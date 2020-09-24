@@ -33,6 +33,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
 
@@ -71,7 +73,7 @@ class LoginWidget extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(top: 16, left: 16, right: 16),
                         child: Text(
-                          "Store and share your files from anywhere",
+                          AppLocalizations.of(context).stringOf("login_text_slogan"),
                           style: TextStyle(color: Colors.white, fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -80,7 +82,7 @@ class LoginWidget extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(bottom: 24),
                         child: Text(
-                          "Please login to continue",
+                          AppLocalizations.of(context).stringOf("login_text_login_to_continue"),
                           style: TextStyle(color: Colors.white, fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -92,7 +94,7 @@ class LoginWidget extends StatelessWidget {
                                 color: AppColor.loginTextFieldTextColor),
                             textInputAction: TextInputAction.next,
                             decoration: TextFieldUtil()
-                                .loginInputDecoration("https://")),
+                                .loginInputDecoration(AppLocalizations.of(context).stringOf("https"))),
                       ),
                       SizedBox(
                         height: 16,
@@ -104,7 +106,7 @@ class LoginWidget extends StatelessWidget {
                                 color: AppColor.loginTextFieldTextColor),
                             textInputAction: TextInputAction.next,
                             decoration:
-                                TextFieldUtil().loginInputDecoration("email")),
+                                TextFieldUtil().loginInputDecoration(AppLocalizations.of(context).stringOf("email"))),
                       ),
                       SizedBox(
                         height: 16,
@@ -117,7 +119,7 @@ class LoginWidget extends StatelessWidget {
                                 color: AppColor.loginTextFieldTextColor),
                             textInputAction: TextInputAction.done,
                             decoration: TextFieldUtil()
-                                .loginInputDecoration("password")),
+                                .loginInputDecoration(AppLocalizations.of(context).stringOf("password"))),
                       ),
                       SizedBox(
                         height: 32,
@@ -137,7 +139,7 @@ class LoginWidget extends StatelessWidget {
                             onPressed: () {},
                             color: AppColor.loginButtonColor,
                             textColor: Colors.white,
-                            child: Text("Login",
+                            child: Text(AppLocalizations.of(context).stringOf("login_button_login"),
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white)),
                           ),

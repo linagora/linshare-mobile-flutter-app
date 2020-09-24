@@ -30,6 +30,8 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
 
 void main() {
@@ -59,6 +61,26 @@ class LinShareApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginWidget(),
+      supportedLocales: [
+        Locale('en'),
+        Locale('vi'),
+        Locale('ru'),
+        Locale('fr')
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        for (var locale in supportedLocales) {
+          if (locale.languageCode == deviceLocale.languageCode) {
+            return deviceLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
     );
   }
 }
