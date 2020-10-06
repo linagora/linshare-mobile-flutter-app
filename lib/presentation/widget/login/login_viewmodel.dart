@@ -29,32 +29,58 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/repository/authentication/authentication_repository.dart';
-import 'dart:core';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 
-class GetPermanentTokenInterActor {
-  final AuthenticationRepository authenticationRepository;
-  final TokenRepository tokenRepository;
-  final CredentialRepository credentialRepository;
+class LoginViewModel extends BaseViewModel {
+  final getPermanentTokenInterActor = getIt<GetPermanentTokenInterActor>();
+  final appNavigation = getIt<AppNavigation>();
 
-  GetPermanentTokenInterActor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
+  String _urlText = "";
+  String _emailText = "";
+  String _passwordText = "";
 
-  Stream<AppStore> execute(Uri baseUrl, UserName userName, Password password) {
-    return _buildGetPermanentTokenStates(baseUrl, userName, password)
-        .map((event) => AppStore(event));
+  setUrlText(String url) {
+    _urlText = url;
   }
 
-  Stream<Either<Failure, Success>> _buildGetPermanentTokenStates(Uri baseUrl, UserName userName, Password password) async* {
-    try {
-      yield Right(LoadingState());
-      final token = await authenticationRepository.getPermanentToken(baseUrl, userName, password);
-      await tokenRepository.persistToken(token);
-      await credentialRepository.saveBaseUrl(baseUrl);
-      yield Right(AuthenticationViewState(token));
-    } catch (e) {
-      yield Left(AuthenticationFailure(e));
+  setEmailText(String email) {
+    _emailText = email;
+  }
+
+  setPasswordText(String password) {
+    _passwordText = password;
+  }
+
+  handleLoginPressed() {
+    consumeState(getPermanentTokenInterActor.execute(
+        _parseUri(_urlText),
+        _parseUserName(_emailText),
+        _parsePassword(_passwordText)));
+  }
+
+  Uri _parseUri(String url) => Uri.parse(url);
+
+  UserName _parseUserName(String userName) => UserName(userName);
+
+  Password _parsePassword(String password) => Password(password);
+
+  @override
+  void onSuccessDispatched(Success success) {
+    if (success is AuthenticationViewState) {
+      appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void onFailureDispatched(Failure failure) {
   }
 }

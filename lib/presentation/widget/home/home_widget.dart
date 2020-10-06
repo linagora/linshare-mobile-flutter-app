@@ -29,32 +29,31 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:domain/src/repository/authentication/authentication_repository.dart';
-import 'dart:core';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
-class GetPermanentTokenInterActor {
-  final AuthenticationRepository authenticationRepository;
-  final TokenRepository tokenRepository;
-  final CredentialRepository credentialRepository;
+import 'home_viewmodel.dart';
 
-  GetPermanentTokenInterActor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
+class HomeWidget extends StatelessWidget {
+  final homeViewModel = getIt<HomeViewModel>();
 
-  Stream<AppStore> execute(Uri baseUrl, UserName userName, Password password) {
-    return _buildGetPermanentTokenStates(baseUrl, userName, password)
-        .map((event) => AppStore(event));
-  }
-
-  Stream<Either<Failure, Success>> _buildGetPermanentTokenStates(Uri baseUrl, UserName userName, Password password) async* {
-    try {
-      yield Right(LoadingState());
-      final token = await authenticationRepository.getPermanentToken(baseUrl, userName, password);
-      await tokenRepository.persistToken(token);
-      await credentialRepository.saveBaseUrl(baseUrl);
-      yield Right(AuthenticationViewState(token));
-    } catch (e) {
-      yield Left(AuthenticationFailure(e));
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColor.primaryColor,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Hello there',
+                  style: TextStyle(color: Colors.white, fontSize: 20)),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

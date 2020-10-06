@@ -4,5 +4,6 @@
   "https": "https://",
   "email": "электронный адрес",
   "password": "пароль",
-  "login_button_login": "Вход"
+  "login_button_login": "Вход",
+  "initializing_data" : "Initializing data..."
 }

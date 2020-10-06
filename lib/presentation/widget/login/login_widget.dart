@@ -31,127 +31,173 @@
 
 import 'dart:ui';
 
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
+import 'package:redux/redux.dart';
 
 class LoginWidget extends StatelessWidget {
+  final loginViewModel = getIt<LoginViewModel>();
+  final textFieldUtil = getIt<TextFieldUtil>();
+  final imagePath = getIt<AppImagePaths>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
-      backgroundColor: AppColor.primaryColor,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned(
-              left: 10,
-              child: IconButton(
-                onPressed: () => {},
-                icon: Image(
-                    image: AssetImage(AppImagePaths.ic_arrow_back),
-                    alignment: Alignment.center),
+    return StoreConnector<AppStore, LoginViewModel>(
+      converter: (Store<AppStore> store) => loginViewModel,
+      builder: (BuildContext context, LoginViewModel viewModel) => Scaffold(
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
+        backgroundColor: AppColor.primaryColor,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Positioned(
+                left: 10,
+                child: IconButton(
+                  onPressed: () => {},
+                  icon: Image(
+                      image: AssetImage(
+                          imagePath.icArrowBack),
+                      alignment: Alignment.center),
+                ),
               ),
-            ),
-            SingleChildScrollView(
-              reverse: true,
-              child: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 100),
-                  child: Column(
-                    children: [
-                      Image(
-                          image: AssetImage(AppImagePaths.ic_login_logo),
-                          alignment: Alignment.center),
-                      Padding(
-                        padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-                        child: Text(
-                          AppLocalizations.of(context).stringOf("login_text_slogan"),
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: 80),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 24),
-                        child: Text(
-                          AppLocalizations.of(context).stringOf("login_text_login_to_continue"),
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: TextField(
-                            style: TextStyle(
-                                color: AppColor.loginTextFieldTextColor),
-                            textInputAction: TextInputAction.next,
-                            decoration: TextFieldUtil()
-                                .loginInputDecoration(AppLocalizations.of(context).stringOf("https"))),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: TextField(
-                            style: TextStyle(
-                                color: AppColor.loginTextFieldTextColor),
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                                TextFieldUtil().loginInputDecoration(AppLocalizations.of(context).stringOf("email"))),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: TextField(
-                            obscureText: true,
-                            style: TextStyle(
-                                color: AppColor.loginTextFieldTextColor),
-                            textInputAction: TextInputAction.done,
-                            decoration: TextFieldUtil()
-                                .loginInputDecoration(AppLocalizations.of(context).stringOf("password"))),
-                      ),
-                      SizedBox(
-                        height: 32,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 67),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: RaisedButton(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(80),
-                              side: BorderSide(
-                                  width: 0, color: AppColor.loginButtonColor),
-                            ),
-                            onPressed: () {},
-                            color: AppColor.loginButtonColor,
-                            textColor: Colors.white,
-                            child: Text(AppLocalizations.of(context).stringOf("login_button_login"),
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white)),
+              SingleChildScrollView(
+                reverse: true,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(top: 100),
+                    child: Column(
+                      children: [
+                        Image(
+                            image: AssetImage(
+                                imagePath.icLoginLogo),
+                            alignment: Alignment.center),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(top: 16, left: 16, right: 16),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .stringOf("login_text_slogan"),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 80),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 24),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .stringOf("login_text_login_to_continue"),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          child: TextField(
+                              onChanged: (value) => viewModel.setUrlText(value),
+                              style: TextStyle(
+                                  color: AppColor.loginTextFieldTextColor),
+                              textInputAction: TextInputAction.next,
+                              decoration: textFieldUtil.loginInputDecoration(
+                                  AppLocalizations.of(context)
+                                      .stringOf("https"))),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          child: TextField(
+                              onChanged: (value) =>
+                                  viewModel.setEmailText(value),
+                              style: TextStyle(
+                                  color: AppColor.loginTextFieldTextColor),
+                              textInputAction: TextInputAction.next,
+                              decoration: textFieldUtil.loginInputDecoration(
+                                  AppLocalizations.of(context)
+                                      .stringOf("email"))),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          child: TextField(
+                              onChanged: (value) =>
+                                  viewModel.setPasswordText(value),
+                              obscureText: true,
+                              style: TextStyle(
+                                  color: AppColor.loginTextFieldTextColor),
+                              textInputAction: TextInputAction.done,
+                              decoration: textFieldUtil.loginInputDecoration(
+                                  AppLocalizations.of(context)
+                                      .stringOf("password"))),
+                        ),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 67),
+                          child: StreamBuilder(builder: (context, snapshot) {
+                            return viewModel.appStore.value.viewState.fold(
+                                (failure) => loginButton(context, loginViewModel),
+                                (success) => (success is LoadingState)
+                                    ? loadingCircularProgress()
+                                    : loginButton(context, loginViewModel));
+                          }),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget loadingCircularProgress() {
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget loginButton(BuildContext context, LoginViewModel loginViewModel) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: RaisedButton(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(80),
+          side: BorderSide(
+              width: 0,
+              color: AppColor.loginButtonColor),
+        ),
+        onPressed: () =>
+            loginViewModel.handleLoginPressed(),
+        color: AppColor.loginButtonColor,
+        textColor: Colors.white,
+        child: Text(
+            AppLocalizations.of(context)
+                .stringOf("login_button_login"),
+            style: TextStyle(
+                fontSize: 16, color: Colors.white)),
       ),
     );
   }

@@ -33,6 +33,10 @@ import 'dart:core';
 import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
 
 class AppImagePaths {
-  static const ic_arrow_back = AppAssetsPath.images + 'ic_arrow_back.png';
-  static const ic_login_logo = AppAssetsPath.images +'ic_login_logo.png';
+  String get icArrowBack => _getImagePath('ic_arrow_back.png');
+  String get icLoginLogo => _getImagePath('ic_login_logo.png');
+
+  String _getImagePath(String imageName) {
+    return AppAssetsPath.images + imageName;
+  }
 }

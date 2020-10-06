@@ -29,32 +29,24 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/repository/authentication/authentication_repository.dart';
-import 'dart:core';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 
-class GetPermanentTokenInterActor {
-  final AuthenticationRepository authenticationRepository;
-  final TokenRepository tokenRepository;
-  final CredentialRepository credentialRepository;
+class HomeViewModel extends BaseViewModel {
+  final appNavigation = getIt<AppNavigation>();
 
-  GetPermanentTokenInterActor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
-
-  Stream<AppStore> execute(Uri baseUrl, UserName userName, Password password) {
-    return _buildGetPermanentTokenStates(baseUrl, userName, password)
-        .map((event) => AppStore(event));
+  @override
+  void dispose() {
+    super.dispose();
   }
 
-  Stream<Either<Failure, Success>> _buildGetPermanentTokenStates(Uri baseUrl, UserName userName, Password password) async* {
-    try {
-      yield Right(LoadingState());
-      final token = await authenticationRepository.getPermanentToken(baseUrl, userName, password);
-      await tokenRepository.persistToken(token);
-      await credentialRepository.saveBaseUrl(baseUrl);
-      yield Right(AuthenticationViewState(token));
-    } catch (e) {
-      yield Left(AuthenticationFailure(e));
-    }
+  @override
+  void onFailureDispatched(Failure failure) {
+  }
+
+  @override
+  void onSuccessDispatched(Success success) {
   }
 }

@@ -4,5 +4,6 @@
   "https": "https://",
   "email": "email",
   "password": "mật khẩu",
-  "login_button_login": "Đăng nhập"
+  "login_button_login": "Đăng nhập",
+  "initializing_data" : "Initializing data..."
 }

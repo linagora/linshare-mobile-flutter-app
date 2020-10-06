@@ -4,5 +4,6 @@
   "https": "https://",
   "email": "email",
   "password": "password",
-  "login_button_login": "Login"
+  "login_button_login": "Login",
+  "initializing_data" : "Initializing data..."
 }
