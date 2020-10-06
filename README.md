@@ -1,4 +1,4 @@
-# linshare-mobile-android-app
+# linshare-mobile-flutter-app
 
 Specially designed to secure paperless trading companies that put privacy and
 traceability in the heart of their problems of exchange, LinShare provides a
