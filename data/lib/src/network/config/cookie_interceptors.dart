@@ -29,11 +29,18 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:dio/dio.dart';
 
-class Token {
-  const Token(this.token, this.tokenId);
+class CookieInterceptors extends InterceptorsWrapper {
+  var _jSessionId = "";
 
-  final String token;
-  final TokenId tokenId;
+  void setJSessionId(String jSessionId) {
+    _jSessionId = jSessionId;
+  }
+
+  @override
+  Future onRequest(RequestOptions options) {
+    options.headers["Cookie"] = "JSESSIONID=$_jSessionId";
+    return super.onRequest(options);
+  }
 }

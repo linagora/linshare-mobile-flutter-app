@@ -29,11 +29,20 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:dio/dio.dart';
 
-class Token {
-  const Token(this.token, this.tokenId);
+class DynamicUrlInterceptors extends InterceptorsWrapper {
+  var _baseUrl = "";
 
-  final String token;
-  final TokenId tokenId;
+  void changeBaseUrl(String url) {
+    _baseUrl = url;
+  }
+
+  @override
+  Future onRequest(RequestOptions options) {
+    if (_baseUrl.isNotEmpty) {
+      options.baseUrl = _baseUrl;
+    }
+    return super.onRequest(options);
+  }
 }

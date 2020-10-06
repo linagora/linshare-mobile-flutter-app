@@ -29,11 +29,40 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'dart:convert';
+import 'dart:io';
 
-class Token {
-  const Token(this.token, this.tokenId);
+import 'package:data/src/network/config/end_point.dart';
+import 'package:dio/dio.dart';
+import 'package:data/src/network/dio_client.dart';
+import 'package:data/src/network/model/request/permanent_token_body_request.dart';
+import 'package:data/src/network/model/response/permanent_token.dart';
+import 'package:data/src/network/model/response/user.dart';
 
-  final String token;
-  final TokenId tokenId;
+class LinShareHttpClient {
+  final DioClient _dioClient;
+
+  LinShareHttpClient(this._dioClient);
+
+  Future<PermanentToken> getPermanentToken(
+      Uri authenticateUrl,
+      String userName,
+      String password,
+      PermanentTokenBodyRequest bodyRequest) async {
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
+
+    final headerParam = _dioClient.getHeaders();
+    headerParam[HttpHeaders.authorizationHeader] = basicAuth;
+
+    final resultJson = await _dioClient.post(
+        EndPoint.authentication.generateAuthenticationUrl(authenticateUrl),
+        options: Options(headers: headerParam),
+        data: bodyRequest.toJson());
+    return PermanentToken.fromJson(resultJson);
+  }
+
+  Future<User> getAuthorizedUser() async {
+    final resultJson = await _dioClient.get(EndPoint.authorizedUser.generateEndPointPath());
+    return User.fromJson(resultJson);
+  }
 }

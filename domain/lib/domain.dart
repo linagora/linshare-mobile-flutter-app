@@ -11,6 +11,8 @@ export 'src/usecases/authentication/authentication_exception.dart';
 export 'src/model/authentication/token.dart';
 export 'src/model/user_name.dart';
 export 'src/model/password.dart';
+export 'src/model/authentication/token_id.dart';
+export 'src/model/authentication/user_id.dart';
 export 'src/network/service_path.dart';
 
 // interActor

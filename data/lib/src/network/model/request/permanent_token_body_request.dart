@@ -29,11 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Token {
-  const Token(this.token, this.tokenId);
+part 'permanent_token_body_request.g.dart';
 
-  final String token;
-  final TokenId tokenId;
+@JsonSerializable()
+class PermanentTokenBodyRequest {
+  PermanentTokenBodyRequest(this.label);
+
+  final String label;
+
+  factory PermanentTokenBodyRequest.fromJson(Map<String, dynamic> json) => _$PermanentTokenBodyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PermanentTokenBodyRequestToJson(this);
 }

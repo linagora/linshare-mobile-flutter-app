@@ -29,11 +29,50 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:dio/dio.dart';
 
-class Token {
-  const Token(this.token, this.tokenId);
+class DioClient {
+  final Dio _dio;
 
-  final String token;
-  final TokenId tokenId;
+  DioClient(this._dio);
+
+  Map<String, dynamic> getHeaders() => new Map.from(_dio.options.headers);
+
+  Future<dynamic> get(
+    String path, {
+    Map<String, dynamic> queryParameters,
+    Options options,
+    CancelToken cancelToken,
+    ProgressCallback onReceiveProgress,
+  }) async {
+    return await _dio.get(
+          path,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onReceiveProgress: onReceiveProgress)
+        .then((value) => value.data)
+        .catchError((error) => throw error);
+  }
+
+  Future<dynamic> post(
+    String path, {
+    data,
+    Map<String, dynamic> queryParameters,
+    Options options,
+    CancelToken cancelToken,
+    ProgressCallback onSendProgress,
+    ProgressCallback onReceiveProgress,
+  }) async {
+    return await _dio.post(
+          path,
+          data: data,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress)
+        .then((value) => value.data)
+        .catchError((error) => {throw error});
+  }
 }

@@ -29,11 +29,40 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Token {
-  const Token(this.token, this.tokenId);
+part 'permanent_token.g.dart';
 
-  final String token;
-  final TokenId tokenId;
+@JsonSerializable()
+class PermanentToken {
+  PermanentToken(this.token, this.tokenId);
+
+  String token;
+
+  @JsonKey(name: Attribute.uuid, fromJson: _uuidFromJson, toJson: _uuidToJson)
+  TokenId tokenId;
+
+  factory PermanentToken.fromJson(Map<String, dynamic> json) => _$PermanentTokenFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PermanentTokenToJson(this);
+}
+
+String _uuidToJson(TokenId tokenId) => jsonEncode({Attribute.uuid: tokenId.uuid});
+
+TokenId _uuidFromJson(dynamic json) => TokenId(json.toString());
+
+extension PermanentTokenExtension on PermanentToken {
+  Token toToken() {
+    return Token(this.token, this.tokenId);
+  }
+}
+
+extension TokenExtension on Token {
+  PermanentToken toPermanentToken() {
+    return PermanentToken(this.token, this.tokenId);
+  }
 }

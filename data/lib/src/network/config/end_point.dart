@@ -31,9 +31,19 @@
 
 import 'package:domain/domain.dart';
 
-class Token {
-  const Token(this.token, this.tokenId);
+class EndPoint {
+  static final String rootPath = "/linshare/webservice/rest/user/v2";
+  static final ServicePath authentication = ServicePath('/jwt');
 
-  final String token;
-  final TokenId tokenId;
+  static final ServicePath authorizedUser = ServicePath("/authentication/authorized");
+}
+
+extension ServicePathExtension on ServicePath {
+  String generateEndPointPath() {
+    return EndPoint.rootPath + this.path;
+  }
+
+  String generateAuthenticationUrl(Uri baseUrl) {
+    return baseUrl.origin + this.generateEndPointPath();
+  }
 }

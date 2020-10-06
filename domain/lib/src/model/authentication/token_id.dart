@@ -29,11 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+class TokenId {
+  final String uuid;
 
-class Token {
-  const Token(this.token, this.tokenId);
-
-  final String token;
-  final TokenId tokenId;
+  TokenId(this.uuid);
 }

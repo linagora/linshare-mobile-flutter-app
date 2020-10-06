@@ -29,11 +29,49 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Token {
-  const Token(this.token, this.tokenId);
+part 'user.g.dart';
 
-  final String token;
-  final TokenId tokenId;
+@JsonSerializable()
+class User {
+  User({
+    this.userId,
+    this.locale,
+    this.externalMailLocale,
+    this.domain,
+    this.firstName,
+    this.lastName,
+    this.mail,
+    this.canUpload,
+    this.canCreateGuest,
+    this.accountType,
+    this.quotaUuid,
+  });
+
+  @JsonKey(name: Attribute.uuid, fromJson: _uuidFromJson, toJson: _uuidToJson)
+  UserId userId;
+
+  String locale;
+  String externalMailLocale;
+  String domain;
+  String firstName;
+  String lastName;
+  String mail;
+  bool canUpload;
+  bool canCreateGuest;
+  String accountType;
+  String quotaUuid;
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
+
+String _uuidToJson(UserId userId) => jsonEncode({Attribute.uuid: userId});
+
+UserId _uuidFromJson(dynamic json) => UserId(json.toString());
