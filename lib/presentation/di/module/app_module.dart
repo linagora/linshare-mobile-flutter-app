@@ -68,7 +68,7 @@ class AppModule {
   }
 
   void _provideInterActor() {
-    getIt.registerFactory(() => GetPermanentTokenInterActor(getIt<AuthenticationRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => CreatePermanentTokenInterActor(getIt<AuthenticationRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {

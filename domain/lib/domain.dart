@@ -16,7 +16,7 @@ export 'src/model/authentication/user_id.dart';
 export 'src/network/service_path.dart';
 
 // interActor
-export 'src/usecases/authentication/get_permanant_token_interactor.dart';
+export 'src/usecases/authentication/create_permanent_token_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

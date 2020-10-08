@@ -36,7 +36,7 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 
 class LoginViewModel extends BaseViewModel {
-  final getPermanentTokenInterActor = getIt<GetPermanentTokenInterActor>();
+  final getPermanentTokenInterActor = getIt<CreatePermanentTokenInteractor>();
   final appNavigation = getIt<AppNavigation>();
 
   String _urlText = "";

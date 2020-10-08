@@ -43,10 +43,10 @@ class AuthenticationDataSource {
 
   AuthenticationDataSource(this.linShareHttpClient, this.deviceManager);
 
-  Future<Token> getPermanentToken(Uri baseUrl, UserName userName, Password password) async {
+  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password) async {
     try {
       final deviceUUID = await deviceManager.getDeviceUUID();
-      final permanentToken = await linShareHttpClient.getPermanentToken(
+      final permanentToken = await linShareHttpClient.createPermanentToken(
           baseUrl,
           userName.userName,
           password.value,

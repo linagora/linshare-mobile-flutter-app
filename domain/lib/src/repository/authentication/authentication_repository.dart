@@ -33,5 +33,5 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/model/authentication/token.dart';
 
 abstract class AuthenticationRepository {
-  Future<Token> getPermanentToken(Uri baseUrl, UserName userName, Password password);
+  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password);
 }

@@ -29,40 +29,32 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:convert';
-import 'dart:io';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/repository/authentication/authentication_repository.dart';
+import 'dart:core';
 
-import 'package:data/src/network/config/end_point.dart';
-import 'package:dio/dio.dart';
-import 'package:data/src/network/dio_client.dart';
-import 'package:data/src/network/model/request/permanent_token_body_request.dart';
-import 'package:data/src/network/model/response/permanent_token.dart';
-import 'package:data/src/network/model/response/user.dart';
+class CreatePermanentTokenInteractor {
+  final AuthenticationRepository authenticationRepository;
+  final TokenRepository tokenRepository;
+  final CredentialRepository credentialRepository;
 
-class LinShareHttpClient {
-  final DioClient _dioClient;
+  CreatePermanentTokenInteractor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
 
-  LinShareHttpClient(this._dioClient);
-
-  Future<PermanentToken> createPermanentToken(
-      Uri authenticateUrl,
-      String userName,
-      String password,
-      PermanentTokenBodyRequest bodyRequest) async {
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
-
-    final headerParam = _dioClient.getHeaders();
-    headerParam[HttpHeaders.authorizationHeader] = basicAuth;
-
-    final resultJson = await _dioClient.post(
-        EndPoint.authentication.generateAuthenticationUrl(authenticateUrl),
-        options: Options(headers: headerParam),
-        data: bodyRequest.toJson());
-    return PermanentToken.fromJson(resultJson);
+  Stream<AppStore> execute(Uri baseUrl, UserName userName, Password password) {
+    return _buildGetPermanentTokenStates(baseUrl, userName, password)
+        .map((event) => AppStore(event));
   }
 
-  Future<User> getAuthorizedUser() async {
-    final resultJson = await _dioClient.get(EndPoint.authorizedUser.generateEndPointPath());
-    return User.fromJson(resultJson);
+  Stream<Either<Failure, Success>> _buildGetPermanentTokenStates(Uri baseUrl, UserName userName, Password password) async* {
+    try {
+      yield Right(LoadingState());
+      final token = await authenticationRepository.createPermanentToken(baseUrl, userName, password);
+      await tokenRepository.persistToken(token);
+      await credentialRepository.saveBaseUrl(baseUrl);
+      yield Right(AuthenticationViewState(token));
+    } catch (e) {
+      yield Left(AuthenticationFailure(e));
+    }
   }
 }
