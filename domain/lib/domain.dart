@@ -6,6 +6,7 @@ export 'src/state/success.dart';
 export 'src/state/failure.dart';
 export 'src/usecases/authentication/authentication_view_state.dart';
 export 'src/usecases/authentication/authentication_exception.dart';
+export 'src/usecases/authentication/credential_view_state.dart';
 
 // model
 export 'src/model/authentication/token.dart';
@@ -17,6 +18,7 @@ export 'src/network/service_path.dart';
 
 // interActor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
+export 'src/usecases/authentication/get_credential_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

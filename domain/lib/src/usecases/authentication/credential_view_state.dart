@@ -30,41 +30,16 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/widget/initialize_get_it/initialize_viewmodel.dart';
 
-class InitializeWidget extends StatelessWidget {
-  final initializeViewModel = getIt<InitializeViewModel>();
+class CredentialViewState extends ViewState {
+  final Token token;
+  final Uri baseUrl;
 
-  @override
-  Widget build(BuildContext context) {
-    return StoreConnector(
-      converter: (Store<AppStore> store) => initializeViewModel,
-      builder: (BuildContext context, InitializeViewModel viewModel) =>
-          _initializeWidget(context)
-    );
-  }
+  CredentialViewState(this.token, this.baseUrl);
+}
 
-  Widget _initializeWidget(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.primaryColor,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(AppLocalizations.of(context).stringOf("initializing_data"),
-                  style: TextStyle(color: Colors.white, fontSize: 17)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+class CredentialFailure extends FeatureFailure {
+  final AuthenticationException authenticationException;
+
+  CredentialFailure(this.authenticationException);
 }

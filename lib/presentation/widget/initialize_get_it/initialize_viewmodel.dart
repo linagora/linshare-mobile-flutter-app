@@ -30,63 +30,33 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/data.dart';
-import 'package:device_info/device_info.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 
-class AppModule {
+class InitializeViewModel extends BaseViewModel {
+  final _getCredentialInterActor = getIt<GetCredentialInterActor>();
+  final _appNavigation = getIt<AppNavigation>();
+  final _dynamicUrlInterceptors = getIt<DynamicUrlInterceptors>();
 
-  AppModule() {
-    _provideAuthenticationDataSource();
-    _provideRepositoryImpl();
-    _provideAuthenticationRepository();
-    _provideInterActor();
-    _provideSharePreference();
-    _provideAppNavigation();
-    _provideDeviceManager();
-    _provideAppImagePaths();
+  InitializeViewModel() {
+    consumeState(_getCredentialInterActor.execute());
   }
 
-  void _provideAuthenticationDataSource() {
-    getIt.registerFactory(() => AuthenticationDataSource(getIt<LinShareHttpClient>(), getIt<DeviceManager>()));
+  @override
+  void onFailureDispatched(Failure failure) {
+    if (failure is CredentialFailure) {
+      _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+    }
   }
 
-  void _provideRepositoryImpl() {
-    getIt.registerFactory(() => AuthenticationRepositoryImpl(getIt<AuthenticationDataSource>()));
-    getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
-    getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
-  }
-
-  void _provideAuthenticationRepository() {
-    getIt.registerFactory<AuthenticationRepository>(() => getIt<AuthenticationRepositoryImpl>());
-    getIt.registerFactory<TokenRepository>(() => getIt<TokenRepositoryImpl>());
-    getIt.registerFactory<CredentialRepository>(() => getIt<CredentialRepositoryImpl>());
-  }
-
-  void _provideInterActor() {
-    getIt.registerFactory(() => CreatePermanentTokenInterActor(getIt<AuthenticationRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
-    getIt.registerFactory(() => GetCredentialInterActor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
-  }
-
-  void _provideSharePreference() {
-    getIt.registerSingletonAsync(() async => SharedPreferences.getInstance());
-  }
-  
-  void _provideAppNavigation() {
-    getIt.registerLazySingleton(() => GlobalKey<NavigatorState>());
-    getIt.registerLazySingleton(() => AppNavigation(getIt<GlobalKey<NavigatorState>>()));
-  }
-
-  void _provideDeviceManager() {
-    getIt.registerLazySingleton(() => DeviceInfoPlugin());
-    getIt.registerLazySingleton(() => DeviceManager(getIt<DeviceInfoPlugin>()));
-  }
-
-  void _provideAppImagePaths() {
-    getIt.registerLazySingleton(() => AppImagePaths());
+  @override
+  void onSuccessDispatched(Success success) {
+    if (success is CredentialViewState) {
+      _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
+      _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
+    }
   }
 }

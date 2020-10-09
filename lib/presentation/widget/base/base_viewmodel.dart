@@ -37,7 +37,7 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class BaseViewModel {
-  final Store<AppStore> store = getIt<Store<AppStore>>();
+  final Store<AppStore> _store = getIt<Store<AppStore>>();
 
   BehaviorSubject<AppStore> _appStore =
       BehaviorSubject<AppStore>.seeded(AppStore(Right(IdleState())));
@@ -59,7 +59,7 @@ abstract class BaseViewModel {
 
   @protected
   void dispatchState(AppStore action) {
-    store.dispatch(action);
+    _store.dispatch(action);
     _appStore.value = action;
   }
 

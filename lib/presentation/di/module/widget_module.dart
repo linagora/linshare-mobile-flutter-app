@@ -33,6 +33,8 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/initialize_get_it/initialize_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
 
@@ -41,6 +43,7 @@ class WidgetModule {
     _provideLoginComponent();
     _provideHomeComponent();
     _provideTextFieldUtil();
+    _provideInitializeComponent();
   }
 
   void _provideLoginComponent() {
@@ -55,5 +58,10 @@ class WidgetModule {
 
   void _provideTextFieldUtil() {
     getIt.registerFactory(() => TextFieldUtil());
+  }
+
+  void _provideInitializeComponent() {
+    getIt.registerFactory(() => InitializeWidget());
+    getIt.registerFactory(() => InitializeViewModel());
   }
 }
