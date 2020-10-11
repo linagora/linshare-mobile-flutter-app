@@ -37,9 +37,10 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 
 class InitializeViewModel extends BaseViewModel {
-  final _getCredentialInterActor = getIt<GetCredentialInterActor>();
+  final _getCredentialInterActor = getIt<GetCredentialInteractor>();
   final _appNavigation = getIt<AppNavigation>();
   final _dynamicUrlInterceptors = getIt<DynamicUrlInterceptors>();
+  final _retryInterceptors = getIt<RetryAuthenticationInterceptors>();
 
   InitializeViewModel() {
     consumeState(_getCredentialInterActor.execute());
@@ -56,6 +57,7 @@ class InitializeViewModel extends BaseViewModel {
   void onSuccessDispatched(Success success) {
     if (success is CredentialViewState) {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
+      _retryInterceptors.setPermanentToken(success.token);
       _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
     }
   }

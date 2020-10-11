@@ -40,8 +40,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/util/router/router.dart' as router;
 
-import 'widget/initialize/initialize_widget.dart';
-
+import 'presentation/widget/initialize/initialize_widget.dart';
 
 void main() async {
   setUpGetIt();

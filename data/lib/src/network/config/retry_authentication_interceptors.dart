@@ -29,33 +29,41 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
-import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
 
-class CookieInterceptors extends InterceptorsWrapper {
-  var _jSessionId = "";
+class RetryAuthenticationInterceptors extends InterceptorsWrapper {
+  static const int _max_retry_count = 3;
+  Token _permanentToken;
+  int _retryCount = 0;
+  final Dio _dio;
 
-  @override
-  Future onRequest(RequestOptions options) {
-    options.headers["Cookie"] = "${Constant.jSessionId}=$_jSessionId";
-    return super.onRequest(options);
+  RetryAuthenticationInterceptors(this._dio);
+
+  void setPermanentToken(Token token){
+    _permanentToken = token;
   }
 
   @override
-  Future onResponse(Response response) {
-    _extractSessionIdFromHeader(response.headers);
-    return super.onResponse(response);
-  }
-
-  void _extractSessionIdFromHeader(Headers headers) {
-    final cookieHeader = headers.value('set-cookie');
-    if (cookieHeader != null) {
-      Right(cookieHeader)
-          .map((cookie) => cookie.split(";"))
-          .map((headers) => headers.firstWhere((element) => element.contains(Constant.jSessionId)))
-          .map((validElement) => validElement.substring(Constant.jSessionId.length + 1))
-          .map((jSessionId) => _jSessionId = jSessionId);
+  Future onError(DioError dioError) {
+    if (_isAuthenticationError(dioError)) {
+      _retryCount++;
+      RequestOptions requestOptions = dioError.response.request;
+      requestOptions.headers.addAll({"Authorization": _getTokenAsBearerHeader(_permanentToken.token)});
+      return _dio.request(requestOptions.path, options: requestOptions);
     }
+    return super.onError(dioError);
   }
+
+  bool _isAuthenticationError(DioError dioError) {
+    if (dioError.type == DioErrorType.RESPONSE &&
+        dioError.response.statusCode == 401 &&
+        _permanentToken != null &&
+        _retryCount < _max_retry_count) {
+      return true;
+    }
+    return false;
+  }
+
+  String _getTokenAsBearerHeader(String token) => "Bearer $token";
 }

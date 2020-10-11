@@ -38,7 +38,6 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 class NetworkModule {
   NetworkModule() {
     _provideBaseOption();
-    _provideInterceptors();
     _provideDio();
     _provideHttpClient();
   }
@@ -54,12 +53,15 @@ class NetworkModule {
   void _provideInterceptors() {
     getIt.registerSingleton<DynamicUrlInterceptors>(DynamicUrlInterceptors());
     getIt.registerSingleton<CookieInterceptors>(CookieInterceptors());
+    getIt.registerSingleton<RetryAuthenticationInterceptors>(RetryAuthenticationInterceptors(getIt<Dio>()));
   }
 
   void _provideDio() {
     getIt.registerSingleton(Dio(getIt<BaseOptions>()));
+    _provideInterceptors();
     getIt<Dio>().interceptors.add(getIt<DynamicUrlInterceptors>());
     getIt<Dio>().interceptors.add(getIt<CookieInterceptors>());
+    getIt<Dio>().interceptors.add(getIt<RetryAuthenticationInterceptors>());
   }
 
   void _provideHttpClient() {
