@@ -5,5 +5,7 @@
   "email": "email",
   "password": "password",
   "login_button_login": "Login",
-  "initializing_data" : "Initializing data..."
+  "initializing_data": "Initializing data...",
+  "my_space_title": "My Space",
+  "my_space_text_upload_your_files_here": "Upload your files here"
 }

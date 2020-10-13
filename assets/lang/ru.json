@@ -5,5 +5,7 @@
   "email": "электронный адрес",
   "password": "пароль",
   "login_button_login": "Вход",
-  "initializing_data" : "Initializing data..."
+  "initializing_data": "Initializing data...",
+  "my_space_title": "Моё пространство",
+  "my_space_text_upload_your_files_here": "Загрузите ваши файлы здесь"
 }

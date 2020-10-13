@@ -29,47 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
-import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/initialize_get_it/initialize_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 
-class WidgetModule {
-  WidgetModule() {
-    _provideLoginComponent();
-    _provideHomeComponent();
-    _provideMySpaceComponent();
-    _provideTextFieldUtil();
-    _provideInitializeComponent();
-  }
+class MySpaceViewModel extends BaseViewModel {
+  @override
+  void onFailureDispatched(Failure failure) {}
 
-  void _provideLoginComponent() {
-    getIt.registerFactory(() => LoginWidget());
-    getIt.registerFactory(() => LoginViewModel());
-  }
-
-  void _provideHomeComponent() {
-    getIt.registerFactory(() => HomeWidget());
-    getIt.registerFactory(() => HomeViewModel());
-  }
-
-  void _provideMySpaceComponent() {
-    getIt.registerFactory(() => MySpaceWidget());
-    getIt.registerFactory(() => MySpaceViewModel());
-  }
-
-  void _provideTextFieldUtil() {
-    getIt.registerFactory(() => TextFieldUtil());
-  }
-
-  void _provideInitializeComponent() {
-    getIt.registerFactory(() => InitializeWidget());
-    getIt.registerFactory(() => InitializeViewModel());
-  }
+  @override
+  void onSuccessDispatched(Success success) {}
 }

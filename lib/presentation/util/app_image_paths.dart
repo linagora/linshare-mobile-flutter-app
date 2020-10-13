@@ -35,6 +35,8 @@ import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
 class AppImagePaths {
   String get icArrowBack => _getImagePath('ic_arrow_back.png');
   String get icLoginLogo => _getImagePath('ic_login_logo.png');
+  String get icAdd => _getImagePath('ic_add.png');
+  String get icUploadFile => _getImagePath('ic_upload_file.png');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

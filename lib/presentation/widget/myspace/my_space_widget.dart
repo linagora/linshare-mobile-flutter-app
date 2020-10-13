@@ -29,47 +29,60 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
-import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/initialize_get_it/initialize_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 
-class WidgetModule {
-  WidgetModule() {
-    _provideLoginComponent();
-    _provideHomeComponent();
-    _provideMySpaceComponent();
-    _provideTextFieldUtil();
-    _provideInitializeComponent();
+class MySpaceWidget extends StatelessWidget {
+  final mySpaceViewModel = getIt<MySpaceViewModel>();
+  final imagePath = getIt<AppImagePaths>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).stringOf('my_space_title'),
+            style: TextStyle(fontSize: 24, color: Colors.white)),
+        centerTitle: true,
+        backgroundColor: AppColor.primaryColor,
+      ),
+      body: _buildUploadFileHere(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: AppColor.primaryColor,
+        child: Image(image: AssetImage(imagePath.icAdd)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 
-  void _provideLoginComponent() {
-    getIt.registerFactory(() => LoginWidget());
-    getIt.registerFactory(() => LoginViewModel());
-  }
-
-  void _provideHomeComponent() {
-    getIt.registerFactory(() => HomeWidget());
-    getIt.registerFactory(() => HomeViewModel());
-  }
-
-  void _provideMySpaceComponent() {
-    getIt.registerFactory(() => MySpaceWidget());
-    getIt.registerFactory(() => MySpaceViewModel());
-  }
-
-  void _provideTextFieldUtil() {
-    getIt.registerFactory(() => TextFieldUtil());
-  }
-
-  void _provideInitializeComponent() {
-    getIt.registerFactory(() => InitializeWidget());
-    getIt.registerFactory(() => InitializeViewModel());
+  Widget _buildUploadFileHere(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            imagePath.icUploadFile,
+            width: 120,
+            height: 120,
+            fit: BoxFit.fill,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Text(
+              AppLocalizations.of(context)
+                  .stringOf("my_space_text_upload_your_files_here"),
+              style: TextStyle(
+                  color: AppColor.loginTextFieldTextColor, fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

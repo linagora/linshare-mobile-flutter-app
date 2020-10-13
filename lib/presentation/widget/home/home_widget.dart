@@ -31,7 +31,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 
 import 'home_viewmodel.dart';
 
@@ -40,20 +40,6 @@ class HomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.primaryColor,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Hello there',
-                  style: TextStyle(color: Colors.white, fontSize: 20)),
-            ],
-          ),
-        ),
-      ),
-    );
+    return getIt<MySpaceWidget>();
   }
 }

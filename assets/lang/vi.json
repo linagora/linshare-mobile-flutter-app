@@ -5,5 +5,7 @@
   "email": "email",
   "password": "mật khẩu",
   "login_button_login": "Đăng nhập",
-  "initializing_data" : "Initializing data..."
+  "initializing_data" : "Initializing data...",
+  "my_space_title": "Không gian của tôi",
+  "my_space_text_upload_your_files_here": "Hãy tải tệp lên"
 }
