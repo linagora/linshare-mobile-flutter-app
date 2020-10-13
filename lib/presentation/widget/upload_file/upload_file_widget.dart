@@ -29,55 +29,49 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
-import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/initialize_get_it/initialize_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 
-class WidgetModule {
-  WidgetModule() {
-    _provideLoginComponent();
-    _provideHomeComponent();
-    _provideMySpaceComponent();
-    _provideUploadFileComponent();
-    _provideTextFieldUtil();
-    _provideInitializeComponent();
-  }
+class UploadFileWidget extends StatelessWidget {
+  final uploadFileViewModel = getIt<UploadFileViewModel>();
+  final imagePath = getIt<AppImagePaths>();
+  final appNavigation = getIt<AppNavigation>();
 
-  void _provideLoginComponent() {
-    getIt.registerFactory(() => LoginWidget());
-    getIt.registerFactory(() => LoginViewModel());
-  }
-
-  void _provideHomeComponent() {
-    getIt.registerFactory(() => HomeWidget());
-    getIt.registerFactory(() => HomeViewModel());
-  }
-
-  void _provideMySpaceComponent() {
-    getIt.registerFactory(() => MySpaceWidget());
-    getIt.registerFactory(() => MySpaceViewModel());
-  }
-
-  void _provideUploadFileComponent() {
-    getIt.registerFactory(() => UploadFileWidget());
-    getIt.registerFactory(() => UploadFileViewModel());
-  }
-
-  void _provideTextFieldUtil() {
-    getIt.registerFactory(() => TextFieldUtil());
-  }
-
-  void _provideInitializeComponent() {
-    getIt.registerFactory(() => InitializeWidget());
-    getIt.registerFactory(() => InitializeViewModel());
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Image.asset(imagePath.icArrowBack),
+          onPressed: () => appNavigation.popBack(),
+        ),
+        centerTitle: true,
+        title: Text(AppLocalizations.of(context).stringOf('upload_file_title'),
+            style: TextStyle(fontSize: 24, color: Colors.white)),
+        backgroundColor: AppColor.primaryColor,
+      ),
+      body: Container(),
+      floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: AppColor.primaryColor,
+          onPressed: () {},
+          // icon: Icon(Icons.save),
+          label: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: Text(
+              AppLocalizations.of(context).stringOf('upload_text_button'),
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.normal),
+            ),
+          )),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 }

@@ -7,5 +7,7 @@
   "login_button_login": "Đăng nhập",
   "initializing_data" : "Initializing data...",
   "my_space_title": "Không gian của tôi",
-  "my_space_text_upload_your_files_here": "Hãy tải tệp lên"
+  "my_space_text_upload_your_files_here": "Hãy tải tệp lên",
+  "upload_file_title": "Tải tệp lên",
+  "upload_text_button": "Tải lên không gian của tôi"
 }

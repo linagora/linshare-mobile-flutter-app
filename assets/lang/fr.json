@@ -7,5 +7,7 @@
   "login_button_login": "S'identifier",
   "initializing_data": "Initializing data...",
   "my_space_title": "Mon Espace",
-  "my_space_text_upload_your_files_here": "Transférez vos fichiers ici"
+  "my_space_text_upload_your_files_here": "Transférez vos fichiers ici",
+  "upload_file_title": "Transférer un fichier",
+  "upload_text_button": "Transférer sur Mon Espace"
 }

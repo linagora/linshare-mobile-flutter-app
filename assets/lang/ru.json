@@ -7,5 +7,7 @@
   "login_button_login": "Вход",
   "initializing_data": "Initializing data...",
   "my_space_title": "Моё пространство",
-  "my_space_text_upload_your_files_here": "Загрузите ваши файлы здесь"
+  "my_space_text_upload_your_files_here": "Загрузите ваши файлы здесь",
+  "upload_file_title": "Загрузка файла",
+  "upload_text_button": "Загрузить в моё пространство"
 }
