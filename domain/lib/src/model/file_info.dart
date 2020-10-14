@@ -29,36 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+class FileInfo {
+  final String fileName;
+  final String filePath;
+  final int fileSize;
 
-class MySpaceViewModel extends BaseViewModel {
-  final _localFilePicker = getIt<LocalFilePicker>();
-
-  handleOnUploadFilePressed() {
-    dispatchState(AppStore(Right(UploadButtonClick())));
-  }
-
-  @override
-  void onFailureDispatched(Failure failure) {}
-
-  @override
-  void onSuccessDispatched(Success success) {
-    if (success is ViewEvent) {
-      _handleViewEvents(success);
-    }
-  }
-
-  void _handleViewEvents(ViewEvent viewEvent) {
-    if (viewEvent is UploadButtonClick) {
-      _handlePickFile();
-    }
-  }
-
-  void _handlePickFile() async {
-    dispatchState(AppStore(await _localFilePicker.pickSingleFile()));
-  }
+  FileInfo(this.fileName, this.filePath, this.fileSize);
 }

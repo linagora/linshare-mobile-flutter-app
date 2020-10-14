@@ -51,7 +51,7 @@ class MySpaceWidget extends StatelessWidget {
       ),
       body: _buildUploadFileHere(context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => mySpaceViewModel.handleOnUploadFilePressed(),
         backgroundColor: AppColor.primaryColor,
         child: Image(image: AssetImage(imagePath.icAdd)),
       ),
