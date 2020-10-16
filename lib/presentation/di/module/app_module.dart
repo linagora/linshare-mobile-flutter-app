@@ -33,6 +33,7 @@ import 'package:data/data.dart';
 import 'package:device_info/device_info.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
@@ -42,7 +43,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppModule {
 
   AppModule() {
-    _provideAuthenticationDataSource();
+    _provideDataSourceImpl();
+    _provideDataSource();
     _provideRepositoryImpl();
     _provideAuthenticationRepository();
     _provideInterActor();
@@ -51,27 +53,36 @@ class AppModule {
     _provideDeviceManager();
     _provideAppImagePaths();
     _provideFileManager();
+    _provideFileUploader();
   }
 
-  void _provideAuthenticationDataSource() {
+  void _provideDataSourceImpl() {
+    getIt.registerFactory(() => DocumentDataSourceImpl(getIt<FlutterUploader>()));
+  }
+
+  void _provideDataSource() {
     getIt.registerFactory(() => AuthenticationDataSource(getIt<LinShareHttpClient>(), getIt<DeviceManager>()));
+    getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
     getIt.registerFactory(() => AuthenticationRepositoryImpl(getIt<AuthenticationDataSource>()));
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
+    getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>()));
   }
 
   void _provideAuthenticationRepository() {
     getIt.registerFactory<AuthenticationRepository>(() => getIt<AuthenticationRepositoryImpl>());
     getIt.registerFactory<TokenRepository>(() => getIt<TokenRepositoryImpl>());
     getIt.registerFactory<CredentialRepository>(() => getIt<CredentialRepositoryImpl>());
+    getIt.registerFactory<DocumentRepository>(() => getIt<DocumentRepositoryImpl>());
   }
 
   void _provideInterActor() {
     getIt.registerFactory(() => CreatePermanentTokenInteractor(getIt<AuthenticationRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetCredentialInteractor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => UploadFileInteractor(getIt<DocumentRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {
@@ -94,5 +105,9 @@ class AppModule {
 
   void _provideFileManager() {
     getIt.registerFactory(() => LocalFilePicker());
+  }
+
+  void _provideFileUploader() {
+    getIt.registerLazySingleton(() => FlutterUploader());
   }
 }

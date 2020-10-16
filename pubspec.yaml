@@ -57,6 +57,9 @@ dependencies:
   # file_picker
   file_picker: ^2.0.7
 
+  # flutter_uploader
+  flutter_uploader: ^1.2.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
