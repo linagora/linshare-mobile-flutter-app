@@ -29,14 +29,33 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/src/usecases/remote_exception.dart';
+abstract class RemoteException implements Exception {
+  static final missingRequiredFields = "Missing required fields";
+  static final serverNotFound = "Server not found";
+  static final internalServerError = "Internal server error";
+  static final connectError = "Connect error";
 
-abstract class AuthenticationException extends RemoteException {
-  static final wrongCredential = "Credential is wrong";
+  final String message;
 
-  AuthenticationException(String message) : super(message);
+  RemoteException(this.message);
 }
 
-class BadCredentials extends AuthenticationException {
-  BadCredentials() : super(AuthenticationException.wrongCredential);
+class MissingRequiredFields extends RemoteException {
+  MissingRequiredFields() : super(RemoteException.missingRequiredFields);
+}
+
+class ServerNotFound extends RemoteException {
+  ServerNotFound() : super(RemoteException.serverNotFound);
+}
+
+class InternalServerError extends RemoteException {
+  InternalServerError() : super(RemoteException.internalServerError);
+}
+
+class ConnectError extends RemoteException {
+  ConnectError() : super(RemoteException.connectError);
+}
+
+class UnknownError extends RemoteException {
+  UnknownError(String message) : super(message);
 }

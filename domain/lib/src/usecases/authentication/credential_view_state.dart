@@ -29,7 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:domain/src/model/authentication/token.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:domain/src/usecases/remote_exception.dart';
 
 class CredentialViewState extends ViewState {
   final Token token;
@@ -39,7 +42,7 @@ class CredentialViewState extends ViewState {
 }
 
 class CredentialFailure extends FeatureFailure {
-  final AuthenticationException authenticationException;
+  final RemoteException authenticationException;
 
   CredentialFailure(this.authenticationException);
 }

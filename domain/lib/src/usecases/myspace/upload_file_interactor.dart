@@ -29,14 +29,47 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/repository/document/document_repository.dart';
+import 'dart:core';
+import 'dart:async';
 
-abstract class AuthenticationException extends RemoteException {
-  static final wrongCredential = "Credential is wrong";
+class UploadFileInteractor {
+  final DocumentRepository documentRepository;
+  final TokenRepository tokenRepository;
+  final CredentialRepository credentialRepository;
 
-  AuthenticationException(String message) : super(message);
-}
+  UploadFileInteractor(this.documentRepository, this.tokenRepository, this.credentialRepository);
 
-class BadCredentials extends AuthenticationException {
-  BadCredentials() : super(AuthenticationException.wrongCredential);
+  Stream<AppStore> execute(FileInfo fileInfo) => _buildUploadFile(fileInfo)
+      .map((event) => AppStore(event));
+
+  Stream<Either<Failure, Success>> _buildUploadFile(FileInfo fileInfo) async* {
+    try {
+      yield Right(PreparingUpload(fileInfo));
+
+      final token = await tokenRepository.getToken();
+      final baseUrl = await credentialRepository.getBaseUrl();
+      final dataHolder = await documentRepository.upload(fileInfo, token, baseUrl);
+
+      await for (final dataInfo in dataHolder.dataInfo) {
+        final Either<Failure, Success> state = dataInfo.fold((failure) {
+          return Left(UploadFileFailure(Exception()));
+        }, (success) {
+          if (success is FileUploadProgress) {
+            return Right(
+                UploadingProgress(success.progress, fileInfo.fileName));
+          } else if (success is FileUploadSuccess) {
+            return Right(UploadFileSuccess(fileInfo));
+          } else {
+            return Left(UploadFileFailure(Exception()));
+          }
+        });
+        yield state;
+      }
+    } catch (exception) {
+      yield Left(UploadFileFailure(exception));
+    }
+  }
 }

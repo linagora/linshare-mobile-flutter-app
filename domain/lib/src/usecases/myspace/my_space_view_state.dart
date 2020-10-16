@@ -32,3 +32,28 @@
 import 'package:domain/domain.dart';
 
 class UploadButtonClick extends ViewEvent {}
+
+class UploadFileSuccess extends ViewState {
+  final FileInfo fileInfo;
+
+  UploadFileSuccess(this.fileInfo);
+}
+
+class UploadFileFailure extends FeatureFailure {
+  final Exception uploadFileException;
+
+  UploadFileFailure(this.uploadFileException);
+}
+
+class UploadingProgress extends ViewState {
+  final int progress;
+  final String fileName;
+
+  UploadingProgress(this.progress, this.fileName);
+}
+
+class PreparingUpload extends ViewState {
+  final FileInfo fileInfo;
+
+  PreparingUpload(this.fileInfo);
+}

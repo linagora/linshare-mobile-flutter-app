@@ -29,14 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'dart:core';
 
-abstract class AuthenticationException extends RemoteException {
-  static final wrongCredential = "Credential is wrong";
+import 'package:domain/src/model/authentication/token.dart';
+import 'package:domain/src/model/file_info.dart';
+import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 
-  AuthenticationException(String message) : super(message);
-}
-
-class BadCredentials extends AuthenticationException {
-  BadCredentials() : super(AuthenticationException.wrongCredential);
+abstract class DocumentRepository {
+  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
 }
