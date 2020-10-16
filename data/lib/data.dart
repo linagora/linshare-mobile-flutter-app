@@ -13,8 +13,14 @@ export 'src/network/config/retry_authentication_interceptors.dart';
 export 'src/repository/authentication/authentication_repository_impl.dart';
 export 'src/repository/authentication/token_repository_impl.dart';
 export 'src/repository/authentication/credential_repository_impl.dart';
+export 'src/repository/myspace/document_repository_impl.dart';
 
+// data source
 export 'src/datasource/authentication_datasource.dart';
+export 'src/datasource/document_datasource.dart';
+
+// data source impl
+export 'src/datasource_impl/document_datasource_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';

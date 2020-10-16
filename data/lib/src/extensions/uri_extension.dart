@@ -29,8 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Constant {
-  static const jSessionId = 'JSESSIONID';
-  static const fileSizeDataForm = 'filesize';
-  static const authorization = 'Authorization';
+import 'package:data/src/network/config/end_point.dart';
+import 'package:domain/domain.dart';
+
+extension UriExtension on Uri {
+  String withServicePath(ServicePath servicePath) {
+    return this.origin + EndPoint.rootPath + servicePath.path;
+  }
 }

@@ -29,8 +29,9 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Constant {
-  static const jSessionId = 'JSESSIONID';
-  static const fileSizeDataForm = 'filesize';
-  static const authorization = 'Authorization';
+import 'dart:core';
+import 'package:domain/domain.dart';
+
+abstract class DocumentDataSource {
+  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
 }

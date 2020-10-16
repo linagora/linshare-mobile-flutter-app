@@ -29,8 +29,50 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Constant {
-  static const jSessionId = 'JSESSIONID';
-  static const fileSizeDataForm = 'filesize';
-  static const authorization = 'Authorization';
+import 'dart:io';
+
+import 'package:dartz/dartz.dart';
+import 'package:data/src/datasource/document_datasource.dart';
+import 'package:data/src/network/config/end_point.dart';
+import 'package:data/src/extensions/uri_extension.dart';
+import 'package:data/src/util/constant.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:rxdart/rxdart.dart';
+
+class DocumentDataSourceImpl implements DocumentDataSource {
+  final FlutterUploader uploader;
+
+  DocumentDataSourceImpl(this.uploader);
+
+  @override
+  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
+    File file = File(fileInfo.filePath + fileInfo.fileName);
+    final taskId = await uploader.enqueue(
+        url: baseUrl.withServicePath(EndPoint.documents),
+        files: [
+          FileItem(savedDir: fileInfo.filePath, filename: fileInfo.fileName)
+        ],
+        headers: {
+          Constant.authorization: 'Bearer ${token.token}'
+        },
+        data: {
+          Constant.fileSizeDataForm: (await file.length()).toString()
+        });
+
+    final mergedStream = Rx.merge([uploader.result, uploader.progress]).map<Either<Failure, Success>>((event) {
+      if (event is UploadTaskResponse) {
+        if (event.statusCode == 200) {
+          return Right(FileUploadSuccess());
+        }
+        return Left(FileUploadFailure());
+      } else if (event is UploadTaskProgress) {
+        return Right(FileUploadProgress(event.progress));
+      } else {
+        return Left(FileUploadFailure());
+      }
+    });
+
+    return FileUploadState(mergedStream, UploadTaskId(taskId));
+  }
 }

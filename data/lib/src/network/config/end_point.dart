@@ -36,6 +36,7 @@ class EndPoint {
   static final ServicePath authentication = ServicePath('/jwt');
 
   static final ServicePath authorizedUser = ServicePath("/authentication/authorized");
+  static final ServicePath documents = ServicePath("/documents");
 }
 
 extension ServicePathExtension on ServicePath {
@@ -44,6 +45,10 @@ extension ServicePathExtension on ServicePath {
   }
 
   String generateAuthenticationUrl(Uri baseUrl) {
+    return baseUrl.origin + this.generateEndPointPath();
+  }
+
+  String generateUploadUrl(Uri baseUrl) {
     return baseUrl.origin + this.generateEndPointPath();
   }
 }

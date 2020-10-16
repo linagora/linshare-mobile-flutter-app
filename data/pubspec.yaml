@@ -26,6 +26,15 @@ dependencies:
   # shared_preferences
   shared_preferences: ^0.5.12
 
+  # flutter_uploader
+  flutter_uploader: ^1.2.0
+
+  # rxdart
+  rxdart: ^0.24.1
+
+  # dartz
+  dartz: ^0.9.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
