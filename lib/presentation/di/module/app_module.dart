@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,6 +55,7 @@ class AppModule {
     _provideAppImagePaths();
     _provideFileManager();
     _provideFileUploader();
+    _provideAppToast();
   }
 
   void _provideDataSourceImpl() {
@@ -109,5 +111,9 @@ class AppModule {
 
   void _provideFileUploader() {
     getIt.registerLazySingleton(() => FlutterUploader());
+  }
+
+  void _provideAppToast() {
+    getIt.registerLazySingleton(() => AppToast());
   }
 }

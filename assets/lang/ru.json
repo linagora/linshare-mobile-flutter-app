@@ -9,5 +9,7 @@
   "my_space_title": "Моё пространство",
   "my_space_text_upload_your_files_here": "Загрузите ваши файлы здесь",
   "upload_file_title": "Загрузка файла",
-  "upload_text_button": "Загрузить в моё пространство"
+  "upload_text_button": "Загрузить в моё пространство",
+  "upload_success_text": "File uploaded",
+  "upload_failure_text": "Failed to upload file"
 }

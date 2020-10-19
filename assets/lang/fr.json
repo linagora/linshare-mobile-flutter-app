@@ -9,5 +9,7 @@
   "my_space_title": "Mon Espace",
   "my_space_text_upload_your_files_here": "Transférez vos fichiers ici",
   "upload_file_title": "Transférer un fichier",
-  "upload_text_button": "Transférer sur Mon Espace"
+  "upload_text_button": "Transférer sur Mon Espace",
+  "upload_success_text": "File uploaded",
+  "upload_failure_text": "Failed to upload file"
 }

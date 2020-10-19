@@ -29,19 +29,18 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:ui' show Color;
-
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
-extension AppColor on Color {
-  static const primaryColor = const Color(0xff4AC6FF);
-  static const loginTextFieldHintColor = const Color(0xffAFAFAF);
-  static const loginTextFieldTextColor = const Color(0xff7B7B7B);
-  static const loginTextFieldErrorBorder = const Color(0xffFF5858);
-  static const loginButtonColor = const Color(0xff1B7EC7);
-  static const uploadFileFileNameTextColor = const Color(0xff7B7B7B);
-  static const uploadFileFileSizeTextColor = const Color(0xffACACAC);
-  static const uploadProgressBackgroundColor = const Color(0xff5FA4D8);
-  static const mySpaceUploadBackground = const Color(0xff1B7EC7);
-  static const toastBackgroundColor = const Color(0xff1B7EC7);
+class AppToast {
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        fontSize: 16,
+        textColor: Colors.white,
+        backgroundColor: AppColor.toastBackgroundColor,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM);
+  }
 }

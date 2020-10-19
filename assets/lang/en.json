@@ -9,5 +9,7 @@
   "my_space_title": "My Space",
   "my_space_text_upload_your_files_here": "Upload your files here",
   "upload_file_title": "Upload file",
-  "upload_text_button": "Upload to My Space"
+  "upload_text_button": "Upload to My Space",
+  "upload_success_text": "File uploaded",
+  "upload_failure_text": "Failed to upload file"
 }
