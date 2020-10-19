@@ -33,10 +33,14 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 
 class MySpaceViewModel extends BaseViewModel {
   final _localFilePicker = getIt<LocalFilePicker>();
+  final appNavigation = getIt<AppNavigation>();
 
   handleOnUploadFilePressed() {
     dispatchState(AppStore(Right(UploadButtonClick())));
@@ -49,6 +53,15 @@ class MySpaceViewModel extends BaseViewModel {
   void onSuccessDispatched(Success success) {
     if (success is ViewEvent) {
       _handleViewEvents(success);
+    } else if (success is ViewState) {
+      _handleViewState(success);
+    }
+  }
+
+  void _handleViewState(ViewState viewState) {
+    if (viewState is FilePickerSuccessViewState) {
+      appNavigation.push(RoutePaths.uploadDocumentRoute,
+          arguments: UploadFileArguments(viewState.fileInfo));
     }
   }
 

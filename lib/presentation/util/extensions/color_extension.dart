@@ -39,4 +39,6 @@ extension AppColor on Color {
   static const loginTextFieldTextColor = const Color(0xff7B7B7B);
   static const loginTextFieldErrorBorder = const Color(0xffFF5858);
   static const loginButtonColor = const Color(0xff1B7EC7);
+  static const uploadFileFileNameTextColor = const Color(0xff7B7B7B);
+  static const uploadFileFileSizeTextColor = const Color(0xffACACAC);
 }

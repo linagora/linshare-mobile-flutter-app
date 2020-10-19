@@ -36,12 +36,15 @@ class AppNavigation {
 
   AppNavigation(this.navigatorKey);
 
-  Future push(String routeName) {
-    return navigatorKey.currentState.pushNamed(routeName);
+  Future push(String routeName, {Object arguments}) {
+    return navigatorKey.currentState
+        .pushNamed(routeName, arguments: RouteSettings(arguments: arguments));
   }
 
-  Future pushAndRemoveAll(String routeName) {
-   return navigatorKey.currentState.pushNamedAndRemoveUntil(routeName, (Route<dynamic> route) => false);
+  Future pushAndRemoveAll(String routeName, {Object arguments}) {
+    return navigatorKey.currentState.pushNamedAndRemoveUntil(
+        routeName, (Route<dynamic> route) => false,
+        arguments: RouteSettings(arguments: arguments));
   }
 
   void popBack() {

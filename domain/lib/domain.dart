@@ -8,6 +8,7 @@ export 'src/usecases/authentication/authentication_view_state.dart';
 export 'src/usecases/authentication/credential_view_state.dart';
 export 'src/usecases/file_picker/file_picker_view_state.dart';
 export 'src/usecases/myspace/my_space_view_state.dart';
+export 'src/usecases/upload_file/upload_file_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';

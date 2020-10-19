@@ -29,10 +29,27 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 
 class UploadFileViewModel extends BaseViewModel {
+  final appNavigation = getIt<AppNavigation>();
+  FileInfo _fileInfo;
+
+  setFileInfo(FileInfo fileInfo) {
+    _fileInfo = fileInfo;
+  }
+
+  handleOnUploadFilePressed() {
+    if (_fileInfo != null) {
+      dispatchState(AppStore(Right(UploadToMySpaceClick(_fileInfo))));
+    }
+    appNavigation.popBack();
+  }
+
   @override
   void onFailureDispatched(Failure failure) {}
 

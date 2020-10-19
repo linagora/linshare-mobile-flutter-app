@@ -35,6 +35,7 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 
 class UploadFileWidget extends StatelessWidget {
@@ -44,6 +45,10 @@ class UploadFileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UploadFileArguments arguments =
+        ModalRoute.of(context).settings.arguments;
+    uploadFileViewModel.setFileInfo(arguments.fileInfo);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -55,10 +60,44 @@ class UploadFileWidget extends StatelessWidget {
             style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor,
       ),
-      body: Container(),
+      body: Container(
+        child: Column(
+          children: [
+            SizedBox(
+              width: double.maxFinite,
+              height: 56,
+              child: Container(
+                color: Colors.white,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Padding(
+                      child: Text(
+                        arguments.fileInfo.fileName,
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: AppColor.uploadFileFileNameTextColor),
+                      ),
+                      padding: EdgeInsets.only(left: 24),
+                    )),
+                    Padding(
+                        padding: EdgeInsets.only(right: 24),
+                        child: Text(
+                          '${arguments.fileInfo.fileSize} KB',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: AppColor.uploadFileFileSizeTextColor),
+                        ))
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: AppColor.primaryColor,
-          onPressed: () {},
+          onPressed: () => uploadFileViewModel.handleOnUploadFilePressed(),
           // icon: Icon(Icons.save),
           label: Padding(
             padding: EdgeInsets.symmetric(horizontal: 25),

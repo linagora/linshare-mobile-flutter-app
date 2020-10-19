@@ -29,23 +29,25 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:redux/redux.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 abstract class BaseViewModel {
   final Store<AppStore> _store = getIt<Store<AppStore>>();
 
-  BehaviorSubject<AppStore> _appStore =
-      BehaviorSubject<AppStore>.seeded(AppStore(Right(IdleState())));
-
+  BehaviorSubject<AppStore> _appStore = BehaviorSubject<AppStore>.seeded(AppStore(Right(IdleState())));
   BehaviorSubject<AppStore> get appStore => _appStore;
 
   BaseViewModel() {
-    _appStore.listen((appStore) {
+    _store.onChange.listen((appStore) {
+      _appStore.value = appStore;
       _onDispatchedState(appStore.viewState);
     });
   }
@@ -60,7 +62,6 @@ abstract class BaseViewModel {
   @protected
   void dispatchState(AppStore action) {
     _store.dispatch(action);
-    _appStore.value = action;
   }
 
   void _onDispatchedState(Either<Failure, Success> action) {

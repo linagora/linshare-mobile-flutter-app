@@ -29,9 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class RoutePaths {
-  static const String loginRoute = "Login";
-  static const String homeRoute = "Home";
-  static const String mySpace = "MySpace";
-  static const String uploadDocumentRoute = "UploadDocument";
+import 'package:domain/domain.dart';
+
+class UploadFileArguments {
+  final FileInfo fileInfo;
+
+  UploadFileArguments(this.fileInfo);
 }

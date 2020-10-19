@@ -35,13 +35,19 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case RoutePaths.loginRoute:
-      return MaterialPageRoute(builder: (context) => getIt<LoginWidget>());
+      return MaterialPageRoute(builder: (context) => getIt<LoginWidget>(), settings: settings.arguments);
     case RoutePaths.homeRoute:
-      return MaterialPageRoute(builder: (context) => getIt<HomeWidget>());
+      return MaterialPageRoute(builder: (context) => getIt<HomeWidget>(), settings: settings.arguments);
+    case RoutePaths.mySpace:
+      return MaterialPageRoute(builder: (context) => getIt<MySpaceWidget>(), settings: settings.arguments);
+    case RoutePaths.uploadDocumentRoute:
+      return MaterialPageRoute(builder: (context) => getIt<UploadFileWidget>(), settings: settings.arguments);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(
