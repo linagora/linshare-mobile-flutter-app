@@ -76,12 +76,18 @@ class MySpaceWidget extends StatelessWidget {
                   }),
                   Container(
                     child: StreamBuilder(builder: (context, snapshot) {
-                      return mySpaceViewModel.appStore.value.viewState.fold(
-                          (failure) => Container(),
-                          (success) => (success is UploadingProgress)
-                              ? _buildUploadingFile(
-                                  context, success.fileName, success.progress)
-                              : Container());
+                      return mySpaceViewModel.appStore.value.viewState
+                          .fold((failure) => Container(), (success) {
+                        if (success is UploadingProgress) {
+                          return _buildPreparingUploadFile(
+                              context, success.fileName);
+                        } else if (success is PreparingUpload) {
+                          return _buildPreparingUploadFile(
+                              context, success.fileInfo.fileName);
+                        } else {
+                          return Container();
+                        }
+                      });
                     }),
                   ),
                   Expanded(
@@ -98,6 +104,33 @@ class MySpaceWidget extends StatelessWidget {
                   FloatingActionButtonLocation.centerFloat,
             ),
         converter: (Store<AppStore> store) => mySpaceViewModel);
+  }
+
+  Widget _buildPreparingUploadFile(BuildContext context, String fileName) {
+    return SizedBox(
+      height: 54,
+      child: Container(
+        color: AppColor.mySpaceUploadBackground,
+        child: Column(children: [
+          Expanded(
+              child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 24),
+                  child: Text(
+                    AppLocalizations.of(context)
+                        .stringOf('upload_prepare_text'),
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          )),
+        ]),
+      ),
+    );
   }
 
   Widget _buildUploadingFile(

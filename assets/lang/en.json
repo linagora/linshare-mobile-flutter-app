@@ -11,5 +11,6 @@
   "upload_file_title": "Upload file",
   "upload_text_button": "Upload to My Space",
   "upload_success_text": "File uploaded",
-  "upload_failure_text": "Failed to upload file"
+  "upload_failure_text": "Failed to upload file",
+  "upload_prepare_text": "Preparing to upload..."
 }
