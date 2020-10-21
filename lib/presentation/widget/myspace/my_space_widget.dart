@@ -79,8 +79,8 @@ class MySpaceWidget extends StatelessWidget {
                       return mySpaceViewModel.appStore.value.viewState
                           .fold((failure) => Container(), (success) {
                         if (success is UploadingProgress) {
-                          return _buildPreparingUploadFile(
-                              context, success.fileName);
+                          return _buildUploadingFile(
+                              context, success.fileName, success.progress);
                         } else if (success is PreparingUpload) {
                           return _buildPreparingUploadFile(
                               context, success.fileInfo.fileName);
