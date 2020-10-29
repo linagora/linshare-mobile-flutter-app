@@ -42,10 +42,7 @@ class UploadFileInteractor {
 
   UploadFileInteractor(this.documentRepository, this.tokenRepository, this.credentialRepository);
 
-  Stream<AppStore> execute(FileInfo fileInfo) => _buildUploadFile(fileInfo)
-      .map((event) => AppStore(event));
-
-  Stream<Either<Failure, Success>> _buildUploadFile(FileInfo fileInfo) async* {
+  Stream<Either<Failure, Success>> execute(FileInfo fileInfo) async* {
     try {
       yield Right(PreparingUpload(fileInfo));
 

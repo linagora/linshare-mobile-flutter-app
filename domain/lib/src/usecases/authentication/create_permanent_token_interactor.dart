@@ -31,30 +31,35 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/repository/authentication/authentication_repository.dart';
 import 'dart:core';
 
 class CreatePermanentTokenInteractor {
-  final AuthenticationRepository authenticationRepository;
+  final AuthenticationRepository
+      authenticationRepository;
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
 
-  CreatePermanentTokenInteractor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
+  CreatePermanentTokenInteractor(
+      this.authenticationRepository,
+      this.tokenRepository,
+      this.credentialRepository);
 
-  Stream<AppStore> execute(Uri baseUrl, UserName userName, Password password) {
-    return _buildGetPermanentTokenStates(baseUrl, userName, password)
-        .map((event) => AppStore(event));
-  }
-
-  Stream<Either<Failure, Success>> _buildGetPermanentTokenStates(Uri baseUrl, UserName userName, Password password) async* {
+  Future<Either<Failure, Success>> execute(
+      Uri baseUrl,
+      UserName userName,
+      Password password
+  ) async {
     try {
-      yield Right(LoadingState());
-      final token = await authenticationRepository.createPermanentToken(baseUrl, userName, password);
+      final token = await authenticationRepository
+          .createPermanentToken(
+              baseUrl, userName, password);
       await tokenRepository.persistToken(token);
-      await credentialRepository.saveBaseUrl(baseUrl);
-      yield Right(AuthenticationViewState(token));
+      await credentialRepository
+          .saveBaseUrl(baseUrl);
+      return Right(
+          AuthenticationViewState(token));
     } catch (e) {
-      yield Left(AuthenticationFailure(e));
+      return Left(AuthenticationFailure(e));
     }
   }
 }

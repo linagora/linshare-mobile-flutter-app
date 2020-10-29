@@ -39,16 +39,13 @@ class GetCredentialInteractor {
 
   GetCredentialInteractor(this.tokenRepository, this.credentialRepository);
 
-  Stream<AppStore> execute() => _buildGetTokenStates()
-      .map((event) => AppStore(event));
-
-  Stream<Either<Failure, Success>> _buildGetTokenStates() async* {
+  Future<Either<Failure, Success>> execute() async {
     try {
       final token = await tokenRepository.getToken();
       final baseUrl = await credentialRepository.getBaseUrl();
-      yield Right(CredentialViewState(token, baseUrl));
+      return Right(CredentialViewState(token, baseUrl));
     } catch (exception) {
-      yield Left(CredentialFailure(BadCredentials()));
+      return Left(CredentialFailure(BadCredentials()));
     }
   }
 }

@@ -31,7 +31,6 @@
 
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/state/success.dart';
 
 class FilePickerSuccessViewState extends ViewState {
   final FileInfo fileInfo;

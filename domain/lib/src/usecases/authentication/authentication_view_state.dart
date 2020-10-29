@@ -31,7 +31,6 @@
 
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/state/success.dart';
 
 class AuthenticationViewState extends ViewState {
   final Token token;

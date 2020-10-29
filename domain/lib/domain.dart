@@ -1,9 +1,8 @@
 library domain;
 
 // viewState
-export 'src/state/app_store.dart';
-export 'src/state/success.dart';
 export 'src/state/failure.dart';
+export 'src/state/success.dart';
 export 'src/usecases/authentication/authentication_view_state.dart';
 export 'src/usecases/authentication/credential_view_state.dart';
 export 'src/usecases/file_picker/file_picker_view_state.dart';
@@ -23,7 +22,7 @@ export 'src/network/service_path.dart';
 export 'src/model/file_info.dart';
 export 'src/usecases/upload_file/file_upload_state.dart';
 
-// interActor
+// interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
 export 'src/usecases/authentication/get_credential_interactor.dart';
 export 'src/usecases/myspace/upload_file_interactor.dart';
