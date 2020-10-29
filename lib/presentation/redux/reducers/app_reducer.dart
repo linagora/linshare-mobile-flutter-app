@@ -29,25 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/app_reducer.dart';
+
+import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
-import 'package:redux_logging/redux_logging.dart';
 
-class ReduxModule {
-  ReduxModule() {
-    _provideStore();
-  }
-
-  void _provideStore() {
-    getIt.registerSingleton<Store<AppState>>(Store<AppState>(appStateReducer,
-        initialState: AppState.initial(),
-        middleware: [
-          thunkMiddleware,
-          if (kDebugMode) new LoggingMiddleware.printer()
-        ]));
-  }
+AppState appStateReducer(AppState state, action) {
+  return AppState(
+      authenticationState: authenticationReducer(state.authenticationState, action),
+      uploadFileState: uploadFileReducer(state.uploadFileState, action));
 }

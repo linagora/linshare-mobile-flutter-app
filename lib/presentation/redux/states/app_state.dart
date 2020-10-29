@@ -29,11 +29,29 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
+import 'package:meta/meta.dart';
 
-AppStore appReducer(AppStore currentStateStore, dynamic action) {
-  if (action is AppStore) {
-    return AppStore(action.viewState);
+class AppState {
+  final AuthenticationState authenticationState;
+  final UploadFileState uploadFileState;
+
+  AppState({@required this.authenticationState, @required this.uploadFileState});
+
+  factory AppState.initial() {
+    return AppState(
+        authenticationState: AuthenticationState.initial(),
+        uploadFileState: UploadFileState.initial());
   }
-  return currentStateStore;
+
+  @override
+  int get hashCode => uploadFileState.hashCode ^ authenticationState.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppState &&
+          uploadFileState == other.uploadFileState &&
+          authenticationState == other.authenticationState;
 }

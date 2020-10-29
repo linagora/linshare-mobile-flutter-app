@@ -29,25 +29,32 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/app_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
-import 'package:redux_logging/redux_logging.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:meta/meta.dart';
 
-class ReduxModule {
-  ReduxModule() {
-    _provideStore();
+import 'linshare_state.dart';
+
+@immutable
+class AuthenticationState extends LinShareState {
+  AuthenticationState(Either<Failure, Success> viewState) : super(viewState);
+
+  factory AuthenticationState.initial() {
+    return AuthenticationState(Right(IdleState()));
   }
 
-  void _provideStore() {
-    getIt.registerSingleton<Store<AppState>>(Store<AppState>(appStateReducer,
-        initialState: AppState.initial(),
-        middleware: [
-          thunkMiddleware,
-          if (kDebugMode) new LoggingMiddleware.printer()
-        ]));
+  @override
+  AuthenticationState startLoadingState() {
+    return AuthenticationState(Right(LoadingState()));
+  }
+
+  @override
+  AuthenticationState sendViewState({Either<Failure, Success> viewState}) {
+    return AuthenticationState(viewState);
+  }
+
+  @override
+  AuthenticationState clearViewState() {
+    return AuthenticationState.initial();
   }
 }

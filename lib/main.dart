@@ -29,7 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
@@ -40,6 +39,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/util/router/router.dart' as router;
 
+import 'presentation/redux/states/app_state.dart';
 import 'presentation/widget/initialize/initialize_widget.dart';
 
 void main() async {
@@ -50,14 +50,13 @@ void main() async {
 class LinShareApp extends StatelessWidget {
   // This widget is the root of your application.
 
-  final Store<AppStore> store = getIt<Store<AppStore>>();
+  final Store<AppState> store = getIt<Store<AppState>>();
   final AppNavigation appNavigation = getIt<AppNavigation>();
 
   LinShareApp() : super();
 
   @override
   Widget build(BuildContext context) {
-
     return StoreProvider(
       store: store,
       child: MaterialApp(
@@ -80,15 +79,14 @@ class LinShareApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: FutureBuilder(
-          future: getIt.allReady(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return getIt<InitializeWidget>();
-            } else {
-              return InitializeGetItWidget();
-            }
-          }
-        ),
+            future: getIt.allReady(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return getIt<InitializeWidget>();
+              } else {
+                return InitializeGetItWidget();
+              }
+            }),
         supportedLocales: [
           Locale('en'),
           Locale('vi'),

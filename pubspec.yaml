@@ -42,6 +42,9 @@ dependencies:
   #  redux
   flutter_redux: ^0.6.0
 
+  # redux_thunk
+  redux_thunk: ^0.3.0
+
   #  either
   dartz: ^0.9.1
 
@@ -62,6 +65,9 @@ dependencies:
 
   # flutter toast
   fluttertoast: ^7.1.1
+
+  # redux_logging
+  redux_logging: ^0.4.0
 
   # receive_sharing_intent
   receive_sharing_intent: ^1.4.1

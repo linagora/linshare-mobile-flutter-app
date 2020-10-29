@@ -44,7 +44,6 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppModule {
-
   AppModule() {
     _provideDataSourceImpl();
     _provideDataSource();
@@ -84,15 +83,21 @@ class AppModule {
   }
 
   void _provideInterActor() {
-    getIt.registerFactory(() => CreatePermanentTokenInteractor(getIt<AuthenticationRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => CreatePermanentTokenInteractor(
+      getIt<AuthenticationRepository>(),
+      getIt<TokenRepository>(),
+      getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetCredentialInteractor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
-    getIt.registerFactory(() => UploadFileInteractor(getIt<DocumentRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => UploadFileInteractor(
+        getIt<DocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {
     getIt.registerSingletonAsync(() async => SharedPreferences.getInstance());
   }
-  
+
   void _provideAppNavigation() {
     getIt.registerLazySingleton(() => GlobalKey<NavigatorState>());
     getIt.registerLazySingleton(() => AppNavigation(getIt<GlobalKey<NavigatorState>>()));
