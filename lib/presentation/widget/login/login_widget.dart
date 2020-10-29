@@ -31,11 +31,12 @@
 
 import 'dart:ui';
 
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/selectors/authentication_selector.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
@@ -49,8 +50,8 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppStore, LoginViewModel>(
-      converter: (Store<AppStore> store) => loginViewModel,
+    return StoreConnector<AppState, LoginViewModel>(
+      converter: (Store<AppState> store) => loginViewModel,
       builder: (BuildContext context, LoginViewModel viewModel) => Scaffold(
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
@@ -63,8 +64,7 @@ class LoginWidget extends StatelessWidget {
                 child: IconButton(
                   onPressed: () => {},
                   icon: Image(
-                      image: AssetImage(
-                          imagePath.icArrowBack),
+                      image: AssetImage(imagePath.icArrowBack),
                       alignment: Alignment.center),
                 ),
               ),
@@ -79,8 +79,7 @@ class LoginWidget extends StatelessWidget {
                     child: Column(
                       children: [
                         Image(
-                            image: AssetImage(
-                                imagePath.icLoginLogo),
+                            image: AssetImage(imagePath.icLoginLogo),
                             alignment: Alignment.center),
                         Padding(
                           padding:
@@ -150,11 +149,10 @@ class LoginWidget extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 67),
                           child: StreamBuilder(builder: (context, snapshot) {
-                            return viewModel.appStore.value.viewState.fold(
-                                (failure) => loginButton(context, loginViewModel),
-                                (success) => (success is LoadingState)
-                                    ? loadingCircularProgress()
-                                    : loginButton(context, loginViewModel));
+                            return 
+                                    viewModel.store.state.authenticationState.isAuthenticationLoading()
+                                ? loadingCircularProgress()
+                                : loginButton(context, loginViewModel);
                           }),
                         ),
                       ],
@@ -185,19 +183,13 @@ class LoginWidget extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(80),
-          side: BorderSide(
-              width: 0,
-              color: AppColor.loginButtonColor),
+          side: BorderSide(width: 0, color: AppColor.loginButtonColor),
         ),
-        onPressed: () =>
-            loginViewModel.handleLoginPressed(),
+        onPressed: () => loginViewModel.handleLoginPressed(),
         color: AppColor.loginButtonColor,
         textColor: Colors.white,
-        child: Text(
-            AppLocalizations.of(context)
-                .stringOf("login_button_login"),
-            style: TextStyle(
-                fontSize: 16, color: Colors.white)),
+        child: Text(AppLocalizations.of(context).stringOf("login_button_login"),
+            style: TextStyle(fontSize: 16, color: Colors.white)),
       ),
     );
   }

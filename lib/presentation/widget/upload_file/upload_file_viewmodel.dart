@@ -29,14 +29,20 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux/redux.dart';
 
 class UploadFileViewModel extends BaseViewModel {
   final appNavigation = getIt<AppNavigation>();
   final _uploadFileInteractor = getIt<UploadFileInteractor>();
+
   FileInfo _fileInfo;
 
   setFileInfo(FileInfo fileInfo) {
@@ -45,14 +51,31 @@ class UploadFileViewModel extends BaseViewModel {
 
   handleOnUploadFilePressed() {
     if (_fileInfo != null) {
-      consumeState(_uploadFileInteractor.execute(_fileInfo));
+      store.dispatch(uploadFileAction(this._fileInfo));
     }
     appNavigation.popBack();
   }
 
-  @override
-  void onFailureDispatched(Failure failure) {}
+  ThunkAction<AppState> uploadFileAction(FileInfo fileInfo) {
+    return (Store<AppState> store) async {
+      _uploadFileInteractor.execute(fileInfo).forEach((viewState) {
+        viewState.fold(
+            (failure) => store.dispatch(UploadFileAction(Left(failure))),
+            (success) => handleUploadFileSuccess(store, success));
+      });
+    };
+  }
+
+  void handleUploadFileSuccess(Store<AppState> store, Success success) {
+    if (success is PreparingUpload) {
+      store.dispatch(StartUploadLoadingAction());
+    } else {
+      store.dispatch(UploadFileAction(Right(success)));
+    }
+  }
 
   @override
-  void onSuccessDispatched(Success success) {}
+  void onDisposed() {
+    super.onDisposed();
+  }
 }

@@ -32,46 +32,47 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux/redux.dart';
 
 class MySpaceViewModel extends BaseViewModel {
   final _localFilePicker = getIt<LocalFilePicker>();
   final _appNavigation = getIt<AppNavigation>();
 
   handleOnUploadFilePressed() {
-    dispatchState(AppStore(Right(UploadButtonClick())));
+    store.dispatch(pickFileAction());
   }
 
-  @override
-  void onFailureDispatched(Failure failure) {}
-
-  @override
-  void onSuccessDispatched(Success success) {
-    if (success is ViewEvent) {
-      _handleViewEvents(success);
-    } else if (success is ViewState) {
-      _handleViewState(success);
-    }
+  cleanUploadViewState() {
+    store.dispatch(CleanUploadStateAction());
   }
 
-  void _handleViewState(ViewState viewState) {
-    if (viewState is FilePickerSuccessViewState) {
+  ThunkAction<AppState> pickFileAction() {
+    return (Store<AppState> store) async {
+      _localFilePicker.pickSingleFile().then((result) => result.fold(
+          (failure) => store.dispatch(UploadFileAction(Left(failure))),
+          (success) => store.dispatch(pickFileSuccessAction(success))));
+    };
+  }
+
+  ThunkAction<AppState> pickFileSuccessAction(
+      FilePickerSuccessViewState success) {
+    return (Store<AppState> store) async {
+      store.dispatch(UploadFileAction(Right(success)));
       _appNavigation.push(RoutePaths.uploadDocumentRoute,
-          arguments: UploadFileArguments(viewState.fileInfo));
-    }
+          arguments: UploadFileArguments(success.fileInfo));
+    };
   }
 
-  void _handleViewEvents(ViewEvent viewEvent) {
-    if (viewEvent is UploadButtonClick) {
-      _handlePickFile();
-    }
-  }
-
-  void _handlePickFile() async {
-    dispatchState(AppStore(await _localFilePicker.pickSingleFile()));
+  @override
+  void onDisposed() {
+    super.onDisposed();
   }
 }

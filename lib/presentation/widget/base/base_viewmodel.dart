@@ -29,52 +29,14 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:async';
-
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:redux/redux.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:rxdart/subjects.dart';
 
 abstract class BaseViewModel {
-  final Store<AppStore> _store = getIt<Store<AppStore>>();
-
-  BehaviorSubject<AppStore> _appStore = BehaviorSubject<AppStore>.seeded(AppStore(Right(IdleState())));
-  BehaviorSubject<AppStore> get appStore => _appStore;
-
-  BaseViewModel() {
-    _store.onChange.listen((appStore) {
-      _appStore.value = appStore;
-      _onDispatchedState(appStore.viewState);
-    });
-  }
+  final Store<AppState> store = getIt<Store<AppState>>();
 
   @protected
-  void consumeState(Stream<AppStore> state) async {
-    state.listen((event) {
-      dispatchState(event);
-    });
-  }
-
-  @protected
-  void dispatchState(AppStore action) {
-    _store.dispatch(action);
-  }
-
-  void _onDispatchedState(Either<Failure, Success> action) {
-    action.fold((left) => onFailureDispatched(left), (right) => onSuccessDispatched(right));
-  }
-
-  @protected
-  void onSuccessDispatched(Success success) ;
-  @protected
-  void onFailureDispatched(Failure failure) ;
-
-  @protected
-  void dispose() {
-    _appStore.close();
-  }
+  void onDisposed() {}
 }

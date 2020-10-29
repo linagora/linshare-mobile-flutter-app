@@ -45,7 +45,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   @override
   void dispose() {
-    homeViewModel.dispose();
+    homeViewModel.onDisposed();
     super.dispose();
   }
 

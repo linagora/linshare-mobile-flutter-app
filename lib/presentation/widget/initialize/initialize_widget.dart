@@ -29,9 +29,9 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
@@ -44,13 +44,15 @@ class InitializeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector(
-      converter: (Store<AppStore> store) => initializeViewModel,
-      builder: (BuildContext context, InitializeViewModel viewModel) =>
-          _initializeWidget(context)
-    );
+        converter: (Store<AppState> store) => initializeViewModel,
+        builder: (BuildContext context, InitializeViewModel viewModel) =>
+            _initializeWidget(context, viewModel));
   }
 
-  Widget _initializeWidget(BuildContext context) {
+  Widget _initializeWidget(
+      BuildContext context,
+      InitializeViewModel viewModel
+  ) {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       body: SafeArea(

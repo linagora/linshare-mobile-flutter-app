@@ -29,11 +29,14 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/selectors/upload_file_selector.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -58,36 +61,16 @@ class MySpaceWidget extends StatelessWidget {
               ),
               body: Column(
                 children: [
-                  StreamBuilder(builder: (ctx, snapshot) {
-                    return mySpaceViewModel.appStore.value.viewState.fold(
-                        (failure) {
-                      if (failure is UploadFileFailure) {
-                        appToast.showToast(AppLocalizations.of(context)
-                            .stringOf('upload_failure_text'));
-                      }
-                      return Container();
-                    }, (success) {
-                      if (success is UploadFileSuccess) {
-                        appToast.showToast(AppLocalizations.of(context)
-                            .stringOf('upload_success_text'));
-                      }
-                      return Container();
-                    });
+                  StreamBuilder(builder: (context, snapshot) {
+                    return handleUploadToastMessage(context,
+                        mySpaceViewModel.store.state.uploadFileState.viewState);
                   }),
                   Container(
                     child: StreamBuilder(builder: (context, snapshot) {
-                      return mySpaceViewModel.appStore.value.viewState
-                          .fold((failure) => Container(), (success) {
-                        if (success is UploadingProgress) {
-                          return _buildUploadingFile(
-                              context, success.fileName, success.progress);
-                        } else if (success is PreparingUpload) {
-                          return _buildPreparingUploadFile(
-                              context, success.fileInfo.fileName);
-                        } else {
-                          return Container();
-                        }
-                      });
+                      return handleUploadWidget(
+                          context,
+                          mySpaceViewModel.store.state.uploadFileState.viewState
+                              .getOrElse(() => null));
                     }),
                   ),
                   Expanded(
@@ -103,7 +86,17 @@ class MySpaceWidget extends StatelessWidget {
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
             ),
-        converter: (Store<AppStore> store) => mySpaceViewModel);
+        converter: (Store<AppState> store) => mySpaceViewModel);
+  }
+
+  Widget handleUploadWidget(BuildContext context, [Success success]) {
+    if (success is UploadingProgress) {
+      return _buildUploadingFile(context, success.fileName, success.progress);
+    } else if (success is FilePickerSuccessViewState) {
+      return _buildPreparingUploadFile(context, success.fileInfo.fileName);
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildPreparingUploadFile(BuildContext context, String fileName) {
@@ -201,5 +194,21 @@ class MySpaceWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget handleUploadToastMessage(
+      BuildContext context, Either<Failure, Success> uploadFileState) {
+    uploadFileState.fold(
+        (failure) => appToast.showToast(
+            AppLocalizations.of(context).stringOf('upload_failure_text')),
+        (success) => {
+              if (success is UploadFileSuccess)
+                {
+                  appToast.showToast(AppLocalizations.of(context)
+                      .stringOf('upload_success_text')),
+                  mySpaceViewModel.cleanUploadViewState()
+                }
+            });
+    return Container();
   }
 }

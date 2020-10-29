@@ -29,14 +29,19 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux/redux.dart';
 
 class LoginViewModel extends BaseViewModel {
-  final getPermanentTokenInterActor = getIt<CreatePermanentTokenInteractor>();
+  final getPermanentTokenInteractor = getIt<CreatePermanentTokenInteractor>();
   final appNavigation = getIt<AppNavigation>();
 
   String _urlText = "";
@@ -56,9 +61,7 @@ class LoginViewModel extends BaseViewModel {
   }
 
   handleLoginPressed() {
-    consumeState(getPermanentTokenInterActor.execute(
-        _parseUri(_urlText),
-        _parseUserName(_emailText),
+    store.dispatch(loginAction(_parseUri(_urlText), _parseUserName(_emailText),
         _parsePassword(_passwordText)));
   }
 
@@ -68,19 +71,26 @@ class LoginViewModel extends BaseViewModel {
 
   Password _parsePassword(String password) => Password(password);
 
-  @override
-  void onSuccessDispatched(Success success) {
-    if (success is AuthenticationViewState) {
+  ThunkAction<AppState> loginAction(
+      Uri baseUrl, UserName userName, Password password) {
+    return (Store<AppState> store) async {
+      store.dispatch(StartAuthenticationLoadingAction());
+      getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
+          (result) => result.fold(
+              (failure) => store.dispatch(LoginAction(Left(failure))),
+              ((success) => {store.dispatch(loginSuccessAction(success))})));
+    };
+  }
+
+  ThunkAction<AppState> loginSuccessAction(AuthenticationViewState success) {
+    return (Store<AppState> store) async {
+      store.dispatch(LoginAction(Right(success)));
       appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
-    }
+    };
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void onFailureDispatched(Failure failure) {
+  void onDisposed() {
+    super.onDisposed();
   }
 }

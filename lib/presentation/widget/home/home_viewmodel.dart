@@ -31,7 +31,6 @@
 
 import 'dart:async';
 
-import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -60,17 +59,9 @@ class HomeViewModel extends BaseViewModel {
   }
 
   @override
-  void onFailureDispatched(Failure failure) {
-  }
-
-  @override
-  void onSuccessDispatched(Success success) {
-  }
-
-  @override
-  void dispose() {
+  void onDisposed() {
     _uploadFileManager.closeUploadFileManagerStream();
     _uploadFileManagerStreamSubscription.cancel();
-    super.dispose();
+    super.onDisposed();
   }
 }

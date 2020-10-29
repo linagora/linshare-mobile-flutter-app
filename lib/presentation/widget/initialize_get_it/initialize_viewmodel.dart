@@ -32,20 +32,24 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 
 class InitializeViewModel extends BaseViewModel {
-  final _getCredentialInterActor = getIt<GetCredentialInteractor>();
+  final getCredentialInteractor = getIt<GetCredentialInteractor>();
   final _appNavigation = getIt<AppNavigation>();
   final _dynamicUrlInterceptors = getIt<DynamicUrlInterceptors>();
   final _retryInterceptors = getIt<RetryAuthenticationInterceptors>();
   final _uploadFileManager = getIt<UploadFileManager>();
   InitializeViewModel() {
+    store.dispatch(getCredentialAction());
     registerReceivingSharingIntent();
-    consumeState(_getCredentialInterActor.execute());
   }
 
   void registerReceivingSharingIntent() {
@@ -56,19 +60,32 @@ class InitializeViewModel extends BaseViewModel {
     });
   }
 
-  @override
-  void onFailureDispatched(Failure failure) {
-    if (failure is CredentialFailure) {
-      _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
-    }
+  ThunkAction<AppState> getCredentialAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartUploadLoadingAction());
+      getCredentialInteractor.execute().then((result) => result.fold(
+              (left) => store.dispatch(getCredentialFailureAction(left)),
+              (right) => store.dispatch(getCredentialSuccessAction((right)))));
+    };
   }
 
-  @override
-  void onSuccessDispatched(Success success) {
-    if (success is CredentialViewState) {
+  ThunkAction<AppState> getCredentialSuccessAction(
+      CredentialViewState success) {
+    return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _retryInterceptors.setPermanentToken(success.token);
       _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
-    }
+    };
+  }
+
+  ThunkAction<AppState> getCredentialFailureAction(CredentialFailure failure) {
+    return (Store<AppState> store) async {
+      _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+    };
+  }
+
+  @override
+  void onDisposed() {
+    super.onDisposed();
   }
 }

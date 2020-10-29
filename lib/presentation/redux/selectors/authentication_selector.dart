@@ -29,14 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 
-Either<Failure, Success> getAuthenticationViewState(AppState store) =>
-    store.authenticationState.viewState;
-
-bool isAuthenticationLoading(AppState store) {
-  return getAuthenticationViewState(store)
-      .fold((failure) => false, (success) => success is LoadingState);
+extension AuthenticationSelector on AuthenticationState {
+  bool isAuthenticationLoading() {
+    return this.viewState.fold(
+        (failure) => false,
+        (success) => success is LoadingState);
+  }
 }

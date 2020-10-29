@@ -29,14 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 
-Either<Failure, Success> getUploadViewState(AppState store) =>
-    store.uploadFileState.viewState;
-
-bool isUploadLoading(AppState store) {
-  return getUploadViewState(store)
-      .fold((failure) => false, (success) => success is LoadingState);
+extension UploadSelector on UploadFileState {
+  bool isUploadLoading() {
+    return this.viewState.fold(
+        (failure) => false,
+        (success) => success is LoadingState);
+  }
 }
