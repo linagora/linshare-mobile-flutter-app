@@ -41,7 +41,6 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file
 class MySpaceViewModel extends BaseViewModel {
   final _localFilePicker = getIt<LocalFilePicker>();
   final _appNavigation = getIt<AppNavigation>();
-  final _uploadFileInteractor = getIt<UploadFileInteractor>();
 
   handleOnUploadFilePressed() {
     dispatchState(AppStore(Right(UploadButtonClick())));
@@ -69,8 +68,6 @@ class MySpaceViewModel extends BaseViewModel {
   void _handleViewEvents(ViewEvent viewEvent) {
     if (viewEvent is UploadButtonClick) {
       _handlePickFile();
-    } else if (viewEvent is UploadToMySpaceClick) {
-      consumeState(_uploadFileInteractor.execute(viewEvent.fileInfo));
     }
   }
 
