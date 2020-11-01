@@ -35,15 +35,25 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 
 class InitializeViewModel extends BaseViewModel {
   final _getCredentialInterActor = getIt<GetCredentialInteractor>();
   final _appNavigation = getIt<AppNavigation>();
   final _dynamicUrlInterceptors = getIt<DynamicUrlInterceptors>();
   final _retryInterceptors = getIt<RetryAuthenticationInterceptors>();
-
+  final _uploadFileManager = getIt<UploadFileManager>();
   InitializeViewModel() {
+    registerReceivingSharingIntent();
     consumeState(_getCredentialInterActor.execute());
+  }
+
+  void registerReceivingSharingIntent() {
+    _uploadFileManager.getReceivingSharingStream().listen((listShareMedia) {
+      if (listShareMedia != null && listShareMedia.length > 0) {
+        _uploadFileManager.setPendingSingleFile(listShareMedia.first.path);
+      }
+    });
   }
 
   @override

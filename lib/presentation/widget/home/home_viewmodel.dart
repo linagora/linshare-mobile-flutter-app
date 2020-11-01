@@ -29,17 +29,34 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 
 class HomeViewModel extends BaseViewModel {
-  final appNavigation = getIt<AppNavigation>();
+  final _appNavigation = getIt<AppNavigation>();
+  final _uploadFileManager = getIt<UploadFileManager>();
+  StreamSubscription _uploadFileManagerStreamSubscription;
 
-  @override
-  void dispose() {
-    super.dispose();
+  HomeViewModel() {
+    _registerPendingUploadFile();
+  }
+
+  void _registerPendingUploadFile() {
+    _uploadFileManagerStreamSubscription =
+        _uploadFileManager.pendingListFileInfo.stream.listen((listFileInfo) {
+      if (listFileInfo != null && listFileInfo.length > 0) {
+        _uploadFileManager.clearPendingFile();
+        _appNavigation.push(RoutePaths.uploadDocumentRoute,
+            arguments: UploadFileArguments(listFileInfo.first));
+      }
+    });
   }
 
   @override
@@ -48,5 +65,12 @@ class HomeViewModel extends BaseViewModel {
 
   @override
   void onSuccessDispatched(Success success) {
+  }
+
+  @override
+  void dispose() {
+    _uploadFileManager.closeUploadFileManagerStream();
+    _uploadFileManagerStreamSubscription.cancel();
+    super.dispose();
   }
 }

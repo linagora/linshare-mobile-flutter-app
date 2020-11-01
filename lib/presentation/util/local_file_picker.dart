@@ -29,13 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
 
 class LocalFilePicker {
+
   Future<Either<FilePickerFailure, FilePickerSuccessViewState>>
       pickSingleFile() async {
     try {
@@ -54,10 +53,7 @@ class LocalFilePicker {
   }
 
   String _getSingleFileNameWithExtension(FilePickerResult filePickerResult) {
-    if (Platform.isAndroid) {
-      return filePickerResult.files.single.name;
-    }
-    return "${filePickerResult.files.single.name}.${filePickerResult.files.single.extension}";
+    return filePickerResult.files.single.name;
   }
 
   String _getSingleFilePathWithoutFileName(FilePickerResult filePickerResult) {

@@ -29,28 +29,35 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
+import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/util/file_path_util.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:rxdart/rxdart.dart';
 
-import 'home_viewmodel.dart';
+class UploadFileManager {
+  final _filePathUtil = getIt<FilePathUtil>();
+  BehaviorSubject<List<FileInfo>> _pendingListFileInfo = BehaviorSubject.seeded([]);
+  BehaviorSubject<List<FileInfo>> get pendingListFileInfo => _pendingListFileInfo;
 
-class HomeWidget extends StatefulWidget {
-  @override
-  _HomeWidgetState createState() => _HomeWidgetState();
-}
-
-class _HomeWidgetState extends State<HomeWidget> {
-  final homeViewModel = getIt<HomeViewModel>();
-
-  @override
-  void dispose() {
-    homeViewModel.dispose();
-    super.dispose();
+  void setPendingSingleFile(String filePath) async {
+    final fileInfo = await _filePathUtil.getFileInfoFromFilePath(filePath);
+    _pendingListFileInfo.add([]);
+    _pendingListFileInfo.add([fileInfo]);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return getIt<MySpaceWidget>();
+  void clearPendingFile() {
+    _pendingListFileInfo.add([]);
+  }
+
+  void closeUploadFileManagerStream() {
+    _pendingListFileInfo.close();
+  }
+
+  Stream<List<SharedMediaFile>> getReceivingSharingStream() {
+    return Rx.merge([
+      Stream.fromFuture(ReceiveSharingIntent.getInitialMedia()),
+      ReceiveSharingIntent.getMediaStream()
+    ]);
   }
 }

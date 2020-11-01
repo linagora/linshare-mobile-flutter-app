@@ -28,29 +28,24 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'dart:io';
 
-import 'home_viewmodel.dart';
+import 'package:domain/domain.dart';
 
-class HomeWidget extends StatefulWidget {
-  @override
-  _HomeWidgetState createState() => _HomeWidgetState();
-}
+class FilePathUtil {
+  static const _filePath = "file:///";
 
-class _HomeWidgetState extends State<HomeWidget> {
-  final homeViewModel = getIt<HomeViewModel>();
-
-  @override
-  void dispose() {
-    homeViewModel.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return getIt<MySpaceWidget>();
+  Future<FileInfo> getFileInfoFromFilePath(String filePath) async {
+    final actualPath = filePath.startsWith(_filePath)
+        ? filePath.substring(_filePath.length - 1)
+        : filePath;
+    File file = File(actualPath);
+    final fileNameWithExtension = actualPath.split('/').last;
+    return FileInfo(
+        fileNameWithExtension,
+        actualPath.substring(0, actualPath.length - fileNameWithExtension.length),
+        await file.length());
   }
 }
