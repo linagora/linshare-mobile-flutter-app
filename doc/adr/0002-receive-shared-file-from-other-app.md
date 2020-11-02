@@ -1,4 +1,4 @@
-# 2. receive-shared-file-from-other-app as Unix shell scripts
+# 2. receive-shared-file-from-other-app
 
 Date: 2020-10-27
 
