@@ -32,7 +32,7 @@
 import 'package:dio/dio.dart';
 
 class DynamicUrlInterceptors extends InterceptorsWrapper {
-  var _baseUrl = "";
+  var _baseUrl = '';
 
   void changeBaseUrl(String url) {
     _baseUrl = url;

@@ -30,8 +30,8 @@
 //  the Additional Terms applicable to LinShare software.
 
 class RoutePaths {
-  static const String loginRoute = "Login";
-  static const String homeRoute = "Home";
-  static const String mySpace = "MySpace";
-  static const String uploadDocumentRoute = "UploadDocument";
+  static const String loginRoute = 'Login';
+  static const String homeRoute = 'Home';
+  static const String mySpace = 'MySpace';
+  static const String uploadDocumentRoute = 'UploadDocument';
 }

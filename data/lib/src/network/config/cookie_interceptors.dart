@@ -29,16 +29,16 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
-import 'package:dartz/dartz.dart';
 
 class CookieInterceptors extends InterceptorsWrapper {
-  var _jSessionId = "";
+  var _jSessionId = '';
 
   @override
   Future onRequest(RequestOptions options) {
-    options.headers["Cookie"] = "${Constant.jSessionId}=$_jSessionId";
+    options.headers['Cookie'] = '${Constant.jSessionId}=$_jSessionId';
     return super.onRequest(options);
   }
 
@@ -52,7 +52,7 @@ class CookieInterceptors extends InterceptorsWrapper {
     final cookieHeader = headers.value('set-cookie');
     if (cookieHeader != null) {
       Right(cookieHeader)
-          .map((cookie) => cookie.split(";"))
+          .map((cookie) => cookie.split(';'))
           .map((headers) => headers.firstWhere((element) => element.contains(Constant.jSessionId)))
           .map((validElement) => validElement.substring(Constant.jSessionId.length + 1))
           .map((jSessionId) => _jSessionId = jSessionId);

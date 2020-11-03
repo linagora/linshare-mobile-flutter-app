@@ -37,16 +37,16 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class LoginViewModel extends BaseViewModel {
   final getPermanentTokenInteractor = getIt<CreatePermanentTokenInteractor>();
   final appNavigation = getIt<AppNavigation>();
 
-  String _urlText = "";
-  String _emailText = "";
-  String _passwordText = "";
+  String _urlText = '';
+  String _emailText = '';
+  String _passwordText = '';
 
   setUrlText(String url) {
     _urlText = url;

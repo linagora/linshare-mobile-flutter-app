@@ -30,8 +30,8 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/data.dart';
-import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
+import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/util/device_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -50,7 +50,7 @@ class AuthenticationDataSource {
           baseUrl,
           userName.userName,
           password.value,
-          PermanentTokenBodyRequest("LinShare-${deviceManager.getPlatformString()}-$deviceUUID"));
+          PermanentTokenBodyRequest('LinShare-${deviceManager.getPlatformString()}-$deviceUUID'));
       return permanentToken.toToken();
     } catch (exception) {
       _throwAuthenticateException(exception);

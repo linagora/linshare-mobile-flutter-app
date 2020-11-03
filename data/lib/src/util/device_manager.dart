@@ -29,11 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
-import 'dart:core';
-import 'dart:async';
 
 class DeviceManager {
   final DeviceInfoPlugin _deviceInfoPlugin;
@@ -41,7 +41,7 @@ class DeviceManager {
   DeviceManager(this._deviceInfoPlugin);
 
   Future<String> getDeviceUUID() async {
-    String deviceUUID = "unknown device uuid";
+    String deviceUUID = 'unknown device uuid';
     try {
       if (Platform.isIOS) {
         var info = await _deviceInfoPlugin.iosInfo;
@@ -58,8 +58,8 @@ class DeviceManager {
 
   String getPlatformString() {
     if (Platform.isIOS) {
-      return "IOS-App";
+      return 'IOS-App';
     }
-    return "Android-App";
+    return 'Android-App';
   }
 }

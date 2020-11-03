@@ -32,11 +32,11 @@
 import 'package:domain/domain.dart';
 
 class EndPoint {
-  static final String rootPath = "/linshare/webservice/rest/user/v2";
+  static final String rootPath = '/linshare/webservice/rest/user/v2';
   static final ServicePath authentication = ServicePath('/jwt');
 
-  static final ServicePath authorizedUser = ServicePath("/authentication/authorized");
-  static final ServicePath documents = ServicePath("/documents");
+  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
+  static final ServicePath documents = ServicePath('/documents');
 }
 
 extension ServicePathExtension on ServicePath {

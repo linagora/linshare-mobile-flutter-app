@@ -35,13 +35,13 @@ import 'dart:io';
 import 'package:domain/domain.dart';
 
 class FilePathUtil {
-  static const _filePath = "file:///";
+  static const _filePath = 'file:///';
 
   Future<FileInfo> getFileInfoFromFilePath(String filePath) async {
     final actualPath = filePath.startsWith(_filePath)
         ? filePath.substring(_filePath.length - 1)
         : filePath;
-    File file = File(actualPath);
+    var file = File(actualPath);
     final fileNameWithExtension = actualPath.split('/').last;
     return FileInfo(
         fileNameWithExtension,
