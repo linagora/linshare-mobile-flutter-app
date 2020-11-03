@@ -149,8 +149,7 @@ class LoginWidget extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 67),
                           child: StreamBuilder(builder: (context, snapshot) {
-                            return 
-                                    viewModel.store.state.authenticationState.isAuthenticationLoading()
+                            return viewModel.store.state.authenticationState.isAuthenticationLoading()
                                 ? loadingCircularProgress()
                                 : loginButton(context, loginViewModel);
                           }),

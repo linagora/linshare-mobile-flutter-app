@@ -64,13 +64,12 @@ class InitializeViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartUploadLoadingAction());
       getCredentialInteractor.execute().then((result) => result.fold(
-              (left) => store.dispatch(getCredentialFailureAction(left)),
-              (right) => store.dispatch(getCredentialSuccessAction((right)))));
+          (left) => store.dispatch(getCredentialFailureAction(left)),
+          (right) => store.dispatch(getCredentialSuccessAction((right)))));
     };
   }
 
-  ThunkAction<AppState> getCredentialSuccessAction(
-      CredentialViewState success) {
+  ThunkAction<AppState> getCredentialSuccessAction(CredentialViewState success) {
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _retryInterceptors.setPermanentToken(success.token);

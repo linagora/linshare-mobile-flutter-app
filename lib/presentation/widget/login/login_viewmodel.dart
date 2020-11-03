@@ -71,8 +71,7 @@ class LoginViewModel extends BaseViewModel {
 
   Password _parsePassword(String password) => Password(password);
 
-  ThunkAction<AppState> loginAction(
-      Uri baseUrl, UserName userName, Password password) {
+  ThunkAction<AppState> loginAction(Uri baseUrl, UserName userName, Password password) {
     return (Store<AppState> store) async {
       store.dispatch(StartAuthenticationLoadingAction());
       getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
