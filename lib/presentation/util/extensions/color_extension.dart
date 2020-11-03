@@ -34,14 +34,14 @@ import 'dart:ui' show Color;
 import 'package:flutter/material.dart';
 
 extension AppColor on Color {
-  static const primaryColor = const Color(0xff4AC6FF);
-  static const loginTextFieldHintColor = const Color(0xffAFAFAF);
-  static const loginTextFieldTextColor = const Color(0xff7B7B7B);
-  static const loginTextFieldErrorBorder = const Color(0xffFF5858);
-  static const loginButtonColor = const Color(0xff1B7EC7);
-  static const uploadFileFileNameTextColor = const Color(0xff7B7B7B);
-  static const uploadFileFileSizeTextColor = const Color(0xffACACAC);
-  static const uploadProgressBackgroundColor = const Color(0xff5FA4D8);
-  static const mySpaceUploadBackground = const Color(0xff1B7EC7);
-  static const toastBackgroundColor = const Color(0xff1B7EC7);
+  static const primaryColor = Color(0xff4AC6FF);
+  static const loginTextFieldHintColor = Color(0xffAFAFAF);
+  static const loginTextFieldTextColor = Color(0xff7B7B7B);
+  static const loginTextFieldErrorBorder = Color(0xffFF5858);
+  static const loginButtonColor = Color(0xff1B7EC7);
+  static const uploadFileFileNameTextColor = Color(0xff7B7B7B);
+  static const uploadFileFileSizeTextColor = Color(0xffACACAC);
+  static const uploadProgressBackgroundColor = Color(0xff5FA4D8);
+  static const mySpaceUploadBackground = Color(0xff1B7EC7);
+  static const toastBackgroundColor = Color(0xff1B7EC7);
 }

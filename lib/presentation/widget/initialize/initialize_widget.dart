@@ -31,12 +31,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/initialize_get_it/initialize_viewmodel.dart';
+import 'package:redux/redux.dart';
 
 class InitializeWidget extends StatelessWidget {
   final initializeViewModel = getIt<InitializeViewModel>();
@@ -61,7 +61,7 @@ class InitializeWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(AppLocalizations.of(context).stringOf("initializing_data"),
+              Text(AppLocalizations.of(context).stringOf('initializing_data'),
                   style: TextStyle(color: Colors.white, fontSize: 17)),
             ],
           ),

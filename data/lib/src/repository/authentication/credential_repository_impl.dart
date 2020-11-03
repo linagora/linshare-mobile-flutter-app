@@ -35,7 +35,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CredentialRepositoryImpl extends CredentialRepository {
   final SharedPreferences sharedPreferences;
 
-  final keyBaseUrl = "KEY_BASE_URL";
+  final keyBaseUrl = 'KEY_BASE_URL';
 
   CredentialRepositoryImpl(this.sharedPreferences);
 

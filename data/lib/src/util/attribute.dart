@@ -30,5 +30,5 @@
 //  the Additional Terms applicable to LinShare software.
 
 class Attribute {
-  static const uuid = "uuid";
+  static const uuid = 'uuid';
 }

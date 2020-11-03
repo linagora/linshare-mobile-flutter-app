@@ -35,7 +35,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/redux/selectors/upload_file_selector.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
@@ -185,7 +184,7 @@ class MySpaceWidget extends StatelessWidget {
             padding: EdgeInsets.only(top: 20),
             child: Text(
               AppLocalizations.of(context)
-                  .stringOf("my_space_text_upload_your_files_here"),
+                  .stringOf('my_space_text_upload_your_files_here'),
               style: TextStyle(
                   color: AppColor.loginTextFieldTextColor, fontSize: 20),
               textAlign: TextAlign.center,

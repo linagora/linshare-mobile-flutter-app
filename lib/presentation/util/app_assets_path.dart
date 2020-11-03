@@ -30,6 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 
 class AppAssetsPath {
-  static const images = "assets/images/";
-  static const localizations = "assets/lang/";
+  static const images = 'assets/images/';
+  static const localizations = 'assets/lang/';
 }
