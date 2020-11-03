@@ -38,10 +38,21 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 
-class UploadFileWidget extends StatelessWidget {
+class UploadFileWidget extends StatefulWidget {
+  @override
+  _UploadFileWidgetState createState() => _UploadFileWidgetState();
+}
+
+class _UploadFileWidgetState extends State<UploadFileWidget> {
   final uploadFileViewModel = getIt<UploadFileViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final appNavigation = getIt<AppNavigation>();
+
+  @override
+  void dispose() {
+    uploadFileViewModel.onDisposed();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

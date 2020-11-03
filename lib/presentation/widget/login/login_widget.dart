@@ -43,10 +43,21 @@ import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
 import 'package:redux/redux.dart';
 
-class LoginWidget extends StatelessWidget {
+class LoginWidget extends StatefulWidget {
+  @override
+  _LoginWidgetState createState() => _LoginWidgetState();
+}
+
+class _LoginWidgetState extends State<LoginWidget> {
   final loginViewModel = getIt<LoginViewModel>();
   final textFieldUtil = getIt<TextFieldUtil>();
   final imagePath = getIt<AppImagePaths>();
+
+  @override
+  void dispose() {
+    loginViewModel.onDisposed();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
