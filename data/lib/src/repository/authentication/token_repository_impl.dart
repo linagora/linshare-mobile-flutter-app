@@ -37,7 +37,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TokenRepositoryImpl extends TokenRepository {
   final SharedPreferences sharedPreferences;
 
-  final keyPermanentToken = "KEY_PERMANENT_TOKEN";
+  final keyPermanentToken = 'KEY_PERMANENT_TOKEN';
 
   TokenRepositoryImpl(this.sharedPreferences);
 

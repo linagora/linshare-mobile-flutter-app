@@ -49,7 +49,7 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     if (_isAuthenticationError(dioError)) {
       _retryCount++;
       RequestOptions requestOptions = dioError.response.request;
-      requestOptions.headers.addAll({"Authorization": _getTokenAsBearerHeader(_permanentToken.token)});
+      requestOptions.headers.addAll({'Authorization': _getTokenAsBearerHeader(_permanentToken.token)});
       return _dio.request(requestOptions.path, options: requestOptions);
     }
     return super.onError(dioError);
@@ -65,5 +65,5 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     return false;
   }
 
-  String _getTokenAsBearerHeader(String token) => "Bearer $token";
+  String _getTokenAsBearerHeader(String token) => 'Bearer $token';
 }

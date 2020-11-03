@@ -195,7 +195,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             padding: EdgeInsets.only(top: 20),
             child: Text(
               AppLocalizations.of(context)
-                  .stringOf("my_space_text_upload_your_files_here"),
+                  .stringOf('my_space_text_upload_your_files_here'),
               style: TextStyle(
                   color: AppColor.loginTextFieldTextColor, fontSize: 20),
               textAlign: TextAlign.center,

@@ -47,7 +47,7 @@ class AppLocalizations {
   Map<String, String> _localizedValues;
 
   Future load() async {
-    String jsonStringValues = await rootBundle.loadString("${AppAssetsPath.localizations}${locale.languageCode}.json");
+    var jsonStringValues = await rootBundle.loadString('${AppAssetsPath.localizations}${locale.languageCode}.json');
 
     Map<String, dynamic> mappedJson = json.decode(jsonStringValues);
     _localizedValues = mappedJson.map((key, value) => MapEntry(key, value.toString()));
@@ -70,12 +70,11 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
-    AppLocalizations appLocalizations = AppLocalizations(locale);
+    var appLocalizations = AppLocalizations(locale);
     await appLocalizations.load();
     return appLocalizations;
   }
 
   @override
-  bool shouldReload(covariant LocalizationsDelegate<AppLocalizations> old) =>
-      false;
+  bool shouldReload(covariant LocalizationsDelegate<AppLocalizations> old) => false;
 }

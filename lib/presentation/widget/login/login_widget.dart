@@ -97,7 +97,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               EdgeInsets.only(top: 16, left: 16, right: 16),
                           child: Text(
                             AppLocalizations.of(context)
-                                .stringOf("login_text_slogan"),
+                                .stringOf('login_text_slogan'),
                             style: TextStyle(color: Colors.white, fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
@@ -107,7 +107,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                           padding: EdgeInsets.only(bottom: 24),
                           child: Text(
                             AppLocalizations.of(context)
-                                .stringOf("login_text_login_to_continue"),
+                                .stringOf('login_text_login_to_continue'),
                             style: TextStyle(color: Colors.white, fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
@@ -121,7 +121,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               textInputAction: TextInputAction.next,
                               decoration: textFieldUtil.loginInputDecoration(
                                   AppLocalizations.of(context)
-                                      .stringOf("https"))),
+                                      .stringOf('https'))),
                         ),
                         SizedBox(
                           height: 16,
@@ -136,7 +136,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               textInputAction: TextInputAction.next,
                               decoration: textFieldUtil.loginInputDecoration(
                                   AppLocalizations.of(context)
-                                      .stringOf("email"))),
+                                      .stringOf('email'))),
                         ),
                         SizedBox(
                           height: 16,
@@ -152,7 +152,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               textInputAction: TextInputAction.done,
                               decoration: textFieldUtil.loginInputDecoration(
                                   AppLocalizations.of(context)
-                                      .stringOf("password"))),
+                                      .stringOf('password'))),
                         ),
                         SizedBox(
                           height: 32,
@@ -198,7 +198,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         onPressed: () => loginViewModel.handleLoginPressed(),
         color: AppColor.loginButtonColor,
         textColor: Colors.white,
-        child: Text(AppLocalizations.of(context).stringOf("login_button_login"),
+        child: Text(AppLocalizations.of(context).stringOf('login_button_login'),
             style: TextStyle(fontSize: 16, color: Colors.white)),
       ),
     );

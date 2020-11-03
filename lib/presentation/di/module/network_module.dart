@@ -43,9 +43,9 @@ class NetworkModule {
   }
 
   void _provideBaseOption() {
-    final Map<String, dynamic> headers = {
-      HttpHeaders.acceptHeader: "application/json",
-      HttpHeaders.contentTypeHeader: "application/json"
+    final headers = <String, dynamic>{
+      HttpHeaders.acceptHeader: 'application/json',
+      HttpHeaders.contentTypeHeader: 'application/json'
     };
     getIt.registerSingleton<BaseOptions>(BaseOptions(headers: headers));
   }
