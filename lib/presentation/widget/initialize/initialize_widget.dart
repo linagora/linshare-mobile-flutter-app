@@ -38,8 +38,19 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/initialize_get_it/initialize_viewmodel.dart';
 
-class InitializeWidget extends StatelessWidget {
+class InitializeWidget extends StatefulWidget {
+  @override
+  _InitializeWidgetState createState() => _InitializeWidgetState();
+}
+
+class _InitializeWidgetState extends State<InitializeWidget> {
   final initializeViewModel = getIt<InitializeViewModel>();
+
+  @override
+  void dispose() {
+    initializeViewModel.onDisposed();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
