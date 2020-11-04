@@ -57,12 +57,12 @@ TokenId _uuidFromJson(dynamic json) => TokenId(json.toString());
 
 extension PermanentTokenExtension on PermanentToken {
   Token toToken() {
-    return Token(this.token, this.tokenId);
+    return Token(token, tokenId);
   }
 }
 
 extension TokenExtension on Token {
   PermanentToken toPermanentToken() {
-    return PermanentToken(this.token, this.tokenId);
+    return PermanentToken(token, tokenId);
   }
 }

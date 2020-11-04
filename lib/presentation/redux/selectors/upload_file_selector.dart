@@ -34,7 +34,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state
 
 extension UploadSelector on UploadFileState {
   bool isUploadLoading() {
-    return this.viewState.fold(
+    return viewState.fold(
         (failure) => false,
         (success) => success is LoadingState);
   }
