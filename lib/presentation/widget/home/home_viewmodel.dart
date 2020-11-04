@@ -50,7 +50,7 @@ class HomeViewModel extends BaseViewModel {
   void _registerPendingUploadFile() {
     _uploadFileManagerStreamSubscription =
         _uploadFileManager.pendingListFileInfo.stream.listen((listFileInfo) {
-      if (listFileInfo != null && listFileInfo.length > 0) {
+      if (listFileInfo != null && listFileInfo.isNotEmpty) {
         _uploadFileManager.clearPendingFile();
         _appNavigation.push(RoutePaths.uploadDocumentRoute,
             arguments: UploadFileArguments(listFileInfo.first));

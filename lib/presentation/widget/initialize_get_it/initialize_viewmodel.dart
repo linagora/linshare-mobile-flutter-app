@@ -54,7 +54,7 @@ class InitializeViewModel extends BaseViewModel {
 
   void registerReceivingSharingIntent() {
     _uploadFileManager.getReceivingSharingStream().listen((listShareMedia) {
-      if (listShareMedia != null && listShareMedia.length > 0) {
+      if (listShareMedia != null && listShareMedia.isNotEmpty) {
         _uploadFileManager.setPendingSingleFile(listShareMedia.first.path);
       }
     });
