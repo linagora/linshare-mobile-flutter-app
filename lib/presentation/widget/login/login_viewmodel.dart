@@ -74,7 +74,7 @@ class LoginViewModel extends BaseViewModel {
   ThunkAction<AppState> loginAction(Uri baseUrl, UserName userName, Password password) {
     return (Store<AppState> store) async {
       store.dispatch(StartAuthenticationLoadingAction());
-      getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
+      await getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
           (result) => result.fold(
               (failure) => store.dispatch(LoginAction(Left(failure))),
               ((success) => {store.dispatch(loginSuccessAction(success))})));
@@ -84,7 +84,7 @@ class LoginViewModel extends BaseViewModel {
   ThunkAction<AppState> loginSuccessAction(AuthenticationViewState success) {
     return (Store<AppState> store) async {
       store.dispatch(LoginAction(Right(success)));
-      appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
+      await appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
     };
   }
 

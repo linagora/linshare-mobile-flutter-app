@@ -37,9 +37,9 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux_thunk/redux_thunk.dart';
-import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class InitializeViewModel extends BaseViewModel {
   final getCredentialInteractor = getIt<GetCredentialInteractor>();
@@ -63,7 +63,7 @@ class InitializeViewModel extends BaseViewModel {
   ThunkAction<AppState> getCredentialAction() {
     return (Store<AppState> store) async {
       store.dispatch(StartUploadLoadingAction());
-      getCredentialInteractor.execute().then((result) => result.fold(
+      await getCredentialInteractor.execute().then((result) => result.fold(
           (left) => store.dispatch(getCredentialFailureAction(left)),
           (right) => store.dispatch(getCredentialSuccessAction((right)))));
     };
@@ -73,13 +73,13 @@ class InitializeViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _retryInterceptors.setPermanentToken(success.token);
-      _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
+      await _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
     };
   }
 
   ThunkAction<AppState> getCredentialFailureAction(CredentialFailure failure) {
     return (Store<AppState> store) async {
-      _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+      await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
     };
   }
 

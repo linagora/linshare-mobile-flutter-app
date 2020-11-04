@@ -58,7 +58,7 @@ class UploadFileViewModel extends BaseViewModel {
 
   ThunkAction<AppState> uploadFileAction(FileInfo fileInfo) {
     return (Store<AppState> store) async {
-      _uploadFileInteractor.execute(fileInfo).forEach((viewState) {
+      await _uploadFileInteractor.execute(fileInfo).forEach((viewState) {
         viewState.fold(
             (failure) => store.dispatch(UploadFileAction(Left(failure))),
             (success) => handleUploadFileSuccess(store, success));
