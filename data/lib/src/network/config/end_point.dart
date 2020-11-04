@@ -41,14 +41,14 @@ class EndPoint {
 
 extension ServicePathExtension on ServicePath {
   String generateEndPointPath() {
-    return EndPoint.rootPath + this.path;
+    return EndPoint.rootPath + path;
   }
 
   String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + this.generateEndPointPath();
+    return baseUrl.origin + generateEndPointPath();
   }
 
   String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + this.generateEndPointPath();
+    return baseUrl.origin + generateEndPointPath();
   }
 }

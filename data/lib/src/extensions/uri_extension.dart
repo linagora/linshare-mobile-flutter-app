@@ -34,6 +34,6 @@ import 'package:domain/domain.dart';
 
 extension UriExtension on Uri {
   String withServicePath(ServicePath servicePath) {
-    return this.origin + EndPoint.rootPath + servicePath.path;
+    return origin + EndPoint.rootPath + servicePath.path;
   }
 }

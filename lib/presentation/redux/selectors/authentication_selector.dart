@@ -34,7 +34,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/authentication_st
 
 extension AuthenticationSelector on AuthenticationState {
   bool isAuthenticationLoading() {
-    return this.viewState.fold(
+    return viewState.fold(
         (failure) => false,
         (success) => success is LoadingState);
   }

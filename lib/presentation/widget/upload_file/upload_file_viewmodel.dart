@@ -36,8 +36,8 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_acti
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class UploadFileViewModel extends BaseViewModel {
   final appNavigation = getIt<AppNavigation>();
@@ -51,7 +51,7 @@ class UploadFileViewModel extends BaseViewModel {
 
   handleOnUploadFilePressed() {
     if (_fileInfo != null) {
-      store.dispatch(uploadFileAction(this._fileInfo));
+      store.dispatch(uploadFileAction(_fileInfo));
     }
     appNavigation.popBack();
   }
