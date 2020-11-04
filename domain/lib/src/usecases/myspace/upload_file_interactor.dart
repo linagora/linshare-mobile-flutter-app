@@ -29,11 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+import 'dart:core';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/repository/document/document_repository.dart';
-import 'dart:core';
-import 'dart:async';
 
 class UploadFileInteractor {
   final DocumentRepository documentRepository;
@@ -51,7 +52,7 @@ class UploadFileInteractor {
       final dataHolder = await documentRepository.upload(fileInfo, token, baseUrl);
 
       await for (final dataInfo in dataHolder.dataInfo) {
-        final Either<Failure, Success> state = dataInfo.fold((failure) {
+        final state = dataInfo.fold((failure) {
           return Left(UploadFileFailure(Exception()));
         }, (success) {
           if (success is FileUploadProgress) {

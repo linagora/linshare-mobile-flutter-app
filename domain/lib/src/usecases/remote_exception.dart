@@ -32,10 +32,10 @@
 import 'package:equatable/equatable.dart';
 
 abstract class RemoteException extends Equatable implements Exception {
-  static final missingRequiredFields = "Missing required fields";
-  static final serverNotFound = "Server not found";
-  static final internalServerError = "Internal server error";
-  static final connectError = "Connect error";
+  static final missingRequiredFields = 'Missing required fields';
+  static final serverNotFound = 'Server not found';
+  static final internalServerError = 'Internal server error';
+  static final connectError = 'Connect error';
 
   final String message;
 
