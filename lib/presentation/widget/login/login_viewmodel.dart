@@ -48,19 +48,19 @@ class LoginViewModel extends BaseViewModel {
   String _emailText = '';
   String _passwordText = '';
 
-  setUrlText(String url) {
+  void setUrlText(String url) {
     _urlText = url;
   }
 
-  setEmailText(String email) {
+  void setEmailText(String email) {
     _emailText = email;
   }
 
-  setPasswordText(String password) {
+  void setPasswordText(String password) {
     _passwordText = password;
   }
 
-  handleLoginPressed() {
+  void handleLoginPressed() {
     store.dispatch(loginAction(_parseUri(_urlText), _parseUserName(_emailText),
         _parsePassword(_passwordText)));
   }

@@ -30,11 +30,12 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+
 import 'extensions/color_extension.dart';
 
 class TextFieldUtil {
   InputDecoration loginInputDecoration(String hintText) {
-    return new InputDecoration(
+    return InputDecoration(
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(6)),
             borderSide: BorderSide(width: 1, color: Colors.white)),

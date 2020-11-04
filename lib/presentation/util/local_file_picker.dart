@@ -38,7 +38,7 @@ class LocalFilePicker {
   Future<Either<FilePickerFailure, FilePickerSuccessViewState>>
       pickSingleFile() async {
     try {
-      FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+      var fileResult = await FilePicker.platform.pickFiles();
       if (fileResult != null) {
         return Right(FilePickerSuccessViewState(FileInfo(
             _getSingleFileNameWithExtension(fileResult),

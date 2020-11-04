@@ -45,11 +45,11 @@ class UploadFileViewModel extends BaseViewModel {
 
   FileInfo _fileInfo;
 
-  setFileInfo(FileInfo fileInfo) {
+  void setFileInfo(FileInfo fileInfo) {
     _fileInfo = fileInfo;
   }
 
-  handleOnUploadFilePressed() {
+  void handleOnUploadFilePressed() {
     if (_fileInfo != null) {
       store.dispatch(uploadFileAction(_fileInfo));
     }

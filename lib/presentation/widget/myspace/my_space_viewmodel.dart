@@ -39,18 +39,18 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class MySpaceViewModel extends BaseViewModel {
   final _localFilePicker = getIt<LocalFilePicker>();
   final _appNavigation = getIt<AppNavigation>();
 
-  handleOnUploadFilePressed() {
+  void handleOnUploadFilePressed() {
     store.dispatch(pickFileAction());
   }
 
-  cleanUploadViewState() {
+  void cleanUploadViewState() {
     store.dispatch(CleanUploadStateAction());
   }
 

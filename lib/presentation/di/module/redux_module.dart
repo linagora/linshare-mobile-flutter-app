@@ -34,8 +34,8 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/app_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux_logging/redux_logging.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class ReduxModule {
   ReduxModule() {
@@ -47,7 +47,7 @@ class ReduxModule {
         initialState: AppState.initial(),
         middleware: [
           thunkMiddleware,
-          if (kDebugMode) new LoggingMiddleware.printer()
+          if (kDebugMode) LoggingMiddleware.printer()
         ]));
   }
 }
