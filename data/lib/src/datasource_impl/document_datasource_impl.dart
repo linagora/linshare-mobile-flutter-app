@@ -33,8 +33,8 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:data/src/datasource/document_datasource.dart';
-import 'package:data/src/network/config/end_point.dart';
 import 'package:data/src/extensions/uri_extension.dart';
+import 'package:data/src/network/config/end_point.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
@@ -47,7 +47,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
 
   @override
   Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
-    File file = File(fileInfo.filePath + fileInfo.fileName);
+    var file = File(fileInfo.filePath + fileInfo.fileName);
     final taskId = await uploader.enqueue(
         url: baseUrl.withServicePath(EndPoint.documents),
         files: [

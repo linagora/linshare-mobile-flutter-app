@@ -41,7 +41,7 @@ class DeviceManager {
   DeviceManager(this._deviceInfoPlugin);
 
   Future<String> getDeviceUUID() async {
-    String deviceUUID = 'unknown device uuid';
+    var deviceUUID = 'unknown device uuid';
     try {
       if (Platform.isIOS) {
         var info = await _deviceInfoPlugin.iosInfo;

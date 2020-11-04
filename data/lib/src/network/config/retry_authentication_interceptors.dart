@@ -48,7 +48,7 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   Future onError(DioError dioError) {
     if (_isAuthenticationError(dioError)) {
       _retryCount++;
-      RequestOptions requestOptions = dioError.response.request;
+      var requestOptions = dioError.response.request;
       requestOptions.headers.addAll({'Authorization': _getTokenAsBearerHeader(_permanentToken.token)});
       return _dio.request(requestOptions.path, options: requestOptions);
     }

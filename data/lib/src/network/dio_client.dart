@@ -36,7 +36,7 @@ class DioClient {
 
   DioClient(this._dio);
 
-  Map<String, dynamic> getHeaders() => new Map.from(_dio.options.headers);
+  Map<String, dynamic> getHeaders() => Map.from(_dio.options.headers);
 
   Future<dynamic> get(
     String path, {

@@ -34,11 +34,11 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 extension SharePreferencesExtension on SharedPreferences {
-  setObject(String key, T) async {
+  Future<bool> setObject(String key, T) async {
     return setString(key, json.encode(T));
   }
 
-  getObject(String key) async {
+  dynamic getObject(String key) async {
     return json.decode(getString(key));
   }
 }
