@@ -56,7 +56,7 @@ class MySpaceViewModel extends BaseViewModel {
 
   ThunkAction<AppState> pickFileAction() {
     return (Store<AppState> store) async {
-      _localFilePicker.pickSingleFile().then((result) => result.fold(
+      await _localFilePicker.pickSingleFile().then((result) => result.fold(
           (failure) => store.dispatch(UploadFileAction(Left(failure))),
           (success) => store.dispatch(pickFileSuccessAction(success))));
     };
@@ -66,7 +66,7 @@ class MySpaceViewModel extends BaseViewModel {
       FilePickerSuccessViewState success) {
     return (Store<AppState> store) async {
       store.dispatch(UploadFileAction(Right(success)));
-      _appNavigation.push(RoutePaths.uploadDocumentRoute,
+      await _appNavigation.push(RoutePaths.uploadDocumentRoute,
           arguments: UploadFileArguments(success.fileInfo));
     };
   }
