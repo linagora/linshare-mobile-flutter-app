@@ -32,7 +32,7 @@
 import 'package:domain/src/usecases/remote_exception.dart';
 
 abstract class AuthenticationException extends RemoteException {
-  static final wrongCredential = "Credential is wrong";
+  static final wrongCredential = 'Credential is wrong';
 
   AuthenticationException(String message) : super(message);
 }
