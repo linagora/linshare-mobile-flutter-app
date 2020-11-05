@@ -44,7 +44,7 @@ class AuthenticationDataSource {
   AuthenticationDataSource(this.linShareHttpClient, this.deviceManager);
 
   Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password) async {
-    try {
+    return Future.sync(() async {
       final deviceUUID = await deviceManager.getDeviceUUID();
       final permanentToken = await linShareHttpClient.createPermanentToken(
           baseUrl,
@@ -52,12 +52,12 @@ class AuthenticationDataSource {
           password.value,
           PermanentTokenBodyRequest('LinShare-${deviceManager.getPlatformString()}-$deviceUUID'));
       return permanentToken.toToken();
-    } catch (exception) {
-      _throwAuthenticateException(exception);
-    }
+    }).catchError((error) {
+      _throwAuthenticateException(error);
+    });
   }
 
-  void _throwAuthenticateException(Exception exception) {
+  void _throwAuthenticateException(dynamic exception) {
     if (exception is DioError) {
       switch (exception.type) {
         case DioErrorType.DEFAULT:

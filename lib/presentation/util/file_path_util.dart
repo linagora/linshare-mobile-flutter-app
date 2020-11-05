@@ -41,7 +41,7 @@ class FilePathUtil {
     final actualPath = filePath.startsWith(_filePath)
         ? filePath.substring(_filePath.length - 1)
         : filePath;
-    var file = File(actualPath);
+    final file = File(actualPath);
     final fileNameWithExtension = actualPath.split('/').last;
     return FileInfo(
         fileNameWithExtension,
