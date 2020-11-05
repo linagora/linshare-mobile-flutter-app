@@ -69,6 +69,15 @@ workflows:
         inputs:
         - additional_params: ''
         - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION/data"
+    - flutter-test@0:
+        inputs:
+        - additional_params: "--verbose"
+    - flutter-test@0:
+        inputs:
+        - additional_params: data --verbose
+    - flutter-test@0:
+        inputs:
+        - additional_params: domain --verbose
     - certificate-and-profile-installer@1:
         is_always_run: true
     - flutter-build@0:
