@@ -39,4 +39,7 @@ abstract class AuthenticationException extends RemoteException {
 
 class BadCredentials extends AuthenticationException {
   BadCredentials() : super(AuthenticationException.wrongCredential);
+
+  @override
+  List<Object> get props => [];
 }

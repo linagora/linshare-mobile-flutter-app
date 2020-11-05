@@ -38,10 +38,16 @@ class CredentialViewState extends ViewState {
   final Uri baseUrl;
 
   CredentialViewState(this.token, this.baseUrl);
+
+  @override
+  List<Object> get props => [token, baseUrl];
 }
 
 class CredentialFailure extends FeatureFailure {
   final RemoteException authenticationException;
 
   CredentialFailure(this.authenticationException);
+
+  @override
+  List<Object> get props => [authenticationException];
 }

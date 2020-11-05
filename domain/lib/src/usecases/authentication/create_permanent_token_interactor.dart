@@ -34,30 +34,18 @@ import 'package:domain/domain.dart';
 import 'dart:core';
 
 class CreatePermanentTokenInteractor {
-  final AuthenticationRepository
-      authenticationRepository;
+  final AuthenticationRepository authenticationRepository;
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
 
-  CreatePermanentTokenInteractor(
-      this.authenticationRepository,
-      this.tokenRepository,
-      this.credentialRepository);
+  CreatePermanentTokenInteractor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
 
-  Future<Either<Failure, Success>> execute(
-      Uri baseUrl,
-      UserName userName,
-      Password password
-  ) async {
+  Future<Either<Failure, Success>> execute(Uri baseUrl, UserName userName, Password password) async {
     try {
-      final token = await authenticationRepository
-          .createPermanentToken(
-              baseUrl, userName, password);
+      final token = await authenticationRepository.createPermanentToken(baseUrl, userName, password);
       await tokenRepository.persistToken(token);
-      await credentialRepository
-          .saveBaseUrl(baseUrl);
-      return Right(
-          AuthenticationViewState(token));
+      await credentialRepository.saveBaseUrl(baseUrl);
+      return Right(AuthenticationViewState(token));
     } catch (e) {
       return Left(AuthenticationFailure(e));
     }
