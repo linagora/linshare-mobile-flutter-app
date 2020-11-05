@@ -28,45 +28,9 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:async';
-import 'dart:core';
-
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/repository/document/document_repository.dart';
+import 'package:mockito/mockito.dart';
 
-class UploadFileInteractor {
-  final DocumentRepository documentRepository;
-  final TokenRepository tokenRepository;
-  final CredentialRepository credentialRepository;
-
-  UploadFileInteractor(this.documentRepository, this.tokenRepository, this.credentialRepository);
-
-  Stream<Either<Failure, Success>> execute(FileInfo fileInfo) async* {
-    try {
-      yield Right(PreparingUpload(fileInfo));
-
-      final token = await tokenRepository.getToken();
-      final baseUrl = await credentialRepository.getBaseUrl();
-      final dataHolder = await documentRepository.upload(fileInfo, token, baseUrl);
-
-      await for (final dataInfo in dataHolder.dataInfo) {
-        final state = dataInfo.fold((failure) {
-          return Left(UploadFileFailure(Exception()));
-        }, (success) {
-          if (success is FileUploadProgress) {
-            return Right(UploadingProgress(success.progress, fileInfo.fileName));
-          } else if (success is FileUploadSuccess) {
-            return Right(UploadFileSuccess(fileInfo));
-          } else {
-            return Left(UploadFileFailure(Exception()));
-          }
-        });
-        yield state;
-      }
-    } catch (exception) {
-      yield Left(UploadFileFailure(exception));
-    }
-  }
-}
+class MockDocumentRepository extends Mock implements DocumentRepository {}
