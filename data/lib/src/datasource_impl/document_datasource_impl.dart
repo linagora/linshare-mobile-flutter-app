@@ -47,7 +47,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
 
   @override
   Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
-    var file = File(fileInfo.filePath + fileInfo.fileName);
+    final file = File(fileInfo.filePath + fileInfo.fileName);
     final taskId = await uploader.enqueue(
         url: baseUrl.withServicePath(EndPoint.documents),
         files: [

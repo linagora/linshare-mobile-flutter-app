@@ -49,7 +49,7 @@ class LinShareHttpClient {
       String userName,
       String password,
       PermanentTokenBodyRequest bodyRequest) async {
-    var basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
+    final basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
 
     final headerParam = _dioClient.getHeaders();
     headerParam[HttpHeaders.authorizationHeader] = basicAuth;
