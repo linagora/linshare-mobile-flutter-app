@@ -29,7 +29,9 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-abstract class RemoteException implements Exception {
+import 'package:equatable/equatable.dart';
+
+abstract class RemoteException extends Equatable implements Exception {
   static final missingRequiredFields = "Missing required fields";
   static final serverNotFound = "Server not found";
   static final internalServerError = "Internal server error";
@@ -42,20 +44,35 @@ abstract class RemoteException implements Exception {
 
 class MissingRequiredFields extends RemoteException {
   MissingRequiredFields() : super(RemoteException.missingRequiredFields);
+
+  @override
+  List<Object> get props => [];
 }
 
 class ServerNotFound extends RemoteException {
   ServerNotFound() : super(RemoteException.serverNotFound);
+
+  @override
+  List<Object> get props => [];
 }
 
 class InternalServerError extends RemoteException {
   InternalServerError() : super(RemoteException.internalServerError);
+
+  @override
+  List<Object> get props => [];
 }
 
 class ConnectError extends RemoteException {
   ConnectError() : super(RemoteException.connectError);
+
+  @override
+  List<Object> get props => [];
 }
 
 class UnknownError extends RemoteException {
   UnknownError(String message) : super(message);
+
+  @override
+  List<Object> get props => [];
 }

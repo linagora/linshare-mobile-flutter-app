@@ -29,8 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class UserName {
+import 'package:equatable/equatable.dart';
+
+class UserName extends Equatable {
   final String userName;
 
   UserName(this.userName);
+
+  @override
+  List<Object> get props => [userName];
 }

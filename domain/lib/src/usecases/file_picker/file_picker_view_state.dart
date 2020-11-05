@@ -36,10 +36,16 @@ class FilePickerSuccessViewState extends ViewState {
   final FileInfo fileInfo;
 
   FilePickerSuccessViewState(this.fileInfo);
+
+  @override
+  List<Object> get props => [fileInfo];
 }
 
 class FilePickerFailure extends FeatureFailure {
   final Exception exception;
 
   FilePickerFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
 }

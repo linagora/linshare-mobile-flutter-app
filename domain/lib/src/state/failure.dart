@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-abstract class Failure {}
+import 'package:equatable/equatable.dart';
+
+abstract class Failure extends Equatable {}
 
 abstract class FeatureFailure extends Failure {}

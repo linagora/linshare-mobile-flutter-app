@@ -31,26 +31,42 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class FileUploadState {
+class FileUploadState extends Equatable {
   final Stream<Either<Failure, Success>> dataInfo;
   final UploadTaskId taskId;
 
   FileUploadState(this.dataInfo, this.taskId);
+
+  @override
+  List<Object> get props => [dataInfo, taskId];
 }
 
-class FileUploadSuccess extends Success {}
+class FileUploadSuccess extends Success {
+  @override
+  List<Object> get props => [];
+}
 
-class FileUploadFailure extends Failure {}
+class FileUploadFailure extends Failure {
+  @override
+  List<Object> get props => [];
+}
 
 class FileUploadProgress extends Success {
   final int progress;
 
   FileUploadProgress(this.progress);
+
+  @override
+  List<Object> get props => [progress];
 }
 
-class UploadTaskId {
+class UploadTaskId extends Equatable {
   final String id;
 
   UploadTaskId(this.id);
+
+  @override
+  List<Object> get props => [id];
 }

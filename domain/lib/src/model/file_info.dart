@@ -29,10 +29,15 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class FileInfo {
+import 'package:equatable/equatable.dart';
+
+class FileInfo extends Equatable {
   final String fileName;
   final String filePath;
   final int fileSize;
 
   FileInfo(this.fileName, this.filePath, this.fileSize);
+
+  @override
+  List<Object> get props => [fileName, filePath, fileSize];
 }

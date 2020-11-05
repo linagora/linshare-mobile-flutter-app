@@ -30,10 +30,14 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class Token {
+class Token extends Equatable {
   const Token(this.token, this.tokenId);
 
   final String token;
   final TokenId tokenId;
+
+  @override
+  List<Object> get props => [token, tokenId];
 }

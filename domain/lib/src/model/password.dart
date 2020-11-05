@@ -29,8 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Password {
+import 'package:equatable/equatable.dart';
+
+class Password extends Equatable {
   final String value;
 
   Password(this.value);
+
+  @override
+  List<Object> get props => [value];
 }

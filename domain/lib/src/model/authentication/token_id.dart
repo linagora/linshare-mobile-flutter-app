@@ -29,8 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class TokenId {
+import 'package:equatable/equatable.dart';
+
+class TokenId extends Equatable {
   final String uuid;
 
   TokenId(this.uuid);
+
+  @override
+  List<Object> get props => [uuid];
 }

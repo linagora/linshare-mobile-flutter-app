@@ -29,12 +29,20 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-abstract class Success {}
+import 'package:equatable/equatable.dart';
 
-abstract class ViewState extends Success {}
+abstract class Success extends Equatable {}
 
 abstract class ViewEvent extends Success {}
 
-class IdleState extends ViewState {}
+abstract class ViewState extends Success {}
 
-class LoadingState extends ViewState {}
+class IdleState extends ViewState {
+  @override
+  List<Object> get props => [];
+}
+
+class LoadingState extends ViewState {
+  @override
+  List<Object> get props => [];
+}

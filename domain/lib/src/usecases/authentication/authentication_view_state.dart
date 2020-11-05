@@ -36,10 +36,16 @@ class AuthenticationViewState extends ViewState {
   final Token token;
 
   AuthenticationViewState(this.token);
+
+  @override
+  List<Object> get props => [token];
 }
 
 class AuthenticationFailure extends FeatureFailure {
   final RemoteException authenticationException;
 
   AuthenticationFailure(this.authenticationException);
+
+  @override
+  List<Object> get props => [authenticationException];
 }
