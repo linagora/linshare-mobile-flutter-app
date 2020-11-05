@@ -33,6 +33,8 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'dart:core';
 
+import '../../extension/uri_extension.dart';
+
 class GetCredentialInteractor {
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
@@ -43,9 +45,15 @@ class GetCredentialInteractor {
     try {
       final token = await tokenRepository.getToken();
       final baseUrl = await credentialRepository.getBaseUrl();
-      return Right(CredentialViewState(token, baseUrl));
+      if (isCredentialValid(token, baseUrl)) {
+        return Right(CredentialViewState(token, baseUrl));
+      } else {
+        return Left(CredentialFailure(BadCredentials()));
+      }
     } catch (exception) {
       return Left(CredentialFailure(BadCredentials()));
     }
   }
+
+  bool isCredentialValid(Token token, Uri baseUrl) => token.isTokenValid() && baseUrl.isBaseUrlValid();
 }
