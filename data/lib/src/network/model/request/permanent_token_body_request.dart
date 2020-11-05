@@ -29,12 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'permanent_token_body_request.g.dart';
 
 @JsonSerializable()
-class PermanentTokenBodyRequest {
+class PermanentTokenBodyRequest extends Equatable{
   PermanentTokenBodyRequest(this.label);
 
   final String label;
@@ -42,4 +43,7 @@ class PermanentTokenBodyRequest {
   factory PermanentTokenBodyRequest.fromJson(Map<String, dynamic> json) => _$PermanentTokenBodyRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$PermanentTokenBodyRequestToJson(this);
+
+  @override
+  List<Object> get props => [label];
 }
