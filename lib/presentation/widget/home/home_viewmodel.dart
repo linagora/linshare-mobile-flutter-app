@@ -40,17 +40,15 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file
 import 'package:redux/redux.dart';
 
 class HomeViewModel extends BaseViewModel {
-  AppNavigation _appNavigation;
-  UploadFileManager _uploadFileManager;
+  final AppNavigation _appNavigation;
+  final UploadFileManager _uploadFileManager;
   StreamSubscription _uploadFileManagerStreamSubscription;
 
   HomeViewModel(
       Store<AppState> store,
-      AppNavigation appNavigation,
-      UploadFileManager uploadFileManager
+      this._appNavigation,
+      this._uploadFileManager
   ) : super(store) {
-    _appNavigation = appNavigation;
-    _uploadFileManager = uploadFileManager;
     _registerPendingUploadFile();
   }
 

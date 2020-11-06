@@ -41,26 +41,20 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class InitializeViewModel extends BaseViewModel {
-  GetCredentialInteractor _getCredentialInteractor;
-  AppNavigation _appNavigation;
-  DynamicUrlInterceptors _dynamicUrlInterceptors;
-  RetryAuthenticationInterceptors _retryInterceptors;
-  UploadFileManager _uploadFileManager;
+  final GetCredentialInteractor _getCredentialInteractor;
+  final AppNavigation _appNavigation;
+  final DynamicUrlInterceptors _dynamicUrlInterceptors;
+  final RetryAuthenticationInterceptors _retryInterceptors;
+  final UploadFileManager _uploadFileManager;
 
   InitializeViewModel(
     Store<AppState> store,
-    GetCredentialInteractor getCredentialInteractor,
-    AppNavigation appNavigation,
-    DynamicUrlInterceptors dynamicUrlInterceptors,
-    RetryAuthenticationInterceptors retryInterceptors,
-    UploadFileManager uploadFileManager
+    this._getCredentialInteractor,
+    this._appNavigation,
+    this._dynamicUrlInterceptors,
+    this._retryInterceptors,
+    this._uploadFileManager
   ) : super(store) {
-    _getCredentialInteractor = getCredentialInteractor;
-    _appNavigation = appNavigation;
-    _dynamicUrlInterceptors = dynamicUrlInterceptors;
-    _retryInterceptors = retryInterceptors;
-    _uploadFileManager = uploadFileManager;
-
     store.dispatch(getCredentialAction());
     registerReceivingSharingIntent();
   }

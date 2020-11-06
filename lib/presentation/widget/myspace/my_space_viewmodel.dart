@@ -42,17 +42,14 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class MySpaceViewModel extends BaseViewModel {
-  LocalFilePicker _localFilePicker;
-  AppNavigation _appNavigation;
+  final LocalFilePicker _localFilePicker;
+  final AppNavigation _appNavigation;
 
   MySpaceViewModel(
     Store<AppState> store,
-    LocalFilePicker localFilePicker,
-    AppNavigation appNavigation,
-  ) : super(store) {
-    _localFilePicker = localFilePicker;
-    _appNavigation = appNavigation;
-  }
+    this._localFilePicker,
+    this._appNavigation,
+  ) : super(store);
 
   void handleOnUploadFilePressed() {
     store.dispatch(pickFileAction());

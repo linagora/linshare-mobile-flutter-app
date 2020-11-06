@@ -34,10 +34,9 @@ import 'package:meta/meta.dart';
 import 'package:redux/redux.dart';
 
 abstract class BaseViewModel {
-  BaseViewModel(Store<AppState> store) {
-    this.store = store;
-  }
-  Store<AppState> store;
+  BaseViewModel(this.store);
+
+  final Store<AppState> store;
 
   @protected
   void onDisposed() {}
