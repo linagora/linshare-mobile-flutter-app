@@ -49,9 +49,9 @@ class HomeViewModel extends BaseViewModel {
       AppNavigation appNavigation,
       UploadFileManager uploadFileManager
   ) : super(store) {
-    _registerPendingUploadFile();
     _appNavigation = appNavigation;
     _uploadFileManager = uploadFileManager;
+    _registerPendingUploadFile();
   }
 
   void _registerPendingUploadFile() {
