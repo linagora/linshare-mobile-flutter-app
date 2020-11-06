@@ -74,10 +74,10 @@ workflows:
         - additional_params: "--verbose"
     - flutter-test@0:
         inputs:
-        - additional_params: data --verbose
+        - additional_params: data
     - flutter-test@0:
         inputs:
-        - additional_params: domain --verbose
+        - additional_params: domain
     - certificate-and-profile-installer@1:
         is_always_run: true
     - flutter-build@0:
