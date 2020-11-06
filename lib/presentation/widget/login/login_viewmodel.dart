@@ -42,15 +42,12 @@ import 'package:redux_thunk/redux_thunk.dart';
 class LoginViewModel extends BaseViewModel {
   LoginViewModel(
     Store<AppState> store,
-    CreatePermanentTokenInteractor createPermanentTokenInteractor,
-    AppNavigation appNavigation
-  ) : super(store) {
-    _getPermanentTokenInteractor = createPermanentTokenInteractor;
-    _appNavigation = appNavigation;
-  }
+    this._getPermanentTokenInteractor,
+    this._appNavigation
+  ) : super(store);
 
-  CreatePermanentTokenInteractor _getPermanentTokenInteractor;
-  AppNavigation _appNavigation;
+  final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
+  final AppNavigation _appNavigation;
 
   String _urlText = '';
   String _emailText = '';

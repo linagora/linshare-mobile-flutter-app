@@ -39,17 +39,14 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class UploadFileViewModel extends BaseViewModel {
-  AppNavigation _appNavigation;
-  UploadFileInteractor _uploadFileInteractor;
+  final AppNavigation _appNavigation;
+  final UploadFileInteractor _uploadFileInteractor;
 
   UploadFileViewModel(
     Store<AppState> store,
-    AppNavigation appNavigation,
-    UploadFileInteractor uploadFileInteractor,
-  ) : super(store) {
-    _appNavigation = appNavigation;
-    _uploadFileInteractor = uploadFileInteractor;
-  }
+    this._appNavigation,
+    this._uploadFileInteractor,
+  ) : super(store);
 
   FileInfo _fileInfo;
 
