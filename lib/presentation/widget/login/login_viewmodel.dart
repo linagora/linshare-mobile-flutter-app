@@ -31,7 +31,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -41,8 +40,17 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class LoginViewModel extends BaseViewModel {
-  final getPermanentTokenInteractor = getIt<CreatePermanentTokenInteractor>();
-  final appNavigation = getIt<AppNavigation>();
+  LoginViewModel(
+    Store<AppState> store,
+    CreatePermanentTokenInteractor createPermanentTokenInteractor,
+    AppNavigation appNavigation
+  ) : super(store) {
+    _getPermanentTokenInteractor = createPermanentTokenInteractor;
+    _appNavigation = appNavigation;
+  }
+
+  CreatePermanentTokenInteractor _getPermanentTokenInteractor;
+  AppNavigation _appNavigation;
 
   String _urlText = '';
   String _emailText = '';
@@ -74,7 +82,7 @@ class LoginViewModel extends BaseViewModel {
   ThunkAction<AppState> loginAction(Uri baseUrl, UserName userName, Password password) {
     return (Store<AppState> store) async {
       store.dispatch(StartAuthenticationLoadingAction());
-      await getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
+      await _getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
           (result) => result.fold(
               (failure) => store.dispatch(LoginAction(Left(failure))),
               ((success) => {store.dispatch(loginSuccessAction(success))})));
@@ -84,7 +92,7 @@ class LoginViewModel extends BaseViewModel {
   ThunkAction<AppState> loginSuccessAction(AuthenticationViewState success) {
     return (Store<AppState> store) async {
       store.dispatch(LoginAction(Right(success)));
-      await appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
+      await _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
     };
   }
 

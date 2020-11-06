@@ -31,7 +31,6 @@
 
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -42,12 +41,26 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class InitializeViewModel extends BaseViewModel {
-  final getCredentialInteractor = getIt<GetCredentialInteractor>();
-  final _appNavigation = getIt<AppNavigation>();
-  final _dynamicUrlInterceptors = getIt<DynamicUrlInterceptors>();
-  final _retryInterceptors = getIt<RetryAuthenticationInterceptors>();
-  final _uploadFileManager = getIt<UploadFileManager>();
-  InitializeViewModel() {
+  GetCredentialInteractor _getCredentialInteractor;
+  AppNavigation _appNavigation;
+  DynamicUrlInterceptors _dynamicUrlInterceptors;
+  RetryAuthenticationInterceptors _retryInterceptors;
+  UploadFileManager _uploadFileManager;
+
+  InitializeViewModel(
+    Store<AppState> store,
+    GetCredentialInteractor getCredentialInteractor,
+    AppNavigation appNavigation,
+    DynamicUrlInterceptors dynamicUrlInterceptors,
+    RetryAuthenticationInterceptors retryInterceptors,
+    UploadFileManager uploadFileManager
+  ) : super(store) {
+    _getCredentialInteractor = getCredentialInteractor;
+    _appNavigation = appNavigation;
+    _dynamicUrlInterceptors = dynamicUrlInterceptors;
+    _retryInterceptors = retryInterceptors;
+    _uploadFileManager = uploadFileManager;
+
     store.dispatch(getCredentialAction());
     registerReceivingSharingIntent();
   }
@@ -63,7 +76,7 @@ class InitializeViewModel extends BaseViewModel {
   ThunkAction<AppState> getCredentialAction() {
     return (Store<AppState> store) async {
       store.dispatch(StartUploadLoadingAction());
-      await getCredentialInteractor.execute().then((result) => result.fold(
+      await _getCredentialInteractor.execute().then((result) => result.fold(
           (left) => store.dispatch(getCredentialFailureAction(left)),
           (right) => store.dispatch(getCredentialSuccessAction((right)))));
     };

@@ -31,7 +31,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -40,8 +39,17 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class UploadFileViewModel extends BaseViewModel {
-  final appNavigation = getIt<AppNavigation>();
-  final _uploadFileInteractor = getIt<UploadFileInteractor>();
+  AppNavigation _appNavigation;
+  UploadFileInteractor _uploadFileInteractor;
+
+  UploadFileViewModel(
+    Store<AppState> store,
+    AppNavigation appNavigation,
+    UploadFileInteractor uploadFileInteractor,
+  ) : super(store) {
+    _appNavigation = appNavigation;
+    _uploadFileInteractor = uploadFileInteractor;
+  }
 
   FileInfo _fileInfo;
 
@@ -53,7 +61,7 @@ class UploadFileViewModel extends BaseViewModel {
     if (_fileInfo != null) {
       store.dispatch(uploadFileAction(_fileInfo));
     }
-    appNavigation.popBack();
+    _appNavigation.popBack();
   }
 
   ThunkAction<AppState> uploadFileAction(FileInfo fileInfo) {
