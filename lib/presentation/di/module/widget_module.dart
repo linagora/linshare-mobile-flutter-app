@@ -29,7 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
@@ -39,8 +44,10 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.d
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
+import 'package:redux/redux.dart';
 
 class WidgetModule {
   WidgetModule() {
@@ -54,22 +61,38 @@ class WidgetModule {
 
   void _provideLoginComponent() {
     getIt.registerFactory(() => LoginWidget());
-    getIt.registerFactory(() => LoginViewModel());
+    getIt.registerFactory(() => LoginViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<CreatePermanentTokenInteractor>(),
+      getIt.get<AppNavigation>()
+    ));
   }
 
   void _provideHomeComponent() {
     getIt.registerFactory(() => HomeWidget());
-    getIt.registerFactory(() => HomeViewModel());
+    getIt.registerFactory(() => HomeViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+      getIt.get<UploadFileManager>()
+    ));
   }
 
   void _provideMySpaceComponent() {
     getIt.registerFactory(() => MySpaceWidget());
-    getIt.registerFactory(() => MySpaceViewModel());
+    getIt.registerFactory(() => MySpaceViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<LocalFilePicker>(),
+      getIt.get<AppNavigation>()
+    ));
   }
 
   void _provideUploadFileComponent() {
     getIt.registerFactory(() => UploadFileWidget());
-    getIt.registerFactory(() => UploadFileViewModel());
+    getIt.registerFactory(() => UploadFileViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+      getIt.get<UploadFileInteractor>()
+    ));
   }
 
   void _provideTextFieldUtil() {
@@ -78,6 +101,13 @@ class WidgetModule {
 
   void _provideInitializeComponent() {
     getIt.registerFactory(() => InitializeWidget());
-    getIt.registerFactory(() => InitializeViewModel());
+    getIt.registerFactory(() => InitializeViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<GetCredentialInteractor>(),
+      getIt.get<AppNavigation>(),
+      getIt.get<DynamicUrlInterceptors>(),
+      getIt.get<RetryAuthenticationInterceptors>(),
+      getIt.get<UploadFileManager>()
+    ));
   }
 }

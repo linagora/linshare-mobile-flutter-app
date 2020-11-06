@@ -31,20 +31,27 @@
 
 import 'dart:async';
 
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
+import 'package:redux/redux.dart';
 
 class HomeViewModel extends BaseViewModel {
-  final _appNavigation = getIt<AppNavigation>();
-  final _uploadFileManager = getIt<UploadFileManager>();
+  AppNavigation _appNavigation;
+  UploadFileManager _uploadFileManager;
   StreamSubscription _uploadFileManagerStreamSubscription;
 
-  HomeViewModel() {
+  HomeViewModel(
+      Store<AppState> store,
+      AppNavigation appNavigation,
+      UploadFileManager uploadFileManager
+  ) : super(store) {
     _registerPendingUploadFile();
+    _appNavigation = appNavigation;
+    _uploadFileManager = uploadFileManager;
   }
 
   void _registerPendingUploadFile() {

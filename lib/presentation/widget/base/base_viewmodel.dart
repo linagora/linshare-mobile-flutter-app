@@ -29,13 +29,15 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:redux/redux.dart';
 import 'package:meta/meta.dart';
+import 'package:redux/redux.dart';
 
 abstract class BaseViewModel {
-  final Store<AppState> store = getIt<Store<AppState>>();
+  BaseViewModel(Store<AppState> store) {
+    this.store = store;
+  }
+  Store<AppState> store;
 
   @protected
   void onDisposed() {}
