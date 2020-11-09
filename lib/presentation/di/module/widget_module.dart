@@ -35,7 +35,6 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/text_field_util.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
@@ -55,7 +54,6 @@ class WidgetModule {
     _provideHomeComponent();
     _provideMySpaceComponent();
     _provideUploadFileComponent();
-    _provideTextFieldUtil();
     _provideInitializeComponent();
   }
 
@@ -93,10 +91,6 @@ class WidgetModule {
       getIt.get<AppNavigation>(),
       getIt.get<UploadFileInteractor>()
     ));
-  }
-
-  void _provideTextFieldUtil() {
-    getIt.registerFactory(() => TextFieldUtil());
   }
 
   void _provideInitializeComponent() {
