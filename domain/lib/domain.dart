@@ -10,6 +10,7 @@ export 'src/usecases/myspace/my_space_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
+export 'src/usecases/myspace/my_space_exception.dart';
 export 'src/usecases/remote_exception.dart';
 
 // model

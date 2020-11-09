@@ -28,66 +28,53 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/document/document.dart';
+import 'package:domain/src/model/document/document_id.dart';
+import 'package:equatable/equatable.dart';
+import 'package:http_parser/http_parser.dart';
 
-class UploadButtonClick extends ViewEvent {
-  @override
-  List<Object> get props => [];
-}
+class Document extends Equatable {
+  final DocumentId documentId;
+  final String description;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final DateTime expirationDate;
+  final bool ciphered;
+  final String name;
+  final int size;
+  final String sha256sum;
+  final bool hasThumbnail;
+  final int shared;
+  final MediaType mediaType;
 
-class UploadFileSuccess extends ViewState {
-  final FileInfo fileInfo;
-
-  UploadFileSuccess(this.fileInfo);
-
-  @override
-  List<Object> get props => [];
-}
-
-class UploadFileFailure extends FeatureFailure {
-  final Exception uploadFileException;
-
-  UploadFileFailure(this.uploadFileException);
-
-  @override
-  List<Object> get props => [uploadFileException];
-}
-
-class UploadingProgress extends ViewState {
-  final int progress;
-  final String fileName;
-
-  UploadingProgress(this.progress, this.fileName);
-
-  @override
-  List<Object> get props => [progress, fileName];
-}
-
-class PreparingUpload extends ViewState {
-  final FileInfo fileInfo;
-
-  PreparingUpload(this.fileInfo);
+  Document(
+      this.documentId,
+      this.description,
+      this.creationDate,
+      this.modificationDate,
+      this.expirationDate,
+      this.ciphered,
+      this.name,
+      this.size,
+      this.sha256sum,
+      this.hasThumbnail,
+      this.shared,
+      this.mediaType);
 
   @override
-  List<Object> get props => [fileInfo];
-}
-
-class MySpaceViewState extends ViewState {
-  final List<Document> documentList;
-
-  MySpaceViewState(this.documentList);
-
-  @override
-  List<Object> get props => [documentList];
-}
-
-class MySpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  MySpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  List<Object> get props => [
+        documentId,
+        description,
+        creationDate,
+        modificationDate,
+        expirationDate,
+        ciphered,
+        name,
+        size,
+        sha256sum,
+        hasThumbnail,
+        shared
+      ];
 }

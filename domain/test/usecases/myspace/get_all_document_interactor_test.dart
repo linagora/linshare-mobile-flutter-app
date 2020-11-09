@@ -28,66 +28,52 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/document/document.dart';
+import 'package:domain/src/usecases/myspace/get_all_document_interactor.dart';
+import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class UploadButtonClick extends ViewEvent {
-  @override
-  List<Object> get props => [];
-}
+import '../../mock/repository/authentication/mock_document_repository.dart';
 
-class UploadFileSuccess extends ViewState {
-  final FileInfo fileInfo;
+void main() {
+  group('get_all_document_interactor_test', () {
+    MockDocumentRepository documentRepository;
+    GetAllDocumentInteractor getAllDocumentInteractor;
 
-  UploadFileSuccess(this.fileInfo);
+    setUp(() {
+      documentRepository = MockDocumentRepository();
+      getAllDocumentInteractor = GetAllDocumentInteractor(documentRepository);
+    });
 
-  @override
-  List<Object> get props => [];
-}
+    test('getAllDocumentInteractor should return success with documentList', () async {
+      when(documentRepository.getAll()).thenAnswer((_) async => [document1, document2, document3]);
 
-class UploadFileFailure extends FeatureFailure {
-  final Exception uploadFileException;
+      final result = await getAllDocumentInteractor.execute();
 
-  UploadFileFailure(this.uploadFileException);
+      final documentList = result.map((success) => (success as MySpaceViewState).documentList)
+          .getOrElse(() => []);
 
-  @override
-  List<Object> get props => [uploadFileException];
-}
+      expect(
+          documentList,
+          containsAllInOrder([document1, document2, document3]));
+    });
 
-class UploadingProgress extends ViewState {
-  final int progress;
-  final String fileName;
+    test('getAllDocumentInteractor should fail when get all failed', () async {
+      final exception = Exception('get list documents failed');
+      when(documentRepository.getAll()).thenThrow(exception);
 
-  UploadingProgress(this.progress, this.fileName);
+      final result = await getAllDocumentInteractor.execute();
 
-  @override
-  List<Object> get props => [progress, fileName];
-}
+      result.fold(
+              (failure) => expect(failure, isA<MySpaceFailure>()),
+              (success) => expect(success, isA<MySpaceViewState>()));
 
-class PreparingUpload extends ViewState {
-  final FileInfo fileInfo;
-
-  PreparingUpload(this.fileInfo);
-
-  @override
-  List<Object> get props => [fileInfo];
-}
-
-class MySpaceViewState extends ViewState {
-  final List<Document> documentList;
-
-  MySpaceViewState(this.documentList);
-
-  @override
-  List<Object> get props => [documentList];
-}
-
-class MySpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  MySpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+      expect(result, Left<Failure, Success>(MySpaceFailure(exception)));
+    });
+  });
 }
