@@ -32,9 +32,12 @@
 import 'dart:core';
 
 import 'package:domain/src/model/authentication/token.dart';
+import 'package:domain/src/model/document/document.dart';
 import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 
 abstract class DocumentRepository {
   Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+
+  Future<List<Document>> getAll();
 }
