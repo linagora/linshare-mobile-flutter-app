@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,16 +26,59 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
+
 
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
-import 'extensions/color_extension.dart';
+abstract class InputDecorationBuilder {
+  String _errorText;
+  String _hintText;
+  TextStyle _hintStyle;
+  EdgeInsets _contentPadding;
 
-class TextFieldUtil {
-  InputDecoration loginInputDecoration(String hintText) {
+  InputDecorationBuilder errorText(String errorText) {
+    _errorText = errorText;
+    return this;
+  }
+
+  InputDecorationBuilder hintText(String hintText) {
+    _hintText = hintText;
+    return this;
+  }
+
+  InputDecorationBuilder hintStyle(TextStyle hintStyle) {
+    _hintStyle = hintStyle;
+    return this;
+  }
+
+  InputDecorationBuilder contentPadding(EdgeInsets contentPadding) {
+    _contentPadding = contentPadding;
+    return this;
+  }
+
+  InputDecoration build() {
+    return InputDecoration(
+        errorText: _errorText,
+        hintText: _hintText,
+        hintStyle: _hintStyle,
+        contentPadding: _contentPadding
+    );
+  }
+}
+
+class LoginInputDecorationBuilder extends InputDecorationBuilder {
+
+  @override
+  InputDecoration build() {
     return InputDecoration(
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -46,11 +90,11 @@ class TextFieldUtil {
             borderRadius: BorderRadius.all(Radius.circular(6)),
             borderSide: BorderSide(
                 width: 1, color: AppColor.loginTextFieldErrorBorder)),
-        hintText: hintText,
-        hintStyle:
-            TextStyle(color: AppColor.loginTextFieldHintColor, fontSize: 16),
+        errorText: _errorText,
+        hintText: _hintText,
+        hintStyle: _hintStyle ?? TextStyle(color: AppColor.loginTextFieldHintColor, fontSize: 16),
+        contentPadding: _contentPadding ?? EdgeInsets.all(10),
         filled: true,
-        fillColor: Colors.white,
-        contentPadding: EdgeInsets.all(10));
+        fillColor: Colors.white);
   }
 }
