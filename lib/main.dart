@@ -31,13 +31,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/widget/initialize_get_it//initialize_get_it_widget.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/util/router/router.dart' as router;
+import 'package:linshare_flutter_app/presentation/widget/initialize_get_it//initialize_get_it_widget.dart';
+import 'package:redux/redux.dart';
 
 import 'presentation/redux/states/app_state.dart';
 import 'presentation/widget/initialize/initialize_widget.dart';
@@ -94,7 +94,7 @@ class LinShareApp extends StatelessWidget {
           Locale('fr')
         ],
         localizationsDelegates: [
-          AppLocalizations.delegate,
+          AppLocalizationsDelegate(),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

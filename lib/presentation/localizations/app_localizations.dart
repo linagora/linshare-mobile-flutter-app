@@ -29,39 +29,101 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
+import 'package:intl/intl.dart';
+import 'package:linshare_flutter_app/l10n/messages_all.dart';
 
 class AppLocalizations {
-  final Locale locale;
-
-  AppLocalizations(this.locale);
 
   static AppLocalizations of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  Map<String, String> _localizedValues;
+  static Future<AppLocalizations> load(Locale locale) async {
+    final name = locale.countryCode == null ? locale.languageCode : locale.toString();
 
-  Future load() async {
-    final jsonStringValues = await rootBundle.loadString('${AppAssetsPath.localizations}${locale.languageCode}.json');
+    final localeName = Intl.canonicalizedLocale(name);
 
-    Map<String, dynamic> mappedJson = json.decode(jsonStringValues);
-    _localizedValues = mappedJson.map((key, value) => MapEntry(key, value.toString()));
+    return initializeMessages(localeName).then((bool _) {
+      print('$localeName');
+      Intl.defaultLocale = localeName;
+      return AppLocalizations();
+    });
   }
 
-  String stringOf(String key) {
-    return _localizedValues[key];
+  String get initializing_data {
+    return Intl.message('Initializing data...',
+      name: 'initializing_data');
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  String get login_text_slogan {
+    return Intl.message('Store and share your files from anywhere',
+      name: 'login_text_slogan');
+  }
+
+  String get login_text_login_to_continue {
+    return Intl.message('Please login to continue',
+      name: 'login_text_login_to_continue');
+  }
+
+  String get https {
+    return Intl.message('https://',
+      name: 'https');
+  }
+
+  String get email {
+    return Intl.message('email',
+      name: 'email');
+  }
+
+  String get password {
+    return Intl.message('password',
+      name: 'password');
+  }
+
+  String get login_button_login {
+    return Intl.message('Login',
+      name: 'login_button_login');
+  }
+
+  String get upload_file_title {
+    return Intl.message('Upload file',
+      name: 'upload_file_title');
+  }
+
+  String get upload_text_button {
+    return Intl.message('Upload to My Space',
+      name: 'upload_text_button');
+  }
+
+  String get my_space_title {
+    return Intl.message('My Space',
+      name: 'my_space_title');
+  }
+
+  String get upload_prepare_text {
+    return Intl.message('Preparing to upload...',
+      name: 'upload_prepare_text');
+  }
+
+  String get my_space_text_upload_your_files_here {
+    return Intl.message('Upload your files here',
+      name: 'my_space_text_upload_your_files_here');
+  }
+
+  String get upload_failure_text {
+    return Intl.message('Failed to upload file',
+      name: 'upload_failure_text');
+  }
+
+  String get upload_success_text {
+    return Intl.message('File uploaded',
+      name: 'upload_success_text');
+  }
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
-  const _AppLocalizationsDelegate();
+class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+  const AppLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) {
@@ -70,9 +132,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
-    final appLocalizations = AppLocalizations(locale);
-    await appLocalizations.load();
-    return appLocalizations;
+    return AppLocalizations.load(locale);
   }
 
   @override
