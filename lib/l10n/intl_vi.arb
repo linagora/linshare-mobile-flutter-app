@@ -1,6 +1,6 @@
 {
   "@@last_modified": "2020-11-10T17:18:26.612601",
-  "initializing_data": "Initializing data...",
+  "initializing_data": "Khởi tạo ...",
   "@initializing_data": {
     "type": "text",
     "placeholders": {}
@@ -50,7 +50,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "upload_prepare_text": "Preparing to upload...",
+  "upload_prepare_text": "Chuẩn bị tải lên...",
   "@upload_prepare_text": {
     "type": "text",
     "placeholders": {}
@@ -60,13 +60,28 @@
     "type": "text",
     "placeholders": {}
   },
-  "upload_failure_text": "Failed to upload file",
+  "upload_failure_text": "Tải lên thất bại",
   "@upload_failure_text": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_success_text": "File uploaded",
+  "upload_success_text": "Tệp đã tải lên thành công",
   "@upload_success_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "wrong_url_message": "Địa chỉ máy chủ không chính xác, hãy thử lại",
+  "@wrong_url_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "credential_error_message": "Lỗi xác thực, email hoặc mật khẩu không đúng, hãy thử lại",
+  "@credential_error_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_error_login_message": "Lỗi không xác định, hãy thử lại",
+  "@unknown_error_login_message": {
     "type": "text",
     "placeholders": {}
   }

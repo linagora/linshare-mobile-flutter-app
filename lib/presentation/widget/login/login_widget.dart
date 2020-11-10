@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/text/input_decoration_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/text/login_text_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/text/text_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
 import 'package:redux/redux.dart';
 
@@ -106,10 +107,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                         SizedBox(height: 80),
                         Padding(
                           padding: EdgeInsets.only(bottom: 24),
-                          child: Text(
-                            AppLocalizations.of(context).login_text_login_to_continue,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                            textAlign: TextAlign.center,
+                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                            converter: (store) => store.state.authenticationState.viewState,
+                            builder: (context, viewState) {
+                              return CenterTextBuilder()
+                                  .text(_getLoginMessage(viewState))
+                                  .textStyle(_getLoginMessageTextStyle(viewState))
+                                  .build();
+                            }
                           ),
                         ),
                         Padding(
@@ -154,7 +159,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               builder: (context, viewState) {
                                 return LoginTextBuilder()
                                     .obscureText(true)
-                                    .onChange((value) => viewModel.setEmailText(value))
+                                    .onChange((value) => viewModel.setPasswordText(value))
                                     .textInputAction(TextInputAction.done)
                                     .textDecoration(
                                       _buildCredentialInputDecoration(
@@ -186,12 +191,42 @@ class _LoginWidgetState extends State<LoginWidget> {
       ),
     );
   }
+  
+  String _getLoginMessage(dartz.Either<Failure, Success> viewState) {
+    return viewState.fold(
+        (failure) => _getErrorMessage(failure),
+        (success) => AppLocalizations.of(context).login_text_login_to_continue);
+  }
+
+  TextStyle _getLoginMessageTextStyle(dartz.Either<Failure, Success> viewState) {
+    final messageColor = viewState.fold(
+        (failure) => AppColor.loginTextFieldErrorBorder,
+        (success) => Colors.white);
+    return TextStyle(color: messageColor);
+  }
+  
+  String _getErrorMessage(Failure failure) {
+    if (failure is AuthenticationFailure) {
+      if (failure.authenticationException is UnknownError) {
+        return AppLocalizations.of(context).unknown_error_login_message;
+      } else if (_checkCredentialError(failure)) {
+        return AppLocalizations.of(context).credential_error_message;
+      } else if (_checkUrlError(failure)) {
+        return AppLocalizations.of(context).wrong_url_message;
+      }
+    }
+    return AppLocalizations.of(context).unknown_error_login_message;
+  }
 
   InputDecoration _buildUrlInputDecoration(dartz.Either<Failure, Success> viewState) {
     final loginInputDecorationBuilder = viewState.fold(
         (failure) {
           if (_checkUrlError(failure)) {
-              return LoginInputDecorationBuilder().errorText('');
+              return LoginInputDecorationBuilder()
+                  .enabledBorder(OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(6)),
+                      borderSide: BorderSide(
+                      width: 1, color: AppColor.loginTextFieldErrorBorder)));
           }
           return LoginInputDecorationBuilder().hintText(AppLocalizations.of(context).https);
         },
@@ -215,7 +250,11 @@ class _LoginWidgetState extends State<LoginWidget> {
     final loginInputDecorationBuilder = viewState.fold(
         (failure) {
           if (_checkCredentialError(failure)) {
-            return LoginInputDecorationBuilder().errorText('');
+            return LoginInputDecorationBuilder()
+                .enabledBorder(OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    borderSide: BorderSide(
+                    width: 1, color: AppColor.loginTextFieldErrorBorder)));
           }
           return LoginInputDecorationBuilder().hintText(hintText);
         },

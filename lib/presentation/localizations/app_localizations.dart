@@ -44,8 +44,7 @@ class AppLocalizations {
 
     final localeName = Intl.canonicalizedLocale(name);
 
-    return initializeMessages(localeName).then((bool _) {
-      print('$localeName');
+    return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       return AppLocalizations();
     });
@@ -119,6 +118,21 @@ class AppLocalizations {
   String get upload_success_text {
     return Intl.message('File uploaded',
       name: 'upload_success_text');
+  }
+
+  String get wrong_url_message {
+    return Intl.message('Server URL is not valid, please try again',
+      name: 'wrong_url_message');
+  }
+
+  String get credential_error_message {
+    return Intl.message('Authentication failed, either the email or the password is invalid, please try again',
+      name: 'credential_error_message');
+  }
+
+  String get unknown_error_login_message {
+    return Intl.message('Unknown error occurred, please try again',
+      name: 'unknown_error_login_message');
   }
 }
 
