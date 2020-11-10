@@ -40,6 +40,7 @@ class NetworkModule {
     _provideBaseOption();
     _provideDio();
     _provideHttpClient();
+    _provideRemoteExceptionThrower();
   }
 
   void _provideBaseOption() {
@@ -67,5 +68,9 @@ class NetworkModule {
   void _provideHttpClient() {
     getIt.registerSingleton(DioClient(getIt<Dio>()));
     getIt.registerSingleton(LinShareHttpClient(getIt<DioClient>()));
+  }
+
+  void _provideRemoteExceptionThrower() {
+    getIt.registerSingleton<RemoteExceptionThrower>(RemoteExceptionThrower());
   }
 }

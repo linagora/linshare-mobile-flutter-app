@@ -30,45 +30,15 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:data/src/network/config/end_point.dart';
-import 'package:data/src/network/dio_client.dart';
-import 'package:data/src/network/model/request/permanent_token_body_request.dart';
-import 'package:data/src/network/model/response/document_response.dart';
-import 'package:data/src/network/model/response/permanent_token.dart';
-import 'package:data/src/network/model/response/user.dart';
-import 'package:dio/dio.dart';
+import 'package:data/src/util/attribute.dart';
+import 'package:domain/domain.dart';
+import 'package:http_parser/http_parser.dart';
 
-class LinShareHttpClient {
-  final DioClient _dioClient;
+String documentIdToJson(DocumentId documentId) => jsonEncode({Attribute.uuid: documentId.uuid});
 
-  LinShareHttpClient(this._dioClient);
+DocumentId documentIdFromJson(dynamic json) => DocumentId(json.toString());
 
-  Future<PermanentToken> createPermanentToken(
-      Uri authenticateUrl,
-      String userName,
-      String password,
-      PermanentTokenBodyRequest bodyRequest) async {
-    final basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
+String mediaTypeToJson(MediaType mediaType) => jsonEncode({Attribute.type: mediaType.mimeType});
 
-    final headerParam = _dioClient.getHeaders();
-    headerParam[HttpHeaders.authorizationHeader] = basicAuth;
-
-    final resultJson = await _dioClient.post(
-        EndPoint.authentication.generateAuthenticationUrl(authenticateUrl),
-        options: Options(headers: headerParam),
-        data: bodyRequest.toJson());
-    return PermanentToken.fromJson(resultJson);
-  }
-
-  Future<User> getAuthorizedUser() async {
-    final resultJson = await _dioClient.get(EndPoint.authorizedUser.generateEndPointPath());
-    return User.fromJson(resultJson);
-  }
-
-  Future<List<DocumentResponse>> getAllDocument() async {
-    final List resultJson = await _dioClient.get(EndPoint.documents.generateEndPointPath());
-    return resultJson.map((data) => DocumentResponse.fromJson(data)).toList();
-  }
-}
+MediaType mediaTypeFromJson(dynamic json) => MediaType.parse(json.toString());

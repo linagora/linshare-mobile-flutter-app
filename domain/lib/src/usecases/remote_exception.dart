@@ -36,8 +36,6 @@ abstract class RemoteException extends Equatable implements Exception {
   static final serverNotFound = 'Server not found';
   static final internalServerError = 'Internal server error';
   static final connectError = 'Connect error';
-  static final noPermissionError = 'No permission error';
-  static final dataNotFoundError = 'Data not found error';
 
   final String message;
 
@@ -67,20 +65,6 @@ class InternalServerError extends RemoteException {
 
 class ConnectError extends RemoteException {
   ConnectError() : super(RemoteException.connectError);
-
-  @override
-  List<Object> get props => [];
-}
-
-class NoPermission extends RemoteException {
-  NoPermission() : super(RemoteException.noPermissionError);
-
-  @override
-  List<Object> get props => [];
-}
-
-class DataNotFound extends RemoteException {
-  DataNotFound() : super(RemoteException.dataNotFoundError);
 
   @override
   List<Object> get props => [];

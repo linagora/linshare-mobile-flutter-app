@@ -35,20 +35,26 @@ import 'package:dartz/dartz.dart';
 import 'package:data/src/datasource/document_datasource.dart';
 import 'package:data/src/extensions/uri_extension.dart';
 import 'package:data/src/network/config/end_point.dart';
+import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:data/src/util/constant.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:data/src/network/model/response/document_response.dart';
 
 class DocumentDataSourceImpl implements DocumentDataSource {
-  final FlutterUploader uploader;
+  final FlutterUploader _uploader;
+  final LinShareHttpClient _linShareHttpClient;
+  final RemoteExceptionThrower _remoteExceptionThrower;
 
-  DocumentDataSourceImpl(this.uploader);
+  DocumentDataSourceImpl(this._uploader, this._linShareHttpClient, this._remoteExceptionThrower);
 
   @override
   Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
     final file = File(fileInfo.filePath + fileInfo.fileName);
-    final taskId = await uploader.enqueue(
+    final taskId = await _uploader.enqueue(
         url: baseUrl.withServicePath(EndPoint.documents),
         files: [
           FileItem(savedDir: fileInfo.filePath, filename: fileInfo.fileName)
@@ -60,7 +66,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
           Constant.fileSizeDataForm: (await file.length()).toString()
         });
 
-    final mergedStream = Rx.merge([uploader.result, uploader.progress]).map<Either<Failure, Success>>((event) {
+    final mergedStream = Rx.merge([_uploader.result, _uploader.progress]).map<Either<Failure, Success>>((event) {
       if (event is UploadTaskResponse) {
         if (event.statusCode == 200) {
           return Right(FileUploadSuccess());
@@ -74,5 +80,21 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     });
 
     return FileUploadState(mergedStream, UploadTaskId(taskId));
+  }
+
+  @override
+  Future<List<Document>> getAll() async {
+    return Future.sync(() async {
+      final documentResponseList = await _linShareHttpClient.getAllDocument();
+      return documentResponseList.map((documentResponse) => documentResponse.toDocument()).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw DocumentNotFound();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
   }
 }

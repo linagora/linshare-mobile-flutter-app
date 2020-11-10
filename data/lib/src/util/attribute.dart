@@ -31,4 +31,5 @@
 
 class Attribute {
   static const uuid = 'uuid';
+  static const type = 'type';
 }
