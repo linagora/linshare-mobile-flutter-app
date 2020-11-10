@@ -98,8 +98,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                           padding:
                               EdgeInsets.only(top: 16, left: 16, right: 16),
                           child: Text(
-                            AppLocalizations.of(context)
-                                .stringOf('login_text_slogan'),
+                            AppLocalizations.of(context).login_text_slogan,
                             style: TextStyle(color: Colors.white, fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
@@ -108,8 +107,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         Padding(
                           padding: EdgeInsets.only(bottom: 24),
                           child: Text(
-                            AppLocalizations.of(context)
-                                .stringOf('login_text_login_to_continue'),
+                            AppLocalizations.of(context).login_text_login_to_continue,
                             style: TextStyle(color: Colors.white, fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
@@ -141,7 +139,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   .textDecoration(
                                     _buildCredentialInputDecoration(
                                       viewState,
-                                      AppLocalizations.of(context).stringOf('email')))
+                                      AppLocalizations.of(context).email))
                                   .build();
                             }
                           )
@@ -161,7 +159,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     .textDecoration(
                                       _buildCredentialInputDecoration(
                                         viewState,
-                                        AppLocalizations.of(context).stringOf('password')))
+                                        AppLocalizations.of(context).password))
                                     .build();
                               }
                           )
@@ -195,9 +193,9 @@ class _LoginWidgetState extends State<LoginWidget> {
           if (_checkUrlError(failure)) {
               return LoginInputDecorationBuilder().errorText('');
           }
-          return LoginInputDecorationBuilder().hintText('https');
+          return LoginInputDecorationBuilder().hintText(AppLocalizations.of(context).https);
         },
-        (success) => LoginInputDecorationBuilder().hintText('https'));
+        (success) => LoginInputDecorationBuilder().hintText(AppLocalizations.of(context).https));
     return loginInputDecorationBuilder.build();
   }
 
@@ -254,7 +252,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         onPressed: () => loginViewModel.handleLoginPressed(),
         color: AppColor.loginButtonColor,
         textColor: Colors.white,
-        child: Text(AppLocalizations.of(context).stringOf('login_button_login'),
+        child: Text(AppLocalizations.of(context).login_button_login,
             style: TextStyle(fontSize: 16, color: Colors.white)),
       ),
     );

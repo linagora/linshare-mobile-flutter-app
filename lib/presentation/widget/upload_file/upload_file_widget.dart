@@ -67,7 +67,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
           onPressed: () => appNavigation.popBack(),
         ),
         centerTitle: true,
-        title: Text(AppLocalizations.of(context).stringOf('upload_file_title'),
+        title: Text(AppLocalizations.of(context).upload_file_title,
             style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor,
       ),
@@ -113,7 +113,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
           label: Padding(
             padding: EdgeInsets.symmetric(horizontal: 25),
             child: Text(
-              AppLocalizations.of(context).stringOf('upload_text_button'),
+              AppLocalizations.of(context).upload_text_button,
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,

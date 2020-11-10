@@ -72,7 +72,7 @@ class _InitializeWidgetState extends State<InitializeWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(AppLocalizations.of(context).stringOf('initializing_data'),
+              Text(AppLocalizations.of(context).initializing_data,
                   style: TextStyle(color: Colors.white, fontSize: 17)),
             ],
           ),

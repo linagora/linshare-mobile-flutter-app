@@ -64,7 +64,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         builder: (BuildContext context, MySpaceViewModel viewModel) => Scaffold(
               appBar: AppBar(
                 title: Text(
-                    AppLocalizations.of(context).stringOf('my_space_title'),
+                    AppLocalizations.of(context).my_space_title,
                     style: TextStyle(fontSize: 24, color: Colors.white)),
                 centerTitle: true,
                 backgroundColor: AppColor.primaryColor,
@@ -122,8 +122,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 24),
                   child: Text(
-                    AppLocalizations.of(context)
-                        .stringOf('upload_prepare_text'),
+                    AppLocalizations.of(context).upload_prepare_text,
                     maxLines: 1,
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
@@ -194,8 +193,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: Text(
-              AppLocalizations.of(context)
-                  .stringOf('my_space_text_upload_your_files_here'),
+              AppLocalizations.of(context).my_space_text_upload_your_files_here,
               style: TextStyle(
                   color: AppColor.loginTextFieldTextColor, fontSize: 20),
               textAlign: TextAlign.center,
@@ -210,15 +208,13 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       BuildContext context, dartz.Either<Failure, Success> uploadFileState) {
     uploadFileState.fold(
         (failure) => appToast.showToast(
-            AppLocalizations.of(context).stringOf('upload_failure_text')),
+            AppLocalizations.of(context).upload_failure_text),
         (success) => {
-              if (success is UploadFileSuccess)
-                {
-                  appToast.showToast(AppLocalizations.of(context)
-                      .stringOf('upload_success_text')),
-                  mySpaceViewModel.cleanUploadViewState()
-                }
-            });
+          if (success is UploadFileSuccess) {
+            appToast.showToast(AppLocalizations.of(context).upload_success_text),
+            mySpaceViewModel.cleanUploadViewState()
+          }
+        });
     return Container();
   }
 }
