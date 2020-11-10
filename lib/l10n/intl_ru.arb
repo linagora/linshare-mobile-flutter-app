@@ -69,5 +69,20 @@
   "@upload_success_text": {
     "type": "text",
     "placeholders": {}
+  },
+  "wrong_url_message": "URL-адрес сервера неверен, пожалуйста, попробуйте еще раз",
+  "@wrong_url_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "credential_error_message": "Аутентификация не возможна. Электронная почта или пароль неверные, пожалуйста, попробуйте еще раз",
+  "@credential_error_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_error_login_message": "Произошла неизвестная ошибка, пожалуйста, попробуйте еще раз",
+  "@unknown_error_login_message": {
+    "type": "text",
+    "placeholders": {}
   }
 }

@@ -34,65 +34,40 @@
 //
 // the Additional Terms applicable to LinShare software.
 
-
 import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
-abstract class InputDecorationBuilder {
-  String _hintText;
-  TextStyle _hintStyle;
-  EdgeInsets _contentPadding;
-  OutlineInputBorder _enabledBorder;
+class TextBuilder {
+  String _text;
+  TextStyle _textStyle;
+  TextAlign _textAlign;
 
-  InputDecorationBuilder hintText(String hintText) {
-    _hintText = hintText;
+  TextBuilder text(String text) {
+    _text = text;
     return this;
   }
 
-  InputDecorationBuilder hintStyle(TextStyle hintStyle) {
-    _hintStyle = hintStyle;
+  TextBuilder textStyle(TextStyle textStyle) {
+    _textStyle = textStyle;
     return this;
   }
 
-  InputDecorationBuilder contentPadding(EdgeInsets contentPadding) {
-    _contentPadding = contentPadding;
+  TextBuilder textAlign(TextAlign textAlign) {
+    _textAlign = textAlign;
     return this;
   }
 
-  InputDecorationBuilder enabledBorder(OutlineInputBorder enabledBorder) {
-    _enabledBorder = enabledBorder;
-    return this;
-  }
-
-  InputDecoration build() {
-    return InputDecoration(
-        hintText: _hintText,
-        hintStyle: _hintStyle,
-        contentPadding: _contentPadding,
-        enabledBorder: _enabledBorder
+  Text build() {
+    return Text(
+      _text,
+      style: _textStyle,
+      textAlign: _textAlign
     );
   }
 }
 
-class LoginInputDecorationBuilder extends InputDecorationBuilder {
-
+class CenterTextBuilder extends TextBuilder {
   @override
-  InputDecoration build() {
-    return InputDecoration(
-        enabledBorder: _enabledBorder ?? OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            borderSide: BorderSide(width: 1, color: Colors.white)),
-        focusedBorder: _enabledBorder ?? OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            borderSide: BorderSide(width: 1, color: Colors.white)),
-        errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            borderSide: BorderSide(
-                width: 1, color: AppColor.loginTextFieldErrorBorder)),
-        hintText: _hintText,
-        hintStyle: _hintStyle ?? TextStyle(color: AppColor.loginTextFieldHintColor, fontSize: 16),
-        contentPadding: _contentPadding ?? EdgeInsets.all(10),
-        filled: true,
-        fillColor: Colors.white);
+  Text build() {
+    return Text(_text, style: _textStyle, textAlign: TextAlign.center);
   }
 }

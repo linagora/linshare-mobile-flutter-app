@@ -69,5 +69,20 @@
   "@upload_success_text": {
     "type": "text",
     "placeholders": {}
+  },
+  "wrong_url_message": "Server URL is not valid, please try again",
+  "@wrong_url_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "credential_error_message": "Authentication failed, either the email or the password is invalid, please try again",
+  "@credential_error_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_error_login_message": "Unknown error occurred, please try again",
+  "@unknown_error_login_message": {
+    "type": "text",
+    "placeholders": {}
   }
 }
