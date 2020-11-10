@@ -1,0 +1,73 @@
+{
+  "@@last_modified": "2020-11-10T17:18:26.612601",
+  "initializing_data": "Initializing data...",
+  "@initializing_data": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_text_slogan": "Храните и делитесь своими файлами где бы вы не находились.",
+  "@login_text_slogan": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_text_login_to_continue": "Пожалуйста, введите ваш логин",
+  "@login_text_login_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "https": "https://",
+  "@https": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "email": "электронный адрес",
+  "@email": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "пароль",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_button_login": "Вход",
+  "@login_button_login": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_file_title": "Загрузка файла",
+  "@upload_file_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_text_button": "Загрузить в моё пространство",
+  "@upload_text_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space_title": "Моё пространство",
+  "@my_space_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_prepare_text": "Preparing to upload...",
+  "@upload_prepare_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space_text_upload_your_files_here": "Загрузите ваши файлы здесь",
+  "@my_space_text_upload_your_files_here": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_failure_text": "Failed to upload file",
+  "@upload_failure_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_success_text": "File uploaded",
+  "@upload_success_text": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

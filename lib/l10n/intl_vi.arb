@@ -1,0 +1,73 @@
+{
+  "@@last_modified": "2020-11-10T17:18:26.612601",
+  "initializing_data": "Initializing data...",
+  "@initializing_data": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_text_slogan": "Lưu trữ và chia sẻ tệp ở bất kì đâu",
+  "@login_text_slogan": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_text_login_to_continue": "Điền thông tin đăng nhập",
+  "@login_text_login_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "https": "https://",
+  "@https": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "email": "email",
+  "@email": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "mật khẩu",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_button_login": "Đăng nhập",
+  "@login_button_login": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_file_title": "Tải tệp lên",
+  "@upload_file_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_text_button": "Tải lên không gian của tôi",
+  "@upload_text_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space_title": "Không gian của tôi",
+  "@my_space_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_prepare_text": "Preparing to upload...",
+  "@upload_prepare_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space_text_upload_your_files_here": "Hãy tải tệp lên",
+  "@my_space_text_upload_your_files_here": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_failure_text": "Failed to upload file",
+  "@upload_failure_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_success_text": "File uploaded",
+  "@upload_success_text": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "@@last_modified": "2020-11-10T17:18:26.612601",
+  "initializing_data": "Initializing data...",
+  "@initializing_data": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_text_slogan": "Stockez et partagez vos fichiers où que vous soyez",
+  "@login_text_slogan": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_text_login_to_continue": "Veuillez saisir vos données de connexion",
+  "@login_text_login_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "https": "https://",
+  "@https": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "email": "email",
+  "@email": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "mot de passe",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_button_login": "S'identifier",
+  "@login_button_login": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_file_title": "Transférer un fichier",
+  "@upload_file_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_text_button": "Transférer sur Mon Espace",
+  "@upload_text_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space_title": "Mon Espace",
+  "@my_space_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_prepare_text": "Preparing to upload...",
+  "@upload_prepare_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space_text_upload_your_files_here": "Transférez vos fichiers ici",
+  "@my_space_text_upload_your_files_here": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_failure_text": "Failed to upload file",
+  "@upload_failure_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_success_text": "File uploaded",
+  "@upload_success_text": {
+    "type": "text",
+    "placeholders": {}
+  }
+}
