@@ -22,11 +22,14 @@ export 'src/model/authentication/user_id.dart';
 export 'src/network/service_path.dart';
 export 'src/model/file_info.dart';
 export 'src/usecases/upload_file/file_upload_state.dart';
+export 'src/model/document/document.dart';
+export 'src/model/document/document_id.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
 export 'src/usecases/authentication/get_credential_interactor.dart';
 export 'src/usecases/myspace/upload_file_interactor.dart';
+export 'src/usecases/myspace/get_all_document_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

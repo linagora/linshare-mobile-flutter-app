@@ -3,6 +3,7 @@ library data;
 // network
 export 'src/network/dio_client.dart';
 export 'src/network/linshare_http_client.dart';
+export 'src/network/remote_exception_thrower.dart';
 
 //config
 export 'src/network/config/dynamic_url_interceptors.dart';
@@ -24,3 +25,6 @@ export 'src/datasource_impl/document_datasource_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';
+
+// model
+export 'src/network/model/response/document_response.dart';

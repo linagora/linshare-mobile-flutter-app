@@ -28,47 +28,24 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:convert';
-import 'dart:io';
+import 'package:json_annotation/json_annotation.dart';
 
-import 'package:data/src/network/config/end_point.dart';
-import 'package:data/src/network/dio_client.dart';
-import 'package:data/src/network/model/request/permanent_token_body_request.dart';
-import 'package:data/src/network/model/response/document_response.dart';
-import 'package:data/src/network/model/response/permanent_token.dart';
-import 'package:data/src/network/model/response/user.dart';
-import 'package:dio/dio.dart';
+class DatetimeConverter implements JsonConverter<DateTime, int> {
+  const DatetimeConverter();
 
-class LinShareHttpClient {
-  final DioClient _dioClient;
-
-  LinShareHttpClient(this._dioClient);
-
-  Future<PermanentToken> createPermanentToken(
-      Uri authenticateUrl,
-      String userName,
-      String password,
-      PermanentTokenBodyRequest bodyRequest) async {
-    final basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
-
-    final headerParam = _dioClient.getHeaders();
-    headerParam[HttpHeaders.authorizationHeader] = basicAuth;
-
-    final resultJson = await _dioClient.post(
-        EndPoint.authentication.generateAuthenticationUrl(authenticateUrl),
-        options: Options(headers: headerParam),
-        data: bodyRequest.toJson());
-    return PermanentToken.fromJson(resultJson);
+  @override
+  DateTime fromJson(int json) {
+    try {
+      return DateTime.fromMillisecondsSinceEpoch(json);
+    } catch (_) {
+      return null;
+    }
   }
 
-  Future<User> getAuthorizedUser() async {
-    final resultJson = await _dioClient.get(EndPoint.authorizedUser.generateEndPointPath());
-    return User.fromJson(resultJson);
-  }
-
-  Future<List<DocumentResponse>> getAllDocument() async {
-    final List resultJson = await _dioClient.get(EndPoint.documents.generateEndPointPath());
-    return resultJson.map((data) => DocumentResponse.fromJson(data)).toList();
+  @override
+  int toJson(DateTime object) {
+    return object.millisecondsSinceEpoch;
   }
 }

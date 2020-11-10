@@ -28,12 +28,86 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:core';
+import 'package:data/src/network/model/converter/data_from_json_converter.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:http_parser/http_parser.dart';
 
-abstract class DocumentDataSource {
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+part 'document_response.g.dart';
 
-  Future<List<Document>> getAll();
+@JsonSerializable()
+@DatetimeConverter()
+class DocumentResponse extends Equatable {
+  DocumentResponse(
+      this.documentId,
+      this.description,
+      this.creationDate,
+      this.modificationDate,
+      this.expirationDate,
+      this.ciphered,
+      this.name,
+      this.size,
+      this.sha256sum,
+      this.hasThumbnail,
+      this.shared,
+      this.mediaType);
+
+  @JsonKey(name: Attribute.uuid, fromJson: documentIdFromJson, toJson: documentIdToJson)
+  final DocumentId documentId;
+
+  final String description;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final DateTime expirationDate;
+  final bool ciphered;
+  final String name;
+  final int size;
+  final String sha256sum;
+  final bool hasThumbnail;
+  final int shared;
+
+  @JsonKey(name: Attribute.type, fromJson: mediaTypeFromJson, toJson: mediaTypeToJson)
+  final MediaType mediaType;
+
+  factory DocumentResponse.fromJson(Map<String, dynamic> json) => _$DocumentResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DocumentResponseToJson(this);
+
+  @override
+  List<Object> get props => [
+        documentId,
+        description,
+        creationDate,
+        modificationDate,
+        expirationDate,
+        ciphered,
+        name,
+        size,
+        sha256sum,
+        hasThumbnail,
+        shared,
+      ];
+}
+
+extension DocumentResponseExtension on DocumentResponse {
+  Document toDocument() {
+    return Document(
+        documentId,
+        description,
+        creationDate,
+        modificationDate,
+        expirationDate,
+        ciphered,
+        name,
+        size,
+        sha256sum,
+        hasThumbnail,
+        shared,
+        mediaType);
+  }
 }

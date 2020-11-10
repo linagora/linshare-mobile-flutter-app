@@ -60,7 +60,10 @@ class AppModule {
   }
 
   void _provideDataSourceImpl() {
-    getIt.registerFactory(() => DocumentDataSourceImpl(getIt<FlutterUploader>()));
+    getIt.registerFactory(() => DocumentDataSourceImpl(
+        getIt<FlutterUploader>(),
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -92,6 +95,7 @@ class AppModule {
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
+    getIt.registerFactory(() => GetAllDocumentInteractor(getIt<DocumentRepository>()));
   }
 
   void _provideSharePreference() {
