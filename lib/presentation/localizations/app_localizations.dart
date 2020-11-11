@@ -134,6 +134,11 @@ class AppLocalizations {
     return Intl.message('Unknown error occurred, please try again',
       name: 'unknown_error_login_message');
   }
+
+  String item_last_modified(String dateString) =>
+    Intl.message('Modified $dateString',
+        name: 'item_last_modified',
+        args: [dateString]);
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

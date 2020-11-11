@@ -31,6 +31,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
@@ -44,12 +45,26 @@ import 'package:redux_thunk/redux_thunk.dart';
 class MySpaceViewModel extends BaseViewModel {
   final LocalFilePicker _localFilePicker;
   final AppNavigation _appNavigation;
+  final GetAllDocumentInteractor _getAllDocumentInteractor;
 
-  MySpaceViewModel(
-    Store<AppState> store,
-    this._localFilePicker,
-    this._appNavigation,
+  MySpaceViewModel(Store<AppState> store,
+      this._localFilePicker,
+      this._appNavigation,
+      this._getAllDocumentInteractor
   ) : super(store);
+
+  ThunkAction<AppState> _getAllDocumentAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartMySpaceLoadingAction());
+      await _getAllDocumentInteractor.execute().then((result) => result.fold(
+              (failure) => store.dispatch(MySpaceGetAllDocumentAction(Left(failure))),
+              (success) => store.dispatch(MySpaceGetAllDocumentAction(Right(success)))));
+    };
+  }
+
+  void getAllDocument() {
+    store.dispatch(_getAllDocumentAction());
+  }
 
   void handleOnUploadFilePressed() {
     store.dispatch(pickFileAction());

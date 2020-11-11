@@ -80,7 +80,8 @@ class WidgetModule {
     getIt.registerFactory(() => MySpaceViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<LocalFilePicker>(),
-      getIt.get<AppNavigation>()
+      getIt.get<AppNavigation>(),
+      getIt.get<GetAllDocumentInteractor>()
     ));
   }
 

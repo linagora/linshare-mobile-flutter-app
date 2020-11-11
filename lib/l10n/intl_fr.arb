@@ -84,5 +84,10 @@
   "@unknown_error_login_message": {
     "type": "text",
     "placeholders": {}
+  },
+  "item_last_modified": "Modifié le {dateString}",
+  "@item_last_modified": {
+    "type": "text",
+    "placeholders": {}
   }
 }
