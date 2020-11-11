@@ -28,22 +28,20 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:ui' show Color;
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
+import 'package:redux/redux.dart';
 
-import 'package:flutter/material.dart';
-
-extension AppColor on Color {
-  static const primaryColor = Color(0xff4AC6FF);
-  static const loginTextFieldHintColor = Color(0xffAFAFAF);
-  static const loginTextFieldTextColor = Color(0xff7B7B7B);
-  static const loginTextFieldErrorBorder = Color(0xffFF5858);
-  static const loginButtonColor = Color(0xff1B7EC7);
-  static const uploadFileFileNameTextColor = Color(0xff7B7B7B);
-  static const uploadFileFileSizeTextColor = Color(0xffACACAC);
-  static const uploadProgressBackgroundColor = Color(0xff5FA4D8);
-  static const mySpaceUploadBackground = Color(0xff1B7EC7);
-  static const toastBackgroundColor = Color(0xff1B7EC7);
-  static const documentNameItemTextColor = Color(0xff7B7B7B);
-  static const documentModifiedDateItemTextColor = Color(0xffACACAC);
-}
+final mySpaceReducer = combineReducers<MySpaceState>([
+  TypedReducer<MySpaceState, StartMySpaceLoadingAction>((MySpaceState state, _) => state.startLoadingState()),
+  TypedReducer<MySpaceState, MySpaceGetAllDocumentAction>((MySpaceState state, MySpaceGetAllDocumentAction action) =>
+    state.sendViewState(
+        viewState: action.viewState,
+        documentList: action.viewState.fold(
+          (failure) => [],
+          (success) => (success is MySpaceViewState) ? success.documentList : []))),
+  TypedReducer<MySpaceState, CleanMySpaceStateAction>((MySpaceState state, _) => state.clearViewState()),
+]);

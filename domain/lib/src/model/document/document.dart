@@ -63,6 +63,8 @@ class Document extends Equatable {
       this.shared,
       this.mediaType);
 
+  bool isShared() => shared != 0;
+
   @override
   List<Object> get props => [
         documentId,

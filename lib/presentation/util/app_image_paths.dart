@@ -37,6 +37,16 @@ class AppImagePaths {
   String get icLoginLogo => _getImagePath('ic_login_logo.png');
   String get icAdd => _getImagePath('ic_add.png');
   String get icUploadFile => _getImagePath('ic_upload_file.png');
+  String get icSharedPeople => _getImagePath('ic_shared_people.svg');
+  String get icContextMenu => _getImagePath('ic_context_menu.svg');
+  String get icFileTypeImage => _getImagePath('ic_file_type_image.svg');
+  String get icFileTypeDoc => _getImagePath('ic_file_type_doc.svg');
+  String get icFileTypeFile => _getImagePath('ic_file_type_file.svg');
+  String get icFileTypePdf => _getImagePath('ic_file_type_pdf.svg');
+  String get icFileTypeSheets => _getImagePath('ic_file_type_sheets.svg');
+  String get icFileTypeSlide => _getImagePath('ic_file_type_slide.svg');
+  String get icFileTypeVideo => _getImagePath('ic_file_type_video.svg');
+  String get icFileTypeAudio => _getImagePath('ic_file_type_audio.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;
