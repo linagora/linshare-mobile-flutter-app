@@ -115,7 +115,8 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenThrow(exception);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(documentRepository.downloadDocument(documentId, permanentToken, wrongUrl)).thenThrow(exception);
+      when(documentRepository.downloadDocument(documentId, permanentToken, wrongUrl))
+        .thenAnswer((_) async => DownloadTaskId('task_id_1'));
 
       when(documentRepository.downloadDocument(documentId, permanentToken, wrongUrl))
         .thenAnswer((_) async => DownloadTaskId('task_id_1'));

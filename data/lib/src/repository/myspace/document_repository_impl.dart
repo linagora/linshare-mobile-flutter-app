@@ -31,7 +31,6 @@
 
 import 'package:data/src/datasource/document_datasource.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/document/document.dart';
 
 class DocumentRepositoryImpl implements DocumentRepository {
   final DocumentDataSource documentDataSource;
@@ -46,5 +45,10 @@ class DocumentRepositoryImpl implements DocumentRepository {
   @override
   Future<List<Document>> getAll() {
     return documentDataSource.getAll();
+  }
+
+  @override
+  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) {
+    return documentDataSource.downloadDocument(documentId, token, baseUrl);
   }
 }

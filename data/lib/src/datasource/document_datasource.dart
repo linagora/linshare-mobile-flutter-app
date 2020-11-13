@@ -36,4 +36,6 @@ abstract class DocumentDataSource {
   Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
 
   Future<List<Document>> getAll();
+
+  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl);
 }

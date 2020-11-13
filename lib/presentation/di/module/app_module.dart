@@ -96,6 +96,10 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetAllDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => DownloadFileInteractor(
+        getIt<DocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {

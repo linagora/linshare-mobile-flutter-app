@@ -34,15 +34,19 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:data/src/datasource/document_datasource.dart';
 import 'package:data/src/extensions/uri_extension.dart';
-import 'package:data/src/network/config/end_point.dart';
+import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:data/src/network/model/response/document_response.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 class DocumentDataSourceImpl implements DocumentDataSource {
   final FlutterUploader _uploader;
@@ -55,7 +59,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
     final file = File(fileInfo.filePath + fileInfo.fileName);
     final taskId = await _uploader.enqueue(
-        url: baseUrl.withServicePath(EndPoint.documents),
+        url: baseUrl.withServicePath(Endpoint.documents),
         files: [
           FileItem(savedDir: fileInfo.filePath, filename: fileInfo.fileName)
         ],
@@ -96,5 +100,31 @@ class DocumentDataSourceImpl implements DocumentDataSource {
         }
       });
     });
+  }
+
+  @override
+  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) async {
+    var externalStorageDirPath;
+    if (Platform.isAndroid) {
+      externalStorageDirPath = (await getExternalStorageDirectory()).absolute.path;
+    } else if (Platform.isIOS) {
+      // iOS Implementation
+    } else {
+      throw DeviceNotSupportedException();
+    }
+
+    final taskId = await FlutterDownloader.enqueue(
+      url: Endpoint.documents
+          .downloadServicePath(documentId.uuid)
+          .generateDownloadUrl(baseUrl),
+      savedDir: externalStorageDirPath,
+      headers: {
+        Constant.authorization: 'Bearer ${token.token}'
+      },
+      showNotification: true,
+      openFileFromNotification: true,
+    );
+
+    return DownloadTaskId(taskId);
   }
 }

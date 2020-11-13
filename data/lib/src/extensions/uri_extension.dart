@@ -29,11 +29,15 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/network/config/end_point.dart';
+import 'package:data/src/network/config/endpoint.dart';
 import 'package:domain/domain.dart';
 
 extension UriExtension on Uri {
   String withServicePath(ServicePath servicePath) {
-    return origin + EndPoint.rootPath + servicePath.path;
+    return origin + Endpoint.rootPath + servicePath.path;
+  }
+
+  String withDownloadPath(ServicePath servicePath, DocumentId documentId) {
+    return withServicePath(servicePath) + '/${documentId.uuid}/${Endpoint.download}';
   }
 }

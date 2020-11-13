@@ -32,7 +32,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:data/src/network/config/end_point.dart';
+import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/dio_client.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/response/document_response.dart';
@@ -56,19 +56,19 @@ class LinShareHttpClient {
     headerParam[HttpHeaders.authorizationHeader] = basicAuth;
 
     final resultJson = await _dioClient.post(
-        EndPoint.authentication.generateAuthenticationUrl(authenticateUrl),
+        Endpoint.authentication.generateAuthenticationUrl(authenticateUrl),
         options: Options(headers: headerParam),
         data: bodyRequest.toJson());
     return PermanentToken.fromJson(resultJson);
   }
 
   Future<User> getAuthorizedUser() async {
-    final resultJson = await _dioClient.get(EndPoint.authorizedUser.generateEndPointPath());
+    final resultJson = await _dioClient.get(Endpoint.authorizedUser.generateEndpointPath());
     return User.fromJson(resultJson);
   }
 
   Future<List<DocumentResponse>> getAllDocument() async {
-    final List resultJson = await _dioClient.get(EndPoint.documents.generateEndPointPath());
+    final List resultJson = await _dioClient.get(Endpoint.documents.generateEndpointPath());
     return resultJson.map((data) => DocumentResponse.fromJson(data)).toList();
   }
 }

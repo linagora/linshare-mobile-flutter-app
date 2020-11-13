@@ -31,8 +31,9 @@
 
 import 'package:domain/domain.dart';
 
-class EndPoint {
+class Endpoint {
   static final String rootPath = '/linshare/webservice/rest/user/v2';
+  static final String download = '/download';
   static final ServicePath authentication = ServicePath('/jwt');
 
   static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
@@ -40,15 +41,26 @@ class EndPoint {
 }
 
 extension ServicePathExtension on ServicePath {
-  String generateEndPointPath() {
-    return EndPoint.rootPath + path;
+  String generateEndpointPath() {
+    return Endpoint.rootPath + path;
   }
 
   String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndPointPath();
+    return baseUrl.origin + generateEndpointPath();
   }
 
   String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndPointPath();
+    return baseUrl.origin + generateEndpointPath();
+<<<<<<< HEAD:data/lib/src/network/config/endpoint.dart
+  }
+
+  ServicePath downloadServicePath(String resourceId) {
+    return ServicePath('$path/$resourceId${Endpoint.download}');
+  }
+
+  String generateDownloadUrl(Uri baseUrl) {
+    return baseUrl.origin + generateEndpointPath();
+=======
+>>>>>>> 94fa309... LA-540 Add Download file data Layer Logic and Tests:data/lib/src/network/config/end_point.dart
   }
 }
