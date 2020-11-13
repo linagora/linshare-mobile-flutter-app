@@ -33,6 +33,12 @@ dependencies:
   # flutter_uploader
   flutter_uploader: ^1.2.0
 
+  # flutter_downloader
+  flutter_downloader: ^1.5.2
+
+  # path_provider
+  path_provider: ^1.6.24
+
   # rxdart
   rxdart: ^0.24.1
 

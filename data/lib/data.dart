@@ -5,7 +5,7 @@ export 'src/network/dio_client.dart';
 export 'src/network/linshare_http_client.dart';
 export 'src/network/remote_exception_thrower.dart';
 
-//config
+// config
 export 'src/network/config/dynamic_url_interceptors.dart';
 export 'src/network/config/cookie_interceptors.dart';
 export 'src/network/config/retry_authentication_interceptors.dart';

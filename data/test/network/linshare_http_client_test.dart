@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/network/config/end_point.dart';
+import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('getAllDocument should return success with valid data', () async {
-      when(dioClient.get(EndPoint.documents.generateEndPointPath()))
+      when(dioClient.get(Endpoint.documents.generateEndpointPath()))
           .thenAnswer((_) async => [responseJsonDocument1, responseJsonDocument2, responseJsonDocument3]);
 
       final result = await linShareHttpClient.getAllDocument();
@@ -58,7 +58,7 @@ void main() {
     });
 
     test('getAllDocument should fail when response error', () async {
-      when(dioClient.get(EndPoint.documents.generateEndPointPath()))
+      when(dioClient.get(Endpoint.documents.generateEndpointPath()))
           .thenThrow(Exception());
 
       await linShareHttpClient.getAllDocument().catchError((error) => expect(error, isA<Exception>()));
