@@ -29,83 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:domain/src/model/document/document.dart';
+import 'package:equatable/equatable.dart';
 
-class UploadButtonClick extends ViewEvent {
-  @override
-  List<Object> get props => [];
-}
+class DownloadTaskId extends Equatable {
+  final String taskId;
 
-class UploadFileSuccess extends ViewState {
-  final FileInfo fileInfo;
-
-  UploadFileSuccess(this.fileInfo);
-
-  @override
-  List<Object> get props => [];
-}
-
-class UploadFileFailure extends FeatureFailure {
-  final Exception uploadFileException;
-
-  UploadFileFailure(this.uploadFileException);
-
-  @override
-  List<Object> get props => [uploadFileException];
-}
-
-class UploadingProgress extends ViewState {
-  final int progress;
-  final String fileName;
-
-  UploadingProgress(this.progress, this.fileName);
-
-  @override
-  List<Object> get props => [progress, fileName];
-}
-
-class PreparingUpload extends ViewState {
-  final FileInfo fileInfo;
-
-  PreparingUpload(this.fileInfo);
-
-  @override
-  List<Object> get props => [fileInfo];
-}
-
-class MySpaceViewState extends ViewState {
-  final List<Document> documentList;
-
-  MySpaceViewState(this.documentList);
-
-  @override
-  List<Object> get props => [documentList];
-}
-
-class MySpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  MySpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class DownloadFileViewState extends ViewState {
-  final DownloadTaskId taskId;
-
-  DownloadFileViewState(this.taskId);
+  DownloadTaskId(this.taskId);
 
   @override
   List<Object> get props => [taskId];
-}
-
-class DownloadFileFailure extends FeatureFailure {
-  final Exception downloadFileException;
-
-  DownloadFileFailure(this.downloadFileException);
-
-  @override
-  List<Object> get props => [downloadFileException];
 }

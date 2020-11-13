@@ -33,11 +33,15 @@ import 'dart:core';
 
 import 'package:domain/src/model/authentication/token.dart';
 import 'package:domain/src/model/document/document.dart';
+import 'package:domain/src/model/document/document_id.dart';
 import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
+import 'package:domain/src/usecases/download_file/download_task_id.dart';
 
 abstract class DocumentRepository {
   Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
 
   Future<List<Document>> getAll();
+
+  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl);
 }

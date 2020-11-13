@@ -38,6 +38,7 @@ const tokenUUID = 'e66fdc71-df36-4c55-aaec-aa456bfc7e4a';
 
 final linShareBaseUrl = Uri.parse(linShareUrl);
 final wrongUrl = Uri.parse('http://linsharewrong.org');
+final wrongToken = Token('token', TokenId('uuid'));
 final userName1 = UserName('user1@linshare.org');
 final password1 = Password('qwedsazxc');
 final userName2 = UserName('user2@linshare.org');
