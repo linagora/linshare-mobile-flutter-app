@@ -30,8 +30,13 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 
 import 'home_viewmodel.dart';
 
@@ -41,7 +46,9 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final homeViewModel = getIt<HomeViewModel>();
+  final imagePath = getIt<AppImagePaths>();
 
   @override
   void dispose() {
@@ -51,6 +58,21 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return getIt<MySpaceWidget>();
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+            AppLocalizations.of(context).my_space_title,
+            style: TextStyle(fontSize: 24, color: Colors.white)),
+        centerTitle: true,
+        backgroundColor: AppColor.primaryColor,
+        leading: IconButton(
+            icon: SvgPicture.asset(imagePath.icLinShareMenu),
+            onPressed: () => _scaffoldKey.currentState.openDrawer()),
+      ),
+      drawer: SideMenuDrawerWidget(),
+      body: getIt<MySpaceWidget>(),
+    );
   }
 }

@@ -71,13 +71,6 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   Widget build(BuildContext context) {
     return StoreConnector(
         builder: (BuildContext context, MySpaceViewModel viewModel) => Scaffold(
-              appBar: AppBar(
-                title: Text(
-                    AppLocalizations.of(context).my_space_title,
-                    style: TextStyle(fontSize: 24, color: Colors.white)),
-                centerTitle: true,
-                backgroundColor: AppColor.primaryColor,
-              ),
               body: Column(
                 children: [
                   StreamBuilder(builder: (context, snapshot) {
