@@ -1,0 +1,45 @@
+<!-- LinShare is an open source filesharing software, part of the LinPKI software
+suite, developed by Linagora.
+
+Copyright (C) 2020 LINAGORA
+
+This program is free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later version,
+provided you comply with the Additional Terms applicable for LinShare software by
+Linagora pursuant to Section 7 of the GNU Affero General Public License,
+subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
+display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
+the words “You are using the Free and Open Source version of LinShare™, powered by
+Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+offer!”. You must also retain the latter notice in all asynchronous messages such as
+e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
+http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
+infringing Linagora intellectual property rights over its trademarks and commercial
+brands. Other Additional Terms apply, see
+<http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
+more details.
+You should have received a copy of the GNU Affero General Public License and its
+applicable Additional Terms for LinShare along with this program. If not, see
+<http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+the Additional Terms applicable to LinShare software. -->
+
+<svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0)">
+    <path d="M9.03968 8.88086L8.29959 10.6254C9.77977 11.2597 10.5199 12.9513 9.93836 14.4315L7.50664 20.2994C6.81942 21.7795 5.18065 22.5196 3.75334 21.8853C2.27316 21.2509 1.58593 19.5593 2.16743 18.0791L3.54188 14.6958L1.74452 13.9557L0.370076 17.339C-0.63433 19.7707 0.528666 22.5725 2.96038 23.6298C5.44497 24.687 8.24673 23.4183 9.25113 21.0395H9.304L11.6829 15.1716C12.1586 13.9558 12.1058 12.6342 11.63 11.4712C11.1542 10.361 10.2555 9.40949 9.03968 8.88086Z" fill="white"/>
+    <path d="M12.423 0.370294C9.93838 -0.686975 7.13662 0.581748 6.13221 2.9606L3.75336 8.82844C2.74895 11.2602 3.96481 14.0619 6.34367 15.1192L7.08375 13.3747C5.55071 12.7403 4.91635 11.0487 5.49785 9.56853L7.8767 3.70069V3.64783C8.56393 2.16765 10.2027 1.42756 11.63 2.06192C13.1102 2.69629 13.8503 4.38791 13.2159 5.81523L11.8415 9.09276L13.6388 9.83285L15.0133 6.55532C15.489 5.33946 15.489 4.01787 14.9604 2.90774C14.5375 1.90333 13.6388 0.898928 12.423 0.370294Z" fill="white"/>
+  </g>
+  <rect x="20" y="2" width="12" height="2" rx="1" fill="white"/>
+  <rect x="12" y="20" width="20" height="2" rx="1" fill="white"/>
+  <rect x="16" y="11" width="16" height="2" rx="1" fill="white"/>
+  <defs>
+    <clipPath id="clip0">
+      <rect width="15.3304" height="24" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>

@@ -139,6 +139,10 @@ class AppLocalizations {
     Intl.message('Modified $dateString',
         name: 'item_last_modified',
         args: [dateString]);
+
+  String get my_space {
+    return Intl.message('My Space', name: 'my_space');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -29,28 +29,46 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
-import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 
-class AppImagePaths {
-  String get icArrowBack => _getImagePath('ic_arrow_back.png');
-  String get icLoginLogo => _getImagePath('ic_login_logo.png');
-  String get icAdd => _getImagePath('ic_add.png');
-  String get icUploadFile => _getImagePath('ic_upload_file.png');
-  String get icSharedPeople => _getImagePath('ic_shared_people.svg');
-  String get icContextMenu => _getImagePath('ic_context_menu.svg');
-  String get icFileTypeImage => _getImagePath('ic_file_type_image.svg');
-  String get icFileTypeDoc => _getImagePath('ic_file_type_doc.svg');
-  String get icFileTypeFile => _getImagePath('ic_file_type_file.svg');
-  String get icFileTypePdf => _getImagePath('ic_file_type_pdf.svg');
-  String get icFileTypeSheets => _getImagePath('ic_file_type_sheets.svg');
-  String get icFileTypeSlide => _getImagePath('ic_file_type_slide.svg');
-  String get icFileTypeVideo => _getImagePath('ic_file_type_video.svg');
-  String get icFileTypeAudio => _getImagePath('ic_file_type_audio.svg');
-  String get icLinShareMenu => _getImagePath('ic_linshare_menu.svg');
-  String get icLinShareLogo => _getImagePath('ic_linshare_logo.svg');
+class SideMenuDrawerWidget extends StatelessWidget {
+  final imagePath = getIt<AppImagePaths>();
+  final sideMenuDrawerViewModel = getIt<SideMenuDrawerViewModel>();
 
-  String _getImagePath(String imageName) {
-    return AppAssetsPath.images + imageName;
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          Container(
+            height: 130.0,
+            child: DrawerHeader(
+            padding: EdgeInsets.only(left: 50, top: 32),
+            child: SvgPicture.asset(
+              imagePath.icLinShareLogo,
+              fit: BoxFit.none,
+              alignment: Alignment.centerLeft,
+              ),
+            decoration: BoxDecoration(
+                color: AppColor.primaryColor,
+          ))),
+          ListTile(
+            leading: Icon(Icons.home, size: 36, color: AppColor.documentNameItemTextColor),
+            title: Text(AppLocalizations.of(context).my_space, style: TextStyle(
+              fontSize: 16,
+              color: AppColor.documentNameItemTextColor)),
+            onTap: () => sideMenuDrawerViewModel.goToMySpace(),
+          ),
+          Divider()
+        ],
+      ),
+    );
   }
 }

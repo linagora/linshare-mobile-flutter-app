@@ -89,5 +89,10 @@
   "@item_last_modified": {
     "type": "text",
     "placeholders": {}
+  },
+  "my_space": "Không gian của tôi",
+  "@my_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

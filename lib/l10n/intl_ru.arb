@@ -89,5 +89,10 @@
   "@item_last_modified": {
     "type": "text",
     "placeholders": {}
+  },
+  "my_space": "Моё пространство",
+  "@my_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

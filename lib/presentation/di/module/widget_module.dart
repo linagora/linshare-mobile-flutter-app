@@ -43,6 +43,8 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.d
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
@@ -55,6 +57,7 @@ class WidgetModule {
     _provideMySpaceComponent();
     _provideUploadFileComponent();
     _provideInitializeComponent();
+    _provideSideMenuComponent();
   }
 
   void _provideLoginComponent() {
@@ -104,6 +107,13 @@ class WidgetModule {
       getIt.get<DynamicUrlInterceptors>(),
       getIt.get<RetryAuthenticationInterceptors>(),
       getIt.get<UploadFileManager>()
+    ));
+  }
+
+  void _provideSideMenuComponent() {
+    getIt.registerFactory(() => SideMenuDrawerWidget());
+    getIt.registerFactory(() => SideMenuDrawerViewModel(
+      getIt.get<Store<AppState>>()
     ));
   }
 }
