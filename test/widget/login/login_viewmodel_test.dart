@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -46,10 +47,12 @@ void main() {
   TestReduxModule(getIt);
   getIt.registerLazySingleton<CreatePermanentTokenInteractor>(() => MockCreatePermanentTokenInteractor());
   getIt.registerLazySingleton<AppNavigation>(() => MockAppNavigation());
+  getIt.registerLazySingleton<DynamicUrlInterceptors>(() => MockDynamicUrlInterceptors());
   getIt.registerLazySingleton<LoginViewModel>(() => LoginViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<CreatePermanentTokenInteractor>(),
-      getIt.get<AppNavigation>()
+      getIt.get<AppNavigation>(),
+      getIt.get<DynamicUrlInterceptors>()
   ));
 
   group('test loginViewModel', () {

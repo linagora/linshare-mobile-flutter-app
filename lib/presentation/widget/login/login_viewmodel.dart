@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -43,11 +44,13 @@ class LoginViewModel extends BaseViewModel {
   LoginViewModel(
     Store<AppState> store,
     this._getPermanentTokenInteractor,
-    this._appNavigation
+    this._appNavigation,
+    this._dynamicUrlInterceptors
   ) : super(store);
 
   final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
   final AppNavigation _appNavigation;
+  final DynamicUrlInterceptors _dynamicUrlInterceptors;
 
   String _urlText = '';
   String _emailText = '';
@@ -83,6 +86,7 @@ class LoginViewModel extends BaseViewModel {
   ThunkAction<AppState> loginSuccessAction(AuthenticationViewState success) {
     return (Store<AppState> store) async {
       store.dispatch(LoginAction(Right(success)));
+      _dynamicUrlInterceptors.changeBaseUrl(_urlText);
       await _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
     };
   }

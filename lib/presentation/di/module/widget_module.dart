@@ -62,7 +62,8 @@ class WidgetModule {
     getIt.registerFactory(() => LoginViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<CreatePermanentTokenInteractor>(),
-      getIt.get<AppNavigation>()
+      getIt.get<AppNavigation>(),
+      getIt.get<DynamicUrlInterceptors>()
     ));
   }
 
