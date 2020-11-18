@@ -37,9 +37,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/background_widgets/error_background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
@@ -123,19 +126,33 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   }
 
   Widget _buildMySpaceList(BuildContext context) {
-    return StoreConnector<AppState, List<Document>>(
-        converter: (store) => store.state.mySpaceState.documentList,
-        builder: (context, documentList) {
-          if (documentList.isEmpty) {
-            return _buildUploadFileHere(context);
-          } else {
-            return ListView.builder(
-                itemCount: documentList.length,
-                itemBuilder: (context, index) {
-                  return _buildMySpaceListItem(context, documentList[index]);
-                });
-          }
+    return StoreConnector<AppState, MySpaceState>(
+        converter: (store) => store.state.mySpaceState,
+        builder: (context, mySpaceState) {
+          return mySpaceState.viewState.fold(
+            (failure) =>
+              RefreshIndicator(
+                onRefresh: () async => mySpaceViewModel.getAllDocument(),
+                child: failure is MySpaceFailure ?
+              ErrorBackgroundWidgetBuilder(context, imagePath).build() : _buildMySpaceListView(context, mySpaceState.documentList)),
+            (success) => success is LoadingState ?
+              _buildMySpaceListView(context, mySpaceState.documentList) :
+              RefreshIndicator(
+                onRefresh: () async => mySpaceViewModel.getAllDocument(),
+                child: _buildMySpaceListView(context, mySpaceState.documentList)));
         });
+  }
+
+  Widget _buildMySpaceListView(BuildContext context, List<Document> documentList) {
+    if (documentList.isEmpty) {
+      return _buildUploadFileHere(context);
+    } else {
+      return ListView.builder(
+        itemCount: documentList.length,
+        itemBuilder: (context, index) {
+          return _buildMySpaceListItem(context, documentList[index]);
+        });
+    }
   }
 
   Widget _buildMySpaceListItem(BuildContext context, Document document) {
@@ -269,29 +286,14 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   }
 
   Widget _buildUploadFileHere(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            imagePath.icUploadFile,
-            width: 120,
-            height: 120,
-            fit: BoxFit.fill,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Text(
-              AppLocalizations.of(context).my_space_text_upload_your_files_here,
-              style: TextStyle(
-                  color: AppColor.loginTextFieldTextColor, fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
+    return BackgroundWidgetBuilder(
+      SvgPicture.asset(
+        imagePath.icUploadFile,
+        width: 120,
+        height: 120,
+        fit: BoxFit.fill,
       ),
-    );
+      AppLocalizations.of(context).my_space_text_upload_your_files_here).build();
   }
 
   Widget handleUploadToastMessage(
