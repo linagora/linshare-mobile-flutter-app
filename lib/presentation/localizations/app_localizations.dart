@@ -135,6 +135,11 @@ class AppLocalizations {
       name: 'unknown_error_login_message');
   }
 
+  String get download_to_device {
+    return Intl.message('Download to device',
+      name: 'download_to_device');
+  }
+
   String item_last_modified(String dateString) =>
     Intl.message('Modified $dateString',
         name: 'item_last_modified',

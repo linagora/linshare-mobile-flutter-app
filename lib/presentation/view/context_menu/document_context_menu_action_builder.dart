@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,34 +26,37 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
-import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/material/list_tile.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-class AppImagePaths {
-  String get icArrowBack => _getImagePath('ic_arrow_back.png');
-  String get icLoginLogo => _getImagePath('ic_login_logo.png');
-  String get icAdd => _getImagePath('ic_add.png');
-  String get icUploadFile => _getImagePath('ic_upload_file.svg');
-  String get icSharedPeople => _getImagePath('ic_shared_people.svg');
-  String get icContextMenu => _getImagePath('ic_context_menu.svg');
-  String get icFileTypeImage => _getImagePath('ic_file_type_image.svg');
-  String get icFileTypeDoc => _getImagePath('ic_file_type_doc.svg');
-  String get icFileTypeFile => _getImagePath('ic_file_type_file.svg');
-  String get icFileTypePdf => _getImagePath('ic_file_type_pdf.svg');
-  String get icFileTypeSheets => _getImagePath('ic_file_type_sheets.svg');
-  String get icFileTypeSlide => _getImagePath('ic_file_type_slide.svg');
-  String get icFileTypeVideo => _getImagePath('ic_file_type_video.svg');
-  String get icFileTypeAudio => _getImagePath('ic_file_type_audio.svg');
-  String get icLinShareMenu => _getImagePath('ic_linshare_menu.svg');
-  String get icLinShareLogo => _getImagePath('ic_linshare_logo.svg');
-  String get icUnexpectedError => _getImagePath('ic_unexpected_error.svg');
-  String get icFileDownload => _getImagePath('ic_file_download.svg');
+typedef OnDocumentContextMenuAction = void Function(Document document);
 
-  String _getImagePath(String imageName) {
-    return AppAssetsPath.images + imageName;
+class DocumentContextMenuTileBuilder extends ContextMenuActionBuilder<Document> {
+  final Document _document;
+
+  DocumentContextMenuTileBuilder(Key key, SvgPicture actionIcon, String actionName, this._document) : super(key, actionIcon, actionName);
+
+  @override
+  ListTile build() {
+    return ListTile(
+        key: key,
+        leading: actionIcon,
+        title: Text(
+            actionName,
+            style: actionTextStyle()),
+        onTap: () => onContextMenuActionClick(_document)
+    );
   }
 }

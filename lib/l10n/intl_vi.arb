@@ -88,7 +88,9 @@
   "item_last_modified": "Chỉnh sửa {dateString}",
   "@item_last_modified": {
     "type": "text",
-    "placeholders": {}
+    "placeholders": {
+      "dateString": {}
+    }
   },
   "my_space": "Không gian của tôi",
   "@my_space": {
@@ -97,6 +99,11 @@
   },
   "common_error_occured_message": "Unexpected error occurs\nPlease reload or try again later",
   "@common_error_occured_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "download_to_device" :"Download to device",
+  "@download_to_device": {
     "type": "text",
     "placeholders": {}
   }

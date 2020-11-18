@@ -31,12 +31,15 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:linshare_flutter_app/presentation/model/file/document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:redux/redux.dart';
@@ -46,20 +49,18 @@ class MySpaceViewModel extends BaseViewModel {
   final LocalFilePicker _localFilePicker;
   final AppNavigation _appNavigation;
   final GetAllDocumentInteractor _getAllDocumentInteractor;
+  final DownloadFileInteractor _downloadFileInteractor;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
       this._appNavigation,
-      this._getAllDocumentInteractor
+      this._getAllDocumentInteractor,
+      this._downloadFileInteractor
   ) : super(store);
 
-  ThunkAction<AppState> _getAllDocumentAction() {
-    return (Store<AppState> store) async {
-      store.dispatch(StartMySpaceLoadingAction());
-      await _getAllDocumentInteractor.execute().then((result) => result.fold(
-              (failure) => store.dispatch(MySpaceGetAllDocumentAction(Left(failure))),
-              (success) => store.dispatch(MySpaceGetAllDocumentAction(Right(success)))));
-    };
+  void downloadFile(DocumentId documentId) {
+    store.dispatch(_downloadFileAction(documentId));
+    _appNavigation.popBack();
   }
 
   void getAllDocument() {
@@ -72,6 +73,36 @@ class MySpaceViewModel extends BaseViewModel {
 
   void cleanUploadViewState() {
     store.dispatch(CleanUploadStateAction());
+  }
+
+  void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles) {
+    store.dispatch(_handleContextMenuAction(context, document, actionTiles));
+  }
+
+  ThunkAction<AppState> _handleContextMenuAction(BuildContext context, Document document, List<Widget> actionTiles) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context, DocumentPresentationFile.fromDocument(document))
+          .addTiles(actionTiles)
+          .build();
+      store.dispatch(MySpaceAction(Right(ContextMenuItemViewState(document))));
+    };
+  }
+
+  ThunkAction<AppState> _getAllDocumentAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartMySpaceLoadingAction());
+      await _getAllDocumentInteractor.execute().then((result) => result.fold(
+              (failure) => store.dispatch(MySpaceGetAllDocumentAction(Left(failure))),
+              (success) => store.dispatch(MySpaceGetAllDocumentAction(Right(success)))));
+    };
+  }
+
+  ThunkAction<AppState> _downloadFileAction(DocumentId documentId) {
+    return (Store<AppState> store) async {
+      await _downloadFileInteractor.execute(documentId).then((result) => result.fold(
+        (failure) => store.dispatch(MySpaceAction(Left(failure))),
+        (success) => store.dispatch(MySpaceAction(Right(success)))));
+    };
   }
 
   ThunkAction<AppState> pickFileAction() {

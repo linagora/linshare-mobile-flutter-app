@@ -88,7 +88,9 @@
   "item_last_modified": "Modifié le {dateString}",
   "@item_last_modified": {
     "type": "text",
-    "placeholders": {}
+    "placeholders": {
+      "dateString": {}
+    }
   },
   "my_space": "Mon Espace",
   "@my_space": {
@@ -97,6 +99,11 @@
   },
   "common_error_occured_message": "Une erreur inconnue est survenue\nVeuillez réessayer plus tard",
   "@common_error_occured_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "download_to_device" :"Télécharger sur l'appareil",
+  "@download_to_device": {
     "type": "text",
     "placeholders": {}
   }

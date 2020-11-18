@@ -51,7 +51,6 @@ extension ServicePathExtension on ServicePath {
 
   String generateUploadUrl(Uri baseUrl) {
     return baseUrl.origin + generateEndpointPath();
-<<<<<<< HEAD:data/lib/src/network/config/endpoint.dart
   }
 
   ServicePath downloadServicePath(String resourceId) {
@@ -60,7 +59,5 @@ extension ServicePathExtension on ServicePath {
 
   String generateDownloadUrl(Uri baseUrl) {
     return baseUrl.origin + generateEndpointPath();
-=======
->>>>>>> 94fa309... LA-540 Add Download file data Layer Logic and Tests:data/lib/src/network/config/end_point.dart
   }
 }

@@ -29,30 +29,51 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
-import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 
-class AppImagePaths {
-  String get icArrowBack => _getImagePath('ic_arrow_back.png');
-  String get icLoginLogo => _getImagePath('ic_login_logo.png');
-  String get icAdd => _getImagePath('ic_add.png');
-  String get icUploadFile => _getImagePath('ic_upload_file.svg');
-  String get icSharedPeople => _getImagePath('ic_shared_people.svg');
-  String get icContextMenu => _getImagePath('ic_context_menu.svg');
-  String get icFileTypeImage => _getImagePath('ic_file_type_image.svg');
-  String get icFileTypeDoc => _getImagePath('ic_file_type_doc.svg');
-  String get icFileTypeFile => _getImagePath('ic_file_type_file.svg');
-  String get icFileTypePdf => _getImagePath('ic_file_type_pdf.svg');
-  String get icFileTypeSheets => _getImagePath('ic_file_type_sheets.svg');
-  String get icFileTypeSlide => _getImagePath('ic_file_type_slide.svg');
-  String get icFileTypeVideo => _getImagePath('ic_file_type_video.svg');
-  String get icFileTypeAudio => _getImagePath('ic_file_type_audio.svg');
-  String get icLinShareMenu => _getImagePath('ic_linshare_menu.svg');
-  String get icLinShareLogo => _getImagePath('ic_linshare_logo.svg');
-  String get icUnexpectedError => _getImagePath('ic_unexpected_error.svg');
-  String get icFileDownload => _getImagePath('ic_file_download.svg');
+class ContextMenuBuilder {
+  final imagePath = getIt<AppImagePaths>();
 
-  String _getImagePath(String imageName) {
-    return AppAssetsPath.images + imageName;
+  final BuildContext _context;
+  final PresentationFile _file;
+  final List<Widget> _actionTiles = [];
+
+  ContextMenuBuilder(this._context, this._file);
+
+  ContextMenuBuilder addTiles(List<Widget> tiles) {
+    _actionTiles.addAll(tiles);
+    return this;
+  }
+
+  RoundedRectangleBorder _shape() {
+    return RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0)
+        )
+    );
+  }
+
+  void build() {
+    showModalBottomSheet(
+      shape: _shape(),
+      context: _context,
+      builder: (BuildContext buildContext) {
+        return Container(
+          child: Wrap(
+            children: <Widget>[
+              ContextMenuHeaderBuilder(Key('context_menu_header'), _file).build(),
+              Divider(),
+              ..._actionTiles,
+            ],
+          ),
+        );
+      }
+    );
   }
 }

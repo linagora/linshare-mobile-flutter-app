@@ -109,3 +109,12 @@ class DownloadFileFailure extends FeatureFailure {
   @override
   List<Object> get props => [downloadFileException];
 }
+
+class ContextMenuItemViewState extends ViewState {
+  final Document document;
+
+  ContextMenuItemViewState(this.document);
+
+  @override
+  List<Object> get props => [document];
+}

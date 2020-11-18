@@ -37,10 +37,11 @@ import 'package:redux/redux.dart';
 
 final mySpaceReducer = combineReducers<MySpaceState>([
   TypedReducer<MySpaceState, StartMySpaceLoadingAction>((MySpaceState state, _) => state.startLoadingState()),
+  TypedReducer<MySpaceState, MySpaceAction>((MySpaceState state, MySpaceAction action) => state.sendViewState(viewState: action.viewState)),
   TypedReducer<MySpaceState, MySpaceGetAllDocumentAction>((MySpaceState state, MySpaceGetAllDocumentAction action) =>
-    state.sendViewState(
+    state.setDocuments(
         viewState: action.viewState,
-        documentList: action.viewState.fold(
+        newDocumentList: action.viewState.fold(
           (failure) => [],
           (success) => (success is MySpaceViewState) ? success.documentList : []))),
   TypedReducer<MySpaceState, CleanMySpaceStateAction>((MySpaceState state, _) => state.clearViewState()),
