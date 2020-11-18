@@ -29,30 +29,39 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
-import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
+import 'package:filesize/filesize.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 
-class AppImagePaths {
-  String get icArrowBack => _getImagePath('ic_arrow_back.png');
-  String get icLoginLogo => _getImagePath('ic_login_logo.png');
-  String get icAdd => _getImagePath('ic_add.png');
-  String get icUploadFile => _getImagePath('ic_upload_file.svg');
-  String get icSharedPeople => _getImagePath('ic_shared_people.svg');
-  String get icContextMenu => _getImagePath('ic_context_menu.svg');
-  String get icFileTypeImage => _getImagePath('ic_file_type_image.svg');
-  String get icFileTypeDoc => _getImagePath('ic_file_type_doc.svg');
-  String get icFileTypeFile => _getImagePath('ic_file_type_file.svg');
-  String get icFileTypePdf => _getImagePath('ic_file_type_pdf.svg');
-  String get icFileTypeSheets => _getImagePath('ic_file_type_sheets.svg');
-  String get icFileTypeSlide => _getImagePath('ic_file_type_slide.svg');
-  String get icFileTypeVideo => _getImagePath('ic_file_type_video.svg');
-  String get icFileTypeAudio => _getImagePath('ic_file_type_audio.svg');
-  String get icLinShareMenu => _getImagePath('ic_linshare_menu.svg');
-  String get icLinShareLogo => _getImagePath('ic_linshare_logo.svg');
-  String get icUnexpectedError => _getImagePath('ic_unexpected_error.svg');
-  String get icFileDownload => _getImagePath('ic_file_download.svg');
+class ContextMenuHeaderBuilder {
+  final imagePath = getIt<AppImagePaths>();
 
-  String _getImagePath(String imageName) {
-    return AppAssetsPath.images + imageName;
+  final Key _key;
+  final PresentationFile _file;
+
+  ContextMenuHeaderBuilder(this._key, this._file);
+
+  ListTile build() {
+    return ListTile(
+      key: _key,
+      leading: SvgPicture.asset(
+        _file.fileMediaType().getFileTypeImagePath(imagePath),
+          width: 16,
+          height: 20,
+          fit: BoxFit.fill),
+      title: Transform(
+        transform: Matrix4.translationValues(-16, -2, 0.0),
+        child: Text(
+          _file.fileName(),
+          maxLines: 1,
+          style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+          ),
+        ),
+      trailing: Text(filesize(_file.fileSize()), style: TextStyle(fontSize: 14, color: AppColor.documentModifiedDateItemTextColor)));
   }
 }

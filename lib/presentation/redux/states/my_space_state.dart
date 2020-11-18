@@ -53,8 +53,12 @@ class MySpaceState extends LinShareState {
   }
 
   @override
-  LinShareState sendViewState({Either<Failure, Success> viewState, List<Document> documentList}) {
+  LinShareState sendViewState({Either<Failure, Success> viewState}) {
     return MySpaceState(viewState, documentList);
+  }
+
+  LinShareState setDocuments({Either<Failure, Success> viewState, List<Document> newDocumentList}) {
+    return MySpaceState(viewState, newDocumentList);
   }
 
   @override

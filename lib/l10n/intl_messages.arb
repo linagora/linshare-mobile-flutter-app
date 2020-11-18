@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-11-16T09:32:45.678474",
+  "@@last_modified": "2020-11-24T17:07:26.070375",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -88,10 +88,17 @@
   "item_last_modified": "Modified {dateString}",
   "@item_last_modified": {
     "type": "text",
-    "placeholders": {}
+    "placeholders": {
+      "dateString": {}
+    }
   },
   "my_space": "My Space",
   "@my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "download_to_device" :"Download to device",
+  "@download_to_device": {
     "type": "text",
     "placeholders": {}
   },

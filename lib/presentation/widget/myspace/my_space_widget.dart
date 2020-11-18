@@ -45,6 +45,8 @@ import 'package:linshare_flutter_app/presentation/view/background_widgets/backgr
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:redux/redux.dart';
 
 class MySpaceWidget extends StatefulWidget {
@@ -201,12 +203,14 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           ],
         ),
       ),
-      trailing: SvgPicture.asset(
-        imagePath.icContextMenu,
-        width: 24,
-        height: 24,
-        fit: BoxFit.fill,
-      ),
+      trailing: IconButton(
+        icon: SvgPicture.asset(
+          imagePath.icContextMenu,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+      ), onPressed: () => mySpaceViewModel
+          .openContextMenu(context, document, contextMenuActionTiles(document))),
     );
   }
 
@@ -318,5 +322,24 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           }
         });
     return Container();
+  }
+
+  List<Widget> contextMenuActionTiles(Document document) {
+    return [
+      downloadAction(document)
+    ];
+  }
+
+  Widget downloadAction(Document document) {
+    return DocumentContextMenuTileBuilder(
+        Key('download_context_menu_action'),
+        SvgPicture.asset(
+            imagePath.icFileDownload,
+            width: 24,
+            height: 24,
+            fit: BoxFit.fill),
+        AppLocalizations.of(context).download_to_device,
+        document)
+      .build();
   }
 }
