@@ -108,7 +108,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     if (Platform.isAndroid) {
       externalStorageDirPath = (await getExternalStorageDirectory()).absolute.path;
     } else if (Platform.isIOS) {
-      // iOS Implementation
+      externalStorageDirPath = (await getApplicationDocumentsDirectory()).absolute.path;
     } else {
       throw DeviceNotSupportedException();
     }
