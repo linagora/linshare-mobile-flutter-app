@@ -14,6 +14,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		CF02DF86256283DB005EDE4A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CF02DF85256283CA005EDE4A /* libsqlite3.tbd */; };
 		CF0E3E6C2542EC0200DE0A66 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0E3E6B2542EC0200DE0A66 /* ShareViewController.swift */; };
 		CF0E3E6F2542EC0200DE0A66 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF0E3E6D2542EC0200DE0A66 /* MainInterface.storyboard */; };
 		CF0E3E732542EC0200DE0A66 /* LinshareShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CF0E3E692542EC0200DE0A66 /* LinshareShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -69,6 +70,7 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF02DF85256283CA005EDE4A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		CF0E3E692542EC0200DE0A66 /* LinshareShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LinshareShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF0E3E6B2542EC0200DE0A66 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		CF0E3E6E2542EC0200DE0A66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF02DF86256283DB005EDE4A /* libsqlite3.tbd in Frameworks */,
 				937149AADB9A95EDA0FFCCD6 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +114,7 @@
 		9068E0C77FF800C12F420678 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF02DF85256283CA005EDE4A /* libsqlite3.tbd */,
 				F99627AED8910E249D28E96C /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
