@@ -1,0 +1,35 @@
+<!-- LinShare is an open source filesharing software, part of the LinPKI software
+suite, developed by Linagora.
+
+Copyright (C) 2020 LINAGORA
+
+This program is free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later version,
+provided you comply with the Additional Terms applicable for LinShare software by
+Linagora pursuant to Section 7 of the GNU Affero General Public License,
+subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
+display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
+the words “You are using the Free and Open Source version of LinShare™, powered by
+Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+offer!”. You must also retain the latter notice in all asynchronous messages such as
+e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
+http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
+infringing Linagora intellectual property rights over its trademarks and commercial
+brands. Other Additional Terms apply, see
+<http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
+more details.
+You should have received a copy of the GNU Affero General Public License and its
+applicable Additional Terms for LinShare along with this program. If not, see
+<http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+the Additional Terms applicable to LinShare software. -->
+
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M97.5 120H22.5C10.0781 120 0 109.922 0 97.5V22.5C0 10.0781 10.0781 0 22.5 0H97.5C109.922 0 120 10.0781 120 22.5V97.5C120 109.922 109.922 120 97.5 120Z" fill="#F2F2F2"/>
+<path d="M86.8001 48.8002H84.8001C83.8001 48.8002 83.8001 48.8002 83.4001 47.8002C82.8001 46.4002 81.6001 45.6002 80.0001 45.6002H78.8001C77.2001 45.6002 77.2001 45.6002 77.2001 44.0002V42.0002C76.8001 40.4002 75.2001 39.2002 73.6001 39.2002H35.0001C34.0001 39.4002 33.2001 39.8002 32.6001 40.8002C32.2001 41.2002 32.4001 41.6002 32.2001 42.0002V82.2002C32.4001 83.6002 33.6001 84.6002 35.2001 84.6002H56.2001C57.0001 84.6002 57.2001 84.6002 57.2001 83.6002V77.2002V73.4002C57.2001 72.8002 57.0001 72.6002 56.4001 72.6002H53.8001C53.4001 72.6002 53.0001 72.6002 52.6001 72.4002C51.6001 72.2002 51.4001 71.2002 52.0001 70.4002L52.6001 69.8002L62.8001 59.6002L63.4001 59.0002C64.0001 58.6002 64.4001 58.6002 65.0001 59.0002L65.6001 59.6002L76.0001 70.0002L76.6001 70.6002C77.2001 71.4002 76.8001 72.2002 75.8001 72.6002C75.4001 72.8002 75.2001 72.8002 74.8001 72.8002H72.0001C71.2001 72.8002 71.2001 73.0002 71.2001 73.6002V84.0002C71.2001 84.6002 71.4001 84.8002 72.0001 84.8002H80.6001C81.8001 84.8002 82.8001 84.2002 83.4001 83.0002C83.8001 82.4002 83.8001 81.8002 84.0001 81.2002C85.6001 74.2002 87.2001 67.2002 88.6001 60.2002C89.2001 57.8002 89.8001 55.4002 90.0001 52.8002C90.2001 50.6002 89.0001 49.2002 86.8001 48.8002ZM73.4001 46.0002H70.8001C69.2001 46.0002 68.0001 47.0002 67.6001 48.6002C67.4001 49.2002 67.2001 49.2002 66.8001 49.2002H49.0001C46.8001 49.2002 45.6001 50.2002 45.2001 52.4002C43.8001 58.4002 42.6001 64.4002 41.2001 70.4002C40.4001 74.0002 39.6001 77.4002 38.8001 81.0002C38.8001 81.4002 38.6001 81.6002 38.2001 81.6002H36.2001C35.6001 81.6002 35.4001 81.4002 35.4001 80.8002V74.6002V62.2002V43.8002C35.4001 42.8002 35.4001 42.8002 36.4001 42.8002H73.2001C74.0001 42.8002 74.0001 42.8002 74.0001 43.6002V45.4002C74.0001 45.8002 73.8001 46.0002 73.4001 46.0002Z" fill="#D3D3D3"/>
+</svg>
