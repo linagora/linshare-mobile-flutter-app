@@ -94,5 +94,10 @@
   "@my_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "common_error_occured_message": "Unexpected error occurs\nPlease reload or try again later",
+  "@common_error_occured_message": {
+    "type": "text",
+    "placeholders": {}
   }
 }

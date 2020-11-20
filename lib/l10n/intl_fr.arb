@@ -94,5 +94,10 @@
   "@my_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "common_error_occured_message": "Une erreur inconnue est survenue\nVeuillez réessayer plus tard",
+  "@common_error_occured_message": {
+    "type": "text",
+    "placeholders": {}
   }
 }
