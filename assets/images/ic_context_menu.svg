@@ -1,3 +1,34 @@
+<!-- LinShare is an open source filesharing software, part of the LinPKI software
+suite, developed by Linagora.
+
+Copyright (C) 2020 LINAGORA
+
+This program is free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later version,
+provided you comply with the Additional Terms applicable for LinShare software by
+Linagora pursuant to Section 7 of the GNU Affero General Public License,
+subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
+display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
+the words “You are using the Free and Open Source version of LinShare™, powered by
+Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+offer!”. You must also retain the latter notice in all asynchronous messages such as
+e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
+http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
+infringing Linagora intellectual property rights over its trademarks and commercial
+brands. Other Additional Terms apply, see
+<http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
+more details.
+You should have received a copy of the GNU Affero General Public License and its
+applicable Additional Terms for LinShare along with this program. If not, see
+<http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+the Additional Terms applicable to LinShare software. -->
+
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7.33333 12C7.33333 10.8933 6.43999 10 5.33333 10C4.22666 10 3.33333 10.8933 3.33333 12C3.33333 13.1067 4.22666 14 5.33333 14C6.43999 14 7.33333 13.1067 7.33333 12ZM9.99999 12C9.99999 13.1067 10.8933 14 12 14C13.1067 14 14 13.1067 14 12C14 10.8933 13.1067 10 12 10C10.8933 10 9.99999 10.8933 9.99999 12ZM16.6667 12C16.6667 13.1067 17.56 14 18.6667 14C19.7733 14 20.6667 13.1067 20.6667 12C20.6667 10.8933 19.7733 10 18.6667 10C17.56 10 16.6667 10.8933 16.6667 12Z" fill="#4AC6FF"/>
 </svg>
