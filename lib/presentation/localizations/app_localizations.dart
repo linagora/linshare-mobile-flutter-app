@@ -143,6 +143,10 @@ class AppLocalizations {
   String get my_space {
     return Intl.message('My Space', name: 'my_space');
   }
+
+  String get common_error_occured_message {
+    return Intl.message('Unexpected error occurs\nPlease reload or try again later');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
