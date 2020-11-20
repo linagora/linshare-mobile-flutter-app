@@ -64,6 +64,11 @@ workflows:
             # Install necessary pods
             cd ../ios
             flutter pub get && pod install
+
+            cd ..
+            flutter pub get && flutter pub run intl_translation:extract_to_arb --output-dir=./lib/l10n lib/presentation/localizations/app_localizations.dart
+
+            flutter pub get && flutter pub run intl_translation:generate_from_arb --output-dir=lib/l10n --no-use-deferred-loading lib/presentation/localizations/app_localizations.dart lib/l10n/intl*.arb
         is_always_run: true
     - flutter-analyze@0:
         inputs:
@@ -95,6 +100,31 @@ workflows:
         - force_provisioning_profile_specifier: ''
         - export_method: development
     - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        inputs:
+        - channel: 'channel: #ft-mobile '
+        - text: |
+            Commit Author|${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Message|${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            View App|${BITRISE_APP_URL}
+            View Build|${BITRISE_BUILD_URL}
+            Install Page|${BITRISE_PUBLIC_INSTALL_PAGE_URL}
+            Status|${BITRISE_BUILD_STATUS}
+        - emoji: ":sunny:"
+        - from_username: mobile_bot
+        - from_username_on_error: mobile_bot
+        - channel_on_error: 'channel: #ft-mobile'
+        - footer: Linagora Mobile Team
+        - text_on_error: Your linshare-mobile-flutter-app CI job has sadly been failed.
+            What's up, guys?
+        - emoji_on_error: ":rain_cloud:"
+        - icon_url: https://github.com/linagora/linshare-mobile-flutter-app/blob/master/ios/Runner/Assets.xcassets/AppIcon.appiconset/LinShare_product_icon_180px.png
+        - footer_icon: https://github.com/linagora/linshare-mobile-flutter-app/blob/master/ios/Runner/Assets.xcassets/AppIcon.appiconset/LinShare_product_icon_180px.png?size=16
+        - icon_url_on_error: https://github.com/linagora/linshare-mobile-flutter-app/blob/master/ios/Runner/Assets.xcassets/AppIcon.appiconset/LinShare_product_icon_180px.png
+        - webhook_url: "$TWAKE_WEBHOOK_API"
 app:
   envs:
   - opts:
