@@ -40,6 +40,12 @@ class TextBuilder {
   String _text;
   TextStyle _textStyle;
   TextAlign _textAlign;
+  Key _key;
+
+  TextBuilder key(Key key) {
+    _key = key;
+    return this;
+  }
 
   TextBuilder text(String text) {
     _text = text;
@@ -57,17 +63,13 @@ class TextBuilder {
   }
 
   Text build() {
-    return Text(
-      _text,
-      style: _textStyle,
-      textAlign: _textAlign
-    );
+    return Text(_text, key: _key, style: _textStyle, textAlign: _textAlign);
   }
 }
 
 class CenterTextBuilder extends TextBuilder {
   @override
   Text build() {
-    return Text(_text, style: _textStyle, textAlign: TextAlign.center);
+    return Text(_text, key: _key, style: _textStyle, textAlign: TextAlign.center);
   }
 }

@@ -110,6 +110,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                 ],
               ),
               floatingActionButton: FloatingActionButton(
+                key: Key('my_space_upload_button'),
                 onPressed: () => mySpaceViewModel.handleOnUploadFilePressed(),
                 backgroundColor: AppColor.primaryColor,
                 child: Image(image: AssetImage(imagePath.icAdd)),
@@ -129,7 +130,11 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
               RefreshIndicator(
                 onRefresh: () async => mySpaceViewModel.getAllDocument(),
                 child: failure is MySpaceFailure ?
-              ErrorBackgroundWidgetBuilder(context, imagePath).build() : _buildMySpaceListView(context, mySpaceState.documentList)),
+              ErrorBackgroundWidgetBuilder(
+                Key('my_space_error_background'),
+                context,
+                imagePath
+              ).build() : _buildMySpaceListView(context, mySpaceState.documentList)),
             (success) => success is LoadingState ?
               _buildMySpaceListView(context, mySpaceState.documentList) :
               RefreshIndicator(
@@ -143,6 +148,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       return _buildUploadFileHere(context);
     } else {
       return ListView.builder(
+        key: Key('my_space_documents_list'),
         itemCount: documentList.length,
         itemBuilder: (context, index) {
           return _buildMySpaceListItem(context, documentList[index]);
@@ -213,6 +219,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   Widget _buildPreparingUploadFile(BuildContext context, String fileName) {
     return SizedBox(
+      key: Key('my_space_preparing_upload_file'),
       height: 54,
       child: Container(
         color: AppColor.mySpaceUploadBackground,
@@ -240,6 +247,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   Widget _buildUploadingFile(
       BuildContext context, String fileName, int progress) {
     return SizedBox(
+      key: Key('my_space_uploading_file'),
       height: 58,
       child: Container(
         color: AppColor.mySpaceUploadBackground,
@@ -282,6 +290,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   Widget _buildUploadFileHere(BuildContext context) {
     return BackgroundWidgetBuilder(
+      Key('my_space_upload_file_here'),
       SvgPicture.asset(
         imagePath.icUploadFile,
         width: 120,

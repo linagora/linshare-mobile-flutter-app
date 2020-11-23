@@ -44,22 +44,26 @@ class SideMenuDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      key: Key('side_menu_drawer'),
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           Container(
             height: 130.0,
             child: DrawerHeader(
-            padding: EdgeInsets.only(left: 50, top: 32),
-            child: SvgPicture.asset(
-              imagePath.icLinShareLogo,
-              fit: BoxFit.none,
-              alignment: Alignment.centerLeft,
-              ),
-            decoration: BoxDecoration(
-                color: AppColor.primaryColor,
-          ))),
+              key: Key('side_menu_drawer_header'),
+              padding: EdgeInsets.only(left: 50, top: 32),
+              child: SvgPicture.asset(
+                imagePath.icLinShareLogo,
+                fit: BoxFit.none,
+                alignment: Alignment.centerLeft,
+                ),
+              decoration: BoxDecoration(
+                  color: AppColor.primaryColor,
+            ))
+          ),
           ListTile(
+            key: Key('side_menu_my_space_button'),
             leading: Icon(Icons.home, size: 36, color: AppColor.documentNameItemTextColor),
             title: Text(AppLocalizations.of(context).my_space, style: TextStyle(
               fontSize: 16,
