@@ -297,8 +297,12 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   Widget handleUploadToastMessage(
       BuildContext context, dartz.Either<Failure, Success> uploadFileState) {
     uploadFileState.fold(
-        (failure) => appToast.showToast(
-            AppLocalizations.of(context).upload_failure_text),
+        (failure) => {
+          if (failure is FilePickerFailure || failure is UploadFileFailure) {
+            appToast.showToast(
+                AppLocalizations.of(context).upload_failure_text)
+          }
+        },
         (success) => {
           if (success is UploadFileSuccess) {
             appToast.showToast(AppLocalizations.of(context).upload_success_text),
