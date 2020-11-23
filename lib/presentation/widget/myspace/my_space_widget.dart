@@ -42,7 +42,6 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/background_widgets/error_background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
@@ -130,11 +129,15 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
               RefreshIndicator(
                 onRefresh: () async => mySpaceViewModel.getAllDocument(),
                 child: failure is MySpaceFailure ?
-              ErrorBackgroundWidgetBuilder(
-                Key('my_space_error_background'),
-                context,
-                imagePath
-              ).build() : _buildMySpaceListView(context, mySpaceState.documentList)),
+              BackgroundWidgetBuilder()
+                .key(Key('my_space_error_background'))
+                .image(SvgPicture.asset(
+                  imagePath.icUnexpectedError,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.fill))
+                .text(AppLocalizations.of(context).common_error_occured_message)
+                .build() : _buildMySpaceListView(context, mySpaceState.documentList)),
             (success) => success is LoadingState ?
               _buildMySpaceListView(context, mySpaceState.documentList) :
               RefreshIndicator(
@@ -289,15 +292,14 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   }
 
   Widget _buildUploadFileHere(BuildContext context) {
-    return BackgroundWidgetBuilder(
-      Key('my_space_upload_file_here'),
-      SvgPicture.asset(
+    return BackgroundWidgetBuilder()
+      .key(Key('my_space_upload_file_here'))
+      .image(SvgPicture.asset(
         imagePath.icUploadFile,
         width: 120,
         height: 120,
-        fit: BoxFit.fill,
-      ),
-      AppLocalizations.of(context).my_space_text_upload_your_files_here).build();
+        fit: BoxFit.fill))
+      .text(AppLocalizations.of(context).my_space_text_upload_your_files_here).build();
   }
 
   Widget handleUploadToastMessage(
