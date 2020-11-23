@@ -64,7 +64,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(imagePath.icArrowBack),
-          onPressed: () => appNavigation.popBack(),
+          onPressed: () => uploadFileViewModel.backToMySpace(),
         ),
         centerTitle: true,
         title: Text(AppLocalizations.of(context).upload_file_title,
