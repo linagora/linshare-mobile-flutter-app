@@ -35,7 +35,7 @@ import 'package:file_picker/file_picker.dart';
 
 class LocalFilePicker {
 
-  Future<Either<FilePickerFailure, FilePickerSuccessViewState>>
+  Future<Either<Failure, FilePickerSuccessViewState>>
       pickSingleFile() async {
     try {
       final fileResult = await FilePicker.platform.pickFiles();
@@ -45,7 +45,7 @@ class LocalFilePicker {
             _getSingleFilePathWithoutFileName(fileResult),
             fileResult.files.single.size)));
       } else {
-        return Left(FilePickerFailure(Exception('unknown file picker')));
+        return Left(FilePickerCancel());
       }
     } catch (exception) {
       return Left(FilePickerFailure(exception));

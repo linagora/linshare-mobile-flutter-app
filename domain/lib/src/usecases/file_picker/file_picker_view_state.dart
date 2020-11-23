@@ -49,3 +49,8 @@ class FilePickerFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class FilePickerCancel extends FeatureFailure {
+  @override
+  List<Object> get props => [];
+}
