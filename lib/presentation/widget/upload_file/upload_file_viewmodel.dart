@@ -50,6 +50,11 @@ class UploadFileViewModel extends BaseViewModel {
 
   FileInfo _fileInfo;
 
+  void backToMySpace() {
+    _appNavigation.popBack();
+    store.dispatch(CleanUploadStateAction());
+  }
+
   void setFileInfo(FileInfo fileInfo) {
     _fileInfo = fileInfo;
   }
@@ -65,8 +70,8 @@ class UploadFileViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       await _uploadFileInteractor.execute(fileInfo).forEach((viewState) {
         viewState.fold(
-            (failure) => store.dispatch(UploadFileAction(Left(failure))),
-            (success) => handleUploadFileSuccess(store, success));
+          (failure) => store.dispatch(UploadFileAction(Left(failure))),
+          (success) => handleUploadFileSuccess(store, success));
       });
     };
   }

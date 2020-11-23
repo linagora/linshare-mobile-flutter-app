@@ -45,6 +45,4 @@ class UploadFileAction extends ActionOnline {
 }
 
 @immutable
-class CleanUploadStateAction extends ActionOffline {
-  CleanUploadStateAction();
-}
+class CleanUploadStateAction extends ActionOffline {}
