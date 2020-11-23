@@ -76,17 +76,12 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         builder: (BuildContext context, MySpaceViewModel viewModel) => Scaffold(
               body: Column(
                 children: [
-                  StreamBuilder(builder: (context, snapshot) {
-                    return handleUploadToastMessage(context,
-                        mySpaceViewModel.store.state.uploadFileState.viewState);
-                  }),
+                  handleUploadToastMessage(context,
+                    mySpaceViewModel.store.state.uploadFileState.viewState),
                   Container(
-                    child: StreamBuilder(builder: (context, snapshot) {
-                      return handleUploadWidget(
-                          context,
-                          mySpaceViewModel.store.state.uploadFileState.viewState
-                              .getOrElse(() => null));
-                    }),
+                    child: handleUploadWidget(
+                      context,
+                      mySpaceViewModel.store.state.uploadFileState.viewState.getOrElse(() => null))
                   ),
                   StoreConnector<AppState, dartz.Either<Failure, Success>>(
                     converter: (store) => store.state.mySpaceState.viewState,
