@@ -37,13 +37,15 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'background_widget_builder.dart';
 
 class ErrorBackgroundWidgetBuilder {
+  final Key _key;
   final BuildContext _context;
   final AppImagePaths _imagePath;
 
-  ErrorBackgroundWidgetBuilder(this._context, this._imagePath);
+  ErrorBackgroundWidgetBuilder(this._key, this._context, this._imagePath);
 
   Widget build() {
     return BackgroundWidgetBuilder(
+            _key,
             SvgPicture.asset(
               _imagePath.icUnexpectedError,
               width: 120,

@@ -63,12 +63,15 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          key: Key('upload_file_arrow_back_button'),
           icon: Image.asset(imagePath.icArrowBack),
           onPressed: () => uploadFileViewModel.backToMySpace(),
         ),
         centerTitle: true,
-        title: Text(AppLocalizations.of(context).upload_file_title,
-            style: TextStyle(fontSize: 24, color: Colors.white)),
+        title: Text(
+          AppLocalizations.of(context).upload_file_title,
+          key: Key('upload_file_title'),
+          style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor,
       ),
       body: Container(
@@ -85,6 +88,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                         child: Padding(
                       child: Text(
                         arguments.fileInfo.fileName,
+                        key: Key('upload_file_name'),
                         style: TextStyle(
                             fontSize: 14,
                             color: AppColor.uploadFileFileNameTextColor),
@@ -95,6 +99,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                         padding: EdgeInsets.only(right: 24),
                         child: Text(
                           '${arguments.fileInfo.fileSize} KB',
+                          key: Key('upload_file_size'),
                           style: TextStyle(
                               fontSize: 14,
                               color: AppColor.uploadFileFileSizeTextColor),
@@ -107,18 +112,18 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+          key: Key('upload_file_confirm_button'),
           backgroundColor: AppColor.primaryColor,
           onPressed: () => uploadFileViewModel.handleOnUploadFilePressed(),
-          // icon: Icon(Icons.save),
           label: Padding(
             padding: EdgeInsets.symmetric(horizontal: 25),
             child: Text(
               AppLocalizations.of(context).upload_text_button,
               style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.normal),
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.normal),
             ),
           )),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -44,8 +44,10 @@ class InitializeGetItWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(AppLocalizations.of(context).initializing_data,
-                  style: TextStyle(color: Colors.white, fontSize: 17)),
+              Text(
+                AppLocalizations.of(context).initializing_data,
+                key: Key('initialize_message'),
+                style: TextStyle(color: Colors.white, fontSize: 17)),
             ],
           ),
         ),

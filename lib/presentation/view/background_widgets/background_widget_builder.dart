@@ -34,15 +34,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 class BackgroundWidgetBuilder {
+  final Key _key;
   final SvgPicture _backgroundImage;
   final String _backgroundText;
 
-  BackgroundWidgetBuilder(this._backgroundImage, this._backgroundText);
+  BackgroundWidgetBuilder(this._key, this._backgroundImage, this._backgroundText);
 
   Widget build() {
-    return Stack(children: <Widget>[
-      Center(
-        child: Column(
+    return Stack(
+      key: _key,
+      children: <Widget>[
+        Center(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -56,9 +59,8 @@ class BackgroundWidgetBuilder {
               ),
             ),
           ],
-        )
-      ),
-      ListView()]
-    );
+        )),
+        ListView()
+      ]);
   }
 }

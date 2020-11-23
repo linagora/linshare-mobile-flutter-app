@@ -76,6 +76,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               Positioned(
                 left: 10,
                 child: IconButton(
+                  key: Key('login_arrow_back_button'),
                   onPressed: () => {},
                   icon: Image(
                       image: AssetImage(imagePath.icArrowBack),
@@ -91,6 +92,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(top: 100),
                     child: Column(
+                      key: Key('login_logo_header'),
                       children: [
                         Image(
                             image: AssetImage(imagePath.icLoginLogo),
@@ -111,6 +113,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             converter: (store) => store.state.authenticationState.viewState,
                             builder: (context, viewState) {
                               return CenterTextBuilder()
+                                  .key(Key('login_message'))
                                   .text(_getLoginMessage(viewState))
                                   .textStyle(_getLoginMessageTextStyle(viewState))
                                   .build();
@@ -123,6 +126,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             converter: (store) => store.state.authenticationState.viewState,
                             builder: (context, viewState) {
                                 return LoginTextBuilder()
+                                    .key(Key('login_url_input'))
                                     .onChange((value) => viewModel.setUrlText(value))
                                     .textInputAction(TextInputAction.next)
                                     .textDecoration(_buildUrlInputDecoration(viewState))
@@ -139,6 +143,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             converter: (store) => store.state.authenticationState.viewState,
                             builder: (context, viewState) {
                               return LoginTextBuilder()
+                                  .key(Key('login_email_input'))
                                   .onChange((value) => viewModel.setEmailText(value))
                                   .textInputAction(TextInputAction.next)
                                   .textDecoration(
@@ -158,6 +163,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               converter: (store) => store.state.authenticationState.viewState,
                               builder: (context, viewState) {
                                 return LoginTextBuilder()
+                                    .key(Key('login_password_input'))
                                     .obscureText(true)
                                     .onChange((value) => viewModel.setPasswordText(value))
                                     .textInputAction(TextInputAction.done)
@@ -270,6 +276,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Widget loadingCircularProgress() {
     return SizedBox(
+      key: Key('login_loading_icon'),
       width: 40,
       height: 40,
       child: CircularProgressIndicator(),
@@ -278,6 +285,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Widget loginButton(BuildContext context, LoginViewModel loginViewModel) {
     return SizedBox(
+      key: Key('login_confirm_button'),
       width: double.infinity,
       height: 48,
       child: RaisedButton(
