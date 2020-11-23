@@ -34,26 +34,39 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 class BackgroundWidgetBuilder {
-  final Key _key;
-  final SvgPicture _backgroundImage;
-  final String _backgroundText;
+  Key _key;
+  SvgPicture _image;
+  String _text;
 
-  BackgroundWidgetBuilder(this._key, this._backgroundImage, this._backgroundText);
+  BackgroundWidgetBuilder key(Key key) {
+    _key = key;
+    return this;
+  }
+
+  BackgroundWidgetBuilder image(SvgPicture image) {
+    _image = image;
+    return this;
+  }
+
+  BackgroundWidgetBuilder text(String text) {
+    _text = text;
+    return this;
+  }
 
   Widget build() {
     return Stack(
       key: _key,
       children: <Widget>[
         Center(
-            child: Column(
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _backgroundImage,
+            _image,
             Padding(
               padding: EdgeInsets.only(top: 20),
               child: Text(
-                _backgroundText,
+                _text,
                 style: TextStyle(color: AppColor.loginTextFieldTextColor, fontSize: 20),
                 textAlign: TextAlign.center,
               ),
