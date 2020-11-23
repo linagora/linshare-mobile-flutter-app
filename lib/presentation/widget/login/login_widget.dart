@@ -174,11 +174,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 67),
-                          child: StreamBuilder(builder: (context, snapshot) {
-                            return viewModel.store.state.authenticationState.isAuthenticationLoading()
+                          child: viewModel.store.state.authenticationState.isAuthenticationLoading()
                                 ? loadingCircularProgress()
-                                : loginButton(context, loginViewModel);
-                          }),
+                                : loginButton(context, loginViewModel),
                         ),
                       ],
                     ),
