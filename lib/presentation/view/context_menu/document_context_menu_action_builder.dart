@@ -41,8 +41,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-typedef OnDocumentContextMenuAction = void Function(Document document);
-
 class DocumentContextMenuTileBuilder extends ContextMenuActionBuilder<Document> {
   final Document _document;
 
