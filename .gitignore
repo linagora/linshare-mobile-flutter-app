@@ -116,3 +116,9 @@ app.*.symbols
 
 #generated file
 *.g.dart
+messages_all.dart
+messages_en.dart
+messages_fr.dart
+messages_messages.dart
+messages_ru.dart
+messages_vi.dart
