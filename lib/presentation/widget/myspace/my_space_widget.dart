@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -41,10 +42,9 @@ import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.da
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:redux/redux.dart';
@@ -325,21 +325,22 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   }
 
   List<Widget> contextMenuActionTiles(Document document) {
-    return [
-      downloadAction(document)
-    ];
+    return [];
   }
 
   Widget downloadAction(Document document) {
     return DocumentContextMenuTileBuilder(
         Key('download_context_menu_action'),
         SvgPicture.asset(
-            imagePath.icFileDownload,
-            width: 24,
-            height: 24,
-            fit: BoxFit.fill),
-        AppLocalizations.of(context).download_to_device,
+          imagePath.icFileDownload,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill),
+        AppLocalizations
+          .of(context)
+          .download_to_device,
         document)
+      .onActionClick((data) => mySpaceViewModel.downloadFile(document.documentId))
       .build();
   }
 }
