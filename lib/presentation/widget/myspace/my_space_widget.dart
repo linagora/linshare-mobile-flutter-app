@@ -42,11 +42,12 @@ import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.da
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
-import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:redux/redux.dart';
 
 class MySpaceWidget extends StatefulWidget {
@@ -88,7 +89,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                     converter: (store) => store.state.mySpaceState.viewState,
                     builder: (context, viewState) {
                       return viewState.fold(
-                          (failure) => Container(),
+                          (failure) => SizedBox.shrink(),
                           (success) => (success is LoadingState)
                               ? Padding(
                                   padding: EdgeInsets.only(top: 20),
@@ -102,7 +103,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                                     ),
                                   ),
                                 )
-                              : Container());
+                              : SizedBox.shrink());
                     },
                   ),
                   Expanded(
@@ -153,6 +154,9 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       return _buildUploadFileHere(context);
     } else {
       return ListView.builder(
+        padding: ResponsiveWidget.isLargeScreen(context) ?
+          EdgeInsets.symmetric(horizontal: 132.0)
+          : EdgeInsets.zero,
         key: Key('my_space_documents_list'),
         itemCount: documentList.length,
         itemBuilder: (context, index) {
@@ -163,46 +167,50 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   Widget _buildMySpaceListItem(BuildContext context, Document document) {
     return ListTile(
-      leading: SvgPicture.asset(
-        document.mediaType.getFileTypeImagePath(imagePath),
-        width: 16,
-        height: 20,
-        fit: BoxFit.fill,
+      leading: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+          document.mediaType.getFileTypeImagePath(imagePath),
+          width: 20,
+          height: 24,
+          fit: BoxFit.fill)
+        ]
       ),
-      title: Transform(
-        transform: Matrix4.translationValues(-16, -2, 0.0),
-        child: Text(
-          document.name,
-          maxLines: 1,
-          style:
-              TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+      title: ResponsiveWidget(
+        mediumScreen: Transform(
+          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  _buildDocumentName(document.name),
+                  _buildSharedIcon(document.isShared())
+                ]
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
+                  document.modificationDate.getMMMddyyyyFormatString())))
+            ]
+          ),
+        ),
+        smallScreen: Transform(
+          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+          child: _buildDocumentName(document.name),
         ),
       ),
-      subtitle: Transform(
+      subtitle: ResponsiveWidget.isSmallScreen(context) ? Transform(
         transform: Matrix4.translationValues(-16, 0.0, 0.0),
         child: Row(
           children: [
-            Text(
-              AppLocalizations.of(context).item_last_modified(
-                  document.modificationDate.getMMMddyyyyFormatString()),
-              style: TextStyle(
-                  fontSize: 13,
-                  color: AppColor.documentModifiedDateItemTextColor),
-            ),
-            document.isShared()
-                ? Padding(
-                    padding: EdgeInsets.only(left: 16),
-                    child: SvgPicture.asset(
-                      imagePath.icSharedPeople,
-                      width: 16,
-                      height: 16,
-                      fit: BoxFit.fill,
-                    ),
-                  )
-                : Container()
+            _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
+                  document.modificationDate.getMMMddyyyyFormatString())),
+            _buildSharedIcon(document.isShared())
           ],
         ),
-      ),
+      ) : null,
       trailing: IconButton(
         icon: SvgPicture.asset(
           imagePath.icContextMenu,
@@ -214,13 +222,42 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     );
   }
 
+  Widget _buildDocumentName(String documentName) {
+    return Text(
+      documentName,
+      maxLines: 1,
+      style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+    );
+  }
+
+  Widget _buildModifiedDocumentText(String modificationDate) {
+    return Text(
+      modificationDate,
+      style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
+    );
+  }
+
+  Widget _buildSharedIcon(bool isShared) {
+    return isShared
+        ? Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: SvgPicture.asset(
+              imagePath.icSharedPeople,
+              width: 16,
+              height: 16,
+              fit: BoxFit.fill,
+            ),
+          )
+        : SizedBox.shrink();
+  }
+
   Widget handleUploadWidget(BuildContext context, [Success success]) {
     if (success is UploadingProgress) {
       return _buildUploadingFile(context, success.fileName, success.progress);
     } else if (success is FilePickerSuccessViewState) {
       return _buildPreparingUploadFile(context, success.fileInfo.fileName);
     } else {
-      return Container();
+      return SizedBox.shrink();
     }
   }
 
@@ -321,7 +358,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             mySpaceViewModel.cleanUploadViewState()
           }
         });
-    return Container();
+    return SizedBox.shrink();
   }
 
   List<Widget> contextMenuActionTiles(Document document) {
