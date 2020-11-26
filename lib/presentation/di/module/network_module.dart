@@ -33,6 +33,7 @@ import 'dart:io';
 
 import 'package:data/data.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 
 class NetworkModule {
@@ -63,6 +64,9 @@ class NetworkModule {
     getIt<Dio>().interceptors.add(getIt<DynamicUrlInterceptors>());
     getIt<Dio>().interceptors.add(getIt<CookieInterceptors>());
     getIt<Dio>().interceptors.add(getIt<RetryAuthenticationInterceptors>());
+    if (kDebugMode) {
+      getIt<Dio>().interceptors.add(LogInterceptor(requestBody: true));
+    };
   }
 
   void _provideHttpClient() {

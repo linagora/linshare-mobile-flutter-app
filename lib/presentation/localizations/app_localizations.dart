@@ -204,6 +204,16 @@ class AppLocalizations {
       Intl.message('Downloading $fileName',
           name: 'downloading_file',
           args: [fileName]);
+
+  String get logout {
+    return Intl.message('Log out',
+        name: 'logout');
+  }
+
+  String get confirm_remove_account_title {
+    return Intl.message('Are you sure you want to log out of this account ?',
+        name: 'confirm_remove_account_title');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

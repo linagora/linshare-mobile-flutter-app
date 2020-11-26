@@ -158,5 +158,15 @@
   "@file_could_not_be_share": {
     "type": "text",
     "placeholders": {}
+  },
+  "logout" :"Log out",
+  "@logout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "confirm_remove_account_title" : "Are you sure you want to log out of this account ?",
+  "@confirm_remove_account_title": {
+    "type": "text",
+    "placeholders": {}
   }
 }

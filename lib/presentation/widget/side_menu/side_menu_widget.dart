@@ -35,11 +35,14 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 
 class SideMenuDrawerWidget extends StatelessWidget {
   final imagePath = getIt<AppImagePaths>();
   final sideMenuDrawerViewModel = getIt<SideMenuDrawerViewModel>();
+  final appNavigation = getIt<AppNavigation>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +67,29 @@ class SideMenuDrawerWidget extends StatelessWidget {
           ),
           ListTile(
             key: Key('side_menu_my_space_button'),
-            leading: Icon(Icons.home, size: 36, color: AppColor.documentNameItemTextColor),
+            leading: SvgPicture.asset(
+              imagePath.icHome,
+              fit: BoxFit.none
+            ),
             title: Text(AppLocalizations.of(context).my_space, style: TextStyle(
               fontSize: 16,
               color: AppColor.documentNameItemTextColor)),
             onTap: () => sideMenuDrawerViewModel.goToMySpace(),
           ),
-          Divider()
+          Divider(),
+          ListTile(
+            leading: SvgPicture.asset(
+              imagePath.icExitToApp,
+              fit: BoxFit.none,
+            ),
+            title: Text(AppLocalizations.of(context).logout, style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor)),
+            onTap: () => ConfirmModalSheetBuilder(appNavigation)
+              .key(Key('logout_confirm_modal'))
+              .title(AppLocalizations.of(context).confirm_remove_account_title)
+              .cancelText(AppLocalizations.of(context).cancel)
+              .onConfirmAction(AppLocalizations.of(context).logout, () => sideMenuDrawerViewModel.logout())
+              .show(context),
+          ),
         ],
       ),
     );
