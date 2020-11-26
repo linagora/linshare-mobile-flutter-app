@@ -41,4 +41,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password) async {
     return authenticationDataSource.createPermanentToken(baseUrl, userName, password);
   }
+
+  @override
+  Future<bool> deletePermanentToken(Token token) async {
+    return authenticationDataSource.deletePermanentToken(token);
+  }
 }

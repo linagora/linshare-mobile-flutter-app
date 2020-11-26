@@ -73,6 +73,23 @@ class DioClient {
           onSendProgress: onSendProgress,
           onReceiveProgress: onReceiveProgress)
         .then((value) => value.data)
-        .catchError((error) => {throw error});
+        .catchError((error) => throw error);
+  }
+
+  Future<dynamic> delete(
+    String path, {
+    data,
+    Map<String, dynamic> queryParameters,
+    Options options,
+    CancelToken cancelToken,
+  }) async {
+    return await _dio.delete(
+          path,
+          data: data,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken)
+        .then((value) => value.data)
+        .catchError((error) => throw(error));
   }
 }

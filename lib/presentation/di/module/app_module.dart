@@ -67,7 +67,11 @@ class AppModule {
   }
 
   void _provideDataSource() {
-    getIt.registerFactory(() => AuthenticationDataSource(getIt<LinShareHttpClient>(), getIt<DeviceManager>()));
+    getIt.registerFactory(() => AuthenticationDataSource(
+      getIt<LinShareHttpClient>(),
+      getIt<DeviceManager>(),
+      getIt<RemoteExceptionThrower>()
+    ));
     getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
   }
 

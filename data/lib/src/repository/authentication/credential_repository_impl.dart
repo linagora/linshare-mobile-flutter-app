@@ -48,4 +48,9 @@ class CredentialRepositoryImpl extends CredentialRepository {
   Future saveBaseUrl(Uri baseUrl) async {
     await sharedPreferences.setString(keyBaseUrl, baseUrl.origin);
   }
+
+  @override
+  Future removeBaseUrl() async {
+    await sharedPreferences.remove(keyBaseUrl);
+  }
 }

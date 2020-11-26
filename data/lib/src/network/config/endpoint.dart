@@ -44,7 +44,11 @@ class Endpoint {
 
 extension ServicePathExtension on ServicePath {
   String generateEndpointPath() {
-    return Endpoint.rootPath + path;
+    return '${Endpoint.rootPath}${path}';
+  }
+
+  String generateEndpointPathWithParameter(String parameter) {
+    return '${Endpoint.rootPath}${path}/${parameter}';
   }
 
   String generateAuthenticationUrl(Uri baseUrl) {

@@ -72,6 +72,6 @@ class User {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
-String _uuidToJson(UserId userId) => jsonEncode({Attribute.uuid: userId});
+String _uuidToJson(UserId userId) => userId.uuid;
 
 UserId _uuidFromJson(dynamic json) => UserId(json.toString());

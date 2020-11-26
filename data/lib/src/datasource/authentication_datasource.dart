@@ -40,8 +40,9 @@ class AuthenticationDataSource {
 
   final LinShareHttpClient linShareHttpClient;
   final DeviceManager deviceManager;
+  final RemoteExceptionThrower _remoteExceptionThrower;
 
-  AuthenticationDataSource(this.linShareHttpClient, this.deviceManager);
+  AuthenticationDataSource(this.linShareHttpClient, this.deviceManager, this._remoteExceptionThrower);
 
   Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password) async {
     return Future.sync(() async {
@@ -53,30 +54,28 @@ class AuthenticationDataSource {
           PermanentTokenBodyRequest('LinShare-${deviceManager.getPlatformString()}-$deviceUUID'));
       return permanentToken.toToken();
     }).catchError((error) {
-      _throwAuthenticateException(error);
+        _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+          if (error.response.statusCode == 401) {
+            throw BadCredentials();
+          } else if (error.response.statusCode == 500) {
+            throw MissingRequiredFields();
+          } else {
+            throw UnknownError(error.response.statusMessage);
+          }
+        });
     });
   }
 
-  void _throwAuthenticateException(dynamic exception) {
-    if (exception is DioError) {
-      switch (exception.type) {
-        case DioErrorType.DEFAULT:
-          throw ServerNotFound();
-          break;
-        case DioErrorType.CONNECT_TIMEOUT:
-          throw ConnectError();
-          break;
-        case DioErrorType.RESPONSE:
-          if (exception.response.statusCode == 401) {
-            throw BadCredentials();
+  Future<bool> deletePermanentToken(Token token) async {
+    return Future.sync(() async => await linShareHttpClient.deletePermanentToken(token.toPermanentToken()))
+      .catchError((error) =>
+        _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+          if (error.response.statusCode == 404) {
+            throw RequestedTokenNotFound();
+          } else {
+            throw UnknownError(error.response.statusMessage);
           }
-          break;
-        default:
-          throw UnknownError(exception.toString());
-          break;
-      }
-    } else {
-      throw UnknownError(exception.toString());
-    }
+        })
+      );
   }
 }

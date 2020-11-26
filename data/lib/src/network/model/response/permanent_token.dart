@@ -51,7 +51,7 @@ class PermanentToken {
   Map<String, dynamic> toJson() => _$PermanentTokenToJson(this);
 }
 
-String _uuidToJson(TokenId tokenId) => jsonEncode({Attribute.uuid: tokenId.uuid});
+String _uuidToJson(TokenId tokenId) => tokenId.uuid;
 
 TokenId _uuidFromJson(dynamic json) => TokenId(json.toString());
 

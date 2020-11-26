@@ -43,12 +43,14 @@ void main() {
   group('test authentication dataSource', () {
     MockDeviceManager _deviceManager;
     MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
     AuthenticationDataSource _authenticationDataSource;
 
     setUp(() {
       _deviceManager = MockDeviceManager();
       _linShareHttpClient = MockLinShareHttpClient();
-      _authenticationDataSource = AuthenticationDataSource(_linShareHttpClient, _deviceManager);
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _authenticationDataSource = AuthenticationDataSource(_linShareHttpClient, _deviceManager, _remoteExceptionThrower);
     });
 
     test('createPermanentToken should create permanentToken success', () async {
@@ -78,14 +80,14 @@ void main() {
         .thenAnswer((_) => 'IOS-App');
       when(_linShareHttpClient.createPermanentToken(
           Uri.parse('http://linshare.test'),
-          'user1@linsahre.org',
+          'user1@linshare.org',
           '123456',
           argThat(isA<PermanentTokenBodyRequest>())))
         .thenAnswer((_) => Future.value(PermanentToken('token', TokenId('12345-5555'))));
 
       await _authenticationDataSource.createPermanentToken(
           Uri.parse('http://linshare.test'),
-          UserName('user1@linsahre.org'),
+          UserName('user1@linshare.org'),
           Password('123456'))
         .catchError((error) => expect(error, isA<UnknownError>()));
     });
@@ -113,26 +115,25 @@ void main() {
         .catchError((error) => expect(error, isA<BadCredentials>()));
     });
 
-    test('createPermanentToken should throw ServerNotFound when linShareHttpClient response error', () async {
-      var error = DioError(
-          type: DioErrorType.DEFAULT
-      );
-      when(_deviceManager.getDeviceUUID())
-          .thenAnswer((_) async => Future.value('12345-bde44'));
-      when(_deviceManager.getPlatformString())
-          .thenAnswer((_) => 'IOS-App');
-      when(_linShareHttpClient.createPermanentToken(
-            Uri.parse('http://linshare.test'),
-            'user1@linsahre.org',
-            '123456',
-            argThat(isA<PermanentTokenBodyRequest>())))
-          .thenThrow(error);
+    test('deletePermanentToken should success', () async {
+      when(_linShareHttpClient.deletePermanentToken(argThat(isA<PermanentToken>())))
+        .thenAnswer((_) async => true);
 
-      await _authenticationDataSource.createPermanentToken(
-            Uri.parse('http://linshare.test'),
-            UserName('user1@linsahre.org'),
-            Password('123456'))
-          .catchError((error) => expect(error, isA<ServerNotFound>()));
+      var deleteResult = await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')));
+
+      expect(deleteResult, true);
+    });
+
+    test('deletePermanentToken should throw RequestedTokenNotFound when linShareHttpClient response is 404', () async {
+      var error = DioError(
+        type: DioErrorType.RESPONSE,
+        response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.deletePermanentToken(argThat(isA<PermanentToken>())))
+        .thenThrow(error);
+
+      await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')))
+        .catchError((error) => expect(error, isA<RequestedTokenNotFound>()));
     });
   });
 }
