@@ -105,6 +105,10 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
     getIt.registerFactory(() => ShareDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => DeletePermanentTokenInteractor(
+      getIt<AuthenticationRepository>(),
+      getIt<TokenRepository>(),
+      getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {

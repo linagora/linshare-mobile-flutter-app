@@ -34,5 +34,7 @@ import 'package:domain/domain.dart';
 abstract class TokenRepository {
   Future persistToken(Token token);
 
+  Future removeToken();
+
   Future<Token> getToken();
 }
