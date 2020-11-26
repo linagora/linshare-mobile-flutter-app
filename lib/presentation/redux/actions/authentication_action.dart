@@ -38,10 +38,10 @@ import 'package:meta/meta.dart';
 class StartAuthenticationLoadingAction extends ActionOffline {}
 
 @immutable
-class LoginAction extends ActionOnline {
+class AuthenticationAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
-  LoginAction(this.viewState);
+  AuthenticationAction(this.viewState);
 }
 
 @immutable

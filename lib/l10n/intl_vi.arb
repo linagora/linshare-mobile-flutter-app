@@ -158,5 +158,15 @@
   "@file_could_not_be_share": {
     "type": "text",
     "placeholders": {}
+  },
+  "logout" :"Đăng xuất tài khoản",
+  "@logout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "confirm_remove_account_title" : "Bạn muốn đăng xuất tài khoản này ?",
+  "@confirm_remove_account_title": {
+    "type": "text",
+    "placeholders": {}
   }
 }

@@ -29,15 +29,36 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:redux/src/store.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class SideMenuDrawerViewModel extends BaseViewModel {
+  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
+  final AppNavigation _appNavigation;
 
-  SideMenuDrawerViewModel(Store<AppState> store) : super(store);
+  SideMenuDrawerViewModel(
+    Store<AppState> store,
+    this._appNavigation,
+    this.deletePermanentTokenInteractor
+  ) : super(store);
 
   void goToMySpace() {
     // push via nested navigation here
+  }
+
+  void logout() {
+    store.dispatch(logoutAction());
+  }
+
+  ThunkAction<AppState> logoutAction() {
+    return (Store<AppState> store) async {
+      await deletePermanentTokenInteractor.execute().then(
+          (_) => _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute));
+    };
   }
 }

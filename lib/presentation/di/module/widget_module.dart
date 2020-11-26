@@ -116,7 +116,9 @@ class WidgetModule {
   void _provideSideMenuComponent() {
     getIt.registerFactory(() => SideMenuDrawerWidget());
     getIt.registerFactory(() => SideMenuDrawerViewModel(
-      getIt.get<Store<AppState>>()
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+      getIt.get<DeletePermanentTokenInteractor>(),
     ));
   }
 }
