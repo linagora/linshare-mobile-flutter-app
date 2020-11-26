@@ -12,7 +12,7 @@ export 'src/usecases/myspace/my_space_view_state.dart';
 export 'src/usecases/authentication/authentication_exception.dart';
 export 'src/usecases/myspace/my_space_exception.dart';
 export 'src/usecases/remote_exception.dart';
-export 'src/usecases/download_file/device_not_supported_exception.dart';
+export 'src/usecases/download_file/download_file_exception.dart';
 
 // model
 export 'src/model/authentication/token.dart';
@@ -33,6 +33,7 @@ export 'src/usecases/authentication/get_credential_interactor.dart';
 export 'src/usecases/myspace/upload_file_interactor.dart';
 export 'src/usecases/myspace/get_all_document_interactor.dart';
 export 'src/usecases/download_file/download_file_interactor.dart';
+export 'src/usecases/download_file/download_file_ios_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

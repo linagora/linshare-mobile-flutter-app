@@ -24,6 +24,9 @@ dependencies:
   # equatable
   equatable: ^1.2.3
 
+  # dio
+  dio: ^3.0.10
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
