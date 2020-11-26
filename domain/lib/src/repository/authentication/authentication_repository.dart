@@ -30,8 +30,9 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
 
 abstract class AuthenticationRepository {
   Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password);
+
+  Future<bool> deletePermanentToken(Token token);
 }
