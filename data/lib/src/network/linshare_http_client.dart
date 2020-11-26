@@ -31,6 +31,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/dio_client.dart';
@@ -39,6 +40,7 @@ import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/user.dart';
 import 'package:dio/dio.dart';
+import 'package:domain/domain.dart';
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -70,5 +72,16 @@ class LinShareHttpClient {
   Future<List<DocumentResponse>> getAllDocument() async {
     final List resultJson = await _dioClient.get(Endpoint.documents.generateEndpointPath());
     return resultJson.map((data) => DocumentResponse.fromJson(data)).toList();
+  }
+
+  Future<ResponseBody> downloadDocumentIOS(
+      String url,
+      CancelToken cancelToken,
+      Token permanentToken) async {
+    final headerParam = _dioClient.getHeaders();
+    headerParam[HttpHeaders.authorizationHeader] = 'Bearer ${permanentToken.token}';
+    final responseBody = await _dioClient.get(url,
+        options: Options(headers: headerParam, responseType: ResponseType.stream));
+    return (responseBody as ResponseBody);
   }
 }

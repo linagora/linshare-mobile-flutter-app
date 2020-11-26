@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:core';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 abstract class DocumentDataSource {
@@ -38,4 +39,6 @@ abstract class DocumentDataSource {
   Future<List<Document>> getAll();
 
   Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl);
+
+  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
 }

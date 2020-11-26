@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/datasource/document_datasource.dart';
+import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
 
 class DocumentRepositoryImpl implements DocumentRepository {
@@ -50,5 +51,10 @@ class DocumentRepositoryImpl implements DocumentRepository {
   @override
   Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) {
     return documentDataSource.downloadDocument(documentId, token, baseUrl);
+  }
+
+  @override
+  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
+    return documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
   }
 }
