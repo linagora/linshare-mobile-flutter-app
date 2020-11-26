@@ -100,6 +100,10 @@ class AppModule {
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
+    getIt.registerFactory(() => DownloadFileIOSInteractor(
+        getIt<DocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {

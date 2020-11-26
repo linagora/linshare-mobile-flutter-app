@@ -31,6 +31,7 @@
 
 import 'dart:core';
 
+import 'package:dio/dio.dart';
 import 'package:domain/src/model/authentication/token.dart';
 import 'package:domain/src/model/document/document.dart';
 import 'package:domain/src/model/document/document_id.dart';
@@ -44,4 +45,6 @@ abstract class DocumentRepository {
   Future<List<Document>> getAll();
 
   Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl);
+
+  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
 }

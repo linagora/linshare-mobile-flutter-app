@@ -32,3 +32,15 @@
 class DeviceNotSupportedException implements Exception {
   String notSupported = 'This device is not supported, please try on Android or iOS';
 }
+
+class DownloadFileException implements Exception {
+  final String message;
+
+  DownloadFileException(this.message);
+}
+
+class CancelDownloadFileException implements Exception {
+  final String message;
+
+  CancelDownloadFileException(this.message);
+}
