@@ -47,6 +47,11 @@ class TokenRepositoryImpl extends TokenRepository {
   }
 
   @override
+  Future removeToken() async {
+    await sharedPreferences.remove(keyPermanentToken);
+  }
+
+  @override
   Future<Token> getToken() async {
     final permanentToken = PermanentToken.fromJson(await sharedPreferences.getObject(keyPermanentToken));
     return permanentToken.toToken();

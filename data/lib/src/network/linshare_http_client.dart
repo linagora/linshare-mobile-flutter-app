@@ -66,6 +66,16 @@ class LinShareHttpClient {
     return PermanentToken.fromJson(resultJson);
   }
 
+  Future<bool> deletePermanentToken(PermanentToken token) async {
+    final deletedToken = await _dioClient.delete(
+      Endpoint.authentication.generateEndpointPathWithParameter(token.tokenId.uuid),
+      options: Options(headers: {
+        'Content-Type': 'application/json'
+      })
+    );
+    return deletedToken != null;
+  }
+
   Future<User> getAuthorizedUser() async {
     final resultJson = await _dioClient.get(Endpoint.authorizedUser.generateEndpointPath());
     return User.fromJson(resultJson);

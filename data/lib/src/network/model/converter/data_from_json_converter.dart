@@ -35,10 +35,10 @@ import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
 
-String documentIdToJson(DocumentId documentId) => jsonEncode({Attribute.uuid: documentId.uuid});
+String documentIdToJson(DocumentId documentId) => documentId.uuid;
 
 DocumentId documentIdFromJson(dynamic json) => DocumentId(json.toString());
 
-String mediaTypeToJson(MediaType mediaType) => jsonEncode({Attribute.type: mediaType.mimeType});
+String mediaTypeToJson(MediaType mediaType) => mediaType.mimeType;
 
 MediaType mediaTypeFromJson(dynamic json) => MediaType.parse(json.toString());
