@@ -30,8 +30,11 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
@@ -40,27 +43,38 @@ import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:share/share.dart';
 
 class MySpaceViewModel extends BaseViewModel {
   final LocalFilePicker _localFilePicker;
   final AppNavigation _appNavigation;
   final GetAllDocumentInteractor _getAllDocumentInteractor;
   final DownloadFileInteractor _downloadFileInteractor;
+  final DownloadFileIOSInteractor _downloadFileIOSInteractor;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
       this._appNavigation,
       this._getAllDocumentInteractor,
-      this._downloadFileInteractor
+      this._downloadFileInteractor,
+      this._downloadFileIOSInteractor
   ) : super(store);
 
   void downloadFile(DocumentId documentId) {
     store.dispatch(_downloadFileAction(documentId));
     _appNavigation.popBack();
+  }
+
+  void exportFile(BuildContext context, Document document) {
+    _appNavigation.popBack();
+    final cancelToken = CancelToken();
+    _showDownloadingFileDialog(context, document.name, cancelToken);
+    store.dispatch(_exportFileAction(document, cancelToken));
   }
 
   void getAllDocument() {
@@ -77,6 +91,17 @@ class MySpaceViewModel extends BaseViewModel {
 
   void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles) {
     store.dispatch(_handleContextMenuAction(context, document, actionTiles));
+  }
+
+  void _showDownloadingFileDialog(BuildContext context, String fileName, CancelToken cancelToken) {
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => DownloadingFileBuilder(context, cancelToken, _appNavigation)
+            .key(Key('downloading_file_dialog'))
+            .title(AppLocalizations.of(context).preparing_to_export)
+            .content(AppLocalizations.of(context).downloading_file(fileName))
+            .actionText(AppLocalizations.of(context).cancel)
+            .build());
   }
 
   ThunkAction<AppState> _handleContextMenuAction(BuildContext context, Document document, List<Widget> actionTiles) {
@@ -102,6 +127,36 @@ class MySpaceViewModel extends BaseViewModel {
       await _downloadFileInteractor.execute(documentId).then((result) => result.fold(
         (failure) => store.dispatch(MySpaceAction(Left(failure))),
         (success) => store.dispatch(MySpaceAction(Right(success)))));
+    };
+  }
+
+  ThunkAction<AppState> _exportFileAction(Document document, CancelToken cancelToken) {
+    return (Store<AppState> store) async {
+      await _downloadFileIOSInteractor.execute(document, cancelToken).then(
+          (result) => result.fold(
+              (failure) => store.dispatch(exportFileFailureAction(failure)),
+              (success) => store.dispatch(exportFileSuccessAction(success))));
+    };
+  }
+
+  ThunkAction<AppState> exportFileSuccessAction(DownloadFileIOSViewState success) {
+    return (Store<AppState> store) async {
+      _appNavigation.popBack();
+      store.dispatch(MySpaceAction(Right(success)));
+      if (success is DownloadFileIOSViewState) {
+        final filePathUri = success.filePath;
+        await Share.shareFiles([Uri.decodeFull(filePathUri.path)]);
+      }
+    };
+  }
+
+  ThunkAction<AppState> exportFileFailureAction(Failure failure) {
+    return (Store<AppState> store) async {
+      if (failure is DownloadFileIOSFailure &&
+          !(failure.downloadFileException is CancelDownloadFileException)) {
+        _appNavigation.popBack();
+      }
+      store.dispatch(MySpaceAction(Left(failure)));
     };
   }
 

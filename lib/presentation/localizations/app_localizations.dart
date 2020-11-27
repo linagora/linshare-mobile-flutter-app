@@ -152,6 +152,26 @@ class AppLocalizations {
   String get common_error_occured_message {
     return Intl.message('Unexpected error occurs\nPlease reload or try again later');
   }
+
+  String get export_file {
+    return Intl.message('Export file',
+        name: 'export_file');
+  }
+
+  String get preparing_to_export {
+    return Intl.message('Preparing to export',
+        name: 'preparing_to_export');
+  }
+
+  String get cancel {
+    return Intl.message('Cancel',
+        name: 'cancel');
+  }
+
+  String downloading_file(String fileName) =>
+      Intl.message('Downloading $fileName',
+          name: 'downloading_file',
+          args: [fileName]);
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

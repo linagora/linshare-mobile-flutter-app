@@ -106,5 +106,27 @@
   "@common_error_occured_message": {
     "type": "text",
     "placeholders": {}
+  },
+  "export_file" :"Export file",
+  "@export_file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preparing_to_export" :"Preparing to export",
+  "@preparing_to_export": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel" :"Cancel",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "downloading_file": "Downloading {fileName}",
+  "@downloading_file": {
+    "type": "text",
+    "placeholders": {
+      "fileName": {}
+    }
   }
 }

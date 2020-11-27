@@ -86,7 +86,8 @@ class WidgetModule {
       getIt.get<LocalFilePicker>(),
       getIt.get<AppNavigation>(),
       getIt.get<GetAllDocumentInteractor>(),
-      getIt.get<DownloadFileInteractor>()
+      getIt.get<DownloadFileInteractor>(),
+      getIt.get<DownloadFileIOSInteractor>()
     ));
   }
 

@@ -51,6 +51,7 @@ class AppImagePaths {
   String get icLinShareLogo => _getImagePath('ic_linshare_logo.svg');
   String get icUnexpectedError => _getImagePath('ic_unexpected_error.svg');
   String get icFileDownload => _getImagePath('ic_file_download.svg');
+  String get icExportFile => _getImagePath('ic_export_file.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

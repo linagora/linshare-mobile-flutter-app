@@ -84,6 +84,9 @@ dependencies:
   #filesize
   filesize: ^1.0.4
 
+  # share
+  share: 0.6.5+4
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
