@@ -28,23 +28,84 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:ui' show Color;
-
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 
-extension AppColor on Color {
-  static const primaryColor = Color(0xff4AC6FF);
-  static const loginTextFieldHintColor = Color(0xffAFAFAF);
-  static const loginTextFieldTextColor = Color(0xff7B7B7B);
-  static const loginTextFieldErrorBorder = Color(0xffFF5858);
-  static const loginButtonColor = Color(0xff1B7EC7);
-  static const uploadFileFileNameTextColor = Color(0xff7B7B7B);
-  static const uploadFileFileSizeTextColor = Color(0xffACACAC);
-  static const uploadProgressBackgroundColor = Color(0xff5FA4D8);
-  static const mySpaceUploadBackground = Color(0xff1B7EC7);
-  static const toastBackgroundColor = Color(0xff1B7EC7);
-  static const documentNameItemTextColor = Color(0xff7B7B7B);
-  static const documentModifiedDateItemTextColor = Color(0xffACACAC);
-  static const exportFileDialogButtonCancelTextColor = Color(0xff007AFF);
+class DownloadingFileBuilder {
+  final BuildContext _context;
+  final CancelToken cancelToken;
+  final AppNavigation _appNavigation;
+
+  Key _key;
+  String _title = '';
+  String _content = '';
+  String _actionText = '';
+
+  DownloadingFileBuilder(this._context, this.cancelToken, this._appNavigation);
+
+  DownloadingFileBuilder key(Key key) {
+    _key = key;
+    return this;
+  }
+
+  DownloadingFileBuilder title(String title) {
+    _title = title;
+    return this;
+  }
+
+  DownloadingFileBuilder content(String content) {
+    _content = content;
+    return this;
+  }
+
+  DownloadingFileBuilder actionText(String actionText) {
+    _actionText = actionText;
+    return this;
+  }
+
+  Widget build() {
+    return CupertinoAlertDialog(
+      title: Text(_title, style: TextStyle(fontSize: 17.0, color: Colors.black),),
+      content: Padding(
+        padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(
+                width: 20.0,
+                height: 20.0,
+                child: CupertinoActivityIndicator(),
+              ),
+              SizedBox(height: 16,),
+              Text(_content,
+                style: TextStyle(fontSize: 13.0, color: Colors.black),
+                softWrap: false,
+                maxLines: 1,
+              )
+            ],
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(
+            _actionText,
+            style: TextStyle(
+                fontSize: 17.0,
+                color: AppColor.exportFileDialogButtonCancelTextColor),
+          ),
+          onPressed: () {
+            cancelToken.cancel(['user cancel download file']);
+            _appNavigation.popBack();
+          },
+        )
+      ],
+    );
+  }
 }

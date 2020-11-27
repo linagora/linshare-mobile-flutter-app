@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:io';
 
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
@@ -218,7 +219,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           height: 24,
           fit: BoxFit.fill,
       ), onPressed: () => mySpaceViewModel
-          .openContextMenu(context, document, contextMenuActionTiles(document))),
+          .openContextMenu(context, document, contextMenuActionTiles(context, document))),
     );
   }
 
@@ -361,23 +362,33 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     return SizedBox.shrink();
   }
 
-  List<Widget> contextMenuActionTiles(Document document) {
-    return [];
+  List<Widget> contextMenuActionTiles(BuildContext context, Document document) {
+    return [
+      if (Platform.isIOS) exportFileAction(context, document)
+    ];
   }
 
   Widget downloadAction(Document document) {
     return DocumentContextMenuTileBuilder(
-        Key('download_context_menu_action'),
-        SvgPicture.asset(
-          imagePath.icFileDownload,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill),
-        AppLocalizations
-          .of(context)
-          .download_to_device,
-        document)
-      .onActionClick((data) => mySpaceViewModel.downloadFile(document.documentId))
-      .build();
+            Key('download_context_menu_action'),
+            SvgPicture.asset(imagePath.icFileDownload,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).download_to_device,
+            document)
+        .onActionClick((data) {
+      mySpaceViewModel.downloadFile(data.documentId);
+    }).build();
+  }
+
+  Widget exportFileAction(BuildContext context, Document document) {
+    return DocumentContextMenuTileBuilder(
+            Key('export_context_menu_action'),
+            SvgPicture.asset(imagePath.icExportFile,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).export_file,
+            document)
+        .onActionClick((data) {
+      mySpaceViewModel.exportFile(context, data);
+    }).build();
   }
 }
