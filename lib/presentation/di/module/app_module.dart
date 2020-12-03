@@ -104,6 +104,7 @@ class AppModule {
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
+    getIt.registerFactory(() => ShareDocumentInteractor(getIt<DocumentRepository>()));
   }
 
   void _provideSharePreference() {

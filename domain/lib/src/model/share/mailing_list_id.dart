@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,31 +26,25 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
+import 'package:equatable/equatable.dart';
 
-import 'package:dio/dio.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
+class MailingListId with EquatableMixin {
+  String _uuid;
+    String get uuid => _uuid;
 
-abstract class DocumentRepository {
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+  MailingListId(String uuid) {
+    assert(uuid != null, 'invalid mailingListId');
+    _uuid = uuid;
+  }
 
-  Future<List<Document>> getAll();
-
-  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl);
-
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
-
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+  @override
+  List<Object> get props => [uuid];
 }

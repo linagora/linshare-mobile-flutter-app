@@ -31,7 +31,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/dio_client.dart';

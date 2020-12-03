@@ -33,6 +33,7 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:dartz/dartz.dart';
 
 final document1 = Document(
     DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),
@@ -165,3 +166,22 @@ final responseJsonDocument3 = {
   'shared': 0,
   'type': 'image/png'
 };
+
+final mailingListId1 = MailingListId('3e57d240-47a1-4a7e-b1a7-25e29870af33');
+final genericUser1 = GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane'));
+
+final share1 = Share(
+    ShareId('3e57d240-47a1-4a7e-b1a7-25e29870af33'),
+    'document 1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    document1,
+    'description 1',
+    GenericUser('user1@linshare.org'));
+
+final share2 = Share(
+    ShareId('3e57d240-47a1-4a7e-b1a7-25e29870af32'),
+    'document 2',
+    DateTime.fromMillisecondsSinceEpoch(1604482138182),
+    document2,
+    'description 2',
+    GenericUser('user2@linshare.org'));

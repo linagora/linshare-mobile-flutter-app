@@ -29,8 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class ResponsiveWidget extends StatelessWidget {
