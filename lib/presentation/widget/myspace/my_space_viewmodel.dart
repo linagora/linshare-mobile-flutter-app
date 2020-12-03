@@ -48,7 +48,7 @@ import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dar
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:share/share.dart';
+import 'package:share/share.dart' as share_library;
 
 class MySpaceViewModel extends BaseViewModel {
   final LocalFilePicker _localFilePicker;
@@ -96,7 +96,7 @@ class MySpaceViewModel extends BaseViewModel {
   void _showDownloadingFileDialog(BuildContext context, String fileName, CancelToken cancelToken) {
     showCupertinoDialog(
         context: context,
-        builder: (_) => DownloadingFileBuilder(context, cancelToken, _appNavigation)
+        builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
             .key(Key('downloading_file_dialog'))
             .title(AppLocalizations.of(context).preparing_to_export)
             .content(AppLocalizations.of(context).downloading_file(fileName))
@@ -145,7 +145,7 @@ class MySpaceViewModel extends BaseViewModel {
       store.dispatch(MySpaceAction(Right(success)));
       if (success is DownloadFileIOSViewState) {
         final filePathUri = success.filePath;
-        await Share.shareFiles([Uri.decodeFull(filePathUri.path)]);
+        await share_library.Share.shareFiles([Uri.decodeFull(filePathUri.path)]);
       }
     };
   }

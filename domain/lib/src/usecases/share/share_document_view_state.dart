@@ -28,28 +28,24 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:core';
+import 'package:domain/domain.dart';
 
-import 'package:dio/dio.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
+class ShareDocumentViewState extends ViewState {
+  final Share share;
 
-abstract class DocumentRepository {
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+  ShareDocumentViewState(this.share);
 
-  Future<List<Document>> getAll();
+  @override
+  List<Object> get props => [share];
+}
 
-  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl);
+class ShareDocumentFailure extends FeatureFailure {
+  final Exception exception;
 
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
+  ShareDocumentFailure(this.exception);
 
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+  @override
+  List<Object> get props => [exception];
 }

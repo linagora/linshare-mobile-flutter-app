@@ -38,7 +38,6 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 
 class DownloadingFileBuilder {
-  final BuildContext _context;
   final CancelToken cancelToken;
   final AppNavigation _appNavigation;
 
@@ -47,7 +46,7 @@ class DownloadingFileBuilder {
   String _content = '';
   String _actionText = '';
 
-  DownloadingFileBuilder(this._context, this.cancelToken, this._appNavigation);
+  DownloadingFileBuilder(this.cancelToken, this._appNavigation);
 
   DownloadingFileBuilder key(Key key) {
     _key = key;
@@ -71,6 +70,7 @@ class DownloadingFileBuilder {
 
   Widget build() {
     return CupertinoAlertDialog(
+      key: _key,
       title: Text(_title, style: TextStyle(fontSize: 17.0, color: Colors.black),),
       content: Padding(
         padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),

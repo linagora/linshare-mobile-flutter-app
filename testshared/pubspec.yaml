@@ -18,6 +18,9 @@ dependencies:
   domain:
     path: ../domain
 
+  #rxdart
+  rxdart: 0.24.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

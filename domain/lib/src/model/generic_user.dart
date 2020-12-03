@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,31 +26,37 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 
-import 'package:dio/dio.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
+class GenericUser with EquatableMixin {
+  String _mail;
+  String get mail => _mail;
 
-abstract class DocumentRepository {
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+  Option<String> _lastName = none();
+  Option<String> get lastName => _lastName;
 
-  Future<List<Document>> getAll();
+  Option<String> _firstName = none();
+  Option<String> get firstName => _firstName;
 
-  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl);
+  GenericUser(String mail, {Option<String> lastName, Option<String> firstName}) {
+    assert(mail != null, 'invalid mail');
+    _mail = mail;
+    _lastName = lastName;
+    _firstName = firstName;
+  }
 
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
+  @override
+  List<Object> get props => [_mail, _lastName, _firstName];
 
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+  @override
+  bool get stringify => true;
 }
