@@ -28,40 +28,26 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/datasource/document_datasource.dart';
-import 'package:dio/src/cancel_token.dart';
-import 'package:domain/domain.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
+import 'dart:convert';
 
-class DocumentRepositoryImpl implements DocumentRepository {
-  final DocumentDataSource documentDataSource;
+import 'package:data/src/network/model/converter/mailing_list_id_dto_converter.dart';
+import 'package:data/src/network/model/converter/share_id_dto_converter.dart';
+import 'package:data/src/network/model/generic_user_dto.dart';
+import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
+import 'package:data/src/network/model/share/share_id_dto.dart';
 
-  DocumentRepositoryImpl(this.documentDataSource);
+class ShareDocumentBodyRequest {
+  final List<ShareIdDto> documents;
+  final List<MailingListIdDto> mailingListUuid;
+  final List<GenericUserDto> recipients;
 
-  @override
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
-    return documentDataSource.upload(fileInfo, token, baseUrl);
-  }
+  ShareDocumentBodyRequest(this.documents, this.mailingListUuid, this.recipients);
 
-  @override
-  Future<List<Document>> getAll() {
-    return documentDataSource.getAll();
-  }
-
-  @override
-  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) {
-    return documentDataSource.downloadDocument(documentId, token, baseUrl);
-  }
-
-  @override
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
-    return documentDataSource.share(documentIds, mailingListIds, recipients);
-  }
-
-  @override
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
-    return documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
-  }
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        jsonEncode('documents'): documents.map(const ShareIdDtoConverter().toJson)?.toList(),
+        jsonEncode('mailingListUuid'): mailingListUuid.map(const MailingListIdDtoConverter().toJson)?.toList(),
+        jsonEncode('recipients'): recipients?.map((data) => data?.toJson())?.toList(),
+      };
 }

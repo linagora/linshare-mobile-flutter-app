@@ -38,6 +38,8 @@ class Endpoint {
 
   static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
   static final ServicePath documents = ServicePath('/documents');
+
+  static final ServicePath shares = ServicePath('/shares');
 }
 
 extension ServicePathExtension on ServicePath {
@@ -59,5 +61,9 @@ extension ServicePathExtension on ServicePath {
 
   String generateDownloadUrl(Uri baseUrl) {
     return baseUrl.origin + generateEndpointPath();
+  }
+
+  ServicePath append(ServicePath other) {
+    return ServicePath(path + other.path);
   }
 }

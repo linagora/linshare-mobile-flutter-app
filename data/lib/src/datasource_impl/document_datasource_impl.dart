@@ -37,8 +37,13 @@ import 'package:data/src/datasource/document_datasource.dart';
 import 'package:data/src/extensions/uri_extension.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/generic_user_dto.dart';
+import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:data/src/network/model/response/document_response.dart';
+import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
+import 'package:data/src/network/model/share/share_id_dto.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
+import 'package:data/src/network/model/share/share_dto.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -125,6 +130,31 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     );
 
     return DownloadTaskId(taskId);
+  }
+
+  @override
+  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
+    return Future.sync(() async {
+      final shareDocumentBodyRequest = ShareDocumentBodyRequest(
+          documentIds.map((data) => ShareIdDto(data.uuid)).toList(),
+          mailingListIds.map((data) => MailingListIdDto(data.uuid)).toList(),
+          recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName)).toList());
+      final shareList = await _linShareHttpClient.shareDocument(shareDocumentBodyRequest);
+      return shareList.map((data) => data.toShare()).toList().first;
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) => _handleShareException(error));
+    });
+  }
+
+  void _handleShareException(DioError error) {
+    if (error.response.statusCode == 404) {
+      throw DocumentNotFound();
+    } else if (error.response.statusCode == 403) {
+      throw ShareDocumentNoPermissionException();
+    } else {
+      throw UnknownError(error.response.statusMessage);
+    }
   }
 
   @override

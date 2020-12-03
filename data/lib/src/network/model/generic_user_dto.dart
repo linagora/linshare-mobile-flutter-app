@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,43 +26,54 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/document_datasource.dart';
-import 'package:dio/src/cancel_token.dart';
+import 'dart:convert';
+
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
 
-class DocumentRepositoryImpl implements DocumentRepository {
-  final DocumentDataSource documentDataSource;
+class GenericUserDto {
+  String _mail;
+    String get mail => _mail;
 
-  DocumentRepositoryImpl(this.documentDataSource);
+  Option<String> _lastName = none();
+    Option<String> get lastName => _lastName;
 
-  @override
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
-    return documentDataSource.upload(fileInfo, token, baseUrl);
+  Option<String> _firstName = none();
+    Option<String> get firstName => _firstName;
+
+  GenericUserDto(String mail, {Option<String> lastName, Option<String> firstName}) {
+    assert(mail != null, 'invalid mail');
+    _mail = mail;
+    _lastName = lastName ?? none();
+    _firstName = firstName ?? none();
   }
 
-  @override
-  Future<List<Document>> getAll() {
-    return documentDataSource.getAll();
+  factory GenericUserDto.fromJson(Map<String, dynamic> json) {
+    return GenericUserDto(
+      json['mail'] as String,
+      lastName: optionOf(json['lastName'] as String),
+      firstName: optionOf(json['firstName'] as String)
+    );
   }
 
-  @override
-  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) {
-    return documentDataSource.downloadDocument(documentId, token, baseUrl);
-  }
+  Map<String, dynamic> toJson() =>
+    {
+      jsonEncode('mail'): jsonEncode(_mail),
+      jsonEncode('lastName'): jsonEncode(lastName.fold(() => '', (lastName) => lastName)),
+      jsonEncode('firstName'): jsonEncode(firstName.fold(() => '', (firstName) => firstName))
+    };
+}
 
-  @override
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
-    return documentDataSource.share(documentIds, mailingListIds, recipients);
-  }
-
-  @override
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
-    return documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
+extension GenericUserDtoExtension on GenericUserDto {
+  GenericUser toGenericUser() {
+    return GenericUser(_mail, firstName: _firstName, lastName: _lastName);
   }
 }

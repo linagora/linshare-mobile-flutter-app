@@ -28,40 +28,47 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/datasource/document_datasource.dart';
-import 'package:dio/src/cancel_token.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/share_id_dto_converter.dart';
+import 'package:data/src/network/model/generic_user_dto.dart';
+import 'package:data/src/network/model/response/document_response.dart';
+import 'package:data/src/network/model/share/share_id_dto.dart';
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
 
-class DocumentRepositoryImpl implements DocumentRepository {
-  final DocumentDataSource documentDataSource;
+import 'package:json_annotation/json_annotation.dart';
 
-  DocumentRepositoryImpl(this.documentDataSource);
+part 'share_dto.g.dart';
 
-  @override
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
-    return documentDataSource.upload(fileInfo, token, baseUrl);
-  }
+@JsonSerializable()
+@DatetimeConverter()
+@ShareIdDtoConverter()
+class ShareDto {
+  @JsonKey(name: Attribute.uuid)
+  final ShareIdDto shareId;
+  final String name;
+  final DateTime modificationDate;
+  final DocumentResponse document;
+  final String description;
+  final GenericUserDto recipient;
 
-  @override
-  Future<List<Document>> getAll() {
-    return documentDataSource.getAll();
-  }
+  ShareDto(this.shareId, this.name, this.modificationDate, this.document, this.description, this.recipient);
 
-  @override
-  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) {
-    return documentDataSource.downloadDocument(documentId, token, baseUrl);
-  }
+  factory ShareDto.fromJson(Map<String, dynamic> json) => _$ShareDtoFromJson(json);
 
-  @override
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
-    return documentDataSource.share(documentIds, mailingListIds, recipients);
-  }
+  Map<String, dynamic> toJson() => _$ShareDtoToJson(this);
+}
 
-  @override
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
-    return documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
+extension ShareDtoExtension on ShareDto {
+  Share toShare() {
+    return Share(
+        ShareId(shareId.uuid),
+        name,
+        modificationDate,
+        document.toDocument(),
+        description,
+        recipient.toGenericUser());
   }
 }

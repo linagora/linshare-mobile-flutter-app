@@ -28,40 +28,33 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/datasource/document_datasource.dart';
-import 'package:dio/src/cancel_token.dart';
-import 'package:domain/domain.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
+import 'package:dartz/dartz.dart';
+import 'package:data/src/network/model/generic_user_dto.dart';
+import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
+import 'package:data/src/network/model/share/share_dto.dart';
+import 'package:data/src/network/model/share/share_id_dto.dart';
+import 'package:testshared/testshared.dart';
 
-class DocumentRepositoryImpl implements DocumentRepository {
-  final DocumentDataSource documentDataSource;
+final shareIdDto1 = ShareIdDto('3e57d240-47a1-4a7e-b1a7-25e29870af33');
+final shareIdDto2 = ShareIdDto('3e57d240-47a1-4a7e-b1a7-25e29870af32');
+final mailingListIdDto1 = MailingListIdDto('3e57d240-47a1-4a7e-b1a7-25e29870af33');
+final genericUserDto1 = GenericUserDto('user1@linshare.org',
+    lastName: optionOf('Smith'), firstName: optionOf('Jane'));
 
-  DocumentRepositoryImpl(this.documentDataSource);
+final shareDto1 = ShareDto(
+    shareIdDto1,
+    'document 1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    documentResponse1,
+    'description 1',
+    GenericUserDto('user1@linshare.org'));
 
-  @override
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
-    return documentDataSource.upload(fileInfo, token, baseUrl);
-  }
-
-  @override
-  Future<List<Document>> getAll() {
-    return documentDataSource.getAll();
-  }
-
-  @override
-  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) {
-    return documentDataSource.downloadDocument(documentId, token, baseUrl);
-  }
-
-  @override
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
-    return documentDataSource.share(documentIds, mailingListIds, recipients);
-  }
-
-  @override
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
-    return documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
-  }
-}
+final shareDto2 = ShareDto(
+    shareIdDto2,
+    'document2',
+    DateTime.fromMillisecondsSinceEpoch(1604482138182),
+    documentResponse2,
+    'description 2',
+    GenericUserDto('user2@linshare.org'));
