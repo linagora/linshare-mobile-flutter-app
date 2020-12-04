@@ -43,4 +43,14 @@ class AppToast {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM);
   }
+
+  void showErrorToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        fontSize: 16,
+        textColor: Colors.white,
+        backgroundColor: AppColor.toastErrorBackgroundColor,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM);
+  }
 }

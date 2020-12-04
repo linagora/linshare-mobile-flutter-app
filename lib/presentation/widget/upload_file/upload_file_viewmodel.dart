@@ -29,41 +29,124 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:rxdart/rxdart.dart';
 
 class UploadFileViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final UploadFileInteractor _uploadFileInteractor;
+  final ShareDocumentInteractor _shareDocumentInteractor;
+  StreamSubscription _userMailListSubscription;
 
   UploadFileViewModel(
     Store<AppState> store,
     this._appNavigation,
     this._uploadFileInteractor,
-  ) : super(store);
+    this._shareDocumentInteractor,
+  ) : super(store) {
+    _userMailListSubscription = _userMailList.listen((value) {
+      if (_shareTypeArgument == ShareType.quickShare) {
+        value.isEmpty ? _enableUploadAndShareButton.add(false) : _enableUploadAndShareButton.add(true);
+      }
+    });
+  }
 
-  FileInfo _fileInfo;
+  FileInfo _fileInfoArgument;
+
+  ShareType _shareTypeArgument = ShareType.uploadAndShare;
+  ShareType get shareTypeArgument => _shareTypeArgument;
+
+  Document _documentArgument;
+
+  final BehaviorSubject<List<String>> _userMailList = BehaviorSubject.seeded([]);
+  BehaviorSubject<List<String>> get userMailList => _userMailList;
+
+  final BehaviorSubject<bool> _enableUploadAndShareButton = BehaviorSubject.seeded(true);
+  BehaviorSubject<bool> get enableUploadAndShareButton => _enableUploadAndShareButton;
 
   void backToMySpace() {
     _appNavigation.popBack();
     store.dispatch(CleanUploadStateAction());
   }
 
-  void setFileInfo(FileInfo fileInfo) {
-    _fileInfo = fileInfo;
+  void setFileInfoArgument(FileInfo fileInfo) {
+    _fileInfoArgument = fileInfo;
   }
 
-  void handleOnUploadFilePressed() {
-    if (_fileInfo != null) {
-      store.dispatch(uploadFileAction(_fileInfo));
+  void setShareTypeArgument(ShareType shareType) {
+    _shareTypeArgument = shareType;
+  }
+
+  void setDocumentArgument(Document document) {
+    _documentArgument = document;
+  }
+
+  void addUserEmail(String email) {
+    if (email.isEmpty) {
+      return;
+    }
+    final newEmailList = _userMailList.value;
+    newEmailList.add(email);
+    _userMailList.add(newEmailList);
+  }
+
+  void removeUserEmail(int index) {
+    final newEmailList = _userMailList.value;
+    newEmailList.removeAt(index);
+    _userMailList.add(newEmailList);
+  }
+
+  String get fileName => _shareTypeArgument == ShareType.quickShare ? _documentArgument.name : _fileInfoArgument.fileName;
+
+  int get fileSize => _shareTypeArgument == ShareType.quickShare ? _documentArgument.size : _fileInfoArgument.fileSize;
+
+  void handleOnUploadAndSharePressed() {
+    if (_shareTypeArgument == ShareType.quickShare) {
+      _handleQuickShare();
+    } else {
+      _handleUploadAndShare();
     }
     _appNavigation.popBack();
+  }
+
+  void _handleQuickShare() {
+    if (_documentArgument != null) {
+      store.dispatch(shareAction());
+    }
+  }
+
+  void _handleUploadAndShare() {
+    if (_fileInfoArgument != null) {
+      store.dispatch(uploadFileAction(_fileInfoArgument));
+    }
+  }
+
+  ThunkAction<AppState> shareAction() {
+    return (Store<AppState> store) async {
+      final genericUserList = _userMailList.value
+          .map((data) => GenericUser(data, firstName: none(), lastName: none()))
+          .toList();
+      final documentIdList = [_documentArgument.documentId];
+      await _shareDocumentInteractor.execute(
+          documentIdList,
+          <MailingListId>[],
+          genericUserList).then((viewState) {
+            viewState.fold(
+              (failure) => store.dispatch(ShareAction(Left(failure))),
+              (success) => store.dispatch(ShareAction(Right(success))));
+      });
+    };
   }
 
   ThunkAction<AppState> uploadFileAction(FileInfo fileInfo) {
@@ -86,6 +169,7 @@ class UploadFileViewModel extends BaseViewModel {
 
   @override
   void onDisposed() {
+    _userMailListSubscription.cancel();
     super.onDisposed();
   }
 }

@@ -128,5 +128,35 @@
     "placeholders": {
       "fileName": {}
     }
+  },
+  "share" :"Partager",
+  "@share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "title_quick_share" :"Partager rapidement",
+  "@title_quick_share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_recipients" :"Ajouter des destinataires",
+  "@add_recipients": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_people" :"Ajouter des utilisateurs",
+  "@add_people": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_is_successfully_shared" :"The file is successfully shared",
+  "@file_is_successfully_shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_could_not_be_share" :"The file could not be shared",
+  "@file_could_not_be_share": {
+    "type": "text",
+    "placeholders": {}
   }
 }

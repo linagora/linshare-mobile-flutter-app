@@ -96,7 +96,8 @@ class WidgetModule {
     getIt.registerFactory(() => UploadFileViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>(),
-      getIt.get<UploadFileInteractor>()
+      getIt.get<UploadFileInteractor>(),
+      getIt.get<ShareDocumentInteractor>()
     ));
   }
 

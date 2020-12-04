@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -56,9 +57,10 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final UploadFileArguments arguments =
-        ModalRoute.of(context).settings.arguments;
-    uploadFileViewModel.setFileInfo(arguments.fileInfo);
+    final UploadFileArguments arguments = ModalRoute.of(context).settings.arguments;
+    uploadFileViewModel.setFileInfoArgument(arguments.fileInfo);
+    uploadFileViewModel.setShareTypeArgument(arguments.shareType);
+    uploadFileViewModel.setDocumentArgument(arguments.document);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,9 +71,11 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
         ),
         centerTitle: true,
         title: Text(
-          AppLocalizations.of(context).upload_file_title,
-          key: Key('upload_file_title'),
-          style: TextStyle(fontSize: 24, color: Colors.white)),
+            uploadFileViewModel.shareTypeArgument == ShareType.uploadAndShare
+                ? AppLocalizations.of(context).upload_file_title
+                : AppLocalizations.of(context).title_quick_share,
+            key: Key('upload_file_title'),
+            style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor,
       ),
       body: Container(
@@ -87,7 +91,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                     Expanded(
                         child: Padding(
                       child: Text(
-                        arguments.fileInfo.fileName,
+                        uploadFileViewModel.fileName,
                         key: Key('upload_file_name'),
                         style: TextStyle(
                             fontSize: 14,
@@ -98,7 +102,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                     Padding(
                         padding: EdgeInsets.only(right: 24),
                         child: Text(
-                          '${arguments.fileInfo.fileSize} KB',
+                          '${uploadFileViewModel.fileSize} KB',
                           key: Key('upload_file_size'),
                           style: TextStyle(
                               fontSize: 14,
@@ -107,26 +111,113 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                   ],
                 ),
               ),
-            )
+            ),
+            _buildShareWidget(context)
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          key: Key('upload_file_confirm_button'),
-          backgroundColor: AppColor.primaryColor,
-          onPressed: () => uploadFileViewModel.handleOnUploadFilePressed(),
-          label: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text(
-              AppLocalizations.of(context).upload_text_button,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontStyle: FontStyle.normal),
-            ),
-          )),
+      floatingActionButton: StreamBuilder(
+        stream: uploadFileViewModel.enableUploadAndShareButton,
+        initialData: true,
+        builder: ( context, AsyncSnapshot<bool> snapshot) {
+          return IgnorePointer(
+            ignoring: !snapshot.data,
+            child: FloatingActionButton.extended(
+                key: Key('upload_file_confirm_button'),
+                backgroundColor: snapshot.data ? AppColor.primaryColor : AppColor.uploadButtonDisableBackgroundColor,
+                onPressed: () => uploadFileViewModel.handleOnUploadAndSharePressed(),
+                label: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child: Text(
+                    uploadFileViewModel.shareTypeArgument == ShareType.uploadAndShare
+                        ? AppLocalizations.of(context).upload_text_button
+                        : AppLocalizations.of(context).share,
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.normal),
+                  ),
+                )),
+          );
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  Widget _buildShareWidget(BuildContext buildContext) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              AppLocalizations.of(context).add_recipients,
+              style: TextStyle(
+                  fontSize: 16.0, color: AppColor.uploadFileFileNameTextColor),
+            ),
+          ),
+          SizedBox(
+            height: 14.0,
+          ),
+          TextField(
+            textAlignVertical: TextAlignVertical.center,
+            textInputAction: TextInputAction.done,
+            onSubmitted: (text) {
+              uploadFileViewModel.addUserEmail(text);
+            },
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                hintText: AppLocalizations.of(context).add_people,
+                hintStyle: TextStyle(
+                    color: AppColor.uploadFileFileSizeTextColor,
+                    fontSize: 16.0),
+                prefixIcon: Icon(
+                  Icons.person_add,
+                  size: 24.0,
+                )),
+          ),
+          SizedBox(
+            height: 16.0,
+          ),
+          _buildTagList(context)
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTagList(BuildContext context) {
+    return StreamBuilder(
+        stream: uploadFileViewModel.userMailList,
+        initialData: <String>[],
+        builder: (context, AsyncSnapshot<List<String>> snapshot) {
+      return Align(
+        alignment: Alignment.topLeft,
+        child: Tags(
+          alignment: WrapAlignment.start,
+          spacing: 10.0,
+          itemCount: snapshot.data.length,
+          itemBuilder: (index) {
+            return ItemTags(
+              index: index,
+              title: snapshot.data[index],
+              pressEnabled: false,
+              activeColor: AppColor.userTagBackgroundColor,
+              textActiveColor: AppColor.userTagTextColor,
+              textStyle: TextStyle(fontSize: 16.0),
+              removeButton: ItemTagsRemoveButton(
+                  color: Colors.white,
+                  backgroundColor: AppColor.userTagRemoveButtonBackgroundColor,
+                  onRemoved: () {
+                    uploadFileViewModel.removeUserEmail(index);
+                    return true;
+                  }),
+            );
+          },
+        ),
+      );
+    });
   }
 }

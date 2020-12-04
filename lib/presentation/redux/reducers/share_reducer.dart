@@ -28,20 +28,15 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
+import 'package:redux/redux.dart';
 
-class FileInfo extends Equatable {
-  final String fileName;
-  final String filePath;
-  final int fileSize;
-
-  FileInfo(this.fileName, this.filePath, this.fileSize);
-
-  factory FileInfo.empty() {
-    return FileInfo('', '', 0);
-  }
-
-  @override
-  List<Object> get props => [fileName, filePath, fileSize];
-}
+final shareReducer = combineReducers<ShareState>([
+  TypedReducer<ShareState, ShareAction>(
+          (ShareState state, ShareAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<ShareState, CleanShareStateAction>(
+          (ShareState state, _) => state.clearViewState()),
+]);

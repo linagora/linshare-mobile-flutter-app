@@ -79,8 +79,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         builder: (BuildContext context, MySpaceViewModel viewModel) => Scaffold(
               body: Column(
                 children: [
-                  handleUploadToastMessage(context,
-                    mySpaceViewModel.store.state.uploadFileState.viewState),
+                  handleUploadToastMessage(context),
+                  handleShareDocumentToastMessage(context),
                   Container(
                     child: handleUploadWidget(
                       context,
@@ -344,13 +344,11 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       .text(AppLocalizations.of(context).my_space_text_upload_your_files_here).build();
   }
 
-  Widget handleUploadToastMessage(
-      BuildContext context, dartz.Either<Failure, Success> uploadFileState) {
-    uploadFileState.fold(
+  Widget handleUploadToastMessage(BuildContext context) {
+    mySpaceViewModel.store.state.uploadFileState.viewState.fold(
         (failure) => {
           if (failure is FilePickerFailure || failure is UploadFileFailure) {
-            appToast.showToast(
-                AppLocalizations.of(context).upload_failure_text)
+            appToast.showToast(AppLocalizations.of(context).upload_failure_text)
           }
         },
         (success) => {
@@ -362,9 +360,27 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     return SizedBox.shrink();
   }
 
+  Widget handleShareDocumentToastMessage(BuildContext context) {
+    mySpaceViewModel.store.state.shareState.viewState.fold(
+            (failure) => {
+          if (failure is ShareDocumentFailure) {
+            appToast.showErrorToast(AppLocalizations.of(context).file_could_not_be_share),
+            mySpaceViewModel.cleanShareViewState()
+          }
+        },
+            (success) => {
+          if (success is ShareDocumentViewState){
+            appToast.showToast(AppLocalizations.of(context).file_is_successfully_shared),
+            mySpaceViewModel.cleanShareViewState()
+          }
+        });
+    return SizedBox.shrink();
+  }
+
   List<Widget> contextMenuActionTiles(BuildContext context, Document document) {
     return [
-      if (Platform.isIOS) exportFileAction(context, document)
+      if (Platform.isIOS) exportFileAction(context, document),
+      shareAction(document)
     ];
   }
 
@@ -390,5 +406,17 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .onActionClick((data) {
       mySpaceViewModel.exportFile(context, data);
     }).build();
+  }
+
+  Widget shareAction(Document document) {
+    return DocumentContextMenuTileBuilder(
+            Key('share_context_menu_action'),
+            SvgPicture.asset(imagePath.icContextItemShare,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).share,
+            document)
+        .onActionClick(
+            (data) => mySpaceViewModel.shareDocument(document))
+        .build();
   }
 }
