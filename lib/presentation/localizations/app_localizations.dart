@@ -142,6 +142,36 @@ class AppLocalizations {
       name: 'download_to_device');
   }
 
+  String get share {
+    return Intl.message('Share',
+        name: 'share');
+  }
+
+  String get title_quick_share {
+    return Intl.message('Quick Share',
+        name: 'title_quick_share');
+  }
+
+  String get add_recipients {
+    return Intl.message('Add recipients',
+        name: 'add_recipients');
+  }
+
+  String get add_people {
+    return Intl.message('Add people',
+        name: 'add_people');
+  }
+
+  String get file_is_successfully_shared {
+    return Intl.message('The file is successfully shared',
+        name: 'file_is_successfully_shared');
+  }
+
+  String get file_could_not_be_share {
+    return Intl.message('The file could not be shared',
+        name: 'file_could_not_be_share');
+  }
+
   String item_last_modified(String dateString) =>
     Intl.message('Modified $dateString',
         name: 'item_last_modified',

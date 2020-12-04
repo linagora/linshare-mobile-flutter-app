@@ -52,6 +52,7 @@ class AppImagePaths {
   String get icUnexpectedError => _getImagePath('ic_unexpected_error.svg');
   String get icFileDownload => _getImagePath('ic_file_download.svg');
   String get icExportFile => _getImagePath('ic_export_file.svg');
+  String get icContextItemShare => _getImagePath('ic_context_item_share.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

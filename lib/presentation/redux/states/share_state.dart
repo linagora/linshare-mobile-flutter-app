@@ -28,20 +28,34 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:equatable/equatable.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-class FileInfo extends Equatable {
-  final String fileName;
-  final String filePath;
-  final int fileSize;
+@immutable
+class ShareState extends LinShareState {
 
-  FileInfo(this.fileName, this.filePath, this.fileSize);
+  ShareState(Either<Failure, Success> viewState) : super(viewState);
 
-  factory FileInfo.empty() {
-    return FileInfo('', '', 0);
+  factory ShareState.initial() {
+    return ShareState(Right(IdleState()));
   }
 
   @override
-  List<Object> get props => [fileName, filePath, fileSize];
+  LinShareState clearViewState() {
+    return ShareState(Right(IdleState()));
+  }
+
+  @override
+  LinShareState sendViewState({Either<Failure, Success> viewState}) {
+    return ShareState(viewState);
+  }
+
+  @override
+  LinShareState startLoadingState() {
+    return ShareState(Right(LoadingState()));
+  }
 }

@@ -29,9 +29,9 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 
@@ -39,5 +39,6 @@ AppState appStateReducer(AppState state, action) {
   return AppState(
       authenticationState: authenticationReducer(state.authenticationState, action),
       uploadFileState: uploadFileReducer(state.uploadFileState, action),
-      mySpaceState: mySpaceReducer(state.mySpaceState, action));
+      mySpaceState: mySpaceReducer(state.mySpaceState, action),
+      shareState: shareReducer(state.shareState, action));
 }

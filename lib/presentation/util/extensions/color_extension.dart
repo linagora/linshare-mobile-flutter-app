@@ -44,7 +44,12 @@ extension AppColor on Color {
   static const uploadProgressBackgroundColor = Color(0xff5FA4D8);
   static const mySpaceUploadBackground = Color(0xff1B7EC7);
   static const toastBackgroundColor = Color(0xff1B7EC7);
+  static const toastErrorBackgroundColor = Color(0xffFF5858);
   static const documentNameItemTextColor = Color(0xff7B7B7B);
   static const documentModifiedDateItemTextColor = Color(0xffACACAC);
   static const exportFileDialogButtonCancelTextColor = Color(0xff007AFF);
+  static const userTagRemoveButtonBackgroundColor = Color(0xffACACAC);
+  static const userTagBackgroundColor = Color(0xffF2F2F2);
+  static const userTagTextColor = Color(0xff7B7B7B);
+  static const uploadButtonDisableBackgroundColor = Color(0xffD3D3D3);
 }

@@ -33,6 +33,14 @@ import 'package:domain/domain.dart';
 
 class UploadFileArguments {
   final FileInfo fileInfo;
+  ShareType shareType;
+  Document document;
 
-  UploadFileArguments(this.fileInfo);
+  UploadFileArguments(this.fileInfo,
+      {ShareType shareType = ShareType.uploadAndShare, Document document}) {
+    this.shareType = shareType;
+    this.document = document;
+  }
 }
+
+enum ShareType { quickShare, uploadAndShare }
