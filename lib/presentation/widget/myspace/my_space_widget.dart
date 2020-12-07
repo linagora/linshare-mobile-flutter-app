@@ -43,12 +43,12 @@ import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.da
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
+import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:redux/redux.dart';
 
 class MySpaceWidget extends StatefulWidget {
@@ -380,7 +380,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   List<Widget> contextMenuActionTiles(BuildContext context, Document document) {
     return [
       if (Platform.isIOS) exportFileAction(context, document),
-      shareAction(document)
+      if (Platform.isAndroid) downloadAction(document),
+      shareAction(document),
     ];
   }
 
