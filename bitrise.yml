@@ -1,11 +1,11 @@
 ---
 format_version: '8'
-default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: flutter
 trigger_map:
 - push_branch: master
   workflow: primary
-- pull_request_source_branch: '*'
+- pull_request_source_branch: "*"
   workflow: primary
 workflows:
   deploy:
@@ -22,19 +22,19 @@ workflows:
     - cache-pull@2: {}
     - flutter-analyze@0:
         inputs:
-        - project_location: $BITRISE_FLUTTER_PROJECT_LOCATION
+        - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION"
     - flutter-test@0:
         inputs:
-        - project_location: $BITRISE_FLUTTER_PROJECT_LOCATION
+        - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION"
     - flutter-build@0:
         inputs:
-        - project_location: $BITRISE_FLUTTER_PROJECT_LOCATION
+        - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION"
         - platform: both
     - xcode-archive@2:
         inputs:
-        - project_path: $BITRISE_PROJECT_PATH
-        - scheme: $BITRISE_SCHEME
-        - export_method: $BITRISE_EXPORT_METHOD
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME"
+        - export_method: "$BITRISE_EXPORT_METHOD"
         - configuration: Release
     - deploy-to-bitrise-io@1: {}
     - cache-push@2: {}
@@ -45,63 +45,187 @@ workflows:
     - git-clone@4: {}
     - flutter-installer@0:
         inputs:
-        - installation_bundle_url: >-
-            https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.22.1-stable.zip
+        - installation_bundle_url: https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.22.1-stable.zip
         - is_update: 'false'
     - cache-pull@2: {}
     - script@1:
         title: Do anything with Script step
         inputs:
-        - content: >-
+        - content: |-
             #!/usr/bin/env bash
-
             # fail if any commands fails
-
             set -e
-
             # debug log
-
             set -x
 
-
             cd data
-
-            flutter pub get && flutter pub run build_runner build
-            --delete-conflicting-outputs
-
+            flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs
 
             # Install necessary pods
-
             cd ../ios
-
             flutter pub get && pod install
+
+            cd ..
+            flutter pub get && flutter pub run intl_translation:extract_to_arb --output-dir=./lib/l10n lib/presentation/localizations/app_localizations.dart
+
+            flutter pub get && flutter pub run intl_translation:generate_from_arb --output-dir=lib/l10n --no-use-deferred-loading lib/presentation/localizations/app_localizations.dart lib/l10n/intl*.arb
         is_always_run: true
     - flutter-analyze@0:
         inputs:
         - additional_params: ''
-        - project_location: $BITRISE_FLUTTER_PROJECT_LOCATION/data
+        - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION/data"
+    - flutter-test@0:
+        inputs:
+        - additional_params: "--verbose"
+    - flutter-test@0:
+        inputs:
+        - additional_params: data
+    - flutter-test@0:
+        inputs:
+        - additional_params: domain
     - certificate-and-profile-installer@1:
         is_always_run: true
+    - sign-apk@1: {}
     - flutter-build@0:
         inputs:
-        - platform: ios
         - is_debug_mode: 'true'
-        - ios_additional_params: '--release'
+        - ios_additional_params: "--release"
         - ios_codesign_identity: 'Apple Development: Tung Tran (D62M3529UP)'
     - xcode-archive@2:
         inputs:
         - team_id: 6Z27TKCGWF
         - force_team_id: 6Z27TKCGWF
         - force_code_sign_identity: 'Apple Development: Tung Tran (D62M3529UP)'
-        - force_provisioning_profile: 00e32e14-02a1-4a9c-8438-292de72b2cff
+        - force_provisioning_profile: 9ab856e2-3906-4537-8ebc-00ac1f0dd25d
         - force_provisioning_profile_specifier: ''
         - export_method: development
     - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        inputs:
+        - channel: 'channel: #ft-mobile '
+        - text: |
+            Commit Author: ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Message: ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            App: ${BITRISE_APP_TITLE}
+            Branch: ${BITRISE_GIT_BRANCH}
+            Workflow: ${BITRISE_TRIGGERED_WORKFLOW_ID}
+            View App: ${BITRISE_APP_URL}
+            View Build: ${BITRISE_BUILD_URL}
+            Install Page: ${BITRISE_PUBLIC_INSTALL_PAGE_URL}
+            Status: ${BITRISE_BUILD_STATUS}
+        - emoji: ":sunny:"
+        - from_username: mobile_bot
+        - from_username_on_error: mobile_bot
+        - channel_on_error: 'channel: #ft-mobile'
+        - footer: Linagora Mobile Team
+        - text_on_error: |-
+            Commit Author: ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Message: ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            App: ${BITRISE_APP_TITLE}
+            Branch: ${BITRISE_GIT_BRANCH}
+            Workflow: ${BITRISE_TRIGGERED_WORKFLOW_ID}
+            View App: ${BITRISE_APP_URL}
+            View Build: ${BITRISE_BUILD_URL}
+            Install Page: ${BITRISE_PUBLIC_INSTALL_PAGE_URL}
+            Status: ${BITRISE_BUILD_STATUS}
+        - emoji_on_error: ":rain_cloud:"
+        - icon_url: ''
+        - footer_icon: ''
+        - icon_url_on_error: ''
+        - webhook_url: "$TWAKE_WEBHOOK_API"
+  primary-bitrise-debug:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - flutter-installer@0:
+        inputs:
+        - installation_bundle_url: https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.22.1-stable.zip
+        - is_update: 'false'
+    - cache-pull@2: {}
+    - script@1:
+        title: Do anything with Script step
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\ncat pubspec.yaml\n\nflutter pub get\nflutter pub get domain\nflutter
+            pub get data\nflutter packages get\n\ncd $BITRISE_FLUTTER_PROJECT_LOCATION/data\nflutter
+            pub run build_runner build --delete-conflicting-outputs\n\ncd $BITRISE_FLUTTER_PROJECT_LOCATION\nflutter
+            pub run intl_translation:extract_to_arb --output-dir=$BITRISE_FLUTTER_PROJECT_LOCATION/lib/l10n
+            \\\n$BITRISE_FLUTTER_PROJECT_LOCATION/lib/presentation/localizations/app_localizations.dart\nflutter
+            pub run intl_translation:generate_from_arb --output-dir=$BITRISE_FLUTTER_PROJECT_LOCATION/lib/l10n
+            \\ \n--no-use-deferred-loading $BITRISE_FLUTTER_PROJECT_LOCATION/lib/presentation/localizations/app_localizations.dart
+            \\\n$BITRISE_FLUTTER_PROJECT_LOCATION/lib/l10n/intl*.arb\n\n# Install
+            necessary pods\ncd $BITRISE_FLUTTER_PROJECT_LOCATION/ios\nflutter pub
+            get && pod install"
+        is_always_run: true
+    - flutter-analyze@0:
+        inputs:
+        - additional_params: ''
+        - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION/data"
+    - flutter-test@0:
+        inputs:
+        - additional_params: "--verbose"
+    - flutter-test@0:
+        inputs:
+        - additional_params: data
+    - flutter-test@0:
+        inputs:
+        - additional_params: domain
+    - certificate-and-profile-installer@1:
+        is_always_run: true
+    - flutter-build@0:
+        inputs:
+        - platform: ios
+        - is_debug_mode: 'true'
+        - ios_additional_params: "--release"
+        - ios_codesign_identity: 'Apple Development: Tung Tran (D62M3529UP)'
+    - xcode-archive@2:
+        inputs:
+        - team_id: 6Z27TKCGWF
+        - force_team_id: 6Z27TKCGWF
+        - force_code_sign_identity: 'Apple Development: Tung Tran (D62M3529UP)'
+        - force_provisioning_profile: 9ab856e2-3906-4537-8ebc-00ac1f0dd25d
+        - force_provisioning_profile_specifier: ''
+        - export_method: development
+    - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        inputs:
+        - channel: 'channel: #ft-mobile '
+        - text: |
+            Commit Author|${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Message|${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            View App|${BITRISE_APP_URL}
+            View Build|${BITRISE_BUILD_URL}
+            Install Page|${BITRISE_PUBLIC_INSTALL_PAGE_URL}
+            Status|${BITRISE_BUILD_STATUS}
+        - emoji: ":sunny:"
+        - from_username: mobile_bot
+        - from_username_on_error: mobile_bot
+        - channel_on_error: 'channel: #ft-mobile'
+        - footer: Linagora Mobile Team
+        - text_on_error: |
+            Commit Author|${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Message|${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            View App|${BITRISE_APP_URL}
+            View Build|${BITRISE_BUILD_URL}
+            Install Page|${BITRISE_PUBLIC_INSTALL_PAGE_URL}
+            Status|${BITRISE_BUILD_STATUS}
+        - emoji_on_error: ":rain_cloud:"
+        - icon_url: https://www.linshare.org/img/linshare-logo-blue.png
+        - footer_icon: https://www.linshare.org/img/linshare-logo-blue.png?size=16
+        - icon_url_on_error: https://www.linshare.org/img/linshare-logo-blue.png
+        - webhook_url: "$TWAKE_WEBHOOK_API"
 app:
   envs:
   - opts:
       is_expand: false
-    BITRISE_FLUTTER_PROJECT_LOCATION: .
+    BITRISE_FLUTTER_PROJECT_LOCATION: "."
   - opts:
       is_expand: false
     BITRISE_PROJECT_PATH: ios/Runner.xcworkspace
