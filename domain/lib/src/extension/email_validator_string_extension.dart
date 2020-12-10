@@ -30,36 +30,9 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/autocomplete/autocomplete_result.dart';
-
-class UserAutoCompleteResult extends AutoCompleteResult {
-  final String firstName;
-  final String lastName;
-  final String domain;
-  final String mail;
-
-  UserAutoCompleteResult(
-      String identifier,
-      String display,
-      this.firstName,
-      this.lastName,
-      this.domain,
-      this.mail
-  ) : super(identifier, display);
-
-  @override
-  List<Object> get props => [
-    identifier,
-    display,
-    firstName,
-    lastName,
-    domain,
-    mail
-  ];
-}
-
-extension UserAutoCompleteResultExtension on UserAutoCompleteResult {
-  String fullName() {
-    return '${firstName.isEmpty ? '' : firstName} ${lastName.isEmpty ? '' : lastName}';
+extension EmailValidatorStringExtension on String {
+  bool isValidEmail() {
+    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(this);
   }
 }

@@ -100,7 +100,8 @@ class WidgetModule {
       getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>(),
       getIt.get<UploadFileInteractor>(),
-      getIt.get<ShareDocumentInteractor>()
+      getIt.get<ShareDocumentInteractor>(),
+      getIt.get<GetAutoCompleteSharingInteractor>()
     ));
   }
 

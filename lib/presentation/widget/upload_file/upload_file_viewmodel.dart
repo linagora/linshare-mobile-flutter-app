@@ -47,15 +47,17 @@ class UploadFileViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final UploadFileInteractor _uploadFileInteractor;
   final ShareDocumentInteractor _shareDocumentInteractor;
-  StreamSubscription _userMailListSubscription;
+  final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
+  StreamSubscription _autoCompleteResultListSubscription;
 
   UploadFileViewModel(
     Store<AppState> store,
     this._appNavigation,
     this._uploadFileInteractor,
     this._shareDocumentInteractor,
+    this._getAutoCompleteSharingInteractor,
   ) : super(store) {
-    _userMailListSubscription = _userMailList.listen((value) {
+    _autoCompleteResultListSubscription = _autoCompleteResultListObservable.listen((value) {
       if (_shareTypeArgument == ShareType.quickShare) {
         value.isEmpty ? _enableUploadAndShareButton.add(false) : _enableUploadAndShareButton.add(true);
       }
@@ -69,8 +71,8 @@ class UploadFileViewModel extends BaseViewModel {
 
   Document _documentArgument;
 
-  final BehaviorSubject<List<String>> _userMailList = BehaviorSubject.seeded([]);
-  BehaviorSubject<List<String>> get userMailList => _userMailList;
+  final BehaviorSubject<List<AutoCompleteResult>> _autoCompleteResultListObservable = BehaviorSubject.seeded([]);
+  BehaviorSubject<List<AutoCompleteResult>> get autoCompleteResultListObservable => _autoCompleteResultListObservable;
 
   final BehaviorSubject<bool> _enableUploadAndShareButton = BehaviorSubject.seeded(true);
   BehaviorSubject<bool> get enableUploadAndShareButton => _enableUploadAndShareButton;
@@ -92,19 +94,16 @@ class UploadFileViewModel extends BaseViewModel {
     _documentArgument = document;
   }
 
-  void addUserEmail(String email) {
-    if (email.isEmpty) {
-      return;
-    }
-    final newEmailList = _userMailList.value;
-    newEmailList.add(email);
-    _userMailList.add(newEmailList);
+  void addUserEmail(AutoCompleteResult autoCompleteResult) {
+    final newAutoCompleteResultList = _autoCompleteResultListObservable.value;
+    newAutoCompleteResultList.add(autoCompleteResult);
+    _autoCompleteResultListObservable.add(newAutoCompleteResultList);
   }
 
   void removeUserEmail(int index) {
-    final newEmailList = _userMailList.value;
-    newEmailList.removeAt(index);
-    _userMailList.add(newEmailList);
+    final newAutoCompleteResultList = _autoCompleteResultListObservable.value;
+    newAutoCompleteResultList.removeAt(index);
+    _autoCompleteResultListObservable.add(newAutoCompleteResultList);
   }
 
   String get fileName => _shareTypeArgument == ShareType.quickShare ? _documentArgument.name : _fileInfoArgument.fileName;
@@ -132,16 +131,29 @@ class UploadFileViewModel extends BaseViewModel {
     }
   }
 
+  Future<List<AutoCompleteResult>> getAutoCompleteSharing(
+      String pattern) async {
+    return await _getAutoCompleteSharingInteractor
+        .execute(AutoCompletePattern(pattern), AutoCompleteType.sharing)
+        .then((viewState) => viewState.fold(
+            (failure) => <AutoCompleteResult>[],
+            (success) => (success as AutoCompleteViewState).results));
+  }
+
   ThunkAction<AppState> shareAction() {
     return (Store<AppState> store) async {
-      final genericUserList = _userMailList.value
-          .map((data) => GenericUser(data, firstName: none(), lastName: none()))
+      final genericUserList = _autoCompleteResultListObservable.value
+          .where((element) => element is UserAutoCompleteResult || element is SimpleAutoCompleteResult)
+          .map((data) => GenericUser(data.getSuggestionMail(), firstName: none(), lastName: none()))
+          .toList();
+      final mailingListIdList = _autoCompleteResultListObservable.value
+          .whereType<MailingListAutoCompleteResult>()
+          .map((data) => MailingListId(data.identifier))
           .toList();
       final documentIdList = [_documentArgument.documentId];
-      await _shareDocumentInteractor.execute(
-          documentIdList,
-          <MailingListId>[],
-          genericUserList).then((viewState) {
+      await _shareDocumentInteractor
+          .execute(documentIdList, mailingListIdList, genericUserList)
+          .then((viewState) {
             viewState.fold(
               (failure) => store.dispatch(ShareAction(Left(failure))),
               (success) => store.dispatch(ShareAction(Right(success))));
@@ -169,7 +181,7 @@ class UploadFileViewModel extends BaseViewModel {
 
   @override
   void onDisposed() {
-    _userMailListSubscription.cancel();
+    _autoCompleteResultListSubscription.cancel();
     super.onDisposed();
   }
 }

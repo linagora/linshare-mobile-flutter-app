@@ -52,4 +52,5 @@ extension AppColor on Color {
   static const userTagBackgroundColor = Color(0xffF2F2F2);
   static const userTagTextColor = Color(0xff7B7B7B);
   static const uploadButtonDisableBackgroundColor = Color(0xffD3D3D3);
+  static const defaultLabelAvatarBackgroundColor = Color(0xff1B7EC7);
 }

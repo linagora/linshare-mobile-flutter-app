@@ -222,6 +222,11 @@ class AppLocalizations {
     return Intl.message('You don\'t have any workgroup yet',
         name: 'do_not_have_any_workgroup');
   }
+
+  String get unknown_user {
+    return Intl.message('Unknown user',
+        name: 'unknown_user');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

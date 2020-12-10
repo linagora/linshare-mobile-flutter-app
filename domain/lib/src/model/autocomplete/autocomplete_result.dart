@@ -31,10 +31,38 @@
 //
 
 import 'package:equatable/equatable.dart';
+import 'subtype/simple_autocomplete_result.dart';
+import 'subtype/user_autocomplete_result.dart';
 
 abstract class AutoCompleteResult with EquatableMixin {
   final String identifier;
   final String display;
 
   AutoCompleteResult(this.identifier, this.display);
+}
+
+extension AutoCompleteResultExtension on AutoCompleteResult {
+
+  String getSuggestionMail() {
+    if (this is SimpleAutoCompleteResult) {
+      return identifier;
+    } else if (this is UserAutoCompleteResult) {
+      final autoCompleteResult = this as UserAutoCompleteResult;
+      return autoCompleteResult.mail.isNotEmpty
+          ? autoCompleteResult.mail
+          : autoCompleteResult.display;
+    } else {
+      return display;
+    }
+  }
+
+  String getSuggestionDisplayName() {
+    if (this is UserAutoCompleteResult) {
+      final autoCompleteResult = this as UserAutoCompleteResult;
+      return autoCompleteResult.fullName().isNotEmpty
+          ? autoCompleteResult.fullName()
+          : autoCompleteResult.display;
+    }
+    return display;
+  }
 }
