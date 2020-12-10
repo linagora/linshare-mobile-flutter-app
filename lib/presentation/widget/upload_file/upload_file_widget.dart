@@ -29,13 +29,16 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 
@@ -48,16 +51,19 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
   final uploadFileViewModel = getIt<UploadFileViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final appNavigation = getIt<AppNavigation>();
+  final TextEditingController _typeAheadController = TextEditingController();
 
   @override
   void dispose() {
     uploadFileViewModel.onDisposed();
+    _typeAheadController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final UploadFileArguments arguments = ModalRoute.of(context).settings.arguments;
+    final UploadFileArguments arguments =
+        ModalRoute.of(context).settings.arguments;
     uploadFileViewModel.setFileInfoArgument(arguments.fileInfo);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
     uploadFileViewModel.setDocumentArgument(arguments.document);
@@ -119,17 +125,21 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       floatingActionButton: StreamBuilder(
         stream: uploadFileViewModel.enableUploadAndShareButton,
         initialData: true,
-        builder: ( context, AsyncSnapshot<bool> snapshot) {
+        builder: (context, AsyncSnapshot<bool> snapshot) {
           return IgnorePointer(
             ignoring: !snapshot.data,
             child: FloatingActionButton.extended(
                 key: Key('upload_file_confirm_button'),
-                backgroundColor: snapshot.data ? AppColor.primaryColor : AppColor.uploadButtonDisableBackgroundColor,
-                onPressed: () => uploadFileViewModel.handleOnUploadAndSharePressed(),
+                backgroundColor: snapshot.data
+                    ? AppColor.primaryColor
+                    : AppColor.uploadButtonDisableBackgroundColor,
+                onPressed: () =>
+                    uploadFileViewModel.handleOnUploadAndSharePressed(),
                 label: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
-                    uploadFileViewModel.shareTypeArgument == ShareType.uploadAndShare
+                    uploadFileViewModel.shareTypeArgument ==
+                            ShareType.uploadAndShare
                         ? AppLocalizations.of(context).upload_text_button
                         : AppLocalizations.of(context).share,
                     style: TextStyle(
@@ -162,23 +172,59 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
           SizedBox(
             height: 14.0,
           ),
-          TextField(
-            textAlignVertical: TextAlignVertical.center,
-            textInputAction: TextInputAction.done,
-            onSubmitted: (text) {
-              uploadFileViewModel.addUserEmail(text);
-            },
-            decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 0),
-                hintText: AppLocalizations.of(context).add_people,
-                hintStyle: TextStyle(
-                    color: AppColor.uploadFileFileSizeTextColor,
-                    fontSize: 16.0),
-                prefixIcon: Icon(
-                  Icons.person_add,
-                  size: 24.0,
-                )),
-          ),
+          TypeAheadFormField(
+              textFieldConfiguration: TextFieldConfiguration(
+                  controller: _typeAheadController,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(vertical: 15),
+                      hintText: AppLocalizations.of(context).add_people,
+                      hintStyle: TextStyle(
+                          color: AppColor.uploadFileFileSizeTextColor,
+                          fontSize: 16.0),
+                      prefixIcon: Icon(
+                        Icons.person_add,
+                        size: 24.0,
+                      ))),
+              debounceDuration: Duration(milliseconds: 300),
+              suggestionsCallback: (pattern) async {
+                if (pattern.length >= 3) {
+                  return await uploadFileViewModel
+                      .getAutoCompleteSharing(pattern);
+                }
+                return null;
+              },
+              itemBuilder: (context, AutoCompleteResult autoCompleteResult) {
+                return ListTile(
+                  leading: LabelAvatarBuilder(autoCompleteResult
+                          .getSuggestionDisplayName()
+                          .characters
+                          .first
+                          .toUpperCase())
+                      .key(Key('label_avatar'))
+                      .build(),
+                  title: Text(autoCompleteResult.getSuggestionDisplayName(),
+                      style: TextStyle(
+                          fontSize: 14.0, color: AppColor.userTagTextColor)),
+                  subtitle: Text(autoCompleteResult.getSuggestionMail(),
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          color: AppColor.userTagRemoveButtonBackgroundColor)),
+                );
+              },
+              onSuggestionSelected: (autoCompleteResult) {
+                _typeAheadController.text = '';
+                uploadFileViewModel.addUserEmail(autoCompleteResult);
+              },
+              noItemsFoundBuilder: (context) => Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: Text(
+                      AppLocalizations.of(context).unknown_user,
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          color: AppColor.toastErrorBackgroundColor),
+                    ),
+                  )),
           SizedBox(
             height: 16.0,
           ),
@@ -190,34 +236,44 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
 
   Widget _buildTagList(BuildContext context) {
     return StreamBuilder(
-        stream: uploadFileViewModel.userMailList,
-        initialData: <String>[],
-        builder: (context, AsyncSnapshot<List<String>> snapshot) {
-      return Align(
-        alignment: Alignment.topLeft,
-        child: Tags(
-          alignment: WrapAlignment.start,
-          spacing: 10.0,
-          itemCount: snapshot.data.length,
-          itemBuilder: (index) {
-            return ItemTags(
-              index: index,
-              title: snapshot.data[index],
-              pressEnabled: false,
-              activeColor: AppColor.userTagBackgroundColor,
-              textActiveColor: AppColor.userTagTextColor,
-              textStyle: TextStyle(fontSize: 16.0),
-              removeButton: ItemTagsRemoveButton(
-                  color: Colors.white,
-                  backgroundColor: AppColor.userTagRemoveButtonBackgroundColor,
-                  onRemoved: () {
-                    uploadFileViewModel.removeUserEmail(index);
-                    return true;
-                  }),
-            );
-          },
-        ),
-      );
-    });
+        stream: uploadFileViewModel.autoCompleteResultListObservable,
+        initialData: <AutoCompleteResult>[],
+        builder: (context, AsyncSnapshot<List<AutoCompleteResult>> snapshot) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Tags(
+              alignment: WrapAlignment.start,
+              spacing: 10.0,
+              itemCount: snapshot.data.length,
+              itemBuilder: (index) {
+                return ItemTags(
+                  index: index,
+                  combine: ItemTagsCombine.withTextAfter,
+                  title: snapshot.data[index].getSuggestionDisplayName(),
+                  image: ItemTagsImage(
+                      child: LabelAvatarBuilder(snapshot.data[index]
+                              .getSuggestionDisplayName()
+                              .characters
+                              .first
+                              .toUpperCase())
+                          .key(Key('label_avatar'))
+                          .build()),
+                  pressEnabled: false,
+                  activeColor: AppColor.userTagBackgroundColor,
+                  textActiveColor: AppColor.userTagTextColor,
+                  textStyle: TextStyle(fontSize: 16.0),
+                  removeButton: ItemTagsRemoveButton(
+                      color: Colors.white,
+                      backgroundColor:
+                          AppColor.userTagRemoveButtonBackgroundColor,
+                      onRemoved: () {
+                        uploadFileViewModel.removeUserEmail(index);
+                        return true;
+                      }),
+                );
+              },
+            ),
+          );
+        });
   }
 }

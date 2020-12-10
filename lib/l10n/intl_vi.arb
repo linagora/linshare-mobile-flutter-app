@@ -178,5 +178,10 @@
   "@do_not_have_any_workgroup": {
     "type": "text",
     "placeholders": {}
+  },
+  "unknown_user" :"Không tìm thấy người dùng",
+  "@unknown_user": {
+    "type": "text",
+    "placeholders": {}
   }
 }

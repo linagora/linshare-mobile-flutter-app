@@ -44,6 +44,9 @@ class GetAutoCompleteSharingInteractor {
       AutoCompleteType autoCompleteType) async {
     try {
       final resultList = await _autoCompleteRepository.getAutoComplete(autoCompletePattern, autoCompleteType);
+      if (resultList.isEmpty && autoCompletePattern.value.isValidEmail()) {
+        resultList.add(SimpleAutoCompleteResult(autoCompletePattern.value, autoCompletePattern.value));
+      }
       return Right<Failure, Success>(AutoCompleteViewState(resultList));
     } catch (exception) {
       return Left<Failure, Success>(AutoCompleteFailure(exception));

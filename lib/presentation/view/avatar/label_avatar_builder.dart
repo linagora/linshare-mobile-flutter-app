@@ -30,36 +30,40 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/autocomplete/autocomplete_result.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
-class UserAutoCompleteResult extends AutoCompleteResult {
-  final String firstName;
-  final String lastName;
-  final String domain;
-  final String mail;
+class LabelAvatarBuilder {
+  final String label;
+  Color _backgroundColor;
+  TextStyle _textStyle;
+  Key _key;
 
-  UserAutoCompleteResult(
-      String identifier,
-      String display,
-      this.firstName,
-      this.lastName,
-      this.domain,
-      this.mail
-  ) : super(identifier, display);
+  LabelAvatarBuilder(this.label);
 
-  @override
-  List<Object> get props => [
-    identifier,
-    display,
-    firstName,
-    lastName,
-    domain,
-    mail
-  ];
-}
+  LabelAvatarBuilder backgroundColor(Color color) {
+    _backgroundColor = color;
+    return this;
+  }
 
-extension UserAutoCompleteResultExtension on UserAutoCompleteResult {
-  String fullName() {
-    return '${firstName.isEmpty ? '' : firstName} ${lastName.isEmpty ? '' : lastName}';
+  LabelAvatarBuilder textStyle(TextStyle textStyle) {
+    _textStyle = textStyle;
+    return this;
+  }
+
+  LabelAvatarBuilder key(Key key) {
+    _key = key;
+    return this;
+  }
+
+  Widget build() {
+    return CircleAvatar(
+        key: _key,
+        backgroundColor: _backgroundColor ?? AppColor.defaultLabelAvatarBackgroundColor,
+        child: Text(
+          label,
+          style: _textStyle ?? TextStyle(fontSize: 16.0, color: Colors.white),
+        ));
   }
 }

@@ -1,5 +1,8 @@
 library domain;
 
+// extension
+export 'src/extension/email_validator_string_extension.dart';
+
 // viewState
 export 'src/state/failure.dart';
 export 'src/state/success.dart';

@@ -178,5 +178,10 @@
   "@do_not_have_any_workgroup": {
     "type": "text",
     "placeholders": {}
+  },
+  "unknown_user" :"Неизвестный пользователь",
+  "@unknown_user": {
+    "type": "text",
+    "placeholders": {}
   }
 }
