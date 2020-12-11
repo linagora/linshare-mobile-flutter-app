@@ -29,8 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:convert';
-
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';

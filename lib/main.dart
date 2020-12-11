@@ -43,8 +43,6 @@ import 'package:flutter/foundation.dart';
 
 import 'presentation/redux/states/app_state.dart';
 import 'presentation/widget/initialize/initialize_widget.dart';
-import 'package:intl_translation/extract_messages.dart';
-import 'package:intl_translation/generate_localized.dart';
 
 void main() async {
   setUpGetIt();
