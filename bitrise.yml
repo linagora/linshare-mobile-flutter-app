@@ -89,8 +89,12 @@ workflows:
     - flutter-build@0:
         inputs:
         - is_debug_mode: 'true'
-        - ios_additional_params: "--release"
+        - ios_additional_params: "--debug"
         - ios_codesign_identity: 'Apple Development: Tung Tran (D62M3529UP)'
+    - flutter-build@0:
+        inputs:
+        - is_debug_mode: 'true'
+        - android_additional_params: "--debug"
     - xcode-archive@2:
         inputs:
         - team_id: 6Z27TKCGWF
