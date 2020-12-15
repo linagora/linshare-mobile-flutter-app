@@ -124,6 +124,18 @@ void main() {
       expect(deleteResult, true);
     });
 
+    test('deletePermanentToken should throw MissingRequiredFields when linShareHttpClient response error is 400', () async {
+      var error = DioError(
+        type: DioErrorType.RESPONSE,
+        response: Response(statusCode: 400)
+      );
+      when(_linShareHttpClient.deletePermanentToken(null))
+          .thenThrow(error);
+
+      await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')))
+          .catchError((error) => expect(error, isA<MissingRequiredFields>()));
+    });
+
     test('deletePermanentToken should throw RequestedTokenNotFound when linShareHttpClient response is 404', () async {
       var error = DioError(
         type: DioErrorType.RESPONSE,
