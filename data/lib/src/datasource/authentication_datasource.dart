@@ -57,8 +57,6 @@ class AuthenticationDataSource {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
           if (error.response.statusCode == 401) {
             throw BadCredentials();
-          } else if (error.response.statusCode == 500) {
-            throw MissingRequiredFields();
           } else {
             throw UnknownError(error.response.statusMessage);
           }
@@ -72,6 +70,8 @@ class AuthenticationDataSource {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
           if (error.response.statusCode == 404) {
             throw RequestedTokenNotFound();
+          } else if (error.response.statusCode == 400) {
+            throw MissingRequiredFields();
           } else {
             throw UnknownError(error.response.statusMessage);
           }
