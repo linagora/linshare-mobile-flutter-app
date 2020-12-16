@@ -45,28 +45,22 @@ class UploadFileInteractor {
 
   Stream<Either<Failure, Success>> execute(FileInfo fileInfo) async* {
     try {
-      yield Right<Failure, Success>(PreparingUpload(fileInfo));
-
       final token = await tokenRepository.getToken();
       final baseUrl = await credentialRepository.getBaseUrl();
       final dataHolder = await documentRepository.upload(fileInfo, token, baseUrl);
 
       await for (final dataInfo in dataHolder.dataInfo) {
-        final state = dataInfo.fold((failure) {
-          return Left<Failure, Success>(UploadFileFailure(Exception()));
-        }, (success) {
-          if (success is FileUploadProgress) {
-            return Right<Failure, Success>(UploadingProgress(success.progress, fileInfo.fileName));
-          } else if (success is FileUploadSuccess) {
-            return Right<Failure, Success>(UploadFileSuccess(fileInfo));
-          } else {
-            return Left<Failure, Success>(UploadFileFailure(Exception()));
-          }
-        });
-        yield state;
+        yield dataInfo;
+
+        final shouldEndStream = dataInfo.fold(
+          (failure) => true,
+          (success) => success is FileUploadSuccess,
+        );
+
+        if (shouldEndStream) break;
       }
     } catch (exception) {
-      yield Left<Failure, Success>(UploadFileFailure(exception));
+      yield Left<Failure, Success>(FileUploadFailure(fileInfo, exception));
     }
   }
 }

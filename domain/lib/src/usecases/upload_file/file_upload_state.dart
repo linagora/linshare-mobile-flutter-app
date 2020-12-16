@@ -43,12 +43,31 @@ class FileUploadState extends Equatable {
   List<Object> get props => [dataInfo, taskId];
 }
 
+class UploadingProgress extends Success {
+  final int progress;
+  final FileInfo fileInfo;
+
+  UploadingProgress(this.progress, this.fileInfo);
+
+  @override
+  List<Object> get props => [progress, fileInfo];
+}
+
 class FileUploadSuccess extends Success {
+  final Document uploadedDocument;
+
+  FileUploadSuccess(this.uploadedDocument);
+
   @override
   List<Object> get props => [];
 }
 
 class FileUploadFailure extends Failure {
+  final FileInfo fileInfo;
+  final Exception exception;
+
+  FileUploadFailure(this.fileInfo, this.exception);
+
   @override
   List<Object> get props => [];
 }
@@ -69,4 +88,36 @@ class UploadTaskId extends Equatable {
 
   @override
   List<Object> get props => [id];
+}
+
+class SharingAfterUploadState extends Success {
+  final List<AutoCompleteResult> recipients;
+  final Document uploadedDocument;
+
+  SharingAfterUploadState(this.recipients, this.uploadedDocument);
+
+  @override
+  List<Object> get props => [uploadedDocument, recipients];
+}
+
+class ShareAfterUploadSuccess extends SharingAfterUploadState {
+  ShareAfterUploadSuccess(
+    List<AutoCompleteResult> recipients,
+    Document uploadedDocument,
+  ) : super(recipients, uploadedDocument);
+}
+
+class ShareAfterUploadFailure extends Failure {
+  final Exception exception;
+  final List<AutoCompleteResult> recipients;
+  final Document uploadedDocument;
+
+  ShareAfterUploadFailure(
+    this.exception,
+    this.recipients,
+    this.uploadedDocument,
+  );
+
+  @override
+  List<Object> get props => [exception, uploadedDocument, recipients];
 }

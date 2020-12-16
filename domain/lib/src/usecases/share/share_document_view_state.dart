@@ -33,12 +33,14 @@
 import 'package:domain/domain.dart';
 
 class ShareDocumentViewState extends ViewState {
-  final Share share;
+  final List<Share> sharedRecipients;
 
-  ShareDocumentViewState(this.share);
+  Document get sharedDocument => sharedRecipients.first?.document;
+
+  ShareDocumentViewState(this.sharedRecipients);
 
   @override
-  List<Object> get props => [share];
+  List<Object> get props => [sharedRecipients];
 }
 
 class ShareDocumentFailure extends FeatureFailure {

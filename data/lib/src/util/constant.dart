@@ -33,4 +33,5 @@ class Constant {
   static const jSessionId = 'JSESSIONID';
   static const fileSizeDataForm = 'filesize';
   static const authorization = 'Authorization';
+  static const accept = 'accept';
 }

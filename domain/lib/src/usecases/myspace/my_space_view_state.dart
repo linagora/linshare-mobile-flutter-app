@@ -37,43 +37,6 @@ class UploadButtonClick extends ViewEvent {
   List<Object> get props => [];
 }
 
-class UploadFileSuccess extends ViewState {
-  final FileInfo fileInfo;
-
-  UploadFileSuccess(this.fileInfo);
-
-  @override
-  List<Object> get props => [];
-}
-
-class UploadFileFailure extends FeatureFailure {
-  final Exception uploadFileException;
-
-  UploadFileFailure(this.uploadFileException);
-
-  @override
-  List<Object> get props => [uploadFileException];
-}
-
-class UploadingProgress extends ViewState {
-  final int progress;
-  final String fileName;
-
-  UploadingProgress(this.progress, this.fileName);
-
-  @override
-  List<Object> get props => [progress, fileName];
-}
-
-class PreparingUpload extends ViewState {
-  final FileInfo fileInfo;
-
-  PreparingUpload(this.fileInfo);
-
-  @override
-  List<Object> get props => [fileInfo];
-}
-
 class MySpaceViewState extends ViewState {
   final List<Document> documentList;
 

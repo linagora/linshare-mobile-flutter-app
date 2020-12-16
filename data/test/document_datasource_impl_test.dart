@@ -156,7 +156,7 @@ void shareDocumentTest() {
           .thenAnswer((_) async => [shareDto1]);
 
       final result = await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1]);
-      expect(result, share1);
+      expect(result, [share1]);
     });
 
     test('shareDocument should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {

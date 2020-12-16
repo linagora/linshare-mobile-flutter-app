@@ -56,7 +56,7 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
+  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
     return documentDataSource.share(documentIds, mailingListIds, recipients);
   }
 
