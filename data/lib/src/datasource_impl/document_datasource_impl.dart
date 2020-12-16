@@ -41,12 +41,13 @@ import 'package:data/src/network/model/generic_user_dto.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
+import 'package:data/src/network/model/share/share_dto.dart';
 import 'package:data/src/network/model/share/share_id_dto.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
-import 'package:data/src/network/model/share/share_dto.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -110,7 +111,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) async {
     var externalStorageDirPath;
     if (Platform.isAndroid) {
-      externalStorageDirPath = (await getExternalStorageDirectory()).absolute.path;
+      externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
     } else if (Platform.isIOS) {
       externalStorageDirPath = (await getApplicationDocumentsDirectory()).absolute.path;
     } else {
