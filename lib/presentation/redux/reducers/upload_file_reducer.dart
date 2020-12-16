@@ -34,8 +34,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state
 import 'package:redux/redux.dart';
 
 final uploadFileReducer = combineReducers<UploadFileState>([
-  TypedReducer<UploadFileState, StartUploadLoadingAction>(
-      (UploadFileState state, _) => state.startLoadingState()),
   TypedReducer<UploadFileState, UploadFileAction>(
       (UploadFileState state, UploadFileAction action) => state.sendViewState(viewState: action.viewState)),
   TypedReducer<UploadFileState, CleanUploadStateAction>(

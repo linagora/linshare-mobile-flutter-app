@@ -46,8 +46,7 @@ class AutoCompleteDataSourceImpl implements AutoCompleteDataSource {
   final LinShareHttpClient _linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
 
-  AutoCompleteDataSourceImpl(
-      this._linShareHttpClient, this._remoteExceptionThrower);
+  AutoCompleteDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
 
   @override
   Future<List<AutoCompleteResult>> getAutoComplete(

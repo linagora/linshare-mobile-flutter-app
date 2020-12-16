@@ -31,9 +31,8 @@
 
 import 'dart:async';
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
+import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -45,21 +44,29 @@ import 'package:rxdart/rxdart.dart';
 
 class UploadFileViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
-  final UploadFileInteractor _uploadFileInteractor;
-  final ShareDocumentInteractor _shareDocumentInteractor;
+  final UploadShareFileManager _uploadShareFileManager;
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
   StreamSubscription _autoCompleteResultListSubscription;
 
   UploadFileViewModel(
     Store<AppState> store,
     this._appNavigation,
-    this._uploadFileInteractor,
-    this._shareDocumentInteractor,
+    this._uploadShareFileManager,
     this._getAutoCompleteSharingInteractor,
   ) : super(store) {
-    _autoCompleteResultListSubscription = _autoCompleteResultListObservable.listen((value) {
-      if (_shareTypeArgument == ShareType.quickShare) {
-        value.isEmpty ? _enableUploadAndShareButton.add(false) : _enableUploadAndShareButton.add(true);
+    _autoCompleteResultListSubscription = _autoCompleteResultListObservable.listen((shareMails) {
+      switch (_shareTypeArgument) {
+        case ShareType.quickShare:
+          shareMails.isEmpty
+              ? _enableUploadAndShareButton.add(false)
+              : _enableUploadAndShareButton.add(true);
+          break;
+        case ShareType.uploadAndShare:
+          final shareButtonType = shareMails.isEmpty
+              ? ShareButtonType.justUpload
+              : ShareButtonType.uploadAndShare;
+          _uploadAndShareButtonType.add(shareButtonType);
+          break;
       }
     });
   }
@@ -72,10 +79,13 @@ class UploadFileViewModel extends BaseViewModel {
   Document _documentArgument;
 
   final BehaviorSubject<List<AutoCompleteResult>> _autoCompleteResultListObservable = BehaviorSubject.seeded([]);
-  BehaviorSubject<List<AutoCompleteResult>> get autoCompleteResultListObservable => _autoCompleteResultListObservable;
+  StreamView<List<AutoCompleteResult>> get autoCompleteResultListObservable => _autoCompleteResultListObservable;
 
   final BehaviorSubject<bool> _enableUploadAndShareButton = BehaviorSubject.seeded(true);
-  BehaviorSubject<bool> get enableUploadAndShareButton => _enableUploadAndShareButton;
+  StreamView<bool> get enableUploadAndShareButton => _enableUploadAndShareButton;
+
+  final BehaviorSubject<ShareButtonType> _uploadAndShareButtonType = BehaviorSubject.seeded(ShareButtonType.justUpload);
+  StreamView<ShareButtonType> get uploadAndShareButtonType => _uploadAndShareButtonType;
 
   void backToMySpace() {
     _appNavigation.popBack();
@@ -127,7 +137,7 @@ class UploadFileViewModel extends BaseViewModel {
 
   void _handleUploadAndShare() {
     if (_fileInfoArgument != null) {
-      store.dispatch(uploadFileAction(_fileInfoArgument));
+      store.dispatch(uploadAndShareFileAction(_fileInfoArgument));
     }
   }
 
@@ -135,48 +145,38 @@ class UploadFileViewModel extends BaseViewModel {
       String pattern) async {
     return await _getAutoCompleteSharingInteractor
         .execute(AutoCompletePattern(pattern), AutoCompleteType.sharing)
-        .then((viewState) => viewState.fold(
+        .then(
+          (viewState) => viewState.fold(
             (failure) => <AutoCompleteResult>[],
-            (success) => (success as AutoCompleteViewState).results));
+            (success) => (success as AutoCompleteViewState).results,
+          ),
+        );
   }
 
   ThunkAction<AppState> shareAction() {
     return (Store<AppState> store) async {
-      final genericUserList = _autoCompleteResultListObservable.value
-          .where((element) => element is UserAutoCompleteResult || element is SimpleAutoCompleteResult)
-          .map((data) => GenericUser(data.getSuggestionMail(), firstName: none(), lastName: none()))
-          .toList();
-      final mailingListIdList = _autoCompleteResultListObservable.value
-          .whereType<MailingListAutoCompleteResult>()
-          .map((data) => MailingListId(data.identifier))
-          .toList();
       final documentIdList = [_documentArgument.documentId];
-      await _shareDocumentInteractor
-          .execute(documentIdList, mailingListIdList, genericUserList)
-          .then((viewState) {
-            viewState.fold(
-              (failure) => store.dispatch(ShareAction(Left(failure))),
-              (success) => store.dispatch(ShareAction(Right(success))));
-      });
+      await _uploadShareFileManager.justShare(
+        _autoCompleteResultListObservable.value,
+        documentIdList,
+      );
     };
   }
 
-  ThunkAction<AppState> uploadFileAction(FileInfo fileInfo) {
+  ThunkAction<AppState> uploadAndShareFileAction(FileInfo fileInfo) {
     return (Store<AppState> store) async {
-      await _uploadFileInteractor.execute(fileInfo).forEach((viewState) {
-        viewState.fold(
-          (failure) => store.dispatch(UploadFileAction(Left(failure))),
-          (success) => handleUploadFileSuccess(store, success));
-      });
+      final uploadType = _uploadAndShareButtonType.value;
+      switch (uploadType) {
+        case ShareButtonType.justUpload:
+          await _uploadShareFileManager.justUpload(fileInfo);
+          break;
+        case ShareButtonType.uploadAndShare:
+          await _uploadShareFileManager.uploadThenShare(
+            fileInfo,
+            _autoCompleteResultListObservable.value,
+          );
+      }
     };
-  }
-
-  void handleUploadFileSuccess(Store<AppState> store, Success success) {
-    if (success is PreparingUpload) {
-      store.dispatch(StartUploadLoadingAction());
-    } else {
-      store.dispatch(UploadFileAction(Right(success)));
-    }
   }
 
   @override

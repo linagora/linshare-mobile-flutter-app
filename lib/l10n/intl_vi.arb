@@ -183,5 +183,29 @@
   "@unknown_user": {
     "type": "text",
     "placeholders": {}
+  },
+  "upload_and_share_button": "Upload and Share",
+  "@upload_and_share_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sharing_single_after_uploaded_success": "The file is uploaded and shared with {recipientName}",
+  "@sharing_single_after_uploaded_success": {
+    "type": "text",
+    "placeholders": {
+      "recipientName": {}
+    }
+  },
+  "sharing_multiple_after_uploaded_success": "The file is uploaded and shared with {numberOfRecipients} people",
+  "@sharing_multiple_after_uploaded_success": {
+    "type": "text",
+    "placeholders": {
+      "numberOfRecipients": {}
+    }
+  },
+  "sharing_after_uploaded_failure": "The file will be ready for upload and sharing once connection is available",
+  "@sharing_after_uploaded_failure": {
+    "type": "text",
+    "placeholders": {}
   }
 }

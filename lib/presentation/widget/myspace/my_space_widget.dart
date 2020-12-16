@@ -254,12 +254,34 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   Widget handleUploadWidget(BuildContext context, [Success success]) {
     if (success is UploadingProgress) {
-      return _buildUploadingFile(context, success.fileName, success.progress);
+      return _buildUploadingFile(context, success.fileInfo.fileName, success.progress);
     } else if (success is FilePickerSuccessViewState) {
       return _buildPreparingUploadFile(context, success.fileInfo.fileName);
+    } else if (success is SharingAfterUploadState) {
+      return _buildSharingFileWidget(success);
     } else {
       return SizedBox.shrink();
     }
+  }
+
+  Widget _buildSharingFileWidget(SharingAfterUploadState state) {
+    return SizedBox(
+      height: 58,
+      child: Container(
+        color: AppColor.mySpaceUploadBackground,
+        child: Align(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text(
+              _buildSharingMessage(context, state.recipients),
+              maxLines: 1,
+              style: TextStyle(fontSize: 14, color: Colors.white),
+            ),
+          ),
+          alignment: Alignment.centerLeft,
+        ),
+      ),
+    );
   }
 
   Widget _buildPreparingUploadFile(BuildContext context, String fileName) {
@@ -346,15 +368,15 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   Widget handleUploadToastMessage(BuildContext context) {
     mySpaceViewModel.store.state.uploadFileState.viewState.fold(
-        (failure) => {
-          if (failure is FilePickerFailure || failure is UploadFileFailure) {
-            appToast.showToast(AppLocalizations.of(context).upload_failure_text)
+        (failure) {
+          if (failure is FilePickerFailure || failure is FileUploadFailure) {
+            appToast.showToast(AppLocalizations.of(context).upload_failure_text);
           }
         },
-        (success) => {
-          if (success is UploadFileSuccess) {
-            appToast.showToast(AppLocalizations.of(context).upload_success_text),
-            mySpaceViewModel.cleanUploadViewState()
+        (success) {
+          if (success is FileUploadSuccess) {
+            appToast.showToast(AppLocalizations.of(context).upload_success_text);
+            mySpaceViewModel.cleanUploadViewState();
           }
         });
     return SizedBox.shrink();
@@ -362,19 +384,39 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   Widget handleShareDocumentToastMessage(BuildContext context) {
     mySpaceViewModel.store.state.shareState.viewState.fold(
-            (failure) => {
-          if (failure is ShareDocumentFailure) {
-            appToast.showErrorToast(AppLocalizations.of(context).file_could_not_be_share),
-            mySpaceViewModel.cleanShareViewState()
-          }
-        },
-            (success) => {
-          if (success is ShareDocumentViewState){
-            appToast.showToast(AppLocalizations.of(context).file_is_successfully_shared),
-            mySpaceViewModel.cleanShareViewState()
-          }
-        });
+      (failure) {
+        if (failure is ShareDocumentFailure) {
+          appToast.showErrorToast(
+              AppLocalizations.of(context).file_could_not_be_share);
+          mySpaceViewModel.cleanShareViewState();
+        }
+      },
+      (success) {
+        if (success is ShareDocumentViewState) {
+          appToast.showToast(
+              AppLocalizations.of(context).file_is_successfully_shared);
+          mySpaceViewModel.cleanShareViewState();
+        } else if (success is ShareAfterUploadSuccess) {
+          appToast.showToast(_buildSharingMessage(context, success.recipients));
+          mySpaceViewModel.cleanUploadViewState();
+          mySpaceViewModel.cleanShareViewState();
+        }
+      },
+    );
     return SizedBox.shrink();
+  }
+
+  String _buildSharingMessage(BuildContext context, List<AutoCompleteResult> recipients) {
+    final shareSinglePerson = recipients.length == 1;
+    if (shareSinglePerson) {
+      return AppLocalizations.of(context).sharing_single_after_uploaded_success(
+        recipients.first.getSuggestionDisplayName()
+      );
+    } else {
+      return AppLocalizations.of(context).sharing_multiple_after_uploaded_success(
+        recipients.length
+      );
+    }
   }
 
   List<Widget> contextMenuActionTiles(BuildContext context, Document document) {

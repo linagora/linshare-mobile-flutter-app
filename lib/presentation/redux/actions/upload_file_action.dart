@@ -35,9 +35,6 @@ import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart'
 import 'package:meta/meta.dart';
 
 @immutable
-class StartUploadLoadingAction extends ActionOffline {}
-
-@immutable
 class UploadFileAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 

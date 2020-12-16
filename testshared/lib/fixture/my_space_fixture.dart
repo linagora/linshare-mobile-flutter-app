@@ -185,3 +185,11 @@ final share2 = Share(
     document2,
     'description 2',
     GenericUser('user2@linshare.org'));
+
+final mailListId = MailingListId('3e57d240-47a1-4a7e-b1a7-25e29870af33');
+final genericUser = GenericUser('user1@linshare.org', firstName: none(), lastName: none());
+
+final recipients = [
+  MailingListAutoCompleteResult(mailListId.uuid, '', '', '', '', ''),
+  SimpleAutoCompleteResult(genericUser.mail, '')
+];

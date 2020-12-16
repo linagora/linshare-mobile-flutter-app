@@ -73,7 +73,6 @@ class InitializeViewModel extends BaseViewModel {
 
   ThunkAction<AppState> getCredentialAction() {
     return (Store<AppState> store) async {
-      store.dispatch(StartUploadLoadingAction());
       await _getCredentialInteractor.execute().then((result) => result.fold(
           (left) => store.dispatch(getCredentialFailureAction(left)),
           (right) => store.dispatch(getCredentialSuccessAction((right)))));

@@ -44,3 +44,5 @@ class UploadFileArguments {
 }
 
 enum ShareType { quickShare, uploadAndShare }
+
+enum ShareButtonType { justUpload, uploadAndShare }

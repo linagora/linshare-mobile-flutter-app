@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
+import 'package:rxdart/rxdart.dart';
 
 class UploadFileWidget extends StatefulWidget {
   @override
@@ -62,8 +63,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final UploadFileArguments arguments =
-        ModalRoute.of(context).settings.arguments;
+    final UploadFileArguments arguments = ModalRoute.of(context).settings.arguments;
     uploadFileViewModel.setFileInfoArgument(arguments.fileInfo);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
     uploadFileViewModel.setDocumentArgument(arguments.document);
@@ -137,16 +137,9 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                     uploadFileViewModel.handleOnUploadAndSharePressed(),
                 label: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: Text(
-                    uploadFileViewModel.shareTypeArgument ==
-                            ShareType.uploadAndShare
-                        ? AppLocalizations.of(context).upload_text_button
-                        : AppLocalizations.of(context).share,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        fontStyle: FontStyle.normal),
+                  child: _buildUploadAndShareButton(
+                    uploadFileViewModel.shareTypeArgument,
+                    uploadFileViewModel.uploadAndShareButtonType,
                   ),
                 )),
           );
@@ -154,6 +147,38 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  Widget _buildUploadAndShareButton(
+    ShareType shareType,
+    BehaviorSubject<ShareButtonType> buttonTypeStream,
+  ) {
+    final style = TextStyle(
+      fontSize: 16,
+      color: Colors.white,
+      fontWeight: FontWeight.normal,
+      fontStyle: FontStyle.normal,
+    );
+
+    if (shareType == ShareType.quickShare) {
+      return Text(
+        AppLocalizations.of(context).share,
+        style: style,
+      );
+    } else {
+      return StreamBuilder<ShareButtonType>(
+        stream: buttonTypeStream,
+        builder: (_, snapshot) {
+          final buttonText = snapshot.data == ShareButtonType.justUpload
+              ? AppLocalizations.of(context).upload_text_button
+              : AppLocalizations.of(context).upload_and_share_button;
+          return Text(
+            buttonText,
+            style: style,
+          );
+        },
+      );
+    }
   }
 
   Widget _buildShareWidget(BuildContext buildContext) {

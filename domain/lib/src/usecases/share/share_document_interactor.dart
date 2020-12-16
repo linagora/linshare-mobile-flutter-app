@@ -45,6 +45,10 @@ class ShareDocumentInteractor {
 
   Future<Either<Failure, Success>> execute(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> genericUsers) async {
     try {
+      if (documentIds.isEmpty) throw ShareDocumentEmpty();
+
+      if (mailingListIds.isEmpty && genericUsers.isEmpty) throw ShareDocumentToNobodyException();
+
       final share = await _documentRepository.share(documentIds, mailingListIds, genericUsers);
       return Right<Failure, Success>(ShareDocumentViewState(share));
     } catch (exception) {
