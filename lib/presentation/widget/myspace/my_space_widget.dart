@@ -392,9 +392,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                 width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).download_to_device,
             document)
-        .onActionClick((data) {
-      mySpaceViewModel.downloadFile(data.documentId);
-    }).build();
+        .onActionClick((data) => mySpaceViewModel.downloadFileClick(data.documentId))
+        .build();
   }
 
   Widget exportFileAction(BuildContext context, Document document) {

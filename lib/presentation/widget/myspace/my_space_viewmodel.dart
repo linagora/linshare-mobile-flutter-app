@@ -47,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
@@ -66,7 +67,32 @@ class MySpaceViewModel extends BaseViewModel {
       this._downloadFileIOSInteractor
   ) : super(store);
 
-  void downloadFile(DocumentId documentId) {
+  void downloadFileClick(DocumentId documentId) {
+    store.dispatch(handleDownloadFile(documentId));
+  }
+
+  ThunkAction<AppState> handleDownloadFile(DocumentId documentId) {
+    return (Store<AppState> store) async {
+      final status = await Permission.storage.status;
+      switch (status) {
+        case PermissionStatus.granted: _download(documentId);
+        break;
+        case PermissionStatus.permanentlyDenied: _appNavigation.popBack();
+        break;
+        default: {
+          final requested = await Permission.storage.request();
+          switch (requested) {
+            case PermissionStatus.granted: _download(documentId);
+            break;
+            default: _appNavigation.popBack();
+            break;
+          }
+        }
+      }
+    };
+  }
+
+  void _download(DocumentId documentId) {
     store.dispatch(_downloadFileAction(documentId));
     _appNavigation.popBack();
   }
