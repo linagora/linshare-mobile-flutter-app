@@ -35,6 +35,8 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/file_path_util.dart';
@@ -42,6 +44,7 @@ import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:redux/redux.dart';
 
 class AppModule {
   AppModule() {
@@ -151,6 +154,11 @@ class AppModule {
     getIt.registerFactory(() => LocalFilePicker());
     getIt.registerLazySingleton(() => UploadFileManager());
     getIt.registerFactory(() => FilePathUtil());
+    getIt.registerLazySingleton(() => UploadShareFileManager(
+          getIt.get<Store<AppState>>(),
+          getIt.get<UploadFileInteractor>(),
+          getIt.get<ShareDocumentInteractor>(),
+        ));
   }
 
   void _provideFileUploader() {

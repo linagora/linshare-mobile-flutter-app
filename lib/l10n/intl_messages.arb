@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-12-07T11:09:53.474741",
+  "@@last_modified": "2020-12-23T14:42:41.914073",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -90,6 +90,36 @@
     "type": "text",
     "placeholders": {}
   },
+  "share": "Share",
+  "@share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "title_quick_share": "Quick Share",
+  "@title_quick_share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_recipients": "Add recipients",
+  "@add_recipients": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_people": "Add people",
+  "@add_people": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_is_successfully_shared": "The file is successfully shared",
+  "@file_is_successfully_shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_could_not_be_share": "The file could not be shared",
+  "@file_could_not_be_share": {
+    "type": "text",
+    "placeholders": {}
+  },
   "item_last_modified": "Modified {dateString}",
   "@item_last_modified": {
     "type": "text",
@@ -129,58 +159,52 @@
       "fileName": {}
     }
   },
-  "share" :"Share",
-  "@share": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "title_quick_share" :"Quick Share",
-  "@title_quick_share": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_recipients" :"Add recipients",
-  "@add_recipients": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_people" :"Add people",
-  "@add_people": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "file_is_successfully_shared" :"The file is successfully shared",
-  "@file_is_successfully_shared": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "file_could_not_be_share" :"The file could not be shared",
-  "@file_could_not_be_share": {
-    "type": "text",
-    "placeholders": {}
-  },
   "logout": "Log out",
   "@logout": {
     "type": "text",
     "placeholders": {}
   },
-  "confirm_remove_account_title" : "Are you sure you want to log out of this account ?",
+  "confirm_remove_account_title": "Are you sure you want to log out of this account ?",
   "@confirm_remove_account_title": {
     "type": "text",
     "placeholders": {}
   },
-  "shared_space" :"Shared space",
+  "shared_space": "Shared space",
   "@shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "do_not_have_any_workgroup" :"You don't have any workgroup yet",
+  "do_not_have_any_workgroup": "You don't have any workgroup yet",
   "@do_not_have_any_workgroup": {
     "type": "text",
     "placeholders": {}
   },
-  "unknown_user" :"Unknown user",
+  "unknown_user": "Unknown user",
   "@unknown_user": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_and_share_button": "Upload and Share",
+  "@upload_and_share_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sharing_single_after_uploaded_success": "The file is uploaded and shared with {recipientName}",
+  "@sharing_single_after_uploaded_success": {
+    "type": "text",
+    "placeholders": {
+      "recipientName": {}
+    }
+  },
+  "sharing_multiple_after_uploaded_success": "The file is uploaded and shared with {numberOfRecipients} people",
+  "@sharing_multiple_after_uploaded_success": {
+    "type": "text",
+    "placeholders": {
+      "numberOfRecipients": {}
+    }
+  },
+  "sharing_after_uploaded_failure": "The file will be ready for upload and sharing once connection is available",
+  "@sharing_after_uploaded_failure": {
     "type": "text",
     "placeholders": {}
   }

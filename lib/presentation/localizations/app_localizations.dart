@@ -227,6 +227,36 @@ class AppLocalizations {
     return Intl.message('Unknown user',
         name: 'unknown_user');
   }
+
+  String get upload_and_share_button {
+    return Intl.message(
+      'Upload and Share',
+      name: 'upload_and_share_button',
+    );
+  }
+
+  String sharing_single_after_uploaded_success(String recipientName) {
+    return Intl.message(
+      'The file is uploaded and shared with $recipientName',
+      name: 'sharing_single_after_uploaded_success',
+      args: [recipientName],
+    );
+  }
+
+  String sharing_multiple_after_uploaded_success(int numberOfRecipients) {
+    return Intl.message(
+      'The file is uploaded and shared with $numberOfRecipients people',
+      name: 'sharing_multiple_after_uploaded_success',
+      args: [numberOfRecipients],
+    );
+  }
+
+  String get sharing_after_uploaded_failure {
+    return Intl.message(
+      'The file will be ready for upload and sharing once connection is available',
+      name: 'sharing_after_uploaded_failure',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -32,6 +32,7 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -99,8 +100,7 @@ class WidgetModule {
     getIt.registerFactory(() => UploadFileViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>(),
-      getIt.get<UploadFileInteractor>(),
-      getIt.get<ShareDocumentInteractor>(),
+      getIt.get<UploadShareFileManager>(),
       getIt.get<GetAutoCompleteSharingInteractor>()
     ));
   }

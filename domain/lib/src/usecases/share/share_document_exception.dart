@@ -30,6 +30,28 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-class ShareDocumentNoPermissionException implements Exception {
-  String notSupported = 'You are not authorized to create anonymous share entries.';
+import 'package:equatable/equatable.dart';
+
+abstract class ShareDocumentException extends Equatable implements Exception {
+  final String message;
+
+  ShareDocumentException(this.message);
+
+  @override
+  String toString() => message;
+
+  @override
+  List<Object> get props => [message];
+}
+
+class ShareDocumentNoPermissionException extends ShareDocumentException {
+  ShareDocumentNoPermissionException() : super('You are not authorized to create anonymous share entries.');
+}
+
+class ShareDocumentToNobodyException extends ShareDocumentException {
+  ShareDocumentToNobodyException() : super('Nobody will be shared');
+}
+
+class ShareDocumentEmpty extends ShareDocumentException {
+  ShareDocumentEmpty() : super('There is nothing document to share');
 }
