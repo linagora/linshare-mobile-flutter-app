@@ -50,9 +50,9 @@ void main() {
 
     test('share document interactor should return success with valid data', () async {
       when(documentRepository.share([document1.documentId], [mailingListId1], [genericUser1]))
-          .thenAnswer((_) async => share1);
+          .thenAnswer((_) async => [share1]);
       final result = await shareDocumentInteractor.execute([document1.documentId], [mailingListId1], [genericUser1]);
-      expect(result, Right<Failure, Success>(ShareDocumentViewState(share1)));
+      expect(result, Right<Failure, Success>(ShareDocumentViewState([share1])));
     });
 
     test('share document interactor should return failure with invalid documentId', () async {

@@ -41,7 +41,7 @@ abstract class DocumentDataSource {
 
   Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl);
 
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
+  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
 
   Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
 }

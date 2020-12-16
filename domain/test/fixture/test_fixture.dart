@@ -31,6 +31,7 @@
 //
 
 import 'package:domain/domain.dart';
+import 'package:http_parser/http_parser.dart';
 
 const linShareUrl = 'http://linshare.org';
 const permanentTokenString = 'eyJhbGciOiJSUzUxMiJ9.';
@@ -47,6 +48,21 @@ final password2 = Password('qwedsasca');
 final permanentToken = Token(permanentTokenString, TokenId(tokenUUID));
 
 final fileInfo1 = FileInfo('fileName1', 'filePath1', 1000);
-final fileUploadProgress10 = FileUploadProgress(10);
-final fileUploadProgress30 = FileUploadProgress(30);
-final fileUploadProgress100 = FileUploadProgress(100);
+final fileUploadProgress10 = UploadingProgress(10, fileInfo1);
+final fileUploadProgress30 = UploadingProgress(30, fileInfo1);
+final fileUploadProgress100 = UploadingProgress(100, fileInfo1);
+
+final document = Document(
+  DocumentId('uuid'),
+  '',
+  DateTime.now(),
+  DateTime.now(),
+  DateTime.now(),
+  false,
+  'fileName1',
+  123456,
+  '',
+  true,
+  1,
+  MediaType.parse('text/plain'),
+);

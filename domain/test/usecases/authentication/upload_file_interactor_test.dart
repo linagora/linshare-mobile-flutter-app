@@ -32,7 +32,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/usecases/myspace/upload_file_interactor.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -65,7 +64,7 @@ void main() {
               Stream.fromIterable([
                 Right<Failure, Success>(fileUploadProgress10),
                 Right<Failure, Success>(fileUploadProgress100),
-                Right<Failure, Success>(FileUploadSuccess())
+                Right<Failure, Success>(FileUploadSuccess(document))
               ]),
               uploadTaskId));
 
@@ -74,10 +73,9 @@ void main() {
       expect(
           resultStream,
           emitsInOrder([
-            Right<Failure, Success>(PreparingUpload(fileInfo1)),
-            Right<Failure, Success>(UploadingProgress(fileUploadProgress10.progress, fileInfo1.fileName)),
-            Right<Failure, Success>(UploadingProgress(fileUploadProgress100.progress, fileInfo1.fileName)),
-            Right<Failure, Success>(UploadFileSuccess(fileInfo1))
+            Right<Failure, Success>(fileUploadProgress10),
+            Right<Failure, Success>(fileUploadProgress100),
+            Right<Failure, Success>(FileUploadSuccess(document))
           ]));
     });
 
@@ -93,8 +91,7 @@ void main() {
       expect(
           resultStream,
           emitsInOrder([
-            Right<Failure, Success>(PreparingUpload(fileInfo1)),
-            Left<Failure, Success>(UploadFileFailure(exception))
+            Left<Failure, Success>(FileUploadFailure(fileInfo1, exception))
           ]));
     });
 
@@ -111,8 +108,7 @@ void main() {
       expect(
           resultStream,
           emitsInOrder([
-            Right<Failure, Success>(PreparingUpload(fileInfo1)),
-            Left<Failure, Success>(UploadFileFailure(exception))
+            Left<Failure, Success>(FileUploadFailure(fileInfo1, exception))
           ]));
     });
   });

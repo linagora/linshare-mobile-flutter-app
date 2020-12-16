@@ -38,7 +38,7 @@ import 'package:equatable/equatable.dart';
 
 class MailingListId with EquatableMixin {
   String _uuid;
-    String get uuid => _uuid;
+  String get uuid => _uuid;
 
   MailingListId(String uuid) {
     assert(uuid != null, 'invalid mailingListId');

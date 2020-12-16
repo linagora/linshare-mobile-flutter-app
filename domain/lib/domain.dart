@@ -59,7 +59,7 @@ export 'src/model/linshare_error_code.dart';
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
 export 'src/usecases/authentication/get_credential_interactor.dart';
-export 'src/usecases/myspace/upload_file_interactor.dart';
+export 'src/usecases/upload_file/upload_file_interactor.dart';
 export 'src/usecases/myspace/get_all_document_interactor.dart';
 export 'src/usecases/download_file/download_file_interactor.dart';
 export 'src/usecases/download_file/download_file_ios_interactor.dart';

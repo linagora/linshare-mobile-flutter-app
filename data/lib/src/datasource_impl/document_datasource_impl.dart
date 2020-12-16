@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -69,7 +70,8 @@ class DocumentDataSourceImpl implements DocumentDataSource {
           FileItem(savedDir: fileInfo.filePath, filename: fileInfo.fileName)
         ],
         headers: {
-          Constant.authorization: 'Bearer ${token.token}'
+          Constant.authorization: 'Bearer ${token.token}',
+          Constant.accept: 'application/json',
         },
         data: {
           Constant.fileSizeDataForm: (await file.length()).toString()
@@ -78,13 +80,14 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     final mergedStream = Rx.merge([_uploader.result, _uploader.progress]).map<Either<Failure, Success>>((event) {
       if (event is UploadTaskResponse) {
         if (event.statusCode == 200) {
-          return Right(FileUploadSuccess());
+          final response = DocumentResponse.fromJson(json.decode(event.response));
+          return Right(FileUploadSuccess(response.toDocument()));
         }
-        return Left(FileUploadFailure());
+        return Left(FileUploadFailure(fileInfo, Exception('Response code failed: ${event.response}')));
       } else if (event is UploadTaskProgress) {
-        return Right(FileUploadProgress(event.progress));
+        return Right(UploadingProgress(event.progress, fileInfo));
       } else {
-        return Left(FileUploadFailure());
+        return Left(FileUploadFailure(fileInfo, Exception('Something wrong with response: ${event.toString()}')));
       }
     });
 
@@ -134,14 +137,14 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<Share> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
+  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
     return Future.sync(() async {
       final shareDocumentBodyRequest = ShareDocumentBodyRequest(
           documentIds.map((data) => ShareIdDto(data.uuid)).toList(),
           mailingListIds.map((data) => MailingListIdDto(data.uuid)).toList(),
           recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName)).toList());
       final shareList = await _linShareHttpClient.shareDocument(shareDocumentBodyRequest);
-      return shareList.map((data) => data.toShare()).toList().first;
+      return shareList.map((data) => data.toShare()).toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error,
           handler: (DioError error) => _handleShareException(error));
