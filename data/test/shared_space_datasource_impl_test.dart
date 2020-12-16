@@ -29,51 +29,60 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final ServicePath authentication = ServicePath('/jwt');
+import 'fixture/mock/mock_fixtures.dart';
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+void main() {
+  group('test shared spaces dataSource', () {
+    MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    SharedSpaceDataSourceImpl _sharedSpaceDataSourceImpl;
 
-  static final ServicePath shares = ServicePath('/shares');
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _sharedSpaceDataSourceImpl = SharedSpaceDataSourceImpl(
+        _linShareHttpClient,
+        _remoteExceptionThrower
+      );
+    });
 
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
-}
+    test('getAllSharedSpaces should return success with valid data', () async {
+      when(_linShareHttpClient.getSharedSpaces())
+          .thenAnswer((_) async => [sharedSpaceResponse1, sharedSpaceResponse2]);
 
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
+      final result = await _sharedSpaceDataSourceImpl.getSharedSpaces();
+      expect(result, [sharedSpace1, sharedSpace2]);
+    });
 
-  ServicePath withQueryParameters(List<String> queryParameters) {
-    return ServicePath('${path}?${queryParameters.join("&")}');
-  }
+    test('getAllDocument should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.getSharedSpaces())
+          .thenThrow(error);
 
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
+      await _sharedSpaceDataSourceImpl.getSharedSpaces()
+          .catchError((error) => expect(error, isA<SharedSpacesNotFound>()));
+    });
 
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
+    test('getAllDocument should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 403)
+      );
+      when(_linShareHttpClient.getSharedSpaces())
+          .thenThrow(error);
 
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
-  }
+      await _sharedSpaceDataSourceImpl.getSharedSpaces()
+          .catchError((error) => expect(error, isA<NotAuthorized>()));
+    });
+  });
 }

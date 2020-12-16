@@ -29,51 +29,34 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/datasource/shared_space_datasource.dart';
+import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/remote_exception_thrower.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/sharedspace/shared_space_node_nested.dart';
+import 'package:data/data.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final ServicePath authentication = ServicePath('/jwt');
+class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
+  final LinShareHttpClient _linShareHttpClient;
+  final RemoteExceptionThrower _remoteExceptionThrower;
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+  SharedSpaceDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
 
-  static final ServicePath shares = ServicePath('/shares');
-
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
-}
-
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
-
-  ServicePath withQueryParameters(List<String> queryParameters) {
-    return ServicePath('${path}?${queryParameters.join("&")}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
+  @override
+  Future<List<SharedSpaceNodeNested>> getSharedSpaces() {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getSharedSpaces()).map((sharedSpaceResponse) => sharedSpaceResponse.toSharedSpaceNodeNested()).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw SharedSpacesNotFound();
+        } if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
   }
 }

@@ -29,51 +29,60 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
+import 'package:data/src/network/model/sharedspace/shared_space_role_dto.dart';
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final ServicePath authentication = ServicePath('/jwt');
+part 'shared_space_node_nested_response.g.dart';
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+@JsonSerializable()
+@DatetimeConverter()
+@SharedSpaceIdConverter()
+class SharedSpaceNodeNestedResponse extends Equatable {
+  SharedSpaceNodeNestedResponse(
+    this.sharedSpaceId,
+    this.role,
+    this.creationDate,
+    this.modificationDate,
+    this.name,
+    this.nodeType,
+  );
 
-  static final ServicePath shares = ServicePath('/shares');
+  @JsonKey(name: Attribute.uuid)
+  final SharedSpaceId sharedSpaceId;
 
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
+  final SharedSpaceRoleDto role;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final String name;
+  final LinShareNodeType nodeType;
+
+  factory SharedSpaceNodeNestedResponse.fromJson(Map<String, dynamic> json) => _$SharedSpaceNodeNestedResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$SharedSpaceNodeNestedResponseToJson(this);
+
+  @override
+  List<Object> get props => [
+    sharedSpaceId,
+    role,
+    creationDate,
+    modificationDate,
+    name,
+    nodeType,
+  ];
 }
 
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
-
-  ServicePath withQueryParameters(List<String> queryParameters) {
-    return ServicePath('${path}?${queryParameters.join("&")}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
+extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedResponse {
+  SharedSpaceNodeNested toSharedSpaceNodeNested() {
+    return SharedSpaceNodeNested(
+      sharedSpaceId,
+      role.toSharedSpaceRole(),
+      creationDate,
+      modificationDate,
+      name,
+      nodeType);
   }
 }

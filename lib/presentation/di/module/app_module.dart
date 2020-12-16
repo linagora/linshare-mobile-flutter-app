@@ -64,6 +64,9 @@ class AppModule {
         getIt<FlutterUploader>(),
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => SharedSpaceDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -73,6 +76,7 @@ class AppModule {
       getIt<RemoteExceptionThrower>()
     ));
     getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
+    getIt.registerFactory<SharedSpaceDataSource>(() => getIt<SharedSpaceDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -80,6 +84,7 @@ class AppModule {
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>()));
+    getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
   }
 
   void _provideAuthenticationRepository() {
@@ -87,6 +92,7 @@ class AppModule {
     getIt.registerFactory<TokenRepository>(() => getIt<TokenRepositoryImpl>());
     getIt.registerFactory<CredentialRepository>(() => getIt<CredentialRepositoryImpl>());
     getIt.registerFactory<DocumentRepository>(() => getIt<DocumentRepositoryImpl>());
+    getIt.registerFactory<SharedSpaceRepository>(() => getIt<SharedSpaceRepositoryImpl>());
   }
 
   void _provideInterActor() {
