@@ -32,6 +32,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:data/data.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/dio_client.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
@@ -68,7 +69,7 @@ class LinShareHttpClient {
 
   Future<bool> deletePermanentToken(PermanentToken token) async {
     final deletedToken = await _dioClient.delete(
-      Endpoint.authentication.generateEndpointPathWithParameter(token.tokenId.uuid),
+      Endpoint.authentication.withPathParameter(token.tokenId.uuid).generateEndpointPath(),
       options: Options(headers: {
         'Content-Type': 'application/json'
       })
@@ -102,5 +103,10 @@ class LinShareHttpClient {
     final responseBody = await _dioClient.get(url,
         options: Options(headers: headerParam, responseType: ResponseType.stream));
     return (responseBody as ResponseBody);
+  }
+
+  Future<List<SharedSpaceNodeNestedResponse>> getSharedSpaces() async {
+    final List resultJson = await _dioClient.get(Endpoint.sharedSpaces.withQueryParameters(['withRole=true']).generateEndpointPath());
+    return resultJson.map((data) => SharedSpaceNodeNestedResponse.fromJson(data)).toList();
   }
 }

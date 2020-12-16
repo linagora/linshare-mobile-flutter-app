@@ -29,51 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final ServicePath authentication = ServicePath('/jwt');
+class SharedSpaceRoleIdConverter implements JsonConverter<SharedSpaceRoleId, String> {
+  const SharedSpaceRoleIdConverter();
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+  @override
+  SharedSpaceRoleId fromJson(String json) => SharedSpaceRoleId(json);
 
-  static final ServicePath shares = ServicePath('/shares');
-
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
-}
-
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
-
-  ServicePath withQueryParameters(List<String> queryParameters) {
-    return ServicePath('${path}?${queryParameters.join("&")}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
-  }
+  @override
+  String toJson(SharedSpaceRoleId object) => jsonEncode(object.uuid);
 }
