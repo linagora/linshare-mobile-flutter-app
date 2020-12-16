@@ -28,59 +28,55 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:equatable/equatable.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 
-abstract class RemoteException extends Equatable implements Exception {
-  static final missingRequiredFields = 'Missing required fields';
-  static final serverNotFound = 'Server not found';
-  static final internalServerError = 'Internal server error';
-  static final connectError = 'Connect error';
-  static final notAuthorized = 'Current logged in account does not have the rights';
+final sharedSpace1 = SharedSpaceNodeNested(
+  SharedSpaceId('e352ed55-abef-4630-816f-c025caa3b025'),
+  SharedSpaceRole(
+    SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
+    SharedSpaceRoleName.ADMIN
+  ),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  'Shared Space 1',
+  LinShareNodeType.WORK_GROUP
+);
 
-  final String message;
+final sharedSpace2 = SharedSpaceNodeNested(
+  SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+  SharedSpaceRole(
+    SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
+    SharedSpaceRoleName.CONTRIBUTOR
+  ),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  'Shared Space 2',
+  LinShareNodeType.DRIVE
+);
 
-  RemoteException(this.message);
-}
+final sharedSpaceResponse1 = SharedSpaceNodeNestedResponse(
+  SharedSpaceId('e352ed55-abef-4630-816f-c025caa3b025'),
+  SharedSpaceRoleDto(
+    SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
+    SharedSpaceRoleName.ADMIN
+  ),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  'Shared Space 1',
+  LinShareNodeType.WORK_GROUP
+);
 
-class MissingRequiredFields extends RemoteException {
-  MissingRequiredFields() : super(RemoteException.missingRequiredFields);
-
-  @override
-  List<Object> get props => [];
-}
-
-class ServerNotFound extends RemoteException {
-  ServerNotFound() : super(RemoteException.serverNotFound);
-
-  @override
-  List<Object> get props => [];
-}
-
-class InternalServerError extends RemoteException {
-  InternalServerError() : super(RemoteException.internalServerError);
-
-  @override
-  List<Object> get props => [];
-}
-
-class ConnectError extends RemoteException {
-  ConnectError() : super(RemoteException.connectError);
-
-  @override
-  List<Object> get props => [];
-}
-
-class NotAuthorized extends RemoteException {
-  NotAuthorized() : super(RemoteException.notAuthorized);
-
-  @override
-  List<Object> get props => [];
-}
-
-class UnknownError extends RemoteException {
-  UnknownError(String message) : super(message);
-
-  @override
-  List<Object> get props => [];
-}
+final sharedSpaceResponse2 = SharedSpaceNodeNestedResponse(
+  SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+  SharedSpaceRoleDto(
+    SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
+    SharedSpaceRoleName.CONTRIBUTOR
+  ),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  'Shared Space 2',
+  LinShareNodeType.DRIVE
+);

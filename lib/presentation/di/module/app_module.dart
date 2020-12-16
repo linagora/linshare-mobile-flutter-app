@@ -113,6 +113,7 @@ class AppModule {
       getIt<AuthenticationRepository>(),
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
+    getIt.registerFactory(() => GetAllSharedSpacesInteractor(getIt<SharedSpaceRepository>()));
   }
 
   void _provideSharePreference() {

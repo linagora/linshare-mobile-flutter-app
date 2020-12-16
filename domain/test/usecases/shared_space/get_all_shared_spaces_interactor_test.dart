@@ -28,59 +28,49 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:equatable/equatable.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-abstract class RemoteException extends Equatable implements Exception {
-  static final missingRequiredFields = 'Missing required fields';
-  static final serverNotFound = 'Server not found';
-  static final internalServerError = 'Internal server error';
-  static final connectError = 'Connect error';
-  static final notAuthorized = 'Current logged in account does not have the rights';
+import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
-  final String message;
+void main() {
+  group('get_all_shared_spaces_interactor', () {
+    MockSharedSpaceRepository sharedSpaceRepository;
+    GetAllSharedSpacesInteractor getAllSharedSpacesInteractor;
 
-  RemoteException(this.message);
-}
+    setUp(() {
+      sharedSpaceRepository = MockSharedSpaceRepository();
+      getAllSharedSpacesInteractor = GetAllSharedSpacesInteractor(sharedSpaceRepository);
+    });
 
-class MissingRequiredFields extends RemoteException {
-  MissingRequiredFields() : super(RemoteException.missingRequiredFields);
+    test('get all shared spaces interactor should return success with shared spaces list', () async {
+      when(sharedSpaceRepository.getSharedSpaces()).thenAnswer((_) async => [sharedSpace1, sharedSpace2]);
 
-  @override
-  List<Object> get props => [];
-}
+      final result = await getAllSharedSpacesInteractor.execute();
 
-class ServerNotFound extends RemoteException {
-  ServerNotFound() : super(RemoteException.serverNotFound);
+      final sharedSpacesList = result.map((success) => (success as SharedSpaceViewState).sharedSpacesList)
+          .getOrElse(() => []);
 
-  @override
-  List<Object> get props => [];
-}
+      expect(sharedSpacesList, containsAllInOrder([sharedSpace1, sharedSpace2]));
+    });
 
-class InternalServerError extends RemoteException {
-  InternalServerError() : super(RemoteException.internalServerError);
 
-  @override
-  List<Object> get props => [];
-}
+    test('get all shared spaces interactor should fail when getAllSharedSpaces fail', () async {
+      final exception = Exception();
+      when(sharedSpaceRepository.getSharedSpaces()).thenThrow(exception);
 
-class ConnectError extends RemoteException {
-  ConnectError() : super(RemoteException.connectError);
+      final result = await getAllSharedSpacesInteractor.execute();
 
-  @override
-  List<Object> get props => [];
-}
+      result.fold(
+        (failure) => expect(failure, isA<SharedSpaceFailure>()),
+        (success) => expect(success, isA<SharedSpaceViewState>()));
 
-class NotAuthorized extends RemoteException {
-  NotAuthorized() : super(RemoteException.notAuthorized);
-
-  @override
-  List<Object> get props => [];
-}
-
-class UnknownError extends RemoteException {
-  UnknownError(String message) : super(message);
-
-  @override
-  List<Object> get props => [];
+      expect(result, Left<Failure, Success>(SharedSpaceFailure(exception)));
+    });
+  });
 }

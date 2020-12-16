@@ -28,59 +28,23 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:equatable/equatable.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
-abstract class RemoteException extends Equatable implements Exception {
-  static final missingRequiredFields = 'Missing required fields';
-  static final serverNotFound = 'Server not found';
-  static final internalServerError = 'Internal server error';
-  static final connectError = 'Connect error';
-  static final notAuthorized = 'Current logged in account does not have the rights';
+class GetAllSharedSpacesInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  final String message;
+  GetAllSharedSpacesInteractor(this._sharedSpaceRepository);
 
-  RemoteException(this.message);
-}
-
-class MissingRequiredFields extends RemoteException {
-  MissingRequiredFields() : super(RemoteException.missingRequiredFields);
-
-  @override
-  List<Object> get props => [];
-}
-
-class ServerNotFound extends RemoteException {
-  ServerNotFound() : super(RemoteException.serverNotFound);
-
-  @override
-  List<Object> get props => [];
-}
-
-class InternalServerError extends RemoteException {
-  InternalServerError() : super(RemoteException.internalServerError);
-
-  @override
-  List<Object> get props => [];
-}
-
-class ConnectError extends RemoteException {
-  ConnectError() : super(RemoteException.connectError);
-
-  @override
-  List<Object> get props => [];
-}
-
-class NotAuthorized extends RemoteException {
-  NotAuthorized() : super(RemoteException.notAuthorized);
-
-  @override
-  List<Object> get props => [];
-}
-
-class UnknownError extends RemoteException {
-  UnknownError(String message) : super(message);
-
-  @override
-  List<Object> get props => [];
+  Future<Either<Failure, Success>> execute() async {
+    try {
+      final sharedspaces = await _sharedSpaceRepository.getSharedSpaces();
+      return Right<Failure, Success>(SharedSpaceViewState(sharedspaces));
+    } catch (exception) {
+      return Left<Failure, Success>(SharedSpaceFailure(exception));
+    }
+  }
 }
