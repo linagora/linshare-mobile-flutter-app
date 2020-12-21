@@ -28,12 +28,31 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux/src/store.dart';
+
+@immutable
+class SetCurrentView extends ActionOffline {
+  final String routePath;
+
+  SetCurrentView(this.routePath);
+}
+
+@immutable
+class ClearCurrentView extends ActionOffline {
+  ClearCurrentView();
+}
+
+ThunkAction<AppState> initializeHomeView(AppNavigation appNavigation) {
+  return (Store<AppState> store) async {
+    store.dispatch(SetCurrentView(RoutePaths.mySpace));
+    await appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
+  };
 }

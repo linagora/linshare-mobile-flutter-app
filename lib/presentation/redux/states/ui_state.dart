@@ -29,11 +29,24 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+
+@immutable
+class UIState {
+  final String routePath;
+
+  UIState(this.routePath);
+
+  factory UIState.initial() {
+    return UIState(RoutePaths.initializeRoute);
+  }
+
+  UIState setCurrentView(String routePath) {
+    return UIState(routePath);
+  }
+
+  UIState clearCurrentView() {
+    return UIState.initial();
+  }
 }

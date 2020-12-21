@@ -69,12 +69,23 @@ class SideMenuDrawerWidget extends StatelessWidget {
             key: Key('side_menu_my_space_button'),
             leading: SvgPicture.asset(
               imagePath.icHome,
-              fit: BoxFit.none
+              fit: BoxFit.none,
             ),
             title: Text(AppLocalizations.of(context).my_space, style: TextStyle(
               fontSize: 16,
               color: AppColor.documentNameItemTextColor)),
             onTap: () => sideMenuDrawerViewModel.goToMySpace(),
+          ),
+          ListTile(
+            key: Key('side_menu_shared_space_button'),
+            leading: SvgPicture.asset(
+              imagePath.icSharedSpace,
+              width: 28,
+              fit: BoxFit.none),
+            title: Text(AppLocalizations.of(context).shared_space, style: TextStyle(
+              fontSize: 16,
+              color: AppColor.documentNameItemTextColor)),
+            onTap: () => sideMenuDrawerViewModel.goToSharedSpace(),
           ),
           Divider(),
           ListTile(
@@ -90,6 +101,7 @@ class SideMenuDrawerWidget extends StatelessWidget {
               .onConfirmAction(AppLocalizations.of(context).logout, () => sideMenuDrawerViewModel.logout())
               .show(context),
           ),
+          Divider()
         ],
       ),
     );

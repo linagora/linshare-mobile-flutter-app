@@ -30,12 +30,16 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 
 import 'home_viewmodel.dart';
@@ -62,9 +66,13 @@ class _HomeWidgetState extends State<HomeWidget> {
       key: _scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-            AppLocalizations.of(context).my_space_title,
-            style: TextStyle(fontSize: 24, color: Colors.white)),
+        title: StoreConnector<AppState, String>(
+          converter: (store) => store.state.uiState.routePath,
+          distinct: true,
+          builder: (context, routePath) => Text(
+            getAppBarTitle(routePath),
+            style: TextStyle(fontSize: 24, color: Colors.white))
+        ),
         centerTitle: true,
         backgroundColor: AppColor.primaryColor,
         leading: IconButton(
@@ -72,7 +80,33 @@ class _HomeWidgetState extends State<HomeWidget> {
             onPressed: () => _scaffoldKey.currentState.openDrawer()),
       ),
       drawer: SideMenuDrawerWidget(),
-      body: getIt<MySpaceWidget>(),
+      body: StoreConnector<AppState, String>(
+        converter: (store) => store.state.uiState.routePath,
+        distinct: true,
+        builder: (context, routePath) => getHomeWidget(routePath)
+      ),
     );
+  }
+
+  String getAppBarTitle(String routePath) {
+    switch (routePath) {
+      case RoutePaths.mySpace:
+        return AppLocalizations.of(context).my_space_title;
+      case RoutePaths.sharedSpace:
+        return AppLocalizations.of(context).shared_space;
+      default:
+        return AppLocalizations.of(context).my_space_title;
+    }
+  }
+
+  Widget getHomeWidget(String routePath) {
+    switch (routePath) {
+      case RoutePaths.mySpace:
+        return getIt<MySpaceWidget>();
+      case RoutePaths.sharedSpace:
+        return getIt<SharedSpaceWidget>();
+      default:
+        return getIt<MySpaceWidget>();
+    }
   }
 }
