@@ -29,47 +29,38 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
-import 'package:meta/meta.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:redux/src/store.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
-class AppState {
-  final UIState uiState;
-  final AuthenticationState authenticationState;
-  final UploadFileState uploadFileState;
-  final MySpaceState mySpaceState;
-  final ShareState shareState;
-  final SharedSpaceState sharedSpaceState;
+class SharedSpaceViewModel extends BaseViewModel {
+  final GetAllSharedSpacesInteractor _getAllSharedSpacesInteractor;
 
-  AppState(
-      {@required this.uiState,
-      @required this.authenticationState,
-      @required this.uploadFileState,
-      @required this.mySpaceState,
-      @required this.shareState,
-      @required this.sharedSpaceState});
+  SharedSpaceViewModel(
+    Store<AppState> store,
+    this._getAllSharedSpacesInteractor
+  ) : super(store);
 
-  factory AppState.initial() {
-    return AppState(
-        uiState: UIState.initial(),
-        authenticationState: AuthenticationState.initial(),
-        uploadFileState: UploadFileState.initial(),
-        mySpaceState: MySpaceState.initial(),
-        shareState: ShareState.initial(),
-        sharedSpaceState: SharedSpaceState.initial());
+  void getAllSharedSpaces() {
+    store.dispatch(_getAllSharedSpacesAction());
+  }
+
+  ThunkAction<AppState> _getAllSharedSpacesAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartSharedSpaceLoadingAction());
+      await _getAllSharedSpacesInteractor.execute().then((result) => result.fold(
+        (failure) => store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure))),
+        (success) => store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)))));
+    };
   }
 
   @override
-  int get hashCode => uploadFileState.hashCode ^ authenticationState.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppState &&
-          uploadFileState == other.uploadFileState &&
-          authenticationState == other.authenticationState;
+  void onDisposed() {
+    store.dispatch(CleanShareStateAction());
+  }
 }

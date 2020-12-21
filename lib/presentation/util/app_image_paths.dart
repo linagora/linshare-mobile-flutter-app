@@ -56,6 +56,7 @@ class AppImagePaths {
   String get icExitToApp => _getImagePath('ic_exit_to_app.svg');
   String get icHome => _getImagePath('ic_home.svg');
   String get icSharedSpace => _getImagePath('ic_shared_space.svg');
+  String get icSharedSpaceNoWorkGroup => _getImagePath('ic_shared_space_no_workgroup.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

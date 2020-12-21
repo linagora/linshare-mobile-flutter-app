@@ -173,5 +173,10 @@
   "@shared_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "do_not_have_any_workgroup" :"Bạn chưa có nhóm làm việc nào",
+  "@do_not_have_any_workgroup": {
+    "type": "text",
+    "placeholders": {}
   }
 }

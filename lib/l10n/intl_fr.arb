@@ -173,5 +173,10 @@
   "@shared_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "do_not_have_any_workgroup" :"Vous n'avez pas encore de Groupe De Travail",
+  "@do_not_have_any_workgroup": {
+    "type": "text",
+    "placeholders": {}
   }
 }
