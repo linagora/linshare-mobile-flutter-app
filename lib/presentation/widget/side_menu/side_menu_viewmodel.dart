@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -48,7 +49,13 @@ class SideMenuDrawerViewModel extends BaseViewModel {
   ) : super(store);
 
   void goToMySpace() {
-    // push via nested navigation here
+    store.dispatch(SetCurrentView(RoutePaths.mySpace));
+    _appNavigation.popBack();
+  }
+
+  void goToSharedSpace() {
+    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
+    _appNavigation.popBack();
   }
 
   void logout() {

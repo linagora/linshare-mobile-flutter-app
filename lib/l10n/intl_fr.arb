@@ -168,5 +168,10 @@
   "@confirm_remove_account_title": {
     "type": "text",
     "placeholders": {}
+  },
+  "shared_space" :"Espace Commun",
+  "@shared_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

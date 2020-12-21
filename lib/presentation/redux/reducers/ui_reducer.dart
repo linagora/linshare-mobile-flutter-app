@@ -28,12 +28,15 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-}
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:redux/redux.dart';
+
+final uiReducer = combineReducers<UIState>([
+  TypedReducer<UIState, SetCurrentView>(
+          (UIState state, SetCurrentView action) => state.setCurrentView(action.routePath)),
+  TypedReducer<UIState, ClearCurrentView>(
+          (UIState state, _) => state.clearCurrentView()),
+]);

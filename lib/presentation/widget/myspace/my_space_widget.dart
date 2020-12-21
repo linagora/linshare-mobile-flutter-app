@@ -133,15 +133,15 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
               RefreshIndicator(
                 onRefresh: () async => mySpaceViewModel.getAllDocument(),
                 child: failure is MySpaceFailure ?
-              BackgroundWidgetBuilder()
-                .key(Key('my_space_error_background'))
-                .image(SvgPicture.asset(
-                  imagePath.icUnexpectedError,
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.fill))
-                .text(AppLocalizations.of(context).common_error_occured_message)
-                .build() : _buildMySpaceListView(context, mySpaceState.documentList)),
+                  BackgroundWidgetBuilder()
+                    .key(Key('my_space_error_background'))
+                    .image(SvgPicture.asset(
+                      imagePath.icUnexpectedError,
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.fill))
+                    .text(AppLocalizations.of(context).common_error_occured_message)
+                    .build() : _buildMySpaceListView(context, mySpaceState.documentList)),
             (success) => success is LoadingState ?
               _buildMySpaceListView(context, mySpaceState.documentList) :
               RefreshIndicator(

@@ -212,6 +212,11 @@ class AppLocalizations {
     return Intl.message('Are you sure you want to log out of this account ?',
         name: 'confirm_remove_account_title');
   }
+
+  String get shared_space {
+    return Intl.message('Shared space',
+        name: 'shared_space');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -33,6 +33,7 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -83,12 +84,13 @@ class InitializeViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _retryInterceptors.setPermanentToken(success.token);
-      await _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
+      store.dispatch(initializeHomeView(_appNavigation));
     };
   }
 
   ThunkAction<AppState> getCredentialFailureAction(CredentialFailure failure) {
     return (Store<AppState> store) async {
+      store.dispatch(SetCurrentView(RoutePaths.loginRoute));
       await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
     };
   }
