@@ -1,0 +1,41 @@
+<!-- LinShare is an open source filesharing software, part of the LinPKI software
+suite, developed by Linagora.
+
+Copyright (C) 2020 LINAGORA
+
+This program is free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later version,
+provided you comply with the Additional Terms applicable for LinShare software by
+Linagora pursuant to Section 7 of the GNU Affero General Public License,
+subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
+display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
+the words “You are using the Free and Open Source version of LinShare™, powered by
+Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+offer!”. You must also retain the latter notice in all asynchronous messages such as
+e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
+http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
+infringing Linagora intellectual property rights over its trademarks and commercial
+brands. Other Additional Terms apply, see
+<http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
+more details.
+You should have received a copy of the GNU Affero General Public License and its
+applicable Additional Terms for LinShare along with this program. If not, see
+<http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+the Additional Terms applicable to LinShare software. -->
+
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M97.5 120H22.5C10.0781 120 0 109.922 0 97.5V22.5C0 10.0781 10.0781 0 22.5 0H97.5C109.922 0 120 10.0781 120 22.5V97.5C120 109.922 109.922 120 97.5 120Z" fill="#F2F2F2"/>
+<path d="M83.1328 42.4922H72.5156V37.5C72.5156 34.7344 70.2657 32.5078 67.5235 32.5078H52.5235C49.7578 32.5078 47.5313 34.7578 47.5313 37.5V42.4922H36.9141C33.1172 42.4922 30.0469 45.586 30.0469 49.3594V78.1172C30.0469 81.9141 33.1407 84.9844 36.9141 84.9844H83.1563C86.9531 84.9844 90.0235 81.8906 90.0235 78.1172V49.3828C90 45.586 86.9297 42.4922 83.1328 42.4922ZM67.5 42.4922H52.5V37.5H67.5V42.4922Z" fill="#CECECE"/>
+<path d="M45 65.1562C47.0711 65.1562 48.75 63.4773 48.75 61.4062C48.75 59.3352 47.0711 57.6562 45 57.6562C42.9289 57.6562 41.25 59.3352 41.25 61.4062C41.25 63.4773 42.9289 65.1562 45 65.1562Z" fill="#EAEAEA"/>
+<path d="M50.0156 67.7813C48.1172 69.2109 46.875 71.4844 46.875 74.0625V74.5312H38.9063C38.1328 74.5312 37.5 73.8984 37.5 73.125V72.1875C37.5 69.3281 39.7969 67.0312 42.6563 67.0312H47.3438C48.3281 67.0312 49.2422 67.3125 50.0156 67.7813Z" fill="#EAEAEA"/>
+<path d="M75 65.1562C77.0711 65.1562 78.75 63.4773 78.75 61.4062C78.75 59.3352 77.0711 57.6562 75 57.6562C72.9289 57.6562 71.25 59.3352 71.25 61.4062C71.25 63.4773 72.9289 65.1562 75 65.1562Z" fill="#EAEAEA"/>
+<path d="M82.5 72.1875V73.125C82.5 73.8984 81.8672 74.5312 81.0937 74.5312H73.125V74.0625C73.125 71.4844 71.8828 69.2109 69.9844 67.7813C70.7578 67.3125 71.6719 67.0312 72.6562 67.0312H77.3437C80.2031 67.0312 82.5 69.3281 82.5 72.1875Z" fill="#EAEAEA"/>
+<path d="M60 66.0938C63.1066 66.0938 65.625 63.5754 65.625 60.4688C65.625 57.3621 63.1066 54.8438 60 54.8438C56.8934 54.8438 54.375 57.3621 54.375 60.4688C54.375 63.5754 56.8934 66.0938 60 66.0938Z" fill="#EAEAEA"/>
+<path d="M65.1562 68.9062H54.8438C52.0078 68.9062 49.6875 71.2266 49.6875 74.0625V76.875C49.6875 77.6484 50.3203 78.2812 51.0938 78.2812H68.9062C69.6797 78.2812 70.3125 77.6484 70.3125 76.875V74.0625C70.3125 71.2266 67.9922 68.9062 65.1562 68.9062Z" fill="#EAEAEA"/>
+</svg>

@@ -28,48 +28,31 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
-import 'package:meta/meta.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-class AppState {
-  final UIState uiState;
-  final AuthenticationState authenticationState;
-  final UploadFileState uploadFileState;
-  final MySpaceState mySpaceState;
-  final ShareState shareState;
-  final SharedSpaceState sharedSpaceState;
+@immutable
+class StartSharedSpaceLoadingAction extends ActionOnline {}
 
-  AppState(
-      {@required this.uiState,
-      @required this.authenticationState,
-      @required this.uploadFileState,
-      @required this.mySpaceState,
-      @required this.shareState,
-      @required this.sharedSpaceState});
+@immutable
+class SharedSpaceAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
 
-  factory AppState.initial() {
-    return AppState(
-        uiState: UIState.initial(),
-        authenticationState: AuthenticationState.initial(),
-        uploadFileState: UploadFileState.initial(),
-        mySpaceState: MySpaceState.initial(),
-        shareState: ShareState.initial(),
-        sharedSpaceState: SharedSpaceState.initial());
-  }
+  SharedSpaceAction(this.viewState);
+}
 
-  @override
-  int get hashCode => uploadFileState.hashCode ^ authenticationState.hashCode;
+@immutable
+class SharedSpaceGetAllSharedSpacesAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppState &&
-          uploadFileState == other.uploadFileState &&
-          authenticationState == other.authenticationState;
+  SharedSpaceGetAllSharedSpacesAction(this.viewState);
+}
+
+@immutable
+class CleanSharedSpaceStateAction extends ActionOffline {
+  CleanSharedSpaceStateAction();
 }

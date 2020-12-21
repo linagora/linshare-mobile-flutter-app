@@ -217,6 +217,11 @@ class AppLocalizations {
     return Intl.message('Shared space',
         name: 'shared_space');
   }
+
+  String get do_not_have_any_workgroup {
+    return Intl.message('You don\'t have any workgroup yet',
+        name: 'do_not_have_any_workgroup');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
