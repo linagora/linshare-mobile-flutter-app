@@ -48,7 +48,7 @@ class AppModule {
     _provideDataSourceImpl();
     _provideDataSource();
     _provideRepositoryImpl();
-    _provideAuthenticationRepository();
+    _provideRepository();
     _provideInterActor();
     _provideSharePreference();
     _provideAppNavigation();
@@ -67,6 +67,9 @@ class AppModule {
     getIt.registerFactory(() => SharedSpaceDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => AutoCompleteDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -77,6 +80,7 @@ class AppModule {
     ));
     getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDataSource>(() => getIt<SharedSpaceDataSourceImpl>());
+    getIt.registerFactory<AutoCompleteDataSource>(() => getIt<AutoCompleteDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -85,13 +89,15 @@ class AppModule {
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>()));
     getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
+    getIt.registerFactory(() => AutoCompleteRepositoryImpl(getIt<AutoCompleteDataSource>()));
   }
 
-  void _provideAuthenticationRepository() {
+  void _provideRepository() {
     getIt.registerFactory<AuthenticationRepository>(() => getIt<AuthenticationRepositoryImpl>());
     getIt.registerFactory<TokenRepository>(() => getIt<TokenRepositoryImpl>());
     getIt.registerFactory<CredentialRepository>(() => getIt<CredentialRepositoryImpl>());
     getIt.registerFactory<DocumentRepository>(() => getIt<DocumentRepositoryImpl>());
+    getIt.registerFactory<AutoCompleteRepository>(() => getIt<AutoCompleteRepositoryImpl>());
     getIt.registerFactory<SharedSpaceRepository>(() => getIt<SharedSpaceRepositoryImpl>());
   }
 
@@ -120,6 +126,7 @@ class AppModule {
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetAllSharedSpacesInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => GetAutoCompleteSharingInteractor(getIt<AutoCompleteRepository>()));
   }
 
   void _provideSharePreference() {
