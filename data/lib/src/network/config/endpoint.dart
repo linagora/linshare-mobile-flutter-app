@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:domain/domain.dart';
 
 class Endpoint {
@@ -42,6 +43,8 @@ class Endpoint {
   static final ServicePath shares = ServicePath('/shares');
 
   static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
+
+  static final ServicePath autocomplete = ServicePath('/autocomplete');
 }
 
 extension ServicePathExtension on ServicePath {
@@ -49,8 +52,9 @@ extension ServicePathExtension on ServicePath {
     return '${Endpoint.rootPath}${path}';
   }
 
-  ServicePath withQueryParameters(List<String> queryParameters) {
-    return ServicePath('${path}?${queryParameters.join("&")}');
+  ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
+    return ServicePath('${path}?${queryParameters
+        .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
   }
 
   ServicePath withPathParameter(String pathParameter) {

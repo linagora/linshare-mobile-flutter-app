@@ -28,27 +28,63 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:dio/dio.dart';
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
 
-class RemoteExceptionThrower {
-  void throwRemoteException(dynamic exception, {Function(DioError) handler}) {
-    if (exception is DioError) {
-      switch (exception.type) {
-        case DioErrorType.DEFAULT:
-          throw ServerNotFound();
-        case DioErrorType.CONNECT_TIMEOUT:
-          throw ConnectError();
-        default:
-          handler != null ? handler(exception) : throw UnknownError(exception.message);
-          break;
-      }
-    } else {
-      throw UnknownError(exception.toString());
-    }
+class UserAutoCompleteResultDto extends AutoCompleteResult {
+  final String firstName;
+  final String lastName;
+  final String domain;
+  final String mail;
+
+  UserAutoCompleteResultDto(String identifier,
+      String display,
+      this.firstName,
+      this.lastName,
+      this.domain,
+      this.mail
+  ) : super(identifier, display);
+
+  factory UserAutoCompleteResultDto.fromJson(Map<String, dynamic> json) {
+    return UserAutoCompleteResultDto(
+        json['identifier'] as String,
+        json['display'] as String,
+        json['firstName'] as String,
+        json['lastName'] as String,
+        json['domain'] as String,
+        json['mail'] as String);
   }
 
-  LinShareErrorCode getErrorCodeFromErrorResponse(Map<String, dynamic> responseMap) =>
-      LinShareErrorCode(responseMap['errCode'] as int);
+  Map<String, dynamic> toJson() => {
+    jsonEncode('identifier'): jsonEncode(identifier),
+    jsonEncode('display'): jsonEncode(display),
+    jsonEncode('firstName'): jsonEncode(firstName),
+    jsonEncode('lastName'): jsonEncode(lastName),
+    jsonEncode('domain'): jsonEncode(domain),
+    jsonEncode('mail'): jsonEncode(mail)
+  };
+
+  @override
+  List<Object> get props => [
+    identifier,
+    display,
+    firstName,
+    lastName,
+    domain,
+    mail
+  ];
+}
+
+extension UserAutoCompleteResultDtoExtension on UserAutoCompleteResultDto {
+  UserAutoCompleteResult toUserAutoCompleteResult() =>
+      UserAutoCompleteResult(
+          identifier,
+          display,
+          firstName,
+          lastName,
+          domain,
+          mail);
 }

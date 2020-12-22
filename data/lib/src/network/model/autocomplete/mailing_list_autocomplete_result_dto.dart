@@ -28,27 +28,64 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:dio/dio.dart';
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
 
-class RemoteExceptionThrower {
-  void throwRemoteException(dynamic exception, {Function(DioError) handler}) {
-    if (exception is DioError) {
-      switch (exception.type) {
-        case DioErrorType.DEFAULT:
-          throw ServerNotFound();
-        case DioErrorType.CONNECT_TIMEOUT:
-          throw ConnectError();
-        default:
-          handler != null ? handler(exception) : throw UnknownError(exception.message);
-          break;
-      }
-    } else {
-      throw UnknownError(exception.toString());
-    }
+class MailingListAutoCompleteResultDto extends AutoCompleteResult {
+  final String ownerLastName;
+  final String ownerFirstName;
+  final String ownerMail;
+  final String listName;
+
+  MailingListAutoCompleteResultDto(
+      String identifier,
+      String display,
+      this.ownerLastName,
+      this.ownerFirstName,
+      this.ownerMail,
+      this.listName
+  ) : super(identifier, display);
+
+  factory MailingListAutoCompleteResultDto.fromJson(Map<String, dynamic> json) {
+    return MailingListAutoCompleteResultDto(
+        json['identifier'] as String,
+        json['display'] as String,
+        json['ownerLastName'] as String,
+        json['ownerFirstName'] as String,
+        json['ownerMail'] as String,
+        json['listName'] as String);
   }
 
-  LinShareErrorCode getErrorCodeFromErrorResponse(Map<String, dynamic> responseMap) =>
-      LinShareErrorCode(responseMap['errCode'] as int);
+  Map<String, dynamic> toJson() => {
+    jsonEncode('identifier'): jsonEncode(identifier),
+    jsonEncode('display'): jsonEncode(display),
+    jsonEncode('ownerLastName'): jsonEncode(ownerLastName),
+    jsonEncode('ownerFirstName'): jsonEncode(ownerFirstName),
+    jsonEncode('ownerMail'): jsonEncode(ownerMail),
+    jsonEncode('listName'): jsonEncode(listName)
+  };
+
+  @override
+  List<Object> get props => [
+    identifier,
+    display,
+    ownerLastName,
+    ownerFirstName,
+    ownerMail,
+    listName
+  ];
+}
+
+extension MailingListAutoCompleteResultDtoExtension on MailingListAutoCompleteResultDto {
+  MailingListAutoCompleteResult toMailingListAutoCompleteResult() =>
+      MailingListAutoCompleteResult(
+          identifier,
+          display,
+          ownerLastName,
+          ownerFirstName,
+          ownerMail,
+          listName);
 }
