@@ -28,27 +28,10 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
-class RemoteExceptionThrower {
-  void throwRemoteException(dynamic exception, {Function(DioError) handler}) {
-    if (exception is DioError) {
-      switch (exception.type) {
-        case DioErrorType.DEFAULT:
-          throw ServerNotFound();
-        case DioErrorType.CONNECT_TIMEOUT:
-          throw ConnectError();
-        default:
-          handler != null ? handler(exception) : throw UnknownError(exception.message);
-          break;
-      }
-    } else {
-      throw UnknownError(exception.toString());
-    }
-  }
-
-  LinShareErrorCode getErrorCodeFromErrorResponse(Map<String, dynamic> responseMap) =>
-      LinShareErrorCode(responseMap['errCode'] as int);
+abstract class AutoCompleteDataSource {
+  Future<List<AutoCompleteResult>> getAutoComplete(AutoCompletePattern autoCompletePattern, AutoCompleteType autoCompleteType);
 }

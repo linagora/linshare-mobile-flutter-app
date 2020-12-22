@@ -35,6 +35,10 @@ import 'dart:io';
 import 'package:data/data.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/dio_client.dart';
+import 'package:data/src/network/model/autocomplete/mailing_list_autocomplete_result_dto.dart';
+import 'package:data/src/network/model/autocomplete/simple_autocomplete_result_dto.dart';
+import 'package:data/src/network/model/autocomplete/user_autocomplete_result_dto.dart';
+import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:data/src/network/model/response/document_response.dart';
@@ -106,7 +110,29 @@ class LinShareHttpClient {
   }
 
   Future<List<SharedSpaceNodeNestedResponse>> getSharedSpaces() async {
-    final List resultJson = await _dioClient.get(Endpoint.sharedSpaces.withQueryParameters(['withRole=true']).generateEndpointPath());
+    final List resultJson = await _dioClient.get(Endpoint.sharedSpaces
+        .withQueryParameters([BooleanQueryParameter('withRole', true)])
+        .generateEndpointPath());
     return resultJson.map((data) => SharedSpaceNodeNestedResponse.fromJson(data)).toList();
+  }
+
+  Future<List<AutoCompleteResult>> getSharingAutoComplete(
+      AutoCompletePattern autoCompletePattern) async {
+    final List resultJson = await _dioClient.get(Endpoint.autocomplete
+        .withPathParameter(autoCompletePattern.value)
+        .withQueryParameters([StringQueryParameter('type', 'SHARING')])
+        .generateEndpointPath());
+    return resultJson.map((data) => _getDynamicAutoCompleteResult(data)).toList();
+  }
+
+  AutoCompleteResult _getDynamicAutoCompleteResult(Map<String, dynamic> map) {
+    final type = map['type'] as String;
+    if (type == AutoCompleteResultType.simple.value) {
+      return SimpleAutoCompleteResultDto.fromJson(map);
+    } else if (type == AutoCompleteResultType.user.value) {
+      return UserAutoCompleteResultDto.fromJson(map);
+    } else {
+      return MailingListAutoCompleteResultDto.fromJson(map);
+    }
   }
 }
