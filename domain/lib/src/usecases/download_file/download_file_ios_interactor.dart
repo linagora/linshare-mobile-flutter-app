@@ -41,6 +41,7 @@ import 'package:domain/src/repository/authentication/token_repository.dart';
 import 'package:domain/src/repository/document/document_repository.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
+import 'dart:developer' as developer;
 
 class DownloadFileIOSInteractor {
   final DocumentRepository _documentRepository;
@@ -58,6 +59,7 @@ class DownloadFileIOSInteractor {
       });
       return Right<Failure, Success>(DownloadFileIOSViewState(filePath));
     } catch (exception) {
+      developer.log('download file ios', name: 'download_file_ios_interactor', error: exception);
       return Left<Failure, Success>(DownloadFileIOSFailure(exception));
     }
   }

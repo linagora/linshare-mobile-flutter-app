@@ -35,6 +35,7 @@ import 'dart:core';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/repository/document/document_repository.dart';
+import 'dart:developer' as developer;
 
 class UploadFileInteractor {
   final DocumentRepository documentRepository;
@@ -66,6 +67,7 @@ class UploadFileInteractor {
         yield state;
       }
     } catch (exception) {
+      developer.log('upload file interactor', name: 'upload_file_interactor', error: exception);
       yield Left<Failure, Success>(UploadFileFailure(exception));
     }
   }

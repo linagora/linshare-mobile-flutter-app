@@ -32,6 +32,7 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:io';
+import 'dart:developer' as developer;
 
 import 'package:device_info/device_info.dart';
 
@@ -51,7 +52,7 @@ class DeviceManager {
         deviceUUID = info.androidId;
       }
     } catch (exception) {
-      print(exception.toString());
+      developer.log('getDeviceUUID', name: 'device_manager', error: exception);
     }
     return deviceUUID;
   }

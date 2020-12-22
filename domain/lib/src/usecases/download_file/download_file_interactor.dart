@@ -32,6 +32,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/repository/document/document_repository.dart';
+import 'dart:developer' as developer;
 
 class DownloadFileInteractor {
   final DocumentRepository _documentRepository;
@@ -52,6 +53,7 @@ class DownloadFileInteractor {
 
       return Right<Failure, Success>(DownloadFileViewState(taskId));
     } catch (exception) {
+      developer.log('download file', name: 'download_file_interactor', error: exception);
       return Left<Failure, Success>(DownloadFileFailure(exception));
     }
   }

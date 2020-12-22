@@ -31,6 +31,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'dart:developer' as developer;
 
 import 'logout_view_state.dart';
 
@@ -58,6 +59,7 @@ class DeletePermanentTokenInteractor {
         });
       return Right(LogoutViewState());
     } catch (exception) {
+      developer.log('delete permanent token', name: 'delete_permanent_token_interactor', error: exception);
       return Left(LogoutFailure(exception));
     }
   }

@@ -32,6 +32,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'dart:core';
+import 'dart:developer' as developer;
 
 class CreatePermanentTokenInteractor {
   final AuthenticationRepository authenticationRepository;
@@ -47,6 +48,7 @@ class CreatePermanentTokenInteractor {
       await credentialRepository.saveBaseUrl(baseUrl);
       return Right(AuthenticationViewState(token));
     } catch (e) {
+      developer.log('create permanent token', name: 'create_permanent_token_interactor', error: e);
       return Left(AuthenticationFailure(e));
     }
   }

@@ -32,6 +32,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'dart:core';
+import 'dart:developer' as developer;
 
 import '../../extension/uri_extension.dart';
 
@@ -51,6 +52,7 @@ class GetCredentialInteractor {
         return Left(CredentialFailure(BadCredentials()));
       }
     } catch (exception) {
+      developer.log('get credential', name: 'get_credential_interactor', error: exception);
       return Left(CredentialFailure(BadCredentials()));
     }
   }
