@@ -35,7 +35,7 @@ import 'package:domain/domain.dart';
 class Endpoint {
   static final String rootPath = '/linshare/webservice/rest/user/v2';
   static final String download = '/download';
-  static final ServicePath authentication = ServicePath('/jwt');
+  static final ServicePath authentication = ServicePath(r'/jwt/$tokenId');
 
   static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
   static final ServicePath documents = ServicePath('/documents');
@@ -44,7 +44,7 @@ class Endpoint {
 
   static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
 
-  static final ServicePath autocomplete = ServicePath('/autocomplete');
+  static final ServicePath autocomplete = ServicePath(r'/autocomplete/$query');
 }
 
 extension ServicePathExtension on ServicePath {
@@ -57,8 +57,31 @@ extension ServicePathExtension on ServicePath {
         .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
   }
 
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
+  /// Build path with parameters.
+  /// Ex:
+  /// 'shared_spaces/$sharedSpaceId/$sharedSpaceId2/blah..'
+  ///
+  /// service.withPathParameters([
+  ///   PathParameter('sharedSpaceId', sharedSpaceId),
+  ///   PathParameter('sharedSpaceId2', sharedSpaceId2),
+  /// ])
+  ///
+  ServicePath withPathParameters(List<PathParameter> parameters) {
+    final filledParametersPath = path.replaceAllMapped(
+      RegExp(r'\$[A-Za-z0-9_]{1,}'),
+      (match) {
+        final matchGroup = match[0];
+        final parameterKey = matchGroup.substring(1);
+        return parameters
+            .firstWhere(
+              (parameter) => parameter.parameterKey == parameterKey,
+              orElse: () => null,
+            )
+            ?.parameterValue;
+      },
+    );
+
+    return ServicePath(filledParametersPath);
   }
 
   String generateAuthenticationUrl(Uri baseUrl) {

@@ -73,8 +73,10 @@ class LinShareHttpClient {
 
   Future<bool> deletePermanentToken(PermanentToken token) async {
     final deletedToken = await _dioClient.delete(
-      Endpoint.authentication.withPathParameter(token.tokenId.uuid).generateEndpointPath(),
-      options: Options(headers: {
+        Endpoint.authentication
+            .withPathParameters([PathParameter('tokenId', token.tokenId.uuid)])
+            .generateEndpointPath(),
+        options: Options(headers: {
         'Content-Type': 'application/json'
       })
     );
@@ -119,7 +121,7 @@ class LinShareHttpClient {
   Future<List<AutoCompleteResult>> getSharingAutoComplete(
       AutoCompletePattern autoCompletePattern) async {
     final List resultJson = await _dioClient.get(Endpoint.autocomplete
-        .withPathParameter(autoCompletePattern.value)
+        .withPathParameters([PathParameter('query', autoCompletePattern.value)])
         .withQueryParameters([StringQueryParameter('type', 'SHARING')])
         .generateEndpointPath());
     return resultJson.map((data) => _getDynamicAutoCompleteResult(data)).toList();

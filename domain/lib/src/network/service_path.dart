@@ -34,3 +34,10 @@ class ServicePath {
 
   ServicePath(this.path);
 }
+
+class PathParameter {
+  final String parameterKey;
+  final String parameterValue;
+
+  PathParameter(this.parameterKey, this.parameterValue);
+}

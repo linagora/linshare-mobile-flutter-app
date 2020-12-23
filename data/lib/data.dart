@@ -31,6 +31,7 @@ export 'src/datasource_impl/autocomplete_datasource_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';
+export 'src/network/config/endpoint.dart';
 
 // model
 export 'src/network/model/response/document_response.dart';
