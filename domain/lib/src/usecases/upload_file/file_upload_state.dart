@@ -59,7 +59,7 @@ class FileUploadSuccess extends Success {
   FileUploadSuccess(this.uploadedDocument);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [uploadedDocument];
 }
 
 class FileUploadFailure extends Failure {
@@ -69,7 +69,26 @@ class FileUploadFailure extends Failure {
   FileUploadFailure(this.fileInfo, this.exception);
 
   @override
+  List<Object> get props => [fileInfo, exception];
+}
+
+class WorkGroupDocumentUploadSuccess extends Success {
+  final WorkGroupDocument workGroupDocument;
+
+  WorkGroupDocumentUploadSuccess(this.workGroupDocument);
+
+  @override
   List<Object> get props => [];
+}
+
+class WorkGroupDocumentUploadFailure extends Failure {
+  final FileInfo fileInfo;
+  final Exception exception;
+
+  WorkGroupDocumentUploadFailure(this.fileInfo, this.exception);
+
+  @override
+  List<Object> get props => [fileInfo, exception];
 }
 
 class FileUploadProgress extends Success {
