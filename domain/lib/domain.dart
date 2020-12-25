@@ -55,6 +55,13 @@ export 'src/model/autocomplete/subtype/simple_autocomplete_result.dart';
 export 'src/model/autocomplete/subtype/user_autocomplete_result.dart';
 export 'src/model/autocomplete/subtype/mailing_list_autocomplete_result.dart';
 export 'src/model/linshare_error_code.dart';
+export 'src/model/account/account.dart';
+export 'src/model/account/account_id.dart';
+export 'src/model/account/account_type.dart';
+export 'src/model/sharedspacedocument/work_group_node.dart';
+export 'src/model/sharedspacedocument/work_group_node_id.dart';
+export 'src/model/sharedspacedocument/work_group_node_type.dart';
+export 'src/model/sharedspacedocument/work_group_document.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -67,6 +74,7 @@ export 'src/usecases/share/share_document_interactor.dart';
 export 'src/usecases/authentication/delete_permanent_token_interactor.dart';
 export 'src/usecases/shared_space/get_all_shared_spaces_interactor.dart';
 export 'src/usecases/autocomplete/get_autocomplete_sharing_interactor.dart';
+export 'src/usecases/upload_file/upload_work_group_document_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -74,6 +82,7 @@ export 'src/repository/authentication/credential_repository.dart';
 export 'src/repository/authentication/token_repository.dart';
 export 'src/repository/document/document_repository.dart';
 export 'src/repository/autocomplete/autocomplete_repository.dart';
+export 'src/repository/sharedspacedocument/shared_space_document_repository.dart';
 
 // errorcode
 export 'src/errorcode/business_error_code.dart';
