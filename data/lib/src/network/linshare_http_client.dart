@@ -44,11 +44,14 @@ import 'package:data/src/network/model/request/share_document_body_request.dart'
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/user.dart';
+import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:data/src/extensions/list_extension.dart';
 
 import 'model/share/share_dto.dart';
+import 'model/sharedspacedocument/work_group_document_dto.dart';
+import 'model/sharedspacedocument/work_group_folder_dto.dart';
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -128,6 +131,35 @@ class LinShareHttpClient {
     return resultJson.map((data) => _getDynamicAutoCompleteResult(data)).toList();
   }
 
+  Future<List<WorkGroupNodeDto>> getWorkGroupChildNodes(
+      SharedSpaceId sharedSpaceId,
+      {WorkGroupNodeId parentId}
+  ) async {
+    final endpointPath = Endpoint.sharedSpaces
+        .withPathParameter('/${sharedSpaceId.uuid}')
+        .withPathParameter(Endpoint.nodes)
+        .generateEndpointPath();
+
+    final queryParameters = parentId != null
+        ? [StringQueryParameter('parent', parentId.uuid)]
+        : <QueryParameter>[];
+
+    final List nodesJsonResult = await _dioClient.get(
+      endpointPath,
+      queryParameters: queryParameters.toMap(),
+    );
+
+    // Sort by modificationDate descending
+    final sortedWorkgroupNodesDto = nodesJsonResult
+        .map((data) => _convertToWorkGroupNodeChild(data))
+        .toList()
+          ..sort((node1, node2) {
+            return node2.modificationDate.compareTo(node1.modificationDate);
+          });
+
+    return sortedWorkgroupNodesDto;
+  }
+
   AutoCompleteResult _getDynamicAutoCompleteResult(Map<String, dynamic> map) {
     final type = map['type'] as String;
     if (type == AutoCompleteResultType.simple.value) {
@@ -138,4 +170,9 @@ class LinShareHttpClient {
       return MailingListAutoCompleteResultDto.fromJson(map);
     }
   }
+
+  WorkGroupNodeDto _convertToWorkGroupNodeChild(Map<String, dynamic> nodeChildJson) =>
+      nodeChildJson['type'] == WorkGroupNodeType.DOCUMENT.value
+          ? WorkGroupDocumentDto.fromJson(nodeChildJson)
+          : WorkGroupNodeFolderDto.fromJson(nodeChildJson);
 }

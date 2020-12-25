@@ -28,19 +28,25 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-enum WorkGroupNodeType { FOLDER, DOCUMENT }
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/get_child_nodes/get_all_child_nodes_view_state.dart';
 
-extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
-  String get value {
-    switch(this) {
-      case WorkGroupNodeType.FOLDER:
-        return 'FOLDER';
-      case WorkGroupNodeType.DOCUMENT:
-        return 'DOCUMENT';
-      default:
-        return toString();
+class GetAllChildNodesInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+
+  GetAllChildNodesInteractor(this._sharedSpaceDocumentRepository);
+
+  Future<Either<Failure, Success>> execute(
+      SharedSpaceId sharedSpaceId,
+      {WorkGroupNodeId parentId}
+  ) async {
+    try {
+      final childNodes = await _sharedSpaceDocumentRepository.getAllChildNodes(sharedSpaceId, parentNodeId: parentId,);
+      return Right(GetChildNodesViewState(childNodes));
+    } catch (exception) {
+      return Left(GetChildNodesFailure(exception));
     }
   }
 }

@@ -15,6 +15,7 @@ export 'src/usecases/upload_file/file_upload_state.dart';
 export 'src/usecases/authentication/logout_view_state.dart';
 export 'src/usecases/shared_space/shared_space_view_state.dart';
 export 'src/usecases/autocomplete/autocomplete_view_state.dart';
+export 'src/usecases/get_child_nodes/get_all_child_nodes_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -25,6 +26,7 @@ export 'src/usecases/download_file/download_file_exception.dart';
 export 'src/usecases/share/share_document_exception.dart';
 export 'src/usecases/autocomplete/autocomplete_exception.dart';
 export 'src/usecases/shared_space/shared_space_exception.dart';
+export 'src/usecases/get_child_nodes/get_chil_nodes_exception.dart';
 
 // model
 export 'src/model/authentication/token.dart';
@@ -62,6 +64,8 @@ export 'src/model/sharedspacedocument/work_group_node.dart';
 export 'src/model/sharedspacedocument/work_group_node_id.dart';
 export 'src/model/sharedspacedocument/work_group_node_type.dart';
 export 'src/model/sharedspacedocument/work_group_document.dart';
+export 'src/model/sharedspacedocument/work_group_folder.dart';
+export 'src/model/sharedspacedocument/work_group_root_node.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -75,6 +79,7 @@ export 'src/usecases/authentication/delete_permanent_token_interactor.dart';
 export 'src/usecases/shared_space/get_all_shared_spaces_interactor.dart';
 export 'src/usecases/autocomplete/get_autocomplete_sharing_interactor.dart';
 export 'src/usecases/upload_file/upload_work_group_document_interactor.dart';
+export 'src/usecases/get_child_nodes/get_all_child_nodes_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

@@ -30,17 +30,20 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum WorkGroupNodeType { FOLDER, DOCUMENT }
+import 'package:equatable/equatable.dart';
 
-extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
-  String get value {
-    switch(this) {
-      case WorkGroupNodeType.FOLDER:
-        return 'FOLDER';
-      case WorkGroupNodeType.DOCUMENT:
-        return 'DOCUMENT';
-      default:
-        return toString();
-    }
-  }
+abstract class GetChildNodesException extends Equatable implements Exception {
+  final String message;
+
+  GetChildNodesException(this.message);
+
+  @override
+  String toString() => message;
+
+  @override
+  List<Object> get props => [message];
+}
+
+class GetChildNodesNotFoundException extends GetChildNodesException {
+  GetChildNodesNotFoundException() : super('Get child nodes not found.');
 }

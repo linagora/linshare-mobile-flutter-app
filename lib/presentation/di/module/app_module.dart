@@ -74,7 +74,9 @@ class AppModule {
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
     getIt.registerFactory(() => SharedSpaceDocumentDataSourceImpl(
-        getIt<FlutterUploader>()));
+          getIt<FlutterUploader>(),
+          getIt<LinShareHttpClient>(),
+          getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -139,6 +141,7 @@ class AppModule {
         getIt<SharedSpaceDocumentRepository>(),
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
+    getIt.registerFactory(() => GetAllChildNodesInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
   void _provideSharePreference() {
