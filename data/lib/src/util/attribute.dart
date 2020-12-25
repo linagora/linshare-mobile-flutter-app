@@ -32,4 +32,7 @@
 class Attribute {
   static const uuid = 'uuid';
   static const type = 'type';
+  static const mimeType = 'mimeType';
+  static const workGroup = 'workGroup';
+  static const parent = 'parent';
 }

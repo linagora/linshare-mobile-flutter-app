@@ -73,6 +73,8 @@ class AppModule {
     getIt.registerFactory(() => AutoCompleteDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => SharedSpaceDocumentDataSourceImpl(
+        getIt<FlutterUploader>()));
   }
 
   void _provideDataSource() {
@@ -84,6 +86,7 @@ class AppModule {
     getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDataSource>(() => getIt<SharedSpaceDataSourceImpl>());
     getIt.registerFactory<AutoCompleteDataSource>(() => getIt<AutoCompleteDataSourceImpl>());
+    getIt.registerFactory<SharedSpaceDocumentDataSource>(() => getIt<SharedSpaceDocumentDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -93,6 +96,7 @@ class AppModule {
     getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>()));
     getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
     getIt.registerFactory(() => AutoCompleteRepositoryImpl(getIt<AutoCompleteDataSource>()));
+    getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(getIt<SharedSpaceDocumentDataSource>()));
   }
 
   void _provideRepository() {
@@ -102,6 +106,7 @@ class AppModule {
     getIt.registerFactory<DocumentRepository>(() => getIt<DocumentRepositoryImpl>());
     getIt.registerFactory<AutoCompleteRepository>(() => getIt<AutoCompleteRepositoryImpl>());
     getIt.registerFactory<SharedSpaceRepository>(() => getIt<SharedSpaceRepositoryImpl>());
+    getIt.registerFactory<SharedSpaceDocumentRepository>(() => getIt<SharedSpaceDocumentRepositoryImpl>());
   }
 
   void _provideInterActor() {
@@ -130,6 +135,10 @@ class AppModule {
       getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetAllSharedSpacesInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => GetAutoCompleteSharingInteractor(getIt<AutoCompleteRepository>()));
+    getIt.registerFactory(() => UploadWorkGroupDocumentInteractor(
+        getIt<SharedSpaceDocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {

@@ -28,60 +28,28 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:data/src/datasource/shared_space_document_datasource.dart';
 import 'package:domain/domain.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final String nodes = '/nodes';
-  static final ServicePath authentication = ServicePath('/jwt');
+class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository {
+  final SharedSpaceDocumentDataSource _sharedSpaceDocumentDataSource;
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+  SharedSpaceDocumentRepositoryImpl(this._sharedSpaceDocumentDataSource);
 
-  static final ServicePath shares = ServicePath('/shares');
-
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
-
-  static final ServicePath autocomplete = ServicePath('/autocomplete');
-}
-
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
-
-  ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
-    if (queryParameters.isEmpty) {
-      return this;
-    }
-    return ServicePath('${path}?${queryParameters
-        .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
+  @override
+  Future<FileUploadState> uploadSharedSpaceDocument(
+      FileInfo fileInfo,
+      Token token,
+      Uri baseUrl,
+      SharedSpaceId sharedSpaceId,
+      {WorkGroupNodeId parentNodeId}) {
+    return _sharedSpaceDocumentDataSource.uploadSharedSpaceDocument(
+        fileInfo,
+        token,
+        baseUrl,
+        sharedSpaceId,
+        parentNodeId: parentNodeId);
   }
 }
