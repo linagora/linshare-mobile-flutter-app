@@ -28,60 +28,35 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:data/src/network/model/converter/account_id_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final String nodes = '/nodes';
-  static final ServicePath authentication = ServicePath('/jwt');
+part 'account_dto.g.dart';
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+@JsonSerializable()
+@AccountIdConverter()
+class AccountDto with EquatableMixin {
+  final String name;
+  final String mail;
+  final String firstName;
+  final String lastName;
+  final AccountId accountId;
+  final AccountType accountType;
 
-  static final ServicePath shares = ServicePath('/shares');
+  AccountDto(this.name, this.mail, this.accountId, this.accountType, this.firstName, this.lastName);
 
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
+  factory AccountDto.fromJson(Map<String, dynamic> json) => _$AccountDtoFromJson(json);
 
-  static final ServicePath autocomplete = ServicePath('/autocomplete');
+  Map<String, dynamic> toJson() => _$AccountDtoToJson(this);
+
+  @override
+  List<Object> get props => [name, mail, firstName, lastName, accountId, accountType];
 }
 
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
-
-  ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
-    if (queryParameters.isEmpty) {
-      return this;
-    }
-    return ServicePath('${path}?${queryParameters
-        .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
-  }
+extension AccountDtoExtension on AccountDto {
+  Account toAccount() => Account(name, mail, accountId, accountType, firstName, lastName);
 }

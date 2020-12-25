@@ -46,6 +46,7 @@ import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/user.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:data/src/extensions/list_extension.dart';
 
 import 'model/share/share_dto.dart';
 
@@ -110,18 +111,20 @@ class LinShareHttpClient {
   }
 
   Future<List<SharedSpaceNodeNestedResponse>> getSharedSpaces() async {
-    final List resultJson = await _dioClient.get(Endpoint.sharedSpaces
-        .withQueryParameters([BooleanQueryParameter('withRole', true)])
-        .generateEndpointPath());
+    final List resultJson = await _dioClient.get(
+        Endpoint.sharedSpaces
+            .generateEndpointPath(),
+        queryParameters: [BooleanQueryParameter('withRole', true)].toMap());
     return resultJson.map((data) => SharedSpaceNodeNestedResponse.fromJson(data)).toList();
   }
 
   Future<List<AutoCompleteResult>> getSharingAutoComplete(
       AutoCompletePattern autoCompletePattern) async {
-    final List resultJson = await _dioClient.get(Endpoint.autocomplete
-        .withPathParameter(autoCompletePattern.value)
-        .withQueryParameters([StringQueryParameter('type', 'SHARING')])
-        .generateEndpointPath());
+    final List resultJson = await _dioClient.get(
+        Endpoint.autocomplete
+            .withPathParameter(autoCompletePattern.value)
+            .generateEndpointPath(),
+        queryParameters: [StringQueryParameter('type', 'SHARING')].toMap());
     return resultJson.map((data) => _getDynamicAutoCompleteResult(data)).toList();
   }
 

@@ -17,17 +17,20 @@ export 'src/repository/authentication/credential_repository_impl.dart';
 export 'src/repository/myspace/document_repository_impl.dart';
 export 'src/repository/sharedspace/shared_space_repository_impl.dart';
 export 'src/repository/autocomplete/autocomplete_repository_impl.dart';
+export 'src/repository/sharedspacedocument/shared_space_document_repository_impl.dart';
 
 // data source
 export 'src/datasource/authentication_datasource.dart';
 export 'src/datasource/document_datasource.dart';
 export 'src/datasource/autocomplete_datasource.dart';
 export 'src/datasource/shared_space_datasource.dart';
+export 'src/datasource/shared_space_document_datasource.dart';
 
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_datasource_impl.dart';
 export 'src/datasource_impl/autocomplete_datasource_impl.dart';
+export 'src/datasource_impl/shared_space_document_datasource_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';
