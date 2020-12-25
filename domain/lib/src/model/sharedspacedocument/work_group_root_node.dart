@@ -30,17 +30,11 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum WorkGroupNodeType { FOLDER, DOCUMENT }
+import 'package:domain/domain.dart';
 
-extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
-  String get value {
-    switch(this) {
-      case WorkGroupNodeType.FOLDER:
-        return 'FOLDER';
-      case WorkGroupNodeType.DOCUMENT:
-        return 'DOCUMENT';
-      default:
-        return toString();
-    }
-  }
+class WorkGroupRootNode extends WorkGroupNode {
+  WorkGroupRootNode(SharedSpaceId sharedSpaceId) : super(null, null, null, sharedSpaceId, null, null, 'This is root of workgroup', 'Root', null);
+
+  @override
+  List<Object> get props => [sharedSpaceId];
 }

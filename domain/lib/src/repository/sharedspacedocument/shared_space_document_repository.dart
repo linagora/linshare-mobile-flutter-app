@@ -42,4 +42,8 @@ abstract class SharedSpaceDocumentRepository {
       Uri baseUrl,
       SharedSpaceId sharedSpaceId,
       {WorkGroupNodeId parentNodeId});
+
+  Future<List<WorkGroupNode>> getAllChildNodes(
+      SharedSpaceId sharedSpaceId,
+      {WorkGroupNodeId parentNodeId});
 }

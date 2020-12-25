@@ -30,17 +30,72 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum WorkGroupNodeType { FOLDER, DOCUMENT }
+import 'package:data/src/network/model/account/account_dto.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
+import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
+import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
+import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
-  String get value {
-    switch(this) {
-      case WorkGroupNodeType.FOLDER:
-        return 'FOLDER';
-      case WorkGroupNodeType.DOCUMENT:
-        return 'DOCUMENT';
-      default:
-        return toString();
-    }
-  }
+part 'work_group_folder_dto.g.dart';
+
+@JsonSerializable(explicitToJson: true)
+@DatetimeConverter()
+@WorkGroupNodeIdConverter()
+@SharedSpaceIdConverter()
+class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
+  WorkGroupNodeFolderDto(
+    WorkGroupNodeId workGroupNodeId,
+    WorkGroupNodeId parentWorkGroupNodeId,
+    WorkGroupNodeType type,
+    SharedSpaceId sharedSpaceId,
+    DateTime creationDate,
+    DateTime modificationDate,
+    String description,
+    String name,
+    AccountDto lastAuthor,
+  ) : super(
+          workGroupNodeId,
+          parentWorkGroupNodeId,
+          type,
+          sharedSpaceId,
+          creationDate,
+          modificationDate,
+          description,
+          name,
+          lastAuthor,
+        );
+
+  factory WorkGroupNodeFolderDto.fromJson(Map<String, dynamic> json) =>
+      _$WorkGroupNodeFolderDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WorkGroupNodeFolderDtoToJson(this);
+
+  @override
+  List<Object> get props => [
+        workGroupNodeId,
+        parentWorkGroupNodeId,
+        type,
+        sharedSpaceId,
+        creationDate,
+        modificationDate,
+        description,
+        name,
+        lastAuthor,
+      ];
+}
+
+extension WorkGroupNodeFolderDtoExtension on WorkGroupNodeFolderDto {
+  WorkGroupFolder toWorkGroupFolder() => WorkGroupFolder(
+        workGroupNodeId,
+        parentWorkGroupNodeId,
+        type,
+        sharedSpaceId,
+        creationDate,
+        modificationDate,
+        description,
+        name,
+        lastAuthor.toAccount(),
+      );
 }

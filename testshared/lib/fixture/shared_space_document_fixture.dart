@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -55,3 +56,33 @@ final workGroupDocument1 = WorkGroupDocument(
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
     false,
     '557c7bf3f95d00547b83ad0f7d75b1bb345d80947b2f0c4ca14643298fbde4ab');
+
+final sharedSpaceId1 = SharedSpaceId('1');
+final parentWorkGroupNodeId1 = WorkGroupNodeId('0');
+final workGroupNodeId1 = WorkGroupNodeId('1');
+final workGroupNodeId2 = WorkGroupNodeId('1');
+final account1 = AccountDto(
+  'User1', 'user1@linagora.org', AccountId('1'), AccountType.INTERNAL, '', 'User1',
+);
+
+final sharedSpaceFolder1 = WorkGroupNodeFolderDto(
+    workGroupNodeId1,
+    parentWorkGroupNodeId1,
+    WorkGroupNodeType.FOLDER,
+    sharedSpaceId1,
+    DateTime.now(),
+    DateTime.now(),
+    'Folder 1',
+    'Folder 1',
+    account1);
+
+final sharedSpaceFolder2 = WorkGroupNodeFolderDto(
+    workGroupNodeId2,
+    parentWorkGroupNodeId1,
+    WorkGroupNodeType.FOLDER,
+    sharedSpaceId1,
+    DateTime.now(),
+    DateTime.now(),
+    'Folder 2',
+    'Folder 2',
+    account1);

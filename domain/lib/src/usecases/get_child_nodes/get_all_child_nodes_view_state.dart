@@ -28,19 +28,23 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-enum WorkGroupNodeType { FOLDER, DOCUMENT }
+import 'package:domain/domain.dart';
 
-extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
-  String get value {
-    switch(this) {
-      case WorkGroupNodeType.FOLDER:
-        return 'FOLDER';
-      case WorkGroupNodeType.DOCUMENT:
-        return 'DOCUMENT';
-      default:
-        return toString();
-    }
-  }
+class GetChildNodesViewState extends ViewState {
+  final List<WorkGroupNode> workGroupNodes;
+
+  GetChildNodesViewState(this.workGroupNodes);
+
+  @override
+  List<Object> get props => [workGroupNodes];
+}
+
+class GetChildNodesFailure extends FeatureFailure {
+  final Exception exception;
+
+  GetChildNodesFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
 }
