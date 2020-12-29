@@ -26,6 +26,7 @@ void main() {
     MockCredentialRepository credentialRepository;
     UploadFileInteractor uploadFileInteractor;
     ShareDocumentInteractor shareDocumentInteractor;
+    UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
     UploadShareFileManager uploadShareFileManager;
     UploadTaskId uploadTaskId;
 
@@ -45,6 +46,7 @@ void main() {
         getIt.get<Store<AppState>>(),
         uploadFileInteractor,
         shareDocumentInteractor,
+        uploadWorkGroupDocumentInteractor
       );
     });
 

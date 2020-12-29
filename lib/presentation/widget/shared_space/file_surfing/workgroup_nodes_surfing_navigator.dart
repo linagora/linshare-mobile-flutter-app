@@ -41,11 +41,11 @@ import '../../../util/data_structure/stack.dart' as DataStructure;
 class WorkGroupNodesSurfingNavigator extends StatefulWidget {
   WorkGroupNodesSurfingNavigator(
     Key key,
-    this.sharedSpaceId,
+    this.sharedSpaceNodeNested,
     this.onBackClickedCallback,
   ) : super(key: key);
 
-  final SharedSpaceId sharedSpaceId;
+  final SharedSpaceNodeNested sharedSpaceNodeNested;
   final OnBackClickedCallback onBackClickedCallback;
   final DataStructure.Stack<WorkGroupNodesSurfingArguments> pagesStack = DataStructure.Stack();
   WorkGroupNodesSurfingArguments get currentPageData => pagesStack.peek();
@@ -68,8 +68,8 @@ class WorkGroupNodesSurfingNavigatorState extends State<WorkGroupNodesSurfingNav
         key: _navigatorKey,
         onGenerateRoute: (settings) {
           final rootArgs = WorkGroupNodesSurfingArguments(
-            FolderNodeType.root,
-            sharedSpaceId: widget.sharedSpaceId);
+              FolderNodeType.root,
+              widget.sharedSpaceNodeNested);
           widget.pagesStack.push(rootArgs);
           return _generateNewPage(
             context,
@@ -90,9 +90,9 @@ class WorkGroupNodesSurfingNavigatorState extends State<WorkGroupNodesSurfingNav
           (clickedNode) {
             if (clickedNode is WorkGroupFolder) {
               final pageArgs = WorkGroupNodesSurfingArguments(
-                FolderNodeType.normal,
-                folder: clickedNode,
-              );
+                  FolderNodeType.normal,
+                  widget.sharedSpaceNodeNested,
+                  folder: clickedNode);
               widget.pagesStack.push(pageArgs);
               Navigator.push(
                   context,

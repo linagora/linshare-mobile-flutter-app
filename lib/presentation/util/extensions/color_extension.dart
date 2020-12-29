@@ -53,6 +53,7 @@ extension AppColor on Color {
   static const userTagTextColor = Color(0xff7B7B7B);
   static const uploadButtonDisableBackgroundColor = Color(0xffD3D3D3);
   static const defaultLabelAvatarBackgroundColor = Color(0xff1B7EC7);
+  static const uploadLineDividerWorkGroupDestination = Color(0xffEEEEEE);
   static const workgroupNodesSurfingBackTitleColor = Color(0xff4AC6FF);
   static const workgroupNodesSurfingFolderNameColor = Color(0xff7B7B7B);
   static const workgroupDetailFilesUploadDisableColor = Color(0xffD3D3D3);

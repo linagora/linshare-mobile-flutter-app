@@ -60,6 +60,7 @@ class AppImagePaths {
   String get icBackBlue => _getImagePath('ic_arrow_back_blue.svg');
   String get icFolder => _getImagePath('ic_folder.svg');
   String get icPlus => _getImagePath('ic_plus.svg');
+  String get icSharedSpaceDisable => _getImagePath('ic_shared_space_disable.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

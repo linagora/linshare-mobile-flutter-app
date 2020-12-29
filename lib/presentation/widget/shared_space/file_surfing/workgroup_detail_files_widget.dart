@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_navigator.dart';
 
@@ -49,6 +50,7 @@ class WorkGroupDetailFilesWidget extends StatefulWidget {
 
 class _WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> {
   final AppImagePaths imagePath = getIt<AppImagePaths>();
+  final workGroupDetailFilesViewModel = getIt<WorkGroupDetailFilesViewModel>();
   final GlobalKey<WorkGroupNodesSurfingNavigatorState> _workgroupNavigatorKey = GlobalKey();
 
   @override
@@ -57,7 +59,7 @@ class _WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget>
       children: [
         WorkGroupNodesSurfingNavigator(
           _workgroupNavigatorKey,
-          widget.sharedSpaceNode.sharedSpaceId,
+          widget.sharedSpaceNode,
           widget.onBackClickedCallback,
         ),
         Align(
@@ -79,9 +81,12 @@ class _WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget>
                 Align(
                   alignment: Alignment.topCenter,
                   child: GestureDetector(
-                    onTap: () {
-                      print(_workgroupNavigatorKey.currentState.widget.currentPageData.folder.name);
-                    },
+                    onTap: () => widget.sharedSpaceNode.sharedSpaceRole.name ==
+                            SharedSpaceRoleName.READER
+                        ? {}
+                        : workGroupDetailFilesViewModel
+                            .handleOnUploadFilePressed(_workgroupNavigatorKey
+                                .currentState.widget.currentPageData),
                     child: _buildUploadWidget(),
                   ),
                 ),

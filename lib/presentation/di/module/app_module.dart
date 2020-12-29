@@ -167,10 +167,10 @@ class AppModule {
     getIt.registerLazySingleton(() => UploadFileManager());
     getIt.registerFactory(() => FilePathUtil());
     getIt.registerLazySingleton(() => UploadShareFileManager(
-          getIt.get<Store<AppState>>(),
-          getIt.get<UploadFileInteractor>(),
-          getIt.get<ShareDocumentInteractor>(),
-        ));
+        getIt.get<Store<AppState>>(),
+        getIt.get<UploadFileInteractor>(),
+        getIt.get<ShareDocumentInteractor>(),
+        getIt.get<UploadWorkGroupDocumentInteractor>()));
   }
 
   void _provideFileUploader() {

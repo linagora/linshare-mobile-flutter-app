@@ -30,19 +30,35 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 
 class UploadFileArguments {
   final FileInfo fileInfo;
   ShareType shareType;
   Document document;
+  WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo;
 
-  UploadFileArguments(this.fileInfo,
-      {ShareType shareType = ShareType.uploadAndShare, Document document}) {
+  UploadFileArguments(this.fileInfo, {
+    ShareType shareType = ShareType.uploadAndShare,
+    Document document,
+    WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo
+  }) {
     this.shareType = shareType;
     this.document = document;
+    this.workGroupDocumentUploadInfo = workGroupDocumentUploadInfo;
   }
 }
 
-enum ShareType { quickShare, uploadAndShare }
+enum ShareType { quickShare, uploadAndShare, none }
 
-enum ShareButtonType { justUpload, uploadAndShare }
+enum ShareButtonType { justUpload, uploadAndShare, workGroup }
+
+class WorkGroupDocumentUploadInfo {
+  final SharedSpaceNodeNested sharedSpaceNodeNested;
+  final WorkGroupNode currentNode;
+  final FolderNodeType folderType;
+
+  WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);
+
+  bool isRootNode() => folderType == FolderNodeType.root ? true : false;
+}
