@@ -28,59 +28,51 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:async';
-
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
+import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:redux/src/store.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
-class WorkGroupNodesSurfingViewModel extends BaseViewModel {
-  WorkGroupNodesSurfingViewModel(
-    Store<AppState> store,
-    this._getAllChildNodesInteractor,
-  ) : super(store);
+class WorkGroupDetailFilesViewModel extends BaseViewModel {
+  final LocalFilePicker _localFilePicker;
+  final AppNavigation _appNavigation;
 
-  final GetAllChildNodesInteractor _getAllChildNodesInteractor;
+  WorkGroupDetailFilesViewModel(Store<AppState> store, this._localFilePicker, this._appNavigation) : super(store);
 
-  final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
-      BehaviorSubject.seeded(WorkGroupNodesSurfingState(null, [], FolderNodeType.normal));
-  StreamView<WorkGroupNodesSurfingState> get stateSubscription => _stateSubscription;
-
-  WorkGroupNodesSurfingState get currentState => _stateSubscription.value;
-
-  void initial(WorkGroupNodesSurfingArguments input) {
-    _stateSubscription.add(currentState.copyWith(
-      node: input.folder,
-      folderNodeType: input.folderType,
-      sharedSpaceId: input.sharedSpaceNodeNested.sharedSpaceId,
-    ));
+  void handleOnUploadFilePressed(WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
+    store.dispatch(pickFileAction(workGroupNodesSurfingArguments));
   }
 
-  void loadAllChildNodes() async {
-    _stateSubscription.add(currentState.copyWith(showLoading: true));
+  ThunkAction<AppState> pickFileAction(WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
+    return (Store<AppState> store) async {
+      await _localFilePicker.pickSingleFile().then((result) => result.fold(
+              (failure) => store.dispatch(UploadFileAction(Left(failure))),
+              (success) => store.dispatch(pickFileSuccessAction(success, workGroupNodesSurfingArguments))));
+    };
+  }
 
-    final isRootFolder = currentState.folderNodeType == FolderNodeType.root;
-    final result = await _getAllChildNodesInteractor.execute(
-      isRootFolder
-          ? currentState.sharedSpaceId
-          : currentState.node.sharedSpaceId,
-      parentId: isRootFolder ? null : currentState.node.workGroupNodeId,
-    );
-
-    result.fold(
-      (failure) {
-        _stateSubscription.add(currentState.copyWith(children: [], showLoading: false));
-      },
-      (success) {
-        _stateSubscription.add(currentState.copyWith(
-          children: (success as GetChildNodesViewState).workGroupNodes, showLoading: false
-        ));
-      },
-    );
+  ThunkAction<AppState> pickFileSuccessAction(
+      FilePickerSuccessViewState success,
+      WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
+    return (Store<AppState> store) async {
+      store.dispatch(UploadFileAction(Right(success)));
+      await _appNavigation.push(RoutePaths.uploadDocumentRoute,
+          arguments: UploadFileArguments(success.fileInfo,
+              shareType: ShareType.none,
+              workGroupDocumentUploadInfo: WorkGroupDocumentUploadInfo(
+                  workGroupNodesSurfingArguments.sharedSpaceNodeNested,
+                  workGroupNodesSurfingArguments.folder,
+                  workGroupNodesSurfingArguments.folderType)));
+    };
   }
 }

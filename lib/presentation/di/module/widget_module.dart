@@ -44,6 +44,7 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.d
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_model.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
@@ -140,6 +141,11 @@ class WidgetModule {
     getIt.registerFactory(() => WorkGroupNodesSurfingViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<GetAllChildNodesInteractor>(),
+    ));
+    getIt.registerFactory(() => WorkGroupDetailFilesViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<LocalFilePicker>(),
+      getIt.get<AppNavigation>()
     ));
   }
 }

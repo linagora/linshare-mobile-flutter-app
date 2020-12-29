@@ -35,9 +35,9 @@ import 'package:domain/domain.dart';
 class WorkGroupNodesSurfingArguments{
   final FolderNodeType folderType;
   final WorkGroupFolder folder;
-  final SharedSpaceId sharedSpaceId;
+  final SharedSpaceNodeNested sharedSpaceNodeNested;
 
-  WorkGroupNodesSurfingArguments(this.folderType, {this.folder, this.sharedSpaceId});
+  WorkGroupNodesSurfingArguments(this.folderType, this.sharedSpaceNodeNested, {this.folder});
 }
 
 enum FolderNodeType { root, normal, }

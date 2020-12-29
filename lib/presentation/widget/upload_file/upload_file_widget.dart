@@ -31,6 +31,7 @@
 
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
@@ -67,6 +68,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     uploadFileViewModel.setFileInfoArgument(arguments.fileInfo);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
     uploadFileViewModel.setDocumentArgument(arguments.document);
+    uploadFileViewModel.setWorkGroupDocumentUploadInfoArgument(arguments.workGroupDocumentUploadInfo);
 
     return Scaffold(
       appBar: AppBar(
@@ -77,9 +79,9 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
         ),
         centerTitle: true,
         title: Text(
-            uploadFileViewModel.shareTypeArgument == ShareType.uploadAndShare
-                ? AppLocalizations.of(context).upload_file_title
-                : AppLocalizations.of(context).title_quick_share,
+            uploadFileViewModel.shareTypeArgument == ShareType.quickShare
+                ? AppLocalizations.of(context).title_quick_share
+                : AppLocalizations.of(context).upload_file_title,
             key: Key('upload_file_title'),
             style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor,
@@ -118,7 +120,14 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                 ),
               ),
             ),
-            _buildShareWidget(context)
+            arguments.shareType == ShareType.none
+                ? _buildWorkGroupUploadDestination(
+                    context,
+                    arguments.workGroupDocumentUploadInfo.isRootNode()
+                        ? arguments.workGroupDocumentUploadInfo.sharedSpaceNodeNested.name
+                        : arguments
+                            .workGroupDocumentUploadInfo.currentNode.name)
+                : _buildShareWidget(context)
           ],
         ),
       ),
@@ -169,9 +178,14 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       return StreamBuilder<ShareButtonType>(
         stream: buttonTypeStream,
         builder: (_, snapshot) {
-          final buttonText = snapshot.data == ShareButtonType.justUpload
-              ? AppLocalizations.of(context).upload_text_button
-              : AppLocalizations.of(context).upload_and_share_button;
+          var buttonText;
+          if (snapshot.data == ShareButtonType.justUpload) {
+            buttonText = AppLocalizations.of(context).upload_text_button;
+          } else if (snapshot.data == ShareButtonType.uploadAndShare) {
+            buttonText = AppLocalizations.of(context).upload_and_share_button;
+          } else {
+            buttonText = AppLocalizations.of(context).upload_to_workspace;
+          }
           return Text(
             buttonText,
             style: style,
@@ -179,6 +193,45 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
         },
       );
     }
+  }
+
+  Widget _buildWorkGroupUploadDestination(
+      BuildContext context, String workGroupName) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+      child: Column(
+        children: [
+          Align(
+              alignment: AlignmentDirectional.topStart,
+              child: Text(
+                AppLocalizations.of(context).destination,
+                style: TextStyle(
+                    fontSize: 16.0, color: AppColor.uploadFileFileNameTextColor),
+              )),
+          SizedBox(height: 16.0,),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 1.0, right: 8.0),
+                child: SvgPicture.asset(imagePath.icSharedSpaceDisable,
+                    width: 20, height: 20, fit: BoxFit.fill),
+              ),
+              Text(
+                workGroupName,
+                maxLines: 1,
+                style: TextStyle(
+                    fontSize: 16.0, color: AppColor.uploadFileFileSizeTextColor),
+              ),
+            ],
+          ),
+          SizedBox(height: 6.0,),
+          Divider(
+            height: 1.0,
+            color: AppColor.uploadLineDividerWorkGroupDestination,
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildShareWidget(BuildContext buildContext) {

@@ -48,15 +48,23 @@ class UploadShareFileManager {
     this._store,
     this._uploadFileInteractor,
     this._shareDocumentInteractor,
+    this._uploadWorkGroupDocumentInteractor,
   );
 
   final Store<AppState> _store;
 
   final UploadFileInteractor _uploadFileInteractor;
   final ShareDocumentInteractor _shareDocumentInteractor;
+  final UploadWorkGroupDocumentInteractor _uploadWorkGroupDocumentInteractor;
 
   void justUpload(FileInfo uploadFile) async {
     await _upload(uploadFile).forEach((uploadState) {
+      _store.dispatch(UploadFileAction(uploadState));
+    });
+  }
+
+  void uploadToSharedSpace(FileInfo uploadFile, SharedSpaceId sharedSpaceId, {WorkGroupNodeId parentNodeId}) async {
+    await _uploadToSharedSpace(uploadFile, sharedSpaceId, parentNodeId: parentNodeId).forEach((uploadState) {
       _store.dispatch(UploadFileAction(uploadState));
     });
   }
@@ -107,6 +115,10 @@ class UploadShareFileManager {
 
   Stream<Either<Failure, Success>> _upload(FileInfo uploadFile) {
     return _uploadFileInteractor.execute(uploadFile);
+  }
+
+  Stream<Either<Failure, Success>> _uploadToSharedSpace(FileInfo uploadFile, SharedSpaceId sharedSpaceId, {WorkGroupNodeId parentNodeId}) {
+    return _uploadWorkGroupDocumentInteractor.execute(uploadFile, sharedSpaceId, parentNodeId: parentNodeId);
   }
 
   Future<Either<Failure, Success>> _share(

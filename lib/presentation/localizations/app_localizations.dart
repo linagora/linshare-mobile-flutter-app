@@ -271,6 +271,20 @@ class AppLocalizations {
       name: 'workgroup_nodes_surfing_sort_type_title',
     );
   }
+
+  String get destination {
+    return Intl.message(
+      'Destination',
+      name: 'destination',
+    );
+  }
+
+  String get upload_to_workspace {
+    return Intl.message(
+      'Upload to Workspace',
+      name: 'upload_to_workspace',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -67,6 +67,9 @@ class UploadFileViewModel extends BaseViewModel {
               : ShareButtonType.uploadAndShare;
           _uploadAndShareButtonType.add(shareButtonType);
           break;
+        case ShareType.none:
+          _uploadAndShareButtonType.add(ShareButtonType.workGroup);
+          break;
       }
     });
   }
@@ -77,6 +80,7 @@ class UploadFileViewModel extends BaseViewModel {
   ShareType get shareTypeArgument => _shareTypeArgument;
 
   Document _documentArgument;
+  WorkGroupDocumentUploadInfo _workGroupDocumentUploadInfoArgument;
 
   final BehaviorSubject<List<AutoCompleteResult>> _autoCompleteResultListObservable = BehaviorSubject.seeded([]);
   StreamView<List<AutoCompleteResult>> get autoCompleteResultListObservable => _autoCompleteResultListObservable;
@@ -104,6 +108,10 @@ class UploadFileViewModel extends BaseViewModel {
     _documentArgument = document;
   }
 
+  void setWorkGroupDocumentUploadInfoArgument(WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo) {
+    _workGroupDocumentUploadInfoArgument = workGroupDocumentUploadInfo;
+  }
+
   void addUserEmail(AutoCompleteResult autoCompleteResult) {
     final newAutoCompleteResultList = _autoCompleteResultListObservable.value;
     newAutoCompleteResultList.add(autoCompleteResult);
@@ -123,8 +131,10 @@ class UploadFileViewModel extends BaseViewModel {
   void handleOnUploadAndSharePressed() {
     if (_shareTypeArgument == ShareType.quickShare) {
       _handleQuickShare();
-    } else {
+    } else if (_shareTypeArgument == ShareType.uploadAndShare) {
       _handleUploadAndShare();
+    } else {
+      _handleUploadToSharedSpace();
     }
     _appNavigation.popBack();
   }
@@ -137,6 +147,12 @@ class UploadFileViewModel extends BaseViewModel {
 
   void _handleUploadAndShare() {
     if (_fileInfoArgument != null) {
+      store.dispatch(uploadAndShareFileAction(_fileInfoArgument));
+    }
+  }
+
+  void _handleUploadToSharedSpace() {
+    if (_fileInfoArgument != null && _workGroupDocumentUploadInfoArgument != null) {
       store.dispatch(uploadAndShareFileAction(_fileInfoArgument));
     }
   }
@@ -175,6 +191,15 @@ class UploadFileViewModel extends BaseViewModel {
             fileInfo,
             _autoCompleteResultListObservable.value,
           );
+          break;
+        case ShareButtonType.workGroup:
+          await _uploadShareFileManager.uploadToSharedSpace(
+              fileInfo,
+              _workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.sharedSpaceId,
+              parentNodeId: _workGroupDocumentUploadInfoArgument.isRootNode()
+                  ? null
+                  : _workGroupDocumentUploadInfoArgument.currentNode.workGroupNodeId);
+          break;
       }
     };
   }
