@@ -79,13 +79,6 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         builder: (BuildContext context, MySpaceViewModel viewModel) => Scaffold(
               body: Column(
                 children: [
-                  handleUploadToastMessage(context),
-                  handleShareDocumentToastMessage(context),
-                  Container(
-                    child: handleUploadWidget(
-                      context,
-                      mySpaceViewModel.store.state.uploadFileState.viewState.getOrElse(() => null))
-                  ),
                   StoreConnector<AppState, dartz.Either<Failure, Success>>(
                     converter: (store) => store.state.mySpaceState.viewState,
                     builder: (context, viewState) {
@@ -252,109 +245,6 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         : SizedBox.shrink();
   }
 
-  Widget handleUploadWidget(BuildContext context, [Success success]) {
-    if (success is UploadingProgress) {
-      return _buildUploadingFile(context, success.fileInfo.fileName, success.progress);
-    } else if (success is FilePickerSuccessViewState) {
-      return _buildPreparingUploadFile(context, success.fileInfo.fileName);
-    } else if (success is SharingAfterUploadState) {
-      return _buildSharingFileWidget(success);
-    } else {
-      return SizedBox.shrink();
-    }
-  }
-
-  Widget _buildSharingFileWidget(SharingAfterUploadState state) {
-    return SizedBox(
-      height: 58,
-      child: Container(
-        color: AppColor.mySpaceUploadBackground,
-        child: Align(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text(
-              _buildSharingMessage(context, state.recipients),
-              maxLines: 1,
-              style: TextStyle(fontSize: 14, color: Colors.white),
-            ),
-          ),
-          alignment: Alignment.centerLeft,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPreparingUploadFile(BuildContext context, String fileName) {
-    return SizedBox(
-      key: Key('my_space_preparing_upload_file'),
-      height: 54,
-      child: Container(
-        color: AppColor.mySpaceUploadBackground,
-        child: Column(children: [
-          Expanded(
-              child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 24),
-                  child: Text(
-                    AppLocalizations.of(context).upload_prepare_text,
-                    maxLines: 1,
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ),
-              )
-            ],
-          )),
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildUploadingFile(
-      BuildContext context, String fileName, int progress) {
-    return SizedBox(
-      key: Key('my_space_uploading_file'),
-      height: 58,
-      child: Container(
-        color: AppColor.mySpaceUploadBackground,
-        child: Column(children: [
-          _buildLinearProgress(context, progress),
-          Expanded(child: _buildUploadFileInfo(context, fileName, progress)),
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildLinearProgress(BuildContext context, int progress) {
-    return SizedBox(
-      height: 4,
-      child: LinearProgressIndicator(
-        backgroundColor: AppColor.uploadProgressBackgroundColor,
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        value: progress.toDouble() / 100,
-      ),
-    );
-  }
-
-  Widget _buildUploadFileInfo(
-      BuildContext context, String fileName, int progress) {
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: 24),
-            child: Text(
-              'Uploading ' + fileName + ' ($progress)%...',
-              maxLines: 1,
-              style: TextStyle(fontSize: 14, color: Colors.white),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
   Widget _buildUploadFileHere(BuildContext context) {
     return BackgroundWidgetBuilder()
       .key(Key('my_space_upload_file_here'))
@@ -364,59 +254,6 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         height: 120,
         fit: BoxFit.fill))
       .text(AppLocalizations.of(context).my_space_text_upload_your_files_here).build();
-  }
-
-  Widget handleUploadToastMessage(BuildContext context) {
-    mySpaceViewModel.store.state.uploadFileState.viewState.fold(
-        (failure) {
-          if (failure is FilePickerFailure || failure is FileUploadFailure) {
-            appToast.showToast(AppLocalizations.of(context).upload_failure_text);
-          }
-        },
-        (success) {
-          if (success is FileUploadSuccess) {
-            appToast.showToast(AppLocalizations.of(context).upload_success_text);
-            mySpaceViewModel.cleanUploadViewState();
-          }
-        });
-    return SizedBox.shrink();
-  }
-
-  Widget handleShareDocumentToastMessage(BuildContext context) {
-    mySpaceViewModel.store.state.shareState.viewState.fold(
-      (failure) {
-        if (failure is ShareDocumentFailure) {
-          appToast.showErrorToast(
-              AppLocalizations.of(context).file_could_not_be_share);
-          mySpaceViewModel.cleanShareViewState();
-        }
-      },
-      (success) {
-        if (success is ShareDocumentViewState) {
-          appToast.showToast(
-              AppLocalizations.of(context).file_is_successfully_shared);
-          mySpaceViewModel.cleanShareViewState();
-        } else if (success is ShareAfterUploadSuccess) {
-          appToast.showToast(_buildSharingMessage(context, success.recipients));
-          mySpaceViewModel.cleanUploadViewState();
-          mySpaceViewModel.cleanShareViewState();
-        }
-      },
-    );
-    return SizedBox.shrink();
-  }
-
-  String _buildSharingMessage(BuildContext context, List<AutoCompleteResult> recipients) {
-    final shareSinglePerson = recipients.length == 1;
-    if (shareSinglePerson) {
-      return AppLocalizations.of(context).sharing_single_after_uploaded_success(
-        recipients.first.getSuggestionDisplayName()
-      );
-    } else {
-      return AppLocalizations.of(context).sharing_multiple_after_uploaded_success(
-        recipients.length
-      );
-    }
   }
 
   List<Widget> contextMenuActionTiles(BuildContext context, Document document) {

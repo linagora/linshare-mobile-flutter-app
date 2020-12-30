@@ -37,7 +37,6 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
@@ -119,14 +118,6 @@ class MySpaceViewModel extends BaseViewModel {
 
   void handleOnUploadFilePressed() {
     store.dispatch(pickFileAction());
-  }
-
-  void cleanUploadViewState() {
-    store.dispatch(CleanUploadStateAction());
-  }
-
-  void cleanShareViewState() {
-    store.dispatch(CleanShareStateAction());
   }
 
   void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles) {
