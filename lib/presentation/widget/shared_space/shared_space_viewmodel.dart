@@ -33,7 +33,9 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -57,6 +59,10 @@ class SharedSpaceViewModel extends BaseViewModel {
         (failure) => store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure))),
         (success) => store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)))));
     };
+  }
+
+  void openSharedSpace(SharedSpaceNodeNested sharedSpace) {
+    store.dispatch(SharedSpaceInsideView(RoutePaths.sharedSpaceInside, sharedSpace));
   }
 
   @override

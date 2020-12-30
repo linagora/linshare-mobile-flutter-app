@@ -44,5 +44,5 @@ AppState appStateReducer(AppState state, action) {
       uploadFileState: uploadFileReducer(state.uploadFileState, action),
       mySpaceState: mySpaceReducer(state.mySpaceState, action),
       shareState: shareReducer(state.shareState, action),
-      sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action));
+      sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),);
 }

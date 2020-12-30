@@ -257,6 +257,20 @@ class AppLocalizations {
       name: 'sharing_after_uploaded_failure',
     );
   }
+
+  String get workgroup_nodes_surfing_root_back_title {
+    return Intl.message(
+      'Back to Shared Space',
+      name: 'workgroup_nodes_surfing_root_back_title',
+    );
+  }
+
+    String get workgroup_nodes_surfing_sort_type_title {
+    return Intl.message(
+      'Modification date',
+      name: 'workgroup_nodes_surfing_sort_type_title',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

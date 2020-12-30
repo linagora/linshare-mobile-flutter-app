@@ -37,6 +37,8 @@ import 'package:redux/redux.dart';
 final uiReducer = combineReducers<UIState>([
   TypedReducer<UIState, SetCurrentView>(
           (UIState state, SetCurrentView action) => state.setCurrentView(action.routePath)),
+  TypedReducer<UIState, SharedSpaceInsideView>(
+          (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, sharedSpace: action.sharedSpace)),
   TypedReducer<UIState, ClearCurrentView>(
           (UIState state, _) => state.clearCurrentView()),
 ]);

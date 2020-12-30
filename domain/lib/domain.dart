@@ -65,7 +65,6 @@ export 'src/model/sharedspacedocument/work_group_node_id.dart';
 export 'src/model/sharedspacedocument/work_group_node_type.dart';
 export 'src/model/sharedspacedocument/work_group_document.dart';
 export 'src/model/sharedspacedocument/work_group_folder.dart';
-export 'src/model/sharedspacedocument/work_group_root_node.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';

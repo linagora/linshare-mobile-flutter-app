@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -43,6 +44,12 @@ class SetCurrentView extends ActionOffline {
   final String routePath;
 
   SetCurrentView(this.routePath);
+}
+
+class SharedSpaceInsideView extends SetCurrentView {
+  final SharedSpaceNodeNested sharedSpace;
+
+  SharedSpaceInsideView(String routePath, this.sharedSpace) : super(routePath);
 }
 
 @immutable

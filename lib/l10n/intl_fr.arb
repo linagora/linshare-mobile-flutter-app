@@ -207,5 +207,15 @@
   "@sharing_after_uploaded_failure": {
     "type": "text",
     "placeholders": {}
+  },
+  "workgroup_nodes_surfing_root_back_title": "Back to Shared Space",
+  "@workgroup_nodes_surfing_root_back_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_nodes_surfing_sort_type_title": "Modification date",
+  "@workgroup_nodes_surfing_sort_type_title": {
+    "type": "text",
+    "placeholders": {}
   }
 }

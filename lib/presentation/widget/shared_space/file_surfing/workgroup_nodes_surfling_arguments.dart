@@ -28,13 +28,16 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
+import 'package:domain/domain.dart';
+
+class WorkGroupNodesSurfingArguments{
+  final FolderNodeType folderType;
+  final WorkGroupFolder folder;
+  final SharedSpaceId sharedSpaceId;
+
+  WorkGroupNodesSurfingArguments(this.folderType, {this.folder, this.sharedSpaceId});
 }
+
+enum FolderNodeType { root, normal, }
