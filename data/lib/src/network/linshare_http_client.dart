@@ -149,15 +149,9 @@ class LinShareHttpClient {
       queryParameters: queryParameters.toMap(),
     );
 
-    // Sort by modificationDate descending
-    final sortedWorkgroupNodesDto = nodesJsonResult
+    return nodesJsonResult
         .map((data) => _convertToWorkGroupNodeChild(data))
-        .toList()
-          ..sort((node1, node2) {
-            return node2.modificationDate.compareTo(node1.modificationDate);
-          });
-
-    return sortedWorkgroupNodesDto;
+        .toList();
   }
 
   AutoCompleteResult _getDynamicAutoCompleteResult(Map<String, dynamic> map) {

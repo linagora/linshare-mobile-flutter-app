@@ -29,12 +29,30 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
+class Stack<T> {
+  final List<T> _elements;
+
+  Stack() : _elements = <T>[];
+
+  int get length => _elements.length;
+
+  bool get isEmpty => _elements.isEmpty;
+
+  void clear() => _elements.clear();
+
+  T peek() {
+    if (isEmpty) return null;
+    return _elements.last;
+  }
+
+  T pop() {
+    if (isEmpty) return null;
+    return _elements.removeLast();
+  }
+
+  void replaceLast(T element) => _elements
+    ..removeLast()
+    ..add(element);
+
+  void push(T element) => _elements.add(element);
 }

@@ -43,7 +43,10 @@ class GetAllChildNodesInteractor {
       {WorkGroupNodeId parentId}
   ) async {
     try {
-      final childNodes = await _sharedSpaceDocumentRepository.getAllChildNodes(sharedSpaceId, parentNodeId: parentId,);
+      final childNodes = await _sharedSpaceDocumentRepository.getAllChildNodes(sharedSpaceId, parentNodeId: parentId,)
+        ..sort((node1, node2) {
+          return node2.modificationDate.compareTo(node1.modificationDate);
+        });
       return Right(GetChildNodesViewState(childNodes));
     } catch (exception) {
       return Left(GetChildNodesFailure(exception));

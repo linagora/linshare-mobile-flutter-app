@@ -34,11 +34,14 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 
@@ -66,11 +69,11 @@ class _HomeWidgetState extends State<HomeWidget> {
       key: _scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: StoreConnector<AppState, String>(
-          converter: (store) => store.state.uiState.routePath,
+        title: StoreConnector<AppState, UIState>(
+          converter: (store) => store.state.uiState,
           distinct: true,
-          builder: (context, routePath) => Text(
-            getAppBarTitle(routePath),
+          builder: (context, uiState) => Text(
+            getAppBarTitle(uiState),
             style: TextStyle(fontSize: 24, color: Colors.white))
         ),
         centerTitle: true,
@@ -80,31 +83,40 @@ class _HomeWidgetState extends State<HomeWidget> {
             onPressed: () => _scaffoldKey.currentState.openDrawer()),
       ),
       drawer: SideMenuDrawerWidget(),
-      body: StoreConnector<AppState, String>(
-        converter: (store) => store.state.uiState.routePath,
+      body: StoreConnector<AppState, UIState>(
+        converter: (store) => store.state.uiState,
         distinct: true,
-        builder: (context, routePath) => getHomeWidget(routePath)
+        builder: (context, uiState) => getHomeWidget(uiState)
       ),
     );
   }
 
-  String getAppBarTitle(String routePath) {
-    switch (routePath) {
+  String getAppBarTitle(UIState uiState) {
+    switch (uiState.routePath) {
       case RoutePaths.mySpace:
         return AppLocalizations.of(context).my_space_title;
       case RoutePaths.sharedSpace:
         return AppLocalizations.of(context).shared_space;
+      case RoutePaths.sharedSpaceInside:
+        return uiState.sharedSpace.name;
       default:
         return AppLocalizations.of(context).my_space_title;
     }
   }
 
-  Widget getHomeWidget(String routePath) {
-    switch (routePath) {
+  Widget getHomeWidget(UIState uiState) {
+    switch (uiState.routePath) {
       case RoutePaths.mySpace:
         return getIt<MySpaceWidget>();
       case RoutePaths.sharedSpace:
         return getIt<SharedSpaceWidget>();
+      case RoutePaths.sharedSpaceInside:
+        return WorkGroupDetailFilesWidget(
+          uiState.sharedSpace,
+          () { // Back to shared spaces screen
+            homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
+          },
+        );
       default:
         return getIt<MySpaceWidget>();
     }

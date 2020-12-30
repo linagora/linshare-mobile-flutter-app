@@ -29,26 +29,58 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+
 import 'package:domain/domain.dart';
-import 'package:flutter/widgets.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:redux/src/store.dart';
+import 'package:rxdart/rxdart.dart';
 
-@immutable
-class UIState {
-  final String routePath;
-  final SharedSpaceNodeNested sharedSpace;
+class WorkGroupNodesSurfingViewModel extends BaseViewModel {
+  WorkGroupNodesSurfingViewModel(
+    Store<AppState> store,
+    this._getAllChildNodesInteractor,
+  ) : super(store);
 
-  UIState(this.routePath, {this.sharedSpace});
+  final GetAllChildNodesInteractor _getAllChildNodesInteractor;
 
-  factory UIState.initial() {
-    return UIState(RoutePaths.initializeRoute);
+  final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
+      BehaviorSubject.seeded(WorkGroupNodesSurfingState(null, [], FolderNodeType.normal));
+  StreamView<WorkGroupNodesSurfingState> get stateSubscription => _stateSubscription;
+
+  WorkGroupNodesSurfingState get currentState => _stateSubscription.value;
+
+  void initial(WorkGroupNodesSurfingArguments input) {
+    _stateSubscription.add(currentState.copyWith(
+      node: input.folder,
+      folderNodeType: input.folderType,
+      sharedSpaceId: input.sharedSpaceId,
+    ));
   }
 
-  UIState setCurrentView(String routePath, {SharedSpaceNodeNested sharedSpace}) {
-    return UIState(routePath, sharedSpace: sharedSpace);
-  }
+  void loadAllChildNodes() async {
+    _stateSubscription.add(currentState.copyWith(showLoading: true));
 
-  UIState clearCurrentView() {
-    return UIState.initial();
+    final isRootFolder = currentState.folderNodeType == FolderNodeType.root;
+    final result = await _getAllChildNodesInteractor.execute(
+      isRootFolder
+          ? currentState.sharedSpaceId
+          : currentState.node.sharedSpaceId,
+      parentId: isRootFolder ? null : currentState.node.workGroupNodeId,
+    );
+
+    result.fold(
+      (failure) {
+        _stateSubscription.add(currentState.copyWith(children: [], showLoading: false));
+      },
+      (success) {
+        _stateSubscription.add(currentState.copyWith(
+          children: (success as GetChildNodesViewState).workGroupNodes, showLoading: false
+        ));
+      },
+    );
   }
 }

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-12-23T14:42:41.914073",
+  "@@last_modified": "2020-12-29T13:56:35.095122",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -205,6 +205,16 @@
   },
   "sharing_after_uploaded_failure": "The file will be ready for upload and sharing once connection is available",
   "@sharing_after_uploaded_failure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_nodes_surfing_root_back_title": "Back to Shared Space",
+  "@workgroup_nodes_surfing_root_back_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_nodes_surfing_sort_type_title": "Modification date",
+  "@workgroup_nodes_surfing_sort_type_title": {
     "type": "text",
     "placeholders": {}
   }

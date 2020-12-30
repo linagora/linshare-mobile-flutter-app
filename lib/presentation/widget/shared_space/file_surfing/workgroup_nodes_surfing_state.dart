@@ -28,13 +28,38 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 
-class WorkGroupRootNode extends WorkGroupNode {
-  WorkGroupRootNode(SharedSpaceId sharedSpaceId) : super(null, null, null, sharedSpaceId, null, null, 'This is root of workgroup', 'Root', null);
+class WorkGroupNodesSurfingState {
+  final WorkGroupNode node;
+  final List<WorkGroupNode> children;
+  final FolderNodeType folderNodeType;
+  final SharedSpaceId sharedSpaceId;
+  final bool showLoading;
 
-  @override
-  List<Object> get props => [sharedSpaceId];
+  WorkGroupNodesSurfingState(
+    this.node,
+    this.children,
+    this.folderNodeType, {
+    this.sharedSpaceId,
+    this.showLoading = false,
+  });
+
+  WorkGroupNodesSurfingState copyWith({
+    WorkGroupNode node,
+    List<WorkGroupNode> children,
+    FolderNodeType folderNodeType,
+    SharedSpaceId sharedSpaceId,
+    bool showLoading,
+  }) {
+    return WorkGroupNodesSurfingState(
+      node ?? this.node,
+      children ?? this.children,
+      folderNodeType ?? this.folderNodeType,
+      sharedSpaceId: sharedSpaceId ?? this.sharedSpaceId,
+      showLoading: showLoading ?? this.showLoading,
+    );
+  }
 }

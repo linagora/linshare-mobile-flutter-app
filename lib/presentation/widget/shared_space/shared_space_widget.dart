@@ -42,7 +42,6 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
-import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
 class SharedSpaceWidget extends StatefulWidget {
@@ -175,6 +174,9 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
           ],
         ),
       ),
+      onTap: () {
+        sharedSpaceViewModel.openSharedSpace(sharedSpace);
+      },
     );
   }
 
