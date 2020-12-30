@@ -31,6 +31,8 @@
 
 import 'dart:async';
 
+import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -61,6 +63,14 @@ class HomeViewModel extends BaseViewModel {
             arguments: UploadFileArguments(listFileInfo.first));
       }
     });
+  }
+
+  void cleanUploadViewState() {
+    store.dispatch(CleanUploadStateAction());
+  }
+
+  void cleanShareViewState() {
+    store.dispatch(CleanShareStateAction());
   }
 
   @override
