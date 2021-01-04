@@ -33,6 +33,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/media_type_ext
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:redux/redux.dart';
 
@@ -107,7 +109,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
               ),
               floatingActionButton: FloatingActionButton(
                 key: Key('my_space_upload_button'),
-                onPressed: () => mySpaceViewModel.handleOnUploadFilePressed(),
+                onPressed: () => mySpaceViewModel
+                    .openUploadFileMenu(context, uploadFileMenuActionTiles(context)),
                 backgroundColor: AppColor.primaryColor,
                 child: Image(image: AssetImage(imagePath.icAdd)),
               ),
@@ -262,6 +265,33 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       if (Platform.isAndroid) downloadAction(document),
       shareAction(document),
     ];
+  }
+
+  List<Widget> uploadFileMenuActionTiles(BuildContext context) {
+    return [
+      pickPhotoAndVideoAction(),
+      browseFileAction()
+    ];
+  }
+
+  Widget pickPhotoAndVideoAction() {
+    return SimpleContextMenuActionBuilder(
+        Key('pick_photo_and_video_context_menu_action'),
+        SvgPicture.asset(imagePath.icPhotoLibrary,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).photos_and_videos)
+        .onActionClick((_) => mySpaceViewModel.openFilePickerByType(FileType.media))
+        .build();
+  }
+
+  Widget browseFileAction() {
+    return SimpleContextMenuActionBuilder(
+        Key('browse_file_context_menu_action'),
+        SvgPicture.asset(imagePath.icMore,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).browse)
+        .onActionClick((_) => mySpaceViewModel.openFilePickerByType(FileType.any))
+        .build();
   }
 
   Widget downloadAction(Document document) {

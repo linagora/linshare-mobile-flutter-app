@@ -40,13 +40,18 @@ class ContextMenuBuilder {
   final imagePath = getIt<AppImagePaths>();
 
   final BuildContext _context;
-  final PresentationFile _file;
   final List<Widget> _actionTiles = [];
+  Widget _header;
 
-  ContextMenuBuilder(this._context, this._file);
+  ContextMenuBuilder(this._context);
 
   ContextMenuBuilder addTiles(List<Widget> tiles) {
     _actionTiles.addAll(tiles);
+    return this;
+  }
+
+  ContextMenuBuilder addHeader(Widget header) {
+    _header = header;
     return this;
   }
 
@@ -67,7 +72,7 @@ class ContextMenuBuilder {
         return Container(
           child: Wrap(
             children: <Widget>[
-              ContextMenuHeaderBuilder(Key('context_menu_header'), _file).build(),
+              _header ?? SizedBox.shrink(),
               Divider(),
               ..._actionTiles,
             ],
