@@ -30,10 +30,13 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_navigator.dart';
@@ -81,12 +84,9 @@ class _WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget>
                 Align(
                   alignment: Alignment.topCenter,
                   child: GestureDetector(
-                    onTap: () => widget.sharedSpaceNode.sharedSpaceRole.name ==
-                            SharedSpaceRoleName.READER
+                    onTap: () => widget.sharedSpaceNode.sharedSpaceRole.name == SharedSpaceRoleName.READER
                         ? {}
-                        : workGroupDetailFilesViewModel
-                            .handleOnUploadFilePressed(_workgroupNavigatorKey
-                                .currentState.widget.currentPageData),
+                        : workGroupDetailFilesViewModel.openUploadFileMenu(context, uploadFileMenuActionTiles(context)),
                     child: _buildUploadWidget(),
                   ),
                 ),
@@ -126,5 +126,38 @@ class _WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget>
         ),
       ),
     );
+  }
+
+  List<Widget> uploadFileMenuActionTiles(BuildContext context) {
+    return [
+      pickPhotoAndVideoAction(),
+      browseFileAction()
+    ];
+  }
+
+  Widget pickPhotoAndVideoAction() {
+    return SimpleContextMenuActionBuilder(
+            Key('pick_photo_and_video_context_menu_action'),
+            SvgPicture.asset(imagePath.icPhotoLibrary,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).photos_and_videos)
+        .onActionClick((_) =>
+            workGroupDetailFilesViewModel.openFilePickerByType(
+                _workgroupNavigatorKey.currentState.widget.currentPageData,
+                FileType.media))
+        .build();
+  }
+
+  Widget browseFileAction() {
+    return SimpleContextMenuActionBuilder(
+            Key('browse_file_context_menu_action'),
+            SvgPicture.asset(imagePath.icMore,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).browse)
+        .onActionClick((_) =>
+            workGroupDetailFilesViewModel.openFilePickerByType(
+                _workgroupNavigatorKey.currentState.widget.currentPageData,
+                FileType.any))
+        .build();
   }
 }
