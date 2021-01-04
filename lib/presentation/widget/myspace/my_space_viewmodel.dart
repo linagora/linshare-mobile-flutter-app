@@ -32,6 +32,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
@@ -44,6 +45,8 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -116,12 +119,29 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_getAllDocumentAction());
   }
 
-  void handleOnUploadFilePressed() {
-    store.dispatch(pickFileAction());
+  void openFilePickerByType(FileType fileType) {
+    _appNavigation.popBack();
+    store.dispatch(pickFileAction(fileType));
   }
 
   void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles) {
     store.dispatch(_handleContextMenuAction(context, document, actionTiles));
+  }
+
+  void openUploadFileMenu(BuildContext context, List<Widget> actionTiles) {
+    store.dispatch(_handleUploadFileMenuAction(context, actionTiles));
+  }
+
+  ThunkAction<AppState> _handleUploadFileMenuAction(
+      BuildContext context, List<Widget> actionTiles) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context)
+          .addHeader(SimpleBottomSheetHeaderBuilder(Key('file_picker_bottom_sheet_header_builder'))
+              .addLabel(AppLocalizations.of(context).upload_file_title)
+              .build())
+          .addTiles(actionTiles)
+          .build();
+    };
   }
 
   void _showDownloadingFileDialog(BuildContext context, String fileName, CancelToken cancelToken) {
@@ -135,9 +155,13 @@ class MySpaceViewModel extends BaseViewModel {
             .build());
   }
 
-  ThunkAction<AppState> _handleContextMenuAction(BuildContext context, Document document, List<Widget> actionTiles) {
+  ThunkAction<AppState> _handleContextMenuAction(
+      BuildContext context, Document document, List<Widget> actionTiles) {
     return (Store<AppState> store) async {
-      ContextMenuBuilder(context, DocumentPresentationFile.fromDocument(document))
+      ContextMenuBuilder(context)
+          .addHeader(ContextMenuHeaderBuilder(
+            Key('context_menu_header'),
+            DocumentPresentationFile.fromDocument(document)).build())
           .addTiles(actionTiles)
           .build();
       store.dispatch(MySpaceAction(Right(ContextMenuItemViewState(document))));
@@ -191,9 +215,9 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> pickFileAction() {
+  ThunkAction<AppState> pickFileAction(FileType fileType) {
     return (Store<AppState> store) async {
-      await _localFilePicker.pickSingleFile().then((result) => result.fold(
+      await _localFilePicker.pickSingleFile(fileType: fileType).then((result) => result.fold(
           (failure) => store.dispatch(UploadFileAction(Left(failure))),
           (success) => store.dispatch(pickFileSuccessAction(success))));
     };

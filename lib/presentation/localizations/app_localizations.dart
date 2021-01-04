@@ -285,6 +285,20 @@ class AppLocalizations {
       name: 'upload_to_workspace',
     );
   }
+
+  String get photos_and_videos {
+    return Intl.message(
+      'Photos and Videos',
+      name: 'photos_and_videos',
+    );
+  }
+
+  String get browse {
+    return Intl.message(
+      'Browse',
+      name: 'browse',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
