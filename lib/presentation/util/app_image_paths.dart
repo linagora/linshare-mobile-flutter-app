@@ -61,6 +61,8 @@ class AppImagePaths {
   String get icFolder => _getImagePath('ic_folder.svg');
   String get icPlus => _getImagePath('ic_plus.svg');
   String get icSharedSpaceDisable => _getImagePath('ic_shared_space_disable.svg');
+  String get icMore => _getImagePath('ic_more.svg');
+  String get icPhotoLibrary => _getImagePath('ic_photo_library.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

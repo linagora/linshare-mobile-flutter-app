@@ -227,5 +227,15 @@
   "@upload_to_workspace": {
     "type": "text",
     "placeholders": {}
+  },
+  "photos_and_videos": "Photos and Videos",
+  "@photos_and_videos": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "browse": "Browse",
+  "@browse": {
+    "type": "text",
+    "placeholders": {}
   }
 }
