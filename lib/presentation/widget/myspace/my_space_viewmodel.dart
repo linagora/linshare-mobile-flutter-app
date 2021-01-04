@@ -132,8 +132,7 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_handleUploadFileMenuAction(context, actionTiles));
   }
 
-  ThunkAction<AppState> _handleUploadFileMenuAction(
-      BuildContext context, List<Widget> actionTiles) {
+  ThunkAction<AppState> _handleUploadFileMenuAction(BuildContext context, List<Widget> actionTiles) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
           .addHeader(SimpleBottomSheetHeaderBuilder(Key('file_picker_bottom_sheet_header_builder'))
