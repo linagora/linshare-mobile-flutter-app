@@ -32,11 +32,16 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
@@ -49,15 +54,31 @@ class WorkGroupDetailFilesViewModel extends BaseViewModel {
 
   WorkGroupDetailFilesViewModel(Store<AppState> store, this._localFilePicker, this._appNavigation) : super(store);
 
-  void handleOnUploadFilePressed(WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
-    store.dispatch(pickFileAction(workGroupNodesSurfingArguments));
+  void openUploadFileMenu(BuildContext context, List<Widget> actionTiles) {
+    store.dispatch(_handleUploadFileMenuAction(context, actionTiles));
   }
 
-  ThunkAction<AppState> pickFileAction(WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
+  void openFilePickerByType(WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments, FileType fileType) {
+    _appNavigation.popBack();
+    store.dispatch(pickFileAction(workGroupNodesSurfingArguments, fileType));
+  }
+
+  ThunkAction<AppState> pickFileAction(WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments, FileType fileType) {
     return (Store<AppState> store) async {
-      await _localFilePicker.pickSingleFile().then((result) => result.fold(
+      await _localFilePicker.pickSingleFile(fileType: fileType).then((result) => result.fold(
               (failure) => store.dispatch(UploadFileAction(Left(failure))),
               (success) => store.dispatch(pickFileSuccessAction(success, workGroupNodesSurfingArguments))));
+    };
+  }
+
+  ThunkAction<AppState> _handleUploadFileMenuAction(BuildContext context, List<Widget> actionTiles) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context)
+          .addHeader(SimpleBottomSheetHeaderBuilder(Key('file_picker_bottom_sheet_header_builder'))
+              .addLabel(AppLocalizations.of(context).upload_file_title)
+              .build())
+          .addTiles(actionTiles)
+          .build();
     };
   }
 
