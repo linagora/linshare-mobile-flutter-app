@@ -37,6 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -51,10 +52,12 @@ import 'workgroup_nodes_surfing_navigator.dart';
 class WorkGroupNodesSurfingWidget extends StatefulWidget {
   final OnNodeClickedCallback nodeClickedCallback;
   final OnBackClickedCallback backClickedCallback;
+  final NodeSurfingType nodeSurfingType;
 
   WorkGroupNodesSurfingWidget(
     this.nodeClickedCallback,
     this.backClickedCallback,
+    {this.nodeSurfingType = NodeSurfingType.normal}
   );
 
   @override
@@ -81,7 +84,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(top: 48),
+          margin: widget.nodeSurfingType == NodeSurfingType.normal ? EdgeInsets.only(top: 48) : EdgeInsets.only(top: 0),
           color: Colors.white,
           child: RefreshIndicator(
             key: _refreshIndicatorKey,
@@ -103,7 +106,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
             ),
           ),
         ),
-        _buildTopBar(),
+        widget.nodeSurfingType == NodeSurfingType.normal ? _buildTopBar() : SizedBox.shrink(),
       ],
     );
   }
@@ -184,6 +187,17 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   }
 
   Widget _buildNodeItem(BuildContext context, WorkGroupNode node) {
+    switch (widget.nodeSurfingType) {
+      case NodeSurfingType.normal:
+        return _buildNodeItemNormal(context, node);
+      case NodeSurfingType.destinationPicker:
+        return _buildNodeItemDestinationPicker(context, node);
+      default:
+        return _buildNodeItemNormal(context, node);
+    }
+  }
+
+  Widget _buildNodeItemNormal(BuildContext context, WorkGroupNode node) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -191,7 +205,9 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
           SvgPicture.asset(
             node.type == WorkGroupNodeType.FOLDER
                 ? imagePath.icFolder
-                : (node as WorkGroupDocument).mediaType.getFileTypeImagePath(imagePath),
+                : (node as WorkGroupDocument)
+                    .mediaType
+                    .getFileTypeImagePath(imagePath),
             width: 20,
             height: 24,
             fit: BoxFit.fill,
@@ -203,15 +219,18 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         child: Text(
           node.name,
           maxLines: 1,
-          style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+          style: TextStyle(
+              fontSize: 14, color: AppColor.documentNameItemTextColor),
         ),
       ),
       subtitle: Transform(
         transform: Matrix4.translationValues(-16, 0.0, 0.0),
         child: Text(
-          AppLocalizations.of(context).item_last_modified(node.modificationDate.getMMMddyyyyFormatString()),
+          AppLocalizations.of(context).item_last_modified(
+              node.modificationDate.getMMMddyyyyFormatString()),
           maxLines: 1,
-          style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
+          style: TextStyle(
+              fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
         ),
       ),
       trailing: IconButton(
@@ -227,7 +246,55 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
     );
   }
 
+  Widget _buildNodeItemDestinationPicker(
+      BuildContext context, WorkGroupNode node) {
+    return ListTile(
+      leading: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          node.type == WorkGroupNodeType.FOLDER
+              ? SvgPicture.asset(
+                  node.type == WorkGroupNodeType.FOLDER
+                      ? imagePath.icFolder
+                      : (node as WorkGroupDocument)
+                          .mediaType
+                          .getFileTypeImagePath(imagePath),
+                  width: 20,
+                  height: 24,
+                  fit: BoxFit.fill,
+                )
+              : Opacity(
+                  opacity: 0.6,
+                  child: SvgPicture.asset(
+                    node.type == WorkGroupNodeType.FOLDER
+                        ? imagePath.icFolder
+                        : (node as WorkGroupDocument)
+                            .mediaType
+                            .getFileTypeImagePath(imagePath),
+                    width: 20,
+                    height: 24,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+        ],
+      ),
+      title: Text(
+        node.name,
+        maxLines: 1,
+        style: TextStyle(
+            fontSize: 14,
+            color: node.type == WorkGroupNodeType.FOLDER
+                ? AppColor.documentNameItemTextColor
+                : AppColor.documentNameItemTextColor.withOpacity(0.6)),
+      ),
+      onTap: () => widget.nodeClickedCallback(node),
+    );
+  }
+
   Widget _buildEmptyListIndicator() {
+    if (widget.nodeSurfingType == NodeSurfingType.destinationPicker) {
+      return SizedBox.shrink();
+    }
     return BackgroundWidgetBuilder()
         .image(
           SvgPicture.asset(

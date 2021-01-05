@@ -32,26 +32,36 @@
 
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:rxdart/rxdart.dart';
 import '../file_surfing/workgroup_nodes_surfing_widget.dart';
-import '../../../util/data_structure/stack.dart' as data_structure;
+import '../../../util/data_structure/stack.dart' as structure;
 
 
 class WorkGroupNodesSurfingNavigator extends StatefulWidget {
   WorkGroupNodesSurfingNavigator(
-    Key key,
-    this.sharedSpaceNodeNested,
-    this.onBackClickedCallback,
-  ) : super(key: key);
+      Key key,
+      this.sharedSpaceNodeNested,
+      this.onBackClickedCallback,
+      {this.nodeSurfingType = NodeSurfingType.normal,
+      this.currentNodeObservable})
+      : super(key: key);
 
   final SharedSpaceNodeNested sharedSpaceNodeNested;
   final OnBackClickedCallback onBackClickedCallback;
-  final data_structure.Stack<WorkGroupNodesSurfingArguments> pagesStack = data_structure.Stack();
+  final NodeSurfingType nodeSurfingType;
+  final structure.Stack<WorkGroupNodesSurfingArguments> pagesStack = structure.Stack();
   WorkGroupNodesSurfingArguments get currentPageData => pagesStack.peek();
+  final BehaviorSubject<WorkGroupNodesSurfingArguments> currentNodeObservable;
+
+  final WorkGroupNodesSurfingNavigatorState _state = WorkGroupNodesSurfingNavigatorState();
 
   @override
-  WorkGroupNodesSurfingNavigatorState createState() => WorkGroupNodesSurfingNavigatorState();
+  WorkGroupNodesSurfingNavigatorState createState() => _state;
+
+  void nodeSurfingNavigateBack() => _state.wantToBack();
 }
 
 class WorkGroupNodesSurfingNavigatorState extends State<WorkGroupNodesSurfingNavigator> {
@@ -61,7 +71,7 @@ class WorkGroupNodesSurfingNavigatorState extends State<WorkGroupNodesSurfingNav
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _wantToBack();
+        wantToBack();
         return false;
       },
       child: Navigator(
@@ -71,6 +81,9 @@ class WorkGroupNodesSurfingNavigatorState extends State<WorkGroupNodesSurfingNav
               FolderNodeType.root,
               widget.sharedSpaceNodeNested);
           widget.pagesStack.push(rootArgs);
+          if (widget.currentNodeObservable != null) {
+            widget.currentNodeObservable.add(rootArgs);
+          }
           return _generateNewPage(
             context,
             rootArgs,
@@ -94,6 +107,9 @@ class WorkGroupNodesSurfingNavigatorState extends State<WorkGroupNodesSurfingNav
                   widget.sharedSpaceNodeNested,
                   folder: clickedNode);
               widget.pagesStack.push(pageArgs);
+              if (widget.currentNodeObservable != null) {
+                widget.currentNodeObservable.add(pageArgs);
+              }
               Navigator.push(
                   context,
                   _generateNewPage(
@@ -103,8 +119,9 @@ class WorkGroupNodesSurfingNavigatorState extends State<WorkGroupNodesSurfingNav
             }
           },
           () {
-            _wantToBack();
+            wantToBack();
           },
+          nodeSurfingType: widget.nodeSurfingType,
         );
       },
       settings: RouteSettings(arguments: args),
@@ -113,13 +130,16 @@ class WorkGroupNodesSurfingNavigatorState extends State<WorkGroupNodesSurfingNav
     );
   }
 
-  void _wantToBack() {
+  void wantToBack() {
     if (_navigatorKey.currentState.canPop()) {
       _navigatorKey.currentState.pop();
     } else {
       widget.onBackClickedCallback();
     }
     widget.pagesStack.pop();
+    if (widget.currentNodeObservable != null) {
+      widget.currentNodeObservable.add(widget.currentPageData);
+    }
   }
 
 }

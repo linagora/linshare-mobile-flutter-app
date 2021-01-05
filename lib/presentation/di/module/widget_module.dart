@@ -38,6 +38,8 @@ import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
@@ -68,6 +70,7 @@ class WidgetModule {
     _provideSharedSpaceComponent();
     _provideWorkGroupNodeSurfingComponent();
     _provideCurrentUploadsComponent();
+    _provideDestinationPickerComponent();
   }
 
   void _provideLoginComponent() {
@@ -157,6 +160,15 @@ class WidgetModule {
     getIt.registerFactory(() => CurrentUploadsViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>()
+    ));
+  }
+
+  void _provideDestinationPickerComponent() {
+    getIt.registerFactory(() => DestinationPickerWidget());
+    getIt.registerFactory(() => DestinationPickerViewModel(
+        getIt<Store<AppState>>(),
+        getIt<GetAllSharedSpacesInteractor>(),
+        getIt<AppNavigation>()
     ));
   }
 }
