@@ -39,6 +39,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -50,6 +51,8 @@ import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/document_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:redux/redux.dart';
 
@@ -81,6 +84,41 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         builder: (BuildContext context, MySpaceViewModel viewModel) => Scaffold(
               body: Column(
                 children: [
+                  StoreConnector<AppState, MySpaceState>(
+                    converter: (Store<AppState> store) => store.state.mySpaceState,
+                    builder: (context, state) {
+                      return state.selectMode == SelectMode.ACTIVE ? ListTile(
+                        leading: SvgPicture.asset(
+                          imagePath.icSelectAll,
+                          width: 28,
+                          height: 28,
+                          fit: BoxFit.fill,
+                          color: state.isAllDocumentsSelected() ?
+                            AppColor.unselectedElementColor :
+                            AppColor.primaryColor
+                        ),
+                        title: Transform(
+                          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                          child: state.isAllDocumentsSelected() ?
+                            Text(AppLocalizations.of(context).unselect_all,
+                              maxLines: 1,
+                              style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor)) :
+                            Text(AppLocalizations.of(context).select_all,
+                              maxLines: 1,
+                              style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+                            )
+                        ),
+                        tileColor: AppColor.topBarBackgroundColor,
+                        onTap: () => mySpaceViewModel.toggleSelectAllDocuments(),
+                        trailing: TextButton(
+                          onPressed: () => mySpaceViewModel.cancelSelection(),
+                          child: Text(AppLocalizations.of(context).cancel,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 14, color: AppColor.primaryColor),
+                        )),
+                      ) : SizedBox.shrink();
+                    },
+                  ),
                   StoreConnector<AppState, dartz.Either<Failure, Success>>(
                     converter: (store) => store.state.mySpaceState.viewState,
                     builder: (context, viewState) {
@@ -105,15 +143,33 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                   Expanded(
                     child: _buildMySpaceList(context),
                   ),
+                  StoreConnector<AppState, MySpaceState>(
+                    converter: (store) => store.state.mySpaceState,
+                    builder: (context, state) {
+                      return state.selectMode == SelectMode.ACTIVE && state.getAllSelectedDocuments().isNotEmpty ?
+                        MultipleSelectionBarBuilder()
+                          .key(Key('multiple_document_selection_bar'))
+                          .text(
+                            AppLocalizations
+                              .of(context)
+                              .items(state.getAllSelectedDocuments().length))
+                          .actions(multipleSelectionActions(state.getAllSelectedDocuments()))
+                          .build()
+                        : SizedBox.shrink();
+                    })
                 ],
               ),
-              floatingActionButton: FloatingActionButton(
-                key: Key('my_space_upload_button'),
-                onPressed: () => mySpaceViewModel
-                    .openUploadFileMenu(context, uploadFileMenuActionTiles(context)),
-                backgroundColor: AppColor.primaryColor,
-                child: Image(image: AssetImage(imagePath.icAdd)),
-              ),
+              floatingActionButton: StoreConnector<AppState, SelectMode>(
+                converter: (store) => store.state.mySpaceState.selectMode,
+                builder: (context, selectMode) {
+                  return selectMode == SelectMode.INACTIVE ? FloatingActionButton(
+                    key: Key('my_space_upload_button'),
+                    onPressed: () => mySpaceViewModel
+                        .openUploadFileMenu(context, uploadFileMenuActionTiles(context)),
+                    backgroundColor: AppColor.primaryColor,
+                    child: Image(image: AssetImage(imagePath.icAdd)),
+                  ) : SizedBox.shrink();
+                }),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
             ),
@@ -146,7 +202,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         });
   }
 
-  Widget _buildMySpaceListView(BuildContext context, List<Document> documentList) {
+  Widget _buildMySpaceListView(BuildContext context, List<SelectableElement<Document>> documentList) {
     if (documentList.isEmpty) {
       return _buildUploadFileHere(context);
     } else {
@@ -162,13 +218,13 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     }
   }
 
-  Widget _buildMySpaceListItem(BuildContext context, Document document) {
+  Widget _buildMySpaceListItem(BuildContext context, SelectableElement<Document> document) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-          document.mediaType.getFileTypeImagePath(imagePath),
+          document.element.mediaType.getFileTypeImagePath(imagePath),
           width: 20,
           height: 24,
           fit: BoxFit.fill)
@@ -182,20 +238,20 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             children: [
               Row(
                 children: [
-                  _buildDocumentName(document.name),
-                  _buildSharedIcon(document.isShared())
+                  _buildDocumentName(document.element.name),
+                  _buildSharedIcon(document.element.isShared())
                 ]
               ),
               Align(
                 alignment: Alignment.centerRight,
                 child: _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
-                  document.modificationDate.getMMMddyyyyFormatString())))
+                  document.element.modificationDate.getMMMddyyyyFormatString())))
             ]
           ),
         ),
         smallScreen: Transform(
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: _buildDocumentName(document.name),
+          child: _buildDocumentName(document.element.name),
         ),
       ),
       subtitle: ResponsiveWidget.isSmallScreen(context) ? Transform(
@@ -203,19 +259,32 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         child: Row(
           children: [
             _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
-                  document.modificationDate.getMMMddyyyyFormatString())),
-            _buildSharedIcon(document.isShared())
+                  document.element.modificationDate.getMMMddyyyyFormatString())),
+            _buildSharedIcon(document.element.isShared())
           ],
         ),
       ) : null,
-      trailing: IconButton(
-        icon: SvgPicture.asset(
-          imagePath.icContextMenu,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
-      ), onPressed: () => mySpaceViewModel
-          .openContextMenu(context, document, contextMenuActionTiles(context, document))),
+      trailing: StoreConnector<AppState, SelectMode>(
+        converter: (store) => store.state.mySpaceState.selectMode,
+        builder: (context, selectMode) {
+          return selectMode == SelectMode.ACTIVE ?
+            Checkbox(
+              value: document.selectMode == SelectMode.ACTIVE,
+              onChanged: (bool value) => mySpaceViewModel.selectItem(document),
+              activeColor: AppColor.primaryColor,
+            ) :
+            IconButton(
+              icon: SvgPicture.asset(
+                imagePath.icContextMenu,
+                width: 24,
+                height: 24,
+                fit: BoxFit.fill,
+              ),
+              onPressed: () => mySpaceViewModel
+                .openContextMenu(context, document.element, contextMenuActionTiles(context, document.element))
+            );
+        }),
+        onLongPress: () => mySpaceViewModel.selectItem(document)
     );
   }
 
@@ -327,5 +396,23 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .onActionClick(
             (data) => mySpaceViewModel.shareDocument(document))
         .build();
+  }
+
+  List<Widget> multipleSelectionActions(List<Document> documents) {
+    return [shareMultipleSelection(documents)];
+  }
+
+  Widget shareMultipleSelection(List<Document> documents) {
+    return DocumentMultipleSelectionActionBuilder(
+      Key('multiple_selection_share_action'),
+      SvgPicture.asset(
+        imagePath.icContextItemShare,
+        width: 24,
+        height: 24,
+        fit: BoxFit.fill,
+      ),
+      documents)
+      .onActionClick((documents) => null)
+      .build();
   }
 }

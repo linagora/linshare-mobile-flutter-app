@@ -33,6 +33,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
@@ -50,6 +51,28 @@ class MySpaceGetAllDocumentAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
   MySpaceGetAllDocumentAction(this.viewState);
+}
+
+@immutable
+class MySpaceSelectDocumentAction extends ActionOffline {
+  final SelectableElement<Document> selectedDocument;
+
+  MySpaceSelectDocumentAction(this.selectedDocument);
+}
+
+@immutable
+class MySpaceClearSelectedDocumentsAction extends ActionOffline {
+  MySpaceClearSelectedDocumentsAction();
+}
+
+@immutable
+class MySpaceSelectAllDocumentsAction extends ActionOffline {
+  MySpaceSelectAllDocumentsAction();
+}
+
+@immutable
+class MySpaceUnselectAllDocumentsAction extends ActionOffline {
+  MySpaceUnselectAllDocumentsAction();
 }
 
 @immutable

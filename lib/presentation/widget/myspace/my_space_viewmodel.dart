@@ -37,7 +37,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/document_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
@@ -231,8 +233,25 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
+  void selectItem(SelectableElement<Document> selectedDocument) {
+    store.dispatch(MySpaceSelectDocumentAction(selectedDocument));
+  }
+
+  void toggleSelectAllDocuments() {
+    if (store.state.mySpaceState.isAllDocumentsSelected()) {
+      store.dispatch(MySpaceUnselectAllDocumentsAction());
+    } else {
+      store.dispatch(MySpaceSelectAllDocumentsAction());
+    }
+  }
+
+  void cancelSelection() {
+    store.dispatch(MySpaceClearSelectedDocumentsAction());
+  }
+
   @override
   void onDisposed() {
+    cancelSelection();
     super.onDisposed();
   }
 }
