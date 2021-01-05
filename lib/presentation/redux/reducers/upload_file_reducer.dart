@@ -36,6 +36,8 @@ import 'package:redux/redux.dart';
 final uploadFileReducer = combineReducers<UploadFileState>([
   TypedReducer<UploadFileState, UploadFileAction>(
       (UploadFileState state, UploadFileAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<UploadFileState, UploadFilesUpdateAction>(
+      (UploadFileState state, UploadFilesUpdateAction action) => state.updateStateList(action.uploadingStateFiles)),
   TypedReducer<UploadFileState, CleanUploadStateAction>(
       (UploadFileState state, _) => state.clearViewState()),
 ]);

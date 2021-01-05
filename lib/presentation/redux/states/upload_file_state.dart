@@ -31,28 +31,45 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_model.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class UploadFileState extends LinShareState {
-  UploadFileState({Either<Failure, Success> viewState}) : super(viewState);
+  final List<UploadAndShareFileState> _uploadingStateFiles;
+  List<UploadAndShareFileState> get uploadingStateFiles => _uploadingStateFiles.toList();
+
+  List<UploadAndShareFileState> get uploadingFiles {
+    return _uploadingStateFiles
+        .where((element) => element.uploadStatus == UploadFileStatus.uploading)
+        .toList();
+  }
+
+  List<UploadAndShareFileState> get succeedFiles {
+    return _uploadingStateFiles
+        .where((element) => element.uploadStatus == UploadFileStatus.succeed)
+        .toList();
+  }
+
+  UploadFileState(this._uploadingStateFiles, {Either<Failure, Success> viewState}) : super(viewState);
 
   factory UploadFileState.initial() {
-    return UploadFileState(viewState: Right(IdleState()));
+    return UploadFileState([], viewState: Right(IdleState()));
   }
 
   @override
   UploadFileState startLoadingState() {
-    return UploadFileState(viewState: Right(LoadingState()));
+    return UploadFileState(_uploadingStateFiles, viewState: Right(LoadingState()));
   }
 
   @override
-  UploadFileState sendViewState(
-      {@required Either<Failure, Success> viewState}) {
-    return UploadFileState(
-      viewState: viewState,
-    );
+  UploadFileState sendViewState({@required Either<Failure, Success> viewState}) {
+    return UploadFileState(_uploadingStateFiles, viewState: viewState);
+  }
+
+  UploadFileState updateStateList(List<UploadAndShareFileState> newStates) {
+    return UploadFileState(newStates, viewState: viewState);
   }
 
   @override

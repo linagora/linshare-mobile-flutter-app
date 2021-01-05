@@ -36,7 +36,7 @@ import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
 
 abstract class SharedSpaceDocumentRepository {
-  Future<FileUploadState> uploadSharedSpaceDocument(
+  Future<UploadTaskId> uploadSharedSpaceDocument(
       FileInfo fileInfo,
       Token token,
       Uri baseUrl,

@@ -61,5 +61,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- changes this number to configure the maximum number of concurrent tasks -->
+    <key>FUMaximumConnectionsPerHost</key>
+    <integer>3</integer>
+	<!-- changes this number to configure the maximum number of concurrent tasks -->
+    <key>FUMaximumUploadOperation</key>
+    <integer>3</integer>
 </dict>
 </plist>

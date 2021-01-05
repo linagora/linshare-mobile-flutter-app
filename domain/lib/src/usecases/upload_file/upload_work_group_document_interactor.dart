@@ -40,24 +40,15 @@ class UploadWorkGroupDocumentInteractor {
 
   UploadWorkGroupDocumentInteractor(this.sharedSpaceDocumentRepository, this.tokenRepository, this.credentialRepository);
 
-  Stream<Either<Failure, Success>> execute(FileInfo fileInfo, SharedSpaceId sharedSpaceId, {WorkGroupNodeId parentNodeId}) async* {
+  Future<Either<Failure, Success>> execute(FileInfo fileInfo, SharedSpaceId sharedSpaceId, {WorkGroupNodeId parentNodeId}) async {
     try {
-      final responses = await Future.wait([tokenRepository.getToken(), credentialRepository.getBaseUrl()]);
-      final token = responses[0] ;
-      final baseUrl = responses[1] ;
-      final dataHolder = await sharedSpaceDocumentRepository
+      final token = await tokenRepository.getToken();
+      final baseUrl = await credentialRepository.getBaseUrl();
+      final uploadTaskId = await sharedSpaceDocumentRepository
           .uploadSharedSpaceDocument(fileInfo, token, baseUrl, sharedSpaceId, parentNodeId: parentNodeId);
-
-      await for (final dataInfo in dataHolder.dataInfo) {
-        yield dataInfo;
-        final shouldEndStream = dataInfo.fold(
-              (failure) => true,
-              (success) => success is WorkGroupDocumentUploadSuccess,
-        );
-        if (shouldEndStream) break;
-      }
+      return Right(FileUploadState(uploadTaskId));
     } catch (exception) {
-      yield Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo, exception));
+      return Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo, exception));
     }
   }
 }

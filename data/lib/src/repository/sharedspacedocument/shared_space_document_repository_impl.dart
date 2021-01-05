@@ -30,27 +30,34 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:data/src/datasource/file_upload_datasource.dart';
 import 'package:data/src/datasource/shared_space_document_datasource.dart';
+import 'package:data/src/network/config/endpoint.dart';
+import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:data/src/extensions/uri_extension.dart';
 import 'package:domain/domain.dart';
 
 class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository {
   final SharedSpaceDocumentDataSource _sharedSpaceDocumentDataSource;
+  final FileUploadDataSource _fileUploadDataSource;
 
-  SharedSpaceDocumentRepositoryImpl(this._sharedSpaceDocumentDataSource);
+  SharedSpaceDocumentRepositoryImpl(this._sharedSpaceDocumentDataSource, this._fileUploadDataSource);
 
   @override
-  Future<FileUploadState> uploadSharedSpaceDocument(
+  Future<UploadTaskId> uploadSharedSpaceDocument(
       FileInfo fileInfo,
       Token token,
       Uri baseUrl,
       SharedSpaceId sharedSpaceId,
       {WorkGroupNodeId parentNodeId}) {
-    return _sharedSpaceDocumentDataSource.uploadSharedSpaceDocument(
-        fileInfo,
-        token,
-        baseUrl,
-        sharedSpaceId,
-        parentNodeId: parentNodeId);
+    final queryParameters = parentNodeId == null
+        ? <QueryParameter>[]
+        : [StringQueryParameter('parent', parentNodeId.uuid)];
+    final url = baseUrl.withServicePath(Endpoint.sharedSpaces
+        .withPathParameter('${sharedSpaceId.uuid}${Endpoint.nodes}')
+        .withQueryParameters(queryParameters));
+
+    return _fileUploadDataSource.upload(fileInfo, token, url);
   }
 
   @override

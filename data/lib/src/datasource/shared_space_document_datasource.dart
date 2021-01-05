@@ -33,13 +33,6 @@
 import 'package:domain/domain.dart';
 
 abstract class SharedSpaceDocumentDataSource {
-  Future<FileUploadState> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
-
   Future<List<WorkGroupNode>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
       {WorkGroupNodeId parentNodeId});
