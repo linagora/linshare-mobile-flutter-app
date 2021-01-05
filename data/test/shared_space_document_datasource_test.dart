@@ -43,12 +43,10 @@ void main() {
     MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
     SharedSpaceDocumentDataSourceImpl _sharedSpaceDataSourceImpl;
-    MockFlutterUploader _uploader;
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
       _sharedSpaceDataSourceImpl = SharedSpaceDocumentDataSourceImpl(
-          _uploader,
           _linShareHttpClient,
           _remoteExceptionThrower
       );

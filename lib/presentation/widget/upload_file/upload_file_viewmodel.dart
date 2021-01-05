@@ -188,17 +188,17 @@ class UploadFileViewModel extends BaseViewModel {
       final uploadType = _uploadAndShareButtonType.value;
       switch (uploadType) {
         case ShareButtonType.justUpload:
-          await _uploadShareFileManager.justUpload(fileInfo);
+          await _uploadShareFileManager.justUploadFiles([fileInfo]);
           break;
         case ShareButtonType.uploadAndShare:
-          await _uploadShareFileManager.uploadThenShare(
-            fileInfo,
+          await _uploadShareFileManager.uploadFilesThenShare(
+            [fileInfo],
             _autoCompleteResultListObservable.value,
           );
           break;
         case ShareButtonType.workGroup:
           await _uploadShareFileManager.uploadToSharedSpace(
-              fileInfo,
+              [fileInfo],
               _workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.sharedSpaceId,
               parentNodeId: _workGroupDocumentUploadInfoArgument.isRootNode()
                   ? null

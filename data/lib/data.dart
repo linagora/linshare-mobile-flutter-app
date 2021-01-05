@@ -25,12 +25,14 @@ export 'src/datasource/document_datasource.dart';
 export 'src/datasource/autocomplete_datasource.dart';
 export 'src/datasource/shared_space_datasource.dart';
 export 'src/datasource/shared_space_document_datasource.dart';
+export 'src/datasource/file_upload_datasource.dart';
 
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_datasource_impl.dart';
 export 'src/datasource_impl/autocomplete_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_document_datasource_impl.dart';
+export 'src/datasource_impl/file_upload_datasource_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';

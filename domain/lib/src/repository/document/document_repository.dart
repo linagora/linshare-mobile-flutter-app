@@ -43,7 +43,7 @@ import 'package:domain/src/usecases/download_file/download_task_id.dart';
 import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 
 abstract class DocumentRepository {
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl);
 
   Future<List<Document>> getAll();
 

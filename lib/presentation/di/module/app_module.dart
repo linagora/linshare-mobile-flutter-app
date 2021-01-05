@@ -64,7 +64,6 @@ class AppModule {
 
   void _provideDataSourceImpl() {
     getIt.registerFactory(() => DocumentDataSourceImpl(
-        getIt<FlutterUploader>(),
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
     getIt.registerFactory(() => SharedSpaceDataSourceImpl(
@@ -74,9 +73,10 @@ class AppModule {
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
     getIt.registerFactory(() => SharedSpaceDocumentDataSourceImpl(
-          getIt<FlutterUploader>(),
-          getIt<LinShareHttpClient>(),
-          getIt<RemoteExceptionThrower>()));
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
+    getIt.registerLazySingleton(() => FileUploadDataSourceImpl(
+        getIt.get<FlutterUploader>()));
   }
 
   void _provideDataSource() {
@@ -89,16 +89,17 @@ class AppModule {
     getIt.registerFactory<SharedSpaceDataSource>(() => getIt<SharedSpaceDataSourceImpl>());
     getIt.registerFactory<AutoCompleteDataSource>(() => getIt<AutoCompleteDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDocumentDataSource>(() => getIt<SharedSpaceDocumentDataSourceImpl>());
+    getIt.registerFactory<FileUploadDataSource>(() => getIt<FileUploadDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
     getIt.registerFactory(() => AuthenticationRepositoryImpl(getIt<AuthenticationDataSource>()));
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
-    getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>()));
+    getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>(), getIt<FileUploadDataSource>()));
     getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
     getIt.registerFactory(() => AutoCompleteRepositoryImpl(getIt<AutoCompleteDataSource>()));
-    getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(getIt<SharedSpaceDocumentDataSource>()));
+    getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(getIt<SharedSpaceDocumentDataSource>(), getIt<FileUploadDataSource>()));
   }
 
   void _provideRepository() {
@@ -117,7 +118,7 @@ class AppModule {
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetCredentialInteractor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
-    getIt.registerFactory(() => UploadFileInteractor(
+    getIt.registerFactory(() => UploadMySpaceDocumentInteractor(
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
@@ -168,7 +169,8 @@ class AppModule {
     getIt.registerFactory(() => FilePathUtil());
     getIt.registerLazySingleton(() => UploadShareFileManager(
         getIt.get<Store<AppState>>(),
-        getIt.get<UploadFileInteractor>(),
+        getIt.get<FileUploadDataSourceImpl>().uploadingFileStream,
+        getIt.get<UploadMySpaceDocumentInteractor>(),
         getIt.get<ShareDocumentInteractor>(),
         getIt.get<UploadWorkGroupDocumentInteractor>()));
   }

@@ -49,15 +49,12 @@ void getAllDocumentTest() {
   group('document_datasource_impl getAll test', () {
     MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    MockFlutterUploader _flutterUploader;
     DocumentDataSourceImpl _documentDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
-      _flutterUploader = MockFlutterUploader();
       _documentDataSourceImpl = DocumentDataSourceImpl(
-          _flutterUploader,
           _linShareHttpClient,
           _remoteExceptionThrower);
     });
@@ -138,15 +135,12 @@ void shareDocumentTest() {
   group('document_datasource_impl share document test', () {
     MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    MockFlutterUploader _flutterUploader;
     DocumentDataSourceImpl _documentDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
-      _flutterUploader = MockFlutterUploader();
       _documentDataSourceImpl = DocumentDataSourceImpl(
-          _flutterUploader,
           _linShareHttpClient,
           _remoteExceptionThrower);
     });

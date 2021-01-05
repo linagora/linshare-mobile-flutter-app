@@ -30,80 +30,23 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:data/src/datasource/shared_space_document_datasource.dart';
-import 'package:data/src/network/config/endpoint.dart';
-import 'package:data/src/extensions/uri_extension.dart';
-import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_document_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_folder_dto.dart';
-import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/model/sharedspace/shared_space_id.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:rxdart/rxdart.dart';
 
 class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource {
-  final FlutterUploader _uploader;
   final LinShareHttpClient _linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
 
   SharedSpaceDocumentDataSourceImpl(
-    this._uploader,
     this._linShareHttpClient,
     this._remoteExceptionThrower,
   );
-
-  @override
-  Future<FileUploadState> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}) async {
-    final file = File(fileInfo.filePath + fileInfo.fileName);
-    final queryParameters = parentNodeId == null
-        ? <QueryParameter>[]
-        : [StringQueryParameter('parent', parentNodeId.uuid)];
-    final taskId = await _uploader.enqueue(
-        url: baseUrl.withServicePath(Endpoint.sharedSpaces
-            .withPathParameter('${sharedSpaceId.uuid}${Endpoint.nodes}')
-            .withQueryParameters(queryParameters)),
-        files: [
-          FileItem(savedDir: fileInfo.filePath, filename: fileInfo.fileName)
-        ],
-        headers: {
-          Constant.authorization: 'Bearer ${token.token}',
-          Constant.accept: 'application/json',
-        },
-        data: {
-    Constant.fileSizeDataForm: (await file.length()).toString()
-    });
-
-    final mergedStream = Rx.merge([_uploader.result, _uploader.progress]).map<Either<Failure, Success>>((event) {
-      if (event is UploadTaskResponse) {
-        if (event.statusCode == 200) {
-          final response = WorkGroupDocumentDto.fromJson(json.decode(event.response));
-          return Right(WorkGroupDocumentUploadSuccess(response.toWorkGroupDocument()));
-        }
-        return Left(WorkGroupDocumentUploadFailure(fileInfo, Exception('Response code failed: ${event.response}')));
-      } else if (event is UploadTaskProgress) {
-        return Right(UploadingProgress(event.progress, fileInfo));
-      } else {
-        return Left(WorkGroupDocumentUploadFailure(fileInfo, Exception('Something wrong with response: ${event.toString()}')));
-      }
-    });
-
-    return FileUploadState(mergedStream, UploadTaskId(taskId));
-  }
 
   @override
   Future<List<WorkGroupNode>> getAllChildNodes(

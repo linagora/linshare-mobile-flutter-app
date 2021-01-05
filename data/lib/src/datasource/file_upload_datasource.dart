@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -31,23 +31,9 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_model.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
-import 'package:meta/meta.dart';
 
-@immutable
-class UploadFileAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+abstract class FileUploadDataSource {
+  Stream<Either<Failure, Success>> get uploadingFileStream;
 
-  UploadFileAction(this.viewState);
+  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, String url);
 }
-
-@immutable
-class UploadFilesUpdateAction extends ActionOnline {
-  final List<UploadAndShareFileState> uploadingStateFiles;
-
-  UploadFilesUpdateAction(this.uploadingStateFiles);
-}
-
-@immutable
-class CleanUploadStateAction extends ActionOffline {}

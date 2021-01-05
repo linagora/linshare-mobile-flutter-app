@@ -38,6 +38,8 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_file_state_list.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_model.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -46,63 +48,159 @@ import 'package:redux/redux.dart';
 class UploadShareFileManager {
   UploadShareFileManager(
     this._store,
-    this._uploadFileInteractor,
+    this._uploadingFileStream,
+    this._uploadMySpaceDocumentInteractor,
     this._shareDocumentInteractor,
     this._uploadWorkGroupDocumentInteractor,
-  );
+  ) {
+    _handleUploadingFileStream(_uploadingFileStream);
+  }
 
   final Store<AppState> _store;
 
-  final UploadFileInteractor _uploadFileInteractor;
+  final Stream<Either<Failure, Success>> _uploadingFileStream;
+
+  final UploadAndShareFileStateList _uploadingStateFiles = UploadAndShareFileStateList();
+  UploadAndShareFileStateList get uploadingStateFiles => _uploadingStateFiles;
+
+  final UploadMySpaceDocumentInteractor _uploadMySpaceDocumentInteractor;
   final ShareDocumentInteractor _shareDocumentInteractor;
   final UploadWorkGroupDocumentInteractor _uploadWorkGroupDocumentInteractor;
 
-  void justUpload(FileInfo uploadFile) async {
-    await _upload(uploadFile).forEach((uploadState) {
-      _store.dispatch(UploadFileAction(uploadState));
+  void justUploadFiles(List<FileInfo> uploadFiles) async {
+    uploadFiles.forEach((uploadFile) async {
+      await _upload(uploadFile, UploadAndShareAction.upload);
     });
   }
 
-  void uploadToSharedSpace(FileInfo uploadFile, SharedSpaceId sharedSpaceId, {WorkGroupNodeId parentNodeId}) async {
-    await _uploadToSharedSpace(uploadFile, sharedSpaceId, parentNodeId: parentNodeId).forEach((uploadState) {
-      _store.dispatch(UploadFileAction(uploadState));
-    });
-  }
-
-  void uploadThenShare(
-    FileInfo uploadFile,
+  void uploadFilesThenShare(
+    List<FileInfo> uploadFiles,
     List<AutoCompleteResult> recipients,
   ) async {
-    await _upload(uploadFile).forEach((uploadState) {
-      uploadState.fold(
-        (failure) => _store.dispatch(UploadFileAction(uploadState)),
-        (success) async {
-          if (success is FileUploadSuccess) {
-            await _shareAfterUploaded(success.uploadedDocument, recipients);
-          } else {
-            _store.dispatch(UploadFileAction(uploadState));
-          }
+    uploadFiles.forEach((uploadFile) async {
+      await _upload(uploadFile, UploadAndShareAction.uploadAndShare, recipients: recipients);
+    });
+  }
+
+  Future<void> _upload(FileInfo uploadFile, UploadAndShareAction action, {List<AutoCompleteResult> recipients}) async {
+    (await _uploadMySpaceDocumentInteractor.execute(uploadFile)).fold(
+      (failure) {
+        final state = UploadAndShareFileState.initial(uploadFile, action, UploadTaskId.undefined(), recipients: recipients)
+            .copyWith(uploadStatus: UploadFileStatus.uploadFailed);
+        _uploadingStateFiles.add(state);
+
+        _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
+      },
+      (success) {
+        final uploadTaskId = (success as FileUploadState).taskId;
+        _uploadingStateFiles.add(UploadAndShareFileState.initial(uploadFile, action, uploadTaskId, recipients: recipients));
+
+        _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
+      },
+    );
+  }
+
+  void uploadToSharedSpace(
+    List<FileInfo> uploadFiles,
+    SharedSpaceId sharedSpaceId, {
+    WorkGroupNodeId parentNodeId,
+  }) async {
+    uploadFiles.forEach((uploadFile) async {
+      await _uploadToSharedSpace(uploadFile, sharedSpaceId, parentNodeId: parentNodeId);
+    });
+  }
+
+  Future<void> _uploadToSharedSpace(
+    FileInfo uploadFile,
+    SharedSpaceId sharedSpaceId, {
+    WorkGroupNodeId parentNodeId,
+  }) async {
+    (await _uploadWorkGroupDocumentInteractor.execute(uploadFile, sharedSpaceId, parentNodeId: parentNodeId)).fold(
+      (failure) {
+        final state = UploadAndShareFileState.initial(uploadFile, UploadAndShareAction.uploadSharedSpace, UploadTaskId.undefined())
+            .copyWith(uploadStatus: UploadFileStatus.uploadFailed);
+        _uploadingStateFiles.add(state);
+
+        _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
+      },
+      (success) {
+        final uploadTaskId = (success as FileUploadState).taskId;
+        _uploadingStateFiles.add(UploadAndShareFileState.initial(uploadFile, UploadAndShareAction.uploadSharedSpace, uploadTaskId));
+
+        _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
+      },
+    );
+  }
+
+  void _handleUploadingFileStream(Stream<Either<Failure, Success>> uploadingFileStream) {
+    uploadingFileStream.listen((resultEvent) {
+        resultEvent.fold(
+          (failure) => null,
+          (success) {
+            if (success is UploadingProgress) {
+              _uploadingStateFiles.updateElementByUploadTaskId(
+                success.uploadTaskId,
+                (currentState) {
+                  return currentState.copyWith(
+                    uploadingProgress: success.progress,
+                    uploadStatus: UploadFileStatus.uploading,
+                  );
+                },
+              );
+            } else if (success is FileUploadSuccess) {
+              _handleUploadFileSucceed(success);
+            }
+
+            _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
+          },
+        );
+      },
+      onError: null,
+    );
+  }
+
+  void _handleUploadFileSucceed(FileUploadSuccess uploadSuccess) {
+    final fileState = _uploadingStateFiles.getElementByUploadTaskId(uploadSuccess.uploadTaskId);
+    if (fileState.action == UploadAndShareAction.uploadAndShare) {
+      _shareAfterUploaded(uploadSuccess, fileState.recipients);
+    } else {
+      _uploadingStateFiles.updateElementByUploadTaskId(
+        uploadSuccess.uploadTaskId,
+        (currentState) {
+          final newState = currentState.copyWith(
+            uploadingProgress: 100,
+            uploadStatus: UploadFileStatus.succeed,
+          );
+
+          return newState;
         },
       );
-    });
+    }
   }
 
   void _shareAfterUploaded(
-    Document uploadedDocument,
+    FileUploadSuccess fileUploadSuccess,
     List<AutoCompleteResult> recipients,
   ) async {
-    _store.dispatch(UploadFileAction(Right(SharingAfterUploadState(recipients, uploadedDocument))));
-
+    final uploadedDocument = fileUploadSuccess.uploadedDocument;
     final shareResult = await _share(recipients, [uploadedDocument.documentId]);
 
     shareResult.fold(
-      (failure) => _store.dispatch(
-        ShareAction(Left(ShareAfterUploadFailure(Exception(), recipients, uploadedDocument))),
-      ),
-      (success) => _store.dispatch(
-        ShareAction(Right(ShareAfterUploadSuccess(recipients, uploadedDocument))),
-      ),
+      (failure) {
+        _uploadingStateFiles.updateElementByUploadTaskId(
+          fileUploadSuccess.uploadTaskId,
+          (currentState) => currentState.copyWith(uploadStatus: UploadFileStatus.shareFailed),
+        );
+      },
+      (success) {
+        _uploadingStateFiles.updateElementByUploadTaskId(
+          fileUploadSuccess.uploadTaskId,
+          (currentState) => currentState.copyWith(uploadStatus: UploadFileStatus.succeed),
+        );
+      },
     );
+
+    _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
   }
 
   void justShare(
@@ -111,14 +209,6 @@ class UploadShareFileManager {
   ) async {
     await _share(recipients, shareDocuments)
         .then((shareResult) => _store.dispatch(ShareAction(shareResult)));
-  }
-
-  Stream<Either<Failure, Success>> _upload(FileInfo uploadFile) {
-    return _uploadFileInteractor.execute(uploadFile);
-  }
-
-  Stream<Either<Failure, Success>> _uploadToSharedSpace(FileInfo uploadFile, SharedSpaceId sharedSpaceId, {WorkGroupNodeId parentNodeId}) {
-    return _uploadWorkGroupDocumentInteractor.execute(uploadFile, sharedSpaceId, parentNodeId: parentNodeId);
   }
 
   Future<Either<Failure, Success>> _share(
