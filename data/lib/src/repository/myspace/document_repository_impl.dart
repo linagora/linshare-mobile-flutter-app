@@ -30,38 +30,46 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/datasource/document_datasource.dart';
+import 'package:data/src/datasource/file_upload_datasource.dart';
+import 'package:data/src/network/config/endpoint.dart';
 import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/share/mailing_list_id.dart';
 import 'package:domain/src/model/share/share.dart';
+import 'package:data/src/extensions/uri_extension.dart';
 
 class DocumentRepositoryImpl implements DocumentRepository {
-  final DocumentDataSource documentDataSource;
+  final DocumentDataSource _documentDataSource;
+  final FileUploadDataSource _fileUploadDataSource;
 
-  DocumentRepositoryImpl(this.documentDataSource);
+  DocumentRepositoryImpl(this._documentDataSource, this._fileUploadDataSource);
 
   @override
-  Future<FileUploadState> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
-    return documentDataSource.upload(fileInfo, token, baseUrl);
+  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
+    return _fileUploadDataSource.upload(
+      fileInfo,
+      token,
+      baseUrl.withServicePath(Endpoint.documents),
+    );
   }
 
   @override
   Future<List<Document>> getAll() {
-    return documentDataSource.getAll();
+    return _documentDataSource.getAll();
   }
 
   @override
   Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) {
-    return documentDataSource.downloadDocument(documentId, token, baseUrl);
+    return _documentDataSource.downloadDocument(documentId, token, baseUrl);
   }
 
   @override
   Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
-    return documentDataSource.share(documentIds, mailingListIds, recipients);
+    return _documentDataSource.share(documentIds, mailingListIds, recipients);
   }
 
   @override
   Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
-    return documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
+    return _documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
   }
 }

@@ -36,31 +36,22 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/repository/document/document_repository.dart';
 
-class UploadFileInteractor {
+class UploadMySpaceDocumentInteractor {
   final DocumentRepository documentRepository;
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
 
-  UploadFileInteractor(this.documentRepository, this.tokenRepository, this.credentialRepository);
+  UploadMySpaceDocumentInteractor(this.documentRepository, this.tokenRepository, this.credentialRepository);
 
-  Stream<Either<Failure, Success>> execute(FileInfo fileInfo) async* {
+  Future<Either<Failure, Success>> execute(FileInfo fileInfo) async {
     try {
       final token = await tokenRepository.getToken();
       final baseUrl = await credentialRepository.getBaseUrl();
-      final dataHolder = await documentRepository.upload(fileInfo, token, baseUrl);
+      final uploadTaskId = await documentRepository.upload(fileInfo, token, baseUrl);
 
-      await for (final dataInfo in dataHolder.dataInfo) {
-        yield dataInfo;
-
-        final shouldEndStream = dataInfo.fold(
-          (failure) => true,
-          (success) => success is FileUploadSuccess,
-        );
-
-        if (shouldEndStream) break;
-      }
+      return Right(FileUploadState(uploadTaskId));
     } catch (exception) {
-      yield Left<Failure, Success>(FileUploadFailure(fileInfo, exception));
+      return Left(FileUploadFailure(UploadTaskId.undefined(), exception));
     }
   }
 }

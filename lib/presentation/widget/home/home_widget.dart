@@ -39,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -91,8 +92,8 @@ class _HomeWidgetState extends State<HomeWidget> {
         children: [
           handleUploadToastMessage(context),
           handleShareDocumentToastMessage(context),
-          StoreConnector<AppState, Success>(
-              converter: (store) => store.state.uploadFileState.viewState.getOrElse(() => null),
+          StoreConnector<AppState, UploadFileState>(
+              converter: (store) => store.state.uploadFileState,
               distinct: true,
               builder: (context, data) => handleUploadWidget(context, data)
           ),
@@ -182,16 +183,8 @@ class _HomeWidgetState extends State<HomeWidget> {
         }));
   }
 
-  Widget handleUploadWidget(BuildContext context, [Success success]) {
-    if (success is UploadingProgress) {
-      return _buildUploadingFile(context, success.fileInfo.fileName, success.progress);
-    } else if (success is FilePickerSuccessViewState) {
-      return _buildPreparingUploadFile(context, success.fileInfo.fileName);
-    } else if (success is SharingAfterUploadState) {
-      return _buildSharingFileWidget(success);
-    } else {
-      return SizedBox.shrink();
-    }
+  Widget handleUploadWidget(BuildContext context, UploadFileState uploadFileState) {
+
   }
 
   Widget _buildUploadingFile(

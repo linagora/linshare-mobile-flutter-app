@@ -48,9 +48,9 @@ final password2 = Password('qwedsasca');
 final permanentToken = Token(permanentTokenString, TokenId(tokenUUID));
 
 final fileInfo1 = FileInfo('fileName1', 'filePath1', 1000);
-final fileUploadProgress10 = UploadingProgress(10, fileInfo1);
-final fileUploadProgress30 = UploadingProgress(30, fileInfo1);
-final fileUploadProgress100 = UploadingProgress(100, fileInfo1);
+final fileUploadProgress10 = UploadingProgress(UploadTaskId('1'), 10);
+final fileUploadProgress30 = UploadingProgress(UploadTaskId('1'), 30);
+final fileUploadProgress100 = UploadingProgress(UploadTaskId('1'), 100);
 
 final document = Document(
   DocumentId('uuid'),

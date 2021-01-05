@@ -29,47 +29,47 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
-class FileUploadState extends Equatable {
-  final Stream<Either<Failure, Success>> dataInfo;
+class FileUploadState extends Success {
   final UploadTaskId taskId;
 
-  FileUploadState(this.dataInfo, this.taskId);
+  FileUploadState(this.taskId);
 
   @override
-  List<Object> get props => [dataInfo, taskId];
+  List<Object> get props => [taskId];
 }
 
 class UploadingProgress extends Success {
+  final UploadTaskId uploadTaskId;
   final int progress;
-  final FileInfo fileInfo;
 
-  UploadingProgress(this.progress, this.fileInfo);
+  UploadingProgress(this.uploadTaskId, this.progress);
 
   @override
-  List<Object> get props => [progress, fileInfo];
+  List<Object> get props => [uploadTaskId, progress];
 }
 
 class FileUploadSuccess extends Success {
+  final UploadTaskId uploadTaskId;
   final Document uploadedDocument;
+  final WorkGroupDocument uploadedWorkGroupDocument;
 
-  FileUploadSuccess(this.uploadedDocument);
+  FileUploadSuccess(this.uploadTaskId, {this.uploadedDocument, this.uploadedWorkGroupDocument});
 
   @override
-  List<Object> get props => [uploadedDocument];
+  List<Object> get props => [uploadTaskId, uploadedDocument];
 }
 
 class FileUploadFailure extends Failure {
-  final FileInfo fileInfo;
+  final UploadTaskId uploadTaskId;
   final Exception exception;
 
-  FileUploadFailure(this.fileInfo, this.exception);
+  FileUploadFailure(this.uploadTaskId, this.exception);
 
   @override
-  List<Object> get props => [fileInfo, exception];
+  List<Object> get props => [uploadTaskId, exception];
 }
 
 class WorkGroupDocumentUploadSuccess extends Success {
@@ -104,6 +104,8 @@ class UploadTaskId extends Equatable {
   final String id;
 
   UploadTaskId(this.id);
+
+  factory UploadTaskId.undefined() => UploadTaskId('');
 
   @override
   List<Object> get props => [id];
