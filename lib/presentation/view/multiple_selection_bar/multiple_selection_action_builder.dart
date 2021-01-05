@@ -31,51 +31,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
-class ContextMenuBuilder {
-  final imagePath = getIt<AppImagePaths>();
+import 'package:flutter_svg/flutter_svg.dart';
 
-  final BuildContext _context;
-  final List<Widget> _actionTiles = [];
-  Widget _header;
+typedef OnMultipleSelectionActionClick<T> = void Function(T data);
 
-  ContextMenuBuilder(this._context);
+abstract class MultipleSelectionActionBuilder<T> {
+  @protected final Key key;
+  @protected final SvgPicture actionIcon;
+  @protected OnMultipleSelectionActionClick<T> onMultipleSelectionActionClick;
 
-  ContextMenuBuilder addTiles(List<Widget> tiles) {
-    _actionTiles.addAll(tiles);
+  MultipleSelectionActionBuilder(
+    this.key,
+    this.actionIcon
+  );
+
+  MultipleSelectionActionBuilder onActionClick(OnMultipleSelectionActionClick<T> onMultipleSelectionActionClick) {
+    this.onMultipleSelectionActionClick = onMultipleSelectionActionClick;
     return this;
   }
 
-  ContextMenuBuilder addHeader(Widget header) {
-    _header = header;
-    return this;
-  }
-
-  RoundedRectangleBorder _shape() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0)
-        )
-    );
-  }
-
-  void build() {
-    showModalBottomSheet(
-      shape: _shape(),
-      context: _context,
-      builder: (BuildContext buildContext) {
-        return Container(
-          child: Wrap(
-            children: <Widget>[
-              _header ?? SizedBox.shrink(),
-              Divider(),
-              ..._actionTiles,
-            ],
-          ),
-        );
-      }
-    );
-  }
+  IconButton build();
 }

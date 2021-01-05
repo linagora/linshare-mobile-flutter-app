@@ -237,5 +237,22 @@
   "@browse": {
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "select_all": "Select all",
+  "@select_all": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unselect_all": "Unselect all",
+  "@unselect_all": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "items": "{numberOfItems} item(s)",
+  "@items": {
+    "type": "text",
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
 }

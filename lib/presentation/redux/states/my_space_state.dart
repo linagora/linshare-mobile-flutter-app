@@ -35,34 +35,74 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
 @immutable
 class MySpaceState extends LinShareState {
-  final List<Document> documentList;
+  final List<SelectableElement<Document>> documentList;
+  final SelectMode selectMode;
 
-  MySpaceState(Either<Failure, Success> viewState, this.documentList) : super(viewState);
+  MySpaceState(
+    Either<Failure, Success> viewState,
+    this.documentList,
+    this.selectMode
+  ) : super(viewState);
 
   factory MySpaceState.initial() {
-    return MySpaceState(Right(IdleState()), []);
+    return MySpaceState(Right(IdleState()), [], SelectMode.INACTIVE);
   }
 
   @override
   LinShareState clearViewState() {
-    return MySpaceState(Right(IdleState()), []);
+    return MySpaceState(Right(IdleState()), documentList, selectMode);
   }
 
   @override
   LinShareState sendViewState({Either<Failure, Success> viewState}) {
-    return MySpaceState(viewState, documentList);
+    return MySpaceState(viewState, documentList, selectMode);
   }
 
   LinShareState setDocuments({Either<Failure, Success> viewState, List<Document> newDocumentList}) {
-    return MySpaceState(viewState, newDocumentList);
+    final selectedElements = documentList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
+
+    return MySpaceState(viewState,
+      {for (var document in newDocumentList)
+          if (selectedElements.contains(document))
+            SelectableElement<Document>(document, SelectMode.ACTIVE)
+          else SelectableElement<Document>(document, SelectMode.INACTIVE)}.toList(),
+      selectMode);
+  }
+
+  LinShareState selectDocument(SelectableElement<Document> selectedDocument) {
+    documentList.firstWhere((document) => document == selectedDocument).toggleSelect();
+    return MySpaceState(viewState, documentList, SelectMode.ACTIVE);
+  }
+
+  LinShareState cancelSelectedDocuments() {
+    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.INACTIVE);
+  }
+
+  LinShareState selectAllDocuments() {
+    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.ACTIVE)).toList(), SelectMode.ACTIVE);
+  }
+
+  LinShareState unselectAllDocuments() {
+    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.ACTIVE);
   }
 
   @override
   MySpaceState startLoadingState() {
-    return MySpaceState(Right(LoadingState()), documentList);
+    return MySpaceState(Right(LoadingState()), documentList, selectMode);
+  }
+}
+
+extension MultipleSelections on MySpaceState {
+  bool isAllDocumentsSelected() {
+    return documentList.every((value) => value.selectMode == SelectMode.ACTIVE);
+  }
+
+  List<Document> getAllSelectedDocuments() {
+    return documentList.where((element) => element.selectMode == SelectMode.ACTIVE).map((document) => document.element).toList();
   }
 }
