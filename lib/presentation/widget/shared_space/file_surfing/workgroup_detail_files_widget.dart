@@ -37,65 +37,100 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_navigator.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:rxdart/rxdart.dart';
 
 class WorkGroupDetailFilesWidget extends StatefulWidget {
   final SharedSpaceNodeNested sharedSpaceNode;
   final OnBackClickedCallback onBackClickedCallback;
+  final NodeSurfingType nodeSurfingType;
+  final GlobalKey<WorkGroupNodesSurfingNavigatorState> _workgroupNavigatorKey = GlobalKey();
+  final BehaviorSubject<WorkGroupNodesSurfingArguments> currentNodeObservable;
 
-  WorkGroupDetailFilesWidget(this.sharedSpaceNode, this.onBackClickedCallback);
+  WorkGroupDetailFilesWidget(
+      Key key,
+      this.sharedSpaceNode,
+      this.onBackClickedCallback,
+      {this.nodeSurfingType = NodeSurfingType.normal,
+      this.currentNodeObservable}) : super(key: key);
 
   @override
-  _WorkGroupDetailFilesWidgetState createState() => _WorkGroupDetailFilesWidgetState();
+  WorkGroupDetailFilesWidgetState createState() => WorkGroupDetailFilesWidgetState();
+
+  void nodeSurfingNavigateBack() => _workgroupNavigatorKey.currentState.widget.nodeSurfingNavigateBack();
 }
 
-class _WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> {
+class WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> {
   final AppImagePaths imagePath = getIt<AppImagePaths>();
   final workGroupDetailFilesViewModel = getIt<WorkGroupDetailFilesViewModel>();
-  final GlobalKey<WorkGroupNodesSurfingNavigatorState> _workgroupNavigatorKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         WorkGroupNodesSurfingNavigator(
-          _workgroupNavigatorKey,
+          widget._workgroupNavigatorKey,
           widget.sharedSpaceNode,
           widget.onBackClickedCallback,
+          nodeSurfingType: widget.nodeSurfingType,
+          currentNodeObservable: widget.currentNodeObservable,
         ),
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
             height: 76,
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: 56,
-                    color: AppColor.workgroupDetailFilesBottomBarColor,
-                    child: Row(
-                      children: [],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: GestureDetector(
-                    onTap: () => widget.sharedSpaceNode.sharedSpaceRole.name == SharedSpaceRoleName.READER
-                        ? {}
-                        : workGroupDetailFilesViewModel.openUploadFileMenu(context, uploadFileMenuActionTiles(context)),
-                    child: _buildUploadWidget(),
-                  ),
-                ),
-              ],
-            ),
+            child: _buildBottomLayout(context),
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildBottomLayout(BuildContext context) {
+    switch (widget.nodeSurfingType) {
+      case NodeSurfingType.normal:
+        return _buildBottomLayoutNormal(context);
+      case NodeSurfingType.destinationPicker:
+        return _buildBottomLayoutDestinationPicker(context);
+      default:
+        return _buildBottomLayoutNormal(context);
+    }
+  }
+
+  Widget _buildBottomLayoutNormal(BuildContext context) {
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: 56,
+            color: AppColor.workgroupDetailFilesBottomBarColor,
+            child: Row(
+              children: [],
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: GestureDetector(
+            onTap: () => widget.sharedSpaceNode.sharedSpaceRole.name ==
+                    SharedSpaceRoleName.READER
+                ? {}
+                : workGroupDetailFilesViewModel.openUploadFileMenu(
+                    context, uploadFileMenuActionTiles(context)),
+            child: _buildUploadWidget(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBottomLayoutDestinationPicker(BuildContext context) {
+    return SizedBox.shrink();
   }
 
   Widget _buildUploadWidget() {
@@ -143,7 +178,7 @@ class _WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget>
             AppLocalizations.of(context).photos_and_videos)
         .onActionClick((_) =>
             workGroupDetailFilesViewModel.openFilePickerByType(
-                _workgroupNavigatorKey.currentState.widget.currentPageData,
+                widget._workgroupNavigatorKey.currentState.widget.currentPageData,
                 FileType.media))
         .build();
   }
@@ -156,7 +191,7 @@ class _WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget>
             AppLocalizations.of(context).browse)
         .onActionClick((_) =>
             workGroupDetailFilesViewModel.openFilePickerByType(
-                _workgroupNavigatorKey.currentState.widget.currentPageData,
+                widget._workgroupNavigatorKey.currentState.widget.currentPageData,
                 FileType.any))
         .build();
   }

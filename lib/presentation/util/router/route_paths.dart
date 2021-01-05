@@ -38,4 +38,5 @@ class RoutePaths {
   static const String sharedSpace = 'shared_space';
   static const String sharedSpaceInside = 'shared_space_inside';
   static const String currentUploads = 'current_uploads';
+  static const String destinationPicker = 'destination_picker';
 }

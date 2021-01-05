@@ -311,5 +311,10 @@
   "@current_uploads_succeed_status": {
     "type": "text",
     "placeholders": {}
+  },
+  "pick_the_destination": "Выберите пункт назначения",
+  "@pick_the_destination": {
+    "type": "text",
+    "placeholders": {}
   }
 }

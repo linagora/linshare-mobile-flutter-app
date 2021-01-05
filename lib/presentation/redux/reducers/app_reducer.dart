@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
@@ -44,5 +45,6 @@ AppState appStateReducer(AppState state, action) {
       uploadFileState: uploadFileReducer(state.uploadFileState, action),
       mySpaceState: mySpaceReducer(state.mySpaceState, action),
       shareState: shareReducer(state.shareState, action),
-      sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),);
+      sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),
+      destinationPickerState: destinationPickerReducer(state.destinationPickerState, action));
 }

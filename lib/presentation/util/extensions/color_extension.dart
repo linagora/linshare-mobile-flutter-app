@@ -66,4 +66,6 @@ extension AppColor on Color {
   static const statusUploadCompletedSubTitleColor = Color(0xff4AC6FF);
   static const statusUploadInProgressSubTitleColor = Color(0xffACACAC);
   static const statusUploadFailedSubTitleColor = Color(0xffFF5858);
+  static const destinationPickerAppBarTitleColor = Color(0xff7B7B7B);
+  static const destinationPickerBottomActionTextColor = Color(0xff1B7EC7);
 }

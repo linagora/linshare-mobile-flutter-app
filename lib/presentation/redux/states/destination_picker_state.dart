@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,53 +28,59 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
-import 'package:meta/meta.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-import 'destination_picker_state.dart';
+@immutable
+class DestinationPickerState extends LinShareState {
+  final List<SharedSpaceNodeNested> sharedSpacesList;
+  final DestinationPickerRouteData routeData;
 
-class AppState {
-  final UIState uiState;
-  final AuthenticationState authenticationState;
-  final UploadFileState uploadFileState;
-  final MySpaceState mySpaceState;
-  final ShareState shareState;
-  final SharedSpaceState sharedSpaceState;
-  final DestinationPickerState destinationPickerState;
+  DestinationPickerState(Either<Failure, Success> viewState, this.sharedSpacesList, this.routeData) : super(viewState);
 
-  AppState(
-      {@required this.uiState,
-      @required this.authenticationState,
-      @required this.uploadFileState,
-      @required this.mySpaceState,
-      @required this.shareState,
-      @required this.sharedSpaceState,
-      @required this.destinationPickerState});
-
-  factory AppState.initial() {
-    return AppState(
-        uiState: UIState.initial(),
-        authenticationState: AuthenticationState.initial(),
-        uploadFileState: UploadFileState.initial(),
-        mySpaceState: MySpaceState.initial(),
-        shareState: ShareState.initial(),
-        sharedSpaceState: SharedSpaceState.initial(),
-        destinationPickerState: DestinationPickerState.initial());
+  factory DestinationPickerState.initial() {
+    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial());
   }
 
   @override
-  int get hashCode => uploadFileState.hashCode ^ authenticationState.hashCode;
+  LinShareState clearViewState() {
+    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial());
+  }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppState &&
-          uploadFileState == other.uploadFileState &&
-          authenticationState == other.authenticationState;
+  LinShareState sendViewState({Either<Failure, Success> viewState}) {
+    return DestinationPickerState(viewState, sharedSpacesList, routeData);
+  }
+
+  LinShareState setDestinationPickerState(
+      {Either<Failure, Success> viewState,
+      List<SharedSpaceNodeNested> newSharedSpacesList,
+      DestinationPickerRouteData routeData}) {
+    return DestinationPickerState(viewState, newSharedSpacesList, routeData ?? this.routeData);
+  }
+
+  @override
+  DestinationPickerState startLoadingState() {
+    return DestinationPickerState(Right(LoadingState()), sharedSpacesList, routeData);
+  }
+}
+
+class DestinationPickerRouteData {
+  final DestinationPickerCurrentView destinationPickerCurrentView;
+  final SharedSpaceNodeNested sharedSpaceNodeNested;
+
+  DestinationPickerRouteData(this.destinationPickerCurrentView, this.sharedSpaceNodeNested);
+
+  factory DestinationPickerRouteData.initial() =>
+      DestinationPickerRouteData(DestinationPickerCurrentView.sharedSpace, null);
+}
+
+enum DestinationPickerCurrentView {
+  sharedSpace, sharedSpaceInside
 }
