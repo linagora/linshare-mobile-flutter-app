@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,57 +26,27 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
-class ContextMenuBuilder {
-  final imagePath = getIt<AppImagePaths>();
+enum SelectMode { ACTIVE, INACTIVE }
 
-  final BuildContext _context;
-  final List<Widget> _actionTiles = [];
-  Widget _header;
+class SelectableElement<T> {
+  T element;
+  SelectMode selectMode;
 
-  ContextMenuBuilder(this._context);
+  SelectableElement(this.element, this.selectMode);
 
-  ContextMenuBuilder addTiles(List<Widget> tiles) {
-    _actionTiles.addAll(tiles);
-    return this;
-  }
-
-  ContextMenuBuilder addHeader(Widget header) {
-    _header = header;
-    return this;
-  }
-
-  RoundedRectangleBorder _shape() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0)
-        )
-    );
-  }
-
-  void build() {
-    showModalBottomSheet(
-      shape: _shape(),
-      context: _context,
-      builder: (BuildContext buildContext) {
-        return Container(
-          child: Wrap(
-            children: <Widget>[
-              _header ?? SizedBox.shrink(),
-              Divider(),
-              ..._actionTiles,
-            ],
-          ),
-        );
-      }
-    );
+  void toggleSelect() {
+    if (selectMode == SelectMode.ACTIVE) {
+      selectMode = SelectMode.INACTIVE;
+    } else {
+      selectMode = SelectMode.ACTIVE;
+    }
   }
 }

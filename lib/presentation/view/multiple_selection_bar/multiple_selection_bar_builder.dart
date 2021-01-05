@@ -29,53 +29,43 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
-class ContextMenuBuilder {
-  final imagePath = getIt<AppImagePaths>();
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
-  final BuildContext _context;
-  final List<Widget> _actionTiles = [];
-  Widget _header;
+class MultipleSelectionBarBuilder {
+  @protected Key _key;
+  @protected String _text;
+  @protected List<Widget> _actions;
 
-  ContextMenuBuilder(this._context);
+  MultipleSelectionBarBuilder();
 
-  ContextMenuBuilder addTiles(List<Widget> tiles) {
-    _actionTiles.addAll(tiles);
+  MultipleSelectionBarBuilder key(Key key) {
+    _key = key;
     return this;
   }
 
-  ContextMenuBuilder addHeader(Widget header) {
-    _header = header;
+  MultipleSelectionBarBuilder text(String text) {
+    _text = text;
     return this;
   }
 
-  RoundedRectangleBorder _shape() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0)
-        )
-    );
+  MultipleSelectionBarBuilder actions(List<Widget> actions) {
+    _actions = actions;
+    return this;
   }
-
-  void build() {
-    showModalBottomSheet(
-      shape: _shape(),
-      context: _context,
-      builder: (BuildContext buildContext) {
-        return Container(
-          child: Wrap(
-            children: <Widget>[
-              _header ?? SizedBox.shrink(),
-              Divider(),
-              ..._actionTiles,
-            ],
-          ),
-        );
-      }
+  
+  Container build() {
+    return Container(
+      key: _key,
+      height: 56,
+      margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 24.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(_text, style: TextStyle(color: AppColor.multipleSelectionBarTextColor)),
+          Row(children: _actions),
+        ],
+      )
     );
   }
 }

@@ -59,4 +59,7 @@ extension AppColor on Color {
   static const workgroupDetailFilesUploadDisableColor = Color(0xffD3D3D3);
   static const workgroupDetailFilesUploadActiveColor = Color(0xff4AC6FF);
   static const workgroupDetailFilesBottomBarColor = Color(0xffF2F2F2);
+  static const unselectedElementColor = Color(0xffACACAC);
+  static const topBarBackgroundColor = Color(0xffF7F7F7);
+  static const multipleSelectionBarTextColor = Color(0xff7B7B7B);
 }

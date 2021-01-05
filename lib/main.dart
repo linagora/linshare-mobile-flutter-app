@@ -42,6 +42,7 @@ import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter/foundation.dart';
 
 import 'presentation/redux/states/app_state.dart';
+import 'presentation/util/extensions/color_extension.dart';
 import 'presentation/widget/initialize/initialize_widget.dart';
 
 void main() async {
@@ -82,6 +83,7 @@ class LinShareApp extends StatelessWidget {
           // the app on. For desktop platforms, the controls will be smaller and
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          unselectedWidgetColor: AppColor.unselectedElementColor
         ),
         home: FutureBuilder(
             future: getIt.allReady(),

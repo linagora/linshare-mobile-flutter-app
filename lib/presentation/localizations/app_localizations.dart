@@ -299,6 +299,28 @@ class AppLocalizations {
       name: 'browse',
     );
   }
+
+  String get select_all {
+    return Intl.message(
+      'Select all',
+      name: 'select_all',
+    );
+  }
+
+  String get unselect_all {
+    return Intl.message(
+      'Unselect all',
+      name: 'unselect_all',
+    );
+  }
+
+  String items(int numberOfItems) {
+    return Intl.message(
+      '$numberOfItems item(s)',
+      name: 'items',
+      args: [numberOfItems],
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
