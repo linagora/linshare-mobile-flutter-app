@@ -129,6 +129,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         return getIt<SharedSpaceWidget>();
       case RoutePaths.sharedSpaceInside:
         return WorkGroupDetailFilesWidget(
+          Key('work_group_detail_files_widget_key'),
           uiState.sharedSpace,
           () { // Back to shared spaces screen
             homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace));

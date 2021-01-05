@@ -404,6 +404,13 @@ class AppLocalizations {
       name: 'current_uploads_succeed_status',
     );
   }
+
+  String get pick_the_destination {
+    return Intl.message(
+      'Pick the destination',
+      name: 'Pick the destination',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
