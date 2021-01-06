@@ -94,7 +94,6 @@ class _HomeWidgetState extends State<HomeWidget> {
           handleShareDocumentToastMessage(context),
           StoreConnector<AppState, UploadFileState>(
               converter: (store) => store.state.uploadFileState,
-              distinct: true,
               builder: (context, data) => handleUploadWidget(context, data)
           ),
           Expanded(
@@ -184,98 +183,51 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   Widget handleUploadWidget(BuildContext context, UploadFileState uploadFileState) {
-
-  }
-
-  Widget _buildUploadingFile(
-      BuildContext context, String fileName, int progress) {
-    return SizedBox(
-      key: Key('my_space_uploading_file'),
-      height: 58,
-      child: Container(
+    if (uploadFileState.isUploadingFiles) {
+      return Container(
+        height: 58,
         color: AppColor.mySpaceUploadBackground,
-        child: Column(children: [
-          _buildLinearProgress(context, progress),
-          Expanded(child: _buildUploadFileInfo(context, fileName, progress)),
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildLinearProgress(BuildContext context, int progress) {
-    return SizedBox(
-      height: 4,
-      child: LinearProgressIndicator(
-        backgroundColor: AppColor.uploadProgressBackgroundColor,
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        value: progress.toDouble() / 100,
-      ),
-    );
-  }
-
-  Widget _buildUploadFileInfo(
-      BuildContext context, String fileName, int progress) {
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: 24),
-            child: Text(
-              'Uploading ' + fileName + ' ($progress)%...',
-              maxLines: 1,
-              style: TextStyle(fontSize: 14, color: Colors.white),
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: Text(
+                  AppLocalizations.of(context).uploading_files_status_title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
             ),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _buildPreparingUploadFile(BuildContext context, String fileName) {
-    return SizedBox(
-      key: Key('my_space_preparing_upload_file'),
-      height: 54,
-      child: Container(
-        color: AppColor.mySpaceUploadBackground,
-        child: Column(children: [
-          Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 24),
-                      child: Text(
-                        AppLocalizations.of(context).upload_prepare_text,
-                        maxLines: 1,
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+            Column(
+              children: [
+                Expanded(
+                  child: FlatButton(
+                    onPressed: () {
+                      // TODO: Open current upload screen
+                    },
+                    padding: EdgeInsets.only(left: 16, right: 16),
+                    child: Text(
+                      AppLocalizations.of(context).uploading_files_view_button,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
                     ),
-                  )
-                ],
-              )),
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildSharingFileWidget(SharingAfterUploadState state) {
-    return SizedBox(
-      height: 58,
-      child: Container(
-        color: AppColor.mySpaceUploadBackground,
-        child: Align(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text(
-              _buildSharingMessage(context, state.recipients),
-              maxLines: 1,
-              style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ),
+              ],
             ),
-          ),
-          alignment: Alignment.centerLeft,
+          ],
         ),
-      ),
-    );
+      );
+    }
+
+    return SizedBox.shrink();
   }
 
   String _buildSharingMessage(BuildContext context, List<AutoCompleteResult> recipients) {

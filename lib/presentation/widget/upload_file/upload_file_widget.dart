@@ -73,7 +73,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
   @override
   Widget build(BuildContext context) {
     final UploadFileArguments arguments = ModalRoute.of(context).settings.arguments;
-    uploadFileViewModel.setFileInfoArgument(arguments.fileInfo);
+    uploadFileViewModel.setUploadFilesArgument(arguments.uploadFiles);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
     uploadFileViewModel.setDocumentsArgument(arguments.documents);
     uploadFileViewModel.setWorkGroupDocumentUploadInfoArgument(arguments.workGroupDocumentUploadInfo);

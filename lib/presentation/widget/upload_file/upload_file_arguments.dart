@@ -33,12 +33,12 @@ import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 
 class UploadFileArguments {
-  final FileInfo fileInfo;
+  final List<FileInfo> uploadFiles;
   ShareType shareType;
   List<Document> documents;
   WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo;
 
-  UploadFileArguments(this.fileInfo, {
+  UploadFileArguments(this.uploadFiles, {
     ShareType shareType = ShareType.uploadAndShare,
     List<Document> documents,
     WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo
