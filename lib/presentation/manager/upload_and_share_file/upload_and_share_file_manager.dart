@@ -141,7 +141,7 @@ class UploadShareFileManager {
               _uploadingStateFiles.updateElementByUploadTaskId(
                 success.uploadTaskId,
                 (currentState) {
-                  return currentState.copyWith(
+                  return currentState.uploadStatus.completed ? currentState : currentState.copyWith(
                     uploadingProgress: success.progress,
                     uploadStatus: UploadFileStatus.uploading,
                   );

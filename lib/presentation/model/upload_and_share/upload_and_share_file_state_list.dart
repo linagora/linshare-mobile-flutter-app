@@ -47,8 +47,8 @@ class UploadAndShareFileStateList {
   List<UploadAndShareFileState> get uploadingStateFiles => _uploadingStateFiles.toList(growable: false);
 
   UploadAndShareFileStateList({
-    this.completedMaxSize = 50,
-    this.reduceCompletedSize = 10,
+    this.completedMaxSize = 10,
+    this.reduceCompletedSize = 1,
   });
 
   UploadAndShareFileStateList add(UploadAndShareFileState element) {

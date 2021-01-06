@@ -65,23 +65,11 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, linShareBaseUrl, sharedSpaceId))
-          .thenAnswer((_) async => FileUploadState(
-              Stream.fromIterable([
-                Right<Failure, Success>(fileUploadProgress10),
-                Right<Failure, Success>(fileUploadProgress100),
-                Right<Failure, Success>(WorkGroupDocumentUploadSuccess(workGroupDocument1))
-              ]),
-              uploadTaskId));
+          .thenAnswer((_) async => uploadTaskId);
 
-      final resultStream = uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
+      final result = await uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
 
-      expect(
-          resultStream,
-          emitsInOrder([
-            Right<Failure, Success>(fileUploadProgress10),
-            Right<Failure, Success>(fileUploadProgress100),
-            Right<Failure, Success>(WorkGroupDocumentUploadSuccess(workGroupDocument1))
-          ]));
+      expect(result, Right<Failure, Success>(FileUploadState(uploadTaskId)));
     });
 
     test('uploadSharedSpaceDocument should failure with invalid sharedSpaceId', () async {
@@ -92,13 +80,9 @@ void main() {
       when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, linShareBaseUrl, wrongSharedSpaceId))
           .thenThrow(exception);
 
-      final resultStream = uploadWorkGroupDocumentInteractor.execute(fileInfo1, wrongSharedSpaceId);
+      final result = await uploadWorkGroupDocumentInteractor.execute(fileInfo1, wrongSharedSpaceId);
 
-      expect(
-          resultStream,
-          emitsInOrder([
-            Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo1, exception))
-          ]));
+      expect(result, Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo1, exception)));
     });
 
     test('uploadSharedSpaceDocument should failure with wrong baseUrl', () async {
@@ -109,13 +93,9 @@ void main() {
       when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, wrongUrl, sharedSpaceId))
           .thenThrow(exception);
 
-      final resultStream = uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
+      final result = await uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
 
-      expect(
-          resultStream,
-          emitsInOrder([
-            Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo1, exception))
-          ]));
+      expect(result, Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo1, exception)));
     });
 
     test('uploadSharedSpaceDocument should failure with wrong token', () async {
@@ -127,13 +107,9 @@ void main() {
       when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, wrongToken, linShareBaseUrl, sharedSpaceId))
           .thenThrow(exception);
 
-      final resultStream = uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
+      final result = await uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
 
-      expect(
-          resultStream,
-          emitsInOrder([
-            Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo1, exception))
-          ]));
+      expect(result, Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo1, exception)));
     });
   });
 }

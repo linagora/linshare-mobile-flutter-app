@@ -91,6 +91,12 @@ class UploadAndShareFileState extends Equatable {
 
 enum UploadFileStatus { waiting, uploading, uploadFailed, shareFailed, succeed }
 
+extension UploadFileStatusExtension on UploadFileStatus {
+  bool get completed => this == UploadFileStatus.uploadFailed ||
+      this == UploadFileStatus.shareFailed ||
+      this == UploadFileStatus.succeed;
+}
+
 enum UploadAndShareAction { upload, uploadAndShare, uploadSharedSpace }
 
 extension UploadAndShareFileStateListExtension on List<UploadAndShareFileState> {

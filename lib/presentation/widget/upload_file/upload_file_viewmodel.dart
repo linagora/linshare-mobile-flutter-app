@@ -127,9 +127,9 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   List<SelectedPresentationFile> get filesInfos {
-    return (_shareTypeArgument == ShareType.quickShare ?
-      {for (var document in _documentsArgument) SelectedPresentationFile(document.name, document.size)} :
-      [SelectedPresentationFile(_fileInfoArgument.fileName, _fileInfoArgument.fileSize)]).toList();
+    return _shareTypeArgument == ShareType.quickShare
+        ? _convertDocumentsToPresentationFile(_documentsArgument)
+        : _convertFilesToPresentationFile(_uploadFilesArgument);
   }
 
   void handleOnUploadAndSharePressed() {
@@ -206,6 +206,18 @@ class UploadFileViewModel extends BaseViewModel {
           break;
       }
     };
+  }
+
+  List<SelectedPresentationFile> _convertDocumentsToPresentationFile(List<Document> documents) {
+    return documents.map((document) {
+      return SelectedPresentationFile(document.name, document.size, mediaType: document.mediaType);
+    }).toList();
+  }
+
+  List<SelectedPresentationFile> _convertFilesToPresentationFile(List<FileInfo> filesInfo) {
+    return filesInfo.map((uploadFiles) {
+      return SelectedPresentationFile(uploadFiles.fileName, uploadFiles.fileSize, mediaType: uploadFiles.fileName.getMediaType());
+    }).toList();
   }
 
   void cancelSelection() {

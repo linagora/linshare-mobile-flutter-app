@@ -36,6 +36,8 @@ import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
@@ -65,6 +67,7 @@ class WidgetModule {
     _provideSideMenuComponent();
     _provideSharedSpaceComponent();
     _provideWorkGroupNodeSurfingComponent();
+    _provideCurrentUploadsComponent();
   }
 
   void _provideLoginComponent() {
@@ -145,6 +148,14 @@ class WidgetModule {
     getIt.registerFactory(() => WorkGroupDetailFilesViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<LocalFilePicker>(),
+      getIt.get<AppNavigation>()
+    ));
+  }
+
+  void _provideCurrentUploadsComponent() {
+    getIt.registerFactory(() => CurrentUploadsWidget());
+    getIt.registerFactory(() => CurrentUploadsViewModel(
+      getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>()
     ));
   }

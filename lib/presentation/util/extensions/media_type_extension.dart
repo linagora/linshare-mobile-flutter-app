@@ -31,6 +31,7 @@
 
 import 'package:http_parser/http_parser.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:mime/mime.dart';
 
 extension MediaTypeExtension on MediaType {
   String getFileTypeImagePath(AppImagePaths appImagePaths) {
@@ -86,5 +87,27 @@ extension MediaTypeExtension on MediaType {
       return appImagePaths.icFileTypeSheets;
     }
     return appImagePaths.icFileTypeFile;
+  }
+}
+
+extension StringMimeTypeExtension on String {
+  static final String defaultMimeType = 'application/octet-stream';
+
+  static final MediaType defaultMediaType = MediaType.parse(defaultMimeType);
+
+  String getMimeType() {
+    try {
+      return lookupMimeType(this) ?? defaultMimeType;
+    } catch(_) {
+      return defaultMimeType;
+    }
+  }
+
+  MediaType getMediaType() {
+    try {
+      return MediaType.parse(getMimeType()) ?? defaultMediaType;
+    } catch(_) {
+      return defaultMediaType;
+    }
   }
 }

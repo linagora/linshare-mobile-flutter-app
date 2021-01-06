@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-07T10:41:03.535242",
+  "@@last_modified": "2021-01-06T17:56:06.438040",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -269,6 +269,46 @@
   },
   "uploading_files_view_button": "View",
   "@uploading_files_view_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_screen_title": "Current uploads",
+  "@current_uploads_screen_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_my_space_tab": "My Space",
+  "@current_uploads_my_space_tab": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_shared_space_tab": "Shared Space",
+  "@current_uploads_shared_space_tab": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_waiting_status": "Waiting",
+  "@current_uploads_waiting_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_uploading_status": "Uploading",
+  "@current_uploads_uploading_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_upload_failed_status": "Upload failed",
+  "@current_uploads_upload_failed_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_share_failed_status": "Share failed",
+  "@current_uploads_share_failed_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_succeed_status": "Completed",
+  "@current_uploads_succeed_status": {
     "type": "text",
     "placeholders": {}
   }

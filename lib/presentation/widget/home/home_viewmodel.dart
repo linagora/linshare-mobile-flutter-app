@@ -67,6 +67,12 @@ class HomeViewModel extends BaseViewModel {
     });
   }
 
+  void clickViewCurrentUploads() {
+    _appNavigation.push(
+      RoutePaths.currentUploads,
+    );
+  }
+
   void cleanUploadViewState() {
     store.dispatch(CleanUploadStateAction());
   }
