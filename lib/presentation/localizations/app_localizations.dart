@@ -348,6 +348,62 @@ class AppLocalizations {
       name: 'uploading_files_view_button',
     );
   }
+
+  String get current_uploads_screen_title {
+    return Intl.message(
+      'Current uploads',
+      name: 'current_uploads_screen_title',
+    );
+  }
+
+  String get current_uploads_my_space_tab {
+    return Intl.message(
+      'My Space',
+      name: 'current_uploads_my_space_tab',
+    );
+  }
+
+  String get current_uploads_shared_space_tab {
+    return Intl.message(
+      'Shared Space',
+      name: 'current_uploads_shared_space_tab',
+    );
+  }
+
+  String get current_uploads_waiting_status {
+    return Intl.message(
+      'Waiting',
+      name: 'current_uploads_waiting_status',
+    );
+  }
+
+  String get current_uploads_uploading_status {
+    return Intl.message(
+      'Uploading',
+      name: 'current_uploads_uploading_status',
+    );
+  }
+
+  String get current_uploads_upload_failed_status {
+    return Intl.message(
+      'Upload failed',
+      name: 'current_uploads_upload_failed_status',
+    );
+  }
+
+  String get current_uploads_share_failed_status {
+    return Intl.message(
+      'Share failed',
+      name: 'current_uploads_share_failed_status',
+    );
+  }
+
+  String get current_uploads_succeed_status {
+    return Intl.message(
+      'Completed',
+      name: 'current_uploads_succeed_status',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -45,7 +45,7 @@ void main() {
     MockDocumentRepository documentRepository;
     MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
-    UploadFileInteractor uploadFileInteractor;
+    UploadMySpaceDocumentInteractor uploadFileInteractor;
     UploadTaskId uploadTaskId;
 
     setUp(() {
@@ -53,30 +53,18 @@ void main() {
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
       uploadTaskId = UploadTaskId('upload_task_id_1');
-      uploadFileInteractor = UploadFileInteractor(documentRepository, tokenRepository, credentialRepository);
+      uploadFileInteractor = UploadMySpaceDocumentInteractor(documentRepository, tokenRepository, credentialRepository);
     });
 
     test('uploadFileInteractor should return success with correct data', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       when(documentRepository.upload(fileInfo1, permanentToken, linShareBaseUrl))
-          .thenAnswer((_) async => FileUploadState(
-              Stream.fromIterable([
-                Right<Failure, Success>(fileUploadProgress10),
-                Right<Failure, Success>(fileUploadProgress100),
-                Right<Failure, Success>(FileUploadSuccess(document))
-              ]),
-              uploadTaskId));
+          .thenAnswer((_) async => uploadTaskId);
 
-      final resultStream = uploadFileInteractor.execute(fileInfo1);
+      final result = await uploadFileInteractor.execute(fileInfo1);
 
-      expect(
-          resultStream,
-          emitsInOrder([
-            Right<Failure, Success>(fileUploadProgress10),
-            Right<Failure, Success>(fileUploadProgress100),
-            Right<Failure, Success>(FileUploadSuccess(document))
-          ]));
+      expect(result, Right<Failure, Success>(FileUploadState(uploadTaskId)));
     });
 
     test('uploadFileInteractor should failure with wrong baseUrl', () async {
@@ -86,13 +74,9 @@ void main() {
       when(documentRepository.upload(fileInfo1, permanentToken, wrongUrl))
           .thenThrow(exception);
 
-      final resultStream = uploadFileInteractor.execute(fileInfo1);
+      final result = await uploadFileInteractor.execute(fileInfo1);
 
-      expect(
-          resultStream,
-          emitsInOrder([
-            Left<Failure, Success>(FileUploadFailure(fileInfo1, exception))
-          ]));
+      expect(result, Left<Failure, Success>(FileUploadFailure(UploadTaskId.undefined(), exception)));
     });
 
     test('uploadFileInteractor should failure with wrong token', () async {
@@ -103,13 +87,9 @@ void main() {
       when(documentRepository.upload(fileInfo1, wrongToken, linShareBaseUrl))
           .thenThrow(exception);
 
-      final resultStream = uploadFileInteractor.execute(fileInfo1);
+      final result = await uploadFileInteractor.execute(fileInfo1);
 
-      expect(
-          resultStream,
-          emitsInOrder([
-            Left<Failure, Success>(FileUploadFailure(fileInfo1, exception))
-          ]));
+      expect(result, Left<Failure, Success>(FileUploadFailure(UploadTaskId.undefined(), exception)));
     });
   });
 }
