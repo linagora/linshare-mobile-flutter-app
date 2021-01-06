@@ -37,4 +37,5 @@ class RoutePaths {
   static const String uploadDocumentRoute = 'upload_document';
   static const String sharedSpace = 'shared_space';
   static const String sharedSpaceInside = 'shared_space_inside';
+  static const String currentUploads = 'current_uploads';
 }

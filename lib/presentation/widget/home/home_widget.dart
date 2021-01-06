@@ -206,9 +206,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               children: [
                 Expanded(
                   child: FlatButton(
-                    onPressed: () {
-                      // TODO: Open current upload screen
-                    },
+                    onPressed: () => homeViewModel.clickViewCurrentUploads(),
                     padding: EdgeInsets.only(left: 16, right: 16),
                     child: Text(
                       AppLocalizations.of(context).uploading_files_view_button,

@@ -41,7 +41,8 @@ extension AppColor on Color {
   static const loginButtonColor = Color(0xff1B7EC7);
   static const uploadFileFileNameTextColor = Color(0xff7B7B7B);
   static const uploadFileFileSizeTextColor = Color(0xffACACAC);
-  static const uploadProgressBackgroundColor = Color(0xff5FA4D8);
+  static const uploadProgressBackgroundColor = Color(0xffF7F7F7);
+  static const uploadProgressValueColor = Color(0xff4AC6FF);
   static const mySpaceUploadBackground = Color(0xff1B7EC7);
   static const toastBackgroundColor = Color(0xff1B7EC7);
   static const toastErrorBackgroundColor = Color(0xffFF5858);
@@ -62,4 +63,7 @@ extension AppColor on Color {
   static const unselectedElementColor = Color(0xffACACAC);
   static const topBarBackgroundColor = Color(0xffF7F7F7);
   static const multipleSelectionBarTextColor = Color(0xff7B7B7B);
+  static const statusUploadCompletedSubTitleColor = Color(0xff4AC6FF);
+  static const statusUploadInProgressSubTitleColor = Color(0xffACACAC);
+  static const statusUploadFailedSubTitleColor = Color(0xffFF5858);
 }

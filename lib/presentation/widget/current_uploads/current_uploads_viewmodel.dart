@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -11,7 +11,7 @@
 // subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
 // display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
 // the words “You are using the Free and Open Source version of LinShare™, powered by
-// Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+// Linagora © 2009–2021. Contribute to Linshare R&D by subscribing to an Enterprise
 // offer!”. You must also retain the latter notice in all asynchronous messages such as
 // e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
@@ -29,32 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:redux/src/store.dart';
 
-Route<dynamic> generateRoute(RouteSettings settings) {
-  switch (settings.name) {
-    case RoutePaths.loginRoute:
-      return MaterialPageRoute(builder: (context) => getIt<LoginWidget>(), settings: settings.arguments);
-    case RoutePaths.homeRoute:
-      return MaterialPageRoute(builder: (context) => getIt<HomeWidget>(), settings: settings.arguments);
-    case RoutePaths.uploadDocumentRoute:
-      return MaterialPageRoute(builder: (context) => getIt<UploadFileWidget>(), settings: settings.arguments);
-    case RoutePaths.currentUploads:
-      return MaterialPageRoute(builder: (context) => getIt<CurrentUploadsWidget>(), settings: settings.arguments);
-    default:
-      return MaterialPageRoute(
-        builder: (context) => Scaffold(
-          body: Center(
-            child: Text('No path for ${settings.name}'),
-          ),
-        ),
-      );
+class CurrentUploadsViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
+
+  CurrentUploadsViewModel(Store<AppState> store, this._appNavigation) : super(store);
+
+  void backToPreviousScreen() {
+    _appNavigation.popBack();
   }
 }
