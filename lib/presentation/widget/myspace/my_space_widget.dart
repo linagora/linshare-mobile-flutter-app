@@ -393,8 +393,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                 width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).share,
             document)
-        .onActionClick(
-            (data) => mySpaceViewModel.shareDocument(document))
+        .onActionClick((data) => mySpaceViewModel.shareDocuments([document]))
         .build();
   }
 
@@ -412,7 +411,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         fit: BoxFit.fill,
       ),
       documents)
-      .onActionClick((documents) => null)
+      .onActionClick((documents) => mySpaceViewModel.shareDocuments(documents))
       .build();
   }
 }

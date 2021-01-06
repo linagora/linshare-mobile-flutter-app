@@ -316,8 +316,21 @@ class AppLocalizations {
 
   String items(int numberOfItems) {
     return Intl.message(
-      '$numberOfItems item(s)',
+      '''${Intl.plural(numberOfItems,
+          zero: 'No item',
+          one: '$numberOfItems item',
+          other: '$numberOfItems items')}''',
       name: 'items',
+      args: [numberOfItems],
+    );
+  }
+
+  String items_selected(int numberOfItems) {
+    return Intl.message(
+      '''${Intl.plural(numberOfItems,
+          one: '$numberOfItems item selected',
+          other: '$numberOfItems items selected')}''',
+      name: 'items_selected',
       args: [numberOfItems],
     );
   }
