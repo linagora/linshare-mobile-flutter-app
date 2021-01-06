@@ -76,7 +76,7 @@ class UploadFileViewModel extends BaseViewModel {
     });
   }
 
-  FileInfo _fileInfoArgument;
+  List<FileInfo> _uploadFilesArgument;
 
   ShareType _shareTypeArgument = ShareType.uploadAndShare;
   ShareType get shareTypeArgument => _shareTypeArgument;
@@ -98,8 +98,8 @@ class UploadFileViewModel extends BaseViewModel {
     store.dispatch(CleanUploadStateAction());
   }
 
-  void setFileInfoArgument(FileInfo fileInfo) {
-    _fileInfoArgument = fileInfo;
+  void setUploadFilesArgument(List<FileInfo> uploadFiles) {
+    _uploadFilesArgument = uploadFiles;
   }
 
   void setShareTypeArgument(ShareType shareType) {
@@ -150,14 +150,14 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   void _handleUploadAndShare() {
-    if (_fileInfoArgument != null) {
-      store.dispatch(uploadAndShareFileAction(_fileInfoArgument));
+    if (_uploadFilesArgument != null) {
+      store.dispatch(uploadAndShareFileAction(_uploadFilesArgument));
     }
   }
 
   void _handleUploadToSharedSpace() {
-    if (_fileInfoArgument != null && _workGroupDocumentUploadInfoArgument != null) {
-      store.dispatch(uploadAndShareFileAction(_fileInfoArgument));
+    if (_uploadFilesArgument != null && _workGroupDocumentUploadInfoArgument != null) {
+      store.dispatch(uploadAndShareFileAction(_uploadFilesArgument));
     }
   }
 
@@ -183,22 +183,22 @@ class UploadFileViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> uploadAndShareFileAction(FileInfo fileInfo) {
+  ThunkAction<AppState> uploadAndShareFileAction(List<FileInfo> uploadFiles) {
     return (Store<AppState> store) async {
       final uploadType = _uploadAndShareButtonType.value;
       switch (uploadType) {
         case ShareButtonType.justUpload:
-          await _uploadShareFileManager.justUploadFiles([fileInfo]);
+          await _uploadShareFileManager.justUploadFiles(uploadFiles);
           break;
         case ShareButtonType.uploadAndShare:
           await _uploadShareFileManager.uploadFilesThenShare(
-            [fileInfo],
+            uploadFiles,
             _autoCompleteResultListObservable.value,
           );
           break;
         case ShareButtonType.workGroup:
           await _uploadShareFileManager.uploadToSharedSpace(
-              [fileInfo],
+              uploadFiles,
               _workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.sharedSpaceId,
               parentNodeId: _workGroupDocumentUploadInfoArgument.isRootNode()
                   ? null

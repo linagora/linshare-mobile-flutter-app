@@ -35,14 +35,19 @@ import 'package:file_picker/file_picker.dart';
 
 class LocalFilePicker {
 
-  Future<Either<Failure, FilePickerSuccessViewState>> pickSingleFile({FileType fileType = FileType.any}) async {
+  Future<Either<Failure, FilePickerSuccessViewState>> pickFiles({FileType fileType = FileType.any}) async {
     try {
-      final fileResult = await FilePicker.platform.pickFiles(type: fileType);
-      if (fileResult != null) {
-        return Right(FilePickerSuccessViewState(FileInfo(
-            _getSingleFileNameWithExtension(fileResult),
-            _getSingleFilePathWithoutFileName(fileResult),
-            fileResult.files.single.size)));
+      final filesResult = await FilePicker.platform.pickFiles(type: fileType, allowMultiple: true);
+      if (filesResult != null) {
+        final filesInfoResult = filesResult.files.map((platformFile) {
+          return FileInfo(
+            _getSingleFileNameWithExtension(platformFile),
+            _getSingleFilePathWithoutFileName(platformFile),
+            platformFile.size,
+          );
+        }).toList();
+
+        return Right(FilePickerSuccessViewState(filesInfoResult));
       } else {
         return Left(FilePickerCancel());
       }
@@ -51,14 +56,14 @@ class LocalFilePicker {
     }
   }
 
-  String _getSingleFileNameWithExtension(FilePickerResult filePickerResult) {
-    return filePickerResult.files.single.name;
+  String _getSingleFileNameWithExtension(PlatformFile platformFile) {
+    return platformFile.name;
   }
 
-  String _getSingleFilePathWithoutFileName(FilePickerResult filePickerResult) {
-    final rawFilePath = filePickerResult.files.single.path;
-    return filePickerResult.files.single.path.substring(
+  String _getSingleFilePathWithoutFileName(PlatformFile platformFile) {
+    final rawFilePath = platformFile.path;
+    return rawFilePath.substring(
         0,
-        rawFilePath.length - _getSingleFileNameWithExtension(filePickerResult).length);
+        rawFilePath.length - _getSingleFileNameWithExtension(platformFile).length);
   }
 }

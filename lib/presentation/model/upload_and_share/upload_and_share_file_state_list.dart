@@ -42,7 +42,7 @@ class UploadAndShareFileStateList {
 
   final int reduceCompletedSize;
 
-  final List<UploadAndShareFileState> _uploadingStateFiles = const <UploadAndShareFileState>[];
+  final List<UploadAndShareFileState> _uploadingStateFiles = <UploadAndShareFileState>[];
 
   List<UploadAndShareFileState> get uploadingStateFiles => _uploadingStateFiles.toList(growable: false);
 
@@ -88,7 +88,8 @@ class UploadAndShareFileStateList {
 
   List<UploadAndShareFileState> _completedFiles() {
     return _uploadingStateFiles
-        .where((element) => element.uploadStatus == UploadFileStatus.succeed);
+        .where((element) => element.uploadStatus == UploadFileStatus.succeed)
+        .toList();
   }
 
   void _minimizeCompletedFiles() {
