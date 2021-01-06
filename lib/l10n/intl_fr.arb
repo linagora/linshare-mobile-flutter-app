@@ -261,5 +261,15 @@
     "placeholders": {
       "numberOfItems": {}
     }
+  },
+  "uploading_files_status_title": "Uploading files",
+  "@uploading_files_status_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "uploading_files_view_button": "View",
+  "@uploading_files_view_button": {
+    "type": "text",
+    "placeholders": {}
   }
 }

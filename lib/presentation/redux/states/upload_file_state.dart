@@ -40,15 +40,29 @@ class UploadFileState extends LinShareState {
   final List<UploadAndShareFileState> _uploadingStateFiles;
   List<UploadAndShareFileState> get uploadingStateFiles => _uploadingStateFiles.toList();
 
-  List<UploadAndShareFileState> get uploadingFiles {
+  bool get isUploadingFiles {
     return _uploadingStateFiles
-        .where((element) => element.uploadStatus == UploadFileStatus.uploading)
+        .where((element) {
+          return element.uploadStatus == UploadFileStatus.uploading ||
+              element.uploadStatus == UploadFileStatus.waiting;
+        })
+        .isNotEmpty;
+  }
+
+  List<UploadAndShareFileState> get mySpaceUploadFiles {
+    return _uploadingStateFiles
+        .where((element) {
+          return element.action == UploadAndShareAction.upload ||
+              element.action == UploadAndShareAction.uploadAndShare;
+        })
         .toList();
   }
 
-  List<UploadAndShareFileState> get succeedFiles {
+  List<UploadAndShareFileState> get workgroupUploadFiles {
     return _uploadingStateFiles
-        .where((element) => element.uploadStatus == UploadFileStatus.succeed)
+        .where((element) {
+          return element.action == UploadAndShareAction.uploadSharedSpace;
+        })
         .toList();
   }
 

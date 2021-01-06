@@ -334,6 +334,20 @@ class AppLocalizations {
       args: [numberOfItems],
     );
   }
+
+  String get uploading_files_status_title {
+    return Intl.message(
+      'Uploading files',
+      name: 'uploading_files_status_title',
+    );
+  }
+
+  String get uploading_files_view_button {
+    return Intl.message(
+      'View',
+      name: 'uploading_files_view_button',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

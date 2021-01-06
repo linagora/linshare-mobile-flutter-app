@@ -59,8 +59,10 @@ class HomeViewModel extends BaseViewModel {
         _uploadFileManager.pendingListFileInfo.stream.listen((listFileInfo) {
       if (listFileInfo != null && listFileInfo.isNotEmpty) {
         _uploadFileManager.clearPendingFile();
-        _appNavigation.push(RoutePaths.uploadDocumentRoute,
-            arguments: UploadFileArguments(listFileInfo.first));
+        _appNavigation.push(
+          RoutePaths.uploadDocumentRoute,
+          arguments: UploadFileArguments(listFileInfo),
+        );
       }
     });
   }

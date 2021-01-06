@@ -33,12 +33,12 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/model/file_info.dart';
 
 class FilePickerSuccessViewState extends ViewState {
-  final FileInfo fileInfo;
+  final List<FileInfo> pickedFiles;
 
-  FilePickerSuccessViewState(this.fileInfo);
+  FilePickerSuccessViewState(this.pickedFiles);
 
   @override
-  List<Object> get props => [fileInfo];
+  List<Object> get props => [pickedFiles];
 }
 
 class FilePickerFailure extends FeatureFailure {

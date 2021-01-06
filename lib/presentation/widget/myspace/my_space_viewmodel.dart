@@ -115,7 +115,7 @@ class MySpaceViewModel extends BaseViewModel {
 
     _appNavigation.push(RoutePaths.uploadDocumentRoute,
         arguments: UploadFileArguments(
-            FileInfo.empty(),
+            [],
             shareType: ShareType.quickShare,
             documents: documents));
   }
@@ -221,18 +221,17 @@ class MySpaceViewModel extends BaseViewModel {
 
   ThunkAction<AppState> pickFileAction(FileType fileType) {
     return (Store<AppState> store) async {
-      await _localFilePicker.pickSingleFile(fileType: fileType).then((result) => result.fold(
+      await _localFilePicker.pickFiles(fileType: fileType).then((result) => result.fold(
           (failure) => store.dispatch(UploadFileAction(Left(failure))),
           (success) => store.dispatch(pickFileSuccessAction(success))));
     };
   }
 
-  ThunkAction<AppState> pickFileSuccessAction(
-      FilePickerSuccessViewState success) {
+  ThunkAction<AppState> pickFileSuccessAction(FilePickerSuccessViewState success) {
     return (Store<AppState> store) async {
       store.dispatch(UploadFileAction(Right(success)));
       await _appNavigation.push(RoutePaths.uploadDocumentRoute,
-          arguments: UploadFileArguments(success.fileInfo));
+          arguments: UploadFileArguments(success.pickedFiles));
     };
   }
 
