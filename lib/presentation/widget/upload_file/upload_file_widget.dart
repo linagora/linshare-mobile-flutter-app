@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tags/flutter_tags.dart';
@@ -54,6 +55,13 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
   final imagePath = getIt<AppImagePaths>();
   final appNavigation = getIt<AppNavigation>();
   final TextEditingController _typeAheadController = TextEditingController();
+  bool isHeaderExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    uploadFileViewModel.cancelSelection();
+  }
 
   @override
   void dispose() {
@@ -67,7 +75,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     final UploadFileArguments arguments = ModalRoute.of(context).settings.arguments;
     uploadFileViewModel.setFileInfoArgument(arguments.fileInfo);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
-    uploadFileViewModel.setDocumentArgument(arguments.document);
+    uploadFileViewModel.setDocumentsArgument(arguments.documents);
     uploadFileViewModel.setWorkGroupDocumentUploadInfoArgument(arguments.workGroupDocumentUploadInfo);
 
     return Scaffold(
@@ -89,6 +97,59 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       body: Container(
         child: Column(
           children: [
+            uploadFileViewModel.filesInfos.length > 1 ?
+            ExpansionPanelList(
+              elevation: 1,
+              expandedHeaderPadding: EdgeInsets.all(0),
+              expansionCallback: (int index, bool isExpanded) {
+                setState(() {
+                  isHeaderExpanded = !isHeaderExpanded;
+                });
+              },
+              children: [
+                ExpansionPanel(
+                  headerBuilder: (BuildContext context, bool isExpanded) {
+                    return ListTile(
+                      title: Text(
+                        AppLocalizations.of(context).items_selected(uploadFileViewModel.filesInfos.length),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColor.multipleSelectionBarTextColor
+                        )
+                      ),
+                    );
+                  },
+                  body: ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: 272),
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(left: 16),
+                      shrinkWrap: true,
+                      itemCount: uploadFileViewModel.filesInfos.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          dense: true,
+                          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                          title: Text(
+                            uploadFileViewModel.filesInfos[index].fileName,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColor.multipleSelectionBarTextColor
+                            )
+                          ),
+                          trailing: Text(
+                            '${filesize(uploadFileViewModel.filesInfos[index].fileSize)}',
+                            key: Key('upload_file_size'),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColor.uploadFileFileSizeTextColor),
+                          )
+                        );
+                      }
+                    )
+                  ),
+                  isExpanded: isHeaderExpanded
+                ),
+              ]):
             SizedBox(
               width: double.maxFinite,
               height: 56,
@@ -97,20 +158,20 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                 child: Row(
                   children: [
                     Expanded(
-                        child: Padding(
-                      child: Text(
-                        uploadFileViewModel.fileName,
-                        key: Key('upload_file_name'),
-                        style: TextStyle(
+                      child: Padding(
+                        child: Text(
+                          uploadFileViewModel.filesInfos[0].fileName,
+                          key: Key('upload_file_name'),
+                          style: TextStyle(
                             fontSize: 14,
                             color: AppColor.uploadFileFileNameTextColor),
-                      ),
+                        ),
                       padding: EdgeInsets.only(left: 24),
                     )),
                     Padding(
                         padding: EdgeInsets.only(right: 24),
                         child: Text(
-                          '${uploadFileViewModel.fileSize} KB',
+                          '${filesize(uploadFileViewModel.filesInfos[0].fileSize)}',
                           key: Key('upload_file_size'),
                           style: TextStyle(
                               fontSize: 14,

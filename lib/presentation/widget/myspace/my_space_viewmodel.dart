@@ -108,13 +108,16 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_exportFileAction(document, cancelToken));
   }
 
-  void shareDocument(Document document) {
-    _appNavigation.popBack();
+  void shareDocuments(List<Document> documents) {
+    if (documents.length == 1) {
+      _appNavigation.popBack();
+    }
+
     _appNavigation.push(RoutePaths.uploadDocumentRoute,
         arguments: UploadFileArguments(
             FileInfo.empty(),
             shareType: ShareType.quickShare,
-            document: document));
+            documents: documents));
   }
 
   void getAllDocument() {

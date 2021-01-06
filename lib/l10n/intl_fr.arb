@@ -248,11 +248,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "items": "{numberOfItems} item(s)",
+  "items": "{numberOfItems,plural, =0{No item}=1{{numberOfItems} item}other{{numberOfItems} items}}",
   "@items": {
     "type": "text",
     "placeholders": {
       "numberOfItems": {}
     }
   },
+  "items_selected": "{numberOfItems,plural, =1{{numberOfItems} item selected}other{{numberOfItems} items selected}}",
+  "@items_selected": {
+    "type": "text",
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  }
 }

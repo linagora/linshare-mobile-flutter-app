@@ -33,6 +33,8 @@ import 'dart:async';
 
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selected_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -79,7 +81,7 @@ class UploadFileViewModel extends BaseViewModel {
   ShareType _shareTypeArgument = ShareType.uploadAndShare;
   ShareType get shareTypeArgument => _shareTypeArgument;
 
-  Document _documentArgument;
+  List<Document> _documentsArgument;
   WorkGroupDocumentUploadInfo _workGroupDocumentUploadInfoArgument;
 
   final BehaviorSubject<List<AutoCompleteResult>> _autoCompleteResultListObservable = BehaviorSubject.seeded([]);
@@ -104,8 +106,8 @@ class UploadFileViewModel extends BaseViewModel {
     _shareTypeArgument = shareType;
   }
 
-  void setDocumentArgument(Document document) {
-    _documentArgument = document;
+  void setDocumentsArgument(List<Document> documents) {
+    _documentsArgument = documents;
   }
 
   void setWorkGroupDocumentUploadInfoArgument(WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo) {
@@ -124,9 +126,11 @@ class UploadFileViewModel extends BaseViewModel {
     _autoCompleteResultListObservable.add(newAutoCompleteResultList);
   }
 
-  String get fileName => _shareTypeArgument == ShareType.quickShare ? _documentArgument.name : _fileInfoArgument.fileName;
-
-  int get fileSize => _shareTypeArgument == ShareType.quickShare ? _documentArgument.size : _fileInfoArgument.fileSize;
+  List<SelectedPresentationFile> get filesInfos {
+    return (_shareTypeArgument == ShareType.quickShare ?
+      {for (var document in _documentsArgument) SelectedPresentationFile(document.name, document.size)} :
+      [SelectedPresentationFile(_fileInfoArgument.fileName, _fileInfoArgument.fileSize)]).toList();
+  }
 
   void handleOnUploadAndSharePressed() {
     if (_shareTypeArgument == ShareType.quickShare) {
@@ -140,7 +144,7 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   void _handleQuickShare() {
-    if (_documentArgument != null) {
+    if (_documentsArgument != null && _documentsArgument.isNotEmpty) {
       store.dispatch(shareAction());
     }
   }
@@ -171,7 +175,7 @@ class UploadFileViewModel extends BaseViewModel {
 
   ThunkAction<AppState> shareAction() {
     return (Store<AppState> store) async {
-      final documentIdList = [_documentArgument.documentId];
+      final documentIdList = _documentsArgument.map((document) => document.documentId).toList();
       await _uploadShareFileManager.justShare(
         _autoCompleteResultListObservable.value,
         documentIdList,
@@ -202,6 +206,10 @@ class UploadFileViewModel extends BaseViewModel {
           break;
       }
     };
+  }
+
+  void cancelSelection() {
+    store.dispatch(MySpaceClearSelectedDocumentsAction());
   }
 
   @override
