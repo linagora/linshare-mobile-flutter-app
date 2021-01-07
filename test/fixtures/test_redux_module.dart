@@ -40,6 +40,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
@@ -63,6 +65,8 @@ AppState createAppStateWithUploadState(UploadFileState state) {
     uploadFileState: state,
     mySpaceState: MySpaceState.initial(),
     shareState: ShareState.initial(),
+    sharedSpaceState: SharedSpaceState.initial(),
+    uiState: UIState.initial(),
   );
 }
 
@@ -72,5 +76,7 @@ AppState createAppStateWithShareState(UploadFileState uploadState, ShareState sh
     uploadFileState: uploadState,
     mySpaceState: MySpaceState.initial(),
     shareState: shareState,
+    sharedSpaceState: SharedSpaceState.initial(),
+    uiState: UIState.initial(),
   );
 }
