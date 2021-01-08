@@ -35,12 +35,17 @@
 // the Additional Terms applicable to LinShare software.
 
 import 'package:equatable/equatable.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 
 class SelectedPresentationFile extends Equatable {
   final String fileName;
   final int fileSize;
+  final MediaType _mediaType;
+  MediaType get mediaType => _mediaType ?? fileName.getMediaType();
 
-  SelectedPresentationFile(this.fileName, this.fileSize);
+  SelectedPresentationFile(this.fileName, this.fileSize, {MediaType mediaType})
+      : _mediaType = mediaType;
 
   @override
   List<Object> get props => [fileName, fileSize];

@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
