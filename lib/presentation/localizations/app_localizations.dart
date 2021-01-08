@@ -411,6 +411,13 @@ class AppLocalizations {
       name: 'Pick the destination',
     );
   }
+
+  String get copy_here {
+    return Intl.message(
+      'copy here',
+      name: 'copy here',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
