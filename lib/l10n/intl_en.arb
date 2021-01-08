@@ -316,5 +316,10 @@
   "@pick_the_destination": {
     "type": "text",
     "placeholders": {}
+  },
+  "copy_here": "copy here",
+  "@copy_here": {
+    "type": "text",
+    "placeholders": {}
   }
 }
