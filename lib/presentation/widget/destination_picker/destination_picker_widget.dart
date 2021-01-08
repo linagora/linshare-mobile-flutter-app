@@ -41,10 +41,12 @@ import 'package:linshare_flutter_app/presentation/redux/states/destination_picke
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 
+import 'destination_picker_action/negative_destination_picker_action.dart';
 import 'destination_picker_viewmodel.dart';
 
 class DestinationPickerWidget extends StatefulWidget {
@@ -58,11 +60,19 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   final _imagePath = getIt<AppImagePaths>();
   final _destinationPickerViewModel = getIt<DestinationPickerViewModel>();
   final GlobalKey<WorkGroupDetailFilesWidgetState> _workGroupDetailFilesWidgetKey = GlobalKey();
+  DestinationPickerArguments _destinationPickerArguments;
 
   @override
   void initState() {
     super.initState();
     _destinationPickerViewModel.getAllSharedSpaces();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        _destinationPickerArguments = ModalRoute.of(context).settings.arguments as DestinationPickerArguments;
+      } catch (exception) {
+        print(exception);
+      }
+    });
   }
 
   @override
@@ -176,26 +186,28 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
           height: 56.0,
           child: Row(
             textDirection: TextDirection.rtl,
-            children: [
-              TextButton(
-                  onPressed: null,
-                  child: Text(
-                    'COPY HERE',
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.destinationPickerBottomActionTextColor),
-                  )),
-              TextButton(
-                  onPressed: null,
-                  child: Text(
-                    'CANCEL',
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.destinationPickerBottomActionTextColor),
-                  )),
-            ],
+            children: _buildBottomActionList(context),
           ),
         ));
+  }
+
+  List<Widget> _buildBottomActionList(BuildContext context) {
+    final listAction = <Widget>[];
+    if (_destinationPickerArguments != null) {
+      for (final action in _destinationPickerArguments.actionList) {
+        listAction.add(TextButton(
+            onPressed: () {
+              if (action.actionClick != null) {
+                action is NegativeDestinationPickerAction
+                    ? action.actionClick(null)
+                    : action.actionClick(
+                    _destinationPickerViewModel.currentNodeObservable.value);
+              }
+            },
+            child: action.actionWidget));
+      }
+    }
+    return listAction;
   }
 
   Widget _buildSharedSpacesList(
