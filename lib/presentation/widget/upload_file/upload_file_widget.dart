@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UploadFileWidget extends StatefulWidget {
@@ -119,33 +120,52 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                       ),
                     );
                   },
-                  body: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 272),
-                    child: ListView.builder(
-                      padding: EdgeInsets.only(left: 16),
-                      shrinkWrap: true,
-                      itemCount: uploadFileViewModel.filesInfos.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          dense: true,
-                          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                          title: Text(
-                            uploadFileViewModel.filesInfos[index].fileName,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColor.multipleSelectionBarTextColor
+                  body: Padding(
+                    padding: const EdgeInsets.only(bottom: 11.0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 209),
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(left: 16),
+                        shrinkWrap: true,
+                        itemExtent: 38,
+                        itemCount: uploadFileViewModel.filesInfos.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final fileInfo = uploadFileViewModel.filesInfos[index];
+                          return ListTile(
+                            dense: true,
+                            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  fileInfo.mediaType.getFileTypeImagePath(imagePath),
+                                  width: 20,
+                                  height: 24,
+                                  fit: BoxFit.fill,
+                                ),
+                              ],
+                            ),
+                            title: Transform(
+                              transform: Matrix4.translationValues(-20, 0.0, 0.0),
+                              child: Text(
+                                fileInfo.fileName,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColor.multipleSelectionBarTextColor
+                                )
+                              ),
+                            ),
+                            trailing: Text(
+                              '${filesize(fileInfo.fileSize)}',
+                              key: Key('upload_file_size'),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: AppColor.uploadFileFileSizeTextColor),
                             )
-                          ),
-                          trailing: Text(
-                            '${filesize(uploadFileViewModel.filesInfos[index].fileSize)}',
-                            key: Key('upload_file_size'),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColor.uploadFileFileSizeTextColor),
-                          )
-                        );
-                      }
-                    )
+                          );
+                        }
+                      )
+                    ),
                   ),
                   isExpanded: isHeaderExpanded
                 ),
