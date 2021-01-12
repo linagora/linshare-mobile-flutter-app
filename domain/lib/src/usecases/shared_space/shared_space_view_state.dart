@@ -41,7 +41,7 @@ class SharedSpaceViewState extends ViewState {
 }
 
 class SharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
+  final Object exception;
 
   SharedSpaceFailure(this.exception);
 

@@ -35,7 +35,7 @@ import 'package:domain/domain.dart';
 class ShareDocumentViewState extends ViewState {
   final List<Share> sharedRecipients;
 
-  Document get sharedDocument => sharedRecipients.first?.document;
+  Document get sharedDocument => sharedRecipients.first.document;
 
   ShareDocumentViewState(this.sharedRecipients);
 
@@ -44,7 +44,7 @@ class ShareDocumentViewState extends ViewState {
 }
 
 class ShareDocumentFailure extends FeatureFailure {
-  final Exception exception;
+  final Object exception;
 
   ShareDocumentFailure(this.exception);
 

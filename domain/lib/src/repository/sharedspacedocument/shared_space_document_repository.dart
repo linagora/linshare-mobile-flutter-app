@@ -41,9 +41,9 @@ abstract class SharedSpaceDocumentRepository {
       Token token,
       Uri baseUrl,
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+      {WorkGroupNodeId? parentNodeId});
 
   Future<List<WorkGroupNode>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+      {WorkGroupNodeId? parentNodeId});
 }

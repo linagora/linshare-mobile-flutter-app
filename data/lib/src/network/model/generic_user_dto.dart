@@ -74,6 +74,9 @@ class GenericUserDto {
 
 extension GenericUserDtoExtension on GenericUserDto {
   GenericUser toGenericUser() {
-    return GenericUser(_mail, firstName: _firstName, lastName: _lastName);
+    return GenericUser(
+        _mail,
+        _firstName.getOrElse(() => null),
+        _lastName.getOrElse(() => null));
   }
 }
