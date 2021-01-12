@@ -32,6 +32,7 @@
 
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/authentication/token.dart';
+import 'package:domain/src/model/copy/copy_request.dart';
 import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
 
@@ -46,4 +47,10 @@ abstract class SharedSpaceDocumentRepository {
   Future<List<WorkGroupNode>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
       {WorkGroupNodeId parentNodeId});
+
+  Future<List<WorkGroupNode>> copyToSharedSpace(
+    CopyRequest copyRequest,
+    SharedSpaceId destinationSharedSpaceId,
+    {WorkGroupNodeId destinationParentNodeId}
+  );
 }
