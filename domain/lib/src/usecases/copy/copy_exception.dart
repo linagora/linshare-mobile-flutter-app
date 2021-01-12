@@ -28,41 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class SharedSpaceViewState extends ViewState {
-  final List<SharedSpaceNodeNested> sharedSpacesList;
+abstract class CopyException extends Equatable implements Exception {
+  final String message;
 
-  SharedSpaceViewState(this.sharedSpacesList);
+  CopyException(this.message);
 
   @override
-  List<Object> get props => [sharedSpacesList];
+  String toString() => message;
+
+  @override
+  List<Object> get props => [message];
 }
 
-class SharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  SharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class CopyToSharedSpaceViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNode;
-
-  CopyToSharedSpaceViewState(this.workGroupNode);
-
-  @override
-  List<Object> get props => [workGroupNode];
-}
-
-class CopyToSharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  CopyToSharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+class WorkGroupNodeNotFoundException extends CopyException {
+  WorkGroupNodeNotFoundException() : super('Workgroup node not found.');
 }

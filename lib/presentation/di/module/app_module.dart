@@ -143,6 +143,7 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetAllChildNodesInteractor(getIt<SharedSpaceDocumentRepository>()));
+    getIt.registerFactory(() => CopyDocumentsToSharedSpaceInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
   void _provideSharePreference() {
