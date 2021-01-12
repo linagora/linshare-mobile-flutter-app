@@ -47,7 +47,7 @@ class MySpaceViewState extends ViewState {
 }
 
 class MySpaceFailure extends FeatureFailure {
-  final Exception exception;
+  final Object exception;
 
   MySpaceFailure(this.exception);
 
@@ -65,7 +65,7 @@ class DownloadFileViewState extends ViewState {
 }
 
 class DownloadFileFailure extends FeatureFailure {
-  final Exception downloadFileException;
+  final Object downloadFileException;
 
   DownloadFileFailure(this.downloadFileException);
 
@@ -91,7 +91,7 @@ class DownloadFileIOSViewState extends ViewState {
 }
 
 class DownloadFileIOSFailure extends FeatureFailure {
-  final Exception downloadFileException;
+  final Object downloadFileException;
 
   DownloadFileIOSFailure(this.downloadFileException);
 

@@ -41,7 +41,7 @@ class GetChildNodesViewState extends ViewState {
 }
 
 class GetChildNodesFailure extends FeatureFailure {
-  final Exception exception;
+  final Object exception;
 
   GetChildNodesFailure(this.exception);
 

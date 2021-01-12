@@ -40,7 +40,7 @@ class GetAllChildNodesInteractor {
 
   Future<Either<Failure, Success>> execute(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentId}
+      {WorkGroupNodeId? parentId}
   ) async {
     try {
       final childNodes = await _sharedSpaceDocumentRepository.getAllChildNodes(sharedSpaceId, parentNodeId: parentId,)
