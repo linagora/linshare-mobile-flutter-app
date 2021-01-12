@@ -32,6 +32,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dartz/dartz.dart';
 import 'package:data/src/datasource/document_datasource.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_http_client.dart';
@@ -102,7 +103,11 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       final shareDocumentBodyRequest = ShareDocumentBodyRequest(
           documentIds.map((data) => ShareIdDto(data.uuid)).toList(),
           mailingListIds.map((data) => MailingListIdDto(data.uuid)).toList(),
-          recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName)).toList());
+          recipients.map((data) => GenericUserDto(
+                data.mail,
+                lastName: optionOf<String>(data.lastName),
+                firstName: optionOf<String>(data.firstName)))
+              .toList());
       final shareList = await _linShareHttpClient.shareDocument(shareDocumentBodyRequest);
       return shareList.map((data) => data.toShare()).toList();
     }).catchError((error) {

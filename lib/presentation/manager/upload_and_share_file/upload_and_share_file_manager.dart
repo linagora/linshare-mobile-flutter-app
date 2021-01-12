@@ -224,8 +224,8 @@ class UploadShareFileManager {
         .map(
           (data) => GenericUser(
             data.getSuggestionMail(),
-            firstName: none(),
-            lastName: none(),
+            null,
+            null
           ),
         )
         .toList();
