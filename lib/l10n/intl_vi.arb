@@ -321,5 +321,20 @@
   "@copy_here": {
     "type": "text",
     "placeholders": {}
+  },
+  "copy_to_a_workgroup": "Sao chép đến nhóm làm việc",
+  "@copy_to_a_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_is_copied_to_a_shared_space": "Tệp đã được sao chép đến nhóm làm việc",
+  "@the_file_is_copied_to_a_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cannot_copy_file_to_shared_space": "Không thể sao chép tệp đến nhóm làm việc",
+  "@cannot_copy_file_to_shared_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

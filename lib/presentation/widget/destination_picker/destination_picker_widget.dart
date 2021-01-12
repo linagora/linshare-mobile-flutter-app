@@ -65,10 +65,10 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   @override
   void initState() {
     super.initState();
-    _destinationPickerViewModel.getAllSharedSpaces();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         _destinationPickerArguments = ModalRoute.of(context).settings.arguments as DestinationPickerArguments;
+        _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.destinationPickerType);
       } catch (exception) {
         print(exception);
       }
@@ -215,7 +215,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     return state.viewState.fold(
         (failure) => RefreshIndicator(
             onRefresh: () async =>
-                _destinationPickerViewModel.getAllSharedSpaces(),
+                _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.destinationPickerType),
             child: failure is SharedSpaceFailure
                 ? BackgroundWidgetBuilder()
                     .key(Key('shared_space_error_background'))
@@ -245,7 +245,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               )
             : RefreshIndicator(
                 onRefresh: () async =>
-                    _destinationPickerViewModel.getAllSharedSpaces(),
+                    _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.destinationPickerType),
                 child: _buildSharedSpacesListView(
                     context, state.sharedSpacesList)));
   }

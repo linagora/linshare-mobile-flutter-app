@@ -321,5 +321,20 @@
   "@copy_here": {
     "type": "text",
     "placeholders": {}
+  },
+  "copy_to_a_workgroup": "Copy to a workgroup",
+  "@copy_to_a_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_is_copied_to_a_shared_space": "The file is copied to a Shared space",
+  "@the_file_is_copied_to_a_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cannot_copy_file_to_shared_space": "Can not copy file to Shared space",
+  "@cannot_copy_file_to_shared_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

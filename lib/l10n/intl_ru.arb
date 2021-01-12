@@ -321,5 +321,20 @@
   "@copy_here": {
     "type": "text",
     "placeholders": {}
+  },
+  "copy_to_a_workgroup": "Скопировать в рабочую группу",
+  "@copy_to_a_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_is_copied_to_a_shared_space": "Файл скопирован в общее пространство",
+  "@the_file_is_copied_to_a_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cannot_copy_file_to_shared_space": "Невозможно скопировать файл в общее пространство",
+  "@cannot_copy_file_to_shared_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

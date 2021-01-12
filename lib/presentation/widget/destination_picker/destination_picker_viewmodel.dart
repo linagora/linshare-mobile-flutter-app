@@ -36,6 +36,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/destination_pick
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -48,16 +49,25 @@ class DestinationPickerViewModel extends BaseViewModel {
 
   DestinationPickerViewModel(Store<AppState> store, this._getAllSharedSpacesInteractor, this._appNavigation) : super(store);
 
-  void getAllSharedSpaces() async {
-    store.dispatch(_getAllSharedSpacesAction());
+  void getAllSharedSpaces(DestinationPickerType destinationPickerType) async {
+    store.dispatch(_getAllSharedSpacesAction(destinationPickerType));
   }
 
-  ThunkAction<AppState> _getAllSharedSpacesAction() {
+  ThunkAction<AppState> _getAllSharedSpacesAction(DestinationPickerType destinationPickerType) {
     return (Store<AppState> store) async {
       store.dispatch(StartDestinationPickerLoadingAction());
       await _getAllSharedSpacesInteractor.execute().then((result) => result.fold(
-              (failure) => store.dispatch(DestinationPickerGetAllSharedSpacesAction(Left(failure))),
-              (success) => store.dispatch(DestinationPickerGetAllSharedSpacesAction(Right(success)))));
+              (failure) => store.dispatch(DestinationPickerGetAllSharedSpacesAction([])),
+              (success) => store.dispatch(DestinationPickerGetAllSharedSpacesAction(
+                  (success as SharedSpaceViewState).sharedSpacesList
+                      .where((element) {
+                        if (destinationPickerType == DestinationPickerType.copy) {
+                          return SharedSpaceOperationRole.copyToSharedSpaceRoles
+                              .contains(element.sharedSpaceRole.name);
+                        }
+                        return true;
+                      })
+                      .toList()))));
     };
   }
 

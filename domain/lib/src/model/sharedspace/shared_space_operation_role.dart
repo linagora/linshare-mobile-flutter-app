@@ -30,42 +30,12 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-@immutable
-class StartDestinationPickerLoadingAction extends ActionOnline {}
-
-@immutable
-class DestinationPickerAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  DestinationPickerAction(this.viewState);
-}
-
-@immutable
-class DestinationPickerGoInsideSharedSpaceAction extends ActionOnline {
-  final SharedSpaceNodeNested sharedSpace;
-
-  DestinationPickerGoInsideSharedSpaceAction(this.sharedSpace);
-}
-
-@immutable
-class DestinationPickerBackToSharedSpaceAction extends ActionOnline {
-
-  DestinationPickerBackToSharedSpaceAction();
-}
-
-@immutable
-class DestinationPickerGetAllSharedSpacesAction extends ActionOnline {
-  final List<SharedSpaceNodeNested> sharedSpacesList;
-
-  DestinationPickerGetAllSharedSpacesAction(this.sharedSpacesList);
-}
-
-@immutable
-class CleanDestinationPickerStateAction extends ActionOffline {
-  CleanDestinationPickerStateAction();
+class SharedSpaceOperationRole {
+  static const copyToSharedSpaceRoles = [
+    SharedSpaceRoleName.ADMIN,
+    SharedSpaceRoleName.CONTRIBUTOR,
+    SharedSpaceRoleName.WRITER
+  ];
 }

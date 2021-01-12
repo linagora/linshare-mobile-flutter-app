@@ -49,6 +49,7 @@ export 'src/model/sharedspace/shared_space_id.dart';
 export 'src/model/sharedspace/shared_space_role.dart';
 export 'src/model/sharedspace/shared_space_role_id.dart';
 export 'src/model/sharedspace/shared_space_role_name.dart';
+export 'src/model/sharedspace/shared_space_operation_role.dart';
 export 'src/model/linshare_node_type.dart';
 export 'src/model/autocomplete/autocomplete_result.dart';
 export 'src/model/autocomplete/autocomplete_pattern.dart';

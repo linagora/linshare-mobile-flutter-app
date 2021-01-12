@@ -50,6 +50,10 @@ import 'package:linshare_flutter_app/presentation/view/downloading_file/download
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
@@ -62,13 +66,15 @@ class MySpaceViewModel extends BaseViewModel {
   final GetAllDocumentInteractor _getAllDocumentInteractor;
   final DownloadFileInteractor _downloadFileInteractor;
   final DownloadFileIOSInteractor _downloadFileIOSInteractor;
+  final CopyDocumentsToSharedSpaceInteractor _copyDocumentsToSharedSpaceInteractor;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
       this._appNavigation,
       this._getAllDocumentInteractor,
       this._downloadFileInteractor,
-      this._downloadFileIOSInteractor
+      this._downloadFileIOSInteractor,
+      this._copyDocumentsToSharedSpaceInteractor
   ) : super(store);
 
   void downloadFileClick(DocumentId documentId) {
@@ -118,6 +124,42 @@ class MySpaceViewModel extends BaseViewModel {
             [],
             shareType: ShareType.quickShare,
             documents: documents));
+  }
+
+  void copyToAWorkgroup(BuildContext context, Document document) {
+    _appNavigation.popBack();
+
+    final cancelAction = NegativeDestinationPickerAction(context,
+        label: AppLocalizations.of(context).cancel.toUpperCase());
+    cancelAction.onDestinationPickerActionClick((_) => _appNavigation.popBack());
+
+    final copyAction = CopyDestinationPickerAction(context);
+    copyAction.onDestinationPickerActionClick((data) {
+      _appNavigation.popBack();
+      if (data is WorkGroupNodesSurfingArguments) {
+        store.dispatch(_copyToWorkgroupAction(document, data));
+      }
+    });
+
+    _appNavigation.push(RoutePaths.destinationPicker,
+        arguments: DestinationPickerArguments(
+            actionList: [copyAction, cancelAction],
+            destinationPickerType: DestinationPickerType.copy));
+  }
+
+  ThunkAction<AppState> _copyToWorkgroupAction(Document document, WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
+    return (Store<AppState> store) async {
+      final parentNodeId = workGroupNodesSurfingArguments.folder != null
+          ? workGroupNodesSurfingArguments.folder.workGroupNodeId
+          : null;
+      await _copyDocumentsToSharedSpaceInteractor.execute(
+          CopyRequest(document.documentId.uuid, SpaceType.personalSpace),
+          workGroupNodesSurfingArguments.sharedSpaceNodeNested.sharedSpaceId,
+      destinationParentNodeId: parentNodeId)
+      .then((result) => result.fold(
+              (failure) => store.dispatch(MySpaceAction(Left(failure))),
+              (success) => store.dispatch(MySpaceAction(Right(success)))));
+    };
   }
 
   void getAllDocument() {
