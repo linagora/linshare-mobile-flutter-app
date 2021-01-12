@@ -29,40 +29,19 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+enum SpaceType { personalSpace, receivedShare, sharedSpace }
 
-class SharedSpaceViewState extends ViewState {
-  final List<SharedSpaceNodeNested> sharedSpacesList;
-
-  SharedSpaceViewState(this.sharedSpacesList);
-
-  @override
-  List<Object> get props => [sharedSpacesList];
-}
-
-class SharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  SharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class CopyToSharedSpaceViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNode;
-
-  CopyToSharedSpaceViewState(this.workGroupNode);
-
-  @override
-  List<Object> get props => [workGroupNode];
-}
-
-class CopyToSharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  CopyToSharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+extension SpaceTypeExtension on SpaceType {
+  String get value {
+    switch (this) {
+      case SpaceType.personalSpace:
+        return 'PERSONAL_SPACE';
+      case SpaceType.receivedShare:
+        return 'RECEIVED_SHARE';
+      case SpaceType.sharedSpace:
+        return 'SHARED_SPACE';
+      default:
+        return 'PERSONAL_SPACE';
+    }
+  }
 }

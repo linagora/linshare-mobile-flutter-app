@@ -28,41 +28,27 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class SharedSpaceViewState extends ViewState {
-  final List<SharedSpaceNodeNested> sharedSpacesList;
+class CopyDocumentsToSharedSpaceInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
 
-  SharedSpaceViewState(this.sharedSpacesList);
+  CopyDocumentsToSharedSpaceInteractor(this._sharedSpaceDocumentRepository);
 
-  @override
-  List<Object> get props => [sharedSpacesList];
-}
-
-class SharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  SharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class CopyToSharedSpaceViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNode;
-
-  CopyToSharedSpaceViewState(this.workGroupNode);
-
-  @override
-  List<Object> get props => [workGroupNode];
-}
-
-class CopyToSharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  CopyToSharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  Future<Either<Failure, Success>> execute(
+    CopyRequest copyRequest,
+    SharedSpaceId destinationSharedSpaceId,
+    {WorkGroupNodeId destinationParentNodeId}
+  ) async {
+    try {
+      final workgroupNodes = await _sharedSpaceDocumentRepository
+        .copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
+      return Right<Failure, Success>(CopyToSharedSpaceViewState(workgroupNodes));
+    } catch (exception) {
+      return Left<Failure, Success>(CopyToSharedSpaceFailure(exception));
+    }
+  }
 }

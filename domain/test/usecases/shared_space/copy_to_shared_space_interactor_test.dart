@@ -28,41 +28,52 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class SharedSpaceViewState extends ViewState {
-  final List<SharedSpaceNodeNested> sharedSpacesList;
+import '../../mock/repository/mock_shared_space_document_repository.dart';
 
-  SharedSpaceViewState(this.sharedSpacesList);
+void main() {
+  group('copy_to_shared_space_interactor tests', () {
+    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    CopyDocumentsToSharedSpaceInteractor copyDocumentsToSharedSpaceInteractor;
 
-  @override
-  List<Object> get props => [sharedSpacesList];
-}
+    setUp(() {
+      sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
+      copyDocumentsToSharedSpaceInteractor = CopyDocumentsToSharedSpaceInteractor(sharedSpaceDocumentRepository);
+    });
 
-class SharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
+    test('copy to shared space interactor should return success with valid data', () async {
+      when(sharedSpaceDocumentRepository.copyToSharedSpace(
+          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          sharedSpace1.sharedSpaceId))
+      .thenAnswer((_) async => [workGroupDocument1]);
 
-  SharedSpaceFailure(this.exception);
+      final result = await copyDocumentsToSharedSpaceInteractor.execute(
+          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          sharedSpace1.sharedSpaceId);
+      final workGroupList = result
+          .map((success) => (success as CopyToSharedSpaceViewState).workGroupNode)
+          .getOrElse(() => []);
+      expect(workGroupList, [workGroupDocument1]);
+    });
 
-  @override
-  List<Object> get props => [exception];
-}
+    test('copy to shared space interactor should fail when copyToSharedSpace fail', () async {
+      final exception = Exception();
+      when(sharedSpaceDocumentRepository.copyToSharedSpace(
+          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          sharedSpace1.sharedSpaceId))
+          .thenThrow(exception);
 
-class CopyToSharedSpaceViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNode;
-
-  CopyToSharedSpaceViewState(this.workGroupNode);
-
-  @override
-  List<Object> get props => [workGroupNode];
-}
-
-class CopyToSharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  CopyToSharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+      final result = await copyDocumentsToSharedSpaceInteractor.execute(
+          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          sharedSpace1.sharedSpaceId);
+      expect(result, Left<Failure, Success>(CopyToSharedSpaceFailure(exception)));
+    });
+  });
 }

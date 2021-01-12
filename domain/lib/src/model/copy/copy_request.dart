@@ -29,40 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:domain/src/model/copy/space_type.dart';
+import 'package:domain/src/model/document/document_id.dart';
+import 'package:equatable/equatable.dart';
 
-class SharedSpaceViewState extends ViewState {
-  final List<SharedSpaceNodeNested> sharedSpacesList;
+class CopyRequest with EquatableMixin {
+  String contextUuid;
+  final String uuid;
+  final SpaceType kind;
 
-  SharedSpaceViewState(this.sharedSpacesList);
-
-  @override
-  List<Object> get props => [sharedSpacesList];
-}
-
-class SharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  SharedSpaceFailure(this.exception);
+  CopyRequest(this.uuid, this.kind, {this.contextUuid = ''});
 
   @override
-  List<Object> get props => [exception];
-}
-
-class CopyToSharedSpaceViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNode;
-
-  CopyToSharedSpaceViewState(this.workGroupNode);
-
-  @override
-  List<Object> get props => [workGroupNode];
-}
-
-class CopyToSharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  CopyToSharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  List<Object> get props => [contextUuid, uuid, kind];
 }
