@@ -39,7 +39,7 @@ class LogoutViewState extends ViewState {
 }
 
 class LogoutFailure extends FeatureFailure {
-  final RemoteException logoutException;
+  final Object logoutException;
 
   LogoutFailure(this.logoutException);
 

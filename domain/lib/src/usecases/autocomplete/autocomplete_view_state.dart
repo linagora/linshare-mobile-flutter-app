@@ -44,7 +44,7 @@ class AutoCompleteViewState extends ViewState {
 }
 
 class AutoCompleteFailure extends FeatureFailure {
-  final Exception exception;
+  final Object exception;
 
   AutoCompleteFailure(this.exception);
 

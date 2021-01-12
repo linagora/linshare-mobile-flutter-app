@@ -42,7 +42,7 @@ class AuthenticationViewState extends ViewState {
 }
 
 class AuthenticationFailure extends FeatureFailure {
-  final RemoteException authenticationException;
+  final Object authenticationException;
 
   AuthenticationFailure(this.authenticationException);
 
