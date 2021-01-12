@@ -38,6 +38,7 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/sharedspace/shared_space_id.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
+import 'package:data/src/network/model/request/copy_body_request.dart';
 
 class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -73,6 +74,37 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         } else {
           throw UnknownError(error.response.statusMessage);
         }
+      });
+    });
+  }
+
+  @override
+  Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId destinationParentNodeId}) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
+            copyRequest.toCopyBodyRequest(),
+            destinationSharedSpaceId,
+            destinationParentNodeId: destinationParentNodeId))
+          .map<WorkGroupNode>((workgroupNode) {
+            if (workgroupNode is WorkGroupDocumentDto) {
+              return workgroupNode.toWorkGroupDocument();
+            }
+            if (workgroupNode is WorkGroupNodeFolderDto) {
+              return workgroupNode.toWorkGroupFolder();
+            }
+            return null;
+          })
+          .where((node) => node != null)
+          .toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw WorkGroupNodeNotFoundException();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        };
       });
     });
   }

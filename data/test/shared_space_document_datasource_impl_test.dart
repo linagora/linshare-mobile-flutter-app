@@ -30,10 +30,12 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/data.dart';
+import 'package:data/src/network/model/request/copy_body_request.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:testshared/fixture/my_space_fixture.dart';
 import 'package:testshared/fixture/shared_space_document_fixture.dart';
 
 import 'fixture/mock/mock_fixtures.dart';
@@ -80,6 +82,48 @@ void main() {
       await _sharedSpaceDataSourceImpl.getAllChildNodes(sharedSpaceId1)
           .catchError((error) => expect(error, isA<GetChildNodesNotFoundException>()));;
 
+    });
+
+    test('Copy To SharedSpace Should Return Success Copied Document', () async {
+      when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
+        CopyBodyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+        sharedSpaceId1,
+        destinationParentNodeId: workGroupDocument1.workGroupNodeId
+      )).thenAnswer((_) async => [sharedSpaceFolder1]);
+
+      final result = await _sharedSpaceDataSourceImpl.copyToSharedSpace(
+          CopyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+          sharedSpaceId1,
+          destinationParentNodeId: workGroupDocument1.workGroupNodeId);
+      expect(result, [sharedSpaceFolder1.toWorkGroupFolder()]);
+    });
+
+    test('Copy To SharedSpace Should Return Success Copied Document Without Destination Parent NodeId', () async {
+      when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
+        CopyBodyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+        sharedSpaceId1
+      )).thenAnswer((_) async => [sharedSpaceFolder1]);
+
+      final result = await _sharedSpaceDataSourceImpl.copyToSharedSpace(
+          CopyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+          sharedSpaceId1);
+      expect(result, [sharedSpaceFolder1.toWorkGroupFolder()]);
+    });
+
+    test('Copy To SharedSpace Should Throw Exception When Copy Failed', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
+        CopyBodyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+          sharedSpaceId1,
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.copyToSharedSpace(
+          CopyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+          sharedSpaceId1
+      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));;
     });
   });
 }

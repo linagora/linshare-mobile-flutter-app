@@ -30,50 +30,28 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/datasource/file_upload_datasource.dart';
-import 'package:data/src/datasource/shared_space_document_datasource.dart';
-import 'package:data/src/network/config/endpoint.dart';
-import 'package:data/src/network/model/query/query_parameter.dart';
-import 'package:data/src/extensions/uri_extension.dart';
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/copy/copy_request.dart';
+import 'package:equatable/equatable.dart';
 
-class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository {
-  final SharedSpaceDocumentDataSource _sharedSpaceDocumentDataSource;
-  final FileUploadDataSource _fileUploadDataSource;
+class CopyBodyRequest with EquatableMixin {
+  String contextUuid;
+  final String uuid;
+  final SpaceType kind;
 
-  SharedSpaceDocumentRepositoryImpl(this._sharedSpaceDocumentDataSource, this._fileUploadDataSource);
+  CopyBodyRequest(this.uuid, this.kind, {this.contextUuid = ''});
 
-  @override
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}) {
-    final queryParameters = parentNodeId == null
-        ? <QueryParameter>[]
-        : [StringQueryParameter('parent', parentNodeId.uuid)];
-    final url = baseUrl.withServicePath(Endpoint.sharedSpaces
-        .withPathParameter('${sharedSpaceId.uuid}${Endpoint.nodes}')
-        .withQueryParameters(queryParameters));
-
-    return _fileUploadDataSource.upload(fileInfo, token, url);
-  }
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('contextUuid'): jsonEncode(contextUuid),
+    jsonEncode('uuid'): jsonEncode(uuid),
+    jsonEncode('kind'): jsonEncode(kind.value),
+  };
 
   @override
-  Future<List<WorkGroupNode>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}
-  ) {
-    return _sharedSpaceDocumentDataSource.getAllChildNodes(sharedSpaceId, parentNodeId: parentNodeId);
-  }
+  List<Object> get props => [contextUuid, uuid, kind];
+}
 
-  @override
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}) {
-      return _sharedSpaceDocumentDataSource.copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
-  }
+extension CopyRequestExtension on CopyRequest {
+  CopyBodyRequest toCopyBodyRequest() => CopyBodyRequest(uuid, kind, contextUuid: contextUuid);
 }
