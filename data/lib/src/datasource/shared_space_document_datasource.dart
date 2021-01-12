@@ -36,4 +36,10 @@ abstract class SharedSpaceDocumentDataSource {
   Future<List<WorkGroupNode>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
       {WorkGroupNodeId parentNodeId});
+
+  Future<List<WorkGroupNode>> copyToSharedSpace(
+    CopyRequest copyRequest,
+    SharedSpaceId destinationSharedSpaceId,
+    {WorkGroupNodeId destinationParentNodeId}
+  );
 }

@@ -49,6 +49,7 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:data/src/extensions/list_extension.dart';
 
+import 'model/request/copy_body_request.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
@@ -169,4 +170,23 @@ class LinShareHttpClient {
       nodeChildJson['type'] == WorkGroupNodeType.DOCUMENT.value
           ? WorkGroupDocumentDto.fromJson(nodeChildJson)
           : WorkGroupNodeFolderDto.fromJson(nodeChildJson);
+
+  Future<List<WorkGroupNodeDto>> copyWorkGroupNodeToSharedSpaceDestination(
+    CopyBodyRequest copyRequest,
+    SharedSpaceId destinationSharedSpaceId,
+    {WorkGroupNodeId destinationParentNodeId}) async {
+      final copyEndpointPath = Endpoint.sharedSpaces
+        .withPathParameter(destinationSharedSpaceId.uuid)
+        .withPathParameter('nodes')
+        .withPathParameter(destinationParentNodeId != null ? destinationParentNodeId.uuid : '')
+        .withPathParameter('copy')
+        .generateEndpointPath();
+
+        final List resultJson = await _dioClient.post(
+          copyEndpointPath,
+          data: copyRequest.toJson().toString(),
+        );
+
+        return resultJson.map((node) => _convertToWorkGroupNodeChild(node)).toList();
+    }
 }
