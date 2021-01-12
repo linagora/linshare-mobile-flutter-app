@@ -100,7 +100,8 @@ class WidgetModule {
       getIt.get<AppNavigation>(),
       getIt.get<GetAllDocumentInteractor>(),
       getIt.get<DownloadFileInteractor>(),
-      getIt.get<DownloadFileIOSInteractor>()
+      getIt.get<DownloadFileIOSInteractor>(),
+      getIt<CopyDocumentsToSharedSpaceInteractor>()
     ));
   }
 

@@ -321,5 +321,20 @@
   "@copy_here": {
     "type": "text",
     "placeholders": {}
+  },
+  "copy_to_a_workgroup": "Copier dans un Groupe De Travail",
+  "@copy_to_a_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_is_copied_to_a_shared_space": "Le fichier a été copié dans un autre Espace Commun",
+  "@the_file_is_copied_to_a_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cannot_copy_file_to_shared_space": "Impossible de copier ce fichier dans un Espace Commun",
+  "@cannot_copy_file_to_shared_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

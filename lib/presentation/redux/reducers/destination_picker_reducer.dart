@@ -30,9 +30,9 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/destination_picker_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/destination_picker_state.dart';
 import 'package:redux/redux.dart';
 
@@ -46,13 +46,9 @@ final destinationPickerReducer = combineReducers<DestinationPickerState>([
       DestinationPickerGetAllSharedSpacesAction>((DestinationPickerState state,
           DestinationPickerGetAllSharedSpacesAction action) =>
       state.setDestinationPickerState(
-          viewState: action.viewState,
-          newSharedSpacesList: action.viewState.fold(
-              (failure) => [],
-              (success) => (success is SharedSpaceViewState)
-                  ? success.sharedSpacesList
-                  : []))),
-  TypedReducer<DestinationPickerState, CleanSharedSpaceStateAction>((DestinationPickerState state, _) => state.clearViewState()),
+          viewState: Right(IdleState()),
+          newSharedSpacesList: action.sharedSpacesList)),
+  TypedReducer<DestinationPickerState, CleanDestinationPickerStateAction>((DestinationPickerState state, _) => state.clearViewState()),
   TypedReducer<DestinationPickerState,
       DestinationPickerGoInsideSharedSpaceAction>((DestinationPickerState state,
           DestinationPickerGoInsideSharedSpaceAction action) =>

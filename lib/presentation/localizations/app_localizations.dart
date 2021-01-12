@@ -418,6 +418,27 @@ class AppLocalizations {
       name: 'copy here',
     );
   }
+
+  String get copy_to_a_workgroup {
+    return Intl.message(
+      'Copy to a workgroup',
+      name: 'Copy to a workgroup',
+    );
+  }
+
+  String get the_file_is_copied_to_a_shared_space {
+    return Intl.message(
+      'The file is copied to a Shared space',
+      name: 'The file is copied to a Shared space',
+    );
+  }
+
+  String get cannot_copy_file_to_shared_space {
+    return Intl.message(
+      'Can not copy file to Shared space',
+      name: 'Can not copy file to Shared space',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

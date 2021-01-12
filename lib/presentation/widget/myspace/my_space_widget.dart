@@ -333,6 +333,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       if (Platform.isIOS) exportFileAction(context, document),
       if (Platform.isAndroid) downloadAction(document),
       shareAction(document),
+      copyToWorkGroupAction(context, document),
     ];
   }
 
@@ -394,6 +395,17 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             AppLocalizations.of(context).share,
             document)
         .onActionClick((data) => mySpaceViewModel.shareDocuments([document]))
+        .build();
+  }
+
+  Widget copyToWorkGroupAction(BuildContext context, Document document) {
+    return DocumentContextMenuTileBuilder(
+        Key('copy_to_workgroup_context_menu_action'),
+        SvgPicture.asset(imagePath.icSharedSpace,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).copy_to_a_workgroup,
+        document)
+        .onActionClick((data) => mySpaceViewModel.copyToAWorkgroup(context, document))
         .build();
   }
 
