@@ -92,6 +92,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         children: [
           handleUploadToastMessage(context),
           handleShareDocumentToastMessage(context),
+          _handleMySpaceToastMessage(context),
           StoreConnector<AppState, UploadFileState>(
               converter: (store) => store.state.uploadFileState,
               builder: (context, data) => handleUploadWidget(context, data)
@@ -178,6 +179,25 @@ class _HomeWidgetState extends State<HomeWidget> {
             appToast.showToast(_buildSharingMessage(context, success.recipients));
             homeViewModel.cleanUploadViewState();
             homeViewModel.cleanShareViewState();
+          }
+          return SizedBox.shrink();
+        }));
+  }
+
+  Widget _handleMySpaceToastMessage(BuildContext context) {
+    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
+        converter: (store) => store.state.mySpaceState.viewState,
+        distinct: true,
+        builder: (context, state) => state.fold((failure) {
+          if (failure is CopyToSharedSpaceFailure) {
+            appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
+            homeViewModel.cleanMySpaceViewState();
+          }
+          return SizedBox.shrink();
+        }, (success) {
+          if (success is CopyToSharedSpaceViewState) {
+            appToast.showToast(AppLocalizations.of(context).the_file_is_copied_to_a_shared_space);
+            homeViewModel.cleanMySpaceViewState();
           }
           return SizedBox.shrink();
         }));
