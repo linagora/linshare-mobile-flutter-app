@@ -42,17 +42,16 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 
 void main() {
   group('download_file_interactor_test', () {
-    MockDocumentRepository documentRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
-    DownloadFileInteractor downloadFileInteractor;
-    DocumentId documentId;
+    late MockDocumentRepository documentRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
+    late DownloadFileInteractor downloadFileInteractor;
+    final documentId = DocumentId('383-384-C');
 
     setUp(() {
       documentRepository = MockDocumentRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
-      documentId = DocumentId('383-384-C');
       downloadFileInteractor = DownloadFileInteractor(documentRepository, tokenRepository, credentialRepository);
     });
 

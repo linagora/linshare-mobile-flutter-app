@@ -32,16 +32,16 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:testshared/testshared.dart';
+import 'package:test/test.dart';
 
+import '../../fixture/my_space_fixture.dart';
 import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('share_document_interactor_test', () {
-    MockDocumentRepository documentRepository;
-    ShareDocumentInteractor shareDocumentInteractor;
+    late MockDocumentRepository documentRepository;
+    late ShareDocumentInteractor shareDocumentInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -65,7 +65,7 @@ void main() {
     });
 
     test('share document interactor should return failure with invalid user', () async {
-      final wrongUser = GenericUser('wrong@linshare.org', lastName: optionOf(''), firstName: optionOf(''));
+      final wrongUser = GenericUser('wrong@linshare.org', null, null);
       final exception = ShareDocumentNoPermissionException();
       when(documentRepository.share([document1.documentId], [mailingListId1], [wrongUser]))
           .thenThrow(exception);

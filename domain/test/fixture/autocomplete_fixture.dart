@@ -30,47 +30,40 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 
-import '../../fixture/shared_space_fixture.dart';
-import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
+final simpleAutoCompleteResult1 = SimpleAutoCompleteResult('e05bd6ee-e040-497f-94cc-a4b52f9da140', 'user1@linshare.org');
 
-void main() {
-  group('get_all_shared_spaces_interactor', () {
-    late MockSharedSpaceRepository sharedSpaceRepository;
-    late GetAllSharedSpacesInteractor getAllSharedSpacesInteractor;
+final simpleAutoCompleteResult2 = SimpleAutoCompleteResult('e05bd6ee-e040-497f-94cc-a4b52f9da141', 'user2@linshare.org');
 
-    setUp(() {
-      sharedSpaceRepository = MockSharedSpaceRepository();
-      getAllSharedSpacesInteractor = GetAllSharedSpacesInteractor(sharedSpaceRepository);
-    });
+final userAutoCompleteResult1 = UserAutoCompleteResult(
+    'e05bd6ee-e040-497f-94cc-a4b52f9da140',
+    'user1@linshare.org',
+    'Tony',
+    'Stark',
+    'e05bd6ee-e040-497f-94cc-a4b52f9da140',
+    'user1@linshare.org');
 
-    test('get all shared spaces interactor should return success with shared spaces list', () async {
-      when(sharedSpaceRepository.getSharedSpaces()).thenAnswer((_) async => [sharedSpace1, sharedSpace2]);
+final userAutoCompleteResult2 = UserAutoCompleteResult(
+    'e05bd6ee-e040-497f-94cc-a4b52f9da141',
+    'user2@linshare.org',
+    'Jack',
+    'Sparrow',
+    'e05bd6ee-e040-497f-94cc-a4b52f9da141',
+    'user2@linshare.org');
 
-      final result = await getAllSharedSpacesInteractor.execute();
+final mailingListAutoCompleteResult1 = MailingListAutoCompleteResult(
+    'e05bd6ee-e040-497f-94cc-a4b52f9da140',
+    'user1@linshare.org',
+    'Tony',
+    'Stark',
+    'user1@linshare.org',
+    'list1');
 
-      final sharedSpacesList = result.map((success) => (success as SharedSpaceViewState).sharedSpacesList)
-          .getOrElse(() => []);
-
-      expect(sharedSpacesList, containsAllInOrder([sharedSpace1, sharedSpace2]));
-    });
-
-
-    test('get all shared spaces interactor should fail when getAllSharedSpaces fail', () async {
-      final exception = Exception();
-      when(sharedSpaceRepository.getSharedSpaces()).thenThrow(exception);
-
-      final result = await getAllSharedSpacesInteractor.execute();
-
-      result.fold(
-        (failure) => expect(failure, isA<SharedSpaceFailure>()),
-        (success) => expect(success, isA<SharedSpaceViewState>()));
-
-      expect(result, Left<Failure, Success>(SharedSpaceFailure(exception)));
-    });
-  });
-}
+final mailingListAutoCompleteResult2 = MailingListAutoCompleteResult(
+    'e05bd6ee-e040-497f-94cc-a4b52f9da141',
+    'user2@linshare.org',
+    'Jack',
+    'Sparrow',
+    'user2@linshare.org',
+    'list2');

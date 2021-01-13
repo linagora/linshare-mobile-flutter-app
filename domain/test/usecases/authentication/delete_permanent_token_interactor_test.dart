@@ -34,8 +34,8 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/authentication/logout_exception.dart';
 import 'package:domain/src/usecases/authentication/logout_view_state.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
 import '../../mock/repository/authentication/mock_authentication_repository.dart';
@@ -45,9 +45,9 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 void main() {
 
   group('delete_permanent_token_interactor_test', () {
-    DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-    MockAuthenticationRepository authenticationRepository;
-    MockTokenRepository tokenRepository;
+    late DeletePermanentTokenInteractor deletePermanentTokenInteractor;
+    late MockAuthenticationRepository authenticationRepository;
+    late MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
 
     setUp(() {

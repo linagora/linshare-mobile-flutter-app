@@ -46,7 +46,7 @@ dependencies:
   redux_thunk: ^0.3.0
 
   #  either
-  dartz: ^0.9.1
+  dartz: 0.10.0-nullsafety.0
 
   # shared_preferences
   shared_preferences: ^0.5.12

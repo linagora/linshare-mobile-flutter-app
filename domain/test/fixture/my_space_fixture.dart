@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -75,96 +74,6 @@ final document3 = Document(
     true,
     0,
     MediaType.parse('image/png'));
-
-final documentResponse1 = DocumentResponse(
-    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),
-    'description 1',
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    false,
-    'document 1',
-    189366,
-    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995c',
-    true,
-    0,
-    MediaType.parse('image/png'));
-
-final documentResponse2 = DocumentResponse(
-    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af32'),
-    'description 2',
-    DateTime.fromMillisecondsSinceEpoch(1604474224450),
-    DateTime.fromMillisecondsSinceEpoch(1604655334118),
-    DateTime.fromMillisecondsSinceEpoch(1604474224450),
-    false,
-    'document 2',
-    189366,
-    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995a',
-    false,
-    1,
-    MediaType.parse('image/png'));
-
-final documentResponse3 = DocumentResponse(
-    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af33'),
-    'description 3',
-    DateTime.fromMillisecondsSinceEpoch(1604482138189),
-    DateTime.fromMillisecondsSinceEpoch(1604482138182),
-    DateTime.fromMillisecondsSinceEpoch(1604482138189),
-    false,
-    'document 3',
-    189366,
-    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995d',
-    true,
-    0,
-    MediaType.parse('image/png'));
-
-final responseJsonDocument1 = {
-  'uuid': '3e57d240-47a1-4a7e-b1a7-25e29870af31',
-  'description': 'description 1',
-  'creationDate': 1604482138188,
-  'modificationDate': 1604482138188,
-  'expirationDate': 1604482138188,
-  'ciphered': false,
-  'name': 'document 1',
-  'size': 189366,
-  'sha256sum':
-  '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995c',
-  'hasThumbnail': true,
-  'shared': 0,
-  'type': 'image/png'
-};
-
-final responseJsonDocument2 = {
-  'uuid': '3e57d240-47a1-4a7e-b1a7-25e29870af32',
-  'description': 'description 2',
-  'creationDate': 1604474224450,
-  'modificationDate': 1604655334118,
-  'expirationDate': 1604474224450,
-  'ciphered': false,
-  'name': 'document 2',
-  'size': 189366,
-  'sha256sum':
-  '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995a',
-  'hasThumbnail': false,
-  'shared': 1,
-  'type': 'image/png'
-};
-
-final responseJsonDocument3 = {
-  'uuid': '3e57d240-47a1-4a7e-b1a7-25e29870af33',
-  'description': 'description 3',
-  'creationDate': 1604482138189,
-  'modificationDate': 1604482138182,
-  'expirationDate': 1604482138189,
-  'ciphered': false,
-  'name': 'document 3',
-  'size': 189366,
-  'sha256sum':
-  '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995d',
-  'hasThumbnail': true,
-  'shared': 0,
-  'type': 'image/png'
-};
 
 final mailingListId1 = MailingListId('3e57d240-47a1-4a7e-b1a7-25e29870af33');
 final genericUser1 = GenericUser('user1@linshare.org', 'Smith', 'Jane');
