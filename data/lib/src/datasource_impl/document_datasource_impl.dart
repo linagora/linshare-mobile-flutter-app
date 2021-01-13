@@ -71,7 +71,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<DownloadTaskId> downloadDocument(DocumentId documentId, Token token, Uri baseUrl) async {
+  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl) async {
     var externalStorageDirPath;
     if (Platform.isAndroid) {
       externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
@@ -81,19 +81,17 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       throw DeviceNotSupportedException();
     }
 
-    final taskId = await FlutterDownloader.enqueue(
-      url: Endpoint.documents
-          .downloadServicePath(documentId.uuid)
-          .generateDownloadUrl(baseUrl),
-      savedDir: externalStorageDirPath,
-      headers: {
-        Constant.authorization: 'Bearer ${token.token}'
-      },
-      showNotification: true,
-      openFileFromNotification: true,
-    );
+    final taskIds = await Future.wait(
+        documentIds.map((documentId) async => await FlutterDownloader.enqueue(
+            url: Endpoint.documents
+              .downloadServicePath(documentId.uuid)
+              .generateDownloadUrl(baseUrl),
+            savedDir: externalStorageDirPath,
+            headers: {Constant.authorization: 'Bearer ${token.token}'},
+            showNotification: true,
+            openFileFromNotification: true)));
 
-    return DownloadTaskId(taskId);
+    return taskIds.map((taskId) => DownloadTaskId(taskId));
   }
 
   @override
