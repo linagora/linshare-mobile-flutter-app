@@ -56,12 +56,12 @@ class MySpaceFailure extends FeatureFailure {
 }
 
 class DownloadFileViewState extends ViewState {
-  final DownloadTaskId taskId;
+  final List<DownloadTaskId> taskIds;
 
-  DownloadFileViewState(this.taskId);
+  DownloadFileViewState(this.taskIds);
 
   @override
-  List<Object> get props => [taskId];
+  List<Object> get props => [taskIds];
 }
 
 class DownloadFileFailure extends FeatureFailure {
