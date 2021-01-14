@@ -439,6 +439,13 @@ class AppLocalizations {
       name: 'Can not copy file to Shared space',
     );
   }
+
+  String get some_items_could_not_be_copied_to_shared_space {
+    return Intl.message(
+      'Some items could not be copied to Shared space',
+      name: 'Some items could not be copied to Shared space',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

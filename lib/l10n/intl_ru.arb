@@ -336,5 +336,10 @@
   "@cannot_copy_file_to_shared_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "some_items_could_not_be_copied_to_shared_space": "Some items could not be copied to Shared space",
+  "@some_items_could_not_be_copied_to_shared_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

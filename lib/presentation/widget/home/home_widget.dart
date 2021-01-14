@@ -189,14 +189,17 @@ class _HomeWidgetState extends State<HomeWidget> {
         converter: (store) => store.state.mySpaceState.viewState,
         distinct: true,
         builder: (context, state) => state.fold((failure) {
-          if (failure is CopyToSharedSpaceFailure) {
+          if (failure is CopyToSharedSpaceFailure || failure is CopyMultipleFilesToSharedSpaceAllFailureViewState) {
             appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
             homeViewModel.cleanMySpaceViewState();
           }
           return SizedBox.shrink();
         }, (success) {
-          if (success is CopyToSharedSpaceViewState) {
+          if (success is CopyToSharedSpaceViewState || success is CopyMultipleFilesToSharedSpaceAllSuccessViewState) {
             appToast.showToast(AppLocalizations.of(context).the_file_is_copied_to_a_shared_space);
+            homeViewModel.cleanMySpaceViewState();
+          } else if (success is CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState) {
+            appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_copied_to_shared_space);
             homeViewModel.cleanMySpaceViewState();
           }
           return SizedBox.shrink();
