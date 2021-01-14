@@ -38,6 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
@@ -48,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
@@ -66,7 +68,7 @@ class MySpaceViewModel extends BaseViewModel {
   final GetAllDocumentInteractor _getAllDocumentInteractor;
   final DownloadFileInteractor _downloadFileInteractor;
   final DownloadFileIOSInteractor _downloadFileIOSInteractor;
-  final CopyDocumentsToSharedSpaceInteractor _copyDocumentsToSharedSpaceInteractor;
+  final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
@@ -74,7 +76,7 @@ class MySpaceViewModel extends BaseViewModel {
       this._getAllDocumentInteractor,
       this._downloadFileInteractor,
       this._downloadFileIOSInteractor,
-      this._copyDocumentsToSharedSpaceInteractor
+      this._copyMultipleFilesToSharedSpaceInteractor
   ) : super(store);
 
   void downloadFileClick(DocumentId documentId) {
@@ -114,8 +116,8 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_exportFileAction(document, cancelToken));
   }
 
-  void shareDocuments(List<Document> documents) {
-    if (documents.length == 1) {
+  void shareDocuments(List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    if (itemSelectionType == ItemSelectionType.single) {
       _appNavigation.popBack();
     }
 
@@ -126,8 +128,11 @@ class MySpaceViewModel extends BaseViewModel {
             documents: documents));
   }
 
-  void copyToAWorkgroup(BuildContext context, Document document) {
+  void copyToAWorkgroup(BuildContext context, List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
 
     final cancelAction = NegativeDestinationPickerAction(context,
         label: AppLocalizations.of(context).cancel.toUpperCase());
@@ -137,7 +142,7 @@ class MySpaceViewModel extends BaseViewModel {
     copyAction.onDestinationPickerActionClick((data) {
       _appNavigation.popBack();
       if (data is WorkGroupNodesSurfingArguments) {
-        store.dispatch(_copyToWorkgroupAction(document, data));
+        store.dispatch(_copyToWorkgroupAction(documents, data));
       }
     });
 
@@ -147,15 +152,15 @@ class MySpaceViewModel extends BaseViewModel {
             destinationPickerType: DestinationPickerType.copy));
   }
 
-  ThunkAction<AppState> _copyToWorkgroupAction(Document document, WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
+  ThunkAction<AppState> _copyToWorkgroupAction(List<Document> documents, WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
     return (Store<AppState> store) async {
       final parentNodeId = workGroupNodesSurfingArguments.folder != null
           ? workGroupNodesSurfingArguments.folder.workGroupNodeId
           : null;
-      await _copyDocumentsToSharedSpaceInteractor.execute(
-          CopyRequest(document.documentId.uuid, SpaceType.personalSpace),
-          workGroupNodesSurfingArguments.sharedSpaceNodeNested.sharedSpaceId,
-      destinationParentNodeId: parentNodeId)
+      await _copyMultipleFilesToSharedSpaceInteractor.execute(
+          documents: documents,
+          destinationSharedSpaceId: workGroupNodesSurfingArguments.sharedSpaceNodeNested.sharedSpaceId,
+          destinationParentNodeId: parentNodeId)
       .then((result) => result.fold(
               (failure) => store.dispatch(MySpaceAction(Left(failure))),
               (success) => store.dispatch(MySpaceAction(Right(success)))));
@@ -291,6 +296,16 @@ class MySpaceViewModel extends BaseViewModel {
 
   void cancelSelection() {
     store.dispatch(MySpaceClearSelectedDocumentsAction());
+  }
+
+  void openMoreActionBottomMenu(BuildContext context, List<Document> documents, List<Widget> actionTiles) {
+    ContextMenuBuilder(context)
+        .addHeader(MoreActionBottomSheetHeaderBuilder(
+          context,
+          Key('more_action_menu_header'),
+          documents.map((element) => DocumentPresentationFile.fromDocument(element)).toList()).build())
+        .addTiles(actionTiles)
+        .build();
   }
 
   @override
