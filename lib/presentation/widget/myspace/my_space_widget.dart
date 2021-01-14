@@ -372,7 +372,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                 width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).download_to_device,
             document)
-        .onActionClick((data) => mySpaceViewModel.downloadFileClick(data.documentId))
+        .onActionClick((data) => mySpaceViewModel.downloadFileClick([data.documentId]))
         .build();
   }
 
@@ -448,7 +448,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   List<Widget> _moreActionList(List<Document> documents) {
     return [
-      _copyMultiFilesToWorkGroupAction(context, documents)
+      if (Platform.isAndroid) _downloadMultiFilesAction(context, documents),
+      _copyMultiFilesToWorkGroupAction(context, documents),
     ];
   }
 
@@ -460,6 +461,19 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         AppLocalizations.of(context).copy_to_a_workgroup,
         documents[0])
         .onActionClick((data) => mySpaceViewModel.copyToAWorkgroup(context, documents, itemSelectionType: ItemSelectionType.multiple))
+        .build();
+  }
+
+  Widget _downloadMultiFilesAction(BuildContext context, List<Document> documents) {
+    return DocumentContextMenuTileBuilder(
+            Key('download_multiple_files_context_menu_action'),
+            SvgPicture.asset(imagePath.icFileDownload,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).download_to_device,
+            documents[0])
+        .onActionClick((data) => mySpaceViewModel.downloadFileClick(
+            documents.map((element) => element.documentId).toList(),
+            itemSelectionType: ItemSelectionType.multiple))
         .build();
   }
 }
