@@ -40,9 +40,9 @@ import 'package:linshare_flutter_app/presentation/model/file/document_presentati
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -79,22 +79,23 @@ class MySpaceViewModel extends BaseViewModel {
       this._copyMultipleFilesToSharedSpaceInteractor
   ) : super(store);
 
-  void downloadFileClick(DocumentId documentId) {
-    store.dispatch(handleDownloadFile(documentId));
+  void downloadFileClick(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    store.dispatch(_handleDownloadFile(documentIds, itemSelectionType: itemSelectionType));
   }
 
-  ThunkAction<AppState> handleDownloadFile(DocumentId documentId) {
+  ThunkAction<AppState> _handleDownloadFile(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return (Store<AppState> store) async {
       final status = await Permission.storage.status;
       switch (status) {
-        case PermissionStatus.granted: _download(documentId);
+        case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
         break;
-        case PermissionStatus.permanentlyDenied: _appNavigation.popBack();
-        break;
+        case PermissionStatus.permanentlyDenied:
+          _appNavigation.popBack();
+          break;
         default: {
           final requested = await Permission.storage.request();
           switch (requested) {
-            case PermissionStatus.granted: _download(documentId);
+            case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
             break;
             default: _appNavigation.popBack();
             break;
@@ -104,9 +105,12 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  void _download(DocumentId documentId) {
-    store.dispatch(_downloadFileAction(documentId));
+  void _download(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    store.dispatch(_downloadFileAction(documentIds));
     _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
   }
 
   void exportFile(BuildContext context, Document document) {
@@ -173,7 +177,7 @@ class MySpaceViewModel extends BaseViewModel {
 
   void openFilePickerByType(FileType fileType) {
     _appNavigation.popBack();
-    store.dispatch(pickFileAction(fileType));
+    store.dispatch(_pickFileAction(fileType));
   }
 
   void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles) {
@@ -228,9 +232,9 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> _downloadFileAction(DocumentId documentId) {
+  ThunkAction<AppState> _downloadFileAction(List<DocumentId> documentIds) {
     return (Store<AppState> store) async {
-      await _downloadFileInteractor.execute(documentId).then((result) => result.fold(
+      await _downloadFileInteractor.execute(documentIds).then((result) => result.fold(
         (failure) => store.dispatch(MySpaceAction(Left(failure))),
         (success) => store.dispatch(MySpaceAction(Right(success)))));
     };
@@ -240,12 +244,12 @@ class MySpaceViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       await _downloadFileIOSInteractor.execute(document, cancelToken).then(
           (result) => result.fold(
-              (failure) => store.dispatch(exportFileFailureAction(failure)),
-              (success) => store.dispatch(exportFileSuccessAction(success))));
+              (failure) => store.dispatch(_exportFileFailureAction(failure)),
+              (success) => store.dispatch(_exportFileSuccessAction(success))));
     };
   }
 
-  ThunkAction<AppState> exportFileSuccessAction(DownloadFileIOSViewState success) {
+  ThunkAction<AppState> _exportFileSuccessAction(DownloadFileIOSViewState success) {
     return (Store<AppState> store) async {
       _appNavigation.popBack();
       store.dispatch(MySpaceAction(Right(success)));
@@ -256,7 +260,7 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> exportFileFailureAction(Failure failure) {
+  ThunkAction<AppState> _exportFileFailureAction(Failure failure) {
     return (Store<AppState> store) async {
       if (failure is DownloadFileIOSFailure &&
           !(failure.downloadFileException is CancelDownloadFileException)) {
@@ -266,15 +270,15 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> pickFileAction(FileType fileType) {
+  ThunkAction<AppState> _pickFileAction(FileType fileType) {
     return (Store<AppState> store) async {
       await _localFilePicker.pickFiles(fileType: fileType).then((result) => result.fold(
           (failure) => store.dispatch(UploadFileAction(Left(failure))),
-          (success) => store.dispatch(pickFileSuccessAction(success))));
+          (success) => store.dispatch(_pickFileSuccessAction(success))));
     };
   }
 
-  ThunkAction<AppState> pickFileSuccessAction(FilePickerSuccessViewState success) {
+  ThunkAction<AppState> _pickFileSuccessAction(FilePickerSuccessViewState success) {
     return (Store<AppState> store) async {
       store.dispatch(UploadFileAction(Right(success)));
       await _appNavigation.push(RoutePaths.uploadDocumentRoute,
