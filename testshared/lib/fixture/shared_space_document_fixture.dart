@@ -57,6 +57,29 @@ final workGroupDocument1 = WorkGroupDocument(
     false,
     '557c7bf3f95d00547b83ad0f7d75b1bb345d80947b2f0c4ca14643298fbde4ab');
 
+final workGroupDocument2 = WorkGroupDocument(
+    WorkGroupNodeId('f9f65f03-4f7a-4024-ab1f-73b2e90a4c64'),
+    WorkGroupNodeId('c542ac1f-2683-4591-9b3f-468b6b6e9d84'),
+    WorkGroupNodeType.DOCUMENT,
+    SharedSpaceId('150e408a-dde9-4315-9a5b-7fe0f251fa83'),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138189),
+    'description1',
+    'document1',
+    Account(
+        'user1@linshare.org',
+        'user1@linshare.org',
+        AccountId('1f75190b-73aa-4c4b-9efb-2760be07c3bb'),
+        AccountType.INTERNAL,
+        'John',
+        'Doe'),
+    1000,
+    MediaType.parse('image/png'),
+    true,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    false,
+    '557c7bf3f95d00547b83ad0f7d75b1bb345d80947b2f0c4ca14643298fbde4ab');
+
 final sharedSpaceId1 = SharedSpaceId('1');
 final parentWorkGroupNodeId1 = WorkGroupNodeId('0');
 final workGroupNodeId1 = WorkGroupNodeId('1');

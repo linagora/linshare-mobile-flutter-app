@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,70 +28,48 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/document/document.dart';
+import 'package:domain/src/model/sharedspace/shared_space_id.dart';
+import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:flutter/widgets.dart';
 
-class SharedSpaceViewState extends ViewState {
-  final List<SharedSpaceNodeNested> sharedSpacesList;
+import 'copy_to_shared_space_interactor.dart';
 
-  SharedSpaceViewState(this.sharedSpacesList);
+class CopyMultipleFilesToSharedSpaceInteractor {
+  final CopyDocumentsToSharedSpaceInteractor _copyDocumentsToSharedSpaceInteractor;
 
-  @override
-  List<Object> get props => [sharedSpacesList];
-}
+  CopyMultipleFilesToSharedSpaceInteractor(this._copyDocumentsToSharedSpaceInteractor);
 
-class SharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  SharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class CopyToSharedSpaceViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNode;
-
-  CopyToSharedSpaceViewState(this.workGroupNode);
-
-  @override
-  List<Object> get props => [workGroupNode];
-}
-
-class CopyToSharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  CopyToSharedSpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-
-class CopyMultipleFilesToSharedSpaceAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  CopyMultipleFilesToSharedSpaceAllSuccessViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class CopyMultipleFilesToSharedSpaceAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
-
-  CopyMultipleFilesToSharedSpaceAllFailureViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
+  Future<Either<Failure, Success>> execute(
+      {@required List<Document> documents,
+      @required SharedSpaceId destinationSharedSpaceId,
+      WorkGroupNodeId destinationParentNodeId}) async {
+    final listResult = await Future.wait(documents.map((element) =>
+        _copyDocumentsToSharedSpaceInteractor.execute(
+            CopyRequest(element.documentId.uuid, SpaceType.personalSpace),
+            destinationSharedSpaceId,
+            destinationParentNodeId: destinationParentNodeId)));
+    if (listResult.length == 1) {
+      return listResult.first;
+    } else {
+      var failedFileCount = 0;
+      listResult.forEach((element) {
+        if (element is Left) {
+          failedFileCount++;
+        }
+      });
+      if (failedFileCount == 0) {
+        return Right(CopyMultipleFilesToSharedSpaceAllSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(CopyMultipleFilesToSharedSpaceAllFailureViewState(listResult));
+      }
+      return Right(CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState(listResult));
+    }
+  }
 }
