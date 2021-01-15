@@ -31,7 +31,7 @@ dependencies:
   shared_preferences: ^0.5.12
 
   # flutter_uploader
-  flutter_uploader: ^1.2.0
+  flutter_uploader: ^1.2.1
 
   # flutter_downloader
   flutter_downloader: ^1.5.2
