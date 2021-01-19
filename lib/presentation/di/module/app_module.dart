@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/file_path_util.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
@@ -169,12 +170,14 @@ class AppModule {
     getIt.registerFactory(() => LocalFilePicker());
     getIt.registerLazySingleton(() => UploadFileManager());
     getIt.registerFactory(() => FilePathUtil());
+    getIt.registerFactory(() => FileHelper());
     getIt.registerLazySingleton(() => UploadShareFileManager(
         getIt.get<Store<AppState>>(),
         getIt.get<FileUploadDataSourceImpl>().uploadingFileStream,
         getIt.get<UploadMySpaceDocumentInteractor>(),
         getIt.get<ShareDocumentInteractor>(),
-        getIt.get<UploadWorkGroupDocumentInteractor>()));
+        getIt.get<UploadWorkGroupDocumentInteractor>(),
+        getIt.get<FileHelper>()));
   }
 
   void _provideFileUploader() {
