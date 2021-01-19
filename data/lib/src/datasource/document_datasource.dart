@@ -42,4 +42,6 @@ abstract class DocumentDataSource {
   Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
 
   Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+
+  Future<Document> remove(DocumentId documentId);
 }

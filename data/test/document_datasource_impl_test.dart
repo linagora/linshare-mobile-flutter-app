@@ -43,6 +43,7 @@ import 'fixture/mock/mock_fixtures.dart';
 void main() {
   getAllDocumentTest();
   shareDocumentTest();
+  removeDocumentTest();
 }
 
 void getAllDocumentTest() {
@@ -225,6 +226,42 @@ void shareDocumentTest() {
 
       await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1])
           .catchError((error) => expect(error, isA<UnknownError>()));
+    });
+  });
+}
+
+void removeDocumentTest() {
+  group('remove document test', () {
+    MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    DocumentDataSourceImpl _documentDataSourceImpl;
+
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _documentDataSourceImpl = DocumentDataSourceImpl(
+          _linShareHttpClient,
+          _remoteExceptionThrower);
+    });
+
+    test('remove document should return success with valid data', () async {
+      when(_linShareHttpClient.removeDocument(document1.documentId))
+          .thenAnswer((_) async => documentResponse1);
+
+      final result = await _documentDataSourceImpl.remove(document1.documentId);
+      expect(result, document1);
+    });
+
+    test('remove document should throw DataNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.removeDocument(document1.documentId))
+          .thenThrow(error);
+
+      await _documentDataSourceImpl.remove(document1.documentId)
+          .catchError((error) => expect(error, isA<DocumentNotFound>()));
     });
   });
 }
