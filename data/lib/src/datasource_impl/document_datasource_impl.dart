@@ -177,4 +177,20 @@ class DocumentDataSourceImpl implements DocumentDataSource {
 
     return streamController.stream.first;
   }
+
+  @override
+  Future<Document> remove(DocumentId documentId) async {
+    return Future.sync(() async {
+      final documentResponse = await _linShareHttpClient.removeDocument(documentId);
+      return documentResponse.toDocument();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw DocumentNotFound();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }

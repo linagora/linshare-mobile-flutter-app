@@ -72,4 +72,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
   Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
     return _documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
   }
+
+  @override
+  Future<Document> remove(DocumentId documentId) {
+    return _documentDataSource.remove(documentId);
+  }
 }
