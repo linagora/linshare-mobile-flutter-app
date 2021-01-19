@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,91 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/document/document.dart';
 
-class UploadButtonClick extends ViewEvent {
-  @override
-  List<Object> get props => [];
-}
+class RemoveDocumentInteractor {
+  final DocumentRepository _documentRepository;
 
-class MySpaceViewState extends ViewState {
-  final List<Document> documentList;
+  RemoveDocumentInteractor(this._documentRepository);
 
-  MySpaceViewState(this.documentList);
-
-  @override
-  List<Object> get props => [documentList];
-}
-
-class MySpaceFailure extends FeatureFailure {
-  final Exception exception;
-
-  MySpaceFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class DownloadFileViewState extends ViewState {
-  final List<DownloadTaskId> taskIds;
-
-  DownloadFileViewState(this.taskIds);
-
-  @override
-  List<Object> get props => [taskIds];
-}
-
-class DownloadFileFailure extends FeatureFailure {
-  final Exception downloadFileException;
-
-  DownloadFileFailure(this.downloadFileException);
-
-  @override
-  List<Object> get props => [downloadFileException];
-}
-
-class ContextMenuItemViewState extends ViewState {
-  final Document document;
-
-  ContextMenuItemViewState(this.document);
-
-  @override
-  List<Object> get props => [document];
-}
-
-class DownloadFileIOSViewState extends ViewState {
-  final Uri filePath;
-  DownloadFileIOSViewState(this.filePath);
-
-  @override
-  List<Object> get props => [filePath];
-}
-
-class DownloadFileIOSFailure extends FeatureFailure {
-  final Exception downloadFileException;
-
-  DownloadFileIOSFailure(this.downloadFileException);
-
-  @override
-  List<Object> get props => [downloadFileException];
-}
-
-class RemoveDocumentViewState extends ViewState {
-  final Document document;
-
-  RemoveDocumentViewState(this.document);
-
-  @override
-  List<Object> get props => [document];
-}
-
-class RemoveDocumentFailure extends FeatureFailure {
-  final Exception removeDocumentFailure;
-
-  RemoveDocumentFailure(this.removeDocumentFailure);
-
-  @override
-  List<Object> get props => [removeDocumentFailure];
+  Future<Either<Failure, Success>> execute(DocumentId documentId) async {
+    try {
+      final document = await _documentRepository.remove(documentId);
+      return Right<Failure, Success>(RemoveDocumentViewState(document));
+    } catch (exception) {
+      return Left<Failure, Success>(RemoveDocumentFailure(exception));
+    }
+  }
 }
