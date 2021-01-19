@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:redux/redux.dart';
 
 class UploadShareFileManager {
@@ -52,6 +53,7 @@ class UploadShareFileManager {
     this._uploadMySpaceDocumentInteractor,
     this._shareDocumentInteractor,
     this._uploadWorkGroupDocumentInteractor,
+    this._fileHelper
   ) {
     _handleUploadingFileStream(_uploadingFileStream);
   }
@@ -66,6 +68,7 @@ class UploadShareFileManager {
   final UploadMySpaceDocumentInteractor _uploadMySpaceDocumentInteractor;
   final ShareDocumentInteractor _shareDocumentInteractor;
   final UploadWorkGroupDocumentInteractor _uploadWorkGroupDocumentInteractor;
+  final FileHelper _fileHelper;
 
   void justUploadFiles(List<FileInfo> uploadFiles) async {
     uploadFiles.forEach((uploadFile) async {
@@ -135,7 +138,11 @@ class UploadShareFileManager {
   void _handleUploadingFileStream(Stream<Either<Failure, Success>> uploadingFileStream) {
     uploadingFileStream.listen((resultEvent) {
         resultEvent.fold(
-          (failure) => null,
+          (failure) {
+            if (failure is FileUploadFailure) {
+              _handleUploadFileFailure(failure);
+            }
+          },
           (success) {
             if (success is UploadingProgress) {
               _uploadingStateFiles.updateElementByUploadTaskId(
@@ -161,20 +168,29 @@ class UploadShareFileManager {
 
   void _handleUploadFileSucceed(FileUploadSuccess uploadSuccess) {
     final fileState = _uploadingStateFiles.getElementByUploadTaskId(uploadSuccess.uploadTaskId);
-    if (fileState.action == UploadAndShareAction.uploadAndShare) {
-      _shareAfterUploaded(uploadSuccess, fileState.recipients);
-    } else {
-      _uploadingStateFiles.updateElementByUploadTaskId(
-        uploadSuccess.uploadTaskId,
-        (currentState) {
-          final newState = currentState.copyWith(
-            uploadingProgress: 100,
-            uploadStatus: UploadFileStatus.succeed,
-          );
+    if (fileState != null) {
+      _fileHelper.deleteFile(fileState.file);
+      if (fileState.action == UploadAndShareAction.uploadAndShare) {
+        _shareAfterUploaded(uploadSuccess, fileState.recipients);
+      } else {
+        _uploadingStateFiles.updateElementByUploadTaskId(
+          uploadSuccess.uploadTaskId,
+          (currentState) {
+            final newState = currentState.copyWith(
+              uploadingProgress: 100,
+              uploadStatus: UploadFileStatus.succeed,
+            );
+            return newState;
+          },
+        );
+      }
+    }
+  }
 
-          return newState;
-        },
-      );
+  void _handleUploadFileFailure(FileUploadFailure uploadFailure) {
+    final fileState = _uploadingStateFiles.getElementByUploadTaskId(uploadFailure.uploadTaskId);
+    if (fileState != null) {
+      _fileHelper.deleteFile(fileState.file);
     }
   }
 
