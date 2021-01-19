@@ -3,6 +3,7 @@ import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:redux/redux.dart';
@@ -27,6 +28,7 @@ void main() {
     UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
     UploadShareFileManager uploadShareFileManager;
     UploadTaskId uploadTaskId;
+    FileHelper fileHelper;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -39,12 +41,14 @@ void main() {
         credentialRepository,
       );
       shareDocumentInteractor = ShareDocumentInteractor(documentRepository);
+      fileHelper = FileHelper();
       uploadShareFileManager = UploadShareFileManager(
         getIt.get<Store<AppState>>(),
         Stream.fromIterable([]),
         uploadFileInteractor,
         shareDocumentInteractor,
         uploadWorkGroupDocumentInteractor,
+        fileHelper
       );
     });
 

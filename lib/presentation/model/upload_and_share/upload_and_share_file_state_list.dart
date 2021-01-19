@@ -79,11 +79,11 @@ class UploadAndShareFileStateList {
   }
 
   UploadAndShareFileState getElementBy(CompareStateCallback compareCallback) {
-    return _uploadingStateFiles.firstWhere((element) => compareCallback(element));
+    return _uploadingStateFiles.firstWhere((element) => compareCallback(element), orElse: () => null);
   }
 
   UploadAndShareFileState getElementByUploadTaskId(UploadTaskId uploadTaskId) {
-    return _uploadingStateFiles.firstWhere((element) => element.uploadTaskId == uploadTaskId);
+    return _uploadingStateFiles.firstWhere((element) => element.uploadTaskId == uploadTaskId, orElse: () => null);
   }
 
   List<UploadAndShareFileState> _completedFiles() {
