@@ -189,4 +189,11 @@ class LinShareHttpClient {
 
         return resultJson.map((node) => _convertToWorkGroupNodeChild(node)).toList();
     }
+
+  Future<DocumentResponse> removeDocument(DocumentId documentId) async {
+    final resultJson = await _dioClient.delete(Endpoint.documents
+        .withPathParameter(documentId.uuid)
+        .generateEndpointPath());
+    return DocumentResponse.fromJson(resultJson);
+  }
 }
