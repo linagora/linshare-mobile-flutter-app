@@ -196,4 +196,22 @@ class LinShareHttpClient {
         .generateEndpointPath());
     return DocumentResponse.fromJson(resultJson);
   }
+
+  Future<WorkGroupNodeDto> removeSharedSpaceNode(
+    SharedSpaceId sharedSpaceId,
+    WorkGroupNodeId sharedSpaceNodeId
+  ) async {
+    final workGroupNode = await _dioClient.delete(
+      Endpoint.sharedSpaces
+        .withPathParameter(sharedSpaceId.uuid)
+        .withPathParameter('nodes')
+        .withPathParameter(sharedSpaceNodeId.uuid)
+        .generateEndpointPath(),
+      options: Options(headers: {
+        'Content-Type': 'application/json'
+      })
+    );
+
+    return _convertToWorkGroupNodeChild(workGroupNode);
+  }
 }

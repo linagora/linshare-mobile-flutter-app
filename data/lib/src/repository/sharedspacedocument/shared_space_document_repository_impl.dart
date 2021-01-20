@@ -76,4 +76,9 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
     {WorkGroupNodeId destinationParentNodeId}) {
       return _sharedSpaceDocumentDataSource.copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
   }
+
+  @override
+  Future<WorkGroupNode> removeSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId) {
+    return _sharedSpaceDocumentDataSource.removeSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId);
+  }
 }
