@@ -125,5 +125,35 @@ void main() {
           sharedSpaceId1
       ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));;
     });
+
+    test('Remove Shared Space Node Should Return Success Deleted Node', () async {
+      when(_linShareHttpClient.removeSharedSpaceNode(
+        sharedSpaceFolder1.sharedSpaceId,
+        sharedSpaceFolder1.workGroupNodeId
+      )).thenAnswer((_) async => sharedSpaceFolder1);
+
+      final result = await _sharedSpaceDataSourceImpl.removeSharedSpaceNode(
+        sharedSpaceFolder1.sharedSpaceId,
+        sharedSpaceFolder1.workGroupNodeId
+      );
+
+      expect(result, sharedSpaceFolder1.toWorkGroupFolder());
+    });
+
+    test('Remove Shared Space Node Should Throw Exception When Remove Failed', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.removeSharedSpaceNode(
+        sharedSpaceFolder1.sharedSpaceId,
+        sharedSpaceFolder1.workGroupNodeId
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.removeSharedSpaceNode(
+        sharedSpaceFolder1.sharedSpaceId,
+        sharedSpaceFolder1.workGroupNodeId
+      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));;
+    });
   });
 }
