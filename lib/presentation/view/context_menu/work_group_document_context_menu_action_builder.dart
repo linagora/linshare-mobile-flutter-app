@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,33 +26,40 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'package:filesize/filesize.dart';
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/material/list_tile.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-class ContextMenuHeaderBuilder {
-  final Key _key;
-  final PresentationFile _file;
+class WorkGroupDocumentContextMenuTileBuilder extends ContextMenuActionBuilder<WorkGroupDocument> {
+  final WorkGroupDocument _workGroupDocument;
 
-  ContextMenuHeaderBuilder(this._key, this._file);
+  WorkGroupDocumentContextMenuTileBuilder(
+    Key key,
+    SvgPicture actionIcon,
+    String actionName,
+    this._workGroupDocument
+  ) : super(key, actionIcon, actionName);
 
+  @override
   ListTile build() {
     return ListTile(
-      key: _key,
-      leading: _file.fileIcon(),
-      title: Transform(
-        transform: Matrix4.translationValues(-16, -2, 0.0),
-        child: Text(
-          _file.fileName(),
-          maxLines: 1,
-          style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
-          ),
-        ),
-      trailing: _file.fileSize() == null ? null : Text(filesize(_file.fileSize()), style: TextStyle(fontSize: 14, color: AppColor.documentModifiedDateItemTextColor)));
+      key: key,
+      leading: actionIcon,
+      title: Text(
+        actionName,
+        style: actionTextStyle()),
+      onTap: () => onContextMenuActionClick(_workGroupDocument)
+    );
   }
 }

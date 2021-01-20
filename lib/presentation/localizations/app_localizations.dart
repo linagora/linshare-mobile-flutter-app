@@ -408,49 +408,42 @@ class AppLocalizations {
   String get pick_the_destination {
     return Intl.message(
       'Pick the destination',
-      name: 'Pick the destination',
+      name: 'pick_the_destination',
     );
   }
 
   String get copy_here {
     return Intl.message(
       'copy here',
-      name: 'copy here',
+      name: 'copy_here',
     );
   }
 
   String get copy_to_a_workgroup {
     return Intl.message(
       'Copy to a workgroup',
-      name: 'Copy to a workgroup',
+      name: 'copy_to_a_workgroup',
     );
   }
 
   String get the_file_is_copied_to_a_shared_space {
     return Intl.message(
       'The file is copied to a Shared space',
-      name: 'The file is copied to a Shared space',
+      name: 'the_file_is_copied_to_a_shared_space',
     );
   }
 
   String get cannot_copy_file_to_shared_space {
     return Intl.message(
       'Can not copy file to Shared space',
-      name: 'Can not copy file to Shared space',
+      name: 'cannot_copy_file_to_shared_space',
     );
   }
 
   String get some_items_could_not_be_copied_to_shared_space {
     return Intl.message(
       'Some items could not be copied to Shared space',
-      name: 'Some items could not be copied to Shared space',
-    );
-  }
-
-  String get delete {
-    return Intl.message(
-      'Delete',
-      name: 'delete',
+      name: 'some_items_could_not_be_copied_to_shared_space',
     );
   }
 
@@ -470,10 +463,17 @@ class AppLocalizations {
     );
   }
 
-  String get the_file_is_successfully_deleted {
+  String get the_file_has_been_successfully_deleted {
     return Intl.message(
-      'The file is successfully deleted',
-      name: 'the_file_is_successfully_deleted',
+      'The file has been successfully deleted',
+      name: 'the_file_has_been_successfully_deleted',
+    );
+  }
+
+  String get files_have_been_successfully_deleted {
+    return Intl.message(
+      'Files have been successfully deleted',
+      name: 'files_have_been_successfully_deleted',
     );
   }
 
@@ -481,6 +481,13 @@ class AppLocalizations {
     return Intl.message(
       'The file could not be deleted',
       name: 'the_file_could_not_be_deleted',
+    );
+  }
+
+  String get files_could_not_be_deleted {
+    return Intl.message(
+      'Files could not be deleted',
+      name: 'files_could_not_be_deleted',
     );
   }
 
@@ -495,6 +502,13 @@ class AppLocalizations {
     return Intl.message(
       'Some items are successfully deleted',
       name: 'some_items_are_successfully_deleted',
+    );
+  }
+
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
     );
   }
 }

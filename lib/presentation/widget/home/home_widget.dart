@@ -93,6 +93,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           handleUploadToastMessage(context),
           handleShareDocumentToastMessage(context),
           _handleMySpaceToastMessage(context),
+          _handleSharedSpaceToastMessage(context),
           StoreConnector<AppState, UploadFileState>(
               converter: (store) => store.state.uploadFileState,
               builder: (context, data) => handleUploadWidget(context, data)
@@ -208,11 +209,39 @@ class _HomeWidgetState extends State<HomeWidget> {
             appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_copied_to_shared_space);
             homeViewModel.cleanMySpaceViewState();
           } else if (success is RemoveDocumentViewState) {
-            appToast.showToast(AppLocalizations.of(context).the_file_is_successfully_deleted);
+            appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
             homeViewModel.cleanMySpaceViewState();
           } else if (success is RemoveMultipleDocumentsAllSuccessViewState) {
             appToast.showToast(AppLocalizations.of(context).some_items_are_successfully_deleted);
             homeViewModel.cleanMySpaceViewState();
+          }
+          return SizedBox.shrink();
+        }));
+  }
+
+  Widget _handleSharedSpaceToastMessage(BuildContext context) {
+    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
+        converter: (store) => store.state.sharedSpaceState.viewState,
+        distinct: true,
+        builder: (context, state) => state.fold((failure) {
+          if (failure is RemoveSharedSpaceNodeFailure) {
+            appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
+            homeViewModel.cleanSharedSpaceViewState();
+          } else if (failure is RemoveAllSharedSpaceNodesFailureViewState) {
+            appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_deleted);
+            homeViewModel.cleanSharedSpaceViewState();
+          }
+          return SizedBox.shrink();
+        }, (success) {
+          if (success is RemoveSharedSpaceNodeViewState) {
+            appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
+            homeViewModel.cleanSharedSpaceViewState();
+          } else if (success is RemoveAllSharedSpaceNodesSuccessViewState) {
+            appToast.showToast(AppLocalizations.of(context).files_have_been_successfully_deleted);
+            homeViewModel.cleanSharedSpaceViewState();
+          } else if (success is RemoveSomeSharedSpaceNodesSuccessViewState) {
+            appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+            homeViewModel.cleanSharedSpaceViewState();
           }
           return SizedBox.shrink();
         }));

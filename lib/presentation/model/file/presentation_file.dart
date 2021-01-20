@@ -34,12 +34,12 @@
 //
 // the Additional Terms applicable to LinShare software.
 
-import 'package:http_parser/http_parser.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class PresentationFile {
   String fileName();
 
   int fileSize();
 
-  MediaType fileMediaType();
+  Widget fileIcon();
 }
