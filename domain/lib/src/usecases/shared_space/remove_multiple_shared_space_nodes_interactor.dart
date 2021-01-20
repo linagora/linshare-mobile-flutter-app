@@ -30,31 +30,28 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/copy/copy_request.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
 
-abstract class SharedSpaceDocumentRepository {
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+class RemoveMultipleSharedSpaceNodesInteractor {
+  final RemoveSharedSpaceNodeInteractor _removeSharedSpaceNodeInteractor;
 
-  Future<List<WorkGroupNode>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+  RemoveMultipleSharedSpaceNodesInteractor(this._removeSharedSpaceNodeInteractor);
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
-  );
+  Future<Either<Failure, Success>> execute(List<WorkGroupNode> workGroupNodes) async {
+    final listResult = await Future.wait(workGroupNodes.map((workGroupNode) =>
+      _removeSharedSpaceNodeInteractor.execute(workGroupNode.sharedSpaceId, workGroupNode.workGroupNodeId)));
 
-  Future<WorkGroupNode> removeSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId);
+    if (listResult.length == 1) {
+      return listResult.single;
+    } else {
+      var failedFileCount = listResult.whereType<Left>().length;
+      if (failedFileCount == 0) {
+        return Right(RemoveAllSharedSpaceNodesSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(RemoveAllSharedSpaceNodesFailureViewState(listResult));
+      }
+      return Right(RemoveSomeSharedSpaceNodesSuccessViewState(listResult));
+    }
+  }
 }
