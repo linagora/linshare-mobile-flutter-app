@@ -75,6 +75,7 @@ class ConfirmModalSheetBuilder {
 
   void show(context) {
     showModalBottomSheet(
+        useRootNavigator: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),

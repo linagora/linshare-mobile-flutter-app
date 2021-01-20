@@ -37,6 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_document_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -240,7 +241,9 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
           height: 24,
           fit: BoxFit.fill,
         ),
-        onPressed: null,
+        onPressed: () => node.type == WorkGroupNodeType.FOLDER ?
+          _model.openFolderContextMenu(context, node, _contextMenuFolderActionTiles(context, node)) :
+          _model.openDocumentContextMenu(context, node, _contextMenuDocumentActionTiles(context, node), _removeDocumentAction(node))
       ),
       onTap: () => widget.nodeClickedCallback(node),
     );
@@ -324,5 +327,24 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         ),
       ],
     );
+  }
+
+  List<Widget> _contextMenuFolderActionTiles(BuildContext context, WorkGroupFolder workGroupFolder) {
+    return [];
+  }
+
+  List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument) {
+    return [];
+  }
+
+  Widget _removeDocumentAction(WorkGroupDocument workGroupDocument) {
+    return WorkGroupDocumentContextMenuTileBuilder(
+      Key('remove_work_group_document_context_menu_action'),
+      SvgPicture.asset(imagePath.icDelete,
+          width: 24, height: 24, fit: BoxFit.fill),
+      AppLocalizations.of(context).delete,
+      workGroupDocument)
+    .onActionClick((data) => _model.removeWorkGroupNode(context, [workGroupDocument]))
+    .build();
   }
 }
