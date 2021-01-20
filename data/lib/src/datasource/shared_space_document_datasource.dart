@@ -42,4 +42,9 @@ abstract class SharedSpaceDocumentDataSource {
     SharedSpaceId destinationSharedSpaceId,
     {WorkGroupNodeId destinationParentNodeId}
   );
+
+  Future<WorkGroupNode> removeSharedSpaceNode(
+    SharedSpaceId sharedSpaceId,
+    WorkGroupNodeId sharedSpaceNodeId,
+  );
 }

@@ -108,4 +108,26 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
       });
     });
   }
+
+  @override
+  Future<WorkGroupNode> removeSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId) {
+    return Future.sync(() async {
+      final workGroupNode = await _linShareHttpClient.removeSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId);
+
+      if (workGroupNode is WorkGroupDocumentDto) return workGroupNode.toWorkGroupDocument();
+      if (workGroupNode is WorkGroupNodeFolderDto) return workGroupNode.toWorkGroupFolder();
+
+      return null;
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw WorkGroupNodeNotFoundException();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }
