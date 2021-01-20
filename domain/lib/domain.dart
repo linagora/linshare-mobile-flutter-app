@@ -86,6 +86,7 @@ export 'src/usecases/get_child_nodes/get_all_child_nodes_interactor.dart';
 export 'src/usecases/shared_space/copy_to_shared_space_interactor.dart';
 export 'src/usecases/shared_space/copy_multiple_files_to_shared_space_interactor.dart';
 export 'src/usecases/myspace/remove_document_interactor.dart';
+export 'src/usecases/myspace/remove_multiple_documents_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

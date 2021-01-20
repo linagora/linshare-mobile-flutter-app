@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/document/document.dart';
 
@@ -115,4 +116,31 @@ class RemoveDocumentFailure extends FeatureFailure {
 
   @override
   List<Object> get props => [removeDocumentFailure];
+}
+
+class RemoveMultipleDocumentsAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveMultipleDocumentsAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveMultipleDocumentsHasSomeFilesFailedViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveMultipleDocumentsHasSomeFilesFailedViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveMultipleDocumentsAllFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveMultipleDocumentsAllFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
 }
