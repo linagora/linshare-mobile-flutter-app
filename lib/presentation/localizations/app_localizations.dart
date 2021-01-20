@@ -446,6 +446,57 @@ class AppLocalizations {
       name: 'Some items could not be copied to Shared space',
     );
   }
+
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+    );
+  }
+
+  String are_you_sure_you_want_to_delete_file(String documentName) {
+    return Intl.message(
+      'Are you sure you want to delete "$documentName"?',
+      name: 'are_you_sure_you_want_to_delete_file',
+      args: [documentName],
+    );
+  }
+
+  String are_you_sure_you_want_to_delete_files(int documentCount) {
+    return Intl.message(
+      'Are you sure you want to delete $documentCount items?',
+      name: 'are_you_sure_you_want_to_delete_files',
+      args: [documentCount],
+    );
+  }
+
+  String get the_file_is_successfully_deleted {
+    return Intl.message(
+      'The file is successfully deleted',
+      name: 'the_file_is_successfully_deleted',
+    );
+  }
+
+  String get the_file_could_not_be_deleted {
+    return Intl.message(
+      'The file could not be deleted',
+      name: 'the_file_could_not_be_deleted',
+    );
+  }
+
+  String get some_items_could_not_be_deleted {
+    return Intl.message(
+      'Some items could not be deleted',
+      name: 'some_items_could_not_be_deleted',
+    );
+  }
+
+  String get some_items_are_successfully_deleted {
+    return Intl.message(
+      'Some items are successfully deleted',
+      name: 'some_items_are_successfully_deleted',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

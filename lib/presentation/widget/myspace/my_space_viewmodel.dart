@@ -51,6 +51,7 @@ import 'package:linshare_flutter_app/presentation/view/downloading_file/download
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
@@ -69,6 +70,7 @@ class MySpaceViewModel extends BaseViewModel {
   final DownloadFileInteractor _downloadFileInteractor;
   final DownloadFileIOSInteractor _downloadFileIOSInteractor;
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
+  final RemoveMultipleDocumentsInteractor _removeMultipleDocumentsInteractor;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
@@ -76,7 +78,8 @@ class MySpaceViewModel extends BaseViewModel {
       this._getAllDocumentInteractor,
       this._downloadFileInteractor,
       this._downloadFileIOSInteractor,
-      this._copyMultipleFilesToSharedSpaceInteractor
+      this._copyMultipleFilesToSharedSpaceInteractor,
+      this._removeMultipleDocumentsInteractor
   ) : super(store);
 
   void downloadFileClick(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
@@ -171,6 +174,38 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
+  void removeDocument(BuildContext context, List<Document> documents,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    if (itemSelectionType == ItemSelectionType.single) {
+      _appNavigation.popBack();
+    }
+
+    final deleteTitle = documents.length == 1
+        ? AppLocalizations.of(context).are_you_sure_you_want_to_delete_file(documents.first.name)
+        : AppLocalizations.of(context).are_you_sure_you_want_to_delete_files(documents.length);
+
+    ConfirmModalSheetBuilder(_appNavigation)
+        .key(Key('delete_document_confirm_modal'))
+        .title(deleteTitle)
+        .cancelText(AppLocalizations.of(context).cancel)
+        .onConfirmAction(AppLocalizations.of(context).delete, () {
+          _appNavigation.popBack();
+          if (itemSelectionType == ItemSelectionType.multiple) {
+            cancelSelection();
+          }
+          store.dispatch(_removeDocumentAction(documents.map((document) => document.documentId).toList()));
+    }).show(context);
+  }
+
+  ThunkAction<AppState> _removeDocumentAction(List<DocumentId> documentIds) {
+    return (Store<AppState> store) async {
+      await _removeMultipleDocumentsInteractor.execute(documentIds: documentIds)
+          .then((result) => result.fold(
+              (failure) => store.dispatch(MySpaceAction(Left(failure))),
+              (success) => store.dispatch(MySpaceAction(Right(success)))));
+    };
+  }
+
   void getAllDocument() {
     store.dispatch(_getAllDocumentAction());
   }
@@ -180,8 +215,8 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_pickFileAction(fileType));
   }
 
-  void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles) {
-    store.dispatch(_handleContextMenuAction(context, document, actionTiles));
+  void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles, {Widget footerAction}) {
+    store.dispatch(_handleContextMenuAction(context, document, actionTiles, footerAction: footerAction));
   }
 
   void openUploadFileMenu(BuildContext context, List<Widget> actionTiles) {
@@ -211,13 +246,17 @@ class MySpaceViewModel extends BaseViewModel {
   }
 
   ThunkAction<AppState> _handleContextMenuAction(
-      BuildContext context, Document document, List<Widget> actionTiles) {
+      BuildContext context,
+      Document document,
+      List<Widget> actionTiles,
+      {Widget footerAction}) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
           .addHeader(ContextMenuHeaderBuilder(
             Key('context_menu_header'),
             DocumentPresentationFile.fromDocument(document)).build())
           .addTiles(actionTiles)
+          .addFooter(footerAction)
           .build();
       store.dispatch(MySpaceAction(Right(ContextMenuItemViewState(document))));
     };

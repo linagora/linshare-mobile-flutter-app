@@ -192,6 +192,12 @@ class _HomeWidgetState extends State<HomeWidget> {
           if (failure is CopyToSharedSpaceFailure || failure is CopyMultipleFilesToSharedSpaceAllFailureViewState) {
             appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
             homeViewModel.cleanMySpaceViewState();
+          } else if (failure is RemoveDocumentFailure) {
+            appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
+            homeViewModel.cleanMySpaceViewState();
+          } else if (failure is RemoveMultipleDocumentsAllFailureViewState) {
+            appToast.showErrorToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+            homeViewModel.cleanMySpaceViewState();
           }
           return SizedBox.shrink();
         }, (success) {
@@ -200,6 +206,12 @@ class _HomeWidgetState extends State<HomeWidget> {
             homeViewModel.cleanMySpaceViewState();
           } else if (success is CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState) {
             appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_copied_to_shared_space);
+            homeViewModel.cleanMySpaceViewState();
+          } else if (success is RemoveDocumentViewState) {
+            appToast.showToast(AppLocalizations.of(context).the_file_is_successfully_deleted);
+            homeViewModel.cleanMySpaceViewState();
+          } else if (success is RemoveMultipleDocumentsAllSuccessViewState) {
+            appToast.showToast(AppLocalizations.of(context).some_items_are_successfully_deleted);
             homeViewModel.cleanMySpaceViewState();
           }
           return SizedBox.shrink();
