@@ -30,31 +30,46 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/copy/copy_request.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/fixture/shared_space_document_fixture.dart';
 
-abstract class SharedSpaceDocumentRepository {
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+import '../../mock/repository/mock_shared_space_document_repository.dart';
 
-  Future<List<WorkGroupNode>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+void main() {
+  group('remove_shared_space_node_interactor test', () {
+    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    RemoveSharedSpaceNodeInteractor removeSharedSpaceNodeInteractor;
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
-  );
+    setUp(() {
+      sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
+      removeSharedSpaceNodeInteractor = RemoveSharedSpaceNodeInteractor(sharedSpaceDocumentRepository);
+    });
 
-  Future<WorkGroupNode> removeSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId);
+    test('remove shared space node interactor should return success with one valid data', () async {
+      when(sharedSpaceDocumentRepository.removeSharedSpaceNode(
+          workGroupDocument1.sharedSpaceId,
+          workGroupDocument1.workGroupNodeId))
+      .thenAnswer((_) async => workGroupDocument1);
+
+      final result = await removeSharedSpaceNodeInteractor.execute(workGroupDocument1.sharedSpaceId, workGroupDocument1.workGroupNodeId);
+      final workGroups = result
+          .map((success) => (success as RemoveSharedSpaceNodeViewState).workGroupNode)
+          .getOrElse(() => null);
+      expect(workGroups, workGroupDocument1);
+    });
+
+    test('remove shared space node interactor should fail when removeSharedSpaceNode fail', () async {
+      final exception = Exception();
+      when(sharedSpaceDocumentRepository.removeSharedSpaceNode(
+          workGroupDocument1.sharedSpaceId,
+          workGroupDocument1.workGroupNodeId))
+          .thenThrow(exception);
+
+      final result = await removeSharedSpaceNodeInteractor.execute(workGroupDocument1.sharedSpaceId, workGroupDocument1.workGroupNodeId);
+      expect(result, Left<Failure, Success>(RemoveSharedSpaceNodeFailure(exception)));
+    });
+  });
 }
