@@ -39,6 +39,7 @@ class ContextMenuBuilder {
   final BuildContext _context;
   final List<Widget> _actionTiles = [];
   Widget _header;
+  Widget _footer;
 
   ContextMenuBuilder(this._context);
 
@@ -49,6 +50,11 @@ class ContextMenuBuilder {
 
   ContextMenuBuilder addHeader(Widget header) {
     _header = header;
+    return this;
+  }
+
+  ContextMenuBuilder addFooter(Widget footer) {
+    _footer = footer;
     return this;
   }
 
@@ -72,6 +78,15 @@ class ContextMenuBuilder {
               _header ?? SizedBox.shrink(),
               Divider(),
               ..._actionTiles,
+              _footer != null ? Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: Wrap(
+                  children: [
+                    Divider(),
+                    _footer
+                  ],
+                ),
+              ) : SizedBox.shrink()
             ],
           ),
         );

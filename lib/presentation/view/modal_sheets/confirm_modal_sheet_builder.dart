@@ -90,7 +90,7 @@ class ConfirmModalSheetBuilder {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(left: 50, right: 50, top: 48, bottom: 19),
-                  child: Text(_title, style: TextStyle(fontSize: 16), textAlign: TextAlign.center)),
+                  child: Text(_title, style: TextStyle(fontSize: 16, color: AppColor.confirmDialogTitleTextColor), textAlign: TextAlign.center,)),
                 Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Row(
