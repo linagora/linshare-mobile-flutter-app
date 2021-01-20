@@ -44,14 +44,14 @@ class WorkGroupFolder extends WorkGroupNode {
     String name,
     Account lastAuthor,
   ) : super(
-          workGroupNodeId,
-          parentWorkGroupNodeId,
-          type,
-          sharedSpaceId,
-          creationDate,
-          modificationDate,
-          description,
-          name,
-          lastAuthor,
-        );
+    workGroupNodeId,
+    parentWorkGroupNodeId,
+    type,
+    sharedSpaceId,
+    creationDate,
+    modificationDate,
+    description,
+    name,
+    lastAuthor,
+  );
 }

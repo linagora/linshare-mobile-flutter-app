@@ -95,3 +95,58 @@ class CopyMultipleFilesToSharedSpaceAllFailureViewState extends FeatureFailure {
   @override
   List<Object> get props => [resultList];
 }
+
+class RemoveSharedSpaceNodeViewState extends ViewState {
+  final WorkGroupNode workGroupNode;
+
+  RemoveSharedSpaceNodeViewState(this.workGroupNode);
+
+  @override
+  List<Object> get props => [workGroupNode];
+}
+
+class RemoveSharedSpaceNodeFailure extends FeatureFailure {
+  final Exception exception;
+
+  RemoveSharedSpaceNodeFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+
+class RemoveAllSharedSpaceNodesSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveAllSharedSpaceNodesSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveSomeSharedSpaceNodesSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveSomeSharedSpaceNodesSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveAllSharedSpaceNodesFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveAllSharedSpaceNodesFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class ContextMenuWorkGroupNodeViewState extends ViewState {
+  final WorkGroupNode workGroupNode;
+
+  ContextMenuWorkGroupNodeViewState(this.workGroupNode);
+
+  @override
+  List<Object> get props => [workGroupNode];
+}
