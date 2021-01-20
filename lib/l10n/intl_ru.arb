@@ -341,5 +341,44 @@
   "@some_items_could_not_be_copied_to_shared_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "delete": "Удалить",
+  "@delete": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_file": "Are you sure you want to delete \"$documentName\"?",
+  "@are_you_sure_you_want_to_delete_file": {
+    "type": "text",
+    "placeholders": {
+      "$documentName": {}
+    }
+  },
+  "are_you_sure_you_want_to_delete_files": "Are you sure you want to delete $documentCount items?",
+  "@are_you_sure_you_want_to_delete_files": {
+    "type": "text",
+    "placeholders": {
+      "$documentCount": {}
+    }
+  },
+  "the_file_is_successfully_deleted": "The file is successfully deleted",
+  "@the_file_is_successfully_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_could_not_be_deleted": "The file could not be deleted",
+  "@the_file_could_not_be_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_items_could_not_be_deleted": "Some items could not be deleted",
+  "@some_items_could_not_be_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_items_are_successfully_deleted": "Some items are successfully deleted",
+  "@some_items_are_successfully_deleted": {
+    "type": "text",
+    "placeholders": {}
   }
 }

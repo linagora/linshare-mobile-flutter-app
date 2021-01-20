@@ -147,6 +147,7 @@ class AppModule {
     getIt.registerFactory(() => CopyDocumentsToSharedSpaceInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => CopyMultipleFilesToSharedSpaceInteractor(getIt<CopyDocumentsToSharedSpaceInteractor>()));
     getIt.registerFactory(() => RemoveDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => RemoveMultipleDocumentsInteractor(getIt<RemoveDocumentInteractor>()));
   }
 
   void _provideSharePreference() {

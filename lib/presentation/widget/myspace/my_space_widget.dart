@@ -154,7 +154,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                             AppLocalizations
                               .of(context)
                               .items(state.getAllSelectedDocuments().length))
-                          .actions(multipleSelectionActions(state.getAllSelectedDocuments()))
+                          .actions(_multipleSelectionActions(state.getAllSelectedDocuments()))
                           .build()
                         : SizedBox.shrink();
                     })
@@ -166,7 +166,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                   return selectMode == SelectMode.INACTIVE ? FloatingActionButton(
                     key: Key('my_space_upload_button'),
                     onPressed: () => mySpaceViewModel
-                        .openUploadFileMenu(context, uploadFileMenuActionTiles(context)),
+                        .openUploadFileMenu(context, _uploadFileMenuActionTiles(context)),
                     backgroundColor: AppColor.primaryColor,
                     child: Image(image: AssetImage(imagePath.icAdd)),
                   ) : SizedBox.shrink();
@@ -281,10 +281,12 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                 height: 24,
                 fit: BoxFit.fill,
               ),
-              onPressed: () => mySpaceViewModel
-                .openContextMenu(context, document.element, contextMenuActionTiles(context, document.element))
-            );
-        }),
+                onPressed: () => mySpaceViewModel.openContextMenu(
+                          context,
+                          document.element,
+                    _contextMenuActionTiles(context, document.element),
+                          footerAction: _contextMenuFooterAction(document.element)));
+            }),
         onLongPress: () => mySpaceViewModel.selectItem(document)
     );
   }
@@ -329,23 +331,35 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       .text(AppLocalizations.of(context).my_space_text_upload_your_files_here).build();
   }
 
-  List<Widget> contextMenuActionTiles(BuildContext context, Document document) {
+  List<Widget> _contextMenuActionTiles(BuildContext context, Document document) {
     return [
-      if (Platform.isIOS) exportFileAction(context, document),
-      if (Platform.isAndroid) downloadAction(document),
-      shareAction(document),
-      copyToWorkGroupAction(context, document),
+      if (Platform.isIOS) _exportFileAction(context, document),
+      if (Platform.isAndroid) _downloadAction(document),
+      _shareAction(document),
+      _copyToWorkGroupAction(context, document),
     ];
   }
 
-  List<Widget> uploadFileMenuActionTiles(BuildContext context) {
+  Widget _contextMenuFooterAction(Document document) {
+    return DocumentContextMenuTileBuilder(
+            Key('delete_document_context_menu_action'),
+            SvgPicture.asset(imagePath.icDelete,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).delete,
+            document)
+        .onActionClick(
+            (data) => mySpaceViewModel.removeDocument(context, [document]))
+        .build();
+  }
+
+  List<Widget> _uploadFileMenuActionTiles(BuildContext context) {
     return [
-      pickPhotoAndVideoAction(),
-      browseFileAction()
+      _pickPhotoAndVideoAction(),
+      _browseFileAction()
     ];
   }
 
-  Widget pickPhotoAndVideoAction() {
+  Widget _pickPhotoAndVideoAction() {
     return SimpleContextMenuActionBuilder(
         Key('pick_photo_and_video_context_menu_action'),
         SvgPicture.asset(imagePath.icPhotoLibrary,
@@ -355,7 +369,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .build();
   }
 
-  Widget browseFileAction() {
+  Widget _browseFileAction() {
     return SimpleContextMenuActionBuilder(
         Key('browse_file_context_menu_action'),
         SvgPicture.asset(imagePath.icMore,
@@ -365,7 +379,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .build();
   }
 
-  Widget downloadAction(Document document) {
+  Widget _downloadAction(Document document) {
     return DocumentContextMenuTileBuilder(
             Key('download_context_menu_action'),
             SvgPicture.asset(imagePath.icFileDownload,
@@ -376,7 +390,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .build();
   }
 
-  Widget exportFileAction(BuildContext context, Document document) {
+  Widget _exportFileAction(BuildContext context, Document document) {
     return DocumentContextMenuTileBuilder(
             Key('export_context_menu_action'),
             SvgPicture.asset(imagePath.icExportFile,
@@ -388,7 +402,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     }).build();
   }
 
-  Widget shareAction(Document document) {
+  Widget _shareAction(Document document) {
     return DocumentContextMenuTileBuilder(
             Key('share_context_menu_action'),
             SvgPicture.asset(imagePath.icContextItemShare,
@@ -399,7 +413,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .build();
   }
 
-  Widget copyToWorkGroupAction(BuildContext context, Document document) {
+  Widget _copyToWorkGroupAction(BuildContext context, Document document) {
     return DocumentContextMenuTileBuilder(
         Key('copy_to_workgroup_context_menu_action'),
         SvgPicture.asset(imagePath.icSharedSpace,
@@ -410,14 +424,15 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .build();
   }
 
-  List<Widget> multipleSelectionActions(List<Document> documents) {
+  List<Widget> _multipleSelectionActions(List<Document> documents) {
     return [
-      shareMultipleSelection(documents),
-      moreActionMultipleSelection(documents)
+      _shareMultipleSelection(documents),
+      _removeMultipleSelection(documents),
+      _moreActionMultipleSelection(documents)
     ];
   }
 
-  Widget shareMultipleSelection(List<Document> documents) {
+  Widget _shareMultipleSelection(List<Document> documents) {
     return DocumentMultipleSelectionActionBuilder(
       Key('multiple_selection_share_action'),
       SvgPicture.asset(
@@ -431,7 +446,21 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       .build();
   }
 
-  Widget moreActionMultipleSelection(List<Document> documents) {
+  Widget _removeMultipleSelection(List<Document> documents) {
+    return DocumentMultipleSelectionActionBuilder(
+        Key('multiple_selection_remove_action'),
+        SvgPicture.asset(
+          imagePath.icDelete,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+        ),
+        documents)
+        .onActionClick((documents) => mySpaceViewModel.removeDocument(context, documents, itemSelectionType: ItemSelectionType.multiple))
+        .build();
+  }
+
+  Widget _moreActionMultipleSelection(List<Document> documents) {
     return DocumentMultipleSelectionActionBuilder(
         Key('multiple_selection_more_action'),
         SvgPicture.asset(

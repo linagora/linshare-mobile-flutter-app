@@ -101,7 +101,8 @@ class WidgetModule {
       getIt.get<GetAllDocumentInteractor>(),
       getIt.get<DownloadFileInteractor>(),
       getIt.get<DownloadFileIOSInteractor>(),
-      getIt<CopyMultipleFilesToSharedSpaceInteractor>()
+      getIt<CopyMultipleFilesToSharedSpaceInteractor>(),
+      getIt<RemoveMultipleDocumentsInteractor>()
     ));
   }
 
