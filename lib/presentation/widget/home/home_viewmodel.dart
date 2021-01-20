@@ -33,6 +33,7 @@ import 'dart:async';
 
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -84,6 +85,10 @@ class HomeViewModel extends BaseViewModel {
 
   void cleanMySpaceViewState() {
     store.dispatch(CleanMySpaceStateAction());
+  }
+
+  void cleanSharedSpaceViewState() {
+    store.dispatch(CleanSharedSpaceStateAction());
   }
 
   @override

@@ -148,7 +148,9 @@ class WidgetModule {
   void _provideWorkGroupNodeSurfingComponent() {
     getIt.registerFactory(() => WorkGroupNodesSurfingViewModel(
       getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
       getIt.get<GetAllChildNodesInteractor>(),
+      getIt.get<RemoveMultipleSharedSpaceNodesInteractor>(),
     ));
     getIt.registerFactory(() => WorkGroupDetailFilesViewModel(
       getIt.get<Store<AppState>>(),
