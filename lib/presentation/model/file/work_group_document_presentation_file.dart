@@ -35,59 +35,70 @@
 // the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http_parser/http_parser.dart';
+import 'package:http_parser/src/media_type.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
+import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 
-class DocumentPresentationFile extends Equatable implements PresentationFile {
+class WorkGroupDocumentPresentationFile extends Equatable implements PresentationFile {
   final imagePath = getIt<AppImagePaths>();
 
-  final DocumentId documentId;
-  final String description;
+  final WorkGroupNodeId workGroupNodeId;
+  final WorkGroupNodeId parentWorkGroupNodeId;
+  final WorkGroupNodeType type;
+  final SharedSpaceId sharedSpaceId;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final DateTime expirationDate;
-  final bool ciphered;
+  final String description;
   final String name;
+  final Account lastAuthor;
   final int size;
-  final String sha256sum;
-  final bool hasThumbnail;
-  final int shared;
   final MediaType mediaType;
+  final bool hasThumbnail;
+  final DateTime uploadDate;
+  final bool hasRevision;
+  final String sha256sum;
 
-  DocumentPresentationFile(
-      this.documentId,
-      this.description,
-      this.creationDate,
-      this.modificationDate,
-      this.expirationDate,
-      this.ciphered,
-      this.name,
-      this.size,
-      this.sha256sum,
-      this.hasThumbnail,
-      this.shared,
-      this.mediaType);
+  WorkGroupDocumentPresentationFile(
+    this.workGroupNodeId,
+    this.parentWorkGroupNodeId,
+    this.type,
+    this.sharedSpaceId,
+    this.creationDate,
+    this.modificationDate,
+    this.description,
+    this.name,
+    this.lastAuthor,
+    this.size,
+    this.mediaType,
+    this.hasThumbnail,
+    this.uploadDate,
+    this.hasRevision,
+    this.sha256sum
+  );
 
-  static DocumentPresentationFile fromDocument(Document document) {
-    return DocumentPresentationFile(
-        document.documentId,
-        document.description,
-        document.creationDate,
-        document.modificationDate,
-        document.expirationDate,
-        document.ciphered,
-        document.name,
-        document.size,
-        document.sha256sum,
-        document.hasThumbnail,
-        document.shared,
-        document.mediaType);
+  static WorkGroupDocumentPresentationFile fromWorkGroupDocument(WorkGroupDocument workGroupNode) {
+    return WorkGroupDocumentPresentationFile(
+      workGroupNode.workGroupNodeId,
+      workGroupNode.parentWorkGroupNodeId,
+      workGroupNode.type,
+      workGroupNode.sharedSpaceId,
+      workGroupNode.creationDate,
+      workGroupNode.modificationDate,
+      workGroupNode.description,
+      workGroupNode.name,
+      workGroupNode.lastAuthor,
+      workGroupNode.size,
+      workGroupNode.mediaType,
+      workGroupNode.hasThumbnail,
+      workGroupNode.uploadDate,
+      workGroupNode.hasRevision,
+      workGroupNode.sha256sum,
+    );
   }
 
   @override
@@ -104,26 +115,28 @@ class DocumentPresentationFile extends Equatable implements PresentationFile {
   Widget fileIcon() {
     return SvgPicture.asset(
       mediaType.getFileTypeImagePath(imagePath),
-      width: 16,
-      height: 20,
-      fit: BoxFit.fill
+      width: 20,
+      height: 24,
+      fit: BoxFit.fill,
     );
   }
 
-  bool isShared() => shared != 0;
-
   @override
   List<Object> get props => [
-    documentId,
-    description,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    ciphered,
-    name,
-    size,
-    sha256sum,
-    hasThumbnail,
-    shared
+      workGroupNodeId,
+      parentWorkGroupNodeId,
+      type,
+      sharedSpaceId,
+      creationDate,
+      modificationDate,
+      description,
+      name,
+      lastAuthor,
+      size,
+      mediaType,
+      hasThumbnail,
+      uploadDate,
+      hasRevision,
+      sha256sum,
   ];
 }

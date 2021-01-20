@@ -69,6 +69,7 @@ class ContextMenuBuilder {
 
   void build() {
     showModalBottomSheet(
+      useRootNavigator: true,
       shape: _shape(),
       context: _context,
       builder: (BuildContext buildContext) {

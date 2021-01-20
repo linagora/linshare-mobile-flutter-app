@@ -31,21 +31,36 @@
 
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/file/work_group_folder_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:redux/src/store.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
 
 class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   WorkGroupNodesSurfingViewModel(
     Store<AppState> store,
+    this._appNavigation,
     this._getAllChildNodesInteractor,
+    this._removeMultipleSharedSpaceNodesInteractor
   ) : super(store);
 
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
+  final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
+  final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
       BehaviorSubject.seeded(WorkGroupNodesSurfingState(null, [], FolderNodeType.normal));
@@ -82,5 +97,67 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
         ));
       },
     );
+  }
+
+  void openFolderContextMenu(BuildContext context, WorkGroupFolder workGroupFolder, List<Widget> actionTiles) {
+    store.dispatch(_handleContextMenuFolderAction(context, workGroupFolder, actionTiles));
+  }
+
+  void openDocumentContextMenu(BuildContext context, WorkGroupDocument workGroupDocument, List<Widget> actionTiles, Widget footerAction) {
+    store.dispatch(_handleContextMenuDocumentAction(context, workGroupDocument, actionTiles, footerAction));
+  }
+
+  ThunkAction<AppState> _handleContextMenuDocumentAction(
+      BuildContext context, WorkGroupDocument workGroupDocument, List<Widget> actionTiles, Widget footerAction) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context)
+          .addHeader(ContextMenuHeaderBuilder(
+            Key('context_menu_header'),
+            WorkGroupDocumentPresentationFile.fromWorkGroupDocument(workGroupDocument)).build())
+          .addTiles(actionTiles)
+          .addFooter(footerAction)
+          .build();
+      store.dispatch(SharedSpaceAction(Right(ContextMenuWorkGroupNodeViewState(workGroupDocument))));
+    };
+  }
+
+  ThunkAction<AppState> _handleContextMenuFolderAction(
+      BuildContext context, WorkGroupFolder workGroupFolder, List<Widget> actionTiles) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context)
+          .addHeader(ContextMenuHeaderBuilder(
+            Key('context_menu_header'),
+            WorkGroupFolderPresentationFile.fromWorkGroupFolder(workGroupFolder)).build())
+          .addTiles(actionTiles)
+          .build();
+      store.dispatch(SharedSpaceAction(Right(ContextMenuWorkGroupNodeViewState(workGroupFolder))));
+    };
+  }
+
+  void removeWorkGroupNode(BuildContext context, List<WorkGroupNode> workGroupNodes) {
+    _appNavigation.popBack();
+    final deleteTitle = workGroupNodes.length == 1
+      ? AppLocalizations.of(context).are_you_sure_you_want_to_delete_file(workGroupNodes.first.name)
+      : AppLocalizations.of(context).are_you_sure_you_want_to_delete_files(workGroupNodes.length);
+
+    ConfirmModalSheetBuilder(_appNavigation)
+      .key(Key('delete_work_group_node_confirm_modal'))
+      .title(deleteTitle)
+      .cancelText(AppLocalizations.of(context).cancel)
+      .onConfirmAction(AppLocalizations.of(context).delete, () {
+        _appNavigation.popBack();
+
+      store.dispatch(_removeWorkGroupNodeAction(workGroupNodes));
+    }).show(context);
+  }
+
+  ThunkAction<AppState> _removeWorkGroupNodeAction(List<WorkGroupNode> workGroupNodes) {
+    return (Store<AppState> store) async {
+      await _removeMultipleSharedSpaceNodesInteractor.execute(workGroupNodes)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+          (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+      loadAllChildNodes();
+    };
   }
 }

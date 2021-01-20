@@ -168,7 +168,11 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                     onPressed: () => mySpaceViewModel
                         .openUploadFileMenu(context, _uploadFileMenuActionTiles(context)),
                     backgroundColor: AppColor.primaryColor,
-                    child: Image(image: AssetImage(imagePath.icAdd)),
+                    child: SvgPicture.asset(
+                      imagePath.icPlus,
+                      width: 24,
+                      height: 24,
+                    ),
                   ) : SizedBox.shrink();
                 }),
               floatingActionButtonLocation:
