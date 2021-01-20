@@ -30,31 +30,23 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/copy/copy_request.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
 
-abstract class SharedSpaceDocumentRepository {
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+class RemoveSharedSpaceNodeInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
 
-  Future<List<WorkGroupNode>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+  RemoveSharedSpaceNodeInteractor(this._sharedSpaceDocumentRepository);
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
-  );
-
-  Future<WorkGroupNode> removeSharedSpaceNode(
+  Future<Either<Failure, Success>> execute(
     SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId);
+    WorkGroupNodeId workGroupNodeId
+  ) async {
+    try {
+      final workGroupNode = await _sharedSpaceDocumentRepository.removeSharedSpaceNode(sharedSpaceId, workGroupNodeId);
+      return Right<Failure, Success>(RemoveSharedSpaceNodeViewState(workGroupNode));
+    } catch (exception) {
+      return Left<Failure, Success>(RemoveSharedSpaceNodeFailure(exception));
+    }
+  }
 }
