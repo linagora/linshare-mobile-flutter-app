@@ -89,6 +89,7 @@ export 'src/usecases/myspace/remove_document_interactor.dart';
 export 'src/usecases/myspace/remove_multiple_documents_interactor.dart';
 export 'src/usecases/shared_space/remove_shared_space_node_interactor.dart';
 export 'src/usecases/shared_space/remove_multiple_shared_space_nodes_interactor.dart';
+export 'src/usecases/download_file/download_multiple_file_ios_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
