@@ -36,16 +36,16 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 @immutable
 class UIState {
   final String routePath;
-  final SharedSpaceNodeNested sharedSpace;
+  final SharedSpaceNodeNested selectedSharedSpace;
 
-  UIState(this.routePath, {this.sharedSpace});
+  UIState(this.routePath, {this.selectedSharedSpace});
 
   factory UIState.initial() {
     return UIState(RoutePaths.initializeRoute);
   }
 
   UIState setCurrentView(String routePath, {SharedSpaceNodeNested sharedSpace}) {
-    return UIState(routePath, sharedSpace: sharedSpace);
+    return UIState(routePath, selectedSharedSpace: sharedSpace);
   }
 
   UIState clearCurrentView() {

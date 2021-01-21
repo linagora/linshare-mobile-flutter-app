@@ -30,14 +30,16 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 
 class WorkGroupNodesSurfingState {
   final WorkGroupNode node;
-  final List<WorkGroupNode> children;
+  final List<SelectableElement<WorkGroupNode>> children;
   final FolderNodeType folderNodeType;
   final SharedSpaceId sharedSpaceId;
   final bool showLoading;
+  final SelectMode selectMode;
 
   WorkGroupNodesSurfingState(
     this.node,
@@ -45,11 +47,57 @@ class WorkGroupNodesSurfingState {
     this.folderNodeType, {
     this.sharedSpaceId,
     this.showLoading = false,
+    this.selectMode = SelectMode.INACTIVE
   });
 
+  WorkGroupNodesSurfingState selectWorkGroupNode(SelectableElement<WorkGroupNode> selectedWorkGroupNode) {
+    children.firstWhere((workGroupNode) => workGroupNode == selectedWorkGroupNode).toggleSelect();
+    return WorkGroupNodesSurfingState(
+      node,
+      children,
+      folderNodeType,
+      sharedSpaceId: sharedSpaceId,
+      showLoading: showLoading,
+      selectMode: SelectMode.ACTIVE
+    );
+  }
+
+  WorkGroupNodesSurfingState cancelSelectedWorkGroupNodes() {
+    return WorkGroupNodesSurfingState(
+      node,
+      children.map((workGroupNode) => SelectableElement<WorkGroupNode>(workGroupNode.element, SelectMode.INACTIVE)).toList(),
+      folderNodeType,
+      sharedSpaceId: sharedSpaceId,
+      showLoading: showLoading,
+      selectMode: SelectMode.INACTIVE
+    );
+  }
+
+  WorkGroupNodesSurfingState selectAllWorkGroupNodes() {
+    return WorkGroupNodesSurfingState(
+      node,
+      children.map((workGroupNode) => SelectableElement<WorkGroupNode>(workGroupNode.element, SelectMode.ACTIVE)).toList(),
+      folderNodeType,
+      sharedSpaceId: sharedSpaceId,
+      showLoading: showLoading,
+      selectMode: SelectMode.ACTIVE
+    );
+  }
+
+  WorkGroupNodesSurfingState unselectAllWorkGroupNodes() {
+    return WorkGroupNodesSurfingState(
+      node,
+      children.map((workGroupNode) => SelectableElement<WorkGroupNode>(workGroupNode.element, SelectMode.INACTIVE)).toList(),
+      folderNodeType,
+      sharedSpaceId: sharedSpaceId,
+      showLoading: showLoading,
+      selectMode: SelectMode.ACTIVE
+    );
+  }
+  
   WorkGroupNodesSurfingState copyWith({
     WorkGroupNode node,
-    List<WorkGroupNode> children,
+    List<SelectableElement<WorkGroupNode>> children,
     FolderNodeType folderNodeType,
     SharedSpaceId sharedSpaceId,
     bool showLoading,
@@ -60,6 +108,33 @@ class WorkGroupNodesSurfingState {
       folderNodeType ?? this.folderNodeType,
       sharedSpaceId: sharedSpaceId ?? this.sharedSpaceId,
       showLoading: showLoading ?? this.showLoading,
+      selectMode: selectMode
     );
+  }
+
+  WorkGroupNodesSurfingState setWorkGroupNodesList(List<WorkGroupNode> workGroupNodes) {
+    final selectedElements = children.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
+
+    return WorkGroupNodesSurfingState(
+      node,
+      {for (var workGroupNode in workGroupNodes)
+          if (selectedElements.contains(workGroupNode))
+            SelectableElement<WorkGroupNode>(workGroupNode, SelectMode.ACTIVE)
+          else SelectableElement<WorkGroupNode>(workGroupNode, SelectMode.INACTIVE)}.toList(),
+      folderNodeType,
+      sharedSpaceId: sharedSpaceId,
+      showLoading: showLoading,
+      selectMode: selectMode
+    );
+  }
+}
+
+extension MultipleSelections on WorkGroupNodesSurfingState {
+  bool isAllDocumentsSelected() {
+    return children.every((value) => value.selectMode == SelectMode.ACTIVE);
+  }
+
+  List<WorkGroupNode> getAllSelectedDocuments() {
+    return children.where((element) => element.selectMode == SelectMode.ACTIVE).map((workGroupNode) => workGroupNode.element).toList();
   }
 }

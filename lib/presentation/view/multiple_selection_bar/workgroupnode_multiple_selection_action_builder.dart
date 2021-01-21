@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,44 +26,37 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
 //
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 
-@immutable
-class StartSharedSpaceLoadingAction extends ActionOnline {}
+import 'multiple_selection_action_builder.dart';
 
-@immutable
-class SharedSpaceAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+class WorkGroupNodeMultipleSelectionActionBuilder extends MultipleSelectionActionBuilder<List<WorkGroupNode>> {
+  final List<WorkGroupNode> _workGroupNodes;
 
-  SharedSpaceAction(this.viewState);
-}
+  WorkGroupNodeMultipleSelectionActionBuilder(
+    Key key,
+    SvgPicture actionIcon,
+    this._workGroupNodes
+  ) : super(key, actionIcon);
 
-@immutable
-class SharedSpaceGetAllSharedSpacesAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  SharedSpaceGetAllSharedSpacesAction(this.viewState);
-}
-
-@immutable
-class CleanSharedSpaceStateAction extends ActionOffline {
-  CleanSharedSpaceStateAction();
-}
-
-@immutable
-class EnableUploadButtonAction extends ActionOffline {
-  EnableUploadButtonAction();
-}
-
-@immutable
-class DisableUploadButtonAction extends ActionOffline {
-  DisableUploadButtonAction();
+  @override
+  IconButton build() {
+    return IconButton(
+      key: key,
+      icon: actionIcon,
+      onPressed: () => onMultipleSelectionActionClick(_workGroupNodes)
+    );
+  }
 }
