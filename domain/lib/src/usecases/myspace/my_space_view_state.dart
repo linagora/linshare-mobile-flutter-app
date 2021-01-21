@@ -100,6 +100,33 @@ class DownloadFileIOSFailure extends FeatureFailure {
   List<Object> get props => [downloadFileException];
 }
 
+class DownloadFileIOSAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadFileIOSAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class DownloadFileIOSHasSomeFilesFailureViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadFileIOSHasSomeFilesFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class DownloadFileIOSAllFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadFileIOSAllFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
 class RemoveDocumentViewState extends ViewState {
   final Document document;
 
