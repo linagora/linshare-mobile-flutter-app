@@ -68,18 +68,18 @@ class MySpaceViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final GetAllDocumentInteractor _getAllDocumentInteractor;
   final DownloadFileInteractor _downloadFileInteractor;
-  final DownloadFileIOSInteractor _downloadFileIOSInteractor;
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
   final RemoveMultipleDocumentsInteractor _removeMultipleDocumentsInteractor;
+  final DownloadMultipleFileIOSInteractor _downloadMultipleFileIOSInteractor;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
       this._appNavigation,
       this._getAllDocumentInteractor,
       this._downloadFileInteractor,
-      this._downloadFileIOSInteractor,
       this._copyMultipleFilesToSharedSpaceInteractor,
-      this._removeMultipleDocumentsInteractor
+      this._removeMultipleDocumentsInteractor,
+      this._downloadMultipleFileIOSInteractor
   ) : super(store);
 
   void downloadFileClick(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
@@ -116,11 +116,14 @@ class MySpaceViewModel extends BaseViewModel {
     }
   }
 
-  void exportFile(BuildContext context, Document document) {
+  void exportFile(BuildContext context, List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
     final cancelToken = CancelToken();
-    _showDownloadingFileDialog(context, document.name, cancelToken);
-    store.dispatch(_exportFileAction(document, cancelToken));
+    _showDownloadingFileDialog(context, documents, cancelToken);
+    store.dispatch(_exportFileAction(documents, cancelToken));
   }
 
   void shareDocuments(List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
@@ -234,13 +237,17 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  void _showDownloadingFileDialog(BuildContext context, String fileName, CancelToken cancelToken) {
+  void _showDownloadingFileDialog(BuildContext context, List<Document> documents, CancelToken cancelToken) {
+    final downloadMessage = documents.length <= 1
+        ? AppLocalizations.of(context).downloading_file(documents.first.name)
+        : AppLocalizations.of(context).downloading_files(documents.length);
+
     showCupertinoDialog(
         context: context,
         builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
             .key(Key('downloading_file_dialog'))
             .title(AppLocalizations.of(context).preparing_to_export)
-            .content(AppLocalizations.of(context).downloading_file(fileName))
+            .content(downloadMessage)
             .actionText(AppLocalizations.of(context).cancel)
             .build());
   }
@@ -279,22 +286,32 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> _exportFileAction(Document document, CancelToken cancelToken) {
+  ThunkAction<AppState> _exportFileAction(List<Document> documents, CancelToken cancelToken) {
     return (Store<AppState> store) async {
-      await _downloadFileIOSInteractor.execute(document, cancelToken).then(
+      await _downloadMultipleFileIOSInteractor.execute(documents: documents, cancelToken: cancelToken).then(
           (result) => result.fold(
               (failure) => store.dispatch(_exportFileFailureAction(failure)),
               (success) => store.dispatch(_exportFileSuccessAction(success))));
     };
   }
 
-  ThunkAction<AppState> _exportFileSuccessAction(DownloadFileIOSViewState success) {
+  ThunkAction<AppState> _exportFileSuccessAction(Success success) {
     return (Store<AppState> store) async {
       _appNavigation.popBack();
       store.dispatch(MySpaceAction(Right(success)));
       if (success is DownloadFileIOSViewState) {
-        final filePathUri = success.filePath;
-        await share_library.Share.shareFiles([Uri.decodeFull(filePathUri.path)]);
+        await share_library.Share.shareFiles([Uri.decodeFull(success.filePath.path)]);
+      } else if (success is DownloadFileIOSAllSuccessViewState) {
+        await share_library.Share.shareFiles(success.resultList
+            .map((result) => Uri.decodeFull(
+                ((result.getOrElse(() => null) as DownloadFileIOSViewState).filePath.path)))
+            .toList());
+      } else if (success is DownloadFileIOSHasSomeFilesFailureViewState) {
+        await share_library.Share.shareFiles(success.resultList
+            .map((result) => result.fold(
+                (failure) => null,
+                (success) => Uri.decodeFull(((success as DownloadFileIOSViewState).filePath.path))))
+            .toList());
       }
     };
   }

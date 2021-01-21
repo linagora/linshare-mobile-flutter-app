@@ -386,6 +386,13 @@
     "type": "text",
     "placeholders": {}
   },
+  "downloading_files": "{numberOfFiles,plural, =1{Downloading {numberOfFiles} file}other{Downloading {numberOfFiles} files}}",
+  "@downloading_files": {
+    "type": "text",
+    "placeholders": {
+      "numberOfFiles": {}
+    }
+  },
   "delete": "Supprimer",
   "@delete": {
     "type": "text",

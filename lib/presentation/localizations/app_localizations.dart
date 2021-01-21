@@ -505,6 +505,16 @@ class AppLocalizations {
     );
   }
 
+  String downloading_files(int numberOfFiles) {
+    return Intl.message(
+      '''${Intl.plural(numberOfFiles,
+          one: 'Downloading $numberOfFiles file',
+          other: 'Downloading $numberOfFiles files')}''',
+      name: 'downloading_files',
+      args: [numberOfFiles],
+    );
+  }
+
   String get delete {
     return Intl.message(
       'Delete',
