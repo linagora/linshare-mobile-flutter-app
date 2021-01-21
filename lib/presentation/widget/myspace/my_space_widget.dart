@@ -402,7 +402,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             AppLocalizations.of(context).export_file,
             document)
         .onActionClick((data) {
-      mySpaceViewModel.exportFile(context, data);
+      mySpaceViewModel.exportFile(context, [data]);
     }).build();
   }
 
@@ -482,6 +482,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   List<Widget> _moreActionList(List<Document> documents) {
     return [
       if (Platform.isAndroid) _downloadMultiFilesAction(context, documents),
+      if (Platform.isIOS) _exportMultiFilesAction(context, documents),
       _copyMultiFilesToWorkGroupAction(context, documents),
     ];
   }
@@ -506,6 +507,21 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             documents[0])
         .onActionClick((data) => mySpaceViewModel.downloadFileClick(
             documents.map((element) => element.documentId).toList(),
+            itemSelectionType: ItemSelectionType.multiple))
+        .build();
+  }
+
+  Widget _exportMultiFilesAction(BuildContext context, List<Document> documents) {
+    if (documents.isEmpty) {
+      return SizedBox.shrink();
+    }
+    return DocumentContextMenuTileBuilder(
+        Key('export_multiple_files_context_menu_action'),
+        SvgPicture.asset(imagePath.icExportFile,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).export_file,
+        documents[0])
+        .onActionClick((data) => mySpaceViewModel.exportFile(context, documents,
             itemSelectionType: ItemSelectionType.multiple))
         .build();
   }
