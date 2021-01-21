@@ -37,18 +37,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_document_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/workgroupnode_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_model.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 
-import 'workgroup_nodes_surfing_navigator.dart';
+import 'workgroup_nodes_surfing_navigator_widget.dart';
 
 class WorkGroupNodesSurfingWidget extends StatefulWidget {
   final OnNodeClickedCallback nodeClickedCallback;
@@ -82,33 +86,36 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          margin: widget.nodeSurfingType == NodeSurfingType.normal ? EdgeInsets.only(top: 48) : EdgeInsets.only(top: 0),
-          color: Colors.white,
-          child: RefreshIndicator(
-            key: _refreshIndicatorKey,
-            onRefresh: () async => await _model.loadAllChildNodes(),
-            child: StreamBuilder<WorkGroupNodesSurfingState>(
-              stream: _model.stateSubscription,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return _buildLoadingWidget();
+    return StreamBuilder<WorkGroupNodesSurfingState>(
+      stream: _model.stateSubscription,
+      builder: (context, snapshot) {
+        return Column(
+          children: [
+            widget.nodeSurfingType == NodeSurfingType.normal ? _buildTopBar() : SizedBox.shrink(),
+            snapshot.data?.selectMode == SelectMode.ACTIVE ? _buildMultipleSelectionTopBar(snapshot.data) : SizedBox.shrink(),
+            Expanded(child: RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: () async => await _model.loadAllChildNodes(),
+              child: StreamBuilder<WorkGroupNodesSurfingState>(
+                stream: _model.stateSubscription,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return _buildLoadingWidget();
 
-                final state = snapshot.data;
-                if (state.children.isNotEmpty) {
-                  return _buildFileList(state.children);
-                } else if (state.showLoading) {
-                  return _buildLoadingWidget();
-                } else {
-                  return _buildEmptyListIndicator();
-                }
-              },
-            ),
-          ),
-        ),
-        widget.nodeSurfingType == NodeSurfingType.normal ? _buildTopBar() : SizedBox.shrink(),
-      ],
+                  final state = snapshot.data;
+                  if (state.children.isNotEmpty) {
+                    return _buildFileList(state.children, snapshot.data.selectMode);
+                  } else if (state.showLoading) {
+                    return _buildLoadingWidget();
+                  } else {
+                    return _buildEmptyListIndicator();
+                  }
+                },
+              ),
+            )),
+            snapshot.data?.selectMode == SelectMode.ACTIVE && snapshot.data.getAllSelectedDocuments().isNotEmpty ? _buildMultipleSelectionBottomBar(snapshot.data.getAllSelectedDocuments()) : SizedBox.shrink()
+          ],
+        );
+      },
     );
   }
 
@@ -178,35 +185,36 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
     );
   }
 
-  Widget _buildFileList(List<WorkGroupNode> nodes) {
+
+  Widget _buildFileList(List<SelectableElement<WorkGroupNode>> nodes, SelectMode currentSelectMode) {
     return ListView.builder(
       itemCount: nodes.length,
       itemBuilder: (context, index) {
-        return _buildNodeItem(context, nodes[index]);
+        return _buildNodeItem(context, nodes[index], currentSelectMode);
       },
     );
   }
 
-  Widget _buildNodeItem(BuildContext context, WorkGroupNode node) {
+  Widget _buildNodeItem(BuildContext context, SelectableElement<WorkGroupNode> node, SelectMode currentSelectMode) {
     switch (widget.nodeSurfingType) {
       case NodeSurfingType.normal:
-        return _buildNodeItemNormal(context, node);
+        return _buildNodeItemNormal(context, node, currentSelectMode);
       case NodeSurfingType.destinationPicker:
-        return _buildNodeItemDestinationPicker(context, node);
+        return _buildNodeItemDestinationPicker(context, node.element);
       default:
-        return _buildNodeItemNormal(context, node);
+        return _buildNodeItemNormal(context, node, currentSelectMode);
     }
   }
 
-  Widget _buildNodeItemNormal(BuildContext context, WorkGroupNode node) {
+  Widget _buildNodeItemNormal(BuildContext context, SelectableElement<WorkGroupNode> node, SelectMode currentSelectMode) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            node.type == WorkGroupNodeType.FOLDER
+            node.element.type == WorkGroupNodeType.FOLDER
                 ? imagePath.icFolder
-                : (node as WorkGroupDocument)
+                : (node.element as WorkGroupDocument)
                     .mediaType
                     .getFileTypeImagePath(imagePath),
             width: 20,
@@ -218,7 +226,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       title: Transform(
         transform: Matrix4.translationValues(-16, 0.0, 0.0),
         child: Text(
-          node.name,
+          node.element.name,
           maxLines: 1,
           style: TextStyle(
               fontSize: 14, color: AppColor.documentNameItemTextColor),
@@ -228,24 +236,31 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         transform: Matrix4.translationValues(-16, 0.0, 0.0),
         child: Text(
           AppLocalizations.of(context).item_last_modified(
-              node.modificationDate.getMMMddyyyyFormatString()),
+              node.element.modificationDate.getMMMddyyyyFormatString()),
           maxLines: 1,
           style: TextStyle(
               fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
         ),
       ),
-      trailing: IconButton(
-        icon: SvgPicture.asset(
-          imagePath.icContextMenu,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
-        ),
-        onPressed: () => node.type == WorkGroupNodeType.FOLDER ?
-          _model.openFolderContextMenu(context, node, _contextMenuFolderActionTiles(context, node)) :
-          _model.openDocumentContextMenu(context, node, _contextMenuDocumentActionTiles(context, node), _removeDocumentAction(node))
+      trailing: currentSelectMode == SelectMode.ACTIVE
+        ? Checkbox(
+            value: node.selectMode == SelectMode.ACTIVE,
+            onChanged: (bool value) => _model.selectItem(node),
+            activeColor: AppColor.primaryColor,
+          )
+        : IconButton(
+            icon: SvgPicture.asset(
+              imagePath.icContextMenu,
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+            ),
+            onPressed: () => node.element.type == WorkGroupNodeType.FOLDER ?
+              _model.openFolderContextMenu(context, node.element, _contextMenuFolderActionTiles(context, node.element)) :
+              _model.openDocumentContextMenu(context, node.element, _contextMenuDocumentActionTiles(context, node.element), _removeDocumentAction(node.element))
       ),
-      onTap: () => widget.nodeClickedCallback(node),
+      onTap: () => currentSelectMode == SelectMode.ACTIVE ? _model.selectItem(node) : widget.nodeClickedCallback(node.element),
+      onLongPress: () => _model.selectItem(node),
     );
   }
 
@@ -346,5 +361,69 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       workGroupDocument)
     .onActionClick((data) => _model.removeWorkGroupNode(context, [workGroupDocument]))
     .build();
+  }
+
+  Widget _buildMultipleSelectionTopBar(WorkGroupNodesSurfingState state) {
+    return ListTile(
+      leading: SvgPicture.asset(
+        imagePath.icSelectAll,
+        width: 28,
+        height: 28,
+        fit: BoxFit.fill,
+        color: state.isAllDocumentsSelected() ?
+          AppColor.unselectedElementColor :
+          AppColor.primaryColor
+      ),
+      title: Transform(
+        transform: Matrix4.translationValues(-16, 0.0, 0.0),
+        child: state.isAllDocumentsSelected() ?
+          Text(AppLocalizations.of(context).unselect_all,
+            maxLines: 1,
+            style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor)) :
+          Text(AppLocalizations.of(context).select_all,
+            maxLines: 1,
+            style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+          )
+      ),
+      tileColor: AppColor.topBarBackgroundColor,
+      onTap: () => _model.toggleSelectAllWorkGroupNodes(),
+      trailing: TextButton(
+        onPressed: () => _model.cancelSelection(),
+        child: Text(AppLocalizations.of(context).cancel,
+        maxLines: 1,
+        style: TextStyle(fontSize: 14, color: AppColor.primaryColor),
+      )),
+    );
+  }
+
+  Widget _buildMultipleSelectionBottomBar(List<WorkGroupNode> allSelectedWorkGroupNodes) {
+    return MultipleSelectionBarBuilder()
+      .key(Key('multiple_document_selection_bar'))
+      .text(
+        AppLocalizations
+          .of(context)
+          .items(allSelectedWorkGroupNodes.length))
+      .actions(_multipleSelectionActions(allSelectedWorkGroupNodes))
+      .build();
+  }
+
+  List<Widget> _multipleSelectionActions(List<WorkGroupNode> worKGroupNodes) {
+    return [
+      _removeMultipleSelection(worKGroupNodes),
+    ];
+  }
+
+  Widget _removeMultipleSelection(List<WorkGroupNode> worKGroupNodes) {
+    return WorkGroupNodeMultipleSelectionActionBuilder(
+      Key('multiple_selection_remove_action'),
+      SvgPicture.asset(
+        imagePath.icDelete,
+        width: 24,
+        height: 24,
+        fit: BoxFit.fill,
+      ),
+      worKGroupNodes)
+      .onActionClick((documents) => _model.removeWorkGroupNode(context, documents, itemSelectionType: ItemSelectionType.multiple))
+      .build();
   }
 }

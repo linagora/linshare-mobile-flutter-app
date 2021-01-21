@@ -36,7 +36,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfi
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:rxdart/rxdart.dart';
-import '../file_surfing/workgroup_nodes_surfing_widget.dart';
+import 'workgroup_nodes_surfing_widget.dart';
 import '../../../util/data_structure/stack.dart' as structure;
 
 

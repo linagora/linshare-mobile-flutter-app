@@ -40,25 +40,34 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 @immutable
 class SharedSpaceState extends LinShareState {
   final List<SharedSpaceNodeNested> sharedSpacesList;
+  final bool showUploadButton;
 
-  SharedSpaceState(Either<Failure, Success> viewState, this.sharedSpacesList) : super(viewState);
+  SharedSpaceState(Either<Failure, Success> viewState, this.sharedSpacesList, {this.showUploadButton = true}) : super(viewState);
 
   factory SharedSpaceState.initial() {
     return SharedSpaceState(Right(IdleState()), []);
   }
 
   @override
-  LinShareState clearViewState() {
+  SharedSpaceState clearViewState() {
     return SharedSpaceState(Right(IdleState()), []);
   }
 
   @override
-  LinShareState sendViewState({Either<Failure, Success> viewState}) {
+  SharedSpaceState sendViewState({Either<Failure, Success> viewState}) {
     return SharedSpaceState(viewState, sharedSpacesList);
   }
 
-  LinShareState setSharedSpaces({Either<Failure, Success> viewState, List<SharedSpaceNodeNested> newSharedSpacesList}) {
+  SharedSpaceState setSharedSpaces({Either<Failure, Success> viewState, List<SharedSpaceNodeNested> newSharedSpacesList}) {
     return SharedSpaceState(viewState, newSharedSpacesList);
+  }
+
+  SharedSpaceState disableUploadButton() {
+    return SharedSpaceState(viewState, sharedSpacesList, showUploadButton: false);
+  }
+
+  SharedSpaceState enableUploadButton() {
+    return SharedSpaceState(viewState, sharedSpacesList, showUploadButton: true);
   }
 
   @override
