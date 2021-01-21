@@ -117,7 +117,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       case RoutePaths.sharedSpace:
         return AppLocalizations.of(context).shared_space;
       case RoutePaths.sharedSpaceInside:
-        return uiState.sharedSpace.name;
+        return uiState.selectedSharedSpace.name;
       default:
         return AppLocalizations.of(context).my_space_title;
     }
@@ -132,7 +132,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       case RoutePaths.sharedSpaceInside:
         return WorkGroupDetailFilesWidget(
           Key('work_group_detail_files_widget_key'),
-          uiState.sharedSpace,
+          uiState.selectedSharedSpace,
           () { // Back to shared spaces screen
             homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
           },

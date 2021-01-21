@@ -32,15 +32,17 @@
 import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_navigator.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -79,12 +81,18 @@ class WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> 
           nodeSurfingType: widget.nodeSurfingType,
           currentNodeObservable: widget.currentNodeObservable,
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            height: 76,
-            child: _buildBottomLayout(context),
-          ),
+        StoreConnector<AppState, bool>(
+          converter: (store) => store.state.sharedSpaceState.showUploadButton,
+          distinct: true,
+          builder: (context, showUploadButton) {
+            return showUploadButton ? Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: 76,
+                child: _buildBottomLayout(context),
+              ),
+            ) : SizedBox.shrink();
+          }
         ),
       ],
     );

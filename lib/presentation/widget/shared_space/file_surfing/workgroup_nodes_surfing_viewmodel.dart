@@ -35,8 +35,10 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_folder_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -92,8 +94,8 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
         _stateSubscription.add(currentState.copyWith(children: [], showLoading: false));
       },
       (success) {
-        _stateSubscription.add(currentState.copyWith(
-          children: (success as GetChildNodesViewState).workGroupNodes, showLoading: false
+        _stateSubscription.add(currentState.setWorkGroupNodesList(
+          (success as GetChildNodesViewState).workGroupNodes
         ));
       },
     );
@@ -111,12 +113,12 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
       BuildContext context, WorkGroupDocument workGroupDocument, List<Widget> actionTiles, Widget footerAction) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
-          .addHeader(ContextMenuHeaderBuilder(
-            Key('context_menu_header'),
-            WorkGroupDocumentPresentationFile.fromWorkGroupDocument(workGroupDocument)).build())
-          .addTiles(actionTiles)
-          .addFooter(footerAction)
-          .build();
+        .addHeader(ContextMenuHeaderBuilder(
+          Key('context_menu_header'),
+          WorkGroupDocumentPresentationFile.fromWorkGroupDocument(workGroupDocument)).build())
+        .addTiles(actionTiles)
+        .addFooter(footerAction)
+        .build();
       store.dispatch(SharedSpaceAction(Right(ContextMenuWorkGroupNodeViewState(workGroupDocument))));
     };
   }
@@ -125,17 +127,21 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
       BuildContext context, WorkGroupFolder workGroupFolder, List<Widget> actionTiles) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
-          .addHeader(ContextMenuHeaderBuilder(
-            Key('context_menu_header'),
-            WorkGroupFolderPresentationFile.fromWorkGroupFolder(workGroupFolder)).build())
-          .addTiles(actionTiles)
-          .build();
+        .addHeader(ContextMenuHeaderBuilder(
+          Key('context_menu_header'),
+          WorkGroupFolderPresentationFile.fromWorkGroupFolder(workGroupFolder)).build())
+        .addTiles(actionTiles)
+        .build();
       store.dispatch(SharedSpaceAction(Right(ContextMenuWorkGroupNodeViewState(workGroupFolder))));
     };
   }
 
-  void removeWorkGroupNode(BuildContext context, List<WorkGroupNode> workGroupNodes) {
-    _appNavigation.popBack();
+  void removeWorkGroupNode(BuildContext context, List<WorkGroupNode> workGroupNodes,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+
+    if (itemSelectionType == ItemSelectionType.single) {
+      _appNavigation.popBack();
+    }
     final deleteTitle = workGroupNodes.length == 1
       ? AppLocalizations.of(context).are_you_sure_you_want_to_delete_file(workGroupNodes.first.name)
       : AppLocalizations.of(context).are_you_sure_you_want_to_delete_files(workGroupNodes.length);
@@ -146,7 +152,9 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
       .cancelText(AppLocalizations.of(context).cancel)
       .onConfirmAction(AppLocalizations.of(context).delete, () {
         _appNavigation.popBack();
-
+      if (itemSelectionType == ItemSelectionType.multiple) {
+        cancelSelection();
+      }
       store.dispatch(_removeWorkGroupNodeAction(workGroupNodes));
     }).show(context);
   }
@@ -159,5 +167,23 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
           (success) => store.dispatch(SharedSpaceAction(Right(success)))));
       loadAllChildNodes();
     };
+  }
+
+  void toggleSelectAllWorkGroupNodes() {
+    if (_stateSubscription.value.isAllDocumentsSelected()) {
+      _stateSubscription.add(currentState.unselectAllWorkGroupNodes());
+    } else {
+      _stateSubscription.add(currentState.selectAllWorkGroupNodes());
+    }
+  }
+
+  void cancelSelection() {
+    _stateSubscription.add(currentState.cancelSelectedWorkGroupNodes());
+    store.dispatch(EnableUploadButtonAction());
+  }
+
+  void selectItem(SelectableElement<WorkGroupNode> selectedWorkGroupNode) {
+    _stateSubscription.add(currentState.selectWorkGroupNode(selectedWorkGroupNode));
+    store.dispatch(DisableUploadButtonAction());
   }
 }
