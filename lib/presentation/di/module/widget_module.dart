@@ -49,7 +49,7 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_model.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
