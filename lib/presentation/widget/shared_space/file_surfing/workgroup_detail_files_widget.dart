@@ -72,14 +72,16 @@ class WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> 
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
-        WorkGroupNodesSurfingNavigator(
-          widget._workgroupNavigatorKey,
-          widget.sharedSpaceNode,
-          widget.onBackClickedCallback,
-          nodeSurfingType: widget.nodeSurfingType,
-          currentNodeObservable: widget.currentNodeObservable,
+        Expanded(
+          child: WorkGroupNodesSurfingNavigator(
+            widget._workgroupNavigatorKey,
+            widget.sharedSpaceNode,
+            widget.onBackClickedCallback,
+            nodeSurfingType: widget.nodeSurfingType,
+            currentNodeObservable: widget.currentNodeObservable,
+          )
         ),
         StoreConnector<AppState, bool>(
           converter: (store) => store.state.sharedSpaceState.showUploadButton,
