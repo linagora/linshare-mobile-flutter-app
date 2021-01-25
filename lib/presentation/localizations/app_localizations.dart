@@ -521,6 +521,13 @@ class AppLocalizations {
       name: 'delete',
     );
   }
+
+  String get can_not_connect_network {
+    return Intl.message(
+      'Cannot connect to the network',
+      name: 'can_not_connect_network',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

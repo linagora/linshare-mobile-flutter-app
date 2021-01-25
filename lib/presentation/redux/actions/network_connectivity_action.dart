@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,25 +28,21 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/network_connectivity_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/foundation.dart';
 
-AppState appStateReducer(AppState state, action) {
-  return AppState(
-      uiState: uiReducer(state.uiState, action),
-      authenticationState: authenticationReducer(state.authenticationState, action),
-      uploadFileState: uploadFileReducer(state.uploadFileState, action),
-      mySpaceState: mySpaceReducer(state.mySpaceState, action),
-      shareState: shareReducer(state.shareState, action),
-      sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),
-      destinationPickerState: destinationPickerReducer(state.destinationPickerState, action),
-      networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action));
+import 'app_action.dart';
+
+@immutable
+class SetNetworkConnectivityStateAction extends ActionOffline {
+  final ConnectivityResult connectivityResult;
+
+  SetNetworkConnectivityStateAction(this.connectivityResult);
+}
+
+@immutable
+class CleanNetworkConnectivityStateAction extends ActionOffline {
+  CleanNetworkConnectivityStateAction();
 }

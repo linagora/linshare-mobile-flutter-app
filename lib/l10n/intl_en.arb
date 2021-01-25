@@ -397,5 +397,10 @@
     "placeholders": {
       "numberOfFiles": {}
     }
+  },
+  "can_not_connect_network": "Cannot connect to the network",
+  "@can_not_connect_network": {
+    "type": "text",
+    "placeholders": {}
   }
 }
