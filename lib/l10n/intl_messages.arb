@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-21T10:01:14.309271",
+  "@@last_modified": "2021-01-25T16:57:52.662792",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -386,16 +386,21 @@
     "type": "text",
     "placeholders": {}
   },
-  "delete": "Delete",
-  "@delete": {
-    "type": "text",
-    "placeholders": {}
-  },
   "downloading_files": "{numberOfFiles,plural, =1{Downloading {numberOfFiles} file}other{Downloading {numberOfFiles} files}}",
   "@downloading_files": {
     "type": "text",
     "placeholders": {
       "numberOfFiles": {}
     }
+  },
+  "delete": "Delete",
+  "@delete": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "can_not_connect_network": "Cannot connect to the network",
+  "@can_not_connect_network": {
+    "type": "text",
+    "placeholders": {}
   }
 }
