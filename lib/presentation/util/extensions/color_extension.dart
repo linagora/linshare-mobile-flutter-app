@@ -69,4 +69,5 @@ extension AppColor on Color {
   static const destinationPickerAppBarTitleColor = Color(0xff7B7B7B);
   static const destinationPickerBottomActionTextColor = Color(0xff1B7EC7);
   static const confirmDialogTitleTextColor = Color(0xff7B7B7B);
+  static const networkConnectionBackgroundColor = Color(0xff7B7B7B);
 }

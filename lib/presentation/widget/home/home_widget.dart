@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -94,6 +96,10 @@ class _HomeWidgetState extends State<HomeWidget> {
           handleShareDocumentToastMessage(context),
           _handleMySpaceToastMessage(context),
           _handleSharedSpaceToastMessage(context),
+          StoreConnector<AppState, NetworkConnectivityState>(
+              converter: (store) => store.state.networkConnectivityState,
+              builder: (context, data) => _buildNetworkConnectionWidget(context, data)
+          ),
           StoreConnector<AppState, UploadFileState>(
               converter: (store) => store.state.uploadFileState,
               builder: (context, data) => handleUploadWidget(context, data)
@@ -290,6 +296,28 @@ class _HomeWidgetState extends State<HomeWidget> {
       );
     }
 
+    return SizedBox.shrink();
+  }
+
+  Widget _buildNetworkConnectionWidget(BuildContext context, NetworkConnectivityState networkConnectivityState) {
+    if (networkConnectivityState.connectivityResult == ConnectivityResult.none) {
+      return Container(
+          color: AppColor.networkConnectionBackgroundColor,
+          height: 54.0,
+          child: Stack(
+            children: [
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      AppLocalizations.of(context).can_not_connect_network,
+                      style: TextStyle(fontSize: 14.0, color: Colors.white),
+                    ),
+                  )),
+            ],
+          ));
+    }
     return SizedBox.shrink();
   }
 

@@ -31,6 +31,7 @@
 
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -47,6 +48,7 @@ class AppState {
   final ShareState shareState;
   final SharedSpaceState sharedSpaceState;
   final DestinationPickerState destinationPickerState;
+  final NetworkConnectivityState networkConnectivityState;
 
   AppState(
       {@required this.uiState,
@@ -55,7 +57,8 @@ class AppState {
       @required this.mySpaceState,
       @required this.shareState,
       @required this.sharedSpaceState,
-      @required this.destinationPickerState});
+      @required this.destinationPickerState,
+      @required this.networkConnectivityState});
 
   factory AppState.initial() {
     return AppState(
@@ -65,7 +68,8 @@ class AppState {
         mySpaceState: MySpaceState.initial(),
         shareState: ShareState.initial(),
         sharedSpaceState: SharedSpaceState.initial(),
-        destinationPickerState: DestinationPickerState.initial());
+        destinationPickerState: DestinationPickerState.initial(),
+        networkConnectivityState: NetworkConnectivityState.initial());
   }
 
   @override

@@ -31,7 +31,9 @@
 
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
@@ -42,18 +44,23 @@ import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dar
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class HomeViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final UploadFileManager _uploadFileManager;
+  final Connectivity _connectivity;
   StreamSubscription _uploadFileManagerStreamSubscription;
+  StreamSubscription _connectivityStreamSubscription;
 
   HomeViewModel(
       Store<AppState> store,
       this._appNavigation,
-      this._uploadFileManager
+      this._uploadFileManager,
+      this._connectivity
   ) : super(store) {
     _registerPendingUploadFile();
+    _registerNetworkConnectivityState();
   }
 
   void _registerPendingUploadFile() {
@@ -66,6 +73,13 @@ class HomeViewModel extends BaseViewModel {
           arguments: UploadFileArguments(listFileInfo),
         );
       }
+    });
+  }
+
+  void _registerNetworkConnectivityState() async {
+    store.dispatch(SetNetworkConnectivityStateAction(await _connectivity.checkConnectivity()));
+    _connectivityStreamSubscription = _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      store.dispatch(SetNetworkConnectivityStateAction(result));
     });
   }
 
@@ -91,10 +105,15 @@ class HomeViewModel extends BaseViewModel {
     store.dispatch(CleanSharedSpaceStateAction());
   }
 
+  void cleanNetworkConnectivityViewState() {
+    store.dispatch(CleanNetworkConnectivityStateAction());
+  }
+
   @override
   void onDisposed() {
     _uploadFileManager.closeUploadFileManagerStream();
     _uploadFileManagerStreamSubscription.cancel();
+    _connectivityStreamSubscription.cancel();
     super.onDisposed();
   }
 }

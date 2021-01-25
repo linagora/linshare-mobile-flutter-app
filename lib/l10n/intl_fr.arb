@@ -397,5 +397,10 @@
   "@delete": {
     "type": "text",
     "placeholders": {}
+  },
+  "can_not_connect_network": "Impossible de se connecter au réseau",
+  "@can_not_connect_network": {
+    "type": "text",
+    "placeholders": {}
   }
 }
