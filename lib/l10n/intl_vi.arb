@@ -397,5 +397,10 @@
     "placeholders": {
       "numberOfFiles": {}
     }
+  },
+  "can_not_connect_network": "Không thể kết nối tới mạng",
+  "@can_not_connect_network": {
+    "type": "text",
+    "placeholders": {}
   }
 }

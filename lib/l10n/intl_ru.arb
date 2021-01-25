@@ -397,5 +397,10 @@
     "placeholders": {
       "numberOfFiles": {}
     }
+  },
+  "can_not_connect_network": "Невозможно подключиться к сети",
+  "@can_not_connect_network": {
+    "type": "text",
+    "placeholders": {}
   }
 }
