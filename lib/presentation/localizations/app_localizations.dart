@@ -528,6 +528,13 @@ class AppLocalizations {
       name: 'can_not_connect_network',
     );
   }
+
+  String get can_not_proceed_while_offline {
+    return Intl.message(
+      'Cannot process while offline',
+      name: 'can_not_proceed_while_offline',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
