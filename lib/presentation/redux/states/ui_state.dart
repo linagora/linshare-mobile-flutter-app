@@ -32,9 +32,10 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class UIState {
+class UIState with EquatableMixin {
   final String routePath;
   final SharedSpaceNodeNested selectedSharedSpace;
 
@@ -51,4 +52,7 @@ class UIState {
   UIState clearCurrentView() {
     return UIState.initial();
   }
+
+  @override
+  List<Object> get props => [routePath, selectedSharedSpace];
 }

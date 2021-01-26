@@ -36,7 +36,7 @@ import 'package:meta/meta.dart';
 import 'linshare_state.dart';
 
 @immutable
-class AuthenticationState extends LinShareState {
+class AuthenticationState extends LinShareState  {
   AuthenticationState(Either<Failure, Success> viewState) : super(viewState);
 
   factory AuthenticationState.initial() {
@@ -57,4 +57,7 @@ class AuthenticationState extends LinShareState {
   AuthenticationState clearViewState() {
     return AuthenticationState.initial();
   }
+
+  @override
+  List<Object> get props => super.props;
 }

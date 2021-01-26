@@ -34,9 +34,10 @@ import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_model.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class UploadFileState extends LinShareState {
+class UploadFileState extends LinShareState with EquatableMixin {
   final List<UploadAndShareFileState> _uploadingStateFiles;
   List<UploadAndShareFileState> get uploadingStateFiles => _uploadingStateFiles.toList();
 
@@ -90,4 +91,10 @@ class UploadFileState extends LinShareState {
   UploadFileState clearViewState() {
     return UploadFileState.initial();
   }
+
+  @override
+  List<Object> get props => [
+    ...super.props,
+    _uploadingStateFiles
+  ];
 }
