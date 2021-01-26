@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-25T16:57:52.662792",
+  "@@last_modified": "2021-01-26T14:26:57.967696",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -400,6 +400,11 @@
   },
   "can_not_connect_network": "Cannot connect to the network",
   "@can_not_connect_network": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "can_not_proceed_while_offline": "Cannot process while offline",
+  "@can_not_proceed_while_offline": {
     "type": "text",
     "placeholders": {}
   }
