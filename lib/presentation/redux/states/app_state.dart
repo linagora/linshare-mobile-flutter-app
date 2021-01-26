@@ -37,10 +37,11 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 import 'destination_picker_state.dart';
 
-class AppState {
+class AppState with EquatableMixin {
   final UIState uiState;
   final AuthenticationState authenticationState;
   final UploadFileState uploadFileState;
@@ -73,12 +74,14 @@ class AppState {
   }
 
   @override
-  int get hashCode => uploadFileState.hashCode ^ authenticationState.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppState &&
-          uploadFileState == other.uploadFileState &&
-          authenticationState == other.authenticationState;
+  List<Object> get props => [
+        uiState,
+        authenticationState,
+        uploadFileState,
+        mySpaceState,
+        shareState,
+        sharedSpaceState,
+        destinationPickerState,
+        networkConnectivityState
+      ];
 }

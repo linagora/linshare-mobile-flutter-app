@@ -37,9 +37,10 @@ import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class MySpaceState extends LinShareState {
+class MySpaceState extends LinShareState with EquatableMixin {
   final List<SelectableElement<Document>> documentList;
   final SelectMode selectMode;
 
@@ -95,6 +96,13 @@ class MySpaceState extends LinShareState {
   MySpaceState startLoadingState() {
     return MySpaceState(Right(LoadingState()), documentList, selectMode);
   }
+
+  @override
+  List<Object> get props => [
+    ...super.props,
+    documentList,
+    selectMode
+  ];
 }
 
 extension MultipleSelections on MySpaceState {
