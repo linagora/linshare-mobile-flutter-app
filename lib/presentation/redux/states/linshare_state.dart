@@ -32,9 +32,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-abstract class LinShareState {
+abstract class LinShareState with EquatableMixin {
   final Either<Failure, Success> viewState;
 
   LinShareState(this.viewState);
@@ -49,10 +50,5 @@ abstract class LinShareState {
   LinShareState clearViewState();
 
   @override
-  int get hashCode => viewState.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is LinShareState && viewState == other.viewState;
+  List<Object> get props => [viewState];
 }

@@ -36,9 +36,10 @@ import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class SharedSpaceState extends LinShareState {
+class SharedSpaceState extends LinShareState  with EquatableMixin {
   final List<SharedSpaceNodeNested> sharedSpacesList;
   final bool showUploadButton;
 
@@ -74,4 +75,11 @@ class SharedSpaceState extends LinShareState {
   SharedSpaceState startLoadingState() {
     return SharedSpaceState(Right(LoadingState()), sharedSpacesList);
   }
+
+  @override
+  List<Object> get props => [
+    ...super.props,
+    sharedSpacesList,
+    showUploadButton
+  ];
 }
