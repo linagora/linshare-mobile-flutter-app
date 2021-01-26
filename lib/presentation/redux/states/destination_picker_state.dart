@@ -36,9 +36,10 @@ import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class DestinationPickerState extends LinShareState {
+class DestinationPickerState extends LinShareState with EquatableMixin {
   final List<SharedSpaceNodeNested> sharedSpacesList;
   final DestinationPickerRouteData routeData;
 
@@ -69,9 +70,16 @@ class DestinationPickerState extends LinShareState {
   DestinationPickerState startLoadingState() {
     return DestinationPickerState(Right(LoadingState()), sharedSpacesList, routeData);
   }
+
+  @override
+  List<Object> get props => [
+    ...super.props,
+    sharedSpacesList,
+    routeData
+  ];
 }
 
-class DestinationPickerRouteData {
+class DestinationPickerRouteData with EquatableMixin {
   final DestinationPickerCurrentView destinationPickerCurrentView;
   final SharedSpaceNodeNested sharedSpaceNodeNested;
 
@@ -79,6 +87,9 @@ class DestinationPickerRouteData {
 
   factory DestinationPickerRouteData.initial() =>
       DestinationPickerRouteData(DestinationPickerCurrentView.sharedSpace, null);
+
+  @override
+  List<Object> get props => [destinationPickerCurrentView, sharedSpaceNodeNested];
 }
 
 enum DestinationPickerCurrentView {

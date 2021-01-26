@@ -34,9 +34,10 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class ShareState extends LinShareState {
+class ShareState extends LinShareState with EquatableMixin {
 
   ShareState(Either<Failure, Success> viewState) : super(viewState);
 
