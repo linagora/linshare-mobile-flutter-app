@@ -46,3 +46,8 @@ class LoadingState extends ViewState {
   @override
   List<Object> get props => [];
 }
+
+class NoInternetConnectionState extends ViewState {
+  @override
+  List<Object> get props => [];
+}

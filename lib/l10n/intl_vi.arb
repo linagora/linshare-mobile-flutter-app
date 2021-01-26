@@ -402,5 +402,10 @@
   "@can_not_connect_network": {
     "type": "text",
     "placeholders": {}
+  },
+  "can_not_proceed_while_offline": "Không thể thực hiện khi offline",
+  "@can_not_proceed_while_offline": {
+    "type": "text",
+    "placeholders": {}
   }
 }
