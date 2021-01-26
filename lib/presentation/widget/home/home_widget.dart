@@ -96,6 +96,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           handleShareDocumentToastMessage(context),
           _handleMySpaceToastMessage(context),
           _handleSharedSpaceToastMessage(context),
+          _handleNetworkStateToastMessage(context),
           StoreConnector<AppState, NetworkConnectivityState>(
               converter: (store) => store.state.networkConnectivityState,
               builder: (context, data) => _buildNetworkConnectionWidget(context, data)
@@ -248,6 +249,21 @@ class _HomeWidgetState extends State<HomeWidget> {
           } else if (success is RemoveSomeSharedSpaceNodesSuccessViewState) {
             appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
             homeViewModel.cleanSharedSpaceViewState();
+          }
+          return SizedBox.shrink();
+        }));
+  }
+
+  Widget _handleNetworkStateToastMessage(BuildContext context) {
+    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
+        converter: (store) => store.state.networkConnectivityState.viewState,
+        distinct: true,
+        builder: (context, state) => state.fold((failure) {
+          return SizedBox.shrink();
+        }, (success) {
+          if (success is NoInternetConnectionState) {
+            appToast.showErrorToast(AppLocalizations.of(context).can_not_proceed_while_offline);
+            homeViewModel.cleanNetworkConnectivityViewState();
           }
           return SizedBox.shrink();
         }));

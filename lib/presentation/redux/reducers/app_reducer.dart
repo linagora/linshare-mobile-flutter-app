@@ -29,6 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:connectivity/connectivity.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
@@ -38,8 +42,24 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_re
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 
 AppState appStateReducer(AppState state, action) {
+  if (state.networkConnectivityState.connectivityResult == ConnectivityResult.none &&
+      !(action is SetNetworkConnectivityStateAction) &&
+      !(action is CleanNetworkConnectivityStateAction)) {
+    return AppState(
+        uiState: state.uiState,
+        authenticationState: state.authenticationState,
+        uploadFileState: state.uploadFileState,
+        mySpaceState: state.mySpaceState,
+        shareState: state.shareState,
+        sharedSpaceState: state.sharedSpaceState,
+        destinationPickerState: state.destinationPickerState,
+        networkConnectivityState: NetworkConnectivityState(
+            Right(NoInternetConnectionState()),
+            state.networkConnectivityState.connectivityResult));
+  }
   return AppState(
       uiState: uiReducer(state.uiState, action),
       authenticationState: authenticationReducer(state.authenticationState, action),
