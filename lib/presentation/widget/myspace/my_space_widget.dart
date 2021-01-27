@@ -358,28 +358,28 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   List<Widget> _uploadFileMenuActionTiles(BuildContext context) {
     return [
-      _pickPhotoAndVideoAction(),
-      _browseFileAction()
+      _pickPhotoAndVideoAction(context),
+      _browseFileAction(context)
     ];
   }
 
-  Widget _pickPhotoAndVideoAction() {
+  Widget _pickPhotoAndVideoAction(BuildContext context) {
     return SimpleContextMenuActionBuilder(
         Key('pick_photo_and_video_context_menu_action'),
         SvgPicture.asset(imagePath.icPhotoLibrary,
             width: 24, height: 24, fit: BoxFit.fill),
         AppLocalizations.of(context).photos_and_videos)
-        .onActionClick((_) => mySpaceViewModel.openFilePickerByType(FileType.media))
+        .onActionClick((_) => mySpaceViewModel.openFilePickerByType(context, FileType.media))
         .build();
   }
 
-  Widget _browseFileAction() {
+  Widget _browseFileAction(BuildContext context) {
     return SimpleContextMenuActionBuilder(
         Key('browse_file_context_menu_action'),
         SvgPicture.asset(imagePath.icMore,
             width: 24, height: 24, fit: BoxFit.fill),
         AppLocalizations.of(context).browse)
-        .onActionClick((_) => mySpaceViewModel.openFilePickerByType(FileType.any))
+        .onActionClick((_) => mySpaceViewModel.openFilePickerByType(context, FileType.any))
         .build();
   }
 
