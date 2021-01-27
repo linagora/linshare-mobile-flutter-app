@@ -47,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/loading_dialog.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
@@ -213,9 +214,9 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_getAllDocumentAction());
   }
 
-  void openFilePickerByType(FileType fileType) {
+  void openFilePickerByType(BuildContext context, FileType fileType) {
     _appNavigation.popBack();
-    store.dispatch(_pickFileAction(fileType));
+    store.dispatch(_pickFileAction(context, fileType));
   }
 
   void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles, {Widget footerAction}) {
@@ -250,6 +251,16 @@ class MySpaceViewModel extends BaseViewModel {
             .content(downloadMessage)
             .actionText(AppLocalizations.of(context).cancel)
             .build());
+  }
+  
+  void _showPickingFileProgress(BuildContext context, String message) {
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => LoadingDialogBuilder(
+            Key('picking_file_progress_dialog'),
+            message)
+          .build()
+    );
   }
 
   ThunkAction<AppState> _handleContextMenuAction(
@@ -326,11 +337,16 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> _pickFileAction(FileType fileType) {
+  ThunkAction<AppState> _pickFileAction(BuildContext context, FileType fileType) {
     return (Store<AppState> store) async {
-      await _localFilePicker.pickFiles(fileType: fileType).then((result) => result.fold(
-          (failure) => store.dispatch(UploadFileAction(Left(failure))),
-          (success) => store.dispatch(_pickFileSuccessAction(success))));
+      _showPickingFileProgress(context, AppLocalizations.of(context).upload_prepare_text);
+      await _localFilePicker.pickFiles(fileType: fileType)
+         .then((result) {
+           _appNavigation.popBack();
+           result.fold(
+              (failure) => store.dispatch(UploadFileAction(Left(failure))),
+              (success) => store.dispatch(_pickFileSuccessAction(success)));
+         });
     };
   }
 
