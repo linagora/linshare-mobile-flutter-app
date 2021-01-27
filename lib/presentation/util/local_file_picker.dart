@@ -38,7 +38,7 @@ class LocalFilePicker {
   Future<Either<Failure, FilePickerSuccessViewState>> pickFiles({FileType fileType = FileType.any}) async {
     try {
       final filesResult = await FilePicker.platform.pickFiles(type: fileType, allowMultiple: true);
-      if (filesResult != null) {
+      if (filesResult != null && filesResult.files.isNotEmpty) {
         final filesInfoResult = filesResult.files.map((platformFile) {
           return FileInfo(
             _getSingleFileNameWithExtension(platformFile),
