@@ -29,15 +29,20 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/network/model/converter/quota_id_converter.dart';
+import 'package:data/src/network/model/converter/user_id_converter.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'user.g.dart';
+part 'user_response.g.dart';
 
+@QuotaIdConverter()
+@UserIdConverter()
 @JsonSerializable()
-class User {
-  User({
+class UserResponse with EquatableMixin  {
+  UserResponse(
     this.userId,
     this.locale,
     this.externalMailLocale,
@@ -49,27 +54,58 @@ class User {
     this.canCreateGuest,
     this.accountType,
     this.quotaUuid,
-  });
+  );
 
-  @JsonKey(name: Attribute.uuid, fromJson: _uuidFromJson, toJson: _uuidToJson)
-  UserId userId;
+  @JsonKey(name: Attribute.uuid)
+  final UserId userId;
 
-  String locale;
-  String externalMailLocale;
-  String domain;
-  String firstName;
-  String lastName;
-  String mail;
-  bool canUpload;
-  bool canCreateGuest;
-  String accountType;
-  String quotaUuid;
+  final String locale;
+  final String externalMailLocale;
+  final String domain;
+  final String firstName;
+  final String lastName;
+  final String mail;
+  final bool canUpload;
+  final bool canCreateGuest;
+  final AccountType accountType;
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  @JsonKey(name: Attribute.quotaUuid)
+  final QuotaId quotaUuid;
 
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  factory UserResponse.fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserResponseToJson(this);
+
+  @override
+  List<Object> get props => [
+    userId,
+    locale,
+    externalMailLocale,
+    domain,
+    firstName,
+    lastName,
+    mail,
+    canUpload,
+    canCreateGuest,
+    accountType,
+    quotaUuid,
+  ];
 }
 
-String _uuidToJson(UserId userId) => userId.uuid;
-
-UserId _uuidFromJson(dynamic json) => UserId(json.toString());
+extension UserResponseExtension on UserResponse {
+  User toUser() {
+    return User(
+      userId,
+      locale,
+      externalMailLocale,
+      domain,
+      firstName,
+      lastName,
+      mail,
+      canUpload,
+      canCreateGuest,
+      accountType,
+      quotaUuid
+    );
+  }
+}

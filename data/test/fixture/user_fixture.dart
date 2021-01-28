@@ -28,12 +28,24 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class Attribute {
-  static const uuid = 'uuid';
-  static const type = 'type';
-  static const mimeType = 'mimeType';
-  static const workGroup = 'workGroup';
-  static const parent = 'parent';
-  static const quotaUuid = 'quotaUuid';
-}
+import 'package:data/src/network/model/response/user_response.dart';
+import 'package:domain/domain.dart';
+
+final userResponse1 = UserResponse(
+  UserId('uuid'),
+  'locale',
+  'externalMailLocale',
+  'domain',
+  'firstName',
+  'lastName',
+  'mail',
+  true,
+  true,
+  AccountType.INTERNAL,
+  QuotaId('quotaUuid')
+);
+
+
+final user1 = userResponse1.toUser();
