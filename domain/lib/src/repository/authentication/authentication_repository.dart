@@ -35,4 +35,6 @@ abstract class AuthenticationRepository {
   Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password);
 
   Future<bool> deletePermanentToken(Token token);
+
+  Future<User> getAuthorizedUser();
 }

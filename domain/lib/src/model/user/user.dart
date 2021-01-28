@@ -30,40 +30,47 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
+import 'package:equatable/equatable.dart';
 
-class AuthenticationViewState extends ViewState {
-  final Token token;
+class User with EquatableMixin  {
+  User(
+    this.userId,
+    this.locale,
+    this.externalMailLocale,
+    this.domain,
+    this.firstName,
+    this.lastName,
+    this.mail,
+    this.canUpload,
+    this.canCreateGuest,
+    this.accountType,
+    this.quotaUuid,
+  );
 
-  AuthenticationViewState(this.token);
-
-  @override
-  List<Object> get props => [token];
-}
-
-class AuthenticationFailure extends FeatureFailure {
-  final RemoteException authenticationException;
-
-  AuthenticationFailure(this.authenticationException);
-
-  @override
-  List<Object> get props => [authenticationException];
-}
-
-class GetAuthorizedUserViewState extends ViewState {
-  final User user;
-
-  GetAuthorizedUserViewState(this.user);
-
-  @override
-  List<Object> get props => [user];
-}
-
-class GetAuthorizedUserFailure extends FeatureFailure {
-  final RemoteException exception;
-
-  GetAuthorizedUserFailure(this.exception);
+  final UserId userId;
+  final String locale;
+  final String externalMailLocale;
+  final String domain;
+  final String firstName;
+  final String lastName;
+  final String mail;
+  final bool canUpload;
+  final bool canCreateGuest;
+  final AccountType accountType;
+  final QuotaId quotaUuid;
 
   @override
-  List<Object> get props => [exception];
+  List<Object> get props => [
+    userId,
+    locale,
+    externalMailLocale,
+    domain,
+    firstName,
+    lastName,
+    mail,
+    canUpload,
+    canCreateGuest,
+    accountType,
+    quotaUuid,
+  ];
 }
