@@ -43,13 +43,14 @@ import 'package:data/src/network/model/request/permanent_token_body_request.dart
 import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
-import 'package:data/src/network/model/response/user.dart';
+import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:data/src/extensions/list_extension.dart';
 
 import 'model/request/copy_body_request.dart';
+import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
@@ -86,9 +87,9 @@ class LinShareHttpClient {
     return deletedToken != null;
   }
 
-  Future<User> getAuthorizedUser() async {
+  Future<UserResponse> getAuthorizedUser() async {
     final resultJson = await _dioClient.get(Endpoint.authorizedUser.generateEndpointPath());
-    return User.fromJson(resultJson);
+    return UserResponse.fromJson(resultJson);
   }
 
   Future<List<DocumentResponse>> getAllDocument() async {

@@ -46,4 +46,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<bool> deletePermanentToken(Token token) async {
     return authenticationDataSource.deletePermanentToken(token);
   }
+
+  @override
+  Future<User> getAuthorizedUser() async {
+    return authenticationDataSource.getAuthorizedUser();
+  }
 }
