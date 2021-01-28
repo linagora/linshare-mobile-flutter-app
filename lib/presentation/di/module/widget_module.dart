@@ -89,6 +89,7 @@ class WidgetModule {
     getIt.registerFactory(() => HomeViewModel(
       getIt<Store<AppState>>(),
       getIt<AppNavigation>(),
+      getIt<GetAuthorizedInteractor>(),
       getIt<UploadFileManager>(),
       getIt<Connectivity>()
     ));
