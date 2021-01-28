@@ -58,7 +58,7 @@ class InitializeViewModel extends BaseViewModel {
     this._uploadFileManager
   ) : super(store) {
     FlutterDownloader.initialize(debug: kDebugMode);
-    store.dispatch(getCredentialAction());
+    store.dispatch(_getCredentialAction());
     registerReceivingSharingIntent();
   }
 
@@ -72,15 +72,15 @@ class InitializeViewModel extends BaseViewModel {
     });
   }
 
-  ThunkAction<AppState> getCredentialAction() {
+  ThunkAction<AppState> _getCredentialAction() {
     return (Store<AppState> store) async {
       await _getCredentialInteractor.execute().then((result) => result.fold(
-          (left) => store.dispatch(getCredentialFailureAction(left)),
-          (right) => store.dispatch(getCredentialSuccessAction((right)))));
+          (left) => store.dispatch(_getCredentialFailureAction(left)),
+          (right) => store.dispatch(_getCredentialSuccessAction((right)))));
     };
   }
 
-  ThunkAction<AppState> getCredentialSuccessAction(CredentialViewState success) {
+  ThunkAction<AppState> _getCredentialSuccessAction(CredentialViewState success) {
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _retryInterceptors.setPermanentToken(success.token);
@@ -88,7 +88,7 @@ class InitializeViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> getCredentialFailureAction(CredentialFailure failure) {
+  ThunkAction<AppState> _getCredentialFailureAction(CredentialFailure failure) {
     return (Store<AppState> store) async {
       store.dispatch(SetCurrentView(RoutePaths.loginRoute));
       await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);

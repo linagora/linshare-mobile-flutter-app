@@ -32,10 +32,13 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -50,17 +53,41 @@ class HomeViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final UploadFileManager _uploadFileManager;
   final Connectivity _connectivity;
+  final GetAuthorizedInteractor _getAuthorizedInteractor;
   StreamSubscription _uploadFileManagerStreamSubscription;
   StreamSubscription _connectivityStreamSubscription;
 
   HomeViewModel(
       Store<AppState> store,
       this._appNavigation,
+      this._getAuthorizedInteractor,
       this._uploadFileManager,
       this._connectivity
   ) : super(store) {
+    this.store.dispatch(_getAuthorizedUserAction());
     _registerPendingUploadFile();
     _registerNetworkConnectivityState();
+  }
+
+  ThunkAction<AppState> _getAuthorizedUserAction() {
+    return (Store<AppState> store) async {
+      await _getAuthorizedInteractor.execute().then((result) => result.fold(
+        (left) => store.dispatch(_getAuthorizedUserFailureAction(left)),
+        (right) => store.dispatch(_getAuthorizedUserSuccessAction((right)))));
+    };
+  }
+
+  ThunkAction<AppState> _getAuthorizedUserSuccessAction(GetAuthorizedUserViewState success) {
+    return (Store<AppState> store) async {
+      store.dispatch(SetAccountInformationsAction(success.user));
+    };
+  }
+
+  ThunkAction<AppState> _getAuthorizedUserFailureAction(GetAuthorizedUserFailure failure) {
+    return (Store<AppState> store) async {
+      store.dispatch(SetCurrentView(RoutePaths.loginRoute));
+      await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+    };
   }
 
   void _registerPendingUploadFile() {

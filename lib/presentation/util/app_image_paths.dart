@@ -67,6 +67,7 @@ class AppImagePaths {
   String get icMoreVertical => _getImagePath('ic_more_vertical.svg');
   String get icDelete => _getImagePath('ic_delete.svg');
   String get icArrowRight => _getImagePath('ic_arrow_right.svg');
+  String get icSettingsApplications => _getImagePath('ic_settings_applications.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;
