@@ -153,6 +153,7 @@ class AppModule {
     getIt.registerFactory(() => RemoveSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => RemoveMultipleSharedSpaceNodesInteractor(getIt<RemoveSharedSpaceNodeInteractor>()));
     getIt.registerFactory(() => DownloadMultipleFileIOSInteractor(getIt<DownloadFileIOSInteractor>()));
+    getIt.registerFactory(() => GetAuthorizedInteractor(getIt<AuthenticationRepository>()));
   }
 
   void _provideSharePreference() {

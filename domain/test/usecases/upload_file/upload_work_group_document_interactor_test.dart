@@ -34,7 +34,6 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:testshared/testshared.dart';
 
 import '../../fixture/test_fixture.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';

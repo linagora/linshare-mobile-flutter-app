@@ -29,41 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
+class QuotaId {
+  final String uuid;
 
-class AuthenticationViewState extends ViewState {
-  final Token token;
-
-  AuthenticationViewState(this.token);
-
-  @override
-  List<Object> get props => [token];
-}
-
-class AuthenticationFailure extends FeatureFailure {
-  final RemoteException authenticationException;
-
-  AuthenticationFailure(this.authenticationException);
-
-  @override
-  List<Object> get props => [authenticationException];
-}
-
-class GetAuthorizedUserViewState extends ViewState {
-  final User user;
-
-  GetAuthorizedUserViewState(this.user);
-
-  @override
-  List<Object> get props => [user];
-}
-
-class GetAuthorizedUserFailure extends FeatureFailure {
-  final RemoteException exception;
-
-  GetAuthorizedUserFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  QuotaId(this.uuid);
 }
