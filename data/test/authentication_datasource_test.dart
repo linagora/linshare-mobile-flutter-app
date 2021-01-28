@@ -38,6 +38,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'fixture/mock/mock_fixtures.dart';
+import 'fixture/user_fixture.dart';
 
 void main() {
   group('test authentication dataSource', () {
@@ -146,6 +147,23 @@ void main() {
 
       await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')))
         .catchError((error) => expect(error, isA<RequestedTokenNotFound>()));
+    });
+
+    test('getAuthorizedUser should success', () async {
+      when(_linShareHttpClient.getAuthorizedUser())
+        .thenAnswer((_) async => userResponse1);
+
+      var result = await _authenticationDataSource.getAuthorizedUser();
+
+      expect(result, user1);
+    });
+
+    test('getAuthorizedUser should throw NotConnectedUser when linShareHttpClient response is null', () async {
+      when(_linShareHttpClient.getAuthorizedUser())
+        .thenAnswer((_) async => null);
+
+      await _authenticationDataSource.getAuthorizedUser()
+        .catchError((error) => expect(error, isA<NotAuthorizedUser>()));
     });
   });
 }

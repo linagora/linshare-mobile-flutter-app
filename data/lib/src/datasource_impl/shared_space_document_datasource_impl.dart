@@ -104,7 +104,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
           throw NotAuthorized();
         } else {
           throw UnknownError(error.response.statusMessage);
-        };
+        }
       });
     });
   }
