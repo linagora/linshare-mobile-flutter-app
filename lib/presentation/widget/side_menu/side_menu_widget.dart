@@ -36,7 +36,6 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 
 class SideMenuDrawerWidget extends StatelessWidget {
@@ -90,16 +89,11 @@ class SideMenuDrawerWidget extends StatelessWidget {
           Divider(),
           ListTile(
             leading: SvgPicture.asset(
-              imagePath.icExitToApp,
+              imagePath.icSettingsApplications,
               fit: BoxFit.none,
             ),
-            title: Text(AppLocalizations.of(context).logout, style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor)),
-            onTap: () => ConfirmModalSheetBuilder(appNavigation)
-              .key(Key('logout_confirm_modal'))
-              .title(AppLocalizations.of(context).confirm_remove_account_title)
-              .cancelText(AppLocalizations.of(context).cancel)
-              .onConfirmAction(AppLocalizations.of(context).logout, () => sideMenuDrawerViewModel.logout())
-              .show(context),
+            title: Text(AppLocalizations.of(context).account_details, style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor)),
+            onTap: () => sideMenuDrawerViewModel.goToAccountDetails(),
           ),
           Divider()
         ],

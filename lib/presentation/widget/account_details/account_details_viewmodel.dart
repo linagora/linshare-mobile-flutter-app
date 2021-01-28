@@ -35,30 +35,35 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/src/store.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
-class SideMenuDrawerViewModel extends BaseViewModel {
+class AccountDetailsViewModel extends BaseViewModel {
   final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
   final AppNavigation _appNavigation;
 
-  SideMenuDrawerViewModel(
+  AccountDetailsViewModel(
     Store<AppState> store,
-    this._appNavigation,
-    this.deletePermanentTokenInteractor
+    this.deletePermanentTokenInteractor,
+    this._appNavigation
   ) : super(store);
 
-  void goToMySpace() {
-    store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    _appNavigation.popBack();
+  void logout() {
+    store.dispatch(logoutAction());
   }
 
-  void goToSharedSpace() {
-    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-    _appNavigation.popBack();
+  ThunkAction<AppState> logoutAction() {
+    return (Store<AppState> store) async {
+      await deletePermanentTokenInteractor.execute().then(
+        (_) {
+          _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+          store.dispatch(ClearCurrentView());
+        } );
+    };
   }
 
-  void goToAccountDetails() {
-    store.dispatch(SetCurrentView(RoutePaths.account_details));
-    _appNavigation.popBack();
+  @override
+  void onDisposed() {
+    super.onDisposed();
   }
 }
