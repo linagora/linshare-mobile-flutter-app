@@ -29,36 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/src/store.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
+import 'package:redux/redux.dart';
 
-class SideMenuDrawerViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
-
-  SideMenuDrawerViewModel(
-    Store<AppState> store,
-    this._appNavigation,
-    this.deletePermanentTokenInteractor
-  ) : super(store);
-
-  void goToMySpace() {
-    store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    _appNavigation.popBack();
-  }
-
-  void goToSharedSpace() {
-    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-    _appNavigation.popBack();
-  }
-
-  void goToAccountDetails() {
-    store.dispatch(SetCurrentView(RoutePaths.account_details));
-    _appNavigation.popBack();
-  }
-}
+final accountReducer = combineReducers<AccountState>([
+  TypedReducer<AccountState, StartAccountLoadingAction>(
+      (AccountState state, _) => state.startLoadingState()),
+  TypedReducer<AccountState, AccountAction>(
+      (AccountState state, AccountAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<AccountState, CleanAccountStateAction>(
+      (AccountState state, _) => state.clearViewState()),
+  TypedReducer<AccountState, SetAccountInformationsAction>(
+      (AccountState state, SetAccountInformationsAction action) => state.setCurrentUserInfo(action.newUser))
+]);

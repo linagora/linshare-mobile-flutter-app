@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';

@@ -33,6 +33,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
@@ -58,7 +59,8 @@ AppState appStateReducer(AppState state, action) {
         destinationPickerState: state.destinationPickerState,
         networkConnectivityState: NetworkConnectivityState(
             Right(NoInternetConnectionState()),
-            state.networkConnectivityState.connectivityResult));
+            state.networkConnectivityState.connectivityResult),
+        account: state.account);
   }
   return AppState(
       uiState: uiReducer(state.uiState, action),
@@ -68,5 +70,6 @@ AppState appStateReducer(AppState state, action) {
       shareState: shareReducer(state.shareState, action),
       sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),
       destinationPickerState: destinationPickerReducer(state.destinationPickerState, action),
-      networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action));
+      networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action),
+      account: accountReducer(state.account, action));
 }

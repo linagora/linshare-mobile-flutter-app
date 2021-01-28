@@ -542,6 +542,53 @@ class AppLocalizations {
       name: 'choose',
     );
   }
+
+  String get account_details_title {
+    return Intl.message(
+      'Account Details',
+      name: 'account_details_title',
+    );
+  }
+
+  String get account_details {
+    return Intl.message(
+      'Account details',
+      name: 'account_details',
+    );
+  }
+
+  String get first_name {
+    return Intl.message(
+      'First name',
+      name: 'first_name',
+    );
+  }
+
+  String get last_name {
+    return Intl.message(
+      'Last name',
+      name: 'last_name',
+    );
+  }
+
+  String get last_login {
+    return Intl.message(
+      'Last login',
+      name: 'last_login',
+    );
+  }
+
+  String get available_space {
+    return Intl.message(
+      'Available space',
+      name: 'available_space',
+    );
+  }
+
+  String available_space_value(String quota, String usedSpace) =>
+    Intl.message('$usedSpace on $quota',
+        name: 'available_space_value',
+        args: [quota, usedSpace]);
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

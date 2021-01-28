@@ -37,6 +37,8 @@ import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_viewmodel.dart';
@@ -72,6 +74,7 @@ class WidgetModule {
     _provideWorkGroupNodeSurfingComponent();
     _provideCurrentUploadsComponent();
     _provideDestinationPickerComponent();
+    _provideAccountDetailsComponent();
   }
 
   void _provideLoginComponent() {
@@ -173,9 +176,18 @@ class WidgetModule {
   void _provideDestinationPickerComponent() {
     getIt.registerFactory(() => DestinationPickerWidget());
     getIt.registerFactory(() => DestinationPickerViewModel(
-        getIt<Store<AppState>>(),
-        getIt<GetAllSharedSpacesInteractor>(),
-        getIt<AppNavigation>()
+      getIt.get<Store<AppState>>(),
+      getIt.get<GetAllSharedSpacesInteractor>(),
+      getIt.get<AppNavigation>()
+    ));
+  }
+
+  void _provideAccountDetailsComponent() {
+    getIt.registerFactory(() => AccountDetailsWidget());
+    getIt.registerFactory(() => AccountDetailsViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<DeletePermanentTokenInteractor>(),
+      getIt.get<AppNavigation>()
     ));
   }
 }
