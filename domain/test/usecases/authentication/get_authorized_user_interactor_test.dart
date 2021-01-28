@@ -28,42 +28,57 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
 
-class AuthenticationViewState extends ViewState {
-  final Token token;
+import '../../fixture/test_fixture.dart';
+import '../../mock/repository/authentication/mock_authentication_repository.dart';
 
-  AuthenticationViewState(this.token);
+void main() {
 
-  @override
-  List<Object> get props => [token];
-}
+  group('get_authorized_user_interactor_test', () {
+    GetAuthorizedInteractor getAuthorizedInteractor;
+    MockAuthenticationRepository authenticationRepository;
 
-class AuthenticationFailure extends FeatureFailure {
-  final RemoteException authenticationException;
+    setUp(() {
+      authenticationRepository = MockAuthenticationRepository();
+      getAuthorizedInteractor = GetAuthorizedInteractor(authenticationRepository);
+    });
 
-  AuthenticationFailure(this.authenticationException);
+    test('getAuthorizedInteractor should success if user is connected', () async {
+      when(authenticationRepository.getAuthorizedUser())
+        .thenAnswer((_) async => user1);
 
-  @override
-  List<Object> get props => [authenticationException];
-}
+      final result = await getAuthorizedInteractor.execute();
 
-class GetAuthorizedUserViewState extends ViewState {
-  final User user;
+      expect(result, Right<Failure, Success>(GetAuthorizedUserViewState(user1)));
+    });
 
-  GetAuthorizedUserViewState(this.user);
+    test('getAuthorizedInteractor should fail if user is disconnected', () async {
+      when(authenticationRepository.getAuthorizedUser())
+        .thenThrow(NotAuthorizedUser());
 
-  @override
-  List<Object> get props => [user];
-}
+      final result = await getAuthorizedInteractor.execute();
 
-class GetAuthorizedUserFailure extends FeatureFailure {
-  final RemoteException exception;
+      expect(result, Left<Failure, Success>(GetAuthorizedUserFailure(NotAuthorizedUser())));
+    });
 
-  GetAuthorizedUserFailure(this.exception);
+    test('getAuthorizedInteractor should fail with connection error', () async {
+      when(authenticationRepository.getAuthorizedUser())
+          .thenThrow(ConnectError());
+      final result = await getAuthorizedInteractor.execute();
+      expect(result, Left<Failure, Success>(GetAuthorizedUserFailure(ConnectError())));
+    });
 
-  @override
-  List<Object> get props => [exception];
+    test('getAuthorizedInteractor should fail with unknown error', () async {
+      when(authenticationRepository.getAuthorizedUser())
+          .thenThrow(UnknownError('unknown error'));
+      final result = await getAuthorizedInteractor.execute();
+      expect(result, Left<Failure, Success>(GetAuthorizedUserFailure(UnknownError('Unknown Error'))));
+    });
+  });
 }

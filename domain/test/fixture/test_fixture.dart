@@ -31,6 +31,7 @@
 //
 
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/quota/quota_id.dart';
 import 'package:http_parser/http_parser.dart';
 
 const linShareUrl = 'http://linshare.org';
@@ -65,4 +66,18 @@ final document = Document(
   true,
   1,
   MediaType.parse('text/plain'),
+);
+
+final user1 = User(
+  UserId('uuid'),
+  'locale',
+  'externalMailLocale',
+  'domain',
+  'firstName',
+  'lastName',
+  'mail',
+  true,
+  true,
+  AccountType.INTERNAL,
+  QuotaId('quotaUuid')
 );

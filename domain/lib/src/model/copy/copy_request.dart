@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/src/model/copy/space_type.dart';
-import 'package:domain/src/model/document/document_id.dart';
 import 'package:equatable/equatable.dart';
 
 class CopyRequest with EquatableMixin {

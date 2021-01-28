@@ -29,41 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
+import 'package:domain/src/usecases/remote_exception.dart';
 
-class AuthenticationViewState extends ViewState {
-  final Token token;
+abstract class UserException extends RemoteException {
+  static final notAuthorizedUser = 'User is not authorized';
 
-  AuthenticationViewState(this.token);
-
-  @override
-  List<Object> get props => [token];
+  UserException(String message) : super(message);
 }
 
-class AuthenticationFailure extends FeatureFailure {
-  final RemoteException authenticationException;
-
-  AuthenticationFailure(this.authenticationException);
+class NotAuthorizedUser extends UserException {
+  NotAuthorizedUser() : super(UserException.notAuthorizedUser);
 
   @override
-  List<Object> get props => [authenticationException];
-}
-
-class GetAuthorizedUserViewState extends ViewState {
-  final User user;
-
-  GetAuthorizedUserViewState(this.user);
-
-  @override
-  List<Object> get props => [user];
-}
-
-class GetAuthorizedUserFailure extends FeatureFailure {
-  final RemoteException exception;
-
-  GetAuthorizedUserFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  List<Object> get props => [];
 }
