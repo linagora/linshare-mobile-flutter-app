@@ -32,6 +32,7 @@
 import 'package:data/data.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
+import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/util/device_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -77,5 +78,20 @@ class AuthenticationDataSource {
           }
         })
       );
+  }
+
+  Future<User> getAuthorizedUser() async {
+    return Future.sync(() async {
+      var result = (await linShareHttpClient.getAuthorizedUser()).toUser();
+      if (result == null) {
+        throw NotAuthorizedUser();
+      }
+      return result;
+    })
+      .catchError((error) => 
+        _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+          throw UnknownError(error.response.statusMessage);
+        })
+    );
   }
 }
