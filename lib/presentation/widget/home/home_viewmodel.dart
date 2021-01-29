@@ -70,7 +70,7 @@ class HomeViewModel extends BaseViewModel {
         _uploadFileManager.clearPendingFile();
         _appNavigation.push(
           RoutePaths.uploadDocumentRoute,
-          arguments: UploadFileArguments(listFileInfo),
+          arguments: UploadFileArguments(listFileInfo, shareType: ShareType.uploadFromOutside),
         );
       }
     });

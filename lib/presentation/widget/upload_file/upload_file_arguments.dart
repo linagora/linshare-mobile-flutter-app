@@ -49,7 +49,7 @@ class UploadFileArguments {
   }
 }
 
-enum ShareType { quickShare, uploadAndShare, none }
+enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
 
 enum ShareButtonType { justUpload, uploadAndShare, workGroup }
 
