@@ -40,10 +40,12 @@ class UploadFileManager {
   final BehaviorSubject<List<FileInfo>> _pendingListFileInfo = BehaviorSubject.seeded([]);
   BehaviorSubject<List<FileInfo>> get pendingListFileInfo => _pendingListFileInfo;
 
-  void setPendingSingleFile(String filePath) async {
-    final fileInfo = await _filePathUtil.getFileInfoFromFilePath(filePath);
-    _pendingListFileInfo.add([]);
-    _pendingListFileInfo.add([fileInfo]);
+  void setPendingFiles(List<String> filePaths) async {
+    await Future.wait(filePaths.map((element) => _filePathUtil.getFileInfoFromFilePath(element)))
+    .then((result) {
+      _pendingListFileInfo.add([]);
+      _pendingListFileInfo.add(result);
+    });
   }
 
   void clearPendingFile() {
