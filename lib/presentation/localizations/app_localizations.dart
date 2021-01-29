@@ -535,6 +535,13 @@ class AppLocalizations {
       name: 'can_not_proceed_while_offline',
     );
   }
+
+  String get choose {
+    return Intl.message(
+      'choose',
+      name: 'choose',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

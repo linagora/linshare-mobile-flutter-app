@@ -86,12 +86,12 @@ class DestinationPickerRouteData with EquatableMixin {
   DestinationPickerRouteData(this.destinationPickerCurrentView, this.sharedSpaceNodeNested);
 
   factory DestinationPickerRouteData.initial() =>
-      DestinationPickerRouteData(DestinationPickerCurrentView.sharedSpace, null);
+      DestinationPickerRouteData(null, null);
 
   @override
   List<Object> get props => [destinationPickerCurrentView, sharedSpaceNodeNested];
 }
 
 enum DestinationPickerCurrentView {
-  sharedSpace, sharedSpaceInside
+  sharedSpace, sharedSpaceInside, uploadDestination
 }
