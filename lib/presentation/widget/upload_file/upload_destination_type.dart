@@ -30,15 +30,4 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:flutter/material.dart';
-
-import 'destination_picker_action/base_destination_picker_action.dart';
-
-class DestinationPickerArguments {
-  final List<BaseDestinationPickerAction> actionList;
-  final DestinationPickerType destinationPickerType;
-
-  DestinationPickerArguments({@required this.actionList, @required this.destinationPickerType});
-}
-
-enum DestinationPickerType { copy, upload }
+enum UploadDestinationType { mySpace, workGroup }

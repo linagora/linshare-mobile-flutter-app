@@ -41,10 +41,12 @@ import 'package:linshare_flutter_app/presentation/redux/states/destination_picke
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/choose_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_destination_type.dart';
 
 import 'destination_picker_action/negative_destination_picker_action.dart';
 import 'destination_picker_viewmodel.dart';
@@ -68,7 +70,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         _destinationPickerArguments = ModalRoute.of(context).settings.arguments as DestinationPickerArguments;
-        _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.destinationPickerType);
+        _destinationPickerViewModel.setCurrentViewByDestinationPickerType(_destinationPickerArguments.destinationPickerType);
       } catch (exception) {
         print(exception);
       }
@@ -118,15 +120,26 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         backgroundColor: Colors.white,
         leading: StoreConnector<AppState, DestinationPickerState>(
             converter: (store) => store.state.destinationPickerState,
-            builder: (context, state) =>
-                state.routeData.destinationPickerCurrentView ==
-                        DestinationPickerCurrentView.sharedSpace
-                    ? IconButton(
-                        icon: SvgPicture.asset(_imagePath.icClose),
-                        onPressed: () => _destinationPickerViewModel.handleOnSharedSpaceBackPress())
-                    : IconButton(
-                        icon: SvgPicture.asset(_imagePath.icBackBlue),
-                        onPressed: () => _workGroupDetailFilesWidgetKey.currentState.widget.nodeSurfingNavigateBack())),
+            builder: (context, state)  {
+              if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.uploadDestination) {
+                return IconButton(icon: SvgPicture.asset(_imagePath.icClose),
+                    onPressed: () => _destinationPickerViewModel.handleOnSharedSpaceBackPress());
+              } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpace) {
+                if (_destinationPickerArguments.destinationPickerType == DestinationPickerType.upload) {
+                  return IconButton(
+                      icon: SvgPicture.asset(_imagePath.icBackBlue),
+                      onPressed: () => _destinationPickerViewModel.backToUploadDestination());
+                }
+                return IconButton(
+                    icon: SvgPicture.asset(_imagePath.icClose),
+                    onPressed: () => _destinationPickerViewModel.handleOnSharedSpaceBackPress());
+              } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
+                return IconButton(
+                    icon: SvgPicture.asset(_imagePath.icBackBlue),
+                    onPressed: () => _workGroupDetailFilesWidgetKey.currentState.widget.nodeSurfingNavigateBack());
+              }
+              return SizedBox.shrink();
+            }),
       ),
       backgroundColor: Colors.white,
       body: Stack(
@@ -135,17 +148,25 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               bottom: 56.0,
               child: StoreConnector<AppState, DestinationPickerState>(
                   converter: (store) => store.state.destinationPickerState,
-                  builder: (context, state) => state
-                              .routeData.destinationPickerCurrentView ==
-                          DestinationPickerCurrentView.sharedSpace
-                      ? _buildSharedSpacesList(context, state)
-                      : WorkGroupDetailFilesWidget(
-                          _workGroupDetailFilesWidgetKey,
-                          state.routeData.sharedSpaceNodeNested,
-                          () => _destinationPickerViewModel.backToSharedSpace(),
-                          nodeSurfingType: NodeSurfingType.destinationPicker,
-                          currentNodeObservable: _destinationPickerViewModel.currentNodeObservable,
-                        ))),
+                  builder: (context, state) {
+                    if (state.routeData.destinationPickerCurrentView ==
+                        DestinationPickerCurrentView.sharedSpace) {
+                      return _buildSharedSpacesList(context, state);
+                    } else if (state.routeData.destinationPickerCurrentView ==
+                        DestinationPickerCurrentView.uploadDestination) {
+                      return _buildUploadDestinationPickerList();
+                    } else if (state.routeData.destinationPickerCurrentView ==
+                        DestinationPickerCurrentView.sharedSpaceInside) {
+                      return WorkGroupDetailFilesWidget(
+                        _workGroupDetailFilesWidgetKey,
+                        state.routeData.sharedSpaceNodeNested,
+                            () => _destinationPickerViewModel.backToSharedSpace(),
+                        nodeSurfingType: NodeSurfingType.destinationPicker,
+                        currentNodeObservable: _destinationPickerViewModel.currentNodeObservable,
+                      );
+                    }
+                    return SizedBox.shrink();
+                  })),
           StoreConnector<AppState, DestinationPickerState>(
               converter: (store) => store.state.destinationPickerState,
               builder: (context, state) =>
@@ -208,6 +229,38 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
       }
     }
     return listAction;
+  }
+
+  Widget _buildUploadDestinationPickerList() {
+    return ListView.builder(
+      key: Key('shared_spaces_list'),
+      padding: EdgeInsets.zero,
+      itemCount: _destinationPickerViewModel.uploadDestinationTypeList.length,
+      itemBuilder: (context, index) {
+        return _buildUploadDestinationPickerListItem(_destinationPickerViewModel.uploadDestinationTypeList[index]);
+      },
+    );
+  }
+
+  Widget _buildUploadDestinationPickerListItem(UploadDestinationType uploadDestinationType) {
+    return ListTile(
+      leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SvgPicture.asset(uploadDestinationType == UploadDestinationType.mySpace ? _imagePath.icHome : _imagePath.icSharedSpace,
+            width: 20, height: 24, fit: BoxFit.fill)
+      ]),
+      title: Text(
+        uploadDestinationType == UploadDestinationType.mySpace
+            ? AppLocalizations.of(context).my_space_title
+            : AppLocalizations.of(context).current_uploads_shared_space_tab,
+        maxLines: 1,
+        style: TextStyle(
+            fontSize: 14, color: AppColor.documentNameItemTextColor),
+      ),
+      onTap: () => _destinationPickerViewModel.onUploadDestinationPressed(
+          uploadDestinationType,
+          _destinationPickerArguments.actionList.firstWhere(
+              (element) => element is ChooseDestinationPickerAction)),
+    );
   }
 
   Widget _buildSharedSpacesList(

@@ -112,7 +112,7 @@ class WorkGroupNodesSurfingState {
     );
   }
 
-  WorkGroupNodesSurfingState setWorkGroupNodesList(List<WorkGroupNode> workGroupNodes) {
+  WorkGroupNodesSurfingState setWorkGroupNodesList(List<WorkGroupNode> workGroupNodes, {bool showLoading}) {
     final selectedElements = children.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
     return WorkGroupNodesSurfingState(
@@ -123,7 +123,7 @@ class WorkGroupNodesSurfingState {
           else SelectableElement<WorkGroupNode>(workGroupNode, SelectMode.INACTIVE)}.toList(),
       folderNodeType,
       sharedSpaceId: sharedSpaceId,
-      showLoading: showLoading,
+      showLoading: showLoading ?? this.showLoading,
       selectMode: selectMode
     );
   }

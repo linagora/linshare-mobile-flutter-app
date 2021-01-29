@@ -59,6 +59,18 @@ class DestinationPickerBackToSharedSpaceAction extends ActionOnline {
 }
 
 @immutable
+class DestinationPickerGoToSharedSpaceAction extends ActionOnline {
+
+  DestinationPickerGoToSharedSpaceAction();
+}
+
+@immutable
+class DestinationPickerGoToUploadDestinationAction extends ActionOnline {
+
+  DestinationPickerGoToUploadDestinationAction();
+}
+
+@immutable
 class DestinationPickerGetAllSharedSpacesAction extends ActionOnline {
   final List<SharedSpaceNodeNested> sharedSpacesList;
 
