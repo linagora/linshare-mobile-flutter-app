@@ -36,8 +36,10 @@ import 'package:linshare_flutter_app/presentation/redux/actions/destination_pick
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/choose_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_destination_type.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
@@ -46,8 +48,29 @@ class DestinationPickerViewModel extends BaseViewModel {
   final GetAllSharedSpacesInteractor _getAllSharedSpacesInteractor;
   final AppNavigation _appNavigation;
   final BehaviorSubject<WorkGroupNodesSurfingArguments> currentNodeObservable = BehaviorSubject.seeded(null);
+  final uploadDestinationTypeList = [UploadDestinationType.mySpace, UploadDestinationType.workGroup];
 
   DestinationPickerViewModel(Store<AppState> store, this._getAllSharedSpacesInteractor, this._appNavigation) : super(store);
+
+  void setCurrentViewByDestinationPickerType(DestinationPickerType destinationPickerType) {
+    if (destinationPickerType == DestinationPickerType.upload) {
+      store.dispatch(DestinationPickerGoToUploadDestinationAction());
+    } else {
+      store.dispatch(DestinationPickerGoToSharedSpaceAction());
+      getAllSharedSpaces(destinationPickerType);
+    }
+  }
+
+  void onUploadDestinationPressed(UploadDestinationType uploadDestinationType, ChooseDestinationPickerAction action) {
+    if (uploadDestinationType == UploadDestinationType.workGroup) {
+      store.dispatch(DestinationPickerGoToSharedSpaceAction());
+      getAllSharedSpaces(DestinationPickerType.upload);
+    } else if (uploadDestinationType == UploadDestinationType.mySpace) {
+      if (action != null) {
+        action.actionClick(null);
+      }
+    }
+  }
 
   void getAllSharedSpaces(DestinationPickerType destinationPickerType) async {
     store.dispatch(_getAllSharedSpacesAction(destinationPickerType));
@@ -64,6 +87,9 @@ class DestinationPickerViewModel extends BaseViewModel {
                         if (destinationPickerType == DestinationPickerType.copy) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles
                               .contains(element.sharedSpaceRole.name);
+                        } else if (destinationPickerType == DestinationPickerType.upload) {
+                          return SharedSpaceOperationRole.uploadToSharedSpaceRoles
+                              .contains(element.sharedSpaceRole.name);
                         }
                         return true;
                       })
@@ -77,6 +103,10 @@ class DestinationPickerViewModel extends BaseViewModel {
 
   void backToSharedSpace() {
     store.dispatch(DestinationPickerBackToSharedSpaceAction());
+  }
+
+  void backToUploadDestination() {
+    store.dispatch(DestinationPickerGoToUploadDestinationAction());
   }
 
   void handleOnSharedSpaceBackPress() {

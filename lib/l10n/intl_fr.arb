@@ -407,5 +407,10 @@
   "@can_not_proceed_while_offline": {
     "type": "text",
     "placeholders": {}
+  },
+  "choose": "Choisir",
+  "@choose": {
+    "type": "text",
+    "placeholders": {}
   }
 }

@@ -31,14 +31,16 @@
 //
 
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/base_destination_picker_action.dart';
 
-import 'destination_picker_action/base_destination_picker_action.dart';
-
-class DestinationPickerArguments {
-  final List<BaseDestinationPickerAction> actionList;
-  final DestinationPickerType destinationPickerType;
-
-  DestinationPickerArguments({@required this.actionList, @required this.destinationPickerType});
+class ChooseDestinationPickerAction extends BaseDestinationPickerAction {
+  ChooseDestinationPickerAction(BuildContext buildContext, {TextStyle style})
+      : super(Text(AppLocalizations.of(buildContext).choose.toUpperCase(),
+      style: style ??
+          TextStyle(
+              fontSize: 14.0,
+              color: AppColor.destinationPickerBottomActionTextColor)));
 }
-
-enum DestinationPickerType { copy, upload }
