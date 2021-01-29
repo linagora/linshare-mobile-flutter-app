@@ -46,6 +46,8 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'upload_destination_type.dart';
+
 class UploadFileWidget extends StatefulWidget {
   @override
   _UploadFileWidgetState createState() => _UploadFileWidgetState();
@@ -201,14 +203,30 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                 ),
               ),
             ),
-            arguments.shareType == ShareType.none
-                ? _buildWorkGroupUploadDestination(
-                    context,
-                    arguments.workGroupDocumentUploadInfo.isRootNode()
-                        ? arguments.workGroupDocumentUploadInfo.sharedSpaceNodeNested.name
-                        : arguments
-                            .workGroupDocumentUploadInfo.currentNode.name)
-                : _buildShareWidget(context)
+            StreamBuilder<UploadDestinationType>(
+              stream: uploadFileViewModel.uploadDestinationTypeObservable,
+              builder: (_, snapshot) {
+                if (arguments.shareType == ShareType.none) {
+                  return _buildWorkGroupUploadDestination(
+                      context,
+                      arguments.workGroupDocumentUploadInfo.isRootNode()
+                          ? arguments.workGroupDocumentUploadInfo.sharedSpaceNodeNested.name
+                          : arguments.workGroupDocumentUploadInfo.currentNode.name);
+                } else if (arguments.shareType == ShareType.uploadFromOutside) {
+                  return _buildUploadDestinationPicker();
+                }
+                return SizedBox.shrink();
+              },
+            ),
+            StreamBuilder<UploadDestinationType>(
+              stream: uploadFileViewModel.uploadDestinationTypeObservable,
+              builder: (_, snapshot) {
+                if (arguments.shareType != ShareType.none && snapshot.data == UploadDestinationType.mySpace) {
+                  return _buildShareWidget(context);
+                }
+                return SizedBox.shrink();
+              },
+            ),
           ],
         ),
       ),
@@ -239,6 +257,70 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     );
   }
 
+  Widget _buildUploadDestinationPicker() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+      child: GestureDetector(
+        onTap: () => uploadFileViewModel.onPickUploadDestinationPressed(context),
+        child: Column(
+          children: [
+            Align(
+                alignment: AlignmentDirectional.topStart,
+                child: Text(
+                  AppLocalizations.of(context).pick_the_destination,
+                  style: TextStyle(
+                      fontSize: 16.0, color: AppColor.uploadFileFileNameTextColor),
+                )),
+            SizedBox(height: 16.0,),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 1.0, right: 8.0),
+                  child: SvgPicture.asset(
+                      uploadFileViewModel.uploadDestinationTypeObservable.value == UploadDestinationType.mySpace
+                          ? imagePath.icHome
+                          : imagePath.icSharedSpace,
+                      width: 20,
+                      height: 20,
+                      fit: BoxFit.fill),
+                ),
+                Expanded(
+                  child: StreamBuilder<UploadDestinationType>(
+                    stream: uploadFileViewModel.uploadDestinationTypeObservable,
+                    builder: (_, snapshot) {
+                      if (snapshot.data == UploadDestinationType.workGroup) {
+                        return _buildUploadDestinationSelectedName(
+                            uploadFileViewModel.workGroupDocumentUploadInfoArgument.isRootNode()
+                                ? uploadFileViewModel.workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.name
+                                : uploadFileViewModel.workGroupDocumentUploadInfoArgument.currentNode.name);
+                      }
+                      return _buildUploadDestinationSelectedName(AppLocalizations.of(context).my_space_title);
+                    },
+                  ),
+                ),
+                SvgPicture.asset(imagePath.icArrowRight,
+                    width: 18, height: 18, fit: BoxFit.fill)
+              ],
+            ),
+            SizedBox(height: 6.0,),
+            Divider(
+              height: 1.0,
+              color: AppColor.uploadLineDividerWorkGroupDestination,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUploadDestinationSelectedName(String name) {
+    return Text(name,
+      maxLines: 1,
+      style: TextStyle(
+          fontSize: 16.0, color: AppColor.uploadFileFileSizeTextColor),
+    );
+  }
+
   Widget _buildUploadAndShareButton(
     ShareType shareType,
     BehaviorSubject<ShareButtonType> buttonTypeStream,
@@ -254,6 +336,22 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       return Text(
         AppLocalizations.of(context).share,
         style: style,
+      );
+    } else if (shareType == ShareType.uploadFromOutside) {
+      return StreamBuilder<UploadDestinationType>(
+        stream: uploadFileViewModel.uploadDestinationTypeObservable,
+        builder: (_, snapshot) {
+          var buttonText;
+          if (snapshot.data == UploadDestinationType.mySpace) {
+            buttonText = AppLocalizations.of(context).upload_text_button;
+          } else {
+            buttonText = AppLocalizations.of(context).upload_to_workspace;
+          }
+          return Text(
+            buttonText,
+            style: style,
+          );
+        },
       );
     } else {
       return StreamBuilder<ShareButtonType>(
