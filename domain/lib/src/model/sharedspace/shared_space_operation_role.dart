@@ -38,4 +38,10 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.CONTRIBUTOR,
     SharedSpaceRoleName.WRITER
   ];
+
+  static const uploadToSharedSpaceRoles = [
+    SharedSpaceRoleName.ADMIN,
+    SharedSpaceRoleName.CONTRIBUTOR,
+    SharedSpaceRoleName.WRITER
+  ];
 }

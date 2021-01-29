@@ -95,7 +95,8 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
       },
       (success) {
         _stateSubscription.add(currentState.setWorkGroupNodesList(
-          (success as GetChildNodesViewState).workGroupNodes
+          (success as GetChildNodesViewState).workGroupNodes,
+          showLoading: false
         ));
       },
     );
