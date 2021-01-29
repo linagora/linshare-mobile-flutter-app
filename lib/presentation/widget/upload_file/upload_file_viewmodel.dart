@@ -32,18 +32,27 @@
 import 'dart:async';
 
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selected_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/choose_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'upload_destination_type.dart';
 
 class UploadFileViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
@@ -73,6 +82,8 @@ class UploadFileViewModel extends BaseViewModel {
         case ShareType.none:
           _uploadAndShareButtonType.add(ShareButtonType.workGroup);
           break;
+        case ShareType.uploadFromOutside:
+          break;
       }
     });
   }
@@ -84,6 +95,7 @@ class UploadFileViewModel extends BaseViewModel {
 
   List<Document> _documentsArgument;
   WorkGroupDocumentUploadInfo _workGroupDocumentUploadInfoArgument;
+  WorkGroupDocumentUploadInfo get workGroupDocumentUploadInfoArgument => _workGroupDocumentUploadInfoArgument;
 
   final BehaviorSubject<List<AutoCompleteResult>> _autoCompleteResultListObservable = BehaviorSubject.seeded([]);
   StreamView<List<AutoCompleteResult>> get autoCompleteResultListObservable => _autoCompleteResultListObservable;
@@ -93,6 +105,9 @@ class UploadFileViewModel extends BaseViewModel {
 
   final BehaviorSubject<ShareButtonType> _uploadAndShareButtonType = BehaviorSubject.seeded(ShareButtonType.justUpload);
   StreamView<ShareButtonType> get uploadAndShareButtonType => _uploadAndShareButtonType;
+
+  final BehaviorSubject<UploadDestinationType> _uploadDestinationTypeObservable = BehaviorSubject.seeded(UploadDestinationType.mySpace);
+  BehaviorSubject<UploadDestinationType> get uploadDestinationTypeObservable => _uploadDestinationTypeObservable;
 
   void backToMySpace() {
     _appNavigation.popBack();
@@ -133,15 +148,60 @@ class UploadFileViewModel extends BaseViewModel {
         : _convertFilesToPresentationFile(_uploadFilesArgument);
   }
 
+  void onPickUploadDestinationPressed(BuildContext context) {
+    final cancelAction = NegativeDestinationPickerAction(context,
+        label: AppLocalizations.of(context).cancel.toUpperCase());
+    cancelAction.onDestinationPickerActionClick((_) => _appNavigation.popBack());
+
+    final chooseAction = ChooseDestinationPickerAction(context);
+    chooseAction.onDestinationPickerActionClick((data) {
+      _appNavigation.popBack();
+      if (data != null && data is WorkGroupNodesSurfingArguments) {
+        setWorkGroupDocumentUploadInfoArgument(WorkGroupDocumentUploadInfo(
+            data.sharedSpaceNodeNested,
+            data.folder,
+            data.folderType));
+        _uploadDestinationTypeObservable.add(UploadDestinationType.workGroup);
+      } else {
+        _uploadDestinationTypeObservable.add(UploadDestinationType.mySpace);
+      }
+    });
+
+    _appNavigation.push(RoutePaths.destinationPicker,
+        arguments: DestinationPickerArguments(
+            actionList: [chooseAction, cancelAction],
+            destinationPickerType: DestinationPickerType.upload));
+  }
+
   void handleOnUploadAndSharePressed() {
     if (_shareTypeArgument == ShareType.quickShare) {
       _handleQuickShare();
     } else if (_shareTypeArgument == ShareType.uploadAndShare) {
       _handleUploadAndShare();
+    } else if (_shareTypeArgument == ShareType.uploadFromOutside) {
+      _handleUploadForUploadFromOutside();
     } else {
       _handleUploadToSharedSpace();
     }
     _appNavigation.popBack();
+  }
+
+  void _handleUploadForUploadFromOutside() {
+    if (_uploadFilesArgument == null) {
+      return;
+    }
+    if (_uploadDestinationTypeObservable.value == UploadDestinationType.workGroup) {
+      _uploadToSharedSpace(_uploadFilesArgument);
+    } else {
+      if (_autoCompleteResultListObservable.value.isEmpty) {
+        _uploadShareFileManager.justUploadFiles(_uploadFilesArgument);
+      } else {
+        _uploadShareFileManager.uploadFilesThenShare(
+          _uploadFilesArgument,
+          _autoCompleteResultListObservable.value,
+        );
+      }
+    }
   }
 
   void _handleQuickShare() {
@@ -198,15 +258,19 @@ class UploadFileViewModel extends BaseViewModel {
           );
           break;
         case ShareButtonType.workGroup:
-          await _uploadShareFileManager.uploadToSharedSpace(
-              uploadFiles,
-              _workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.sharedSpaceId,
-              parentNodeId: _workGroupDocumentUploadInfoArgument.isRootNode()
-                  ? null
-                  : _workGroupDocumentUploadInfoArgument.currentNode.workGroupNodeId);
+          _uploadToSharedSpace(uploadFiles);
           break;
       }
     };
+  }
+
+  void _uploadToSharedSpace(List<FileInfo> uploadFiles) async {
+    _uploadShareFileManager.uploadToSharedSpace(
+        uploadFiles,
+        _workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.sharedSpaceId,
+        parentNodeId: _workGroupDocumentUploadInfoArgument.isRootNode()
+            ? null
+            : _workGroupDocumentUploadInfoArgument.currentNode.workGroupNodeId);
   }
 
   List<SelectedPresentationFile> _convertDocumentsToPresentationFile(List<Document> documents) {
