@@ -28,64 +28,59 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:data/src/datasource_impl/quota_datasource_impl.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final String nodes = '/nodes';
-  static final ServicePath authentication = ServicePath('/jwt');
+import '../fixture/mock/mock_fixtures.dart';
+import '../fixture/quota_fixture.dart';
+import 'package:data/src/network/model/response/account_quota_response.dart';
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+void main() {
+  group('quota_datasource_impl_test', () {
+    MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    QuotaDataSourceImpl _quotaDataSourceImpl;
 
-  static final ServicePath shares = ServicePath('/shares');
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _quotaDataSourceImpl = QuotaDataSourceImpl(
+        _linShareHttpClient,
+        _remoteExceptionThrower
+      );
+    });
 
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
+    test('findQuota should return success with valid data', () async {
+      when(_linShareHttpClient.findQuota(quotaId1))
+        .thenAnswer((_) async => accountQuotaResponse1);
 
-  static final ServicePath receivedShares = ServicePath('/received_shares');
+      final result = await _quotaDataSourceImpl.findQuota(quotaId1);
+      expect(result, accountQuotaResponse1.toAccountQuota());
+    });
 
-  static final ServicePath autocomplete = ServicePath('/autocomplete');
+    test('findQuota should throw QuotaNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+        type: DioErrorType.RESPONSE,
+        response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.findQuota(quotaId1))
+        .thenThrow(error);
 
-  static final ServicePath quota = ServicePath('/quota');
-}
+      await _quotaDataSourceImpl.findQuota(quotaId1)
+        .catchError((error) => expect(error, isA<QuotaNotFound>()));
+    });
 
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
+    test('findQuota should throw UnknownError when linShareHttpClient throw exception', () async {
+      when(_linShareHttpClient.findQuota(quotaId1))
+        .thenThrow(Exception());
 
-  ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
-    if (queryParameters.isEmpty) {
-      return this;
-    }
-    return ServicePath('${path}?${queryParameters
-        .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
-  }
+      await _quotaDataSourceImpl.findQuota(quotaId1)
+        .catchError((error) => expect(error, isA<UnknownError>()));
+    });
+  });
 }

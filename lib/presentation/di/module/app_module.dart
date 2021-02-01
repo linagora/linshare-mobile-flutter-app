@@ -84,6 +84,9 @@ class AppModule {
     getIt.registerFactory(() => ReceivedShareDataSourceImp(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerLazySingleton(() => QuotaDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -97,6 +100,7 @@ class AppModule {
     getIt.registerFactory<AutoCompleteDataSource>(() => getIt<AutoCompleteDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDocumentDataSource>(() => getIt<SharedSpaceDocumentDataSourceImpl>());
     getIt.registerFactory<FileUploadDataSource>(() => getIt<FileUploadDataSourceImpl>());
+    getIt.registerFactory<QuotaDataSource>(() => getIt<QuotaDataSourceImpl>());
     getIt.registerFactory<ReceivedShareDataSource>(() => getIt<ReceivedShareDataSourceImp>());
   }
 
@@ -108,6 +112,7 @@ class AppModule {
     getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
     getIt.registerFactory(() => AutoCompleteRepositoryImpl(getIt<AutoCompleteDataSource>()));
     getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(getIt<SharedSpaceDocumentDataSource>(), getIt<FileUploadDataSource>()));
+    getIt.registerFactory(() => QuotaRepositoryImpl(getIt<QuotaDataSource>()));
     getIt.registerFactory(() => ReceivedShareRepositoryImp(getIt<ReceivedShareDataSource>()));
   }
 
@@ -119,6 +124,7 @@ class AppModule {
     getIt.registerFactory<AutoCompleteRepository>(() => getIt<AutoCompleteRepositoryImpl>());
     getIt.registerFactory<SharedSpaceRepository>(() => getIt<SharedSpaceRepositoryImpl>());
     getIt.registerFactory<SharedSpaceDocumentRepository>(() => getIt<SharedSpaceDocumentRepositoryImpl>());
+    getIt.registerFactory<QuotaRepository>(() => getIt<QuotaRepositoryImpl>());
     getIt.registerFactory<ReceivedShareRepository>(() => getIt<ReceivedShareRepositoryImp>());
   }
 
@@ -127,6 +133,7 @@ class AppModule {
       getIt<AuthenticationRepository>(),
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
+    getIt.registerFactory(() => GetQuotaInteractor(getIt<QuotaRepository>()));
     getIt.registerFactory(() => GetCredentialInteractor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
     getIt.registerFactory(() => UploadMySpaceDocumentInteractor(
         getIt<DocumentRepository>(),
@@ -193,7 +200,8 @@ class AppModule {
         getIt.get<UploadMySpaceDocumentInteractor>(),
         getIt.get<ShareDocumentInteractor>(),
         getIt.get<UploadWorkGroupDocumentInteractor>(),
-        getIt.get<FileHelper>()));
+        getIt.get<FileHelper>(),
+        getIt.get<GetQuotaInteractor>()));
   }
 
   void _provideFileUploader() {
