@@ -277,7 +277,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                     .text(AppLocalizations.of(context)
                         .common_error_occured_message)
                     .build()
-                : _buildSharedSpacesListView(context, state.sharedSpacesList)),
+                : _buildSharedSpacesListView(context, state)),
         (success) => success is LoadingState
             ? Column(
                 children: [
@@ -293,27 +293,29 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                       )),
                   Expanded(
                       child: _buildSharedSpacesListView(
-                          context, state.sharedSpacesList))
+                          context, state))
                 ],
               )
             : RefreshIndicator(
                 onRefresh: () async =>
                     _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.destinationPickerType),
                 child: _buildSharedSpacesListView(
-                    context, state.sharedSpacesList)));
+                    context, state)));
   }
 
   Widget _buildSharedSpacesListView(
-      BuildContext context, List<SharedSpaceNodeNested> sharedSpacesList) {
-    if (sharedSpacesList.isEmpty) {
-      return _buildNoWorkgroupYet(context);
+      BuildContext context, DestinationPickerState state) {
+    if (state.sharedSpacesList.isEmpty) {
+      return state.viewState.fold(
+              (failure) => _buildNoWorkgroupYet(context),
+              (success) => success is LoadingState ? SizedBox.shrink() : _buildNoWorkgroupYet(context));
     } else {
       return ListView.builder(
         key: Key('shared_spaces_list'),
         padding: EdgeInsets.zero,
-        itemCount: sharedSpacesList.length,
+        itemCount: state.sharedSpacesList.length,
         itemBuilder: (context, index) {
-          return _buildSharedSpaceListItem(context, sharedSpacesList[index]);
+          return _buildSharedSpaceListItem(context, state.sharedSpacesList[index]);
         },
       );
     }
