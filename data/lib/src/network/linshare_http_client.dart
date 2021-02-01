@@ -42,6 +42,7 @@ import 'package:data/src/network/model/autocomplete/user_autocomplete_result_dto
 import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
+import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/user_response.dart';
@@ -225,5 +226,10 @@ class LinShareHttpClient {
     );
 
     return _convertToWorkGroupNodeChild(workGroupNode);
+  }
+
+  Future<AccountQuotaResponse> findQuota(QuotaId quotaUuid) async {
+    final resultJson = await _dioClient.get(Endpoint.quota.withPathParameter(quotaUuid.uuid).generateEndpointPath());
+    return AccountQuotaResponse.fromJson(resultJson);
   }
 }

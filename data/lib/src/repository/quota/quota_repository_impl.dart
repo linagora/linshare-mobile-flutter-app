@@ -27,65 +27,18 @@
 // applicable Additional Terms for LinShare along with this program. If not, see
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+//  the Additional Terms applicable to LinShare software.p
 
-import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:data/src/datasource/quota_datasource.dart';
 import 'package:domain/domain.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final String nodes = '/nodes';
-  static final ServicePath authentication = ServicePath('/jwt');
+class QuotaRepositoryImpl implements QuotaRepository {
+  final QuotaDataSource _documentDataSource;
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+  QuotaRepositoryImpl(this._documentDataSource);
 
-  static final ServicePath shares = ServicePath('/shares');
-
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
-
-  static final ServicePath receivedShares = ServicePath('/received_shares');
-
-  static final ServicePath autocomplete = ServicePath('/autocomplete');
-
-  static final ServicePath quota = ServicePath('/quota');
-}
-
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
-
-  ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
-    if (queryParameters.isEmpty) {
-      return this;
-    }
-    return ServicePath('${path}?${queryParameters
-        .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
+  @override
+  Future<AccountQuota> findQuota(QuotaId quotaUuid) {
+    return _documentDataSource.findQuota(quotaUuid);
   }
 }
