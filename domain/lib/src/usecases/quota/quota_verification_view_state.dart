@@ -28,65 +28,24 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/quota/quota_id.dart';
-import 'package:http_parser/http_parser.dart';
 
-const linShareUrl = 'http://linshare.org';
-const permanentTokenString = 'eyJhbGciOiJSUzUxMiJ9.';
-final token = Token('correct-token', TokenId('e66fdc71-df36-4c55-aaec-aa456bfc7e4a'));
-const tokenUUID = 'e66fdc71-df36-4c55-aaec-aa456bfc7e4a';
+class NotEnoughQuotaMySpaceFailure extends FeatureFailure {
+  final int quota;
 
-final linShareBaseUrl = Uri.parse(linShareUrl);
-final wrongUrl = Uri.parse('http://linsharewrong.org');
-final wrongToken = Token('token', TokenId('uuid'));
-final userName1 = UserName('user1@linshare.org');
-final password1 = Password('qwedsazxc');
-final userName2 = UserName('user2@linshare.org');
-final password2 = Password('qwedsasca');
-final permanentToken = Token(permanentTokenString, TokenId(tokenUUID));
+  NotEnoughQuotaMySpaceFailure(this.quota);
 
-final fileInfo1 = FileInfo('fileName1', 'filePath1', 1000);
-final fileUploadProgress10 = UploadingProgress(UploadTaskId('1'), 10);
-final fileUploadProgress30 = UploadingProgress(UploadTaskId('1'), 30);
-final fileUploadProgress100 = UploadingProgress(UploadTaskId('1'), 100);
+  @override
+  List<Object> get props => [quota];
+}
 
-final document = Document(
-  DocumentId('uuid'),
-  '',
-  DateTime.now(),
-  DateTime.now(),
-  DateTime.now(),
-  false,
-  'fileName1',
-  123456,
-  '',
-  true,
-  1,
-  MediaType.parse('text/plain'),
-);
+class TooBigFilesMySpaceFailure extends FeatureFailure {
+  final List<FileInfo> tooBigFiles;
+  final int maxFileSize;
 
-final user1 = User(
-  UserId('uuid'),
-  'locale',
-  'externalMailLocale',
-  'domain',
-  'firstName',
-  'lastName',
-  'mail',
-  true,
-  true,
-  AccountType.INTERNAL,
-  QuotaId('quotaUuid')
-);
+  TooBigFilesMySpaceFailure(this.tooBigFiles, this.maxFileSize);
 
-final quotaId1 = QuotaId('q1');
-
-final accountQuota1 = AccountQuota(
-  quota: QuotaSize(100),
-  usedSpace: QuotaSize(20),
-  maxFileSize: QuotaSize(30),
-  maintenance: true
-);
+  @override
+  List<Object> get props => [tooBigFiles];
+}
