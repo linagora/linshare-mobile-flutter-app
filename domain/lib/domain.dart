@@ -17,6 +17,8 @@ export 'src/usecases/shared_space/shared_space_view_state.dart';
 export 'src/usecases/autocomplete/autocomplete_view_state.dart';
 export 'src/usecases/get_child_nodes/get_all_child_nodes_view_state.dart';
 export 'src/usecases/received/received_share_view_state.dart';
+export 'src/usecases/quota/quota_view_state.dart';
+export 'src/usecases/quota/quota_verification_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -30,6 +32,8 @@ export 'src/usecases/shared_space/shared_space_exception.dart';
 export 'src/usecases/get_child_nodes/get_chil_nodes_exception.dart';
 export 'src/usecases/copy/copy_exception.dart';
 export 'src/usecases/authentication/user_exception.dart';
+export 'src/usecases/quota/quota_exception.dart';
+export 'src/usecases/quota/quota_verification_exception.dart';
 
 // model
 export 'src/model/authentication/token.dart';
@@ -73,6 +77,8 @@ export 'src/model/copy/copy_request.dart';
 export 'src/model/copy/space_type.dart';
 export 'src/model/user/user.dart';
 export 'src/model/quota/quota_id.dart';
+export 'src/model/quota/account_quota.dart';
+export 'src/model/quota/quota_size.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -95,6 +101,7 @@ export 'src/usecases/shared_space/remove_shared_space_node_interactor.dart';
 export 'src/usecases/shared_space/remove_multiple_shared_space_nodes_interactor.dart';
 export 'src/usecases/download_file/download_multiple_file_ios_interactor.dart';
 export 'src/usecases/authentication/get_authorized_user_interactor.dart';
+export 'src/usecases/quota/get_quota_interactor.dart';
 export 'src/usecases/received/get_all_received_interactor.dart';
 
 // repository
@@ -104,6 +111,7 @@ export 'src/repository/authentication/token_repository.dart';
 export 'src/repository/document/document_repository.dart';
 export 'src/repository/autocomplete/autocomplete_repository.dart';
 export 'src/repository/sharedspacedocument/shared_space_document_repository.dart';
+export 'src/repository/quota/quota_repository.dart';
 export 'src/repository/received/received_share_repository.dart';
 
 // errorcode
