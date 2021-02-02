@@ -34,12 +34,8 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -114,26 +110,6 @@ class HomeViewModel extends BaseViewModel {
     _appNavigation.push(
       RoutePaths.currentUploads,
     );
-  }
-
-  void cleanUploadViewState() {
-    store.dispatch(CleanUploadStateAction());
-  }
-
-  void cleanShareViewState() {
-    store.dispatch(CleanShareStateAction());
-  }
-
-  void cleanMySpaceViewState() {
-    store.dispatch(CleanMySpaceStateAction());
-  }
-
-  void cleanSharedSpaceViewState() {
-    store.dispatch(CleanSharedSpaceStateAction());
-  }
-
-  void cleanNetworkConnectivityViewState() {
-    store.dispatch(CleanNetworkConnectivityStateAction());
   }
 
   @override

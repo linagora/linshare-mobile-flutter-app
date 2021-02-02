@@ -44,6 +44,7 @@ import 'package:linshare_flutter_app/presentation/util/file_path_util.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:redux/redux.dart';
@@ -194,6 +195,7 @@ class AppModule {
 
   void _provideAppToast() {
     getIt.registerLazySingleton(() => AppToast());
+    getIt.registerLazySingleton(() => ToastMessageHandler());
   }
 
   void _provideNetworkStateComponent() {

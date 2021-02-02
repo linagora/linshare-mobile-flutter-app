@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -72,6 +74,7 @@ class MySpaceViewModel extends BaseViewModel {
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
   final RemoveMultipleDocumentsInteractor _removeMultipleDocumentsInteractor;
   final DownloadMultipleFileIOSInteractor _downloadMultipleFileIOSInteractor;
+  StreamSubscription _storeStreamSubscription;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
@@ -81,7 +84,17 @@ class MySpaceViewModel extends BaseViewModel {
       this._copyMultipleFilesToSharedSpaceInteractor,
       this._removeMultipleDocumentsInteractor,
       this._downloadMultipleFileIOSInteractor
-  ) : super(store);
+  ) : super(store) {
+    _storeStreamSubscription = store.onChange.listen((event) {
+      event.mySpaceState.viewState.fold(
+        (failure) => null,
+        (success) {
+          if (success is RemoveDocumentViewState) {
+            getAllDocument();
+          }
+      });
+    });
+  }
 
   void downloadFileClick(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     store.dispatch(_handleDownloadFile(documentIds, itemSelectionType: itemSelectionType));
@@ -387,6 +400,7 @@ class MySpaceViewModel extends BaseViewModel {
   @override
   void onDisposed() {
     cancelSelection();
+    _storeStreamSubscription.cancel();
     super.onDisposed();
   }
 }

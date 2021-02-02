@@ -30,8 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:connectivity/connectivity.dart';
-import 'package:dartz/dartz.dart' as dartz;
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
@@ -43,10 +41,10 @@ import 'package:linshare_flutter_app/presentation/redux/states/network_connectiv
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
-import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
@@ -63,11 +61,18 @@ class _HomeWidgetState extends State<HomeWidget> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final homeViewModel = getIt<HomeViewModel>();
   final imagePath = getIt<AppImagePaths>();
-  final appToast = getIt<AppToast>();
+  final _toastMessageHandler = getIt<ToastMessageHandler>();
+
+  @override
+  void initState() {
+    super.initState();
+    _toastMessageHandler.setup(context);
+  }
 
   @override
   void dispose() {
     homeViewModel.onDisposed();
+    _toastMessageHandler.cancelSubscription();
     super.dispose();
   }
 
@@ -93,11 +98,6 @@ class _HomeWidgetState extends State<HomeWidget> {
       drawer: SideMenuDrawerWidget(),
       body: Column(
         children: [
-          handleUploadToastMessage(context),
-          handleShareDocumentToastMessage(context),
-          _handleMySpaceToastMessage(context),
-          _handleSharedSpaceToastMessage(context),
-          _handleNetworkStateToastMessage(context),
           StoreConnector<AppState, NetworkConnectivityState>(
               converter: (store) => store.state.networkConnectivityState,
               builder: (context, data) => _buildNetworkConnectionWidget(context, data)
@@ -152,126 +152,6 @@ class _HomeWidgetState extends State<HomeWidget> {
       default:
         return getIt<MySpaceWidget>();
     }
-  }
-
-  Widget handleUploadToastMessage(BuildContext context) {
-    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
-        converter: (store) => store.state.uploadFileState.viewState,
-        distinct: true,
-        builder: (context, state) => state.fold((failure) {
-              if (failure is FilePickerFailure
-                  || failure is FileUploadFailure
-                  || failure is WorkGroupDocumentUploadFailure) {
-                appToast.showToast(AppLocalizations.of(context).upload_failure_text);
-              }
-              return SizedBox.shrink();
-            }, (success) {
-              if (success is FileUploadSuccess || success is WorkGroupDocumentUploadSuccess) {
-                appToast.showToast(AppLocalizations.of(context).upload_success_text);
-                homeViewModel.cleanUploadViewState();
-              }
-              return SizedBox.shrink();
-            }));
-  }
-
-  Widget handleShareDocumentToastMessage(BuildContext context) {
-    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
-        converter: (store) => store.state.shareState.viewState,
-        distinct: true,
-        builder: (context, state) => state.fold((failure) {
-          if (failure is ShareDocumentFailure) {
-            appToast.showErrorToast(AppLocalizations.of(context).file_could_not_be_share);
-            homeViewModel.cleanShareViewState();
-          }
-          return SizedBox.shrink();
-        }, (success) {
-          if (success is ShareDocumentViewState) {
-            appToast.showToast(AppLocalizations.of(context).file_is_successfully_shared);
-            homeViewModel.cleanShareViewState();
-          } else if (success is ShareAfterUploadSuccess) {
-            appToast.showToast(_buildSharingMessage(context, success.recipients));
-            homeViewModel.cleanUploadViewState();
-            homeViewModel.cleanShareViewState();
-          }
-          return SizedBox.shrink();
-        }));
-  }
-
-  Widget _handleMySpaceToastMessage(BuildContext context) {
-    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
-        converter: (store) => store.state.mySpaceState.viewState,
-        distinct: true,
-        builder: (context, state) => state.fold((failure) {
-          if (failure is CopyToSharedSpaceFailure || failure is CopyMultipleFilesToSharedSpaceAllFailureViewState) {
-            appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
-            homeViewModel.cleanMySpaceViewState();
-          } else if (failure is RemoveDocumentFailure) {
-            appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
-            homeViewModel.cleanMySpaceViewState();
-          } else if (failure is RemoveMultipleDocumentsAllFailureViewState) {
-            appToast.showErrorToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
-            homeViewModel.cleanMySpaceViewState();
-          }
-          return SizedBox.shrink();
-        }, (success) {
-          if (success is CopyToSharedSpaceViewState || success is CopyMultipleFilesToSharedSpaceAllSuccessViewState) {
-            appToast.showToast(AppLocalizations.of(context).the_file_is_copied_to_a_shared_space);
-            homeViewModel.cleanMySpaceViewState();
-          } else if (success is CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState) {
-            appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_copied_to_shared_space);
-            homeViewModel.cleanMySpaceViewState();
-          } else if (success is RemoveDocumentViewState) {
-            appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
-            homeViewModel.cleanMySpaceViewState();
-          } else if (success is RemoveMultipleDocumentsAllSuccessViewState) {
-            appToast.showToast(AppLocalizations.of(context).some_items_are_successfully_deleted);
-            homeViewModel.cleanMySpaceViewState();
-          }
-          return SizedBox.shrink();
-        }));
-  }
-
-  Widget _handleSharedSpaceToastMessage(BuildContext context) {
-    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
-        converter: (store) => store.state.sharedSpaceState.viewState,
-        distinct: true,
-        builder: (context, state) => state.fold((failure) {
-          if (failure is RemoveSharedSpaceNodeFailure) {
-            appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
-            homeViewModel.cleanSharedSpaceViewState();
-          } else if (failure is RemoveAllSharedSpaceNodesFailureViewState) {
-            appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_deleted);
-            homeViewModel.cleanSharedSpaceViewState();
-          }
-          return SizedBox.shrink();
-        }, (success) {
-          if (success is RemoveSharedSpaceNodeViewState) {
-            appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
-            homeViewModel.cleanSharedSpaceViewState();
-          } else if (success is RemoveAllSharedSpaceNodesSuccessViewState) {
-            appToast.showToast(AppLocalizations.of(context).files_have_been_successfully_deleted);
-            homeViewModel.cleanSharedSpaceViewState();
-          } else if (success is RemoveSomeSharedSpaceNodesSuccessViewState) {
-            appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
-            homeViewModel.cleanSharedSpaceViewState();
-          }
-          return SizedBox.shrink();
-        }));
-  }
-
-  Widget _handleNetworkStateToastMessage(BuildContext context) {
-    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
-        converter: (store) => store.state.networkConnectivityState.viewState,
-        distinct: true,
-        builder: (context, state) => state.fold((failure) {
-          return SizedBox.shrink();
-        }, (success) {
-          if (success is NoInternetConnectionState) {
-            appToast.showErrorToast(AppLocalizations.of(context).can_not_proceed_while_offline);
-            homeViewModel.cleanNetworkConnectivityViewState();
-          }
-          return SizedBox.shrink();
-        }));
   }
 
   Widget handleUploadWidget(BuildContext context, UploadFileState uploadFileState) {
@@ -340,18 +220,5 @@ class _HomeWidgetState extends State<HomeWidget> {
           ));
     }
     return SizedBox.shrink();
-  }
-
-  String _buildSharingMessage(BuildContext context, List<AutoCompleteResult> recipients) {
-    final shareSinglePerson = recipients.length == 1;
-    if (shareSinglePerson) {
-      return AppLocalizations.of(context).sharing_single_after_uploaded_success(
-          recipients.first.getSuggestionDisplayName()
-      );
-    } else {
-      return AppLocalizations.of(context).sharing_multiple_after_uploaded_success(
-          recipients.length
-      );
-    }
   }
 }
