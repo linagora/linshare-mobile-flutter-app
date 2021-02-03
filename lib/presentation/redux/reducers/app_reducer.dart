@@ -32,6 +32,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
@@ -46,30 +47,35 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 
 AppState appStateReducer(AppState state, action) {
-  if (state.networkConnectivityState.connectivityResult == ConnectivityResult.none &&
-      !(action is SetNetworkConnectivityStateAction) &&
-      !(action is CleanNetworkConnectivityStateAction)) {
+  if (canExecuteAction(state, action)) {
     return AppState(
-        uiState: state.uiState,
-        authenticationState: state.authenticationState,
-        uploadFileState: state.uploadFileState,
-        mySpaceState: state.mySpaceState,
-        shareState: state.shareState,
-        sharedSpaceState: state.sharedSpaceState,
-        destinationPickerState: state.destinationPickerState,
-        networkConnectivityState: NetworkConnectivityState(
-            Right(NoInternetConnectionState()),
-            state.networkConnectivityState.connectivityResult),
-        account: state.account);
+        uiState: uiReducer(state.uiState, action),
+        authenticationState: authenticationReducer(state.authenticationState, action),
+        uploadFileState: uploadFileReducer(state.uploadFileState, action),
+        mySpaceState: mySpaceReducer(state.mySpaceState, action),
+        shareState: shareReducer(state.shareState, action),
+        sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),
+        destinationPickerState: destinationPickerReducer(state.destinationPickerState, action),
+        networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action),
+        account: accountReducer(state.account, action));
   }
   return AppState(
-      uiState: uiReducer(state.uiState, action),
-      authenticationState: authenticationReducer(state.authenticationState, action),
-      uploadFileState: uploadFileReducer(state.uploadFileState, action),
-      mySpaceState: mySpaceReducer(state.mySpaceState, action),
-      shareState: shareReducer(state.shareState, action),
-      sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),
-      destinationPickerState: destinationPickerReducer(state.destinationPickerState, action),
-      networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action),
-      account: accountReducer(state.account, action));
+      uiState: state.uiState,
+      authenticationState: state.authenticationState,
+      uploadFileState: state.uploadFileState,
+      mySpaceState: state.mySpaceState,
+      shareState: state.shareState,
+      sharedSpaceState: state.sharedSpaceState,
+      destinationPickerState: state.destinationPickerState,
+      networkConnectivityState: NetworkConnectivityState(
+          Right(NoInternetConnectionState()),
+          state.networkConnectivityState.connectivityResult),
+      account: state.account);
+}
+
+bool canExecuteAction(AppState state, action) {
+  if (!(state.networkConnectivityState.isNetworkConnectionAvailable()) && action is ActionOnline) {
+    return false;
+  }
+  return true;
 }
