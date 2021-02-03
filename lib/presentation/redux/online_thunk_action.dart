@@ -31,23 +31,22 @@
 //
 
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
-import 'app_action.dart';
+class OnlineThunkAction extends CallableThunkAction<AppState> {
+  final Function(Store<AppState>) action;
 
-@immutable
-class SetNetworkConnectivityStateAction extends ActionOffline {
-  final ConnectivityResult connectivityResult;
+  OnlineThunkAction(this.action);
 
-  SetNetworkConnectivityStateAction(this.connectivityResult);
-}
-
-@immutable
-class CleanNetworkConnectivityStateAction extends ActionOffline {
-  CleanNetworkConnectivityStateAction();
-}
-
-@immutable
-class BlockExecuteOnlineActionWhileOffline extends ActionOnline {
-  BlockExecuteOnlineActionWhileOffline();
+  @override
+  dynamic call(Store<AppState> store) {
+    if (store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
+      store.dispatch(BlockExecuteOnlineActionWhileOffline());
+      return;
+    }
+    return action(store);
+  }
 }

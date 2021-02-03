@@ -40,7 +40,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart'
 class StartMySpaceLoadingAction extends ActionOnline {}
 
 @immutable
-class MySpaceAction extends ActionOnline {
+class MySpaceAction extends ActionOffline {
   final Either<Failure, Success> viewState;
 
   MySpaceAction(this.viewState);

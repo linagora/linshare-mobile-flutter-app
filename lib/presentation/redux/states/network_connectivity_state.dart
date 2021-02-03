@@ -44,6 +44,10 @@ class NetworkConnectivityState extends LinShareState with EquatableMixin {
 
   NetworkConnectivityState(Either<Failure, Success> viewState, this.connectivityResult) : super(viewState);
 
+  bool isNetworkConnectionAvailable() {
+    return connectivityResult != ConnectivityResult.none;
+  }
+
   factory NetworkConnectivityState.initial() {
     return NetworkConnectivityState(Right(IdleState()), null);
   }
