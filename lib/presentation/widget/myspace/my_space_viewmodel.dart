@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
@@ -214,13 +215,13 @@ class MySpaceViewModel extends BaseViewModel {
     }).show(context);
   }
 
-  ThunkAction<AppState> _removeDocumentAction(List<DocumentId> documentIds) {
-    return (Store<AppState> store) async {
+  OnlineThunkAction _removeDocumentAction(List<DocumentId> documentIds) {
+    return OnlineThunkAction((Store<AppState> store) async {
       await _removeMultipleDocumentsInteractor.execute(documentIds: documentIds)
           .then((result) => result.fold(
               (failure) => store.dispatch(MySpaceAction(Left(failure))),
               (success) => store.dispatch(MySpaceAction(Right(success)))));
-    };
+    });
   }
 
   void getAllDocument() {
@@ -293,13 +294,13 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> _getAllDocumentAction() {
-    return (Store<AppState> store) async {
+  OnlineThunkAction _getAllDocumentAction() {
+    return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartMySpaceLoadingAction());
       await _getAllDocumentInteractor.execute().then((result) => result.fold(
               (failure) => store.dispatch(MySpaceGetAllDocumentAction(Left(failure))),
               (success) => store.dispatch(MySpaceGetAllDocumentAction(Right(success)))));
-    };
+    });
   }
 
   ThunkAction<AppState> _downloadFileAction(List<DocumentId> documentIds) {
