@@ -13,6 +13,7 @@ import '../../domain/test/fixture/test_fixture.dart';
 import '../../domain/test/mock/repository/authentication/mock_credential_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_document_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_token_repository.dart';
+import '../../domain/test/mock/repository/quota/mock_quota_repository.dart';
 import '../fixtures/test_redux_module.dart';
 
 void main() {
@@ -29,6 +30,8 @@ void main() {
     UploadShareFileManager uploadShareFileManager;
     UploadTaskId uploadTaskId;
     FileHelper fileHelper;
+    QuotaRepository quotaRepository;
+    GetQuotaInteractor getQuotaInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -42,13 +45,16 @@ void main() {
       );
       shareDocumentInteractor = ShareDocumentInteractor(documentRepository);
       fileHelper = FileHelper();
+      quotaRepository = MockQuotaRepository();
+      getQuotaInteractor = GetQuotaInteractor(quotaRepository);
       uploadShareFileManager = UploadShareFileManager(
         getIt.get<Store<AppState>>(),
         Stream.fromIterable([]),
         uploadFileInteractor,
         shareDocumentInteractor,
         uploadWorkGroupDocumentInteractor,
-        fileHelper
+        fileHelper,
+        getQuotaInteractor
       );
     });
 

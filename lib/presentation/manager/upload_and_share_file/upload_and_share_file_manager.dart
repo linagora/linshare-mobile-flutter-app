@@ -38,6 +38,7 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/manager/quota/verify_quota_manager.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_file_state_list.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_model.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
@@ -53,8 +54,10 @@ class UploadShareFileManager {
     this._uploadMySpaceDocumentInteractor,
     this._shareDocumentInteractor,
     this._uploadWorkGroupDocumentInteractor,
-    this._fileHelper
+    this._fileHelper,
+    this._getQuotaInteractor
   ) {
+    _verifyQuotaManager = VerifyQuotaManager(_store, _getQuotaInteractor);
     _handleUploadingFileStream(_uploadingFileStream);
   }
 
@@ -70,7 +73,14 @@ class UploadShareFileManager {
   final UploadWorkGroupDocumentInteractor _uploadWorkGroupDocumentInteractor;
   final FileHelper _fileHelper;
 
+  final GetQuotaInteractor _getQuotaInteractor;
+  VerifyQuotaManager _verifyQuotaManager;
+
   void justUploadFiles(List<FileInfo> uploadFiles) async {
+    if (!await _verifyQuotaManager.hasEnoughQuotaAndMaxFileSize(filesInfos: uploadFiles)) {
+      return;
+    }
+
     uploadFiles.forEach((uploadFile) async {
       await _upload(uploadFile, UploadAndShareAction.upload);
     });
