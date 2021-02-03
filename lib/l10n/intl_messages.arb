@@ -472,5 +472,21 @@
     "placeholders": {
       "dateString": {}
     }
+  },
+  "notEnoughQuota": "You have reached the max quota of {quota}",
+  "@notEnoughQuota": {
+    "type": "text",
+    "placeholders": {
+      "quota": {}
+    }
+  },
+  "tooBigFiles": "{nbFiles,plural, =1{{firstElementName} has exceeded the max file of {quota}}other{Some files have exceeded the max file of {quota}}}",
+  "@tooBigFiles": {
+    "type": "text",
+    "placeholders": {
+      "nbFiles": {},
+      "quota": {},
+      "firstElementName": {}
+    }
   }
 }
