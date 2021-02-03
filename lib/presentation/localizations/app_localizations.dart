@@ -222,7 +222,7 @@ class AppLocalizations {
     return Intl.message('You don\'t have any workgroup yet',
         name: 'do_not_have_any_workgroup');
   }
-  
+
   String get not_have_received_yet {
     return Intl.message('View your received shares',
         name: 'not_have_received_yet');
@@ -613,6 +613,24 @@ class AppLocalizations {
       Intl.message('Created $dateString',
           name: 'item_created_date',
           args: [dateString]);
+
+  String notEnoughQuota(String quota) {
+    return Intl.message(
+      'You have reached the max quota of $quota',
+      name: 'notEnoughQuota',
+      args: [quota],
+    );
+  }
+
+  String tooBigFiles(int nbFiles, String quota, String firstElementName) {
+    return Intl.message(
+      '''${Intl.plural(nbFiles,
+          one: '$firstElementName has exceeded the max file of $quota',
+          other: 'Some files have exceeded the max file of $quota')}''',
+      name: 'tooBigFiles',
+      args: [nbFiles, quota, firstElementName],
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
