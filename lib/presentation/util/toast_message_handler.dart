@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:redux/redux.dart';
+import 'package:filesize/filesize.dart';
 
 import 'package:flutter/material.dart';
 
@@ -103,6 +104,19 @@ class ToastMessageHandler {
           || failure is WorkGroupDocumentUploadFailure) {
         appToast.showToast(AppLocalizations.of(context).upload_failure_text);
       }
+
+      if (failure is TooBigFilesMySpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).tooBigFiles(
+          failure.tooBigFiles.length,
+          filesize(failure.maxFileSize),
+          failure.tooBigFiles.first.fileName
+        ));
+      }
+
+      if (failure is NotEnoughQuotaMySpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).notEnoughQuota(filesize(failure.quota)));
+      }
+      _cleanUploadViewState();
     }, (success) {
       if (success is FileUploadSuccess || success is WorkGroupDocumentUploadSuccess) {
         appToast.showToast(AppLocalizations.of(context).upload_success_text);

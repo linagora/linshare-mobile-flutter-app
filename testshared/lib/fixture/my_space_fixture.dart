@@ -199,3 +199,6 @@ final recipients = [
   MailingListAutoCompleteResult(mailListId.uuid, '', '', '', '', ''),
   SimpleAutoCompleteResult(genericUser.mail, '')
 ];
+
+final fileInfo1 = FileInfo('fileInfo1', 'filePath1', 10);
+final fileInfo2 = FileInfo('fileInfo1', 'filePath1', 20);
