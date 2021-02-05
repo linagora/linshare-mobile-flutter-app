@@ -60,3 +60,9 @@ class GenericUser with EquatableMixin {
   @override
   bool get stringify => true;
 }
+
+extension GenericUserExtension on GenericUser {
+  String fullName() {
+    return '${firstName.getOrElse(() => '')} ${lastName.getOrElse(() => '')}';
+  }
+}

@@ -38,22 +38,28 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/model/document/document.dart';
 import 'package:domain/src/model/share/share_id.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http_parser/http_parser.dart';
 
 class Share extends Equatable {
   final ShareId shareId;
   final String name;
+  final DateTime creationDate;
   final DateTime modificationDate;
   final Document document;
   final String description;
   final GenericUser recipient;
+  final MediaType mediaType;
+  final GenericUser sender;
 
-  Share(this.shareId, this.name, this.modificationDate, this.document, this.description, this.recipient);
+  Share(this.shareId, this.name, this.creationDate, this.modificationDate, this.document, this.description, this.recipient, this.mediaType, this.sender);
 
   @override
   List<Object> get props => [
     shareId,
     name,
+    creationDate,
     modificationDate,
     document,
-    description];
+    description,
+    sender];
 }
