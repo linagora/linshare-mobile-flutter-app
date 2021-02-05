@@ -33,6 +33,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:data/data.dart';
+import 'package:data/src/extensions/list_extension.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/dio_client.dart';
 import 'package:data/src/network/model/autocomplete/mailing_list_autocomplete_result_dto.dart';
@@ -47,7 +48,6 @@ import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:data/src/extensions/list_extension.dart';
 
 import 'model/request/copy_body_request.dart';
 import 'model/response/user_response.dart';
@@ -153,6 +153,17 @@ class LinShareHttpClient {
 
     return nodesJsonResult
         .map((data) => _convertToWorkGroupNodeChild(data))
+        .toList();
+  }
+
+  Future<List<Share>> getReceivedShares() async {
+    final endpointPath = Endpoint.receivedShares.generateEndpointPath();
+
+    final List receivedSharesJson = await _dioClient.get(endpointPath);
+
+    return receivedSharesJson
+        .map((data) => ShareDto.fromJson(data))
+        .map((dto) => dto.toShare())
         .toList();
   }
 
