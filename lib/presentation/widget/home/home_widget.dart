@@ -46,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
@@ -128,6 +129,8 @@ class _HomeWidgetState extends State<HomeWidget> {
         return uiState.selectedSharedSpace.name;
       case RoutePaths.account_details:
         return AppLocalizations.of(context).account_details_title;
+      case RoutePaths.received_shares:
+        return AppLocalizations.of(context).received;
       default:
         return AppLocalizations.of(context).my_space_title;
     }
@@ -149,6 +152,8 @@ class _HomeWidgetState extends State<HomeWidget> {
         );
       case RoutePaths.account_details:
         return getIt<AccountDetailsWidget>();
+      case RoutePaths.received_shares:
+        return getIt<ReceivedShareWidget>();
       default:
         return getIt<MySpaceWidget>();
     }

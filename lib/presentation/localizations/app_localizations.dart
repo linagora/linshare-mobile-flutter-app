@@ -222,6 +222,11 @@ class AppLocalizations {
     return Intl.message('You don\'t have any workgroup yet',
         name: 'do_not_have_any_workgroup');
   }
+  
+  String get not_have_received_yet {
+    return Intl.message('View your received shares',
+        name: 'not_have_received_yet');
+  }
 
   String get unknown_user {
     return Intl.message('Unknown user',
@@ -589,6 +594,25 @@ class AppLocalizations {
     Intl.message('$usedSpace on $quota',
         name: 'available_space_value',
         args: [quota, usedSpace]);
+
+  String get received_shares {
+    return Intl.message(
+      'Received shares',
+      name: 'received_shares',
+    );
+  }
+
+  String get received {
+    return Intl.message(
+      'Received',
+      name: 'received',
+    );
+  }
+
+  String item_created_date(String dateString) =>
+      Intl.message('Created $dateString',
+          name: 'item_created_date',
+          args: [dateString]);
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

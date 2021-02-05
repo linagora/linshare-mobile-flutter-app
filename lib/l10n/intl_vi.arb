@@ -445,5 +445,22 @@
       "quota": {},
       "usedSpace": {}
     }
+  },
+  "received_shares": "Chia sẻ với tôi",
+  "@received_shares": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "received": "Đã nhận",
+  "@received": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "item_created_date": "Ngày tạo {dateString}",
+  "@item_created_date": {
+    "type": "text",
+    "placeholders": {
+      "dateString": {}
+    }
   }
 }

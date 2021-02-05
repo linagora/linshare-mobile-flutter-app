@@ -29,16 +29,15 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/network_connectivity_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/received_shares_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
@@ -55,6 +54,7 @@ AppState appStateReducer(AppState state, action) {
         mySpaceState: mySpaceReducer(state.mySpaceState, action),
         shareState: shareReducer(state.shareState, action),
         sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),
+        receivedShareState: receivedSharesReducer(state.receivedShareState, action),
         destinationPickerState: destinationPickerReducer(state.destinationPickerState, action),
         networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action),
         account: accountReducer(state.account, action));
@@ -66,6 +66,7 @@ AppState appStateReducer(AppState state, action) {
       mySpaceState: state.mySpaceState,
       shareState: state.shareState,
       sharedSpaceState: state.sharedSpaceState,
+      receivedShareState: state.receivedShareState,
       destinationPickerState: state.destinationPickerState,
       networkConnectivityState: NetworkConnectivityState(
           Right(NoInternetConnectionState()),

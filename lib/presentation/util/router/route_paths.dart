@@ -40,4 +40,5 @@ class RoutePaths {
   static const String currentUploads = 'current_uploads';
   static const String destinationPicker = 'destination_picker';
   static const String account_details = 'account_details';
+  static const String received_shares = 'received_shares';
 }
