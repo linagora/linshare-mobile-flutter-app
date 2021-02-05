@@ -81,6 +81,9 @@ class AppModule {
         getIt<RemoteExceptionThrower>()));
     getIt.registerLazySingleton(() => FileUploadDataSourceImpl(
         getIt.get<FlutterUploader>()));
+    getIt.registerFactory(() => ReceivedShareDataSourceImp(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -94,6 +97,7 @@ class AppModule {
     getIt.registerFactory<AutoCompleteDataSource>(() => getIt<AutoCompleteDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDocumentDataSource>(() => getIt<SharedSpaceDocumentDataSourceImpl>());
     getIt.registerFactory<FileUploadDataSource>(() => getIt<FileUploadDataSourceImpl>());
+    getIt.registerFactory<ReceivedShareDataSource>(() => getIt<ReceivedShareDataSourceImp>());
   }
 
   void _provideRepositoryImpl() {
@@ -104,6 +108,7 @@ class AppModule {
     getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
     getIt.registerFactory(() => AutoCompleteRepositoryImpl(getIt<AutoCompleteDataSource>()));
     getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(getIt<SharedSpaceDocumentDataSource>(), getIt<FileUploadDataSource>()));
+    getIt.registerFactory(() => ReceivedShareRepositoryImp(getIt<ReceivedShareDataSource>()));
   }
 
   void _provideRepository() {
@@ -114,6 +119,7 @@ class AppModule {
     getIt.registerFactory<AutoCompleteRepository>(() => getIt<AutoCompleteRepositoryImpl>());
     getIt.registerFactory<SharedSpaceRepository>(() => getIt<SharedSpaceRepositoryImpl>());
     getIt.registerFactory<SharedSpaceDocumentRepository>(() => getIt<SharedSpaceDocumentRepositoryImpl>());
+    getIt.registerFactory<ReceivedShareRepository>(() => getIt<ReceivedShareRepositoryImp>());
   }
 
   void _provideInterActor() {
@@ -155,6 +161,7 @@ class AppModule {
     getIt.registerFactory(() => RemoveMultipleSharedSpaceNodesInteractor(getIt<RemoveSharedSpaceNodeInteractor>()));
     getIt.registerFactory(() => DownloadMultipleFileIOSInteractor(getIt<DownloadFileIOSInteractor>()));
     getIt.registerFactory(() => GetAuthorizedInteractor(getIt<AuthenticationRepository>()));
+    getIt.registerFactory(() => GetAllReceivedInteractor(getIt<ReceivedShareRepository>()));
   }
 
   void _provideSharePreference() {
