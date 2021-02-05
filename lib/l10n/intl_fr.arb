@@ -445,5 +445,22 @@
       "quota": {},
       "usedSpace": {}
     }
+  },
+  "received_shares": "Partages reçus",
+  "@received_shares": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "received": "Reçu",
+  "@received": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "item_created_date": "Créé {dateString}",
+  "@item_created_date": {
+    "type": "text",
+    "placeholders": {
+      "dateString": {}
+    }
   }
 }

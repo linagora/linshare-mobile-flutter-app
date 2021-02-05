@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-28T16:57:57.867046",
+  "@@last_modified": "2021-02-05T16:53:33.532267",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -176,6 +176,11 @@
   },
   "do_not_have_any_workgroup": "You don't have any workgroup yet",
   "@do_not_have_any_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "not_have_received_yet": "View your received shares",
+  "@not_have_received_yet": {
     "type": "text",
     "placeholders": {}
   },
@@ -449,6 +454,23 @@
     "placeholders": {
       "quota": {},
       "usedSpace": {}
+    }
+  },
+  "received_shares": "Received shares",
+  "@received_shares": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "received": "Received",
+  "@received": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "item_created_date": "Created {dateString}",
+  "@item_created_date": {
+    "type": "text",
+    "placeholders": {
+      "dateString": {}
     }
   }
 }

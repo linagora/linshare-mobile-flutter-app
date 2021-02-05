@@ -445,5 +445,22 @@
       "quota": {},
       "usedSpace": {}
     }
+  },
+  "received_shares": "Полученные файлы",
+  "@received_shares": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "received": "Обмен получен",
+  "@received": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "item_created_date": "Создан {dateString}",
+  "@item_created_date": {
+    "type": "text",
+    "placeholders": {
+      "dateString": {}
+    }
   }
 }

@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:core';
+
 import 'package:linshare_flutter_app/presentation/util/app_assets_path.dart';
 
 class AppImagePaths {
@@ -68,6 +69,8 @@ class AppImagePaths {
   String get icDelete => _getImagePath('ic_delete.svg');
   String get icArrowRight => _getImagePath('ic_arrow_right.svg');
   String get icSettingsApplications => _getImagePath('ic_settings_applications.svg');
+  String get icNotReceivedYet => _getImagePath('ic_not_received_yet.svg');
+  String get icReceived => _getImagePath('ic_received.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

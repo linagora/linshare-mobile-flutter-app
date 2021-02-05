@@ -65,6 +65,17 @@ class SideMenuDrawerWidget extends StatelessWidget {
             ))
           ),
           ListTile(
+            key: Key('side_menu_received_share_button'),
+            leading: SvgPicture.asset(
+              imagePath.icReceived,
+              fit: BoxFit.none,
+            ),
+            title: Text(AppLocalizations.of(context).received_shares, style: TextStyle(
+                fontSize: 16,
+                color: AppColor.documentNameItemTextColor)),
+            onTap: () => sideMenuDrawerViewModel.goToReceivedShares(),
+          ),
+          ListTile(
             key: Key('side_menu_my_space_button'),
             leading: SvgPicture.asset(
               imagePath.icHome,
