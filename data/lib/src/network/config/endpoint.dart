@@ -45,6 +45,8 @@ class Endpoint {
 
   static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
 
+  static final ServicePath receivedShares = ServicePath('/received_shares');
+
   static final ServicePath autocomplete = ServicePath('/autocomplete');
 }
 
