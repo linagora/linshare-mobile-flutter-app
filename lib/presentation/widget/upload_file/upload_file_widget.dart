@@ -79,7 +79,9 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     uploadFileViewModel.setUploadFilesArgument(arguments.uploadFiles);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
     uploadFileViewModel.setDocumentsArgument(arguments.documents);
-    uploadFileViewModel.setWorkGroupDocumentUploadInfoArgument(arguments.workGroupDocumentUploadInfo);
+    if (arguments.workGroupDocumentUploadInfo != null) {
+      uploadFileViewModel.setWorkGroupDocumentUploadInfoArgument(arguments.workGroupDocumentUploadInfo);
+    }
 
     return Scaffold(
       appBar: AppBar(
