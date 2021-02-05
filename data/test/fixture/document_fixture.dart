@@ -36,6 +36,7 @@ import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
 import 'package:data/src/network/model/share/share_dto.dart';
 import 'package:data/src/network/model/share/share_id_dto.dart';
 import 'package:testshared/testshared.dart';
+import 'package:http_parser/http_parser.dart';
 
 final shareIdDto1 = ShareIdDto('3e57d240-47a1-4a7e-b1a7-25e29870af33');
 final shareIdDto2 = ShareIdDto('3e57d240-47a1-4a7e-b1a7-25e29870af32');
@@ -46,15 +47,22 @@ final genericUserDto1 = GenericUserDto('user1@linshare.org',
 final shareDto1 = ShareDto(
     shareIdDto1,
     'document 1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138181),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
     documentResponse1,
     'description 1',
-    GenericUserDto('user1@linshare.org'));
+    GenericUserDto('user1@linshare.org'),
+    MediaType.parse('image/png'),
+    GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane'))
+);
 
 final shareDto2 = ShareDto(
     shareIdDto2,
     'document2',
+    DateTime.fromMillisecondsSinceEpoch(1604482138181),
     DateTime.fromMillisecondsSinceEpoch(1604482138182),
     documentResponse2,
     'description 2',
-    GenericUserDto('user2@linshare.org'));
+    GenericUserDto('user2@linshare.org'),
+    MediaType.parse('image/png'),
+    GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')));
