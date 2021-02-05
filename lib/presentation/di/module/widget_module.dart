@@ -51,6 +51,8 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.d
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
@@ -75,6 +77,7 @@ class WidgetModule {
     _provideCurrentUploadsComponent();
     _provideDestinationPickerComponent();
     _provideAccountDetailsComponent();
+    _provideReceivedShareWidgetComponent();
   }
 
   void _provideLoginComponent() {
@@ -188,6 +191,14 @@ class WidgetModule {
       getIt.get<Store<AppState>>(),
       getIt.get<DeletePermanentTokenInteractor>(),
       getIt.get<AppNavigation>()
+    ));
+  }
+
+  void _provideReceivedShareWidgetComponent() {
+    getIt.registerFactory(() => ReceivedShareWidget());
+    getIt.registerFactory(() => ReceivedShareViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<GetAllReceivedInteractor>()
     ));
   }
 }

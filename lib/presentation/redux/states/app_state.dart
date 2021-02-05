@@ -29,16 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:meta/meta.dart';
-import 'package:equatable/equatable.dart';
 
 import 'destination_picker_state.dart';
 
@@ -49,6 +50,7 @@ class AppState with EquatableMixin {
   final MySpaceState mySpaceState;
   final ShareState shareState;
   final SharedSpaceState sharedSpaceState;
+  final ReceivedShareState receivedShareState;
   final DestinationPickerState destinationPickerState;
   final NetworkConnectivityState networkConnectivityState;
   final AccountState account;
@@ -60,6 +62,7 @@ class AppState with EquatableMixin {
       @required this.mySpaceState,
       @required this.shareState,
       @required this.sharedSpaceState,
+      @required this.receivedShareState,
       @required this.destinationPickerState,
       @required this.networkConnectivityState,
       @required this.account});
@@ -72,6 +75,7 @@ class AppState with EquatableMixin {
         mySpaceState: MySpaceState.initial(),
         shareState: ShareState.initial(),
         sharedSpaceState: SharedSpaceState.initial(),
+        receivedShareState: ReceivedShareState.initial(),
         destinationPickerState: DestinationPickerState.initial(),
         networkConnectivityState: NetworkConnectivityState.initial(),
         account: AccountState.initial());
@@ -85,6 +89,7 @@ class AppState with EquatableMixin {
         mySpaceState,
         shareState,
         sharedSpaceState,
+        receivedShareState,
         destinationPickerState,
         networkConnectivityState,
         account
