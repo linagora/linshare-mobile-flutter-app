@@ -50,15 +50,13 @@ class AccountDetailsViewModel extends BaseViewModel {
 
   void logout() {
     store.dispatch(logoutAction());
+    _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+    store.dispatch(ClearCurrentView());
   }
 
   ThunkAction<AppState> logoutAction() {
     return (Store<AppState> store) async {
-      await deletePermanentTokenInteractor.execute().then(
-        (_) {
-          _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
-          store.dispatch(ClearCurrentView());
-        } );
+      await deletePermanentTokenInteractor.execute();
     };
   }
 
