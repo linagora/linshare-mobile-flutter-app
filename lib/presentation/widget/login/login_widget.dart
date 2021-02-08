@@ -39,13 +39,13 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/selectors/authentication_selector.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/text/input_decoration_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/text/login_text_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/text/text_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
-import 'package:redux/redux.dart';
 
 class LoginWidget extends StatefulWidget {
   @override
@@ -64,13 +64,13 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, LoginViewModel>(
-      converter: (Store<AppState> store) => loginViewModel,
-      builder: (BuildContext context, LoginViewModel viewModel) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
-        backgroundColor: AppColor.primaryColor,
-        body: SafeArea(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
+      backgroundColor: AppColor.primaryColor,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
           child: Stack(
             children: [
               Positioned(
@@ -110,80 +110,83 @@ class _LoginWidgetState extends State<LoginWidget> {
                         Padding(
                           padding: EdgeInsets.only(bottom: 24),
                           child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                            converter: (store) => store.state.authenticationState.viewState,
-                            builder: (context, viewState) {
-                              return CenterTextBuilder()
-                                  .key(Key('login_message'))
-                                  .text(_getLoginMessage(viewState))
-                                  .textStyle(_getLoginMessageTextStyle(viewState))
-                                  .build();
-                            }
+                              converter: (store) => store.state.authenticationState.viewState,
+                              builder: (context, viewState) {
+                                return CenterTextBuilder()
+                                    .key(Key('login_message'))
+                                    .text(_getLoginMessage(viewState))
+                                    .textStyle(_getLoginMessageTextStyle(viewState))
+                                    .build();
+                              }
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 40),
-                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                            converter: (store) => store.state.authenticationState.viewState,
-                            builder: (context, viewState) {
-                                return LoginTextBuilder()
-                                    .key(Key('login_url_input'))
-                                    .onChange((value) => viewModel.setUrlText(value))
-                                    .textInputAction(TextInputAction.next)
-                                    .textDecoration(_buildUrlInputDecoration(viewState))
-                                    .build();
-                              }
-                          )
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                                converter: (store) => store.state.authenticationState.viewState,
+                                builder: (context, viewState) {
+                                  return LoginTextBuilder()
+                                      .key(Key('login_url_input'))
+                                      .onChange((value) => loginViewModel.setUrlText(value))
+                                      .textInputAction(TextInputAction.next)
+                                      .textDecoration(_buildUrlInputDecoration(viewState))
+                                      .build();
+                                }
+                            )
                         ),
                         SizedBox(
                           height: 16,
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 40),
-                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                            converter: (store) => store.state.authenticationState.viewState,
-                            builder: (context, viewState) {
-                              return LoginTextBuilder()
-                                  .key(Key('login_email_input'))
-                                  .onChange((value) => viewModel.setEmailText(value))
-                                  .textInputAction(TextInputAction.next)
-                                  .textDecoration(
-                                    _buildCredentialInputDecoration(
-                                      viewState,
-                                      AppLocalizations.of(context).email))
-                                  .build();
-                            }
-                          )
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 40),
-                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                              converter: (store) => store.state.authenticationState.viewState,
-                              builder: (context, viewState) {
-                                return LoginTextBuilder()
-                                    .key(Key('login_password_input'))
-                                    .obscureText(true)
-                                    .onChange((value) => viewModel.setPasswordText(value))
-                                    .textInputAction(TextInputAction.done)
-                                    .textDecoration(
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                                converter: (store) => store.state.authenticationState.viewState,
+                                builder: (context, viewState) {
+                                  return LoginTextBuilder()
+                                      .key(Key('login_email_input'))
+                                      .onChange((value) => loginViewModel.setEmailText(value))
+                                      .textInputAction(TextInputAction.next)
+                                      .textDecoration(
                                       _buildCredentialInputDecoration(
-                                        viewState,
-                                        AppLocalizations.of(context).password))
-                                    .build();
-                              }
-                          )
+                                          viewState,
+                                          AppLocalizations.of(context).email))
+                                      .build();
+                                }
+                            )
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                                converter: (store) => store.state.authenticationState.viewState,
+                                builder: (context, viewState) {
+                                  return LoginTextBuilder()
+                                      .key(Key('login_password_input'))
+                                      .obscureText(true)
+                                      .onChange((value) => loginViewModel.setPasswordText(value))
+                                      .textInputAction(TextInputAction.done)
+                                      .textDecoration(
+                                      _buildCredentialInputDecoration(
+                                          viewState,
+                                          AppLocalizations.of(context).password))
+                                      .build();
+                                }
+                            )
                         ),
                         SizedBox(
                           height: 32,
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 67),
-                          child: viewModel.store.state.authenticationState.isAuthenticationLoading()
-                                ? loadingCircularProgress()
-                                : loginButton(context, loginViewModel),
-                        ),
+                          child: StoreConnector<AppState, AuthenticationState>(
+                              converter: (store) => store.state.authenticationState,
+                              builder: (context, authenticationState) =>
+                                  authenticationState.isAuthenticationLoading()
+                                      ? loadingCircularProgress()
+                                      : loginButton(context)),
+                        )
                       ],
                     ),
                   ),
@@ -227,6 +230,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         (failure) {
           if (_checkUrlError(failure)) {
               return LoginInputDecorationBuilder()
+                  .hintText(AppLocalizations.of(context).https)
                   .enabledBorder(OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(6)),
                       borderSide: BorderSide(
@@ -255,6 +259,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         (failure) {
           if (_checkCredentialError(failure)) {
             return LoginInputDecorationBuilder()
+                .hintText(hintText)
                 .enabledBorder(OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(6)),
                     borderSide: BorderSide(
@@ -283,7 +288,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Widget loginButton(BuildContext context, LoginViewModel loginViewModel) {
+  Widget loginButton(BuildContext context) {
     return SizedBox(
       key: Key('login_confirm_button'),
       width: double.infinity,
@@ -294,7 +299,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           borderRadius: BorderRadius.circular(80),
           side: BorderSide(width: 0, color: AppColor.loginButtonColor),
         ),
-        onPressed: () => loginViewModel.handleLoginPressed(),
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+          loginViewModel.handleLoginPressed();
+        },
         color: AppColor.loginButtonColor,
         textColor: Colors.white,
         child: Text(AppLocalizations.of(context).login_button_login,
