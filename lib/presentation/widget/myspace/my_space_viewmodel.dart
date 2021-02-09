@@ -90,7 +90,9 @@ class MySpaceViewModel extends BaseViewModel {
       event.mySpaceState.viewState.fold(
         (failure) => null,
         (success) {
-          if (success is RemoveDocumentViewState) {
+          if (success is RemoveDocumentViewState ||
+              success is RemoveMultipleDocumentsAllSuccessViewState ||
+              success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
             getAllDocument();
           }
       });

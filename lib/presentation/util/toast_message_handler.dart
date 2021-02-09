@@ -93,6 +93,9 @@ class ToastMessageHandler {
       } else if (success is RemoveMultipleDocumentsAllSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_are_successfully_deleted);
         _cleanMySpaceViewState();
+      } else if (success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+        _cleanMySpaceViewState();
       }
     });
   }
