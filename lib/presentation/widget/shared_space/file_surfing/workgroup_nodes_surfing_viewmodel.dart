@@ -143,21 +143,23 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     if (itemSelectionType == ItemSelectionType.single) {
       _appNavigation.popBack();
     }
-    final deleteTitle = workGroupNodes.length == 1
-      ? AppLocalizations.of(context).are_you_sure_you_want_to_delete_file(workGroupNodes.first.name)
-      : AppLocalizations.of(context).are_you_sure_you_want_to_delete_files(workGroupNodes.length);
 
-    ConfirmModalSheetBuilder(_appNavigation)
-      .key(Key('delete_work_group_node_confirm_modal'))
-      .title(deleteTitle)
-      .cancelText(AppLocalizations.of(context).cancel)
-      .onConfirmAction(AppLocalizations.of(context).delete, () {
+    if (workGroupNodes != null && workGroupNodes.isNotEmpty) {
+      final deleteTitle = AppLocalizations.of(context)
+          .are_you_sure_you_want_to_delete_files(workGroupNodes.length, workGroupNodes.first.name);
+
+      ConfirmModalSheetBuilder(_appNavigation)
+          .key(Key('delete_work_group_node_confirm_modal'))
+          .title(deleteTitle)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .onConfirmAction(AppLocalizations.of(context).delete, () {
         _appNavigation.popBack();
-      if (itemSelectionType == ItemSelectionType.multiple) {
-        cancelSelection();
-      }
-      store.dispatch(_removeWorkGroupNodeAction(workGroupNodes));
-    }).show(context);
+        if (itemSelectionType == ItemSelectionType.multiple) {
+          cancelSelection();
+        }
+        store.dispatch(_removeWorkGroupNodeAction(workGroupNodes));
+      }).show(context);
+    }
   }
 
   ThunkAction<AppState> _removeWorkGroupNodeAction(List<WorkGroupNode> workGroupNodes) {
