@@ -342,18 +342,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_file": "Are you sure you want to delete \"{documentName}\"?",
-  "@are_you_sure_you_want_to_delete_file": {
-    "type": "text",
-    "placeholders": {
-      "documentName": {}
-    }
-  },
-  "are_you_sure_you_want_to_delete_files": "Are you sure you want to delete {documentCount} items?",
+  "are_you_sure_you_want_to_delete_files": "{numberOfFiles,plural, =1{Are you sure you want to delete \"{singleDocumentName}\"?}other{Are you sure you want to delete {numberOfFiles} items?}}",
   "@are_you_sure_you_want_to_delete_files": {
     "type": "text",
     "placeholders": {
-      "documentCount": {}
+      "numberOfFiles": {},
+      "singleDocumentName": {}
     }
   },
   "the_file_has_been_successfully_deleted": "The file has been successfully deleted",

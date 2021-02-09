@@ -198,21 +198,22 @@ class MySpaceViewModel extends BaseViewModel {
       _appNavigation.popBack();
     }
 
-    final deleteTitle = documents.length == 1
-        ? AppLocalizations.of(context).are_you_sure_you_want_to_delete_file(documents.first.name)
-        : AppLocalizations.of(context).are_you_sure_you_want_to_delete_files(documents.length);
+    if (documents != null && documents.isNotEmpty) {
+      final deleteTitle = AppLocalizations.of(context)
+          .are_you_sure_you_want_to_delete_files(documents.length, documents.first.name);
 
-    ConfirmModalSheetBuilder(_appNavigation)
-        .key(Key('delete_document_confirm_modal'))
-        .title(deleteTitle)
-        .cancelText(AppLocalizations.of(context).cancel)
-        .onConfirmAction(AppLocalizations.of(context).delete, () {
-          _appNavigation.popBack();
-          if (itemSelectionType == ItemSelectionType.multiple) {
-            cancelSelection();
-          }
-          store.dispatch(_removeDocumentAction(documents.map((document) => document.documentId).toList()));
-    }).show(context);
+      ConfirmModalSheetBuilder(_appNavigation)
+          .key(Key('delete_document_confirm_modal'))
+          .title(deleteTitle)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .onConfirmAction(AppLocalizations.of(context).delete, () {
+        _appNavigation.popBack();
+        if (itemSelectionType == ItemSelectionType.multiple) {
+          cancelSelection();
+        }
+        store.dispatch(_removeDocumentAction(documents.map((document) => document.documentId).toList()));
+      }).show(context);
+    }
   }
 
   OnlineThunkAction _removeDocumentAction(List<DocumentId> documentIds) {
