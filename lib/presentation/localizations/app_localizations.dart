@@ -452,19 +452,13 @@ class AppLocalizations {
     );
   }
 
-  String are_you_sure_you_want_to_delete_file(String documentName) {
+  String are_you_sure_you_want_to_delete_files(int numberOfFiles, String singleDocumentName) {
     return Intl.message(
-      'Are you sure you want to delete "$documentName"?',
-      name: 'are_you_sure_you_want_to_delete_file',
-      args: [documentName],
-    );
-  }
-
-  String are_you_sure_you_want_to_delete_files(int documentCount) {
-    return Intl.message(
-      'Are you sure you want to delete $documentCount items?',
+      '''${Intl.plural(numberOfFiles,
+          one: 'Are you sure you want to delete \"$singleDocumentName\"?',
+          other: 'Are you sure you want to delete $numberOfFiles items?')}''',
       name: 'are_you_sure_you_want_to_delete_files',
-      args: [documentCount],
+      args: [numberOfFiles, singleDocumentName],
     );
   }
 
