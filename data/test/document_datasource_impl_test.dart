@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/data.dart';
+import 'package:data/src/network/model/request/copy_body_request.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -261,6 +262,28 @@ void removeDocumentTest() {
           .thenThrow(error);
 
       await _documentDataSourceImpl.remove(document1.documentId)
+          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+    });
+
+    test('copy to my space should return success with valid data', () async {
+      final copyRequest = CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid);
+      when(_linShareHttpClient.copyToMySpace(copyRequest.toCopyBodyRequest()))
+          .thenAnswer((_) async => [documentResponse1]);
+
+      final result = await _documentDataSourceImpl.copyToMySpace(copyRequest);
+      expect(result, [document1]);
+    });
+
+    test('copy to my sapce throw no document found when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+      final copyRequest = CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid);
+      when(_linShareHttpClient.copyToMySpace(copyRequest.toCopyBodyRequest()))
+          .thenThrow(error);
+
+      await _documentDataSourceImpl.copyToMySpace(copyRequest)
           .catchError((error) => expect(error, isA<DocumentNotFound>()));
     });
   });

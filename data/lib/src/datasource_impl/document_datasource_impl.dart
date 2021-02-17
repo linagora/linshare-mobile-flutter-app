@@ -48,12 +48,14 @@ import 'package:domain/domain.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:data/src/network/model/request/copy_body_request.dart';
 
 class DocumentDataSourceImpl implements DocumentDataSource {
   final LinShareHttpClient _linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
 
   DocumentDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
+
   @override
   Future<List<Document>> getAll() async {
     return Future.sync(() async {
@@ -187,6 +189,24 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response.statusCode == 404) {
           throw DocumentNotFound();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<List<Document>> copyToMySpace(CopyRequest copyRequest) async {
+    return Future.sync(() async {
+      final documentsResponse = await _linShareHttpClient.copyToMySpace(copyRequest.toCopyBodyRequest());
+      return documentsResponse.map((response) => response.toDocument()).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw DocumentNotFound();
+        } if (error.response.statusCode == 403) {
+          throw NotAuthorized();
         } else {
           throw UnknownError(error.response.statusMessage);
         }

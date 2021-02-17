@@ -77,4 +77,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
   Future<Document> remove(DocumentId documentId) {
     return _documentDataSource.remove(documentId);
   }
+
+  @override
+  Future<List<Document>> copyToMySpace(CopyRequest copyRequest) {
+    return _documentDataSource.copyToMySpace(copyRequest);
+  }
 }
