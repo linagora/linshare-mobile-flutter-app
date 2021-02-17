@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,33 +28,31 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:core';
-
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
+import 'package:flutter/material.dart';
 
-abstract class DocumentRepository {
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+class CopyMultipleToMySpaceInteractor {
+  final CopyToMySpaceInteractor _copyToMySpaceInteractor;
 
-  Future<List<Document>> getAll();
+  CopyMultipleToMySpaceInteractor(this._copyToMySpaceInteractor);
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
+  Future<Either<Failure, Success>> execute({@required List<CopyRequest> copyRequests}) async {
+    final listResult = await Future.wait(copyRequests.map((element) =>
+        _copyToMySpaceInteractor.execute(element)));
+    if (listResult.length == 1) {
+      return listResult.first;
+    } else {
+      var failedFileCount = listResult.whereType<Left>().length;
 
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
-
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<Document> remove(DocumentId documentId);
-
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
+      if (failedFileCount == 0) {
+        return Right(CopyMultipleToMySpaceAllSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(CopyMultipleToMySpaceAllFailureViewState(listResult));
+      }
+      return Right(CopyMultipleToMySpaceHasSomeFilesFailedViewState(listResult));
+    }
+  }
 }
