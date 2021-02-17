@@ -625,6 +625,27 @@ class AppLocalizations {
       args: [nbFiles, quota, firstElementName],
     );
   }
+
+  String get copy_to_my_space {
+    return Intl.message(
+      'Copy to My Space',
+      name: 'copy_to_my_space',
+    );
+  }
+
+  String get the_file_has_been_copied_successfully {
+    return Intl.message(
+      'The file has been copied successfully',
+      name: 'the_file_has_been_copied_successfully',
+    );
+  }
+
+  String get the_file_could_not_be_copied {
+    return Intl.message(
+      'The file could not be copied',
+      name: 'the_file_could_not_be_copied',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

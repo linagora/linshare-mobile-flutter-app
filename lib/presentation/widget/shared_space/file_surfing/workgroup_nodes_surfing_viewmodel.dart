@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/model/file/work_group_document
 import 'package:linshare_flutter_app/presentation/model/file/work_group_folder_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -57,11 +58,13 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     Store<AppState> store,
     this._appNavigation,
     this._getAllChildNodesInteractor,
-    this._removeMultipleSharedSpaceNodesInteractor
+    this._removeMultipleSharedSpaceNodesInteractor,
+    this._copyMultipleToMySpaceInteractor
   ) : super(store);
 
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
+  final CopyMultipleToMySpaceInteractor _copyMultipleToMySpaceInteractor;
   final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
@@ -188,5 +191,20 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   void selectItem(SelectableElement<WorkGroupNode> selectedWorkGroupNode) {
     _stateSubscription.add(currentState.selectWorkGroupNode(selectedWorkGroupNode));
     store.dispatch(DisableUploadButtonAction());
+  }
+
+  void copyToMySpace(List<WorkGroupNode> workGroupNodes) {
+    _appNavigation.popBack();
+    store.dispatch(_copyToMySpaceAction(workGroupNodes));
+  }
+
+  OnlineThunkAction _copyToMySpaceAction(List<WorkGroupNode> workGroupNodes) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _copyMultipleToMySpaceInteractor.execute(copyRequests: workGroupNodes.map((wkNode) =>
+        CopyRequest(wkNode.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: wkNode.sharedSpaceId.uuid)).toList())
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+          (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+    });
   }
 }
