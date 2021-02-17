@@ -232,4 +232,18 @@ class LinShareHttpClient {
     final resultJson = await _dioClient.get(Endpoint.quota.withPathParameter(quotaUuid.uuid).generateEndpointPath());
     return AccountQuotaResponse.fromJson(resultJson);
   }
+
+  Future<List<DocumentResponse>> copyToMySpace(
+    CopyBodyRequest copyRequest) async {
+      final copyEndpointPath = Endpoint.documents
+        .withPathParameter('copy')
+        .generateEndpointPath();
+
+        final List resultJson = await _dioClient.post(
+          copyEndpointPath,
+          data: copyRequest.toJson().toString(),
+        );
+
+        return resultJson.map((data) => DocumentResponse.fromJson(data)).toList();
+    }
 }
