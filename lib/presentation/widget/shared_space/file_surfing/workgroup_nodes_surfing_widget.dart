@@ -349,7 +349,9 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   }
 
   List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument) {
-    return [];
+    return [
+      _copyToMySpaceAction(context, workGroupDocument)
+    ];
   }
 
   Widget _removeDocumentAction(WorkGroupDocument workGroupDocument) {
@@ -407,13 +409,13 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       .build();
   }
 
-  List<Widget> _multipleSelectionActions(List<WorkGroupNode> worKGroupNodes) {
+  List<Widget> _multipleSelectionActions(List<WorkGroupNode> workGroupNodes) {
     return [
-      _removeMultipleSelection(worKGroupNodes),
+      _removeMultipleSelection(workGroupNodes),
     ];
   }
 
-  Widget _removeMultipleSelection(List<WorkGroupNode> worKGroupNodes) {
+  Widget _removeMultipleSelection(List<WorkGroupNode> workGroupNodes) {
     return WorkGroupNodeMultipleSelectionActionBuilder(
       Key('multiple_selection_remove_action'),
       SvgPicture.asset(
@@ -422,8 +424,19 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         height: 24,
         fit: BoxFit.fill,
       ),
-      worKGroupNodes)
+      workGroupNodes)
       .onActionClick((documents) => _model.removeWorkGroupNode(context, documents, itemSelectionType: ItemSelectionType.multiple))
+      .build();
+  }
+
+  Widget _copyToMySpaceAction(BuildContext context, WorkGroupNode workGroupNode) {
+    return WorkGroupDocumentContextMenuTileBuilder(
+      Key('copy_in_my_space_context_menu_action'),
+      SvgPicture.asset(imagePath.icCopy,
+          width: 24, height: 24, fit: BoxFit.fill),
+      AppLocalizations.of(context).copy_to_my_space,
+      workGroupNode)
+      .onActionClick((data) => _model.copyToMySpace([workGroupNode]))
       .build();
   }
 }
