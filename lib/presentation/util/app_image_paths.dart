@@ -71,6 +71,7 @@ class AppImagePaths {
   String get icSettingsApplications => _getImagePath('ic_settings_applications.svg');
   String get icNotReceivedYet => _getImagePath('ic_not_received_yet.svg');
   String get icReceived => _getImagePath('ic_received.svg');
+  String get icSearchBlue => _getImagePath('ic_search_blue.svg');
   String get icCopy => _getImagePath('ic_copy.svg');
 
   String _getImagePath(String imageName) {
