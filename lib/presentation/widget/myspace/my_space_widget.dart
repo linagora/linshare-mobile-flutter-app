@@ -54,6 +54,7 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/document_con
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/document_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:redux/redux.dart';
 
@@ -160,6 +161,16 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                     })
                 ],
               ),
+          bottomNavigationBar: StoreConnector<AppState, SelectMode>(
+                  converter: (store) => store.state.mySpaceState.selectMode,
+                  builder: (context, selectMode) {
+                    return selectMode == SelectMode.INACTIVE
+                        ? SearchBottomBarBuilder()
+                            .key(Key('search_bottom_bar'))
+                            .onSearchActionClick(() {})
+                            .build()
+                        : SizedBox.shrink();
+                  }),
               floatingActionButton: StoreConnector<AppState, SelectMode>(
                 converter: (store) => store.state.mySpaceState.selectMode,
                 builder: (context, selectMode) {
@@ -175,8 +186,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                     ),
                   ) : SizedBox.shrink();
                 }),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
             ),
         converter: (Store<AppState> store) => mySpaceViewModel);
   }
