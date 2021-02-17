@@ -456,5 +456,36 @@
     "placeholders": {
       "dateString": {}
     }
+  },
+  "notEnoughQuota": "You have reached the max quota of {quota}",
+  "@notEnoughQuota": {
+    "type": "text",
+    "placeholders": {
+      "quota": {}
+    }
+  },
+  "tooBigFiles": "{nbFiles,plural, =1{{firstElementName} has exceeded the max file of {quota}}other{Some files have exceeded the max file of {quota}}}",
+  "@tooBigFiles": {
+    "type": "text",
+    "placeholders": {
+      "nbFiles": {},
+      "quota": {},
+      "firstElementName": {}
+    }
+  },
+  "copy_to_my_space": "Copy to My Space",
+  "@copy_to_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_has_been_copied_successfully": "The file has been copied successfully",
+  "@the_file_has_been_copied_successfully": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_could_not_be_copied": "The file could not be copied",
+  "@the_file_could_not_be_copied": {
+    "type": "text",
+    "placeholders": {}
   }
 }
