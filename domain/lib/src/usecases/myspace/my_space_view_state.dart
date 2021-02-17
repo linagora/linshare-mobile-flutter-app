@@ -171,3 +171,48 @@ class RemoveMultipleDocumentsAllFailureViewState extends FeatureFailure {
   @override
   List<Object> get props => [resultList];
 }
+
+class CopyToMySpaceViewState extends ViewState {
+  final List<Document> documentsList;
+
+  CopyToMySpaceViewState(this.documentsList);
+
+  @override
+  List<Object> get props => [documentsList];
+}
+
+class CopyToMySpaceFailure extends FeatureFailure {
+  final Exception exception;
+
+  CopyToMySpaceFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class CopyMultipleToMySpaceAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class CopyMultipleToMySpaceHasSomeFilesFailedViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceHasSomeFilesFailedViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class CopyMultipleToMySpaceAllFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceAllFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}

@@ -28,33 +28,48 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:core';
-
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-abstract class DocumentRepository {
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+import '../../mock/repository/authentication/mock_document_repository.dart';
 
-  Future<List<Document>> getAll();
+void main() {
+  group('copy_to_my_space_interactor tests', () {
+    MockDocumentRepository documentRepository;
+    CopyToMySpaceInteractor copyToMySpaceInteractor;
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
+    setUp(() {
+      documentRepository = MockDocumentRepository();
+      copyToMySpaceInteractor = CopyToMySpaceInteractor(documentRepository);
+    });
 
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
+    test('copy to my space interactor should return success with valid data', () async {
+      when(documentRepository.copyToMySpace(
+          CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
+      .thenAnswer((_) async => [document1]);
 
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+      final result = await copyToMySpaceInteractor.execute(
+        CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid));
+      final documentsList = result
+          .map((success) => (success as CopyToMySpaceViewState).documentsList)
+          .getOrElse(() => []);
+      expect(documentsList, [document1]);
+    });
 
-  Future<Document> remove(DocumentId documentId);
+    test('copy to my space interactor should fail success with invalid data', () async {
+      final exception = DocumentNotFound();
+      when(documentRepository.copyToMySpace(
+          CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
+      .thenThrow(exception);
 
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
+      final result = await copyToMySpaceInteractor.execute(
+        CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid));
+      expect(result, Left<Failure, Success>(CopyToMySpaceFailure(exception)));
+    });
+  });
 }
