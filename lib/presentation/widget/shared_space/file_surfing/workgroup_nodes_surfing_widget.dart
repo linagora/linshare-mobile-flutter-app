@@ -112,7 +112,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
                 },
               ),
             )),
-            snapshot.data?.selectMode == SelectMode.ACTIVE && snapshot.data.getAllSelectedDocuments().isNotEmpty ? _buildMultipleSelectionBottomBar(snapshot.data.getAllSelectedDocuments()) : SizedBox.shrink()
+            snapshot.data?.selectMode == SelectMode.ACTIVE && snapshot.data.getAllSelectedDocuments().isNotEmpty ? _buildMultipleSelectionBottomBar(context, snapshot.data.getAllSelectedDocuments()) : SizedBox.shrink()
           ],
         );
       },
@@ -350,7 +350,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
 
   List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument) {
     return [
-      _copyToMySpaceAction(context, workGroupDocument)
+      _copyToMySpaceAction(context, [workGroupDocument])
     ];
   }
 
@@ -398,24 +398,25 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
     );
   }
 
-  Widget _buildMultipleSelectionBottomBar(List<WorkGroupNode> allSelectedWorkGroupNodes) {
+  Widget _buildMultipleSelectionBottomBar(BuildContext context, List<WorkGroupNode> allSelectedWorkGroupNodes) {
     return MultipleSelectionBarBuilder()
       .key(Key('multiple_document_selection_bar'))
       .text(
         AppLocalizations
           .of(context)
           .items(allSelectedWorkGroupNodes.length))
-      .actions(_multipleSelectionActions(allSelectedWorkGroupNodes))
+      .actions(_multipleSelectionActions(context, allSelectedWorkGroupNodes))
       .build();
   }
 
-  List<Widget> _multipleSelectionActions(List<WorkGroupNode> workGroupNodes) {
+  List<Widget> _multipleSelectionActions(BuildContext context, List<WorkGroupNode> workGroupNodes) {
     return [
       _removeMultipleSelection(workGroupNodes),
+      _moreActionMultipleSelection(context, workGroupNodes)
     ];
   }
 
-  Widget _removeMultipleSelection(List<WorkGroupNode> workGroupNodes) {
+  IconButton _removeMultipleSelection(List<WorkGroupNode> workGroupNodes) {
     return WorkGroupNodeMultipleSelectionActionBuilder(
       Key('multiple_selection_remove_action'),
       SvgPicture.asset(
@@ -429,14 +430,37 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       .build();
   }
 
-  Widget _copyToMySpaceAction(BuildContext context, WorkGroupNode workGroupNode) {
-    return WorkGroupDocumentContextMenuTileBuilder(
-      Key('copy_in_my_space_context_menu_action'),
-      SvgPicture.asset(imagePath.icCopy,
-          width: 24, height: 24, fit: BoxFit.fill),
-      AppLocalizations.of(context).copy_to_my_space,
-      workGroupNode)
-      .onActionClick((data) => _model.copyToMySpace([workGroupNode]))
-      .build();
+  Widget _copyToMySpaceAction(BuildContext context, List<WorkGroupNode> workGroupNodes) {
+    return workGroupNodes.any((element) => element is WorkGroupFolder) ?
+      SizedBox.shrink() :
+      WorkGroupDocumentContextMenuTileBuilder(
+        Key('copy_in_my_space_context_menu_action'),
+        SvgPicture.asset(imagePath.icCopy,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).copy_to_my_space,
+        workGroupNodes.first)
+        .onActionClick((data) => _model.copyToMySpace(workGroupNodes))
+        .build();
+  }
+
+  Widget _moreActionMultipleSelection(BuildContext context, List<WorkGroupNode> workGroupNodes) {
+    return WorkGroupNodeMultipleSelectionActionBuilder(
+        Key('multiple_selection_more_action'),
+        SvgPicture.asset(
+          imagePath.icMoreVertical,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+        ),
+        workGroupNodes)
+        .onActionClick((documents) => _model.openMoreActionBottomMenu(
+            context, workGroupNodes, _moreActionList(context, documents)))
+        .build();
+  }
+
+  List<Widget> _moreActionList(BuildContext context, List<WorkGroupNode> workGroupNodes) {
+    return [
+      _copyToMySpaceAction(context, workGroupNodes),
+    ];
   }
 }
