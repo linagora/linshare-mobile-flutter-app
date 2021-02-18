@@ -35,6 +35,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_folder_presentation_file.dart';
@@ -45,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
@@ -64,7 +66,7 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
 
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
-  final CopyMultipleToMySpaceInteractor _copyMultipleToMySpaceInteractor;
+  final CopyMultipleFilesToMySpaceInteractor _copyMultipleToMySpaceInteractor;
   final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
@@ -200,11 +202,27 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
 
   OnlineThunkAction _copyToMySpaceAction(List<WorkGroupNode> workGroupNodes) {
     return OnlineThunkAction((Store<AppState> store) async {
-      await _copyMultipleToMySpaceInteractor.execute(copyRequests: workGroupNodes.map((wkNode) =>
-        CopyRequest(wkNode.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: wkNode.sharedSpaceId.uuid)).toList())
+      await _copyMultipleToMySpaceInteractor.execute(workGroupNodes: workGroupNodes)
         .then((result) => result.fold(
           (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
           (success) => store.dispatch(SharedSpaceAction(Right(success)))));
     });
+  }
+
+  void openMoreActionBottomMenu(BuildContext context, List<WorkGroupNode> workGroupNodes, List<Widget> actionTiles) {
+    ContextMenuBuilder(context)
+        .addHeader(MoreActionBottomSheetHeaderBuilder(
+          context,
+          Key('more_action_menu_header'),
+          workGroupNodes.map<PresentationFile>((element)
+          {
+            if (element is WorkGroupFolder) {
+              return WorkGroupFolderPresentationFile.fromWorkGroupFolder(element);
+            } else {
+              return WorkGroupDocumentPresentationFile.fromWorkGroupDocument(element);
+            }
+          }).toList()).build())
+        .addTiles(actionTiles)
+        .build();
   }
 }

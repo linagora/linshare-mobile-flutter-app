@@ -170,6 +170,9 @@ class ToastMessageHandler {
       } else if (failure is CopyToMySpaceFailure) {
         appToast.showToast(AppLocalizations.of(context).the_file_could_not_be_copied);
         _cleanSharedSpaceViewState();
+      } else if (failure is CopyMultipleToMySpaceAllFailure) {
+        appToast.showToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
+        _cleanSharedSpaceViewState();
       }
     }, (success) {
       if (success is RemoveSharedSpaceNodeViewState) {
@@ -183,6 +186,12 @@ class ToastMessageHandler {
         _cleanSharedSpaceViewState();
       } else if (success is CopyToMySpaceViewState) {
         appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
+        _cleanSharedSpaceViewState();
+      } else if (success is CopyMultipleToMySpaceAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).all_items_have_been_copied_to_my_space);
+        _cleanSharedSpaceViewState();
+      } else if (success is CopyMultipleToMySpaceHasSomeFilesViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
         _cleanSharedSpaceViewState();
       }
     });
