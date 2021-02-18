@@ -51,12 +51,12 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
 
   @override
   SharedSpaceState clearViewState() {
-    return SharedSpaceState(Right(IdleState()), []);
+    return SharedSpaceState(Right(IdleState()), [], showUploadButton: showUploadButton);
   }
 
   @override
   SharedSpaceState sendViewState({Either<Failure, Success> viewState}) {
-    return SharedSpaceState(viewState, sharedSpacesList);
+    return SharedSpaceState(viewState, sharedSpacesList, showUploadButton: showUploadButton);
   }
 
   SharedSpaceState setSharedSpaces({Either<Failure, Success> viewState, List<SharedSpaceNodeNested> newSharedSpacesList}) {
