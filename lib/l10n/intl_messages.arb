@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-09T16:00:16.776012",
+  "@@last_modified": "2021-02-18T18:09:04.627490",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -495,6 +495,21 @@
   },
   "the_file_could_not_be_copied": "The file could not be copied",
   "@the_file_could_not_be_copied": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cannot_copy_files_to_my_space": "Can not copy files to My Space",
+  "@cannot_copy_files_to_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_items_have_been_copied_to_my_space": "Some items have been copied to My Space",
+  "@some_items_have_been_copied_to_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "all_items_have_been_copied_to_my_space": "All items have been copied to My Space",
+  "@all_items_have_been_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
   }

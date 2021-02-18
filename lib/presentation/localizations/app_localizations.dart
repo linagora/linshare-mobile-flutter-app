@@ -646,6 +646,27 @@ class AppLocalizations {
       name: 'the_file_could_not_be_copied',
     );
   }
+
+  String get cannot_copy_files_to_my_space {
+    return Intl.message(
+      'Can not copy files to My Space',
+      name: 'cannot_copy_files_to_my_space',
+    );
+  }
+
+  String get some_items_have_been_copied_to_my_space {
+    return Intl.message(
+      'Some items have been copied to My Space',
+      name: 'some_items_have_been_copied_to_my_space',
+    );
+  }
+
+  String get all_items_have_been_copied_to_my_space {
+    return Intl.message(
+      'All items have been copied to My Space',
+      name: 'all_items_have_been_copied_to_my_space',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
