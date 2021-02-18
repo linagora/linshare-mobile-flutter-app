@@ -199,20 +199,27 @@ class CopyMultipleToMySpaceAllSuccessViewState extends ViewState {
   List<Object> get props => [resultList];
 }
 
-class CopyMultipleToMySpaceHasSomeFilesFailedViewState extends ViewState {
+class CopyMultipleToMySpaceHasSomeFilesViewState extends ViewState {
   final List<Either<Failure, Success>> resultList;
 
-  CopyMultipleToMySpaceHasSomeFilesFailedViewState(this.resultList);
+  CopyMultipleToMySpaceHasSomeFilesViewState(this.resultList);
 
   @override
   List<Object> get props => [resultList];
 }
 
-class CopyMultipleToMySpaceAllFailureViewState extends FeatureFailure {
+class CopyMultipleToMySpaceAllFailure extends FeatureFailure {
   final List<Either<Failure, Success>> resultList;
 
-  CopyMultipleToMySpaceAllFailureViewState(this.resultList);
+  CopyMultipleToMySpaceAllFailure(this.resultList);
 
   @override
   List<Object> get props => [resultList];
+}
+
+class CopyMultipleContainsFoldersToMySpaceFailure extends FeatureFailure {
+  CopyMultipleContainsFoldersToMySpaceFailure();
+
+  @override
+  List<Object> get props => [];
 }
