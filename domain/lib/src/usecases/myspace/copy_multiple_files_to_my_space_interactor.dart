@@ -34,13 +34,19 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 
-class CopyMultipleToMySpaceInteractor {
+class CopyMultipleFilesToMySpaceInteractor {
   final CopyToMySpaceInteractor _copyToMySpaceInteractor;
 
-  CopyMultipleToMySpaceInteractor(this._copyToMySpaceInteractor);
+  CopyMultipleFilesToMySpaceInteractor(this._copyToMySpaceInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<CopyRequest> copyRequests}) async {
-    final listResult = await Future.wait(copyRequests.map((element) =>
+  Future<Either<Failure, Success>> execute({@required List<WorkGroupNode> workGroupNodes}) async {
+    if (workGroupNodes.any((element) => element is WorkGroupFolder)) {
+      return Left(CopyMultipleContainsFoldersToMySpaceFailure());
+    }
+
+    final copyRequestsList = workGroupNodes.whereType<WorkGroupDocument>().map((wkNode) =>
+        CopyRequest(wkNode.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: wkNode.sharedSpaceId.uuid)).toList();
+    final listResult = await Future.wait(copyRequestsList.map((element) =>
         _copyToMySpaceInteractor.execute(element)));
     if (listResult.length == 1) {
       return listResult.first;
@@ -50,9 +56,9 @@ class CopyMultipleToMySpaceInteractor {
       if (failedFileCount == 0) {
         return Right(CopyMultipleToMySpaceAllSuccessViewState(listResult));
       } else if (failedFileCount == listResult.length) {
-        return Left(CopyMultipleToMySpaceAllFailureViewState(listResult));
+        return Left(CopyMultipleToMySpaceAllFailure(listResult));
       }
-      return Right(CopyMultipleToMySpaceHasSomeFilesFailedViewState(listResult));
+      return Right(CopyMultipleToMySpaceHasSomeFilesViewState(listResult));
     }
   }
 }
