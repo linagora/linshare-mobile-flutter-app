@@ -34,6 +34,24 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
 
+final workGroupFolder1 = WorkGroupFolder(
+    WorkGroupNodeId('f9f65f03-4f7a-4024-ab1f-73b2e90a4c66'),
+    WorkGroupNodeId('c542ac1f-2683-4591-9b3f-468b6b6e9d86'),
+    WorkGroupNodeType.FOLDER,
+    SharedSpaceId('150e408a-dde9-4315-9a5b-7fe0f251fa83'),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138189),
+    'description1',
+    'folder1',
+        Account(
+        'user1@linshare.org',
+        'user1@linshare.org',
+        AccountId('1f75190b-73aa-4c4b-9efb-2760be07c3bb'),
+        AccountType.INTERNAL,
+        'John',
+        'Doe')
+);
+
 final workGroupDocument1 = WorkGroupDocument(
     WorkGroupNodeId('f9f65f03-4f7a-4024-ab1f-73b2e90a4c66'),
     WorkGroupNodeId('c542ac1f-2683-4591-9b3f-468b6b6e9d86'),

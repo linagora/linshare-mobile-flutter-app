@@ -41,14 +41,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-class WorkGroupDocumentContextMenuTileBuilder extends ContextMenuActionBuilder<WorkGroupDocument> {
-  final WorkGroupDocument _workGroupDocument;
+class WorkGroupDocumentContextMenuTileBuilder extends ContextMenuActionBuilder<WorkGroupNode> {
+  final WorkGroupNode _workGroupNode;
 
   WorkGroupDocumentContextMenuTileBuilder(
     Key key,
     SvgPicture actionIcon,
     String actionName,
-    this._workGroupDocument
+    this._workGroupNode
   ) : super(key, actionIcon, actionName);
 
   @override
@@ -59,7 +59,7 @@ class WorkGroupDocumentContextMenuTileBuilder extends ContextMenuActionBuilder<W
       title: Text(
         actionName,
         style: actionTextStyle()),
-      onTap: () => onContextMenuActionClick(_workGroupDocument)
+      onTap: () => onContextMenuActionClick(_workGroupNode)
     );
   }
 }

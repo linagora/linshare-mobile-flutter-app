@@ -52,6 +52,6 @@ class ContextMenuHeaderBuilder {
           style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
           ),
         ),
-      trailing: _file.fileSize() == null ? null : Text(filesize(_file.fileSize()), style: TextStyle(fontSize: 14, color: AppColor.documentModifiedDateItemTextColor)));
+      trailing: _file.fileSize() == 0 ? null : Text(filesize(_file.fileSize()), style: TextStyle(fontSize: 14, color: AppColor.documentModifiedDateItemTextColor)));
   }
 }

@@ -88,7 +88,7 @@ class WorkGroupFolderPresentationFile extends Equatable implements PresentationF
 
   @override
   int fileSize() {
-    return null;
+    return 0;
   }
 
   @override
