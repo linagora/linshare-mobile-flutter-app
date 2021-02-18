@@ -170,7 +170,7 @@ class AppModule {
     getIt.registerFactory(() => GetAuthorizedInteractor(getIt<AuthenticationRepository>()));
     getIt.registerFactory(() => GetAllReceivedInteractor(getIt<ReceivedShareRepository>()));
     getIt.registerFactory(() => CopyToMySpaceInteractor(getIt<DocumentRepository>()));
-    getIt.registerFactory(() => CopyMultipleToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
+    getIt.registerFactory(() => CopyMultipleFilesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
   }
 
   void _provideSharePreference() {
