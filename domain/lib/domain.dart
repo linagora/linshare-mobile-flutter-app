@@ -104,7 +104,7 @@ export 'src/usecases/authentication/get_authorized_user_interactor.dart';
 export 'src/usecases/quota/get_quota_interactor.dart';
 export 'src/usecases/received/get_all_received_interactor.dart';
 export 'src/usecases/myspace/copy_to_my_space_interactor.dart';
-export 'src/usecases/myspace/copy_multiple_to_my_space_interactor.dart';
+export 'src/usecases/myspace/copy_multiple_files_to_my_space_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
