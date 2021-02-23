@@ -33,18 +33,28 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/model/file/share_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:redux/src/store.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class ReceivedShareViewModel extends BaseViewModel {
-  final GetAllReceivedInteractor _getAllReceivedInteractor;
+  final GetAllReceivedSharesInteractor _getAllReceivedInteractor;
+  final AppNavigation _appNavigation;
+  final CopyMultipleFilesFromReceivedSharesToMySpaceInteractor _copyMultipleFilesFromReceivedSharesToMySpaceInteractor;
 
   ReceivedShareViewModel(
       Store<AppState> store,
-      this._getAllReceivedInteractor
+      this._getAllReceivedInteractor,
+      this._appNavigation,
+      this._copyMultipleFilesFromReceivedSharesToMySpaceInteractor
   ) : super(store);
 
   void getAllReceivedShare() {
@@ -58,6 +68,41 @@ class ReceivedShareViewModel extends BaseViewModel {
               (failure) => store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure))),
               (success) => store.dispatch(ReceivedShareGetAllReceivedSharesAction(Right(success))))
       );
+    });
+  }
+
+  void openContextMenu(BuildContext context, ReceivedShare share, List<Widget> actionTiles, {Widget footerAction}) {
+    store.dispatch(_handleContextMenuAction(context, share, actionTiles, footerAction: footerAction));
+  }
+
+  ThunkAction<AppState> _handleContextMenuAction(
+      BuildContext context,
+      ReceivedShare share,
+      List<Widget> actionTiles,
+      {Widget footerAction}) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context)
+          .addHeader(ContextMenuHeaderBuilder(
+            Key('context_menu_header'),
+            SharePresentationFile.fromShare(share)).build())
+          .addTiles(actionTiles)
+          .addFooter(footerAction)
+          .build();
+      store.dispatch(ReceivedShareAction(Right(ReceivedShareContextMenuItemViewState(share))));
+    };
+  }
+
+  void copyToMySpace(List<ReceivedShare> shares) {
+    _appNavigation.popBack();
+    store.dispatch(_copyToMySpaceAction(shares));
+  }
+
+  OnlineThunkAction _copyToMySpaceAction(List<ReceivedShare> shares) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: shares)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
+          (success) => store.dispatch(ReceivedShareAction(Right(success)))));
     });
   }
 }
