@@ -31,9 +31,9 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:domain/src/model/share/share.dart';
+import 'package:domain/src/model/share/received_share.dart';
 
 abstract class ReceivedShareRepository {
 
-  Future<List<Share>> getAllReceived();
+  Future<List<ReceivedShare>> getAllReceivedShares();
 }

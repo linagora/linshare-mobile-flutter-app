@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,27 +26,56 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
 //
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/share/share_id.dart';
+import 'package:equatable/equatable.dart';
+import 'package:http_parser/http_parser.dart';
 
-class ShareDocumentViewState extends ViewState {
-  final List<Share> sharedRecipients;
+class ReceivedShare extends Equatable {
+  final ShareId shareId;
+  final String name;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final DateTime expirationDate;
+  final String description;
+  final int downloaded;
+  final GenericUser recipient;
+  final MediaType mediaType;
+  final GenericUser sender;
+  final int size;
 
-  ShareDocumentViewState(this.sharedRecipients);
+  ReceivedShare(
+    this.shareId,
+    this.name,
+    this.creationDate,
+    this.modificationDate,
+    this.expirationDate,
+    this.description,
+    this.recipient,
+    this.mediaType,
+    this.sender,
+    this.downloaded,
+    this.size
+  );
 
   @override
-  List<Object> get props => [sharedRecipients];
-}
-
-class ShareDocumentFailure extends FeatureFailure {
-  final Exception exception;
-
-  ShareDocumentFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  List<Object> get props => [
+    shareId,
+    name,
+    creationDate,
+    modificationDate,
+    expirationDate,
+    description,
+    sender,
+    downloaded,
+    size
+  ];
 }

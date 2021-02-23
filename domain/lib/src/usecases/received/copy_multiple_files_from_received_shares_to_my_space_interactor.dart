@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,22 +30,31 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
 
-class ShareDocumentViewState extends ViewState {
-  final List<Share> sharedRecipients;
+class CopyMultipleFilesFromReceivedSharesToMySpaceInteractor {
+  final CopyToMySpaceInteractor _copyToMySpaceInteractor;
 
-  ShareDocumentViewState(this.sharedRecipients);
+  CopyMultipleFilesFromReceivedSharesToMySpaceInteractor(this._copyToMySpaceInteractor);
 
-  @override
-  List<Object> get props => [sharedRecipients];
-}
+  Future<Either<Failure, Success>> execute({@required List<ReceivedShare> shares}) async {
+    final copyRequestsList = shares.map((share) =>
+        CopyRequest(share.shareId.uuid, SpaceType.receivedShare)).toList();
+    final listResult = await Future.wait(copyRequestsList.map((element) =>
+        _copyToMySpaceInteractor.execute(element)));
+    if (listResult.length == 1) {
+      return listResult.first;
+    } else {
+      var failedFileCount = listResult.whereType<Left>().length;
 
-class ShareDocumentFailure extends FeatureFailure {
-  final Exception exception;
-
-  ShareDocumentFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+      if (failedFileCount == 0) {
+        return Right(CopyMultipleToMySpaceFromReceivedSharesAllSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(CopyMultipleToMySpaceFromReceivedSharesAllFailure(listResult));
+      }
+      return Right(CopyMultipleToMySpaceFromReceivedSharesHasSomeFilesViewState(listResult));
+    }
+  }
 }
