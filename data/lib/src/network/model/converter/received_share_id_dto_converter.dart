@@ -30,61 +30,17 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/share_id_dto_converter.dart';
-import 'package:data/src/network/model/generic_user_dto.dart';
-import 'package:data/src/network/model/response/document_response.dart';
-import 'package:data/src/network/model/share/share_id_dto.dart';
-import 'package:data/src/util/attribute.dart';
-import 'package:domain/domain.dart';
+import 'dart:convert';
 
+import 'package:data/src/network/model/share/received_share_id_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'share_dto.g.dart';
+class ReceivedShareIdDtoConverter implements JsonConverter<ReceivedShareIdDto, String> {
+  const ReceivedShareIdDtoConverter();
 
-@JsonSerializable()
-@DatetimeConverter()
-@ShareIdDtoConverter()
-class ShareDto {
-  @JsonKey(name: Attribute.uuid)
-  final ShareIdDto shareId;
-  final String name;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime expirationDate;
-  final DocumentResponse document;
-  final int downloaded;
-  final String description;
-  final GenericUserDto recipient;
+  @override
+  ReceivedShareIdDto fromJson(String json) => ReceivedShareIdDto(json);
 
-  ShareDto(
-    this.shareId,
-    this.name,
-    this.creationDate,
-    this.modificationDate,
-    this.expirationDate,
-    this.document,
-    this.downloaded,
-    this.description,
-    this.recipient,
-  );
-
-  factory ShareDto.fromJson(Map<String, dynamic> json) => _$ShareDtoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ShareDtoToJson(this);
-}
-
-extension ShareDtoExtension on ShareDto {
-  Share toShare() {
-    return Share(
-      ShareId(shareId.uuid),
-      name, creationDate,
-      modificationDate,
-      expirationDate,
-      document.toDocument(),
-      description,
-      recipient.toGenericUser(),
-      downloaded,
-    );
-  }
+  @override
+  String toJson(ReceivedShareIdDto object) => jsonEncode(object.uuid);
 }

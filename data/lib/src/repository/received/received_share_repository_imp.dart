@@ -40,7 +40,7 @@ class ReceivedShareRepositoryImp extends ReceivedShareRepository {
   ReceivedShareRepositoryImp(this._receivedShareDataSource);
 
   @override
-  Future<List<Share>> getAllReceived() {
-    return _receivedShareDataSource.getAllReceived();
+  Future<List<ReceivedShare>> getAllReceivedShares() {
+    return _receivedShareDataSource.getAllReceivedShares();
   }
 }
