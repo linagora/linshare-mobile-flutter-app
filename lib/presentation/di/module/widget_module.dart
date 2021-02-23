@@ -199,7 +199,9 @@ class WidgetModule {
     getIt.registerFactory(() => ReceivedShareWidget());
     getIt.registerFactory(() => ReceivedShareViewModel(
         getIt.get<Store<AppState>>(),
-        getIt.get<GetAllReceivedInteractor>()
+        getIt.get<GetAllReceivedSharesInteractor>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<CopyMultipleFilesFromReceivedSharesToMySpaceInteractor>()
     ));
   }
 }
