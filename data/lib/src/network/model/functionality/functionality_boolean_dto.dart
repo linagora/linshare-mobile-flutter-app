@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,66 +28,35 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:data/src/network/model/functionality/functionality_dto.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final String nodes = '/nodes';
-  static final ServicePath authentication = ServicePath('/jwt');
+part 'functionality_boolean_dto.g.dart';
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+@JsonSerializable()
+class FunctionalityBooleanDto extends FunctionalityDto with EquatableMixin {
+  final bool value;
 
-  static final ServicePath shares = ServicePath('/shares');
+  FunctionalityBooleanDto(
+      FunctionalityIdentifier identifier,
+      bool enable,
+      bool canOverride,
+      this.value)
+      : super(identifier, enable, canOverride);
 
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
+  factory FunctionalityBooleanDto.fromJson(Map<String, dynamic> json) => _$FunctionalityBooleanDtoFromJson(json);
 
-  static final ServicePath receivedShares = ServicePath('/received_shares');
+  Map<String, dynamic> toJson() => _$FunctionalityBooleanDtoToJson(this);
 
-  static final ServicePath autocomplete = ServicePath('/autocomplete');
-
-  static final ServicePath quota = ServicePath('/quota');
-
-  static final ServicePath functionality = ServicePath('/functionalities');
+  @override
+  List<Object> get props => [...super.props, value];
 }
 
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
-
-  ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
-    if (queryParameters.isEmpty) {
-      return this;
-    }
-    return ServicePath('${path}?${queryParameters
-        .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
-  }
+extension FunctionalityBooleanDtoExtension on FunctionalityBooleanDto {
+  FunctionalityBoolean toFunctionalityBoolean() =>
+      FunctionalityBoolean(identifier, enable, canOverride, value);
 }
