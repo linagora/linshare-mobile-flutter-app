@@ -168,9 +168,10 @@ class AppModule {
     getIt.registerFactory(() => RemoveMultipleSharedSpaceNodesInteractor(getIt<RemoveSharedSpaceNodeInteractor>()));
     getIt.registerFactory(() => DownloadMultipleFileIOSInteractor(getIt<DownloadFileIOSInteractor>()));
     getIt.registerFactory(() => GetAuthorizedInteractor(getIt<AuthenticationRepository>()));
-    getIt.registerFactory(() => GetAllReceivedInteractor(getIt<ReceivedShareRepository>()));
+    getIt.registerFactory(() => GetAllReceivedSharesInteractor(getIt<ReceivedShareRepository>()));
     getIt.registerFactory(() => CopyToMySpaceInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => CopyMultipleFilesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
+    getIt.registerFactory(() => CopyMultipleFilesFromReceivedSharesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
   }
 
   void _provideSharePreference() {

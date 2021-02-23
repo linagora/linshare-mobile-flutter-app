@@ -35,23 +35,31 @@
 // the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/document/document.dart';
 import 'package:domain/src/model/share/share_id.dart';
 import 'package:equatable/equatable.dart';
-import 'package:http_parser/http_parser.dart';
 
 class Share extends Equatable {
   final ShareId shareId;
   final String name;
   final DateTime creationDate;
   final DateTime modificationDate;
+  final DateTime expirationDate;
   final Document document;
   final String description;
+  final int downloaded;
   final GenericUser recipient;
-  final MediaType mediaType;
-  final GenericUser sender;
 
-  Share(this.shareId, this.name, this.creationDate, this.modificationDate, this.document, this.description, this.recipient, this.mediaType, this.sender);
+  Share(
+    this.shareId,
+    this.name,
+    this.creationDate,
+    this.modificationDate,
+    this.expirationDate,
+    this.document,
+    this.description,
+    this.recipient,
+    this.downloaded,
+  );
 
   @override
   List<Object> get props => [
@@ -59,7 +67,9 @@ class Share extends Equatable {
     name,
     creationDate,
     modificationDate,
+    expirationDate,
     document,
     description,
-    sender];
+    downloaded,
+  ];
 }

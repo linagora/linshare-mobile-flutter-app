@@ -79,6 +79,7 @@ export 'src/model/user/user.dart';
 export 'src/model/quota/quota_id.dart';
 export 'src/model/quota/account_quota.dart';
 export 'src/model/quota/quota_size.dart';
+export 'src/model/share/received_share.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -102,9 +103,10 @@ export 'src/usecases/shared_space/remove_multiple_shared_space_nodes_interactor.
 export 'src/usecases/download_file/download_multiple_file_ios_interactor.dart';
 export 'src/usecases/authentication/get_authorized_user_interactor.dart';
 export 'src/usecases/quota/get_quota_interactor.dart';
-export 'src/usecases/received/get_all_received_interactor.dart';
+export 'src/usecases/received/get_all_received_shares_interactor.dart';
 export 'src/usecases/myspace/copy_to_my_space_interactor.dart';
 export 'src/usecases/myspace/copy_multiple_files_to_my_space_interactor.dart';
+export 'src/usecases/received/copy_multiple_files_from_received_shares_to_my_space_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
