@@ -19,6 +19,7 @@ export 'src/usecases/get_child_nodes/get_all_child_nodes_view_state.dart';
 export 'src/usecases/received/received_share_view_state.dart';
 export 'src/usecases/quota/quota_view_state.dart';
 export 'src/usecases/quota/quota_verification_view_state.dart';
+export 'src/usecases/search_document/search_document_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -80,6 +81,7 @@ export 'src/model/quota/quota_id.dart';
 export 'src/model/quota/account_quota.dart';
 export 'src/model/quota/quota_size.dart';
 export 'src/model/share/received_share.dart';
+export 'src/model/search_query.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -104,6 +106,7 @@ export 'src/usecases/download_file/download_multiple_file_ios_interactor.dart';
 export 'src/usecases/authentication/get_authorized_user_interactor.dart';
 export 'src/usecases/quota/get_quota_interactor.dart';
 export 'src/usecases/received/get_all_received_shares_interactor.dart';
+export 'src/usecases/search_document/search_document_interactor.dart';
 export 'src/usecases/myspace/copy_to_my_space_interactor.dart';
 export 'src/usecases/myspace/copy_multiple_files_to_my_space_interactor.dart';
 export 'src/usecases/received/copy_multiple_files_from_received_shares_to_my_space_interactor.dart';
