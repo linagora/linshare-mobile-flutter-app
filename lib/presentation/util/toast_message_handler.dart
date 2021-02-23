@@ -38,12 +38,14 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
@@ -65,6 +67,7 @@ class ToastMessageHandler {
       _handleShareDocumentToastMessage(context, event.shareState);
       _handleSharedSpaceToastMessage(context, event.sharedSpaceState);
       _handleNetworkStateToastMessage(context, event.networkConnectivityState);
+      _handleReceivedShareToastMessage(context, event.receivedShareState);
     });
   }
 
@@ -168,10 +171,10 @@ class ToastMessageHandler {
         appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_deleted);
         _cleanSharedSpaceViewState();
       } else if (failure is CopyToMySpaceFailure) {
-        appToast.showToast(AppLocalizations.of(context).the_file_could_not_be_copied);
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
         _cleanSharedSpaceViewState();
       } else if (failure is CopyMultipleToMySpaceAllFailure) {
-        appToast.showToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
+        appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
         _cleanSharedSpaceViewState();
       }
     }, (success) {
@@ -208,6 +211,29 @@ class ToastMessageHandler {
     });
   }
 
+  void _handleReceivedShareToastMessage(BuildContext context, ReceivedShareState receivedShareState) {
+    receivedShareState.viewState.fold((failure) {
+      if (failure is CopyToMySpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
+        _cleanReceivedShareViewState();
+      } else if (failure is CopyMultipleToMySpaceFromReceivedSharesAllFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
+        _cleanReceivedShareViewState();
+      }
+    }, (success) {
+      if (success is CopyToMySpaceViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
+        _cleanReceivedShareViewState();
+      } else if (success is CopyMultipleToMySpaceFromReceivedSharesAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).all_items_have_been_copied_to_my_space);
+        _cleanReceivedShareViewState();
+      } else if (success is CopyMultipleToMySpaceFromReceivedSharesHasSomeFilesViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
+        _cleanReceivedShareViewState();
+      }
+    });
+  }
+
   void _cleanMySpaceViewState() {
     _store.dispatch(CleanMySpaceStateAction());
   }
@@ -226,6 +252,10 @@ class ToastMessageHandler {
 
   void _cleanNetworkConnectivityViewState() {
     _store.dispatch(CleanNetworkConnectivityStateAction());
+  }
+
+  void _cleanReceivedShareViewState() {
+    _store.dispatch(CleanReceivedShareStateAction());
   }
 
   void cancelSubscription() {
