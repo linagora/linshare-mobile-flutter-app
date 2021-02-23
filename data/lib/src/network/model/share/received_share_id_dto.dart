@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,44 +26,20 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
 //
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
-import 'package:data/src/network/model/generic_user_dto.dart';
-import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
-import 'package:data/src/network/model/share/share_dto.dart';
-import 'package:data/src/network/model/share/share_id_dto.dart';
-import 'package:testshared/fixture/my_space_fixture.dart';
+class ReceivedShareIdDto {
+  String _uuid;
+    String get uuid => _uuid;
 
-final shareIdDto1 = ShareIdDto('3e57d240-47a1-4a7e-b1a7-25e29870af33');
-final shareIdDto2 = ShareIdDto('3e57d240-47a1-4a7e-b1a7-25e29870af32');
-final mailingListIdDto1 = MailingListIdDto('3e57d240-47a1-4a7e-b1a7-25e29870af33');
-final genericUserDto1 = GenericUserDto('user1@linshare.org',
-    lastName: optionOf('Smith'), firstName: optionOf('Jane'));
-
-final shareDto1 = ShareDto(
-    shareIdDto1,
-    'document 1',
-    DateTime.fromMillisecondsSinceEpoch(1604482138181),
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    DateTime.fromMillisecondsSinceEpoch(1604482138238),
-    documentResponse1,
-    2,
-    'description 1',
-    GenericUserDto('user1@linshare.org')
-);
-
-final shareDto2 = ShareDto(
-    shareIdDto2,
-    'document2',
-    DateTime.fromMillisecondsSinceEpoch(1604482138181),
-    DateTime.fromMillisecondsSinceEpoch(1604482138182),
-    DateTime.fromMillisecondsSinceEpoch(1604482138182),
-    documentResponse2,
-    3,
-    'description 2',
-    GenericUserDto('user2@linshare.org'),
-  );
+  ReceivedShareIdDto(String uuid) {
+    assert(uuid != null && uuid.isNotEmpty, 'invalid shareId');
+    _uuid = uuid;
+  }
+}
