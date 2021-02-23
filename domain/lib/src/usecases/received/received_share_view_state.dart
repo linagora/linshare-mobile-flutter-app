@@ -31,10 +31,11 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class GetAllReceivedShareSuccess extends ViewState {
-  final List<Share> receivedShares;
+  final List<ReceivedShare> receivedShares;
 
   GetAllReceivedShareSuccess(this.receivedShares);
 
@@ -43,11 +44,45 @@ class GetAllReceivedShareSuccess extends ViewState {
 }
 
 class GetAllReceivedShareFailure extends FeatureFailure {
-
   final Exception exception;
 
   GetAllReceivedShareFailure(this.exception);
 
   @override
   List<Object> get props => [exception];
+}
+class CopyMultipleToMySpaceFromReceivedSharesAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceFromReceivedSharesAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class CopyMultipleToMySpaceFromReceivedSharesHasSomeFilesViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceFromReceivedSharesHasSomeFilesViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class CopyMultipleToMySpaceFromReceivedSharesAllFailure extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceFromReceivedSharesAllFailure(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class ReceivedShareContextMenuItemViewState extends ViewState {
+  final ReceivedShare share;
+
+  ReceivedShareContextMenuItemViewState(this.share);
+
+  @override
+  List<Object> get props => [share];
 }
