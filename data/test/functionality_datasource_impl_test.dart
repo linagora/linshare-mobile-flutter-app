@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,66 +28,44 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:data/data.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v2';
-  static final String download = '/download';
-  static final String nodes = '/nodes';
-  static final ServicePath authentication = ServicePath('/jwt');
+import 'fixture/functionality_fixture.dart';
+import 'fixture/mock/mock_fixtures.dart';
 
-  static final ServicePath authorizedUser = ServicePath('/authentication/authorized');
-  static final ServicePath documents = ServicePath('/documents');
+void main() {
+  LinShareHttpClient linShareHttpClient;
+  RemoteExceptionThrower remoteExceptionThrower;
+  FunctionalityDataSourceImpl functionalityDataSourceImpl;
 
-  static final ServicePath shares = ServicePath('/shares');
+  setUp(() {
+    linShareHttpClient = MockLinShareHttpClient();
+    remoteExceptionThrower = MockRemoteExceptionThrower();
+    functionalityDataSourceImpl = FunctionalityDataSourceImpl(linShareHttpClient, remoteExceptionThrower);
+  });
 
-  static final ServicePath sharedSpaces = ServicePath('/shared_spaces');
+  test('get all functionality data source should return success with valid data', () async {
+    when(linShareHttpClient.getAllFunctionality())
+        .thenAnswer((_) async => [functionalityDto1, functionalityDto2, functionalityDto3]);
+    final result = await functionalityDataSourceImpl.getAll();
+    expect(result, [functionality1, functionality2, functionality3]);
+  });
 
-  static final ServicePath receivedShares = ServicePath('/received_shares');
+  test('get all functionality data source should throw NotAuthorized when linShareHttpClient response error with 403', () async {
+    final error = DioError(
+        type: DioErrorType.RESPONSE,
+        response: Response(statusCode: 403)
+    );
+    when(linShareHttpClient.getAllFunctionality()).thenThrow(error);
 
-  static final ServicePath autocomplete = ServicePath('/autocomplete');
-
-  static final ServicePath quota = ServicePath('/quota');
-
-  static final ServicePath functionality = ServicePath('/functionalities');
-}
-
-extension ServicePathExtension on ServicePath {
-  String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
-  }
-
-  ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
-    if (queryParameters.isEmpty) {
-      return this;
-    }
-    return ServicePath('${path}?${queryParameters
-        .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
-  }
-
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
-  }
-
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath downloadServicePath(String resourceId) {
-    return ServicePath('$path/$resourceId${Endpoint.download}');
-  }
-
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  ServicePath append(ServicePath other) {
-    return ServicePath(path + other.path);
-  }
+    await functionalityDataSourceImpl.getAll()
+        .catchError((error) => expect(error, isA<NotAuthorized>()));
+  });
 }

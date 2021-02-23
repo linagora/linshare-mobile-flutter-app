@@ -39,6 +39,14 @@ import 'package:data/src/network/dio_client.dart';
 import 'package:data/src/network/model/autocomplete/mailing_list_autocomplete_result_dto.dart';
 import 'package:data/src/network/model/autocomplete/simple_autocomplete_result_dto.dart';
 import 'package:data/src/network/model/autocomplete/user_autocomplete_result_dto.dart';
+import 'package:data/src/network/model/functionality/functionality_boolean_dto.dart';
+import 'package:data/src/network/model/functionality/functionality_dto.dart';
+import 'package:data/src/network/model/functionality/functionality_integer_dto.dart';
+import 'package:data/src/network/model/functionality/functionality_language_dto.dart';
+import 'package:data/src/network/model/functionality/functionality_simple_dto.dart';
+import 'package:data/src/network/model/functionality/functionality_size_dto.dart';
+import 'package:data/src/network/model/functionality/functionality_string_dto.dart';
+import 'package:data/src/network/model/functionality/functionality_time_dto.dart';
 import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
@@ -247,4 +255,23 @@ class LinShareHttpClient {
 
         return resultJson.map((data) => DocumentResponse.fromJson(data)).toList();
     }
+
+  Future<List<FunctionalityDto>> getAllFunctionality() async {
+    final List resultJson = await _dioClient.get(Endpoint.functionality.generateEndpointPath());
+    return resultJson.map((data) => _convertToActualFunctionality(data)).toList();
+  }
+
+  FunctionalityDto _convertToActualFunctionality(Map<String, dynamic> jsonData) {
+    String type = jsonData['type'];
+    switch (type) {
+      case 'boolean': return FunctionalityBooleanDto.fromJson(jsonData);
+      case 'integer': return FunctionalityIntegerDto.fromJson(jsonData);
+      case 'language': return FunctionalityLanguageDto.fromJson(jsonData);
+      case 'simple': return FunctionalitySimpleDto.fromJson(jsonData);
+      case 'size': return FunctionalitySizeDto.fromJson(jsonData);
+      case 'string': return FunctionalityStringDto.fromJson(jsonData);
+      case 'time': return FunctionalityTimeDto.fromJson(jsonData);
+      default: return FunctionalitySimpleDto.fromJson(jsonData);
+    }
+  }
 }
