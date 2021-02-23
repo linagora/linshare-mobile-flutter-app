@@ -35,7 +35,6 @@ import 'package:data/src/network/config/endpoint.dart';
 import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
 import 'package:data/src/extensions/uri_extension.dart';
 
 class DocumentRepositoryImpl implements DocumentRepository {
