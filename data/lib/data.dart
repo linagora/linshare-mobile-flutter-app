@@ -9,6 +9,7 @@ export 'src/datasource/received_share_datasource.dart';
 export 'src/datasource/shared_space_datasource.dart';
 export 'src/datasource/shared_space_document_datasource.dart';
 export 'src/datasource/quota_datasource.dart';
+export 'src/datasource/functionality_datasource.dart';
 
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
@@ -18,6 +19,7 @@ export 'src/datasource_impl/shared_space_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_document_datasource_impl.dart';
 export 'src/datasource_impl/autocomplete_datasource_impl.dart';
 export 'src/datasource_impl/quota_datasource_impl.dart';
+export 'src/datasource_impl/functionality_datasource_impl.dart';
 
 // config
 export 'src/network/config/dynamic_url_interceptors.dart';
@@ -51,6 +53,7 @@ export 'src/repository/received/received_share_repository_imp.dart';
 export 'src/repository/sharedspace/shared_space_repository_impl.dart';
 export 'src/repository/sharedspacedocument/shared_space_document_repository_impl.dart';
 export 'src/repository/quota/quota_repository_impl.dart';
+export 'src/repository/functionality/functionality_repository_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';
