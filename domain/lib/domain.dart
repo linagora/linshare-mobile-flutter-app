@@ -20,6 +20,7 @@ export 'src/usecases/received/received_share_view_state.dart';
 export 'src/usecases/quota/quota_view_state.dart';
 export 'src/usecases/quota/quota_verification_view_state.dart';
 export 'src/usecases/search_document/search_document_view_state.dart';
+export 'src/usecases/functionality/functionality_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -82,6 +83,15 @@ export 'src/model/quota/account_quota.dart';
 export 'src/model/quota/quota_size.dart';
 export 'src/model/share/received_share.dart';
 export 'src/model/search_query.dart';
+export 'src/model/functionality/functionality.dart';
+export 'src/model/functionality/functionality_boolean.dart';
+export 'src/model/functionality/functionality_integer.dart';
+export 'src/model/functionality/functionality_language.dart';
+export 'src/model/functionality/functionality_simple.dart';
+export 'src/model/functionality/functionality_size.dart';
+export 'src/model/functionality/functionality_string.dart';
+export 'src/model/functionality/functionality_time.dart';
+export 'src/model/functionality/functionality_identifier.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -110,6 +120,7 @@ export 'src/usecases/search_document/search_document_interactor.dart';
 export 'src/usecases/myspace/copy_to_my_space_interactor.dart';
 export 'src/usecases/myspace/copy_multiple_files_to_my_space_interactor.dart';
 export 'src/usecases/received/copy_multiple_files_from_received_shares_to_my_space_interactor.dart';
+export 'src/usecases/functionality/get_all_functionality_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -120,6 +131,7 @@ export 'src/repository/autocomplete/autocomplete_repository.dart';
 export 'src/repository/sharedspacedocument/shared_space_document_repository.dart';
 export 'src/repository/quota/quota_repository.dart';
 export 'src/repository/received/received_share_repository.dart';
+export 'src/repository/functionality/functionality_repository.dart';
 
 // errorcode
 export 'src/errorcode/business_error_code.dart';
