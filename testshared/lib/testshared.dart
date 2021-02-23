@@ -5,3 +5,4 @@ export 'fixture/my_space_fixture.dart';
 export 'fixture/received_share_fixture.dart';
 export 'fixture/shared_space_document_fixture.dart';
 export 'fixture/shared_space_fixture.dart';
+export 'fixture/functionality_fixture.dart';
