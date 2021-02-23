@@ -33,7 +33,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/usecases/received/get_all_received_interactor.dart';
 import 'package:domain/src/usecases/received/received_share_view_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -44,17 +43,17 @@ import '../../mock/repository/received/mock_received_share_repository.dart';
 void main() {
   group('get_all_received_interactor', () {
     MockReceivedShareRepository receivedShareRepository;
-    GetAllReceivedInteractor getAllReceivedInteractor;
+    GetAllReceivedSharesInteractor getAllReceivedSharesInteractor;
 
     setUp(() {
       receivedShareRepository = MockReceivedShareRepository();
-      getAllReceivedInteractor = GetAllReceivedInteractor(receivedShareRepository);
+      getAllReceivedSharesInteractor = GetAllReceivedSharesInteractor(receivedShareRepository);
     });
 
     test('get all receives interactor should return success with receive list', () async {
-      when(receivedShareRepository.getAllReceived()).thenAnswer((_) async => [receivedShare1, receivedShare2]);
+      when(receivedShareRepository.getAllReceivedShares()).thenAnswer((_) async => [receivedShare1, receivedShare2]);
 
-      final result = await getAllReceivedInteractor.execute();
+      final result = await getAllReceivedSharesInteractor.execute();
 
       final sharedSpacesList = result.map((success) => (success as GetAllReceivedShareSuccess).receivedShares)
           .getOrElse(() => []);
@@ -65,9 +64,9 @@ void main() {
 
     test('get all received interactor should fail when getAllReceived fail', () async {
       final exception = Exception();
-      when(receivedShareRepository.getAllReceived()).thenThrow(exception);
+      when(receivedShareRepository.getAllReceivedShares()).thenThrow(exception);
 
-      final result = await getAllReceivedInteractor.execute();
+      final result = await getAllReceivedSharesInteractor.execute();
 
       result.fold(
           (failure) => expect(failure, isA<GetAllReceivedShareFailure>()),
