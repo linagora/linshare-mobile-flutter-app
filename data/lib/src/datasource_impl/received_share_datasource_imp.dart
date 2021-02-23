@@ -36,7 +36,6 @@ import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/share/share.dart';
 
 class ReceivedShareDataSourceImp extends ReceivedShareDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -48,7 +47,7 @@ class ReceivedShareDataSourceImp extends ReceivedShareDataSource {
     );
 
   @override
-  Future<List<Share>> getAllReceived() async {
+  Future<List<ReceivedShare>> getAllReceivedShares() async {
     return Future.sync(() async {
       return await _linShareHttpClient.getReceivedShares();
     }).catchError((error) {

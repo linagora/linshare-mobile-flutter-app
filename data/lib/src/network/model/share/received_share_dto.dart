@@ -30,61 +30,71 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:data/src/network/model/converter/data_from_json_converter.dart';
 import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/share_id_dto_converter.dart';
+import 'package:data/src/network/model/converter/received_share_id_dto_converter.dart';
 import 'package:data/src/network/model/generic_user_dto.dart';
-import 'package:data/src/network/model/response/document_response.dart';
-import 'package:data/src/network/model/share/share_id_dto.dart';
+import 'package:data/src/network/model/share/received_share_id_dto.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'share_dto.g.dart';
+part 'received_share_dto.g.dart';
 
 @JsonSerializable()
 @DatetimeConverter()
-@ShareIdDtoConverter()
-class ShareDto {
+@ReceivedShareIdDtoConverter()
+class ReceivedShareDto {
   @JsonKey(name: Attribute.uuid)
-  final ShareIdDto shareId;
+  final ReceivedShareIdDto shareId;
   final String name;
   final DateTime creationDate;
   final DateTime modificationDate;
   final DateTime expirationDate;
-  final DocumentResponse document;
   final int downloaded;
   final String description;
   final GenericUserDto recipient;
+  final int size;
 
-  ShareDto(
+  @JsonKey(name: Attribute.type, fromJson: mediaTypeFromJson, toJson: mediaTypeToJson)
+  final MediaType mediaType;
+
+  final GenericUserDto sender;
+
+  ReceivedShareDto(
     this.shareId,
     this.name,
     this.creationDate,
     this.modificationDate,
     this.expirationDate,
-    this.document,
     this.downloaded,
     this.description,
     this.recipient,
+    this.size,
+    this.mediaType,
+    this.sender
   );
 
-  factory ShareDto.fromJson(Map<String, dynamic> json) => _$ShareDtoFromJson(json);
+  factory ReceivedShareDto.fromJson(Map<String, dynamic> json) => _$ReceivedShareDtoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ShareDtoToJson(this);
+  Map<String, dynamic> toJson() => _$ReceivedShareDtoToJson(this);
 }
 
-extension ShareDtoExtension on ShareDto {
-  Share toShare() {
-    return Share(
+extension ReceivedShareDtoExtension on ReceivedShareDto {
+  ReceivedShare toReceivedShare() {
+    return ReceivedShare(
       ShareId(shareId.uuid),
       name, creationDate,
       modificationDate,
       expirationDate,
-      document.toDocument(),
       description,
-      recipient.toGenericUser(),
+      recipient != null ? recipient.toGenericUser() : null,
+      mediaType,
+      sender != null ? sender.toGenericUser() : null,
       downloaded,
+      size
     );
   }
 }

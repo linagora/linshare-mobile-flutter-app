@@ -33,7 +33,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:testshared/fixture/my_space_fixture.dart';
 import 'package:http_parser/http_parser.dart';
 
 final RECIPIENT_1 = GenericUser(
@@ -48,26 +47,30 @@ final RECIPIENT_2 = GenericUser(
     firstName: optionOf('Bar')
 );
 
-final receivedShare1 = Share(
+final receivedShare1 = ReceivedShare(
     ShareId('6c0e1f35-89e5-432e-a8d4-17c8d2c3b5fa'),
     'document.txt',
     DateTime.fromMillisecondsSinceEpoch(1604482138181),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    document1,
+    DateTime.fromMillisecondsSinceEpoch(1604482928398),
     '',
     RECIPIENT_1,
     MediaType.parse('image/png'),
-    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane'))
+    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+    3,
+    29832983
 );
 
-final receivedShare2 = Share(
+final receivedShare2 = ReceivedShare(
     ShareId('6c0e1f35-89e5-6bc3-a8d4-156ec8074beb'),
     'document.txt',
     DateTime.fromMillisecondsSinceEpoch(1604482138181),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    document2,
+    DateTime.fromMillisecondsSinceEpoch(1604418921982),
     '',
     RECIPIENT_2,
     MediaType.parse('image/png'),
-    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane'))
+    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+    5,
+    289323
 );
