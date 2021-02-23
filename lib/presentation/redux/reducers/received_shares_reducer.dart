@@ -44,5 +44,9 @@ final receivedSharesReducer = combineReducers<ReceivedShareState>([
                   (failure) => [],
                   (success) => (success is GetAllReceivedShareSuccess) ? success.receivedShares : []),
           viewState: action.viewState)),
+  TypedReducer<ReceivedShareState, ReceivedShareSelectAction>((ReceivedShareState state, ReceivedShareSelectAction action) => state.selectReceivedShare(action.selectedReceivedShare)),
+  TypedReducer<ReceivedShareState, ReceivedShareClearSelectedAction>((ReceivedShareState state, ReceivedShareClearSelectedAction action) => state.cancelSelectedReceivedShares()),
+  TypedReducer<ReceivedShareState, ReceivedShareSelectAllAction>((ReceivedShareState state, ReceivedShareSelectAllAction action) => state.selectAllReceivedShares()),
+  TypedReducer<ReceivedShareState, ReceivedShareUnselectAllAction>((ReceivedShareState state, ReceivedShareUnselectAllAction action) => state.unselectAllReceivedShares()),
   TypedReducer<ReceivedShareState, CleanReceivedShareStateAction>((ReceivedShareState state, _) => state.clearViewState()),
 ]);
