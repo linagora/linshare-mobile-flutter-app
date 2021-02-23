@@ -35,5 +35,5 @@ import 'package:domain/domain.dart';
 
 abstract class ReceivedShareDataSource {
 
-  Future<List<Share>> getAllReceived();
+  Future<List<ReceivedShare>> getAllReceivedShares();
 }

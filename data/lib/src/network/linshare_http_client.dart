@@ -46,6 +46,7 @@ import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/user_response.dart';
+import 'package:data/src/network/model/share/received_share_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -157,14 +158,14 @@ class LinShareHttpClient {
         .toList();
   }
 
-  Future<List<Share>> getReceivedShares() async {
+  Future<List<ReceivedShare>> getReceivedShares() async {
     final endpointPath = Endpoint.receivedShares.generateEndpointPath();
 
     final List receivedSharesJson = await _dioClient.get(endpointPath);
 
     return receivedSharesJson
-        .map((data) => ShareDto.fromJson(data))
-        .map((dto) => dto.toShare())
+        .map((data) => ReceivedShareDto.fromJson(data))
+        .map((dto) => dto.toReceivedShare())
         .toList();
   }
 
