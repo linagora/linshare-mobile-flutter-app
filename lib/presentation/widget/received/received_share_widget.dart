@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/received_share_st
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/share_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
@@ -117,7 +118,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
       ));
   }
 
-  Widget _buildReceivedShareListView(BuildContext context, List<Share> receivedList) {
+  Widget _buildReceivedShareListView(BuildContext context, List<ReceivedShare> receivedList) {
     if (receivedList.isEmpty) {
       return _buildNoReceivedShareYet(context);
     } else {
@@ -143,7 +144,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
         .text(AppLocalizations.of(context).not_have_received_yet).build();
   }
 
-  Widget _buildReceivedShareListItem(BuildContext context, Share shareItem) {
+  Widget _buildReceivedShareListItem(BuildContext context, ReceivedShare shareItem) {
     return ListTile(
       leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -176,6 +177,18 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
           ],
         ),
       ),
+      trailing: IconButton(
+        icon: SvgPicture.asset(
+          imagePath.icContextMenu,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+        ),
+        onPressed: () => receivedShareViewModel.openContextMenu(
+          context,
+          shareItem,
+          _contextMenuActionTiles(context, shareItem))
+      ),
       onTap: () {},
     );
   }
@@ -206,5 +219,22 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
         style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
       ),
     );
+  }
+
+  List<Widget> _contextMenuActionTiles(BuildContext context, ReceivedShare share) {
+    return [
+      _copyToMySpaceAction(context, share),
+    ];
+  }
+
+  Widget _copyToMySpaceAction(BuildContext context, ReceivedShare share) {
+    return ShareContextMenuTileBuilder(
+      Key('copy_to_my_space_context_menu_action'),
+      SvgPicture.asset(imagePath.icCopy,
+          width: 24, height: 24, fit: BoxFit.fill),
+      AppLocalizations.of(context).copy_to_my_space,
+      share)
+      .onActionClick((data) => receivedShareViewModel.copyToMySpace([share]))
+      .build();
   }
 }

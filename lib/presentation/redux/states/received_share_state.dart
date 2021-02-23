@@ -39,7 +39,7 @@ import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
 class ReceivedShareState extends LinShareState with EquatableMixin {
-  final List<Share> receivedList;
+  final List<ReceivedShare> receivedList;
 
   ReceivedShareState(
       Either<Failure, Success> viewState,
@@ -50,7 +50,7 @@ class ReceivedShareState extends LinShareState with EquatableMixin {
     return ReceivedShareState(Right(IdleState()), []);
   }
 
-  ReceivedShareState setReceivedShareList(List<Share> newReceivedShareList, {Either<Failure, Success> viewState}) {
+  ReceivedShareState setReceivedShareList(List<ReceivedShare> newReceivedShareList, {Either<Failure, Success> viewState}) {
     return ReceivedShareState(viewState ?? this.viewState, newReceivedShareList);
   }
 
@@ -61,7 +61,7 @@ class ReceivedShareState extends LinShareState with EquatableMixin {
 
   @override
   ReceivedShareState sendViewState({Either<Failure, Success> viewState}) {
-    throw ReceivedShareState(viewState, receivedList);
+    return ReceivedShareState(viewState, receivedList);
   }
 
   @override
