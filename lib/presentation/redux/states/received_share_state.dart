@@ -36,36 +36,75 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
 class ReceivedShareState extends LinShareState with EquatableMixin {
-  final List<ReceivedShare> receivedList;
+  final List<SelectableElement<ReceivedShare>> receivedSharesList;
+  final SelectMode selectMode;
 
   ReceivedShareState(
       Either<Failure, Success> viewState,
-      this.receivedList
+      this.receivedSharesList,
+      this.selectMode
   ) : super(viewState);
 
   factory ReceivedShareState.initial() {
-    return ReceivedShareState(Right(IdleState()), []);
+    return ReceivedShareState(Right(IdleState()), [], SelectMode.INACTIVE);
   }
 
   ReceivedShareState setReceivedShareList(List<ReceivedShare> newReceivedShareList, {Either<Failure, Success> viewState}) {
-    return ReceivedShareState(viewState ?? this.viewState, newReceivedShareList);
+    final selectedElements = receivedSharesList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
+
+    return ReceivedShareState(
+      viewState,
+      {for (var receivedShare in newReceivedShareList)
+          if (selectedElements.contains(receivedShare))
+            SelectableElement<ReceivedShare>(receivedShare, SelectMode.ACTIVE)
+          else SelectableElement<ReceivedShare>(receivedShare, SelectMode.INACTIVE)}.toList(),
+      selectMode
+    );
   }
 
   @override
   ReceivedShareState clearViewState() {
-    return ReceivedShareState(Right(IdleState()), receivedList);
+    return ReceivedShareState(Right(IdleState()), receivedSharesList, selectMode);
   }
 
   @override
   ReceivedShareState sendViewState({Either<Failure, Success> viewState}) {
-    return ReceivedShareState(viewState, receivedList);
+    return ReceivedShareState(viewState, receivedSharesList, selectMode);
   }
 
   @override
   ReceivedShareState startLoadingState() {
-    return ReceivedShareState(Right(LoadingState()), receivedList);
+    return ReceivedShareState(Right(LoadingState()), receivedSharesList, selectMode);
+  }
+
+  LinShareState selectReceivedShare(SelectableElement<ReceivedShare> selectedReceivedShare) {
+    receivedSharesList.firstWhere((receivedShare) => receivedShare == selectedReceivedShare).toggleSelect();
+    return ReceivedShareState(viewState, receivedSharesList, SelectMode.ACTIVE);
+  }
+
+  LinShareState cancelSelectedReceivedShares() {
+    return ReceivedShareState(viewState, receivedSharesList.map((receivedShare) => SelectableElement<ReceivedShare>(receivedShare.element, SelectMode.INACTIVE)).toList(), SelectMode.INACTIVE);
+  }
+
+  LinShareState selectAllReceivedShares() {
+    return ReceivedShareState(viewState, receivedSharesList.map((receivedShare) => SelectableElement<ReceivedShare>(receivedShare.element, SelectMode.ACTIVE)).toList(), SelectMode.ACTIVE);
+  }
+
+  LinShareState unselectAllReceivedShares() {
+    return ReceivedShareState(viewState, receivedSharesList.map((receivedShare) => SelectableElement<ReceivedShare>(receivedShare.element, SelectMode.INACTIVE)).toList(), SelectMode.ACTIVE);
+  }
+}
+
+extension MultipleSelections on ReceivedShareState {
+  bool isAllReceivedSharesSelected() {
+    return receivedSharesList.every((value) => value.selectMode == SelectMode.ACTIVE);
+  }
+
+  List<ReceivedShare> getAllSelectedReceivedShares() {
+    return receivedSharesList.where((element) => element.selectMode == SelectMode.ACTIVE).map((receivedShare) => receivedShare.element).toList();
   }
 }
