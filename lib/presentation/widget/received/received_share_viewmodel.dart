@@ -34,8 +34,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/share_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -92,8 +95,11 @@ class ReceivedShareViewModel extends BaseViewModel {
     };
   }
 
-  void copyToMySpace(List<ReceivedShare> shares) {
-    _appNavigation.popBack();
+  void copyToMySpace(List<ReceivedShare> shares, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    if (itemSelectionType == ItemSelectionType.single) {
+      _appNavigation.popBack();
+    }
+
     store.dispatch(_copyToMySpaceAction(shares));
   }
 
@@ -104,5 +110,21 @@ class ReceivedShareViewModel extends BaseViewModel {
           (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
           (success) => store.dispatch(ReceivedShareAction(Right(success)))));
     });
+  }
+
+  void selectItem(SelectableElement<ReceivedShare> selectedReceivedShare) {
+    store.dispatch(ReceivedShareSelectAction(selectedReceivedShare));
+  }
+
+  void toggleSelectAllReceivedShares() {
+    if (store.state.receivedShareState.isAllReceivedSharesSelected()) {
+      store.dispatch(ReceivedShareUnselectAllAction());
+    } else {
+      store.dispatch(ReceivedShareSelectAllAction());
+    }
+  }
+
+  void cancelSelection() {
+    store.dispatch(ReceivedShareClearSelectedAction());
   }
 }

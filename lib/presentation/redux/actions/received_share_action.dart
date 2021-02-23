@@ -34,6 +34,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
@@ -57,4 +58,27 @@ class ReceivedShareGetAllReceivedSharesAction extends ActionOnline {
 class CleanReceivedShareStateAction extends ActionOffline {
 
   CleanReceivedShareStateAction();
+}
+
+
+@immutable
+class ReceivedShareSelectAction extends ActionOffline {
+  final SelectableElement<ReceivedShare> selectedReceivedShare;
+
+  ReceivedShareSelectAction(this.selectedReceivedShare);
+}
+
+@immutable
+class ReceivedShareClearSelectedAction extends ActionOffline {
+  ReceivedShareClearSelectedAction();
+}
+
+@immutable
+class ReceivedShareSelectAllAction extends ActionOffline {
+  ReceivedShareSelectAllAction();
+}
+
+@immutable
+class ReceivedShareUnselectAllAction extends ActionOffline {
+  ReceivedShareUnselectAllAction();
 }
