@@ -67,7 +67,7 @@ class MySpaceState extends LinShareState with EquatableMixin {
   LinShareState setDocuments({Either<Failure, Success> viewState, List<Document> newDocumentList}) {
     final selectedElements = documentList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
-    return MySpaceState(viewState,
+    return MySpaceState(viewState ?? this.viewState,
       {for (var document in newDocumentList)
           if (selectedElements.contains(document))
             SelectableElement<Document>(document, SelectMode.ACTIVE)
@@ -88,7 +88,7 @@ class MySpaceState extends LinShareState with EquatableMixin {
     return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.ACTIVE)).toList(), SelectMode.ACTIVE);
   }
 
-  LinShareState unselectAllDocuments() {
+  LinShareState unSelectAllDocuments() {
     return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.ACTIVE);
   }
 

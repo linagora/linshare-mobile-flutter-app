@@ -512,5 +512,22 @@
   "@all_items_have_been_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "search_in_my_space": "Search in My Space",
+  "@search_in_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "results_count": "{numberOfResults,plural, =0{{numberOfResults} result}=1{{numberOfResults} result}other{{numberOfResults} results}}",
+  "@results_count": {
+    "type": "text",
+    "placeholders": {
+      "numberOfResults": {}
+    }
+  },
+  "no_results_found": "No results found",
+  "@no_results_found": {
+    "type": "text",
+    "placeholders": {}
   }
 }
