@@ -35,9 +35,11 @@ import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/functionality_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -53,6 +55,7 @@ class HomeViewModel extends BaseViewModel {
   final UploadFileManager _uploadFileManager;
   final Connectivity _connectivity;
   final GetAuthorizedInteractor _getAuthorizedInteractor;
+  final GetAllFunctionalityInteractor _getAllFunctionalityInteractor;
   StreamSubscription _uploadFileManagerStreamSubscription;
   StreamSubscription _connectivityStreamSubscription;
 
@@ -61,11 +64,26 @@ class HomeViewModel extends BaseViewModel {
       this._appNavigation,
       this._getAuthorizedInteractor,
       this._uploadFileManager,
-      this._connectivity
+      this._connectivity,
+      this._getAllFunctionalityInteractor
   ) : super(store) {
     this.store.dispatch(_getAuthorizedUserAction());
     _registerPendingUploadFile();
     _registerNetworkConnectivityState();
+    _getAllFunctionality();
+  }
+
+  void _getAllFunctionality() {
+    store.dispatch(_getAllFunctionalityAction());
+  }
+
+  OnlineThunkAction _getAllFunctionalityAction() {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _getAllFunctionalityInteractor.execute()
+          .then((result) => result.fold(
+              (failure) => store.dispatch(FunctionalityGetAllAction(Left(failure))),
+              (success) => store.dispatch(FunctionalityGetAllAction(Right(success)))));
+    });
   }
 
   ThunkAction<AppState> _getAuthorizedUserAction() {

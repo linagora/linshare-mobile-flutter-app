@@ -35,6 +35,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart'
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/network_connectivity_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/received_shares_reducer.dart';
@@ -57,7 +58,8 @@ AppState appStateReducer(AppState state, action) {
         receivedShareState: receivedSharesReducer(state.receivedShareState, action),
         destinationPickerState: destinationPickerReducer(state.destinationPickerState, action),
         networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action),
-        account: accountReducer(state.account, action));
+        account: accountReducer(state.account, action),
+        functionalityState: functionalityReducer(state.functionalityState, action));
   }
   return AppState(
       uiState: state.uiState,
@@ -71,7 +73,8 @@ AppState appStateReducer(AppState state, action) {
       networkConnectivityState: NetworkConnectivityState(
           Right(NoInternetConnectionState()),
           state.networkConnectivityState.connectivityResult),
-      account: state.account);
+      account: state.account,
+      functionalityState: state.functionalityState);
 }
 
 bool canExecuteAction(AppState state, action) {
