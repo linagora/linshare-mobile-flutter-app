@@ -32,7 +32,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
@@ -45,6 +44,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
+import 'package:linshare_flutter_app/presentation/widget/home/home_app_bar.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
@@ -81,21 +81,9 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: StoreConnector<AppState, UIState>(
-          converter: (store) => store.state.uiState,
-          distinct: true,
-          builder: (context, uiState) => Text(
-            getAppBarTitle(uiState),
-            style: TextStyle(fontSize: 24, color: Colors.white))
-        ),
-        centerTitle: true,
-        backgroundColor: AppColor.primaryColor,
-        leading: IconButton(
-            icon: SvgPicture.asset(imagePath.icLinShareMenu),
-            onPressed: () => _scaffoldKey.currentState.openDrawer()),
-      ),
+      appBar: HomeAppBar(_scaffoldKey,
+          () => homeViewModel.cancelSearchState(),
+          (String searchQuery) => homeViewModel.search(searchQuery)),
       drawer: SideMenuDrawerWidget(),
       body: Column(
         children: [
@@ -117,23 +105,6 @@ class _HomeWidgetState extends State<HomeWidget> {
         ],
       ),
     );
-  }
-
-  String getAppBarTitle(UIState uiState) {
-    switch (uiState.routePath) {
-      case RoutePaths.mySpace:
-        return AppLocalizations.of(context).my_space_title;
-      case RoutePaths.sharedSpace:
-        return AppLocalizations.of(context).shared_space;
-      case RoutePaths.sharedSpaceInside:
-        return uiState.selectedSharedSpace.name;
-      case RoutePaths.account_details:
-        return AppLocalizations.of(context).account_details_title;
-      case RoutePaths.received_shares:
-        return AppLocalizations.of(context).received;
-      default:
-        return AppLocalizations.of(context).my_space_title;
-    }
   }
 
   Widget getHomeWidget(UIState uiState) {

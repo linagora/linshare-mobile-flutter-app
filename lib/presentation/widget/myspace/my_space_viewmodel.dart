@@ -42,10 +42,12 @@ import 'package:linshare_flutter_app/presentation/model/file/document_presentati
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -75,7 +77,12 @@ class MySpaceViewModel extends BaseViewModel {
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
   final RemoveMultipleDocumentsInteractor _removeMultipleDocumentsInteractor;
   final DownloadMultipleFileIOSInteractor _downloadMultipleFileIOSInteractor;
+  final SearchDocumentInteractor _searchDocumentInteractor;
   StreamSubscription _storeStreamSubscription;
+  List<Document> _documentList = [];
+
+  SearchQuery _searchQuery = SearchQuery('');
+  SearchQuery get searchQuery  => _searchQuery;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
@@ -84,19 +91,56 @@ class MySpaceViewModel extends BaseViewModel {
       this._downloadFileInteractor,
       this._copyMultipleFilesToSharedSpaceInteractor,
       this._removeMultipleDocumentsInteractor,
-      this._downloadMultipleFileIOSInteractor
+      this._downloadMultipleFileIOSInteractor,
+      this._searchDocumentInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.mySpaceState.viewState.fold(
-        (failure) => null,
-        (success) {
-          if (success is RemoveDocumentViewState ||
-              success is RemoveMultipleDocumentsAllSuccessViewState ||
-              success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
-            getAllDocument();
-          }
+         (failure) => null,
+         (success) {
+            if (success is SearchDocumentNewQuery && event.uiState.searchState.searchStatus == SearchStatus.active) {
+              _search(success.searchQuery);
+            } else if (success is DisableSearchViewState) {
+              store.dispatch((MySpaceSetSearchResultAction(_documentList)));
+              _searchQuery = SearchQuery('');
+            } else if (success is RemoveDocumentViewState ||
+                success is RemoveMultipleDocumentsAllSuccessViewState ||
+                success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
+              getAllDocument();
+            }
       });
     });
+  }
+
+  void openSearchState() {
+    store.dispatch(EnableSearchStateAction(SearchDestination.mySpace));
+    store.dispatch((MySpaceSetSearchResultAction([])));
+  }
+
+  void _search(SearchQuery searchQuery) {
+    _searchQuery = searchQuery;
+    if (searchQuery.value.isNotEmpty) {
+      store.dispatch(_searchDocumentAction(_documentList, searchQuery));
+    } else {
+      store.dispatch(MySpaceSetSearchResultAction([]));
+    }
+  }
+
+  ThunkAction<AppState> _searchDocumentAction(List<Document> documentList, SearchQuery searchQuery) {
+    return (Store<AppState> store) async {
+      await _searchDocumentInteractor.execute(documentList, searchQuery).then((result) => result.fold(
+              (failure) {
+                if (_isInSearchState()) {
+                  store.dispatch(MySpaceSetSearchResultAction([]));
+                }
+              },
+              (success) {
+                if (_isInSearchState()) {
+                  store.dispatch(MySpaceSetSearchResultAction(success is SearchDocumentSuccess ? success.documentList : []));
+                }
+              })
+      );
+    };
   }
 
   void downloadFileClick(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
@@ -300,9 +344,17 @@ class MySpaceViewModel extends BaseViewModel {
   OnlineThunkAction _getAllDocumentAction() {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartMySpaceLoadingAction());
-      await _getAllDocumentInteractor.execute().then((result) => result.fold(
-              (failure) => store.dispatch(MySpaceGetAllDocumentAction(Left(failure))),
-              (success) => store.dispatch(MySpaceGetAllDocumentAction(Right(success)))));
+      await _getAllDocumentInteractor
+          .execute()
+          .then((result) => result.fold(
+              (failure) {
+                store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
+                _documentList = [];
+              },
+              (success) {
+                store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
+                _documentList = success is MySpaceViewState ? success.documentList : [];
+              }));
     });
   }
 
@@ -399,6 +451,10 @@ class MySpaceViewModel extends BaseViewModel {
           documents.map((element) => DocumentPresentationFile.fromDocument(element)).toList()).build())
         .addTiles(actionTiles)
         .build();
+  }
+
+  bool _isInSearchState() {
+    return store.state.uiState.isInSearchState();
   }
 
   @override

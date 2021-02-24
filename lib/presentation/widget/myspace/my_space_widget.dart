@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -142,8 +143,9 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                               : SizedBox.shrink());
                     },
                   ),
+                  _buildResultCount(),
                   Expanded(
-                    child: _buildMySpaceList(context),
+                    child: buildMySpaceListBySearchState(),
                   ),
                   StoreConnector<AppState, MySpaceState>(
                     converter: (store) => store.state.mySpaceState,
@@ -161,60 +163,115 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                     })
                 ],
               ),
-          bottomNavigationBar: StoreConnector<AppState, SelectMode>(
-                  converter: (store) => store.state.mySpaceState.selectMode,
-                  builder: (context, selectMode) {
-                    return selectMode == SelectMode.INACTIVE
-                        ? SearchBottomBarBuilder()
-                            .key(Key('search_bottom_bar'))
-                            .onSearchActionClick(() {})
-                            .build()
-                        : SizedBox.shrink();
+          bottomNavigationBar: StoreConnector<AppState, AppState>(
+                  converter: (store) => store.state,
+                  builder: (context, appState) {
+                    if (!appState.uiState.isInSearchState() &&
+                        appState.mySpaceState.selectMode == SelectMode.INACTIVE) {
+                      return SearchBottomBarBuilder()
+                          .key(Key('search_bottom_bar'))
+                          .onSearchActionClick(() => mySpaceViewModel.openSearchState())
+                          .build();
+                    }
+                    return SizedBox.shrink();
                   }),
-              floatingActionButton: StoreConnector<AppState, SelectMode>(
-                converter: (store) => store.state.mySpaceState.selectMode,
-                builder: (context, selectMode) {
-                  return selectMode == SelectMode.INACTIVE ? FloatingActionButton(
-                    key: Key('my_space_upload_button'),
-                    onPressed: () => mySpaceViewModel
-                        .openUploadFileMenu(context, _uploadFileMenuActionTiles(context)),
-                    backgroundColor: AppColor.primaryColor,
-                    child: SvgPicture.asset(
-                      imagePath.icPlus,
-                      width: 24,
-                      height: 24,
-                    ),
-                  ) : SizedBox.shrink();
+              floatingActionButton: StoreConnector<AppState, AppState>(
+                converter: (store) => store.state,
+                builder: (context, appState) {
+                  if (!appState.uiState.isInSearchState() &&
+                      appState.mySpaceState.selectMode == SelectMode.INACTIVE) {
+                    return FloatingActionButton(
+                      key: Key('my_space_upload_button'),
+                      onPressed: () => mySpaceViewModel.openUploadFileMenu(context, _uploadFileMenuActionTiles(context)),
+                      backgroundColor: AppColor.primaryColor,
+                      child: SvgPicture.asset(
+                        imagePath.icPlus,
+                        width: 24,
+                        height: 24,
+                      ),
+                    );
+                  }
+                  return SizedBox.shrink();
                 }),
               floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
             ),
         converter: (Store<AppState> store) => mySpaceViewModel);
   }
 
-  Widget _buildMySpaceList(BuildContext context) {
-    return StoreConnector<AppState, MySpaceState>(
-        converter: (store) => store.state.mySpaceState,
-        builder: (context, mySpaceState) {
-          return mySpaceState.viewState.fold(
-            (failure) =>
-              RefreshIndicator(
-                onRefresh: () async => mySpaceViewModel.getAllDocument(),
-                child: failure is MySpaceFailure ?
-                  BackgroundWidgetBuilder()
+  Widget buildMySpaceListBySearchState() {
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, appState) {
+        if (appState.uiState.isInSearchState()) {
+          return _buildSearchResultMySpaceList(appState.mySpaceState);
+        }
+        return _buildNormalMySpaceList(appState.mySpaceState);
+      });
+  }
+
+  Widget _buildSearchResultMySpaceList(MySpaceState mySpaceState) {
+    if (mySpaceViewModel.searchQuery.value.isEmpty) {
+      return SizedBox.shrink();
+    } else {
+      if (mySpaceState.documentList.isEmpty) {
+        return _buildNoResultFound();
+      }
+      return _buildMySpaceListView(context, mySpaceState.documentList);
+    }
+  }
+
+  Widget _buildNoResultFound() {
+    return BackgroundWidgetBuilder()
+        .key(Key('search_no_result_found'))
+        .text(AppLocalizations.of(context).no_results_found).build();
+  }
+
+  Widget _buildResultCount() {
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, appState) {
+          if (appState.uiState.isInSearchState() && mySpaceViewModel.searchQuery.value.isNotEmpty) {
+            return _buildResultCountRow(appState.mySpaceState.documentList);
+          }
+          return SizedBox.shrink();
+        });
+  }
+
+  Widget _buildResultCountRow(List<SelectableElement<Document>> resultList) {
+    return Container(
+      color: AppColor.topBarBackgroundColor,
+      height: 40.0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context).results_count(resultList.length),
+            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNormalMySpaceList(MySpaceState mySpaceState) {
+    return mySpaceState.viewState.fold(
+        (failure) => RefreshIndicator(
+            onRefresh: () async => mySpaceViewModel.getAllDocument(),
+            child: failure is MySpaceFailure
+                ? BackgroundWidgetBuilder()
                     .key(Key('my_space_error_background'))
-                    .image(SvgPicture.asset(
-                      imagePath.icUnexpectedError,
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.fill))
-                    .text(AppLocalizations.of(context).common_error_occured_message)
-                    .build() : _buildMySpaceListView(context, mySpaceState.documentList)),
-            (success) => success is LoadingState ?
-              _buildMySpaceListView(context, mySpaceState.documentList) :
-              RefreshIndicator(
+                    .image(SvgPicture.asset(imagePath.icUnexpectedError,
+                        width: 120, height: 120, fit: BoxFit.fill))
+                    .text(AppLocalizations.of(context)
+                        .common_error_occured_message)
+                    .build()
+                : _buildMySpaceListView(context, mySpaceState.documentList)),
+        (success) => success is LoadingState
+            ? _buildMySpaceListView(context, mySpaceState.documentList)
+            : RefreshIndicator(
                 onRefresh: () async => mySpaceViewModel.getAllDocument(),
                 child: _buildMySpaceListView(context, mySpaceState.documentList)));
-        });
   }
 
   Widget _buildMySpaceListView(BuildContext context, List<SelectableElement<Document>> documentList) {

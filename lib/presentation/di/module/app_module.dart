@@ -171,6 +171,7 @@ class AppModule {
     getIt.registerFactory(() => GetAllReceivedSharesInteractor(getIt<ReceivedShareRepository>()));
     getIt.registerFactory(() => CopyToMySpaceInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => CopyMultipleFilesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
+    getIt.registerFactory(() => SearchDocumentInteractor());
     getIt.registerFactory(() => CopyMultipleFilesFromReceivedSharesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
   }
 

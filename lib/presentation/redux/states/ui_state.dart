@@ -38,21 +38,61 @@ import 'package:equatable/equatable.dart';
 class UIState with EquatableMixin {
   final String routePath;
   final SharedSpaceNodeNested selectedSharedSpace;
+  final SearchState searchState;
 
-  UIState(this.routePath, {this.selectedSharedSpace});
+  UIState(this.routePath, this.searchState, {this.selectedSharedSpace});
 
   factory UIState.initial() {
-    return UIState(RoutePaths.initializeRoute);
+    return UIState(RoutePaths.initializeRoute, SearchState.initial());
   }
 
   UIState setCurrentView(String routePath, {SharedSpaceNodeNested sharedSpace}) {
-    return UIState(routePath, selectedSharedSpace: sharedSpace);
+    return UIState(routePath, searchState, selectedSharedSpace: sharedSpace);
   }
 
   UIState clearCurrentView() {
     return UIState.initial();
   }
 
+  UIState setSearchState(SearchState searchState) {
+    return UIState(routePath, searchState, selectedSharedSpace: selectedSharedSpace);
+  }
+
   @override
   List<Object> get props => [routePath, selectedSharedSpace];
+}
+
+extension UIStateExtension on UIState {
+  bool isInSearchState() => searchState.searchStatus == SearchStatus.active;
+}
+
+class SearchState {
+  final SearchStatus searchStatus;
+  final SearchDestination searchDestination;
+
+  SearchState(this.searchStatus, this.searchDestination);
+
+  factory SearchState.initial() {
+    return SearchState(SearchStatus.inactive, SearchDestination.mySpace);
+  }
+
+  SearchState newSearchQuery(SearchQuery searchQuery) {
+    return SearchState(searchStatus, searchDestination);
+  }
+
+  SearchState disableSearchState() {
+    return SearchState.initial();
+  }
+
+  SearchState enableSearchState(SearchDestination searchDestination) {
+    return SearchState(SearchStatus.active, searchDestination);
+  }
+}
+
+enum SearchStatus {
+  active, inactive
+}
+
+enum SearchDestination {
+  mySpace
 }
