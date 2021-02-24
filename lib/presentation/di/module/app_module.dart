@@ -87,6 +87,9 @@ class AppModule {
     getIt.registerLazySingleton(() => QuotaDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerLazySingleton(() => FunctionalityDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -102,6 +105,7 @@ class AppModule {
     getIt.registerFactory<FileUploadDataSource>(() => getIt<FileUploadDataSourceImpl>());
     getIt.registerFactory<QuotaDataSource>(() => getIt<QuotaDataSourceImpl>());
     getIt.registerFactory<ReceivedShareDataSource>(() => getIt<ReceivedShareDataSourceImp>());
+    getIt.registerFactory<FunctionalityDataSource>(() => getIt<FunctionalityDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -114,6 +118,7 @@ class AppModule {
     getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(getIt<SharedSpaceDocumentDataSource>(), getIt<FileUploadDataSource>()));
     getIt.registerFactory(() => QuotaRepositoryImpl(getIt<QuotaDataSource>()));
     getIt.registerFactory(() => ReceivedShareRepositoryImp(getIt<ReceivedShareDataSource>()));
+    getIt.registerFactory(() => FunctionalityRepositoryImpl(getIt<FunctionalityDataSource>()));
   }
 
   void _provideRepository() {
@@ -126,6 +131,7 @@ class AppModule {
     getIt.registerFactory<SharedSpaceDocumentRepository>(() => getIt<SharedSpaceDocumentRepositoryImpl>());
     getIt.registerFactory<QuotaRepository>(() => getIt<QuotaRepositoryImpl>());
     getIt.registerFactory<ReceivedShareRepository>(() => getIt<ReceivedShareRepositoryImp>());
+    getIt.registerFactory<FunctionalityRepository>(() => getIt<FunctionalityRepositoryImpl>());
   }
 
   void _provideInterActor() {
@@ -173,6 +179,7 @@ class AppModule {
     getIt.registerFactory(() => CopyMultipleFilesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
     getIt.registerFactory(() => SearchDocumentInteractor());
     getIt.registerFactory(() => CopyMultipleFilesFromReceivedSharesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
+    getIt.registerFactory(() => GetAllFunctionalityInteractor(getIt<FunctionalityRepository>()));
   }
 
   void _provideSharePreference() {
