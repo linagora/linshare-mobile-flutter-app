@@ -35,6 +35,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -105,24 +106,30 @@ class SideMenuDrawerWidget extends StatelessWidget {
                     : _buildMySpaceText(context, selected: false)),
             onTap: () => sideMenuDrawerViewModel.goToMySpace(),
           ),
-          ListTile(
-            key: Key('side_menu_shared_space_button'),
-            leading: StoreConnector<AppState, UIState>(
-                converter: (Store<AppState> store) => store.state.uiState,
-                distinct: true,
-                builder: (context, state) =>
-                state.routePath == RoutePaths.sharedSpace
-                    ? _buildSharedSpaceIcon(selected: true)
-                    : _buildSharedSpaceIcon(selected: false)),
-            title: StoreConnector<AppState, UIState>(
-                converter: (Store<AppState> store) => store.state.uiState,
-                distinct: true,
-                builder: (context, state) =>
-                state.routePath == RoutePaths.sharedSpace
-                    ? _buildSharedSpaceText(context, selected: true)
-                    : _buildSharedSpaceText(context, selected: false)),
-            onTap: () => sideMenuDrawerViewModel.goToSharedSpace(),
-          ),
+          StoreConnector<AppState, FunctionalityState>(
+              converter: (Store<AppState> store) => store.state.functionalityState,
+              distinct: true,
+              builder: (context, state) {
+                if (state.isSharedSpaceEnable()) {
+                  return ListTile(
+                    key: Key('side_menu_shared_space_button'),
+                    leading: StoreConnector<AppState, UIState>(
+                        converter: (Store<AppState> store) => store.state.uiState,
+                        distinct: true,
+                        builder: (context, state) => state.routePath == RoutePaths.sharedSpace
+                            ? _buildSharedSpaceIcon(selected: true)
+                            : _buildSharedSpaceIcon(selected: false)),
+                    title: StoreConnector<AppState, UIState>(
+                        converter: (Store<AppState> store) => store.state.uiState,
+                        distinct: true,
+                        builder: (context, state) => state.routePath == RoutePaths.sharedSpace
+                            ? _buildSharedSpaceText(context, selected: true)
+                            : _buildSharedSpaceText(context, selected: false)),
+                    onTap: () => sideMenuDrawerViewModel.goToSharedSpace(),
+                  );
+                }
+                return SizedBox.shrink();
+              }),
           Divider(),
           ListTile(
             leading: StoreConnector<AppState, UIState>(
