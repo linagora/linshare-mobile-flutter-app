@@ -41,4 +41,10 @@ final uiReducer = combineReducers<UIState>([
           (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, sharedSpace: action.sharedSpace)),
   TypedReducer<UIState, ClearCurrentView>(
           (UIState state, _) => state.clearCurrentView()),
+  TypedReducer<UIState, EnableSearchStateAction>(
+      (UIState state, EnableSearchStateAction action) => state.setSearchState(
+          state.searchState.enableSearchState(action.searchDestination))),
+  TypedReducer<UIState, DisableSearchStateAction>(
+          (UIState state, DisableSearchStateAction action) => state.setSearchState(
+          state.searchState.disableSearchState())),
 ]);

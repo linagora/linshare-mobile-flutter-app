@@ -667,6 +667,31 @@ class AppLocalizations {
       name: 'all_items_have_been_copied_to_my_space',
     );
   }
+
+  String get search_in_my_space {
+    return Intl.message(
+      'Search in My Space',
+      name: 'search_in_my_space',
+    );
+  }
+
+  String results_count(int numberOfResults) {
+    return Intl.message(
+      '''${Intl.plural(numberOfResults,
+          zero: '$numberOfResults result',
+          one: '$numberOfResults result',
+          other: '$numberOfResults results')}''',
+      name: 'results_count',
+      args: [numberOfResults],
+    );
+  }
+
+  String get no_results_found {
+    return Intl.message(
+      'No results found',
+      name: 'no_results_found',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

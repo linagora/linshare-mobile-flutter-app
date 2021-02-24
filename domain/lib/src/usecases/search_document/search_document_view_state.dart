@@ -57,3 +57,8 @@ class SearchDocumentNewQuery extends ViewState {
   @override
   List<Object> get props => [searchQuery];
 }
+
+class DisableSearchViewState extends ViewState {
+  @override
+  List<Object> get props => [];
+}

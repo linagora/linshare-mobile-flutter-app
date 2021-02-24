@@ -502,5 +502,22 @@
   "@all_items_have_been_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "search_in_my_space": "Поиск в моём пространстве",
+  "@search_in_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "results_count": "{numberOfResults,plural, =0{{numberOfResults} результат}=1{{numberOfResults} результат}other{{numberOfResults} результата}}",
+  "@results_count": {
+    "type": "text",
+    "placeholders": {
+      "numberOfResults": {}
+    }
+  },
+  "no_results_found": "Результаты не найдены",
+  "@no_results_found": {
+    "type": "text",
+    "placeholders": {}
   }
 }
