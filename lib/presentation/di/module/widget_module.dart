@@ -97,7 +97,8 @@ class WidgetModule {
       getIt<AppNavigation>(),
       getIt<GetAuthorizedInteractor>(),
       getIt<UploadFileManager>(),
-      getIt<Connectivity>()
+      getIt<Connectivity>(),
+      getIt<GetAllFunctionalityInteractor>()
     ));
   }
 

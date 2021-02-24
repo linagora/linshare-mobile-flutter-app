@@ -32,6 +32,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
@@ -54,6 +55,7 @@ class AppState with EquatableMixin {
   final DestinationPickerState destinationPickerState;
   final NetworkConnectivityState networkConnectivityState;
   final AccountState account;
+  final FunctionalityState functionalityState;
 
   AppState(
       {@required this.uiState,
@@ -65,7 +67,8 @@ class AppState with EquatableMixin {
       @required this.receivedShareState,
       @required this.destinationPickerState,
       @required this.networkConnectivityState,
-      @required this.account});
+      @required this.account,
+      @required this.functionalityState});
 
   factory AppState.initial() {
     return AppState(
@@ -78,7 +81,8 @@ class AppState with EquatableMixin {
         receivedShareState: ReceivedShareState.initial(),
         destinationPickerState: DestinationPickerState.initial(),
         networkConnectivityState: NetworkConnectivityState.initial(),
-        account: AccountState.initial());
+        account: AccountState.initial(),
+        functionalityState: FunctionalityState.initial());
   }
 
   @override
@@ -92,6 +96,7 @@ class AppState with EquatableMixin {
         receivedShareState,
         destinationPickerState,
         networkConnectivityState,
-        account
+        account,
+        functionalityState
       ];
 }
