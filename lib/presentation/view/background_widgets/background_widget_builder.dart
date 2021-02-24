@@ -62,7 +62,7 @@ class BackgroundWidgetBuilder {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _image,
+            _image ?? SizedBox.shrink(),
             Padding(
               padding: EdgeInsets.only(top: 20),
               child: Text(
