@@ -79,3 +79,10 @@ class MySpaceUnselectAllDocumentsAction extends ActionOffline {
 class CleanMySpaceStateAction extends ActionOffline {
   CleanMySpaceStateAction();
 }
+
+@immutable
+class MySpaceSetSearchResultAction extends ActionOffline {
+  final List<Document> documentList;
+
+  MySpaceSetSearchResultAction(this.documentList);
+}

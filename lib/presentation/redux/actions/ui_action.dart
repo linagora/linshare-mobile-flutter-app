@@ -34,6 +34,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -63,3 +64,13 @@ ThunkAction<AppState> initializeHomeView(AppNavigation appNavigation) {
     await appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
   };
 }
+
+@immutable
+class EnableSearchStateAction extends ActionOffline {
+  final SearchDestination searchDestination;
+
+  EnableSearchStateAction(this.searchDestination);
+}
+
+@immutable
+class DisableSearchStateAction extends ActionOffline {}

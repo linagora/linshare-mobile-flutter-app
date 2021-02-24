@@ -32,11 +32,14 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
@@ -110,6 +113,21 @@ class HomeViewModel extends BaseViewModel {
     _appNavigation.push(
       RoutePaths.currentUploads,
     );
+  }
+
+  void cancelSearchState() {
+    store.dispatch(DisableSearchStateAction());
+    if (store.state.uiState.searchState.searchDestination == SearchDestination.mySpace) {
+      store.dispatch(MySpaceAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanMySpaceStateAction());
+    }
+  }
+
+  void search(String text) {
+    if (store.state.uiState.searchState.searchDestination == SearchDestination.mySpace) {
+      store.dispatch(MySpaceAction(Right(SearchDocumentNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanMySpaceStateAction());
+    }
   }
 
   @override
