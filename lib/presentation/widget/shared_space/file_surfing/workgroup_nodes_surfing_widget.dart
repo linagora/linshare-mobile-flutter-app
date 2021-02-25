@@ -35,11 +35,14 @@ import 'dart:ui';
 
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_document_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/workgroupnode_multiple_selection_action_builder.dart';
@@ -75,6 +78,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   final WorkGroupNodesSurfingViewModel _model = getIt<WorkGroupNodesSurfingViewModel>();
   final imagePath = getIt<AppImagePaths>();
   WorkGroupNodesSurfingArguments _arguments;
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +90,12 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   }
 
   @override
+  void dispose() {
+    _model.onDisposed();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<WorkGroupNodesSurfingState>(
       stream: _model.stateSubscription,
@@ -94,6 +104,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
           children: [
             widget.nodeSurfingType == NodeSurfingType.normal ? _buildTopBar() : SizedBox.shrink(),
             snapshot.data?.selectMode == SelectMode.ACTIVE ? _buildMultipleSelectionTopBar(snapshot.data) : SizedBox.shrink(),
+            _buildResultCount(),
             Expanded(child: RefreshIndicator(
               key: _refreshIndicatorKey,
               onRefresh: () async => await _model.loadAllChildNodes(),
@@ -113,7 +124,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
                 },
               ),
             )),
-            snapshot.data?.selectMode == SelectMode.ACTIVE && snapshot.data.getAllSelectedDocuments().isNotEmpty ? _buildMultipleSelectionBottomBar(context, snapshot.data.getAllSelectedDocuments()) : SizedBox.shrink()
+            snapshot.data?.selectMode == SelectMode.ACTIVE && snapshot.data.getAllSelectedDocuments().isNotEmpty ? _buildMultipleSelectionBottomBar(context, snapshot.data.getAllSelectedDocuments()) : SizedBox.shrink(),
           ],
         );
       },
@@ -121,69 +132,77 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   }
 
   Widget _buildTopBar() {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 20,
-            offset: Offset(0, 4),
-          )
-        ],
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: GestureDetector(
-              onTap: widget.backClickedCallback,
-              child: SvgPicture.asset(
-                imagePath.icBackBlue,
-                width: 24,
-                height: 24,
+    return StoreConnector<AppState, SearchStatus>(
+        converter: (store) => store.state.uiState.searchState.searchStatus,
+        builder: (context, searchStatus) {
+          if (searchStatus == SearchStatus.ACTIVE) {
+            return SizedBox.shrink();
+          } else {
+            return Container(
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 20,
+                    offset: Offset(0, 4),
+                  )
+                ],
               ),
-            ),
-          ),
-          StreamBuilder<WorkGroupNodesSurfingState>(
-            stream: _model.stateSubscription,
-            builder: (store, snapshot) {
-              if (!snapshot.hasData) return _buildLoadingWidget();
-
-              switch (snapshot.data.folderNodeType) {
-                case FolderNodeType.root:
-                  return Text(
-                    AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: AppColor.workgroupNodesSurfingBackTitleColor,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  );
-                case FolderNodeType.normal:
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5.0, right: 45.0),
-                      child: Text(
-                        snapshot.data.node.name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.workgroupNodesSurfingFolderNameColor,
-                        ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: GestureDetector(
+                      onTap: widget.backClickedCallback,
+                      child: SvgPicture.asset(
+                        imagePath.icBackBlue,
+                        width: 24,
+                        height: 24,
                       ),
                     ),
-                  );
-              }
+                  ),
+                  StreamBuilder<WorkGroupNodesSurfingState>(
+                    stream: _model.stateSubscription,
+                    builder: (store, snapshot) {
+                      if (!snapshot.hasData) return _buildLoadingWidget();
 
-              return SizedBox.shrink();
-            },
-          ),
-        ],
-      ),
-    );
+                      switch (snapshot.data.folderNodeType) {
+                        case FolderNodeType.root:
+                          return Text(
+                            AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: AppColor.workgroupNodesSurfingBackTitleColor,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          );
+                        case FolderNodeType.normal:
+                          return Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5.0, right: 45.0),
+                              child: Text(
+                                snapshot.data.node.name,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.workgroupNodesSurfingFolderNameColor,
+                                ),
+                              ),
+                            ),
+                          );
+                      }
+
+                      return SizedBox.shrink();
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+        });
   }
 
 
@@ -311,7 +330,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   }
 
   Widget _buildEmptyListIndicator() {
-    if (widget.nodeSurfingType == NodeSurfingType.destinationPicker) {
+    if (widget.nodeSurfingType == NodeSurfingType.destinationPicker || _model.isInSearchState()) {
       return SizedBox.shrink();
     }
     return BackgroundWidgetBuilder()
@@ -479,5 +498,33 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       _copyToMySpaceAction(context, workGroupNodes),
       _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
     ];
+  }
+
+  Widget _buildResultCount() {
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, appState) {
+          if (appState.uiState.isInSearchState() && _model.searchQuery.value.isNotEmpty) {
+            return _buildResultCountRow(_model.currentState.children);
+          }
+          return SizedBox.shrink();
+        });
+  }
+
+  Widget _buildResultCountRow(List<SelectableElement<WorkGroupNode>> resultList) {
+    return Container(
+      color: AppColor.topBarBackgroundColor,
+      height: 40.0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context).results_count(resultList.length),
+            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -119,9 +119,22 @@ class WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> 
           child: Container(
             height: 56,
             color: AppColor.workgroupDetailFilesBottomBarColor,
-            child: Row(
-              children: [],
-            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox.shrink(),
+                GestureDetector(
+                  onTap: () => workGroupDetailFilesViewModel.openSearchState(),
+                  child: SvgPicture.asset(
+                    imagePath.icSearchBlue,
+                    width: 32,
+                    height: 32,
+                  ),
+                )
+              ],
+            )),
           ),
         ),
         Align(

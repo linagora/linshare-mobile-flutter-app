@@ -38,6 +38,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/account_action.d
 import 'package:linshare_flutter_app/presentation/redux/actions/functionality_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -135,16 +136,22 @@ class HomeViewModel extends BaseViewModel {
 
   void cancelSearchState() {
     store.dispatch(DisableSearchStateAction());
-    if (store.state.uiState.searchState.searchDestination == SearchDestination.mySpace) {
+    if (store.state.uiState.searchState.searchDestination == SearchDestination.MY_SPACE) {
       store.dispatch(MySpaceAction(Right(DisableSearchViewState())));
       store.dispatch(CleanMySpaceStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.SHARED_SPACE) {
+      store.dispatch(SharedSpaceAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanSharedSpaceStateAction());
     }
   }
 
   void search(String text) {
-    if (store.state.uiState.searchState.searchDestination == SearchDestination.mySpace) {
+    if (store.state.uiState.searchState.searchDestination == SearchDestination.MY_SPACE) {
       store.dispatch(MySpaceAction(Right(SearchDocumentNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanMySpaceStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.SHARED_SPACE) {
+      store.dispatch(SharedSpaceAction(Right(SearchWorkGroupNodeNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanSharedSpaceStateAction());
     }
   }
 

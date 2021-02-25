@@ -63,7 +63,7 @@ class UIState with EquatableMixin {
 }
 
 extension UIStateExtension on UIState {
-  bool isInSearchState() => searchState.searchStatus == SearchStatus.active;
+  bool isInSearchState() => searchState.searchStatus == SearchStatus.ACTIVE;
 }
 
 class SearchState {
@@ -73,7 +73,7 @@ class SearchState {
   SearchState(this.searchStatus, this.searchDestination);
 
   factory SearchState.initial() {
-    return SearchState(SearchStatus.inactive, SearchDestination.mySpace);
+    return SearchState(SearchStatus.INACTIVE, SearchDestination.MY_SPACE);
   }
 
   SearchState newSearchQuery(SearchQuery searchQuery) {
@@ -81,18 +81,19 @@ class SearchState {
   }
 
   SearchState disableSearchState() {
-    return SearchState.initial();
+    return SearchState(SearchStatus.INACTIVE, searchDestination);
   }
 
   SearchState enableSearchState(SearchDestination searchDestination) {
-    return SearchState(SearchStatus.active, searchDestination);
+    return SearchState(SearchStatus.ACTIVE, searchDestination);
   }
 }
 
 enum SearchStatus {
-  active, inactive
+  ACTIVE, INACTIVE
 }
 
 enum SearchDestination {
-  mySpace
+  MY_SPACE,
+  SHARED_SPACE
 }
