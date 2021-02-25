@@ -123,6 +123,8 @@ export 'src/usecases/received/copy_multiple_files_from_received_shares_to_my_spa
 export 'src/usecases/functionality/get_all_functionality_interactor.dart';
 export 'src/usecases/shared_space/download_node_ios_interactor.dart';
 export 'src/usecases/shared_space/download_multiple_node_ios_interactor.dart';
+export 'src/usecases/search_workgroup_node/search_workgroup_node_interactor.dart';
+export 'src/usecases/search_workgroup_node/search_workgroup_node_view_state.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

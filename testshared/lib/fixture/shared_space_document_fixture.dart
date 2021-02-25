@@ -60,7 +60,7 @@ final workGroupDocument1 = WorkGroupDocument(
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
     DateTime.fromMillisecondsSinceEpoch(1604482138189),
     'description1',
-    'document1',
+    'Workgroup Node 1',
     Account(
         'user1@linshare.org',
         'user1@linshare.org',
@@ -83,7 +83,7 @@ final workGroupDocument2 = WorkGroupDocument(
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
     DateTime.fromMillisecondsSinceEpoch(1604482138189),
     'description1',
-    'document1',
+    'Workgroup Node 2',
     Account(
         'user1@linshare.org',
         'user1@linshare.org',
