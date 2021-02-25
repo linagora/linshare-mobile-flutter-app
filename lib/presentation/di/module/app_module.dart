@@ -185,6 +185,7 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
     getIt.registerFactory(() => DownloadMultipleNodeIOSInteractor(getIt<DownloadNodeIOSInteractor>()));
+    getIt.registerFactory(() => SearchWorkGroupNodeInteractor());
   }
 
   void _provideSharePreference() {

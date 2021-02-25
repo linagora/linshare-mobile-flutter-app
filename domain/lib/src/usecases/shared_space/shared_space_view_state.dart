@@ -68,7 +68,6 @@ class CopyToSharedSpaceFailure extends FeatureFailure {
   List<Object> get props => [exception];
 }
 
-
 class CopyMultipleFilesToSharedSpaceAllSuccessViewState extends ViewState {
   final List<Either<Failure, Success>> resultList;
 
@@ -113,7 +112,6 @@ class RemoveSharedSpaceNodeFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
-
 
 class RemoveAllSharedSpaceNodesSuccessViewState extends ViewState {
   final List<Either<Failure, Success>> resultList;
@@ -211,4 +209,11 @@ class DownloadNodeIOSAllFailureViewState extends FeatureFailure {
 
   @override
   List<Object> get props => [resultList];
+}
+
+class ClearWorkGroupNodesListViewState extends ViewState {
+  ClearWorkGroupNodesListViewState();
+
+  @override
+  List<Object> get props => [];
 }
