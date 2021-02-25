@@ -42,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -407,7 +408,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       if (Platform.isIOS) _exportFileAction(context, document),
       if (Platform.isAndroid) _downloadAction(document),
       _shareAction(document),
-      _copyToWorkGroupAction(context, document),
+      _copyToWorkGroupAction(context, [document]),
     ];
   }
 
@@ -484,17 +485,6 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .build();
   }
 
-  Widget _copyToWorkGroupAction(BuildContext context, Document document) {
-    return DocumentContextMenuTileBuilder(
-        Key('copy_to_workgroup_context_menu_action'),
-        SvgPicture.asset(imagePath.icSharedSpace,
-            width: 24, height: 24, fit: BoxFit.fill),
-        AppLocalizations.of(context).copy_to_a_workgroup,
-        document)
-        .onActionClick((data) => mySpaceViewModel.copyToAWorkgroup(context, [document]))
-        .build();
-  }
-
   List<Widget> _multipleSelectionActions(List<Document> documents) {
     return [
       _shareMultipleSelection(documents),
@@ -550,19 +540,26 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     return [
       if (Platform.isAndroid) _downloadMultiFilesAction(context, documents),
       if (Platform.isIOS) _exportMultiFilesAction(context, documents),
-      _copyMultiFilesToWorkGroupAction(context, documents),
+      _copyToWorkGroupAction(context, documents, itemSelectionType: ItemSelectionType.multiple),
     ];
   }
 
-  Widget _copyMultiFilesToWorkGroupAction(BuildContext context, List<Document> documents) {
-    return DocumentContextMenuTileBuilder(
-        Key('copy_to_workgroup_context_menu_action'),
-        SvgPicture.asset(imagePath.icSharedSpace,
-            width: 24, height: 24, fit: BoxFit.fill),
-        AppLocalizations.of(context).copy_to_a_workgroup,
-        documents[0])
-        .onActionClick((data) => mySpaceViewModel.copyToAWorkgroup(context, documents, itemSelectionType: ItemSelectionType.multiple))
-        .build();
+  Widget _copyToWorkGroupAction(BuildContext context, List<Document> documents,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return StoreConnector<AppState, FunctionalityState>(
+        converter: (Store<AppState> store) => store.state.functionalityState,
+        builder: (context, state) => state.isSharedSpaceEnable()
+            ? DocumentContextMenuTileBuilder(
+                    Key('copy_to_workgroup_context_menu_action'),
+                    SvgPicture.asset(imagePath.icSharedSpace,
+                        width: 24, height: 24, fit: BoxFit.fill),
+                    AppLocalizations.of(context).copy_to_a_workgroup, documents[0])
+                .onActionClick((data) => mySpaceViewModel.copyToAWorkgroup(
+                  context,
+                  documents,
+                  itemSelectionType: itemSelectionType))
+                .build()
+            : SizedBox.shrink());
   }
 
   Widget _downloadMultiFilesAction(BuildContext context, List<Document> documents) {
