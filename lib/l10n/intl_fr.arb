@@ -508,6 +508,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "search_in_shared_space_files": "Search in Shared Space files",
+  "@search_in_shared_space_files": {
+    "type": "text",
+    "placeholders": {}
+  },
   "results_count": "{numberOfResults,plural, =0{{numberOfResults} résultat}=1{{numberOfResults} résultat}other{{numberOfResults} résultats}}",
   "@results_count": {
     "type": "text",

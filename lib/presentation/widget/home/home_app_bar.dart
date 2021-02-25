@@ -59,15 +59,15 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return StoreConnector<AppState, UIState>(
         converter: (store) => store.state.uiState,
         builder: (context, uiState) {
-          if (uiState.searchState.searchStatus == SearchStatus.active) {
-            return _searchAppBar(context);
+          if (uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
+            return _searchAppBar(context, uiState.searchState.searchDestination);
           }
           return _homeAppBar(context);
         }
     );
   }
 
-  Widget _searchAppBar(BuildContext context) {
+  Widget _searchAppBar(BuildContext context, SearchDestination searchDestination) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Transform(
@@ -83,7 +83,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   fillColor: AppColor.searchBottomBarColor,
                   filled: true,
                   contentPadding: EdgeInsets.symmetric(vertical: 15),
-                  hintText: AppLocalizations.of(context).search_in_my_space,
+                  hintText: _getSearchHintText(context, searchDestination),
                   hintStyle: TextStyle(
                       color: AppColor.uploadFileFileSizeTextColor,
                       fontSize: 16.0),
@@ -177,6 +177,17 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         return AppLocalizations.of(context).received;
       default:
         return AppLocalizations.of(context).my_space_title;
+    }
+  }
+
+  String _getSearchHintText(BuildContext context, SearchDestination searchDestination) {
+    switch (searchDestination) {
+      case SearchDestination.MY_SPACE:
+        return AppLocalizations.of(context).search_in_my_space;
+      case SearchDestination.SHARED_SPACE:
+        return AppLocalizations.of(context).search_in_shared_space_files;
+      default:
+        return '';
     }
   }
 

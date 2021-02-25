@@ -35,8 +35,11 @@ import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -95,5 +98,10 @@ class WorkGroupDetailFilesViewModel extends BaseViewModel {
                   workGroupNodesSurfingArguments.folder,
                   workGroupNodesSurfingArguments.folderType)));
     };
+  }
+
+  void openSearchState() {
+    store.dispatch(EnableSearchStateAction(SearchDestination.SHARED_SPACE));
+    store.dispatch(SharedSpaceAction(Right(ClearWorkGroupNodesListViewState())));
   }
 }

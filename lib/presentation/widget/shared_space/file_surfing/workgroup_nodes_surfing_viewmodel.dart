@@ -43,8 +43,10 @@ import 'package:linshare_flutter_app/presentation/model/file/work_group_document
 import 'package:linshare_flutter_app/presentation/model/file/work_group_folder_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
@@ -60,19 +62,11 @@ import 'package:rxdart/rxdart.dart';
 import 'package:share/share.dart' as share_library;
 
 class WorkGroupNodesSurfingViewModel extends BaseViewModel {
-  WorkGroupNodesSurfingViewModel(
-    Store<AppState> store,
-    this._appNavigation,
-    this._getAllChildNodesInteractor,
-    this._removeMultipleSharedSpaceNodesInteractor,
-    this._copyMultipleToMySpaceInteractor,
-    this._downloadMultipleNodeIOSInteractor
-  ) : super(store);
-
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
   final CopyMultipleFilesToMySpaceInteractor _copyMultipleToMySpaceInteractor;
   final DownloadMultipleNodeIOSInteractor _downloadMultipleNodeIOSInteractor;
+  final SearchWorkGroupNodeInteractor _searchWorkGroupNodeInteractor;
   final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
@@ -80,13 +74,88 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   StreamView<WorkGroupNodesSurfingState> get stateSubscription => _stateSubscription;
 
   WorkGroupNodesSurfingState get currentState => _stateSubscription.value;
+  StreamSubscription _storeStreamSubscription;
+
+  SearchQuery _searchQuery = SearchQuery('');
+  SearchQuery get searchQuery  => _searchQuery;
+
+  List<WorkGroupNode> _workGroupNodesList;
+
+  WorkGroupNodesSurfingViewModel(
+    Store<AppState> store,
+    this._appNavigation,
+    this._getAllChildNodesInteractor,
+    this._removeMultipleSharedSpaceNodesInteractor,
+    this._copyMultipleToMySpaceInteractor,
+    this._downloadMultipleNodeIOSInteractor,
+    this._searchWorkGroupNodeInteractor
+  ) : super(store) {
+    _storeStreamSubscription = store.onChange.listen((event) {
+      event.sharedSpaceState.viewState.fold(
+         (failure) => null,
+         (success) {
+            if (success is SearchWorkGroupNodeNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
+              _search(success.searchQuery);
+            } else if (success is DisableSearchViewState) {
+              _stateSubscription.add(currentState.setWorkGroupNodesList(_workGroupNodesList, showLoading: false));
+              _searchQuery = SearchQuery('');
+
+            } else if (success is ClearWorkGroupNodesListViewState) {
+              _stateSubscription.add(currentState.setWorkGroupNodesList([], showLoading: false));
+            } else if (success is RemoveSharedSpaceNodeViewState ||
+                success is RemoveAllSharedSpaceNodesSuccessViewState ||
+                success is RemoveSomeSharedSpaceNodesSuccessViewState) {
+              loadAllChildNodes();
+            }
+      });
+    });
+  }
 
   void initial(WorkGroupNodesSurfingArguments input) {
+    if (isInSearchState()) {
+      store.dispatch(DisableSearchStateAction());
+    }
+
     _stateSubscription.add(currentState.copyWith(
       node: input.folder,
       folderNodeType: input.folderType,
       sharedSpaceId: input.sharedSpaceNodeNested.sharedSpaceId,
     ));
+  }
+
+  @override
+  void onDisposed() {
+    cancelSelection();
+    store.dispatch(DisableSearchStateAction());
+    _storeStreamSubscription.cancel();
+    _searchQuery = SearchQuery('');
+    super.onDisposed();
+  }
+
+  void _search(SearchQuery searchQuery) {
+    _searchQuery = searchQuery;
+    if (searchQuery.value.isNotEmpty) {
+      _searchDocumentAction(_workGroupNodesList, searchQuery);
+    } else {
+      _stateSubscription.add(currentState.copyWith(children: [], showLoading: false));
+    }
+  }
+
+  void _searchDocumentAction(List<WorkGroupNode> workGroupNodes, SearchQuery searchQuery) async {
+    if (isInSearchState()) {
+      await _searchWorkGroupNodeInteractor.execute(workGroupNodes, searchQuery).then((result) => result.fold(
+        (failure) => {
+          _stateSubscription.add(currentState.copyWith(children: [], showLoading: false))
+        },
+        (success) => {
+          _stateSubscription.add(currentState.setWorkGroupNodesList(success is SearchWorkGroupNodeSuccess ? success.workGroupNodesList : [], showLoading: false))
+        })
+      );
+    }
+  }
+
+  bool isInSearchState() {
+    return store.state.uiState.isInSearchState();
   }
 
   void loadAllChildNodes() async {
@@ -103,12 +172,18 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     result.fold(
       (failure) {
         _stateSubscription.add(currentState.copyWith(children: [], showLoading: false));
+        _workGroupNodesList = [];
       },
       (success) {
-        _stateSubscription.add(currentState.setWorkGroupNodesList(
-          (success as GetChildNodesViewState).workGroupNodes,
-          showLoading: false
-        ));
+        _workGroupNodesList = (success as GetChildNodesViewState).workGroupNodes;
+        if (isInSearchState()) {
+          _search(_searchQuery);
+        } else {
+          _stateSubscription.add(currentState.setWorkGroupNodesList(
+            (success as GetChildNodesViewState).workGroupNodes,
+            showLoading: false
+          ));
+        }
       },
     );
   }
