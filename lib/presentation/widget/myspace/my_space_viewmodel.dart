@@ -98,7 +98,7 @@ class MySpaceViewModel extends BaseViewModel {
       event.mySpaceState.viewState.fold(
          (failure) => null,
          (success) {
-            if (success is SearchDocumentNewQuery && event.uiState.searchState.searchStatus == SearchStatus.active) {
+            if (success is SearchDocumentNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
               _search(success.searchQuery);
             } else if (success is DisableSearchViewState) {
               store.dispatch((MySpaceSetSearchResultAction(_documentList)));
@@ -113,7 +113,7 @@ class MySpaceViewModel extends BaseViewModel {
   }
 
   void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.mySpace));
+    store.dispatch(EnableSearchStateAction(SearchDestination.MY_SPACE));
     store.dispatch((MySpaceSetSearchResultAction([])));
   }
 
