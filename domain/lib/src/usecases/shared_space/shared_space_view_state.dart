@@ -150,3 +150,21 @@ class ContextMenuWorkGroupNodeViewState extends ViewState {
   @override
   List<Object> get props => [workGroupNode];
 }
+
+class DownloadNodesSuccessViewState extends ViewState {
+  final List<DownloadTaskId> taskIds;
+
+  DownloadNodesSuccessViewState(this.taskIds);
+
+  @override
+  List<Object> get props => [taskIds];
+}
+
+class DownloadNodesFailure extends FeatureFailure {
+  final Object exception;
+
+  DownloadNodesFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
