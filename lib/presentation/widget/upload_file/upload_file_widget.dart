@@ -32,11 +32,15 @@
 import 'package:domain/domain.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -260,57 +264,79 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
   }
 
   Widget _buildUploadDestinationPicker() {
+    return StoreConnector<AppState, FunctionalityState>(
+      converter: (Store<AppState> store) => store.state.functionalityState,
+      distinct: true,
+      builder: (context, state) {
+        if (state.isSharedSpaceEnable()) {
+          return GestureDetector(
+            onTap: () => uploadFileViewModel.onPickUploadDestinationPressed(context),
+            child: _buildUploadDestinationPickerRow(),
+          );
+        }
+        return _buildUploadDestinationPickerRow();
+      }
+    );
+  }
+
+  Widget _buildUploadDestinationPickerRow() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-      child: GestureDetector(
-        onTap: () => uploadFileViewModel.onPickUploadDestinationPressed(context),
-        child: Column(
-          children: [
-            Align(
-                alignment: AlignmentDirectional.topStart,
-                child: Text(
-                  AppLocalizations.of(context).pick_the_destination,
-                  style: TextStyle(
-                      fontSize: 16.0, color: AppColor.uploadFileFileNameTextColor),
-                )),
-            SizedBox(height: 16.0,),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 1.0, right: 8.0),
-                  child: SvgPicture.asset(
-                      uploadFileViewModel.uploadDestinationTypeObservable.value == UploadDestinationType.mySpace
-                          ? imagePath.icHome
-                          : imagePath.icSharedSpace,
-                      width: 20,
-                      height: 20,
-                      fit: BoxFit.fill),
+      child: Column(
+        children: [
+          Align(
+              alignment: AlignmentDirectional.topStart,
+              child: Text(
+                AppLocalizations.of(context).pick_the_destination,
+                style: TextStyle(
+                    fontSize: 16.0, color: AppColor.uploadFileFileNameTextColor),
+              )),
+          SizedBox(height: 16.0,),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 1.0, right: 8.0),
+                child: SvgPicture.asset(
+                    uploadFileViewModel.uploadDestinationTypeObservable.value == UploadDestinationType.mySpace
+                        ? imagePath.icHome
+                        : imagePath.icSharedSpace,
+                    width: 20,
+                    height: 20,
+                    fit: BoxFit.fill),
+              ),
+              Expanded(
+                child: StreamBuilder<UploadDestinationType>(
+                  stream: uploadFileViewModel.uploadDestinationTypeObservable,
+                  builder: (_, snapshot) {
+                    if (snapshot.data == UploadDestinationType.workGroup) {
+                      return _buildUploadDestinationSelectedName(
+                          uploadFileViewModel.workGroupDocumentUploadInfoArgument.isRootNode()
+                              ? uploadFileViewModel.workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.name
+                              : uploadFileViewModel.workGroupDocumentUploadInfoArgument.currentNode.name);
+                    }
+                    return _buildUploadDestinationSelectedName(AppLocalizations.of(context).my_space_title);
+                  },
                 ),
-                Expanded(
-                  child: StreamBuilder<UploadDestinationType>(
-                    stream: uploadFileViewModel.uploadDestinationTypeObservable,
-                    builder: (_, snapshot) {
-                      if (snapshot.data == UploadDestinationType.workGroup) {
-                        return _buildUploadDestinationSelectedName(
-                            uploadFileViewModel.workGroupDocumentUploadInfoArgument.isRootNode()
-                                ? uploadFileViewModel.workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.name
-                                : uploadFileViewModel.workGroupDocumentUploadInfoArgument.currentNode.name);
-                      }
-                      return _buildUploadDestinationSelectedName(AppLocalizations.of(context).my_space_title);
-                    },
-                  ),
-                ),
-                SvgPicture.asset(imagePath.icArrowRight,
-                    width: 18, height: 18, fit: BoxFit.fill)
-              ],
-            ),
-            SizedBox(height: 6.0,),
-            Divider(
-              height: 1.0,
-              color: AppColor.uploadLineDividerWorkGroupDestination,
-            )
-          ],
-        ),
+              ),
+              StoreConnector<AppState, FunctionalityState>(
+                  converter: (Store<AppState> store) => store.state.functionalityState,
+                  distinct: true,
+                  builder: (context, state) {
+                    if (state.isSharedSpaceEnable()) {
+                      return SvgPicture.asset(imagePath.icArrowRight,
+                          width: 18, height: 18, fit: BoxFit.fill);
+                    }
+                    return SizedBox.shrink();
+                  }
+              )
+            ],
+          ),
+          SizedBox(height: 6.0,),
+          Divider(
+            height: 1.0,
+            color: AppColor.uploadLineDividerWorkGroupDestination,
+          )
+        ],
       ),
     );
   }
