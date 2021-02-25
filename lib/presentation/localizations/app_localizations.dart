@@ -675,6 +675,13 @@ class AppLocalizations {
     );
   }
 
+  String get search_in_shared_space_files {
+    return Intl.message(
+      'Search in Shared Space files',
+      name: 'search_in_shared_space_files',
+    );
+  }
+
   String results_count(int numberOfResults) {
     return Intl.message(
       '''${Intl.plural(numberOfResults,
