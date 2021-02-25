@@ -47,4 +47,10 @@ abstract class SharedSpaceDocumentDataSource {
     SharedSpaceId sharedSpaceId,
     WorkGroupNodeId sharedSpaceNodeId,
   );
+
+  Future<List<DownloadTaskId>> downloadNodes(
+    List<WorkGroupNodeId> workgroupNodeIds,
+    Token token,
+    Uri baseUrl
+  );
 }

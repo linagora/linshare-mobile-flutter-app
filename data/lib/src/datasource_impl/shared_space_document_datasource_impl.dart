@@ -30,15 +30,22 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'dart:io';
+
 import 'package:data/data.dart';
 import 'package:data/src/datasource/shared_space_document_datasource.dart';
+import 'package:data/src/network/config/endpoint.dart';
+import 'package:data/src/network/model/request/copy_body_request.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_document_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_folder_dto.dart';
+import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/sharedspace/shared_space_id.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
-import 'package:data/src/network/model/request/copy_body_request.dart';
+import 'package:ext_storage/ext_storage.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -129,5 +136,29 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         }
       });
     });
+  }
+
+  @override
+  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNodeId> workgroupNodeIds, Token token, Uri baseUrl) async {
+    var externalStorageDirPath;
+    if (Platform.isAndroid) {
+        externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+    } else if (Platform.isIOS) {
+        externalStorageDirPath = (await getApplicationDocumentsDirectory()).absolute.path;
+    } else {
+        throw DeviceNotSupportedException();
+    }
+
+    final taskIds = await Future.wait(
+        workgroupNodeIds.map((documentId) async => await FlutterDownloader.enqueue(
+            url: Endpoint.documents
+              .downloadServicePath(documentId.uuid)
+              .generateDownloadUrl(baseUrl),
+            savedDir: externalStorageDirPath,
+            headers: {Constant.authorization: 'Bearer ${token.token}'},
+            showNotification: true,
+            openFileFromNotification: true)));
+
+    return taskIds.map((taskId) => DownloadTaskId(taskId));
   }
 }
