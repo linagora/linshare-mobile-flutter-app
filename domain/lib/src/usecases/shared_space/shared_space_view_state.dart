@@ -168,3 +168,47 @@ class DownloadNodesFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class DownloadNodeIOSViewState extends ViewState {
+  final Uri filePath;
+  DownloadNodeIOSViewState(this.filePath);
+
+  @override
+  List<Object> get props => [filePath];
+}
+
+class DownloadNodeIOSFailure extends FeatureFailure {
+  final downloadFileException;
+
+  DownloadNodeIOSFailure(this.downloadFileException);
+
+  @override
+  List<Object> get props => [downloadFileException];
+}
+
+class DownloadNodeIOSAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadNodeIOSAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class DownloadNodeIOSHasSomeFilesFailureViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadNodeIOSHasSomeFilesFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class DownloadNodeIOSAllFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadNodeIOSAllFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}

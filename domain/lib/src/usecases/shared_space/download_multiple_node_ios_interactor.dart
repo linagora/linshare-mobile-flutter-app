@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,44 +30,31 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/copy/copy_request.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
+import 'package:flutter/foundation.dart';
 
-abstract class SharedSpaceDocumentRepository {
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+import 'download_node_ios_interactor.dart';
 
-  Future<List<WorkGroupNode>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+class DownloadMultipleNodeIOSInteractor {
+  final DownloadNodeIOSInteractor _downloadNodeIOSInteractor;
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
-  );
+  DownloadMultipleNodeIOSInteractor(this._downloadNodeIOSInteractor);
 
-  Future<WorkGroupNode> removeSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId);
-
-  Future<List<DownloadTaskId>> downloadNodes(
-    List<WorkGroupNodeId> workgroupNodeIds,
-    Token token,
-    Uri baseUrl
-  );
-
-  Future<Uri> downloadNodeIOS(
-      WorkGroupNode workgroupNode,
-      Token token,
-      Uri baseUrl,
-      CancelToken cancelToken);
+  Future<Either<Failure, Success>> execute({@required List<WorkGroupNode> workGroupNodes, @required CancelToken cancelToken}) async {
+    final listResult = await Future.wait(workGroupNodes.map((element) =>
+        _downloadNodeIOSInteractor.execute(element, cancelToken)));
+    if (listResult.length == 1) {
+      return listResult.first;
+    } else {
+      final failedFileCount = listResult.whereType<Left>().toList().length;
+      if (failedFileCount == 0) {
+        return Right(DownloadNodeIOSAllSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(DownloadNodeIOSAllFailureViewState(listResult));
+      }
+      return Right(DownloadNodeIOSHasSomeFilesFailureViewState(listResult));
+    }
+  }
 }
