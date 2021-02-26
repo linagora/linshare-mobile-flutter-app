@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,44 +30,27 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/copy/copy_request.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
 
-abstract class SharedSpaceDocumentRepository {
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+class DownloadNodeIOSInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+  final TokenRepository _tokenRepository;
+  final CredentialRepository _credentialRepository;
 
-  Future<List<WorkGroupNode>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+  DownloadNodeIOSInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
-  );
-
-  Future<WorkGroupNode> removeSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId);
-
-  Future<List<DownloadTaskId>> downloadNodes(
-    List<WorkGroupNodeId> workgroupNodeIds,
-    Token token,
-    Uri baseUrl
-  );
-
-  Future<Uri> downloadNodeIOS(
-      WorkGroupNode workgroupNode,
-      Token token,
-      Uri baseUrl,
-      CancelToken cancelToken);
+  Future<Either<Failure, Success>> execute(WorkGroupNode workgroupNode, CancelToken cancelToken) async {
+    try {
+      var filePath;
+      await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
+          .then((List responses) async {
+        filePath = await _sharedSpaceDocumentRepository.downloadNodeIOS(workgroupNode, responses[0], responses[1], cancelToken);
+      });
+      return Right<Failure, Success>(DownloadNodeIOSViewState(filePath));
+    } catch (exception) {
+      return Left<Failure, Success>(DownloadNodeIOSFailure(exception));
+    }
+  }
 }
