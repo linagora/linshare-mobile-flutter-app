@@ -35,6 +35,7 @@ import 'package:data/src/datasource/shared_space_document_datasource.dart';
 import 'package:data/src/extensions/uri_extension.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/copy/copy_request.dart';
 
@@ -85,5 +86,10 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   @override
   Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNodeId> workgroupNodeIds, Token token, Uri baseUrl) {
     return _sharedSpaceDocumentDataSource.downloadNodes(workgroupNodeIds, token, baseUrl);
+  }
+
+  @override
+  Future<Uri> downloadNodeIOS(WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) {
+    return _sharedSpaceDocumentDataSource.downloadNodeIOS(workgroupNode, token, baseUrl, cancelToken);
   }
 }

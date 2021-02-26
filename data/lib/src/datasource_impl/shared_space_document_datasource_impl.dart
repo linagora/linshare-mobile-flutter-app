@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:data/data.dart';
@@ -160,5 +161,69 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
             openFileFromNotification: true)));
 
     return taskIds.map((taskId) => DownloadTaskId(taskId));
+  }
+
+  @override
+  Future<Uri> downloadNodeIOS(WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) async {
+    final streamController = StreamController<Uri>();
+    try {
+      await Future.wait([
+        _linShareHttpClient.downloadDocumentIOS(
+            Endpoint.sharedSpaces
+                .withPathParameter(workgroupNode.sharedSpaceId.uuid)
+                .withPathParameter('nodes')
+                .withPathParameter(workgroupNode.workGroupNodeId.uuid)
+                .withPathParameter(Endpoint.download)
+                .generateEndpointPath(),
+            cancelToken,
+            token),
+        getTemporaryDirectory()
+      ]).then((values) {
+        final fileStream = (values[0] as ResponseBody).stream;
+        final tempFilePath = '${(values[1] as Directory).absolute.path}/${workgroupNode.name}';
+
+        final file = File(tempFilePath);
+        file.createSync(recursive: true);
+        var randomAccessFile = file.openSync(mode: FileMode.write);
+        StreamSubscription subscription;
+
+        subscription = fileStream
+            .takeWhile((_) => cancelToken == null || !cancelToken.isCancelled)
+            .listen((data) {
+          subscription.pause();
+          randomAccessFile.writeFrom(data).then((_randomAccessFile) {
+            randomAccessFile = _randomAccessFile;
+            subscription.resume();
+          }).catchError((error) async {
+            await subscription.cancel();
+            streamController.sink.addError(DownloadFileException(error.toString()));
+            await streamController.close();
+          });
+        }, onDone: () async {
+          await randomAccessFile.close();
+          if (cancelToken.isCancelled) {
+            streamController.sink.addError(CancelDownloadFileException(cancelToken.cancelError.message));
+          } else {
+            streamController.sink.add(Uri.parse(tempFilePath));
+          }
+          await streamController.close();
+        }, onError: (error) async {
+          await randomAccessFile.close();
+          await file.delete();
+          streamController.sink.addError(DownloadFileException(error.toString()));
+          await streamController.close();
+        });
+      });
+    } catch(exception) {
+      _remoteExceptionThrower.throwRemoteException(exception, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw DocumentNotFound();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    }
+
+    return streamController.stream.first;
   }
 }
