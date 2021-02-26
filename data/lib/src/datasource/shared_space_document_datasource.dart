@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 abstract class SharedSpaceDocumentDataSource {
@@ -53,4 +54,10 @@ abstract class SharedSpaceDocumentDataSource {
     Token token,
     Uri baseUrl
   );
+
+  Future<Uri> downloadNodeIOS(
+      WorkGroupNode workgroupNode,
+      Token token,
+      Uri baseUrl,
+      CancelToken cancelToken);
 }
