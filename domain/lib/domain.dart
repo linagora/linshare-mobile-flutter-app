@@ -121,6 +121,8 @@ export 'src/usecases/myspace/copy_to_my_space_interactor.dart';
 export 'src/usecases/myspace/copy_multiple_files_to_my_space_interactor.dart';
 export 'src/usecases/received/copy_multiple_files_from_received_shares_to_my_space_interactor.dart';
 export 'src/usecases/functionality/get_all_functionality_interactor.dart';
+export 'src/usecases/shared_space/download_node_ios_interactor.dart';
+export 'src/usecases/shared_space/download_multiple_node_ios_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

@@ -32,7 +32,9 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
@@ -45,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
@@ -54,6 +57,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfi
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:share/share.dart' as share_library;
 
 class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   WorkGroupNodesSurfingViewModel(
@@ -61,12 +65,14 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     this._appNavigation,
     this._getAllChildNodesInteractor,
     this._removeMultipleSharedSpaceNodesInteractor,
-    this._copyMultipleToMySpaceInteractor
+    this._copyMultipleToMySpaceInteractor,
+    this._downloadMultipleNodeIOSInteractor
   ) : super(store);
 
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
   final CopyMultipleFilesToMySpaceInteractor _copyMultipleToMySpaceInteractor;
+  final DownloadMultipleNodeIOSInteractor _downloadMultipleNodeIOSInteractor;
   final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
@@ -207,6 +213,72 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
           (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
           (success) => store.dispatch(SharedSpaceAction(Right(success)))));
     });
+  }
+
+  void exportFiles(BuildContext context, List<WorkGroupNode> workGroupNodes,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+    final cancelToken = CancelToken();
+    _showDownloadingFileDialog(context, workGroupNodes, cancelToken);
+    store.dispatch(_exportFileAction(workGroupNodes, cancelToken));
+  }
+
+  void _showDownloadingFileDialog(BuildContext context, List<WorkGroupNode> workGroupNodes, CancelToken cancelToken) {
+    final downloadMessage = workGroupNodes.length <= 1
+        ? AppLocalizations.of(context).downloading_file(workGroupNodes.first.name)
+        : AppLocalizations.of(context).downloading_files(workGroupNodes.length);
+
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+            .key(Key('downloading_file_dialog'))
+            .title(AppLocalizations.of(context).preparing_to_export)
+            .content(downloadMessage)
+            .actionText(AppLocalizations.of(context).cancel)
+            .build());
+  }
+
+  OnlineThunkAction _exportFileAction(List<WorkGroupNode> workGroupNodes, CancelToken cancelToken) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadMultipleNodeIOSInteractor.execute(workGroupNodes: workGroupNodes, cancelToken: cancelToken).then(
+              (result) => result.fold(
+                  (failure) => store.dispatch(_exportFileFailureAction(failure)),
+                  (success) => store.dispatch(_exportFileSuccessAction(success))));
+    });
+  }
+
+  ThunkAction<AppState> _exportFileSuccessAction(Success success) {
+    return (Store<AppState> store) async {
+      _appNavigation.popBack();
+      store.dispatch(SharedSpaceAction(Right(success)));
+      if (success is DownloadNodeIOSViewState) {
+        await share_library.Share.shareFiles([Uri.decodeFull(success.filePath.path)]);
+      } else if (success is DownloadNodeIOSAllSuccessViewState) {
+        await share_library.Share.shareFiles(success.resultList
+            .map((result) => Uri.decodeFull(
+            ((result.getOrElse(() => null) as DownloadNodeIOSViewState).filePath.path)))
+            .toList());
+      } else if (success is DownloadNodeIOSHasSomeFilesFailureViewState) {
+        await share_library.Share.shareFiles(success.resultList
+            .map((result) => result.fold(
+                (failure) => null,
+                (success) => Uri.decodeFull(((success as DownloadNodeIOSViewState).filePath.path))))
+            .toList());
+      }
+    };
+  }
+
+  ThunkAction<AppState> _exportFileFailureAction(Failure failure) {
+    return (Store<AppState> store) async {
+      if (failure is DownloadNodeIOSFailure &&
+          !(failure.downloadFileException is CancelDownloadFileException)) {
+        _appNavigation.popBack();
+      }
+      store.dispatch(SharedSpaceAction(Left(failure)));
+    };
   }
 
   void openMoreActionBottomMenu(BuildContext context, List<WorkGroupNode> workGroupNodes, List<Widget> actionTiles) {
