@@ -44,4 +44,8 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.CONTRIBUTOR,
     SharedSpaceRoleName.WRITER
   ];
+
+  static const deleteSharedSpaceRoles = [
+    SharedSpaceRoleName.ADMIN,
+  ];
 }

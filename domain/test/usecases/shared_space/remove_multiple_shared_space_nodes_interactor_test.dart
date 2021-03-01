@@ -38,7 +38,7 @@ import 'package:testshared/fixture/shared_space_document_fixture.dart';
 import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
-  group('remove_multiple_shared_space_nodess_interactor test', () {
+  group('remove_multiple_shared_space_nodes_interactor test', () {
     MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
     RemoveSharedSpaceNodeInteractor removeSharedSpaceNodeInteractor;
     RemoveMultipleSharedSpaceNodesInteractor removeMultipleSharedSpaceNodesInteractor;
