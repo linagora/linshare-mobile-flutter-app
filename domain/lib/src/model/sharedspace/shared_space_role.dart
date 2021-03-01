@@ -40,6 +40,10 @@ class SharedSpaceRole extends Equatable {
 
   SharedSpaceRole(this.sharedSpaceRoleId, this.name);
 
+  factory SharedSpaceRole.initial() {
+    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
+  }
+
   @override
   List<Object> get props => [sharedSpaceRoleId, name];
 }
