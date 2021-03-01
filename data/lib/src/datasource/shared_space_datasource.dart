@@ -32,5 +32,7 @@
 import 'package:domain/domain.dart';
 
 abstract class SharedSpaceDataSource {
-    Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+
+  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
 }

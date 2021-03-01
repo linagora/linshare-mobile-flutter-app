@@ -274,4 +274,15 @@ class LinShareHttpClient {
       default: return FunctionalitySimpleDto.fromJson(jsonData);
     }
   }
+
+  Future<SharedSpaceNodeNestedResponse> deleteSharedSpace(SharedSpaceId sharedSpaceId) async {
+    final deletedSharedSpace = await _dioClient.delete(
+      Endpoint.sharedSpaces.withPathParameter(sharedSpaceId.uuid).generateEndpointPath(),
+      options: Options(headers: {
+        'Content-Type': 'application/json'
+      })
+    );
+
+    return SharedSpaceNodeNestedResponse.fromJson(deletedSharedSpace);
+  }
 }
