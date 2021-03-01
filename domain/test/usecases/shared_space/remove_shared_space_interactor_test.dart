@@ -28,11 +28,41 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
+import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
-abstract class SharedSpaceRepository {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+void main() {
+  group('remove_shared_space_interactor test', () {
+    MockSharedSpaceRepository sharedSpaceRepository;
+    RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+    setUp(() {
+      sharedSpaceRepository = MockSharedSpaceRepository();
+      removeSharedSpaceInteractor = RemoveSharedSpaceInteractor(sharedSpaceRepository);
+    });
+
+    test('remove shared space interactor should return success with one valid data', () async {
+      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace1.sharedSpaceId))
+      .thenAnswer((_) async => sharedSpace1);
+
+      final result = await removeSharedSpaceInteractor.execute(sharedSpace1.sharedSpaceId);
+      expect(result, Right<Failure, Success>(RemoveSharedSpaceViewState(sharedSpace1)));
+    });
+
+    test('remove shared space interactor should fail when remove shared Space fail', () async {
+      final exception = Exception();
+
+      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace1.sharedSpaceId))
+        .thenThrow(exception);
+
+      final result = await removeSharedSpaceInteractor.execute(sharedSpace1.sharedSpaceId);
+      expect(result, Left<Failure, Success>(RemoveSharedSpaceFailure(exception)));
+    });
+  });
 }

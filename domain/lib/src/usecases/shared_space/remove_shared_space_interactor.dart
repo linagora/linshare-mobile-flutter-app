@@ -28,11 +28,28 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class SharedSpaceRepository {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+class RemoveSharedSpaceInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+  RemoveSharedSpaceInteractor(this._sharedSpaceRepository);
+
+  Future<Either<Failure, Success>> execute(
+    SharedSpaceId sharedSpaceId,
+  ) async {
+    try {
+      final sharedSpace = await _sharedSpaceRepository.deleteSharedSpace(sharedSpaceId);
+      return Right<Failure, Success>(RemoveSharedSpaceViewState(sharedSpace));
+    } catch (exception) {
+      if (exception is SharedSpacesNotFound) {
+        return Left<Failure, Success>(RemoveSharedSpaceNotFoundFailure());
+      } else {
+        return Left<Failure, Success>(RemoveSharedSpaceFailure(exception));
+      }
+    }
+  }
 }
