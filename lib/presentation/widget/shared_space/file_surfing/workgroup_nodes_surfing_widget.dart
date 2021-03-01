@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:domain/domain.dart';
@@ -350,7 +351,8 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
 
   List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument) {
     return [
-      _copyToMySpaceAction(context, [workGroupDocument])
+      _copyToMySpaceAction(context, [workGroupDocument]),
+      if (Platform.isIOS) _exportFileAction([workGroupDocument])
     ];
   }
 
@@ -443,6 +445,20 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         .build();
   }
 
+  Widget _exportFileAction(List<WorkGroupNode> workGroupNodes,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return workGroupNodes.any((element) => element is WorkGroupFolder) ?
+    SizedBox.shrink() :
+    WorkGroupDocumentContextMenuTileBuilder(
+        Key('export_file_context_menu_action'),
+        SvgPicture.asset(imagePath.icExportFile,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).export_file,
+        workGroupNodes.first)
+        .onActionClick((data) => _model.exportFiles(context, workGroupNodes, itemSelectionType: itemSelectionType))
+        .build();
+  }
+
   Widget _moreActionMultipleSelection(BuildContext context, List<WorkGroupNode> workGroupNodes) {
     return WorkGroupNodeMultipleSelectionActionBuilder(
         Key('multiple_selection_more_action'),
@@ -461,6 +477,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   List<Widget> _moreActionList(BuildContext context, List<WorkGroupNode> workGroupNodes) {
     return [
       _copyToMySpaceAction(context, workGroupNodes),
+      _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
     ];
   }
 }
