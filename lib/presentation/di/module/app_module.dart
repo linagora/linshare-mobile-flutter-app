@@ -180,6 +180,11 @@ class AppModule {
     getIt.registerFactory(() => SearchDocumentInteractor());
     getIt.registerFactory(() => CopyMultipleFilesFromReceivedSharesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
     getIt.registerFactory(() => GetAllFunctionalityInteractor(getIt<FunctionalityRepository>()));
+    getIt.registerFactory(() => DownloadNodeIOSInteractor(
+        getIt<SharedSpaceDocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
+    getIt.registerFactory(() => DownloadMultipleNodeIOSInteractor(getIt<DownloadNodeIOSInteractor>()));
   }
 
   void _provideSharePreference() {
