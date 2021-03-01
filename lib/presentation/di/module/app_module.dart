@@ -187,6 +187,8 @@ class AppModule {
     getIt.registerFactory(() => DownloadMultipleNodeIOSInteractor(getIt<DownloadNodeIOSInteractor>()));
     getIt.registerFactory(() => SearchWorkGroupNodeInteractor());
     getIt.registerFactory(() => SearchSharedSpaceNodeNestedInteractor());
+    getIt.registerFactory(() => RemoveSharedSpaceInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => RemoveMultipleSharedSpacesInteractor(getIt<RemoveSharedSpaceInteractor>()));
   }
 
   void _provideSharePreference() {

@@ -217,3 +217,64 @@ class ClearWorkGroupNodesListViewState extends ViewState {
   @override
   List<Object> get props => [];
 }
+
+class RemoveSharedSpaceViewState extends ViewState {
+  final SharedSpaceNodeNested sharedSpaceNodeNested;
+
+  RemoveSharedSpaceViewState(this.sharedSpaceNodeNested);
+
+  @override
+  List<Object> get props => [sharedSpaceNodeNested];
+}
+
+class RemoveSharedSpaceFailure extends FeatureFailure {
+  final Object exception;
+
+  RemoveSharedSpaceFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class RemoveSharedSpaceNotFoundFailure extends FeatureFailure {
+  RemoveSharedSpaceNotFoundFailure();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SharedSpaceContextMenuItemViewState extends ViewState {
+  final SharedSpaceNodeNested sharedSpace;
+
+  SharedSpaceContextMenuItemViewState(this.sharedSpace);
+
+  @override
+  List<Object> get props => [sharedSpace];
+}
+
+class RemoveAllSharedSpacesSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveAllSharedSpacesSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveSomeSharedSpacesSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveSomeSharedSpacesSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveAllSharedSpacesFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveAllSharedSpacesFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
