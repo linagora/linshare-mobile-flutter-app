@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-25T11:50:06.016223",
+  "@@last_modified": "2021-03-02T15:29:47.659493",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -532,6 +532,11 @@
   },
   "no_results_found": "No results found",
   "@no_results_found": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search_in_shared_space": "Search in Shared Space",
+  "@search_in_shared_space": {
     "type": "text",
     "placeholders": {}
   }

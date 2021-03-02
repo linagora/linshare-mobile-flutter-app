@@ -41,8 +41,10 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 
 class SharedSpaceWidget extends StatefulWidget {
   @override
@@ -67,38 +69,97 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        StoreConnector<AppState, SharedSpaceState>(
-          converter: (store) => store.state.sharedSpaceState,
-          distinct: true,
-          builder: (context, state) {
-            return state.viewState.fold(
-              (failure) => SizedBox.shrink(),
-              (success) => (success is LoadingState)
-                  ? Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: CircularProgressIndicator(
-                        valueColor:
-                          AlwaysStoppedAnimation<Color>(
-                            AppColor.primaryColor),
-                      ),
-                    )) : SizedBox.shrink());
-            }
-        ),
-        StoreConnector<AppState, SharedSpaceState>(
-          converter: (store) => store.state.sharedSpaceState,
-          distinct: true,
-          builder: (context, state) => Expanded(child: _buildSharedSpacesList(context, state))
-        )
-      ],
+    return Scaffold(
+      body: Column(
+        children: [
+          StoreConnector<AppState, SharedSpaceState>(
+            converter: (store) => store.state.sharedSpaceState,
+            distinct: true,
+            builder: (context, state) {
+              return state.viewState.fold(
+                (failure) => SizedBox.shrink(),
+                (success) => (success is LoadingState)
+                    ? Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                            AlwaysStoppedAnimation<Color>(
+                              AppColor.primaryColor),
+                        ),
+                      )) : SizedBox.shrink());
+              }
+          ),
+          _buildResultCount(),
+          Expanded(child: buildSharedSpaceListBySearchState())
+        ],
+      ),
+      bottomNavigationBar: SearchBottomBarBuilder()
+          .key(Key('search_bottom_bar_shared_space'))
+          .onSearchActionClick(() => sharedSpaceViewModel.openSearchState())
+          .build(),
     );
   }
 
-  Widget _buildSharedSpacesList(BuildContext context, SharedSpaceState state) {
+  Widget _buildResultCount() {
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, appState) {
+          if (appState.uiState.isInSearchState() && sharedSpaceViewModel.searchQuery.value.isNotEmpty) {
+            return _buildResultCountRow(appState.sharedSpaceState.sharedSpacesList);
+          }
+          return SizedBox.shrink();
+        });
+  }
+
+  Widget _buildResultCountRow(List<SharedSpaceNodeNested> resultList) {
+    return Container(
+      color: AppColor.topBarBackgroundColor,
+      height: 40.0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context).results_count(resultList.length),
+            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildSharedSpaceListBySearchState() {
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, appState) {
+          if (appState.uiState.isInSearchState()) {
+            return _buildSearchResultSharedSpacesList(appState.sharedSpaceState);
+          }
+          return _buildNormalSharedSpacesList(appState.sharedSpaceState);
+        });
+  }
+
+  Widget _buildSearchResultSharedSpacesList(SharedSpaceState state) {
+    if (sharedSpaceViewModel.searchQuery.value.isEmpty) {
+      return SizedBox.shrink();
+    } else {
+      if (state.sharedSpacesList.isEmpty) {
+        return _buildNoResultFound();
+      }
+      return _buildSharedSpacesListView(state.sharedSpacesList);
+    }
+  }
+
+  Widget _buildNoResultFound() {
+    return BackgroundWidgetBuilder()
+        .key(Key('search_no_result_found'))
+        .text(AppLocalizations.of(context).no_results_found).build();
+  }
+
+  Widget _buildNormalSharedSpacesList(SharedSpaceState state) {
     return state.viewState.fold(
       (failure) =>
         RefreshIndicator(
@@ -112,18 +173,18 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                   height: 120,
                   fit: BoxFit.fill))
                 .text(AppLocalizations.of(context).common_error_occured_message)
-                .build() : _buildSharedSpacesListView(context, state.sharedSpacesList)
+                .build() : _buildSharedSpacesListView(state.sharedSpacesList)
         ),
       (success) => success is LoadingState ?
-        _buildSharedSpacesListView(context, state.sharedSpacesList) :
+        _buildSharedSpacesListView(state.sharedSpacesList) :
         RefreshIndicator(
           onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(),
-          child: _buildSharedSpacesListView(context, state.sharedSpacesList)
+          child: _buildSharedSpacesListView(state.sharedSpacesList)
         )
     );
   }
 
-  Widget _buildSharedSpacesListView(BuildContext context, List<SharedSpaceNodeNested> sharedSpacesList) {
+  Widget _buildSharedSpacesListView(List<SharedSpaceNodeNested> sharedSpacesList) {
     if (sharedSpacesList.isEmpty) {
       return _buildNoWorkgroupYet(context);
     } else {
