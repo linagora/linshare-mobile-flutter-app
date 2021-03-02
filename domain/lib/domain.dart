@@ -21,6 +21,7 @@ export 'src/usecases/quota/quota_view_state.dart';
 export 'src/usecases/quota/quota_verification_view_state.dart';
 export 'src/usecases/search_document/search_document_view_state.dart';
 export 'src/usecases/functionality/functionality_view_state.dart';
+export 'src/usecases/search_shared_space_node_nested/search_shared_space_node_nested_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -125,6 +126,7 @@ export 'src/usecases/shared_space/download_node_ios_interactor.dart';
 export 'src/usecases/shared_space/download_multiple_node_ios_interactor.dart';
 export 'src/usecases/search_workgroup_node/search_workgroup_node_interactor.dart';
 export 'src/usecases/search_workgroup_node/search_workgroup_node_view_state.dart';
+export 'src/usecases/search_shared_space_node_nested/search_shared_space_node_nested_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
