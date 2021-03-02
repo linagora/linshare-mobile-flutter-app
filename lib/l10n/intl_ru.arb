@@ -524,5 +524,10 @@
   "@no_results_found": {
     "type": "text",
     "placeholders": {}
+  },
+  "search_in_shared_space": "Search in Shared Space",
+  "@search_in_shared_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }

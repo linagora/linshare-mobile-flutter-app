@@ -60,7 +60,7 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
   }
 
   SharedSpaceState setSharedSpaces({Either<Failure, Success> viewState, List<SharedSpaceNodeNested> newSharedSpacesList}) {
-    return SharedSpaceState(viewState, newSharedSpacesList);
+    return SharedSpaceState(viewState ?? this.viewState, newSharedSpacesList);
   }
 
   SharedSpaceState disableUploadButton() {

@@ -66,3 +66,10 @@ class EnableUploadButtonAction extends ActionOffline {
 class DisableUploadButtonAction extends ActionOffline {
   DisableUploadButtonAction();
 }
+
+@immutable
+class SharedSpaceSetSearchResultAction extends ActionOffline {
+  final List<SharedSpaceNodeNested> sharedSpaceNodes;
+
+  SharedSpaceSetSearchResultAction(this.sharedSpaceNodes);
+}
