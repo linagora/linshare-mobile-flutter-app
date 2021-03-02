@@ -186,6 +186,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         return AppLocalizations.of(context).search_in_my_space;
       case SearchDestination.SHARED_SPACE:
         return AppLocalizations.of(context).search_in_shared_space_files;
+      case SearchDestination.ALL_SHARED_SPACES:
+        return AppLocalizations.of(context).search_in_shared_space;
       default:
         return '';
     }

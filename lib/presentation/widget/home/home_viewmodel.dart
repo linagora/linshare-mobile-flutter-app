@@ -139,7 +139,8 @@ class HomeViewModel extends BaseViewModel {
     if (store.state.uiState.searchState.searchDestination == SearchDestination.MY_SPACE) {
       store.dispatch(MySpaceAction(Right(DisableSearchViewState())));
       store.dispatch(CleanMySpaceStateAction());
-    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.SHARED_SPACE) {
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.SHARED_SPACE ||
+        store.state.uiState.searchState.searchDestination == SearchDestination.ALL_SHARED_SPACES) {
       store.dispatch(SharedSpaceAction(Right(DisableSearchViewState())));
       store.dispatch(CleanSharedSpaceStateAction());
     }
@@ -151,6 +152,9 @@ class HomeViewModel extends BaseViewModel {
       store.dispatch(CleanMySpaceStateAction());
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.SHARED_SPACE) {
       store.dispatch(SharedSpaceAction(Right(SearchWorkGroupNodeNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanSharedSpaceStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.ALL_SHARED_SPACES) {
+      store.dispatch(SharedSpaceAction(Right(SearchSharedSpaceNodeNestedNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanSharedSpaceStateAction());
     }
   }
