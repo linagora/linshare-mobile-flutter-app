@@ -699,6 +699,13 @@ class AppLocalizations {
       name: 'no_results_found',
     );
   }
+
+  String get search_in_shared_space {
+    return Intl.message(
+      'Search in Shared Space',
+      name: 'search_in_shared_space',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

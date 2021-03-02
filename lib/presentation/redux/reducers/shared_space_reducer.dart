@@ -44,6 +44,8 @@ final sharedSpaceReducer = combineReducers<SharedSpaceState>([
         newSharedSpacesList: action.viewState.fold(
           (failure) => [],
           (success) => (success is SharedSpaceViewState) ? success.sharedSpacesList : []))),
+  TypedReducer<SharedSpaceState, SharedSpaceSetSearchResultAction>((SharedSpaceState state, SharedSpaceSetSearchResultAction action) =>
+      state.setSharedSpaces(newSharedSpacesList: action.sharedSpaceNodes)),
   TypedReducer<SharedSpaceState, CleanSharedSpaceStateAction>((SharedSpaceState state, _) => state.clearViewState()),
   TypedReducer<SharedSpaceState, EnableUploadButtonAction>((SharedSpaceState state, _) => state.enableUploadButton()),
   TypedReducer<SharedSpaceState, DisableUploadButtonAction>((SharedSpaceState state, _) => state.disableUploadButton()),
