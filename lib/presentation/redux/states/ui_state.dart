@@ -95,5 +95,6 @@ enum SearchStatus {
 
 enum SearchDestination {
   MY_SPACE,
-  SHARED_SPACE
+  SHARED_SPACE,
+  ALL_SHARED_SPACES
 }
