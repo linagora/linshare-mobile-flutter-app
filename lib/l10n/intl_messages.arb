@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-02T15:29:47.659493",
+  "@@last_modified": "2021-03-02T17:40:48.174892",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -347,12 +347,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_files": "{numberOfFiles,plural, =1{Are you sure you want to delete \"{singleDocumentName}\"?}other{Are you sure you want to delete {numberOfFiles} items?}}",
-  "@are_you_sure_you_want_to_delete_files": {
+  "are_you_sure_you_want_to_delete_multiple": "{numberOfItems,plural, =1{Are you sure you want to delete \"{singleItemName}\"?}other{Are you sure you want to delete {numberOfItems} items?}}",
+  "@are_you_sure_you_want_to_delete_multiple": {
     "type": "text",
     "placeholders": {
-      "numberOfFiles": {},
-      "singleDocumentName": {}
+      "numberOfItems": {},
+      "singleItemName": {}
     }
   },
   "the_file_has_been_successfully_deleted": "The file has been successfully deleted",
@@ -537,6 +537,23 @@
   },
   "search_in_shared_space": "Search in Shared Space",
   "@search_in_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_spaces_could_not_be_deleted": "{sharedSpacesNumber,plural, =1{The Shared Space could not be deleted}other{Shared Spaces could not be deleted}}",
+  "@shared_spaces_could_not_be_deleted": {
+    "type": "text",
+    "placeholders": {
+      "sharedSpacesNumber": {}
+    }
+  },
+  "shared_space_has_been_deleted": "The Shared Space has been deleted",
+  "@shared_space_has_been_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "all_shared_spaces_have_been_deleted": "All Shared Spaces have been deleted",
+  "@all_shared_spaces_have_been_deleted": {
     "type": "text",
     "placeholders": {}
   }
