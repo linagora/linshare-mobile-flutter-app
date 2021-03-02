@@ -176,6 +176,14 @@ class ToastMessageHandler {
       } else if (failure is CopyMultipleToMySpaceAllFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
         _cleanSharedSpaceViewState();
+      } else if (failure is RemoveSharedSpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).shared_spaces_could_not_be_deleted(1));
+        _cleanSharedSpaceViewState();
+      } else if (failure is RemoveAllSharedSpacesFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).shared_spaces_could_not_be_deleted(2));
+        _cleanSharedSpaceViewState();
+      } else if (failure is RemoveSharedSpaceNotFoundFailure) {
+        _cleanSharedSpaceViewState();
       }
     }, (success) {
       if (success is RemoveSharedSpaceNodeViewState) {
@@ -195,6 +203,15 @@ class ToastMessageHandler {
         _cleanSharedSpaceViewState();
       } else if (success is CopyMultipleToMySpaceHasSomeFilesViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
+        _cleanSharedSpaceViewState();
+      } else if (success is RemoveSharedSpaceViewState) {
+        appToast.showToast(AppLocalizations.of(context).shared_space_has_been_deleted);
+        _cleanSharedSpaceViewState();
+      } else if (success is RemoveAllSharedSpacesSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).all_shared_spaces_have_been_deleted);
+        _cleanSharedSpaceViewState();
+      } else if (success is RemoveSomeSharedSpacesSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
         _cleanSharedSpaceViewState();
       }
     });

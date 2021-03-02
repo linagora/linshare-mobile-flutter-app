@@ -232,7 +232,7 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
 
     if (workGroupNodes != null && workGroupNodes.isNotEmpty) {
       final deleteTitle = AppLocalizations.of(context)
-          .are_you_sure_you_want_to_delete_files(workGroupNodes.length, workGroupNodes.first.name);
+          .are_you_sure_you_want_to_delete_multiple(workGroupNodes.length, workGroupNodes.first.name);
 
       ConfirmModalSheetBuilder(_appNavigation)
           .key(Key('delete_work_group_node_confirm_modal'))

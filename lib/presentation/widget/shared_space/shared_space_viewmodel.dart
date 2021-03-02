@@ -33,12 +33,19 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/shared_space_node_nested_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -46,6 +53,8 @@ import 'package:redux_thunk/redux_thunk.dart';
 class SharedSpaceViewModel extends BaseViewModel {
   final GetAllSharedSpacesInteractor _getAllSharedSpacesInteractor;
   final SearchSharedSpaceNodeNestedInteractor _searchSharedSpaceNodeNestedInteractor;
+  final RemoveMultipleSharedSpacesInteractor _removeMultipleSharedSpacesInteractor;
+  final AppNavigation _appNavigation;
   StreamSubscription _storeStreamSubscription;
   List<SharedSpaceNodeNested> _sharedSpaceNodes;
 
@@ -54,8 +63,10 @@ class SharedSpaceViewModel extends BaseViewModel {
 
   SharedSpaceViewModel(
     Store<AppState> store,
+    this._appNavigation,
     this._getAllSharedSpacesInteractor,
-    this._searchSharedSpaceNodeNestedInteractor
+    this._searchSharedSpaceNodeNestedInteractor,
+    this._removeMultipleSharedSpacesInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -135,6 +146,54 @@ class SharedSpaceViewModel extends BaseViewModel {
 
   bool _isInSearchState() {
     return store.state.uiState.isInSearchState();
+  }
+
+  void openContextMenu(BuildContext context, SharedSpaceNodeNested sharedSpace, List<Widget> actionTiles, {Widget footerAction}) {
+    store.dispatch(_handleContextMenuAction(context, sharedSpace, actionTiles, footerAction: footerAction));
+  }
+
+  ThunkAction<AppState> _handleContextMenuAction(
+      BuildContext context,
+      SharedSpaceNodeNested sharedSpace,
+      List<Widget> actionTiles,
+      {Widget footerAction}) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context)
+        .addHeader(ContextMenuHeaderBuilder(
+          Key('shared_space_context_menu_header'),
+          SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(sharedSpace)).build())
+        .addTiles(actionTiles)
+        .addFooter(footerAction)
+        .build();
+      store.dispatch(SharedSpaceAction(Right(SharedSpaceContextMenuItemViewState(sharedSpace))));
+    };
+  }
+
+  void removeSharedSpaces(BuildContext context, List<SharedSpaceNodeNested> sharedSpaces) {
+    _appNavigation.popBack();
+
+    final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(sharedSpaces.length, sharedSpaces.first.name);
+
+    ConfirmModalSheetBuilder(_appNavigation)
+      .key(Key('delete_shared_space_confirm_modal'))
+      .title(deleteTitle)
+      .cancelText(AppLocalizations.of(context).cancel)
+      .onConfirmAction(AppLocalizations.of(context).delete, () {
+        _appNavigation.popBack();
+        store.dispatch(_removeSharedSpacesAction(sharedSpaces.map((sharedSpace) => sharedSpace.sharedSpaceId).toList()));
+    }).show(context);
+  }
+
+  ThunkAction<AppState> _removeSharedSpacesAction(List<SharedSpaceId> sharedSpaceIds) {
+    return (Store<AppState> store) async {
+      await _removeMultipleSharedSpacesInteractor.execute(sharedSpaceIds)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+          (success) => {
+            store.dispatch(SharedSpaceAction(Right(success))),
+            getAllSharedSpaces()
+          }));
+    };
   }
 
   @override
