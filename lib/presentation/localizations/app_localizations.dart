@@ -452,13 +452,13 @@ class AppLocalizations {
     );
   }
 
-  String are_you_sure_you_want_to_delete_files(int numberOfFiles, String singleDocumentName) {
+  String are_you_sure_you_want_to_delete_multiple(int numberOfItems, String singleItemName) {
     return Intl.message(
-      '''${Intl.plural(numberOfFiles,
-          one: 'Are you sure you want to delete \"$singleDocumentName\"?',
-          other: 'Are you sure you want to delete $numberOfFiles items?')}''',
-      name: 'are_you_sure_you_want_to_delete_files',
-      args: [numberOfFiles, singleDocumentName],
+      '''${Intl.plural(numberOfItems,
+          one: 'Are you sure you want to delete \"$singleItemName\"?',
+          other: 'Are you sure you want to delete $numberOfItems items?')}''',
+      name: 'are_you_sure_you_want_to_delete_multiple',
+      args: [numberOfItems, singleItemName],
     );
   }
 
@@ -704,6 +704,30 @@ class AppLocalizations {
     return Intl.message(
       'Search in Shared Space',
       name: 'search_in_shared_space',
+    );
+  }
+
+  String shared_spaces_could_not_be_deleted(int sharedSpacesNumber) {
+    return Intl.message(
+      '''${Intl.plural(sharedSpacesNumber,
+          one: 'The Shared Space could not be deleted',
+          other: 'Shared Spaces could not be deleted')}''',
+      name: 'shared_spaces_could_not_be_deleted',
+      args: [sharedSpacesNumber],
+    );
+  }
+
+  String get shared_space_has_been_deleted {
+    return Intl.message(
+      'The Shared Space has been deleted',
+      name: 'shared_space_has_been_deleted',
+    );
+  }
+
+  String get all_shared_spaces_have_been_deleted {
+    return Intl.message(
+      'All Shared Spaces have been deleted',
+      name: 'all_shared_spaces_have_been_deleted',
     );
   }
 }

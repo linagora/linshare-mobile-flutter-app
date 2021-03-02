@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,61 +26,79 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
 //
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/state/failure.dart';
-import 'package:domain/src/state/success.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
 import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 
-@immutable
-class SharedSpaceState extends LinShareState  with EquatableMixin {
-  final List<SharedSpaceNodeNested> sharedSpacesList;
-  final bool showUploadButton;
+class SharedSpaceNodeNestedPresentationFile extends Equatable implements PresentationFile {
+  final imagePath = getIt<AppImagePaths>();
 
-  SharedSpaceState(Either<Failure, Success> viewState, this.sharedSpacesList, {this.showUploadButton = true}) : super(viewState);
+  final SharedSpaceId sharedSpaceId;
+  final SharedSpaceRole sharedSpaceRole;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final String name;
+  final LinShareNodeType nodeType;
 
-  factory SharedSpaceState.initial() {
-    return SharedSpaceState(Right(IdleState()), []);
+  SharedSpaceNodeNestedPresentationFile(
+    this.sharedSpaceId,
+    this.sharedSpaceRole,
+    this.creationDate,
+    this.modificationDate,
+    this.name,
+    this.nodeType,
+  );
+
+  static SharedSpaceNodeNestedPresentationFile fromSharedSpaceNodeNested(SharedSpaceNodeNested sharedSpaceNodeNested) {
+    return SharedSpaceNodeNestedPresentationFile(
+      sharedSpaceNodeNested.sharedSpaceId,
+      sharedSpaceNodeNested.sharedSpaceRole,
+      sharedSpaceNodeNested.creationDate,
+      sharedSpaceNodeNested.modificationDate,
+      sharedSpaceNodeNested.name,
+      sharedSpaceNodeNested.nodeType
+    );
   }
 
   @override
-  SharedSpaceState clearViewState() {
-    return SharedSpaceState(Right(IdleState()), sharedSpacesList, showUploadButton: showUploadButton);
+  String fileName() {
+    return name;
   }
 
   @override
-  SharedSpaceState sendViewState({Either<Failure, Success> viewState}) {
-    return SharedSpaceState(viewState, sharedSpacesList, showUploadButton: showUploadButton);
-  }
-
-  SharedSpaceState setSharedSpaces({Either<Failure, Success> viewState, List<SharedSpaceNodeNested> newSharedSpacesList}) {
-    return SharedSpaceState(viewState ?? this.viewState, newSharedSpacesList);
-  }
-
-  SharedSpaceState disableUploadButton() {
-    return SharedSpaceState(viewState, sharedSpacesList, showUploadButton: false);
-  }
-
-  SharedSpaceState enableUploadButton() {
-    return SharedSpaceState(viewState, sharedSpacesList, showUploadButton: true);
+  int fileSize() {
+    return 0;
   }
 
   @override
-  SharedSpaceState startLoadingState() {
-    return SharedSpaceState(Right(LoadingState()), sharedSpacesList);
+  Widget fileIcon() {
+    return SvgPicture.asset(
+      imagePath.icFolder,
+      width: 20,
+      height: 24,
+      fit: BoxFit.fill,
+    );
   }
 
   @override
   List<Object> get props => [
-    ...super.props,
-    sharedSpacesList,
-    showUploadButton
+      sharedSpaceId,
+      sharedSpaceRole,
+      creationDate,
+      modificationDate,
+      name,
+      nodeType
   ];
 }

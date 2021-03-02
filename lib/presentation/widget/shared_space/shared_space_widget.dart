@@ -42,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -238,7 +239,35 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       onTap: () {
         sharedSpaceViewModel.openSharedSpace(sharedSpace);
       },
+      trailing: IconButton(
+        icon: SvgPicture.asset(
+          imagePath.icContextMenu,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+        ),
+        onPressed: () => sharedSpaceViewModel.openContextMenu(
+          context,
+          sharedSpace,
+          _contextMenuActionTiles(context, sharedSpace),
+          footerAction: _contextMenuFooterAction(sharedSpace)))
     );
+  }
+
+  List<Widget> _contextMenuActionTiles(BuildContext context, SharedSpaceNodeNested sharedSpace) {
+    return [];
+  }
+
+  Widget _contextMenuFooterAction(SharedSpaceNodeNested sharedSpace) {
+    return SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name)
+        ? SimpleContextMenuActionBuilder(
+                Key('delete_shared_space_context_menu_action'),
+                SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+                AppLocalizations.of(context).delete)
+            .onActionClick(
+                (data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
+            .build()
+        : SizedBox.shrink();
   }
 
   Widget _buildSharedSpaceName(String sharedSpaceName) {

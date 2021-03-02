@@ -246,7 +246,7 @@ class MySpaceViewModel extends BaseViewModel {
 
     if (documents != null && documents.isNotEmpty) {
       final deleteTitle = AppLocalizations.of(context)
-          .are_you_sure_you_want_to_delete_files(documents.length, documents.first.name);
+          .are_you_sure_you_want_to_delete_multiple(documents.length, documents.first.name);
 
       ConfirmModalSheetBuilder(_appNavigation)
           .key(Key('delete_document_confirm_modal'))
