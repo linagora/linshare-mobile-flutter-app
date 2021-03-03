@@ -68,10 +68,10 @@ class HomeViewModel extends BaseViewModel {
       this._connectivity,
       this._getAllFunctionalityInteractor
   ) : super(store) {
-    this.store.dispatch(_getAuthorizedUserAction());
     _registerPendingUploadFile();
     _registerNetworkConnectivityState();
     _getAllFunctionality();
+    _getAuthorizedUser();
   }
 
   void _getAllFunctionality() {
@@ -87,24 +87,21 @@ class HomeViewModel extends BaseViewModel {
     });
   }
 
-  ThunkAction<AppState> _getAuthorizedUserAction() {
-    return (Store<AppState> store) async {
+  void _getAuthorizedUser() {
+    store.dispatch(_getAuthorizedUserAction());
+  }
+
+  OnlineThunkAction _getAuthorizedUserAction() {
+    return OnlineThunkAction((Store<AppState> store) async {
       await _getAuthorizedInteractor.execute().then((result) => result.fold(
-        (left) => store.dispatch(_getAuthorizedUserFailureAction(left)),
+        (left) => null,
         (right) => store.dispatch(_getAuthorizedUserSuccessAction((right)))));
-    };
+    });
   }
 
   ThunkAction<AppState> _getAuthorizedUserSuccessAction(GetAuthorizedUserViewState success) {
     return (Store<AppState> store) async {
       store.dispatch(SetAccountInformationsAction(success.user));
-    };
-  }
-
-  ThunkAction<AppState> _getAuthorizedUserFailureAction(GetAuthorizedUserFailure failure) {
-    return (Store<AppState> store) async {
-      store.dispatch(SetCurrentView(RoutePaths.loginRoute));
-      await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
     };
   }
 
