@@ -56,6 +56,7 @@ import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_moda
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
@@ -67,6 +68,7 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   final CopyMultipleFilesToMySpaceInteractor _copyMultipleToMySpaceInteractor;
   final DownloadMultipleNodeIOSInteractor _downloadMultipleNodeIOSInteractor;
   final SearchWorkGroupNodeInteractor _searchWorkGroupNodeInteractor;
+  final DownloadWorkGroupNodeInteractor _downloadWorkGroupNodeInteractor;
   final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
@@ -88,7 +90,8 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     this._removeMultipleSharedSpaceNodesInteractor,
     this._copyMultipleToMySpaceInteractor,
     this._downloadMultipleNodeIOSInteractor,
-    this._searchWorkGroupNodeInteractor
+    this._searchWorkGroupNodeInteractor,
+    this._downloadWorkGroupNodeInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -354,6 +357,49 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
       }
       store.dispatch(SharedSpaceAction(Left(failure)));
     };
+  }
+
+  void downloadNodes(List<WorkGroupNode> nodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    store.dispatch(_downloadNodeAction(nodes, itemSelectionType: itemSelectionType));
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+  }
+
+  OnlineThunkAction _downloadNodeAction(List<WorkGroupNode> nodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final status = await Permission.storage.status;
+      switch (status) {
+        case PermissionStatus.granted: _dispatchHandleDownloadAction(nodes, itemSelectionType: itemSelectionType);
+        break;
+        case PermissionStatus.permanentlyDenied:
+          _appNavigation.popBack();
+          break;
+        default: {
+          final requested = await Permission.storage.request();
+          switch (requested) {
+            case PermissionStatus.granted: _dispatchHandleDownloadAction(nodes, itemSelectionType: itemSelectionType);
+              break;
+            default: _appNavigation.popBack();
+              break;
+          }
+        }
+      }
+    });
+  }
+
+  void _dispatchHandleDownloadAction(List<WorkGroupNode> nodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    store.dispatch(_handleDownloadNodes(nodes));
+  }
+
+  OnlineThunkAction _handleDownloadNodes(List<WorkGroupNode> nodes) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadWorkGroupNodeInteractor.execute(nodes)
+          .then((result) => result.fold(
+              (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+              (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+    });
   }
 
   void openMoreActionBottomMenu(BuildContext context, List<WorkGroupNode> workGroupNodes, List<Widget> actionTiles) {

@@ -36,6 +36,7 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/shared_space/download_workgroup_node_interactor.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:testshared/fixture/shared_space_document_fixture.dart';
 
 import '../../fixture/test_fixture.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
@@ -48,23 +49,23 @@ void main() {
     MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
     DownloadWorkGroupNodeInteractor downloadNodeInteractor;
-    WorkGroupNodeId nodeId;
+    WorkGroupNode workGroupNode;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
-      nodeId = WorkGroupNodeId('383-384-C');
+      workGroupNode = workGroupDocument1;
       downloadNodeInteractor = DownloadWorkGroupNodeInteractor(sharedSpaceDocumentRepository, tokenRepository, credentialRepository);
     });
 
     test('download should return success with correct node ID', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(sharedSpaceDocumentRepository.downloadNodes([nodeId], permanentToken, linShareBaseUrl))
+      when(sharedSpaceDocumentRepository.downloadNodes([workGroupNode], permanentToken, linShareBaseUrl))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
-      final result = await downloadNodeInteractor.execute([nodeId]);
+      final result = await downloadNodeInteractor.execute([workGroupNode]);
 
       verify(tokenRepository.getToken()).called(1);
       verify(credentialRepository.getBaseUrl()).called(1);
@@ -73,13 +74,12 @@ void main() {
     });
 
     test('download should return success with multiple node ID', () async {
-      final nodeId2 = WorkGroupNodeId('383-384-D');
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(sharedSpaceDocumentRepository.downloadNodes([nodeId, nodeId2], permanentToken, linShareBaseUrl))
+      when(sharedSpaceDocumentRepository.downloadNodes([workGroupNode, workGroupDocument2], permanentToken, linShareBaseUrl))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1'), DownloadTaskId('task_id_2')]);
 
-      final result = await downloadNodeInteractor.execute([nodeId, nodeId2]);
+      final result = await downloadNodeInteractor.execute([workGroupNode, workGroupDocument2]);
 
       verify(tokenRepository.getToken()).called(1);
       verify(credentialRepository.getBaseUrl()).called(1);
@@ -95,9 +95,9 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => wrongUrl);
       final exception = Exception();
-      when(sharedSpaceDocumentRepository.downloadNodes([nodeId], permanentToken, wrongUrl)).thenThrow(exception);
+      when(sharedSpaceDocumentRepository.downloadNodes([workGroupNode], permanentToken, wrongUrl)).thenThrow(exception);
 
-      final result = await downloadNodeInteractor.execute([nodeId]);
+      final result = await downloadNodeInteractor.execute([workGroupNode]);
 
       verify(tokenRepository.getToken()).called(1);
       verify(credentialRepository.getBaseUrl()).called(1);
@@ -109,9 +109,9 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenThrow(exception);
-      when(sharedSpaceDocumentRepository.downloadNodes([nodeId], permanentToken, wrongUrl)).thenThrow(exception);
+      when(sharedSpaceDocumentRepository.downloadNodes([workGroupNode], permanentToken, wrongUrl)).thenThrow(exception);
 
-      final result = await downloadNodeInteractor.execute([nodeId]);
+      final result = await downloadNodeInteractor.execute([workGroupNode]);
 
       verify(tokenRepository.getToken()).called(1);
       verify(credentialRepository.getBaseUrl()).called(1);
@@ -123,9 +123,9 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       final exception = Exception();
-      when(sharedSpaceDocumentRepository.downloadNodes([nodeId], wrongToken, linShareBaseUrl)).thenThrow(exception);
+      when(sharedSpaceDocumentRepository.downloadNodes([workGroupNode], wrongToken, linShareBaseUrl)).thenThrow(exception);
 
-      final result = await downloadNodeInteractor.execute([nodeId]);
+      final result = await downloadNodeInteractor.execute([workGroupNode]);
 
       verify(tokenRepository.getToken()).called(1);
       verify(credentialRepository.getBaseUrl()).called(1);
@@ -137,13 +137,13 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenThrow(exception);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(sharedSpaceDocumentRepository.downloadNodes([nodeId], permanentToken, wrongUrl))
+      when(sharedSpaceDocumentRepository.downloadNodes([workGroupNode], permanentToken, wrongUrl))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
-      when(sharedSpaceDocumentRepository.downloadNodes([nodeId], permanentToken, wrongUrl))
+      when(sharedSpaceDocumentRepository.downloadNodes([workGroupNode], permanentToken, wrongUrl))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
-      final result = await downloadNodeInteractor.execute([nodeId]);
+      final result = await downloadNodeInteractor.execute([workGroupNode]);
       verify(tokenRepository.getToken()).called(1);
       verifyNever(credentialRepository.getBaseUrl());
 
