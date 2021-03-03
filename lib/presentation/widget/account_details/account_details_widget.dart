@@ -61,10 +61,10 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
       builder: (context, state) => Column(
         children: [
           ListTile(
-            leading: CircleAvatar(backgroundColor: Colors.blueGrey[900], child: Text(state.user.firstName[0])),
+            leading: CircleAvatar(backgroundColor: Colors.blueGrey[900], child: Text(state.user != null ? state.user.firstName[0] : '')),
             isThreeLine: true,
             subtitle: Text(
-              state.user.mail,
+              state.user != null ? state.user.mail : '',
               style: TextStyle(
                 fontSize: 14,
                 color: AppColor.documentModifiedDateItemTextColor
@@ -75,8 +75,8 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
             padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 24),
             child: Column(
               children: [
-                _buildAccountDetailsTile(AppLocalizations.of(context).first_name, state.user.firstName),
-                _buildAccountDetailsTile(AppLocalizations.of(context).last_name, state.user.lastName),
+                _buildAccountDetailsTile(AppLocalizations.of(context).first_name, state.user != null ? state.user.firstName : ''),
+                _buildAccountDetailsTile(AppLocalizations.of(context).last_name, state.user != null ? state.user.lastName : ''),
                 Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
