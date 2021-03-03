@@ -41,13 +41,13 @@ class DownloadWorkGroupNodeInteractor {
 
   DownloadWorkGroupNodeInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<Either<Failure, Success>> execute(List<WorkGroupNodeId> nodeIds) async {
+  Future<Either<Failure, Success>> execute(List<WorkGroupNode> nodes) async {
     try {
       final taskIds = await Future.wait(
           [_tokenRepository.getToken(), _credentialRepository.getBaseUrl()],
           eagerError: true)
         .then((List responses) async => await _sharedSpaceDocumentRepository
-          .downloadNodes(nodeIds, responses.first, responses.last));
+          .downloadNodes(nodes, responses.first, responses.last));
 
       return Right<Failure, Success>(DownloadNodesSuccessViewState(taskIds));
     } catch (exception) {

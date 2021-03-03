@@ -60,7 +60,7 @@ abstract class SharedSpaceDocumentRepository {
     WorkGroupNodeId sharedSpaceNodeId);
 
   Future<List<DownloadTaskId>> downloadNodes(
-    List<WorkGroupNodeId> workgroupNodeIds,
+    List<WorkGroupNode> workgroupNodes,
     Token token,
     Uri baseUrl
   );
