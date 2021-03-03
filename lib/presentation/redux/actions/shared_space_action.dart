@@ -33,6 +33,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
@@ -72,4 +73,25 @@ class SharedSpaceSetSearchResultAction extends ActionOffline {
   final List<SharedSpaceNodeNested> sharedSpaceNodes;
 
   SharedSpaceSetSearchResultAction(this.sharedSpaceNodes);
+}
+
+class SharedSpaceSelectSharedSpaceAction extends ActionOffline {
+  final SelectableElement<SharedSpaceNodeNested> selectedSharedSpace;
+
+  SharedSpaceSelectSharedSpaceAction(this.selectedSharedSpace);
+}
+
+@immutable
+class SharedSpaceClearSelectedSharedSpacesAction extends ActionOffline {
+  SharedSpaceClearSelectedSharedSpacesAction();
+}
+
+@immutable
+class SharedSpaceSelectAllSharedSpacesAction extends ActionOffline {
+  SharedSpaceSelectAllSharedSpacesAction();
+}
+
+@immutable
+class SharedSpaceUnselectAllSharedSpacesAction extends ActionOffline {
+  SharedSpaceUnselectAllSharedSpacesAction();
 }

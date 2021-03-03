@@ -35,12 +35,15 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/shared_space_node_nested_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -169,8 +172,14 @@ class SharedSpaceViewModel extends BaseViewModel {
     };
   }
 
-  void removeSharedSpaces(BuildContext context, List<SharedSpaceNodeNested> sharedSpaces) {
-    _appNavigation.popBack();
+  void removeSharedSpaces(
+    BuildContext context,
+    List<SharedSpaceNodeNested> sharedSpaces,
+    {ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    if (itemSelectionType == ItemSelectionType.single) {
+      _appNavigation.popBack();
+    }
 
     final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(sharedSpaces.length, sharedSpaces.first.name);
 
@@ -180,6 +189,9 @@ class SharedSpaceViewModel extends BaseViewModel {
       .cancelText(AppLocalizations.of(context).cancel)
       .onConfirmAction(AppLocalizations.of(context).delete, () {
         _appNavigation.popBack();
+        if (itemSelectionType == ItemSelectionType.multiple) {
+          cancelSelection();
+        }
         store.dispatch(_removeSharedSpacesAction(sharedSpaces.map((sharedSpace) => sharedSpace.sharedSpaceId).toList()));
     }).show(context);
   }
@@ -196,9 +208,26 @@ class SharedSpaceViewModel extends BaseViewModel {
     };
   }
 
+  void selectItem(SelectableElement<SharedSpaceNodeNested> selectedSharedSpace) {
+    store.dispatch(SharedSpaceSelectSharedSpaceAction(selectedSharedSpace));
+  }
+
+  void toggleSelectAllSharedSpaces() {
+    if (store.state.sharedSpaceState.isAllSharedSpacesSelected()) {
+      store.dispatch(SharedSpaceUnselectAllSharedSpacesAction());
+    } else {
+      store.dispatch(SharedSpaceSelectAllSharedSpacesAction());
+    }
+  }
+
+  void cancelSelection() {
+    store.dispatch(SharedSpaceClearSelectedSharedSpacesAction());
+  }
+
   @override
   void onDisposed() {
     store.dispatch(CleanShareStateAction());
+    cancelSelection();
     _storeStreamSubscription.cancel();
   }
 }
