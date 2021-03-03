@@ -135,7 +135,8 @@ class WidgetModule {
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
       getIt.get<RetryAuthenticationInterceptors>(),
-      getIt.get<UploadFileManager>()
+      getIt.get<UploadFileManager>(),
+      getIt<Connectivity>(),
     ));
   }
 

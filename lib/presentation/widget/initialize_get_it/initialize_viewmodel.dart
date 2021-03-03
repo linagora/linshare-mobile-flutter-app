@@ -33,6 +33,7 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -41,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dar
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:connectivity/connectivity.dart';
 
 class InitializeViewModel extends BaseViewModel {
   final GetCredentialInteractor _getCredentialInteractor;
@@ -48,6 +50,7 @@ class InitializeViewModel extends BaseViewModel {
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
   final RetryAuthenticationInterceptors _retryInterceptors;
   final UploadFileManager _uploadFileManager;
+  final Connectivity _connectivity;
 
   InitializeViewModel(
     Store<AppState> store,
@@ -55,11 +58,17 @@ class InitializeViewModel extends BaseViewModel {
     this._appNavigation,
     this._dynamicUrlInterceptors,
     this._retryInterceptors,
-    this._uploadFileManager
+    this._uploadFileManager,
+    this._connectivity
   ) : super(store) {
     FlutterDownloader.initialize(debug: kDebugMode);
+    _getNetworkConnectivityState();
     store.dispatch(_getCredentialAction());
     registerReceivingSharingIntent();
+  }
+
+  void _getNetworkConnectivityState() async {
+    store.dispatch(SetNetworkConnectivityStateAction(await _connectivity.checkConnectivity()));
   }
 
   void registerReceivingSharingIntent() {
