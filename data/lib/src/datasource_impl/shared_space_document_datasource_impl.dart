@@ -140,7 +140,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNodeId> workgroupNodeIds, Token token, Uri baseUrl) async {
+  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl) async {
     var externalStorageDirPath;
     if (Platform.isAndroid) {
         externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
@@ -150,15 +150,18 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         throw DeviceNotSupportedException();
     }
 
-    final taskIds = await Future.wait(
-        workgroupNodeIds.map((documentId) async => await FlutterDownloader.enqueue(
-            url: Endpoint.documents
-              .downloadServicePath(documentId.uuid)
+    final taskIds = await Future.wait(workgroupNodes.map((node) async {
+      await FlutterDownloader.enqueue(
+          url: Endpoint.sharedSpaces
+              .withPathParameter(node.sharedSpaceId.uuid)
+              .withPathParameter('nodes')
+              .downloadServicePath(node.workGroupNodeId.uuid)
               .generateDownloadUrl(baseUrl),
-            savedDir: externalStorageDirPath,
-            headers: {Constant.authorization: 'Bearer ${token.token}'},
-            showNotification: true,
-            openFileFromNotification: true)));
+          savedDir: externalStorageDirPath,
+          headers: {Constant.authorization: 'Bearer ${token.token}'},
+          showNotification: true,
+          openFileFromNotification: true);
+        }));
 
     return taskIds.map((taskId) => DownloadTaskId(taskId));
   }
