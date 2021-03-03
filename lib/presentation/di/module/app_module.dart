@@ -46,8 +46,8 @@ import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:redux/redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppModule {
   AppModule() {
@@ -189,6 +189,10 @@ class AppModule {
     getIt.registerFactory(() => SearchSharedSpaceNodeNestedInteractor());
     getIt.registerFactory(() => RemoveSharedSpaceInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RemoveMultipleSharedSpacesInteractor(getIt<RemoveSharedSpaceInteractor>()));
+    getIt.registerFactory(() => DownloadWorkGroupNodeInteractor(
+        getIt<SharedSpaceDocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {

@@ -169,6 +169,7 @@ class WidgetModule {
       getIt.get<CopyMultipleFilesToMySpaceInteractor>(),
       getIt.get<DownloadMultipleNodeIOSInteractor>(),
       getIt.get<SearchWorkGroupNodeInteractor>(),
+      getIt.get<DownloadWorkGroupNodeInteractor>()
     ));
     getIt.registerFactory(() => WorkGroupDetailFilesViewModel(
       getIt.get<Store<AppState>>(),

@@ -43,17 +43,17 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_document_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/workgroupnode_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 
 import 'workgroup_nodes_surfing_navigator_widget.dart';
@@ -371,7 +371,8 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument) {
     return [
       _copyToMySpaceAction(context, [workGroupDocument]),
-      if (Platform.isIOS) _exportFileAction([workGroupDocument])
+      if (Platform.isIOS) _exportFileAction([workGroupDocument]),
+      if (Platform.isAndroid) _downloadFilesAction([workGroupDocument])
     ];
   }
 
@@ -464,6 +465,19 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         .build();
   }
 
+  Widget _downloadFilesAction(List<WorkGroupNode> workGroupNodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return workGroupNodes.any((element) => element is WorkGroupFolder)
+        ? SizedBox.shrink()
+        : WorkGroupDocumentContextMenuTileBuilder(
+            Key('download_file_context_menu_action'),
+            SvgPicture.asset(imagePath.icFileDownload,
+              width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).download_to_device,
+            workGroupNodes[0])
+          .onActionClick((data) => _model.downloadNodes(workGroupNodes, itemSelectionType: itemSelectionType))
+      .build();
+  }
+
   Widget _exportFileAction(List<WorkGroupNode> workGroupNodes,
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return workGroupNodes.any((element) => element is WorkGroupFolder) ?
@@ -496,7 +510,8 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   List<Widget> _moreActionList(BuildContext context, List<WorkGroupNode> workGroupNodes) {
     return [
       _copyToMySpaceAction(context, workGroupNodes),
-      _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
+      if (Platform.isIOS) _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
+      if (Platform.isAndroid) _downloadFilesAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple)
     ];
   }
 
