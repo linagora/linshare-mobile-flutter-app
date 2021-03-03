@@ -49,4 +49,8 @@ final sharedSpaceReducer = combineReducers<SharedSpaceState>([
   TypedReducer<SharedSpaceState, CleanSharedSpaceStateAction>((SharedSpaceState state, _) => state.clearViewState()),
   TypedReducer<SharedSpaceState, EnableUploadButtonAction>((SharedSpaceState state, _) => state.enableUploadButton()),
   TypedReducer<SharedSpaceState, DisableUploadButtonAction>((SharedSpaceState state, _) => state.disableUploadButton()),
+  TypedReducer<SharedSpaceState, SharedSpaceSelectSharedSpaceAction>((SharedSpaceState state, SharedSpaceSelectSharedSpaceAction action) => state.selectSharedSpace(action.selectedSharedSpace)),
+  TypedReducer<SharedSpaceState, SharedSpaceClearSelectedSharedSpacesAction>((SharedSpaceState state, SharedSpaceClearSelectedSharedSpacesAction action) => state.cancelSelectedSharedSpaces()),
+  TypedReducer<SharedSpaceState, SharedSpaceSelectAllSharedSpacesAction>((SharedSpaceState state, SharedSpaceSelectAllSharedSpacesAction action) => state.selectAllSharedSpaces()),
+  TypedReducer<SharedSpaceState, SharedSpaceUnselectAllSharedSpacesAction>((SharedSpaceState state, SharedSpaceUnselectAllSharedSpacesAction action) => state.unSelectAllSharedSpaces()),
 ]);

@@ -36,6 +36,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -43,6 +45,8 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/shared_space_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -71,37 +75,104 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          StoreConnector<AppState, SharedSpaceState>(
-            converter: (store) => store.state.sharedSpaceState,
-            distinct: true,
+        body: Column(
+          children: [
+            StoreConnector<AppState, SharedSpaceState>(
+              converter: (store) => store.state.sharedSpaceState,
+              builder: (context, state) {
+                return state.selectMode == SelectMode.ACTIVE
+                    ? ListTile(
+                        leading: SvgPicture.asset(imagePath.icSelectAll,
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.fill,
+                            color: state.isAllSharedSpacesSelected()
+                                ? AppColor.unselectedElementColor
+                                : AppColor.primaryColor),
+                        title: Transform(
+                            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                            child: state.isAllSharedSpacesSelected()
+                                ? Text(AppLocalizations.of(context).unselect_all,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 14, color: AppColor.documentNameItemTextColor))
+                                : Text(
+                                    AppLocalizations.of(context).select_all,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 14, color: AppColor.documentNameItemTextColor),
+                                  )),
+                        tileColor: AppColor.topBarBackgroundColor,
+                        onTap: () => sharedSpaceViewModel.toggleSelectAllSharedSpaces(),
+                        trailing: TextButton(
+                            onPressed: () => sharedSpaceViewModel.cancelSelection(),
+                            child: Text(
+                              AppLocalizations.of(context).cancel,
+                              maxLines: 1,
+                              style: TextStyle(fontSize: 14, color: AppColor.primaryColor),
+                            )),
+                      )
+                    : SizedBox.shrink();
+              },
+            ),
+            StoreConnector<AppState, SharedSpaceState>(
+                converter: (store) => store.state.sharedSpaceState,
+                distinct: true,
+                builder: (context, state) {
+                  return state.viewState.fold(
+                      (failure) => SizedBox.shrink(),
+                      (success) => (success is LoadingState)
+                          ? Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor),
+                                ),
+                              ))
+                          : SizedBox.shrink());
+                }),
+            _buildResultCount(),
+            Expanded(child: buildSharedSpaceListBySearchState()),
+            StoreConnector<AppState, SharedSpaceState>(
+                converter: (store) => store.state.sharedSpaceState,
+                builder: (context, state) {
+                  return state.selectMode == SelectMode.ACTIVE &&
+                          state.getAllSelectedSharedSpaces().isNotEmpty
+                      ? MultipleSelectionBarBuilder()
+                          .key(Key('multiple_shared_space_selection_bar'))
+                          .text(AppLocalizations.of(context)
+                              .items(state.getAllSelectedSharedSpaces().length))
+                          .actions(_multipleSelectionActions(state.getAllSelectedSharedSpaces()))
+                          .build()
+                      : SizedBox.shrink();
+                })
+          ],
+        ),
+        bottomNavigationBar: StoreConnector<AppState, AppState>(
+            converter: (store) => store.state,
             builder: (context, state) {
-              return state.viewState.fold(
-                (failure) => SizedBox.shrink(),
-                (success) => (success is LoadingState)
-                    ? Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: CircularProgressIndicator(
-                          valueColor:
-                            AlwaysStoppedAnimation<Color>(
-                              AppColor.primaryColor),
-                        ),
-                      )) : SizedBox.shrink());
+              if (!state.uiState.isInSearchState() &&
+                  state.sharedSpaceState.selectMode == SelectMode.INACTIVE) {
+                return SearchBottomBarBuilder()
+                    .key(Key('search_bottom_bar_shared_space'))
+                    .onSearchActionClick(() => sharedSpaceViewModel.openSearchState())
+                    .build();
               }
-          ),
-          _buildResultCount(),
-          Expanded(child: buildSharedSpaceListBySearchState())
-        ],
-      ),
-      bottomNavigationBar: SearchBottomBarBuilder()
-          .key(Key('search_bottom_bar_shared_space'))
-          .onSearchActionClick(() => sharedSpaceViewModel.openSearchState())
-          .build(),
-    );
+              return SizedBox.shrink();
+            }));
+  }
+
+  Widget buildSharedSpaceListBySearchState() {
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, appState) {
+          if (appState.uiState.isInSearchState()) {
+            return _buildSearchResultSharedSpacesList(appState.sharedSpaceState);
+          }
+          return _buildNormalSharedSpacesList(appState.sharedSpaceState);
+        });
   }
 
   Widget _buildResultCount() {
@@ -115,7 +186,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         });
   }
 
-  Widget _buildResultCountRow(List<SharedSpaceNodeNested> resultList) {
+  Widget _buildResultCountRow(List<SelectableElement<SharedSpaceNodeNested>> resultList) {
     return Container(
       color: AppColor.topBarBackgroundColor,
       height: 40.0,
@@ -128,19 +199,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildSharedSpaceListBySearchState() {
-    return StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (context, appState) {
-          if (appState.uiState.isInSearchState()) {
-            return _buildSearchResultSharedSpacesList(appState.sharedSpaceState);
-          }
-          return _buildNormalSharedSpacesList(appState.sharedSpaceState);
-        });
+      ));
   }
 
   Widget _buildSearchResultSharedSpacesList(SharedSpaceState state) {
@@ -185,7 +244,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     );
   }
 
-  Widget _buildSharedSpacesListView(List<SharedSpaceNodeNested> sharedSpacesList) {
+  Widget _buildSharedSpacesListView(List<SelectableElement<SharedSpaceNodeNested>> sharedSpacesList) {
     if (sharedSpacesList.isEmpty) {
       return _buildNoWorkgroupYet(context);
     } else {
@@ -211,50 +270,52 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       .text(AppLocalizations.of(context).do_not_have_any_workgroup).build();
   }
 
-  Widget _buildSharedSpaceListItem(BuildContext context, SharedSpaceNodeNested sharedSpace) {
+  Widget _buildSharedSpaceListItem(
+      BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
     return ListTile(
-      leading: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            imagePath.icSharedSpace,
-            width: 20,
-            height: 24,
-            fit: BoxFit.fill)
-        ]
-      ),
-      title: Transform(
+        leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SvgPicture.asset(imagePath.icSharedSpace, width: 20, height: 24, fit: BoxFit.fill)
+        ]),
+        title: Transform(
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: _buildSharedSpaceName(sharedSpace.name),
-      ),
-      subtitle: Transform(
-        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-        child: Row(
-          children: [
-            _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
-               sharedSpace.modificationDate.getMMMddyyyyFormatString()))
-          ],
+          child: _buildSharedSpaceName(sharedSpace.element.name),
         ),
-      ),
-      onTap: () {
-        sharedSpaceViewModel.openSharedSpace(sharedSpace);
-      },
-      trailing: IconButton(
-        icon: SvgPicture.asset(
-          imagePath.icContextMenu,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
+        subtitle: Transform(
+          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+          child: Row(
+            children: [
+              _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
+                  sharedSpace.element.modificationDate.getMMMddyyyyFormatString()))
+            ],
+          ),
         ),
-        onPressed: () => sharedSpaceViewModel.openContextMenu(
-          context,
-          sharedSpace,
-          _contextMenuActionTiles(context, sharedSpace),
-          footerAction: _contextMenuFooterAction(sharedSpace)))
-    );
+        onTap: () {
+          sharedSpaceViewModel.openSharedSpace(sharedSpace.element);
+        },
+        trailing: StoreConnector<AppState, SelectMode>(
+            converter: (store) => store.state.sharedSpaceState.selectMode,
+            builder: (context, selectMode) {
+              return selectMode == SelectMode.ACTIVE
+                  ? Checkbox(
+                      value: sharedSpace.selectMode == SelectMode.ACTIVE,
+                      onChanged: (bool value) => sharedSpaceViewModel.selectItem(sharedSpace),
+                      activeColor: AppColor.primaryColor,
+                    )
+                  : IconButton(
+                      icon: SvgPicture.asset(
+                        imagePath.icContextMenu,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.fill,
+                      ),
+                      onPressed: () => sharedSpaceViewModel.openContextMenu(context,
+                          sharedSpace.element, _contextMenuActionTiles(context, sharedSpace),
+                          footerAction: _contextMenuFooterAction(sharedSpace.element)));
+            }),
+        onLongPress: () => sharedSpaceViewModel.selectItem(sharedSpace));
   }
 
-  List<Widget> _contextMenuActionTiles(BuildContext context, SharedSpaceNodeNested sharedSpace) {
+  List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
     return [];
   }
 
@@ -283,5 +344,25 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       modificationDate,
       style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
     );
+  }
+
+  List<Widget> _multipleSelectionActions(List<SharedSpaceNodeNested> sharedSpaces) {
+    return [
+      _removeMultipleSelection(sharedSpaces)
+    ];
+  }
+
+  Widget _removeMultipleSelection(List<SharedSpaceNodeNested> sharedSpaces) {
+    return SharedSpaceMultipleSelectionActionBuilder(
+        Key('multiple_selection_remove_action'),
+        SvgPicture.asset(
+          imagePath.icDelete,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+        ),
+        sharedSpaces)
+        .onActionClick((documents) => sharedSpaceViewModel.removeSharedSpaces(context, documents, itemSelectionType: ItemSelectionType.multiple))
+        .build();
   }
 }
