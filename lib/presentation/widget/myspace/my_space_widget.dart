@@ -357,7 +357,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                           context,
                           document.element,
                     _contextMenuActionTiles(context, document.element),
-                          footerAction: _contextMenuFooterAction(document.element)));
+                          footerAction: _removeFileAction([document.element])));
             }),
         onLongPress: () => mySpaceViewModel.selectItem(document)
     );
@@ -407,20 +407,20 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     return [
       if (Platform.isIOS) _exportFileAction(context, document),
       if (Platform.isAndroid) _downloadAction(document),
-      _shareAction(document),
+      _shareAction([document]),
       _copyToWorkGroupAction(context, [document]),
     ];
   }
 
-  Widget _contextMenuFooterAction(Document document) {
+  Widget _removeFileAction(List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return DocumentContextMenuTileBuilder(
             Key('delete_document_context_menu_action'),
             SvgPicture.asset(imagePath.icDelete,
                 width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).delete,
-            document)
+            documents[0])
         .onActionClick(
-            (data) => mySpaceViewModel.removeDocument(context, [document]))
+            (data) => mySpaceViewModel.removeDocument(context, documents, itemSelectionType: itemSelectionType))
         .build();
   }
 
@@ -474,23 +474,45 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     }).build();
   }
 
-  Widget _shareAction(Document document) {
+  Widget _shareAction(List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return DocumentContextMenuTileBuilder(
             Key('share_context_menu_action'),
             SvgPicture.asset(imagePath.icContextItemShare,
                 width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).share,
-            document)
-        .onActionClick((data) => mySpaceViewModel.shareDocuments([document]))
+        documents[0])
+        .onActionClick((data) => mySpaceViewModel.shareDocuments(documents, itemSelectionType: itemSelectionType))
         .build();
   }
 
   List<Widget> _multipleSelectionActions(List<Document> documents) {
     return [
       _shareMultipleSelection(documents),
+      _downloadMultipleSelection(documents),
       _removeMultipleSelection(documents),
       _moreActionMultipleSelection(documents)
     ];
+  }
+
+  Widget _downloadMultipleSelection(List<Document> documents) {
+    return DocumentMultipleSelectionActionBuilder(
+            Key('multiple_selection_download_action'),
+            SvgPicture.asset(
+              Platform.isAndroid
+                  ? imagePath.icFileDownload
+                  : imagePath.icExportFile,
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+            ),
+            documents)
+        .onActionClick((documents) => Platform.isAndroid
+            ? mySpaceViewModel.downloadFileClick(
+                documents.map((document) => document.documentId).toList(),
+                itemSelectionType: ItemSelectionType.multiple)
+            : mySpaceViewModel.exportFile(context, documents,
+                itemSelectionType: ItemSelectionType.multiple))
+        .build();
   }
 
   Widget _shareMultipleSelection(List<Document> documents) {
@@ -532,12 +554,16 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         ),
         documents)
         .onActionClick((documents) => mySpaceViewModel.openMoreActionBottomMenu(
-            context, documents, _moreActionList(documents)))
+            context,
+            documents,
+            _moreActionList(documents),
+            _removeFileAction(documents, itemSelectionType: ItemSelectionType.multiple)))
         .build();
   }
 
   List<Widget> _moreActionList(List<Document> documents) {
     return [
+      _shareAction(documents, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadMultiFilesAction(context, documents),
       if (Platform.isIOS) _exportMultiFilesAction(context, documents),
       _copyToWorkGroupAction(context, documents, itemSelectionType: ItemSelectionType.multiple),
