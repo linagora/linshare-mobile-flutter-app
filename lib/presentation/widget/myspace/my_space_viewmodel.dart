@@ -188,10 +188,10 @@ class MySpaceViewModel extends BaseViewModel {
   }
 
   void shareDocuments(List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    if (itemSelectionType == ItemSelectionType.single) {
-      _appNavigation.popBack();
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
     }
-
     _appNavigation.push(RoutePaths.uploadDocumentRoute,
         arguments: UploadFileArguments(
             [],
@@ -240,8 +240,9 @@ class MySpaceViewModel extends BaseViewModel {
 
   void removeDocument(BuildContext context, List<Document> documents,
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    if (itemSelectionType == ItemSelectionType.single) {
-      _appNavigation.popBack();
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
     }
 
     if (documents != null && documents.isNotEmpty) {
@@ -443,13 +444,14 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(MySpaceClearSelectedDocumentsAction());
   }
 
-  void openMoreActionBottomMenu(BuildContext context, List<Document> documents, List<Widget> actionTiles) {
+  void openMoreActionBottomMenu(BuildContext context, List<Document> documents, List<Widget> actionTiles, Widget footerAction) {
     ContextMenuBuilder(context)
         .addHeader(MoreActionBottomSheetHeaderBuilder(
           context,
           Key('more_action_menu_header'),
           documents.map((element) => DocumentPresentationFile.fromDocument(element)).toList()).build())
         .addTiles(actionTiles)
+        .addFooter(footerAction)
         .build();
   }
 
