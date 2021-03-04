@@ -48,6 +48,12 @@ class AppNavigation {
   }
 
   void popBack() {
-    return navigatorKey.currentState.pop();
+    if (canPop()) {
+      navigatorKey.currentState.pop();
+    }
+  }
+
+  bool canPop() {
+    return navigatorKey.currentState.canPop();
   }
 }
