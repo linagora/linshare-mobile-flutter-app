@@ -32,8 +32,12 @@
  */
 
 import 'package:domain/src/model/share/received_share.dart';
+import 'package:domain/src/usecases/download_file/download_task_id.dart';
+import 'package:domain/domain.dart';
 
 abstract class ReceivedShareRepository {
 
   Future<List<ReceivedShare>> getAllReceivedShares();
+
+  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
 }
