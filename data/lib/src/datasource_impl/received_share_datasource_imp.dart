@@ -31,11 +31,18 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'dart:io';
+
 import 'package:data/src/datasource/received_share_datasource.dart';
+import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
+import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:ext_storage/ext_storage.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ReceivedShareDataSourceImp extends ReceivedShareDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -59,5 +66,29 @@ class ReceivedShareDataSourceImp extends ReceivedShareDataSource {
         }
       });
     });
+  }
+
+  @override
+  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) async {
+    var externalStorageDirPath;
+    if (Platform.isAndroid) {
+      externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+    } else if (Platform.isIOS) {
+      externalStorageDirPath = (await getApplicationDocumentsDirectory()).absolute.path;
+    } else {
+      throw DeviceNotSupportedException();
+    }
+
+    final taskIds = await Future.wait(
+        shareIds.map((shareId) async => await FlutterDownloader.enqueue(
+            url: Endpoint.receivedShares
+              .downloadServicePath(shareId.uuid)
+              .generateDownloadUrl(baseUrl),
+            savedDir: externalStorageDirPath,
+            headers: {Constant.authorization: 'Bearer ${token.token}'},
+            showNotification: true,
+            openFileFromNotification: true)));
+
+    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
   }
 }
