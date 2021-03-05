@@ -228,9 +228,9 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
 
   void removeWorkGroupNode(BuildContext context, List<WorkGroupNode> workGroupNodes,
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-
-    if (itemSelectionType == ItemSelectionType.single) {
-      _appNavigation.popBack();
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
     }
 
     if (workGroupNodes != null && workGroupNodes.isNotEmpty) {
@@ -403,6 +403,7 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   }
 
   void openMoreActionBottomMenu(BuildContext context, List<WorkGroupNode> workGroupNodes, List<Widget> actionTiles) {
+  void openMoreActionBottomMenu(BuildContext context, List<WorkGroupNode> workGroupNodes, List<Widget> actionTiles, Widget footerAction) {
     ContextMenuBuilder(context)
         .addHeader(MoreActionBottomSheetHeaderBuilder(
           context,
@@ -416,6 +417,7 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
             }
           }).toList()).build())
         .addTiles(actionTiles)
+        .addFooter(footerAction)
         .build();
   }
 }

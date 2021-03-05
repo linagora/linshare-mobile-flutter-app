@@ -277,7 +277,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
             ),
             onPressed: () => node.element.type == WorkGroupNodeType.FOLDER ?
               _model.openFolderContextMenu(context, node.element, _contextMenuFolderActionTiles(context, node.element)) :
-              _model.openDocumentContextMenu(context, node.element, _contextMenuDocumentActionTiles(context, node.element), _removeDocumentAction(node.element))
+              _model.openDocumentContextMenu(context, node.element, _contextMenuDocumentActionTiles(context, node.element), _removeWorkGroupNodeAction([node.element]))
       ),
       onTap: () => currentSelectMode == SelectMode.ACTIVE ? _model.selectItem(node) : widget.nodeClickedCallback(node.element),
       onLongPress: () => _model.selectItem(node),
@@ -376,14 +376,14 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
     ];
   }
 
-  Widget _removeDocumentAction(WorkGroupDocument workGroupDocument) {
+  Widget _removeWorkGroupNodeAction(List<WorkGroupNode> workGroupNodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return WorkGroupDocumentContextMenuTileBuilder(
       Key('remove_work_group_document_context_menu_action'),
       SvgPicture.asset(imagePath.icDelete,
           width: 24, height: 24, fit: BoxFit.fill),
       AppLocalizations.of(context).delete,
-      workGroupDocument)
-    .onActionClick((data) => _model.removeWorkGroupNode(context, [workGroupDocument]))
+        workGroupNodes[0])
+    .onActionClick((data) => _model.removeWorkGroupNode(context, workGroupNodes, itemSelectionType: itemSelectionType))
     .build();
   }
 
@@ -433,6 +433,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
 
   List<Widget> _multipleSelectionActions(BuildContext context, List<WorkGroupNode> workGroupNodes) {
     return [
+      _downloadFileMultipleSelection(workGroupNodes),
       _removeMultipleSelection(workGroupNodes),
       _moreActionMultipleSelection(context, workGroupNodes)
     ];
@@ -450,6 +451,23 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       workGroupNodes)
       .onActionClick((documents) => _model.removeWorkGroupNode(context, documents, itemSelectionType: ItemSelectionType.multiple))
       .build();
+  }
+
+  Widget _downloadFileMultipleSelection(List<WorkGroupNode> workGroupNodes) {
+    if (Platform.isAndroid || workGroupNodes.whereType<WorkGroupFolder>().toList().isNotEmpty) {
+      return SizedBox.shrink();
+    }
+    return WorkGroupNodeMultipleSelectionActionBuilder(
+        Key('multiple_selection_download_action'),
+        SvgPicture.asset(
+          imagePath.icExportFile,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+        ),
+        workGroupNodes)
+        .onActionClick((documents) => _model.exportFiles(context, documents, itemSelectionType: ItemSelectionType.multiple))
+        .build();
   }
 
   Widget _copyToMySpaceAction(BuildContext context, List<WorkGroupNode> workGroupNodes) {
@@ -503,7 +521,8 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         ),
         workGroupNodes)
         .onActionClick((documents) => _model.openMoreActionBottomMenu(
-            context, workGroupNodes, _moreActionList(context, documents)))
+            context, workGroupNodes, _moreActionList(context, documents),
+        _removeWorkGroupNodeAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple)))
         .build();
   }
 
