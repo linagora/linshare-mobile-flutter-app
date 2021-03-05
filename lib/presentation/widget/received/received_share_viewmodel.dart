@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -52,12 +53,14 @@ class ReceivedShareViewModel extends BaseViewModel {
   final GetAllReceivedSharesInteractor _getAllReceivedInteractor;
   final AppNavigation _appNavigation;
   final CopyMultipleFilesFromReceivedSharesToMySpaceInteractor _copyMultipleFilesFromReceivedSharesToMySpaceInteractor;
+  final DownloadReceivedSharesInteractor _downloadReceivedSharesInteractor;
 
   ReceivedShareViewModel(
       Store<AppState> store,
       this._getAllReceivedInteractor,
       this._appNavigation,
-      this._copyMultipleFilesFromReceivedSharesToMySpaceInteractor
+      this._copyMultipleFilesFromReceivedSharesToMySpaceInteractor,
+      this._downloadReceivedSharesInteractor
   ) : super(store);
 
   void getAllReceivedShare() {
@@ -126,5 +129,53 @@ class ReceivedShareViewModel extends BaseViewModel {
 
   void cancelSelection() {
     store.dispatch(ReceivedShareClearSelectedAction());
+  }
+
+  void downloadFileClick(List<ShareId> shareIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    store.dispatch(_handleDownloadFile(shareIds, itemSelectionType: itemSelectionType));
+  }
+
+  OnlineThunkAction _handleDownloadFile(List<ShareId> shareIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final status = await Permission.storage.status;
+      switch (status) {
+        case PermissionStatus.granted: _download(shareIds, itemSelectionType: itemSelectionType);
+        break;
+        case PermissionStatus.permanentlyDenied:
+          _appNavigation.popBack();
+          break;
+        default: {
+          final requested = await Permission.storage.request();
+          switch (requested) {
+            case PermissionStatus.granted: _download(shareIds, itemSelectionType: itemSelectionType);
+            break;
+            default: _appNavigation.popBack();
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  void _download(List<ShareId> shareIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    store.dispatch(_downloadFileAction(shareIds));
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+  }
+
+  OnlineThunkAction _downloadFileAction(List<ShareId> shareIds) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadReceivedSharesInteractor.execute(shareIds).then((result) => result.fold(
+        (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
+        (success) => store.dispatch(ReceivedShareAction(Right(success)))));
+    });
+  }
+
+  @override
+  void onDisposed() {
+    cancelSelection();
+    super.onDisposed();
   }
 }
