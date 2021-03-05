@@ -93,7 +93,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
             showNotification: true,
             openFileFromNotification: true)));
 
-    return taskIds.map((taskId) => DownloadTaskId(taskId));
+    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
   }
 
   @override

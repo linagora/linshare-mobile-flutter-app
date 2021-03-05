@@ -36,4 +36,6 @@ import 'package:domain/domain.dart';
 abstract class ReceivedShareDataSource {
 
   Future<List<ReceivedShare>> getAllReceivedShares();
+
+  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
 }
