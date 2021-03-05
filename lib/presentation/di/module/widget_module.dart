@@ -210,7 +210,8 @@ class WidgetModule {
         getIt.get<Store<AppState>>(),
         getIt.get<GetAllReceivedSharesInteractor>(),
         getIt.get<AppNavigation>(),
-        getIt.get<CopyMultipleFilesFromReceivedSharesToMySpaceInteractor>()
+        getIt.get<CopyMultipleFilesFromReceivedSharesToMySpaceInteractor>(),
+        getIt.get<DownloadReceivedSharesInteractor>()
     ));
   }
 }

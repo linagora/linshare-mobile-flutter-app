@@ -31,6 +31,8 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'dart:io';
+
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/share_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/received_share_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
@@ -65,6 +68,12 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   void initState() {
     super.initState();
     receivedShareViewModel.getAllReceivedShare();
+  }
+
+  @override
+  void dispose() {
+    receivedShareViewModel.onDisposed();
+    super.dispose();
   }
 
   @override
@@ -258,8 +267,19 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
 
   List<Widget> _contextMenuActionTiles(BuildContext context, ReceivedShare share) {
     return [
+      if (Platform.isAndroid) _downloadAction(share),
       _copyToMySpaceAction(context, share),
     ];
+  }
+
+  Widget _downloadAction(ReceivedShare share) {
+    return SimpleContextMenuActionBuilder(
+            Key('download_context_menu_action'),
+            SvgPicture.asset(imagePath.icFileDownload,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).download_to_device)
+        .onActionClick((_) => receivedShareViewModel.downloadFileClick([share.shareId]))
+        .build();
   }
 
   Widget _copyToMySpaceAction(BuildContext context, ReceivedShare receivedShare) {
@@ -274,6 +294,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
 
   List<Widget> _multipleSelectionActions(List<ReceivedShare> receivedShares) {
     return [
+      _downloadMultipleSelection(receivedShares),
       _copyToMySpaceMultipleSelection(receivedShares)
     ];
   }
@@ -290,5 +311,22 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
       receivedShares)
       .onActionClick((documents) => receivedShareViewModel.copyToMySpace(receivedShares, itemSelectionType: ItemSelectionType.multiple))
       .build();
+  }
+
+  Widget _downloadMultipleSelection(List<ReceivedShare> shares) {
+    return ReceivedShareMultipleSelectionActionBuilder(
+            Key('multiple_selection_download_action_received_share'),
+            SvgPicture.asset(
+              imagePath.icFileDownload,
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+            ),
+            shares)
+        .onActionClick((shares) =>
+          receivedShareViewModel.downloadFileClick(
+            shares.map((share) => share.shareId).toList(),
+            itemSelectionType: ItemSelectionType.multiple))
+        .build();
   }
 }
