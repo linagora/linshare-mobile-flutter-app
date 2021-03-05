@@ -130,6 +130,7 @@ export 'src/usecases/search_shared_space_node_nested/search_shared_space_node_ne
 export 'src/usecases/shared_space/remove_shared_space_interactor.dart';
 export 'src/usecases/shared_space/remove_multiple_shared_spaces_interactor.dart';
 export 'src/usecases/shared_space/download_workgroup_node_interactor.dart';
+export 'src/usecases/received/download_received_shares_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

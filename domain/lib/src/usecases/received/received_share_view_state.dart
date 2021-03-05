@@ -86,3 +86,21 @@ class ReceivedShareContextMenuItemViewState extends ViewState {
   @override
   List<Object> get props => [share];
 }
+
+class DownloadReceivedShareViewState extends ViewState {
+  final List<DownloadTaskId> taskIds;
+
+  DownloadReceivedShareViewState(this.taskIds);
+
+  @override
+  List<Object> get props => [taskIds];
+}
+
+class DownloadReceivedShareFailure extends FeatureFailure {
+  final dynamic downloadFileException;
+
+  DownloadReceivedShareFailure(this.downloadFileException);
+
+  @override
+  List<Object> get props => [downloadFileException];
+}
