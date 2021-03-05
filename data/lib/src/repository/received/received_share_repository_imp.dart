@@ -43,4 +43,9 @@ class ReceivedShareRepositoryImp extends ReceivedShareRepository {
   Future<List<ReceivedShare>> getAllReceivedShares() {
     return _receivedShareDataSource.getAllReceivedShares();
   }
+
+  @override
+  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) {
+    return _receivedShareDataSource.downloadReceivedShares(shareIds, token, baseUrl);
+  }
 }
