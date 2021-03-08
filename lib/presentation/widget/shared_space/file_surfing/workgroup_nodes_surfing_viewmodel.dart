@@ -402,7 +402,6 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     });
   }
 
-  void openMoreActionBottomMenu(BuildContext context, List<WorkGroupNode> workGroupNodes, List<Widget> actionTiles) {
   void openMoreActionBottomMenu(BuildContext context, List<WorkGroupNode> workGroupNodes, List<Widget> actionTiles, Widget footerAction) {
     ContextMenuBuilder(context)
         .addHeader(MoreActionBottomSheetHeaderBuilder(
