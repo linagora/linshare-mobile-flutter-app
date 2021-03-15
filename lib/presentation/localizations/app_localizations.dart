@@ -31,7 +31,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:linshare_flutter_app/l10n/messages_all.dart';
+import 'package:linshare_flutter_app/generated/intl/messages_all.dart';
 
 class AppLocalizations {
 
