@@ -203,6 +203,8 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()
     ));
+    getIt.registerFactory(() => DownloadReceivedSharesInteractor(getIt<ReceivedShareRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => CreateSharedSpaceFolderInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
   void _provideSharePreference() {
