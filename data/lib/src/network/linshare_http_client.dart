@@ -60,6 +60,7 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 import 'model/request/copy_body_request.dart';
+import 'model/request/create_shared_space_node_folder_request.dart';
 import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
@@ -286,5 +287,15 @@ class LinShareHttpClient {
     );
 
     return SharedSpaceNodeNestedResponse.fromJson(deletedSharedSpace);
+  }
+
+  Future<WorkGroupNodeFolderDto> createSharedSpaceNodeFolder(SharedSpaceId sharedSpaceId, CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest) async {
+    final resultJson = await _dioClient.post(
+      Endpoint.sharedSpaces
+        .withPathParameter(sharedSpaceId.uuid)
+        .withPathParameter('nodes')
+        .generateEndpointPath(),
+        data: createSharedSpaceNodeRequest.toJson().toString());
+    return WorkGroupNodeFolderDto.fromJson(resultJson);
   }
 }
