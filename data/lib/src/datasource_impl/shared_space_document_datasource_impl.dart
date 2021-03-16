@@ -37,6 +37,7 @@ import 'package:data/data.dart';
 import 'package:data/src/datasource/shared_space_document_datasource.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/model/request/copy_body_request.dart';
+import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_document_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_folder_dto.dart';
 import 'package:data/src/util/constant.dart';
@@ -228,5 +229,25 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
     }
 
     return streamController.stream.first;
+  }
+
+  @override
+  Future<WorkGroupFolder> createSharedSpaceFolder(
+    SharedSpaceId sharedSpaceId,
+    CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest) {
+    return Future.sync(() async {
+      final workGroupNode = await _linShareHttpClient.createSharedSpaceNodeFolder(sharedSpaceId, createSharedSpaceNodeRequest);
+      return workGroupNode.toWorkGroupFolder();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw SharedSpacesNotFound();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
   }
 }

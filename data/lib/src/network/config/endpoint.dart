@@ -58,19 +58,23 @@ class Endpoint {
 
 extension ServicePathExtension on ServicePath {
   String generateEndpointPath() {
-    return '${Endpoint.rootPath}${path}';
+    return '${Endpoint.rootPath}$path';
   }
 
   ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
     if (queryParameters.isEmpty) {
       return this;
     }
-    return ServicePath('${path}?${queryParameters
+    return ServicePath('$path?${queryParameters
         .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
   }
 
-  ServicePath withPathParameter(String pathParameter) {
-    return ServicePath('${path}/${pathParameter}');
+  ServicePath withPathParameter([String pathParameter]) {
+    if (pathParameter.isEmpty) {
+      return this;
+    }
+
+    return ServicePath('$path/$pathParameter');
   }
 
   String generateAuthenticationUrl(Uri baseUrl) {

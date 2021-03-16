@@ -35,7 +35,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'permanent_token_body_request.g.dart';
 
 @JsonSerializable()
-class PermanentTokenBodyRequest extends Equatable{
+class PermanentTokenBodyRequest extends Equatable {
   PermanentTokenBodyRequest(this.label);
 
   final String label;
