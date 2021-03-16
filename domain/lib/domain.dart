@@ -135,6 +135,7 @@ export 'src/usecases/shared_space/remove_multiple_shared_spaces_interactor.dart'
 export 'src/usecases/shared_space/download_workgroup_node_interactor.dart';
 export 'src/usecases/received/download_received_shares_interactor.dart';
 export 'src/usecases/preview_file/download_preview_document_interactor.dart';
+export 'src/usecases/shared_space/create_shared_space_folder_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
