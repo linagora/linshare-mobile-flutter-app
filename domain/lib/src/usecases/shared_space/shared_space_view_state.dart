@@ -278,3 +278,21 @@ class RemoveAllSharedSpacesFailureViewState extends FeatureFailure {
   @override
   List<Object> get props => [resultList];
 }
+
+class CreateSharedSpaceFolderViewState extends ViewState {
+  final WorkGroupFolder workGroupFolder;
+
+  CreateSharedSpaceFolderViewState(this.workGroupFolder);
+
+  @override
+  List<Object> get props => [workGroupFolder];
+}
+
+class CreateSharedSpaceFolderFailure extends FeatureFailure {
+  final Exception exception;
+
+  CreateSharedSpaceFolderFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
