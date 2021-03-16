@@ -145,6 +145,7 @@ void main() {
           type: DioErrorType.RESPONSE,
           response: Response(statusCode: 404)
       );
+
       when(_linShareHttpClient.removeSharedSpaceNode(
         sharedSpaceFolder1.sharedSpaceId,
         sharedSpaceFolder1.workGroupNodeId
@@ -153,7 +154,77 @@ void main() {
       await _sharedSpaceDataSourceImpl.removeSharedSpaceNode(
         sharedSpaceFolder1.sharedSpaceId,
         sharedSpaceFolder1.workGroupNodeId
-      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));;
+      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+    });
+
+    test('Create Folder Should Return Success Created Folder', () async {
+      final createdFolder = WorkGroupNodeFolderDto(
+        workGroupNodeId2,
+        parentWorkGroupNodeId1,
+        WorkGroupNodeType.FOLDER,
+        sharedSpaceId1,
+        DateTime.now(),
+        DateTime.now(),
+        'Dat is good',
+        'description',
+        account1
+      );
+
+      final request = CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId);
+
+      when(_linShareHttpClient.createSharedSpaceNodeFolder(
+        sharedSpaceFolder1.sharedSpaceId,
+        request
+      )).thenAnswer((_) async => createdFolder);
+
+      final result = await _sharedSpaceDataSourceImpl.createSharedSpaceFolder(
+        sharedSpaceFolder1.sharedSpaceId,
+        request
+      );
+
+      expect(result, createdFolder.toWorkGroupFolder());
+    });
+
+    test('Create Folder Should Return Success Created Folder when parent is null', () async {
+      final createdFolder = WorkGroupNodeFolderDto(
+        workGroupNodeId2,
+        parentWorkGroupNodeId1,
+        WorkGroupNodeType.FOLDER,
+        sharedSpaceId1,
+        DateTime.now(),
+        DateTime.now(),
+        'Dat is good',
+        'description',
+        account1
+      );
+
+      final request = CreateSharedSpaceNodeFolderRequest('Dat is good');
+
+      when(_linShareHttpClient.createSharedSpaceNodeFolder(
+        sharedSpaceFolder1.sharedSpaceId,
+        request
+      )).thenAnswer((_) async => createdFolder);
+
+      final result = await _sharedSpaceDataSourceImpl.createSharedSpaceFolder(
+        sharedSpaceFolder1.sharedSpaceId,
+        request
+      );
+
+      expect(result, createdFolder.toWorkGroupFolder());
+    });
+
+    test('Created Folder Should Throw Exception When Fail', () async {
+      final error = DioError(type: DioErrorType.RESPONSE, response: Response(statusCode: 404));
+      when(_linShareHttpClient.createSharedSpaceNodeFolder(
+        sharedSpaceFolder1.sharedSpaceId,
+        CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId)
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl
+          .createSharedSpaceFolder(
+            sharedSpaceFolder1.sharedSpaceId,
+            CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId)
+          ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
     });
   });
 }

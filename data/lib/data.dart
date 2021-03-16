@@ -43,6 +43,7 @@ export 'src/network/model/account/account_dto.dart';
 export 'src/network/model/autocomplete/mailing_list_autocomplete_result_dto.dart';
 export 'src/network/model/autocomplete/simple_autocomplete_result_dto.dart';
 export 'src/network/model/autocomplete/user_autocomplete_result_dto.dart';
+export 'src/network/model/request/create_shared_space_node_folder_request.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
