@@ -36,6 +36,7 @@ import 'package:domain/src/model/authentication/token.dart';
 import 'package:domain/src/model/copy/copy_request.dart';
 import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
+import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
 
 abstract class SharedSpaceDocumentRepository {
   Future<UploadTaskId> uploadSharedSpaceDocument(
@@ -66,8 +67,14 @@ abstract class SharedSpaceDocumentRepository {
   );
 
   Future<Uri> downloadNodeIOS(
-      WorkGroupNode workgroupNode,
-      Token token,
-      Uri baseUrl,
-      CancelToken cancelToken);
+    WorkGroupNode workgroupNode,
+    Token token,
+    Uri baseUrl,
+    CancelToken cancelToken
+  );
+
+  Future<WorkGroupFolder> createSharedSpaceFolder(
+    SharedSpaceId sharedSpaceId,
+    CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
+  );
 }

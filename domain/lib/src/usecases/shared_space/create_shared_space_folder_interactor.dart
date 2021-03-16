@@ -30,20 +30,24 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum WorkGroupNodeType {
-  FOLDER,
-  DOCUMENT
-}
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
 
-extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
-  String get value {
-    switch(this) {
-      case WorkGroupNodeType.FOLDER:
-        return 'FOLDER';
-      case WorkGroupNodeType.DOCUMENT:
-        return 'DOCUMENT';
-      default:
-        return toString();
+class CreateSharedSpaceFolderInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+
+  CreateSharedSpaceFolderInteractor(this._sharedSpaceDocumentRepository);
+
+  Future<Either<Failure, Success>> execute(
+    SharedSpaceId sharedSpaceId,
+    CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
+  ) async {
+    try {
+      final workGroupFolder = await _sharedSpaceDocumentRepository.createSharedSpaceFolder(sharedSpaceId, createSharedSpaceNodeRequest);
+      return Right<Failure, Success>(CreateSharedSpaceFolderViewState(workGroupFolder));
+    } catch (exception) {
+      return Left<Failure, Success>(CreateSharedSpaceFolderFailure(exception));
     }
   }
 }
