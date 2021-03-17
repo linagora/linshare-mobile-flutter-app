@@ -32,6 +32,8 @@
 
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/document/document_id.dart';
+import 'package:domain/src/model/preview/document_uti.dart';
+import 'package:domain/src/model/preview/supported_preview_file_types.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -79,4 +81,14 @@ class Document extends Equatable {
         hasThumbnail,
         shared
       ];
+}
+
+extension DocumentExtension on Document {
+  bool isAndroidSupportedPreview() => SupportedPreviewFileTypes.androidSupportedTypes.contains(mediaType.mimeType);
+
+  bool isIOSSupportedPreview() => SupportedPreviewFileTypes.iOSSupportedTypes.containsKey(mediaType.mimeType);
+
+  DocumentUti getDocumentUti() => DocumentUti(SupportedPreviewFileTypes.iOSSupportedTypes[mediaType.mimeType]);
+
+  bool isImageFile() => SupportedPreviewFileTypes.imageMimeTypes.contains(mediaType.mimeType);
 }
