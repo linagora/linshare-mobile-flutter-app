@@ -9,6 +9,7 @@ export 'src/extension/list_document_extension.dart';
 export 'src/extension/order_by_extension.dart';
 export 'src/extension/media_type_extension.dart';
 export 'src/extension/list_work_group_node_extension.dart';
+export 'src/extension/document_extensions.dart';
 
 // viewState
 export 'src/state/failure.dart';
