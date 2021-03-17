@@ -51,6 +51,7 @@ void getAllDocumentTest() {
   group('document_datasource_impl getAll test', () {
     MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
+    MockLinShareDownloadManager _linShareDownloadManager;
     DocumentDataSourceImpl _documentDataSourceImpl;
 
     setUp(() {
@@ -58,7 +59,8 @@ void getAllDocumentTest() {
       _remoteExceptionThrower = MockRemoteExceptionThrower();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
-          _remoteExceptionThrower);
+          _remoteExceptionThrower,
+          _linShareDownloadManager);
     });
 
     test('getAllDocument should return success with valid data', () async {
@@ -138,13 +140,15 @@ void shareDocumentTest() {
     MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
     DocumentDataSourceImpl _documentDataSourceImpl;
+    MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
-          _remoteExceptionThrower);
+          _remoteExceptionThrower,
+          _linShareDownloadManager);
     });
 
     test('shareDocument should return success with valid data', () async {
@@ -236,13 +240,15 @@ void removeDocumentTest() {
     MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
     DocumentDataSourceImpl _documentDataSourceImpl;
+    MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
-          _remoteExceptionThrower);
+          _remoteExceptionThrower,
+          _linShareDownloadManager);
     });
 
     test('remove document should return success with valid data', () async {

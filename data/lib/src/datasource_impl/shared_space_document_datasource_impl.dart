@@ -171,7 +171,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
     final streamController = StreamController<Uri>();
     try {
       await Future.wait([
-        _linShareHttpClient.downloadDocumentIOS(
+        _linShareHttpClient.downloadFile(
             Endpoint.sharedSpaces
                 .withPathParameter(workgroupNode.sharedSpaceId.uuid)
                 .withPathParameter('nodes')

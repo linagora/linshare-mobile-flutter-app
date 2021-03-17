@@ -114,14 +114,16 @@ class LinShareHttpClient {
     return resultJson.map((data) => ShareDto.fromJson(data)).toList();
   }
 
-  Future<ResponseBody> downloadDocumentIOS(
+  Future<ResponseBody> downloadFile(
       String url,
       CancelToken cancelToken,
       Token permanentToken) async {
     final headerParam = _dioClient.getHeaders();
     headerParam[HttpHeaders.authorizationHeader] = 'Bearer ${permanentToken.token}';
-    final responseBody = await _dioClient.get(url,
-        options: Options(headers: headerParam, responseType: ResponseType.stream));
+    final responseBody = await _dioClient.get(
+        url,
+        options: Options(headers: headerParam, responseType: ResponseType.stream),
+        cancelToken: cancelToken);
     return (responseBody as ResponseBody);
   }
 
