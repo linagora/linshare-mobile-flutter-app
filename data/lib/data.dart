@@ -30,6 +30,7 @@ export 'src/network/config/cookie_interceptors.dart';
 export 'src/network/dio_client.dart';
 export 'src/network/linshare_http_client.dart';
 export 'src/network/remote_exception_thrower.dart';
+export 'src/network/linshare_download_manager.dart';
 
 // model
 export 'src/network/model/response/document_response.dart';

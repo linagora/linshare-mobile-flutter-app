@@ -46,4 +46,6 @@ abstract class DocumentDataSource {
   Future<Document> remove(DocumentId documentId);
 
   Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
+
+  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
 }
