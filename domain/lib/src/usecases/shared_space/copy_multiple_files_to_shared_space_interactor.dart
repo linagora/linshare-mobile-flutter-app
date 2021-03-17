@@ -32,7 +32,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/document/document.dart';
 import 'package:domain/src/model/sharedspace/shared_space_id.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
 import 'package:domain/src/state/failure.dart';
@@ -47,12 +46,12 @@ class CopyMultipleFilesToSharedSpaceInteractor {
   CopyMultipleFilesToSharedSpaceInteractor(this._copyDocumentsToSharedSpaceInteractor);
 
   Future<Either<Failure, Success>> execute(
-      {@required List<Document> documents,
+      {@required List<CopyRequest> copyRequests,
       @required SharedSpaceId destinationSharedSpaceId,
       WorkGroupNodeId destinationParentNodeId}) async {
-    final listResult = await Future.wait(documents.map((element) =>
+    final listResult = await Future.wait(copyRequests.map((request) =>
         _copyDocumentsToSharedSpaceInteractor.execute(
-            CopyRequest(element.documentId.uuid, SpaceType.personalSpace),
+            request,
             destinationSharedSpaceId,
             destinationParentNodeId: destinationParentNodeId)));
     if (listResult.length == 1) {
