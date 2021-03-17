@@ -240,7 +240,7 @@ class MySpaceViewModel extends BaseViewModel {
           ? workGroupNodesSurfingArguments.folder.workGroupNodeId
           : null;
       await _copyMultipleFilesToSharedSpaceInteractor.execute(
-          documents: documents,
+          copyRequests: documents.map((document) => document.toCopyRequest()),
           destinationSharedSpaceId: workGroupNodesSurfingArguments.sharedSpaceNodeNested.sharedSpaceId,
           destinationParentNodeId: parentNodeId)
       .then((result) => result.fold(

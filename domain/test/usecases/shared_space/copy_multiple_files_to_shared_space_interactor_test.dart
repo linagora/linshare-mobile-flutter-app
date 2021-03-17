@@ -60,7 +60,7 @@ void main() {
       .thenAnswer((_) async => [workGroupDocument2]);
 
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
-          documents: [document1, document2],
+          copyRequests: [document1, document2].map((document) => document.toCopyRequest()),
           destinationSharedSpaceId: sharedSpace1.sharedSpaceId);
       final state = result.getOrElse(() => null);
       expect(state, isA<CopyMultipleFilesToSharedSpaceAllSuccessViewState>());
@@ -86,7 +86,7 @@ void main() {
 
 
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
-          documents: [document1, document2],
+          copyRequests: [document1, document2].map((document) => document.toCopyRequest()),
           destinationSharedSpaceId: sharedSpace1.sharedSpaceId);
       final state = result.getOrElse(() => null);
       expect(state, isA<CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState>());
@@ -109,7 +109,7 @@ void main() {
       .thenThrow(Exception());
 
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
-          documents: [document1, document2],
+          copyRequests: [document1, document2].map((document) => document.toCopyRequest()),
           destinationSharedSpaceId: sharedSpace1.sharedSpaceId);
       result.fold(
           (failure) {
