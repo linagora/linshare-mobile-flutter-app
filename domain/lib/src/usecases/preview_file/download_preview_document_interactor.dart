@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -11,7 +11,7 @@
 // subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
 // display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
 // the words “You are using the Free and Open Source version of LinShare™, powered by
-// Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+// Linagora © 2009–2021. Contribute to Linshare R&D by subscribing to an Enterprise
 // offer!”. You must also retain the latter notice in all asynchronous messages such as
 // e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
@@ -29,34 +29,28 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
-
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 
-abstract class DocumentRepository {
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+class DownloadPreviewDocumentInteractor {
+  final DocumentRepository _documentRepository;
+  final TokenRepository _tokenRepository;
+  final CredentialRepository _credentialRepository;
 
-  Future<List<Document>> getAll();
+  DownloadPreviewDocumentInteractor(this._documentRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
-
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
-
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<Document> remove(DocumentId documentId);
-
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
-
-  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
+  Future<Either<Failure, Success>> execute(Document document, DownloadPreviewType downloadPreviewType, CancelToken cancelToken) async {
+    try {
+      var filePath;
+      await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
+          .then((List responses) async {
+        filePath = await _documentRepository.downloadPreviewDocument(document, downloadPreviewType, responses[0], responses[1], cancelToken);
+      });
+      return Right<Failure, Success>(DownloadPreviewDocumentViewState(filePath));
+    } catch (exception) {
+      return Left<Failure, Success>(DownloadPreviewDocumentFailure(exception));
+    }
+  }
 }
