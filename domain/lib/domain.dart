@@ -22,6 +22,7 @@ export 'src/usecases/quota/quota_verification_view_state.dart';
 export 'src/usecases/search_document/search_document_view_state.dart';
 export 'src/usecases/functionality/functionality_view_state.dart';
 export 'src/usecases/search_shared_space_node_nested/search_shared_space_node_nested_view_state.dart';
+export 'src/usecases/preview_file/download_preview_document_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -93,6 +94,8 @@ export 'src/model/functionality/functionality_size.dart';
 export 'src/model/functionality/functionality_string.dart';
 export 'src/model/functionality/functionality_time.dart';
 export 'src/model/functionality/functionality_identifier.dart';
+export 'src/model/preview/document_uti.dart';
+export 'src/model/preview/download_preview_type.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -131,6 +134,7 @@ export 'src/usecases/shared_space/remove_shared_space_interactor.dart';
 export 'src/usecases/shared_space/remove_multiple_shared_spaces_interactor.dart';
 export 'src/usecases/shared_space/download_workgroup_node_interactor.dart';
 export 'src/usecases/received/download_received_shares_interactor.dart';
+export 'src/usecases/preview_file/download_preview_document_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

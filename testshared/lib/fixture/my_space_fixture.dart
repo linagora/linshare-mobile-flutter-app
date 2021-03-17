@@ -77,6 +77,20 @@ final document3 = Document(
     0,
     MediaType.parse('image/png'));
 
+final document4 = Document(
+    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af33'),
+    'description 4',
+    DateTime.fromMillisecondsSinceEpoch(1604482138177),
+    DateTime.fromMillisecondsSinceEpoch(1604482138177),
+    DateTime.fromMillisecondsSinceEpoch(1604482138177),
+    false,
+    'document 4',
+    189366,
+    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e599ic',
+    true,
+    0,
+    MediaType.parse('text/calendar'));
+
 final documentResponse1 = DocumentResponse(
     DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),
     'description 1',
