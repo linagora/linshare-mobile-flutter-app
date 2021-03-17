@@ -36,6 +36,8 @@ class Endpoint {
   static final String rootPath = '/linshare/webservice/rest/user/v2';
   static final String download = '/download';
   static final String nodes = '/nodes';
+  static final String thumbnail = '/thumbnail';
+
   static final ServicePath authentication = ServicePath('/jwt');
 
   static final ServicePath authorizedUser = ServicePath('/authentication/authorized');

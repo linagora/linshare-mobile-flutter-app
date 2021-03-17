@@ -81,4 +81,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
   Future<List<Document>> copyToMySpace(CopyRequest copyRequest) {
     return _documentDataSource.copyToMySpace(copyRequest);
   }
+
+  @override
+  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken) {
+    return _documentDataSource.downloadPreviewDocument(document, downloadPreviewType, token, baseUrl, cancelToken);
+  }
 }

@@ -11,3 +11,5 @@ class MockRemoteExceptionThrower extends Mock implements RemoteExceptionThrower 
 class MockFlutterUploader extends Mock implements FlutterUploader {}
 
 class MockDioClient extends Mock implements DioClient {}
+
+class MockLinShareDownloadManager extends Mock implements LinShareDownloadManager {}
