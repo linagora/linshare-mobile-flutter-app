@@ -34,6 +34,7 @@ import 'dart:io';
 
 import 'package:data/src/datasource/document_datasource.dart';
 import 'package:data/src/network/config/endpoint.dart';
+import 'package:data/src/network/linshare_download_manager.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/model/generic_user_dto.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
@@ -53,8 +54,9 @@ import 'package:data/src/network/model/request/copy_body_request.dart';
 class DocumentDataSourceImpl implements DocumentDataSource {
   final LinShareHttpClient _linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
+  final LinShareDownloadManager _linShareDownloadManager;
 
-  DocumentDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
+  DocumentDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower, this._linShareDownloadManager);
 
   @override
   Future<List<Document>> getAll() async {
@@ -122,62 +124,15 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) async {
-    final streamController = StreamController<Uri>();
-
-    try {
-      await Future.wait([
-        _linShareHttpClient.downloadDocumentIOS(Endpoint.documents
+  Future<Uri> downloadDocumentIOS(Document document, Token permanentToken, Uri baseUrl, CancelToken cancelToken) async {
+    return _linShareDownloadManager.downloadFile(
+        Endpoint.documents
             .downloadServicePath(document.documentId.uuid)
-            .generateDownloadUrl(baseUrl), cancelToken, token),
-        getTemporaryDirectory()
-      ]).then((values) {
-        final fileStream = (values[0] as ResponseBody).stream;
-        final tempFilePath = '${(values[1] as Directory).absolute.path}/${document.name}';
-
-        final file = File(tempFilePath);
-        file.createSync(recursive: true);
-        var randomAccessFile = file.openSync(mode: FileMode.write);
-        StreamSubscription subscription;
-
-        subscription = fileStream
-            .takeWhile((_) => cancelToken == null || !cancelToken.isCancelled)
-            .listen((data) {
-              subscription.pause();
-              randomAccessFile.writeFrom(data).then((_randomAccessFile) {
-                randomAccessFile = _randomAccessFile;
-                subscription.resume();
-              }).catchError((error) async {
-                await subscription.cancel();
-                streamController.sink.addError(DownloadFileException(error.toString()));
-                await streamController.close();
-              });
-            }, onDone: () async {
-              await randomAccessFile.close();
-              if (cancelToken.isCancelled) {
-                streamController.sink.addError(CancelDownloadFileException(cancelToken.cancelError.message));
-              } else {
-                streamController.sink.add(Uri.parse(tempFilePath));
-              }
-              await streamController.close();
-            }, onError: (error) async {
-              await randomAccessFile.close();
-              await file.delete();
-              streamController.sink.addError(DownloadFileException(error.toString()));
-              await streamController.close();
-            });
-      });
-    } catch(exception) {
-      _remoteExceptionThrower.throwRemoteException(exception, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
-          throw DocumentNotFound();
-        } else {
-          throw UnknownError(error.response.statusMessage);
-        }
-      });
-    }
-
-    return streamController.stream.first;
+            .generateDownloadUrl(baseUrl),
+        getTemporaryDirectory(),
+        document.name,
+        permanentToken,
+        cancelToken: cancelToken);
   }
 
   @override
@@ -212,5 +167,27 @@ class DocumentDataSourceImpl implements DocumentDataSource {
         }
       });
     });
+  }
+
+  @override
+  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
+    var downloadUrl;
+    if (downloadPreviewType == DownloadPreviewType.original) {
+      downloadUrl = Endpoint.documents
+          .downloadServicePath(document.documentId.uuid)
+          .generateDownloadUrl(baseUrl);
+    } else {
+      downloadUrl = Endpoint.documents
+          .withPathParameter(document.documentId.uuid)
+          .withPathParameter(Endpoint.thumbnail)
+          .withPathParameter(downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
+          .generateEndpointPath();
+    }
+    return _linShareDownloadManager.downloadFile(
+        downloadUrl,
+        getTemporaryDirectory(),
+        document.name + '${downloadPreviewType == DownloadPreviewType.thumbnail ? '.pdf' : ''}',
+        permanentToken,
+        cancelToken: cancelToken);
   }
 }
