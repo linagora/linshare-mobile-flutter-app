@@ -70,7 +70,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         _destinationPickerArguments = ModalRoute.of(context).settings.arguments as DestinationPickerArguments;
-        _destinationPickerViewModel.setCurrentViewByDestinationPickerType(_destinationPickerArguments.destinationPickerType);
+        _destinationPickerViewModel.setCurrentViewByOperation(_destinationPickerArguments.operator);
       } catch (exception) {
         print(exception);
       }
@@ -125,7 +125,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                 return IconButton(icon: SvgPicture.asset(_imagePath.icClose),
                     onPressed: () => _destinationPickerViewModel.handleOnSharedSpaceBackPress());
               } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpace) {
-                if (_destinationPickerArguments.destinationPickerType == DestinationPickerType.upload) {
+                if (_destinationPickerArguments.operator == Operation.upload) {
                   return IconButton(
                       icon: SvgPicture.asset(_imagePath.icBackBlue),
                       onPressed: () => _destinationPickerViewModel.backToUploadDestination());
@@ -271,8 +271,8 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     return state.viewState.fold(
         (failure) => RefreshIndicator(
             onRefresh: () async =>
-                _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.destinationPickerType),
-            child: failure is SharedSpacesFailure
+                _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.operator),
+            child: failure is SharedSpaceFailure
                 ? BackgroundWidgetBuilder()
                     .key(Key('shared_space_error_background'))
                     .image(SvgPicture.asset(_imagePath.icUnexpectedError,
@@ -301,7 +301,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               )
             : RefreshIndicator(
                 onRefresh: () async =>
-                    _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.destinationPickerType),
+                    _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.operator),
                 child: _buildSharedSpacesListView(
                     context, state)));
   }
