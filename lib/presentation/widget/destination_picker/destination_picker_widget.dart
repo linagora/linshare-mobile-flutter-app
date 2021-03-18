@@ -243,27 +243,28 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   }
 
   Widget _buildUploadDestinationPickerListItem(DestinationType destinationType) {
-    return ListTile(
-      leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SvgPicture.asset(
-            destinationType == DestinationType.mySpace 
-                ? _imagePath.icHome 
-                : _imagePath.icSharedSpace,
-            width: 20, height: 24, fit: BoxFit.fill)
-      ]),
-      title: Text(
-        destinationType == DestinationType.mySpace
-            ? AppLocalizations.of(context).my_space_title
-            : AppLocalizations.of(context).current_uploads_shared_space_tab,
-        maxLines: 1,
-        style: TextStyle(
-            fontSize: 14, color: AppColor.documentNameItemTextColor),
-      ),
-      onTap: () => _destinationPickerViewModel.onUploadDestinationPressed(
-          destinationType,
-          _destinationPickerArguments.actionList.firstWhere(
-              (element) => element is ChooseDestinationPickerAction)),
-    );
+    return _isDestinationAvailable(destinationType)
+      ? ListTile(
+          leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            SvgPicture.asset(
+                destinationType == DestinationType.mySpace
+                    ? _imagePath.icHome
+                    : _imagePath.icSharedSpace,
+                width: 20, height: 24, fit: BoxFit.fill)
+          ]),
+          title: Text(
+            destinationType == DestinationType.mySpace
+                ? AppLocalizations.of(context).my_space_title
+                : AppLocalizations.of(context).current_uploads_shared_space_tab,
+            maxLines: 1,
+            style: TextStyle(
+                fontSize: 14, color: AppColor.documentNameItemTextColor),
+          ),
+          onTap: () => _destinationPickerViewModel.onUploadDestinationPressed(
+              destinationType,
+              _destinationPickerArguments.actionList.firstWhere(
+                  (element) => element is ChooseDestinationPickerAction)),)
+        : SizedBox.shrink();
   }
 
   Widget _buildSharedSpacesList(
@@ -356,5 +357,15 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
       maxLines: 1,
       style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
     );
+  }
+
+  bool _isDestinationAvailable(DestinationType destinationType) {
+    if (_destinationPickerArguments != null
+        && _destinationPickerArguments.availableDestinationTypes != null
+        && _destinationPickerArguments.availableDestinationTypes.contains(destinationType)
+    ) {
+      return true;
+    }
+    return false;
   }
 }
