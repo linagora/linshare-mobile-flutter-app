@@ -179,7 +179,7 @@ class UploadFileViewModel extends BaseViewModel {
     _appNavigation.push(RoutePaths.destinationPicker,
         arguments: DestinationPickerArguments(
             actionList: [chooseAction, cancelAction],
-            destinationPickerType: DestinationPickerType.upload));
+            operator: Operation.upload));
   }
 
   void handleOnUploadAndSharePressed() {
