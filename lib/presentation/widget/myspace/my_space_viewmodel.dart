@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -64,6 +65,7 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
+import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -78,6 +80,7 @@ class MySpaceViewModel extends BaseViewModel {
   final RemoveMultipleDocumentsInteractor _removeMultipleDocumentsInteractor;
   final DownloadMultipleFileIOSInteractor _downloadMultipleFileIOSInteractor;
   final SearchDocumentInteractor _searchDocumentInteractor;
+  final DownloadPreviewDocumentInteractor _downloadPreviewDocumentInteractor;
   StreamSubscription _storeStreamSubscription;
   List<Document> _documentList = [];
 
@@ -92,7 +95,8 @@ class MySpaceViewModel extends BaseViewModel {
       this._copyMultipleFilesToSharedSpaceInteractor,
       this._removeMultipleDocumentsInteractor,
       this._downloadMultipleFileIOSInteractor,
-      this._searchDocumentInteractor
+      this._searchDocumentInteractor,
+      this._downloadPreviewDocumentInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.mySpaceState.viewState.fold(
@@ -289,6 +293,54 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_handleUploadFileMenuAction(context, actionTiles));
   }
 
+  void previewDocument(BuildContext context, Document document) {
+    _appNavigation.popBack();
+    final canPreviewDocument = Platform.isIOS ? document.isIOSSupportedPreview() : document.isAndroidSupportedPreview();
+    if (canPreviewDocument || document.hasThumbnail) {
+      final cancelToken = CancelToken();
+      _showPrepareToPreviewFileDialog(context, document, cancelToken);
+
+      var downloadPreviewType = DownloadPreviewType.original;
+      if (document.isImageFile()) {
+        downloadPreviewType = DownloadPreviewType.image;
+      } else if (!canPreviewDocument) {
+        downloadPreviewType = DownloadPreviewType.thumbnail;
+      }
+      store.dispatch(_handleDownloadPreviewDocument(document, downloadPreviewType, cancelToken));
+    }
+  }
+
+  OnlineThunkAction _handleDownloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, CancelToken cancelToken) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadPreviewDocumentInteractor
+          .execute(document, downloadPreviewType, cancelToken)
+          .then((result) => result.fold(
+              (failure) {
+                if (failure is DownloadPreviewDocumentFailure && !(failure.downloadPreviewException is CancelDownloadFileException)) {
+                  store.dispatch(MySpaceAction(Left(NoDocumentPreviewAvailable())));
+                }
+              },
+              (success) {
+                if (success is DownloadPreviewDocumentViewState) {
+                  _openDownloadedPreviewDocument(document, success);
+                }
+          }));
+    });
+  }
+
+  void _openDownloadedPreviewDocument(Document document, DownloadPreviewDocumentViewState viewState) async {
+    _appNavigation.popBack();
+
+    final openResult = await open_file.OpenFile.open(
+        Uri.decodeFull(viewState.filePath.path),
+        type: Platform.isAndroid ? document.mediaType.mimeType : null,
+        uti:  Platform.isIOS ? document.getDocumentUti().value : null);
+
+    if (openResult.type != open_file.ResultType.done) {
+      store.dispatch(MySpaceAction(Left(NoDocumentPreviewAvailable())));
+    }
+  }
+
   ThunkAction<AppState> _handleUploadFileMenuAction(BuildContext context, List<Widget> actionTiles) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
@@ -311,6 +363,17 @@ class MySpaceViewModel extends BaseViewModel {
             .key(Key('downloading_file_dialog'))
             .title(AppLocalizations.of(context).preparing_to_export)
             .content(downloadMessage)
+            .actionText(AppLocalizations.of(context).cancel)
+            .build());
+  }
+
+  void _showPrepareToPreviewFileDialog(BuildContext context, Document document, CancelToken cancelToken) {
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+            .key(Key('prepare_to_preview_file_dialog'))
+            .title(AppLocalizations.of(context).preparing_to_preview_file)
+            .content(AppLocalizations.of(context).downloading_file(document.name))
             .actionText(AppLocalizations.of(context).cancel)
             .build());
   }

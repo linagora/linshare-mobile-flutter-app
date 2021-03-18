@@ -730,6 +730,25 @@ class AppLocalizations {
       name: 'all_shared_spaces_have_been_deleted',
     );
   }
+
+  String get preview {
+    return Intl.message(
+      'Preview',
+      name: 'preview',
+    );
+  }
+
+  String get no_preview_available {
+    return Intl.message(
+      'No preview available',
+      name: 'no_preview_available',
+    );
+  }
+
+  String get preparing_to_preview_file {
+    return Intl.message('Preparing to preview file',
+        name: 'preparing_to_preview_file');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

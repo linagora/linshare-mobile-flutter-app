@@ -55,7 +55,7 @@ class AppModule {
     _provideDataSource();
     _provideRepositoryImpl();
     _provideRepository();
-    _provideInterActor();
+    _provideInteractor();
     _provideSharePreference();
     _provideAppNavigation();
     _provideDeviceManager();
@@ -69,7 +69,8 @@ class AppModule {
   void _provideDataSourceImpl() {
     getIt.registerFactory(() => DocumentDataSourceImpl(
         getIt<LinShareHttpClient>(),
-        getIt<RemoteExceptionThrower>()));
+        getIt<RemoteExceptionThrower>(),
+        getIt<LinShareDownloadManager>()));
     getIt.registerFactory(() => SharedSpaceDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
@@ -134,7 +135,7 @@ class AppModule {
     getIt.registerFactory<FunctionalityRepository>(() => getIt<FunctionalityRepositoryImpl>());
   }
 
-  void _provideInterActor() {
+  void _provideInteractor() {
     getIt.registerFactory(() => CreatePermanentTokenInteractor(
       getIt<AuthenticationRepository>(),
       getIt<TokenRepository>(),
@@ -193,7 +194,15 @@ class AppModule {
         getIt<SharedSpaceDocumentRepository>(),
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
-    getIt.registerFactory(() => DownloadReceivedSharesInteractor(getIt<ReceivedShareRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => DownloadReceivedSharesInteractor(
+        getIt<ReceivedShareRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
+    getIt.registerFactory(() => DownloadPreviewDocumentInteractor(
+        getIt<DocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()
+    ));
   }
 
   void _provideSharePreference() {
