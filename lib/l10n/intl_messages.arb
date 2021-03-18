@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-18T17:02:52.039332",
+  "@@last_modified": "2021-03-19T14:59:50.725025",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -569,6 +569,41 @@
   },
   "preparing_to_preview_file": "Preparing to preview file",
   "@preparing_to_preview_file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_new_file_or_folder": "Add new file or folder",
+  "@add_new_file_or_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_folder": "Create Folder",
+  "@create_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_folder": "New folder",
+  "@new_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "rename": "Rename",
+  "@rename": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name_not_empty": "The name cannot be empty!",
+  "@name_not_empty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name_already_exists": "The name already exists!",
+  "@name_already_exists": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_folder": "Create new folder",
+  "@create_new_folder": {
     "type": "text",
     "placeholders": {}
   }

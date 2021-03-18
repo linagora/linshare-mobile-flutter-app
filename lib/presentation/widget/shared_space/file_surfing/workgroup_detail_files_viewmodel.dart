@@ -31,6 +31,7 @@
 //
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
@@ -38,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
@@ -45,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
@@ -54,27 +57,65 @@ import 'package:redux_thunk/redux_thunk.dart';
 class WorkGroupDetailFilesViewModel extends BaseViewModel {
   final LocalFilePicker _localFilePicker;
   final AppNavigation _appNavigation;
+  final VerifyNameInteractor _verifyNameInteractor;
+  final GetAllChildNodesInteractor _getAllChildNodesInteractor;
+  final CreateSharedSpaceFolderInteractor _createSharedSpaceFolderInteractor;
+  List _workGroupNodesList;
 
-  WorkGroupDetailFilesViewModel(Store<AppState> store, this._localFilePicker, this._appNavigation) : super(store);
+  WorkGroupDetailFilesViewModel(
+      Store<AppState> store,
+      this._localFilePicker,
+      this._appNavigation,
+      this._verifyNameInteractor,
+      this._getAllChildNodesInteractor,
+      this._createSharedSpaceFolderInteractor)
+      : super(store);
+
+  void openAddNewFileOrFolderMenu(BuildContext context, List<Widget> actionTiles) {
+    store.dispatch(_handleAddNewFileOrFolderMenuAction(context, actionTiles));
+  }
+
+  void openCreateFolderModal(BuildContext context, WorkGroupNodesSurfingArguments arguments) {
+    _appNavigation.popBack();
+    store.dispatch(_handleCreateNewFolderModalAction(context, arguments));
+  }
 
   void openUploadFileMenu(BuildContext context, List<Widget> actionTiles) {
+    _appNavigation.popBack();
     store.dispatch(_handleUploadFileMenuAction(context, actionTiles));
   }
 
-  void openFilePickerByType(WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments, FileType fileType) {
+  void openFilePickerByType(
+      WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments, FileType fileType) {
     _appNavigation.popBack();
     store.dispatch(pickFileAction(workGroupNodesSurfingArguments, fileType));
   }
 
-  ThunkAction<AppState> pickFileAction(WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments, FileType fileType) {
+  ThunkAction<AppState> pickFileAction(
+      WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments, FileType fileType) {
     return (Store<AppState> store) async {
       await _localFilePicker.pickFiles(fileType: fileType).then((result) => result.fold(
-              (failure) => store.dispatch(UploadFileAction(Left(failure))),
-              (success) => store.dispatch(pickFileSuccessAction(success, workGroupNodesSurfingArguments))));
+          (failure) => store.dispatch(UploadFileAction(Left(failure))),
+          (success) =>
+              store.dispatch(pickFileSuccessAction(success, workGroupNodesSurfingArguments))));
     };
   }
 
-  ThunkAction<AppState> _handleUploadFileMenuAction(BuildContext context, List<Widget> actionTiles) {
+  ThunkAction<AppState> _handleAddNewFileOrFolderMenuAction(
+      BuildContext context, List<Widget> actionTiles) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context, areTilesHorizontal: true)
+          .addHeader(SimpleBottomSheetHeaderBuilder(
+                  Key('add_new_file_or_folders_bottom_sheet_header_builder'))
+              .addLabel(AppLocalizations.of(context).add_new_file_or_folder)
+              .build())
+          .addTiles(actionTiles)
+          .build();
+    };
+  }
+
+  ThunkAction<AppState> _handleUploadFileMenuAction(
+      BuildContext context, List<Widget> actionTiles) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
           .addHeader(SimpleBottomSheetHeaderBuilder(Key('file_picker_bottom_sheet_header_builder'))
@@ -85,8 +126,48 @@ class WorkGroupDetailFilesViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> pickFileSuccessAction(
-      FilePickerSuccessViewState success,
+  ThunkAction<AppState> _handleCreateNewFolderModalAction(
+      BuildContext context, WorkGroupNodesSurfingArguments arguments) {
+    return (Store<AppState> store) async {
+      loadAllChildNodes(arguments);
+
+      EditTextModalSheetBuilder(_appNavigation)
+          .key(Key('create_new_folder_modal'))
+          .title(AppLocalizations.of(context).create_new_folder)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .hintText(AppLocalizations.of(context).new_folder)
+          .onConfirmAction(AppLocalizations.of(context).rename,
+              (value) => this.store.dispatch(_createNewFolderAction(value, arguments)))
+          .setErrorString((value) => getErrorString(context, value, arguments))
+          .show(context);
+    };
+  }
+
+  String getErrorString(
+      BuildContext context, String value, WorkGroupNodesSurfingArguments arguments) {
+    return _verifyNameInteractor
+        .execute(
+            _workGroupNodesList
+                .whereType<WorkGroupFolder>()
+                .map((node) => node.name)
+                .toList(),
+            value)
+        .fold((failure) {
+      if (failure is VerifyNameFailure) {
+        if (failure.exception is EmptyNameException) {
+          return AppLocalizations.of(context).name_not_empty;
+        } else if (failure.exception is DuplicatedNameException) {
+          return AppLocalizations.of(context).name_already_exists;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }, (success) => null);
+  }
+
+  ThunkAction<AppState> pickFileSuccessAction(FilePickerSuccessViewState success,
       WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
     return (Store<AppState> store) async {
       store.dispatch(UploadFileAction(Right(success)));
@@ -103,5 +184,42 @@ class WorkGroupDetailFilesViewModel extends BaseViewModel {
   void openSearchState() {
     store.dispatch(EnableSearchStateAction(SearchDestination.SHARED_SPACE));
     store.dispatch(SharedSpaceAction(Right(ClearWorkGroupNodesListViewState())));
+  }
+
+  void loadAllChildNodes(WorkGroupNodesSurfingArguments arguments) async {
+    final isRootFolder = arguments.folderType == FolderNodeType.root;
+    final result = await _getAllChildNodesInteractor.execute(
+      isRootFolder ? arguments.sharedSpaceNodeNested.sharedSpaceId : arguments.folder.sharedSpaceId,
+      parentId: isRootFolder ? null : arguments.folder.workGroupNodeId,
+    );
+
+    result.fold(
+      (failure) {
+        _workGroupNodesList = [];
+      },
+      (success) {
+        _workGroupNodesList = (success as GetChildNodesViewState).workGroupNodes;
+      },
+    );
+  }
+
+  OnlineThunkAction _createNewFolderAction(
+      String newName, WorkGroupNodesSurfingArguments arguments) {
+    _appNavigation.popBack();
+    return OnlineThunkAction((Store<AppState> store) async {
+      final isRootFolder = arguments.folderType == FolderNodeType.root;
+      await _createSharedSpaceFolderInteractor
+          .execute(
+              isRootFolder
+                  ? arguments.sharedSpaceNodeNested.sharedSpaceId
+                  : arguments.folder.sharedSpaceId,
+              CreateSharedSpaceNodeFolderRequest(
+                newName,
+                isRootFolder ? null : arguments.folder.workGroupNodeId,
+              ))
+          .then((result) => result.fold(
+              (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+              (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+    });
   }
 }

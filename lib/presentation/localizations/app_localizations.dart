@@ -746,8 +746,59 @@ class AppLocalizations {
   }
 
   String get preparing_to_preview_file {
-    return Intl.message('Preparing to preview file',
-        name: 'preparing_to_preview_file');
+    return Intl.message(
+      'Preparing to preview file',
+      name: 'preparing_to_preview_file'
+    );
+  }
+
+  String get add_new_file_or_folder {
+    return Intl.message(
+      'Add new file or folder',
+      name: 'add_new_file_or_folder',
+    );
+  }
+
+  String get create_folder {
+    return Intl.message(
+      'Create Folder',
+      name: 'create_folder',
+    );
+  }
+
+  String get new_folder {
+    return Intl.message(
+      'New folder',
+      name: 'new_folder',
+    );
+  }
+
+  String get rename {
+    return Intl.message(
+      'Rename',
+      name: 'rename',
+    );
+  }
+
+  String get name_not_empty {
+    return Intl.message(
+      'The name cannot be empty!',
+      name: 'name_not_empty',
+    );
+  }
+
+  String get name_already_exists {
+    return Intl.message(
+      'The name already exists!',
+      name: 'name_already_exists',
+    );
+  }
+
+  String get create_new_folder {
+    return Intl.message(
+      'Create new folder',
+      name: 'create_new_folder',
+    );
   }
 }
 

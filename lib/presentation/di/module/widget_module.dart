@@ -170,12 +170,15 @@ class WidgetModule {
       getIt.get<CopyMultipleFilesToMySpaceInteractor>(),
       getIt.get<DownloadMultipleNodeIOSInteractor>(),
       getIt.get<SearchWorkGroupNodeInteractor>(),
-      getIt.get<DownloadWorkGroupNodeInteractor>()
+      getIt.get<DownloadWorkGroupNodeInteractor>(),
     ));
     getIt.registerFactory(() => WorkGroupDetailFilesViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<LocalFilePicker>(),
-      getIt.get<AppNavigation>()
+      getIt.get<AppNavigation>(),
+      getIt.get<VerifyNameInteractor>(),
+      getIt.get<GetAllChildNodesInteractor>(),
+      getIt.get<CreateSharedSpaceFolderInteractor>()
     ));
   }
 

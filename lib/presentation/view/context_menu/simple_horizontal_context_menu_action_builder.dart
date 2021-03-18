@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -17,8 +17,7 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-//
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -26,42 +25,29 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses
-// for the GNU Affero General Public License version
+// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+//  the Additional Terms applicable to LinShare software.
 //
-// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-// for
-//
-// the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:meta/meta.dart';
-typedef OnContextMenuActionClick<T> = void Function(T data);
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-abstract class ContextMenuActionBuilder<T> {
-  @protected final Key key;
-  @protected final SvgPicture actionIcon;
-  @protected final String actionName;
-  @protected OnContextMenuActionClick<T> onContextMenuActionClick;
+class SimpleHorizontalContextMenuActionBuilder extends ContextMenuActionBuilder<void> {
+  SimpleHorizontalContextMenuActionBuilder(Key key, SvgPicture actionIcon, String actionName)
+      : super(key, actionIcon, actionName);
 
-  ContextMenuActionBuilder(
-      this.key,
-      this.actionIcon,
-      this.actionName);
-
-  ContextMenuActionBuilder onActionClick(OnContextMenuActionClick<T> onContextMenuActionClick) {
-    this.onContextMenuActionClick = onContextMenuActionClick;
-    return this;
+  @override
+  Widget build() {
+    return GestureDetector(
+        child: Container(
+          padding: EdgeInsets.only(bottom: 26, left: 26),
+            child: Column(
+              children: [actionIcon, Text(actionName, style: actionTextStyle())]
+            )
+        ),
+        onTap: () => onContextMenuActionClick(null));
   }
-
-  TextStyle actionTextStyle() {
-    return TextStyle(
-        fontSize: 16,
-        color: AppColor.documentNameItemTextColor);
-  }
-
-  Widget build();
 }
