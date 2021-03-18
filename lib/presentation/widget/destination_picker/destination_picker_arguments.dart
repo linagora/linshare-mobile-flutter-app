@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
@@ -37,9 +38,7 @@ import 'destination_picker_action/base_destination_picker_action.dart';
 
 class DestinationPickerArguments extends RouterArguments {
   final List<BaseDestinationPickerAction> actionList;
-  final DestinationPickerType destinationPickerType;
+  final Operation operator;
 
-  DestinationPickerArguments({@required this.actionList, @required this.destinationPickerType});
+  DestinationPickerArguments({@required this.actionList, @required this.operator});
 }
-
-enum DestinationPickerType { copy, upload }

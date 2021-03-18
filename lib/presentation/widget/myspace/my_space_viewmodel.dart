@@ -231,7 +231,7 @@ class MySpaceViewModel extends BaseViewModel {
     _appNavigation.push(RoutePaths.destinationPicker,
         arguments: DestinationPickerArguments(
             actionList: [copyAction, cancelAction],
-            destinationPickerType: DestinationPickerType.copy));
+            operator: Operation.copy));
   }
 
   ThunkAction<AppState> _copyToWorkgroupAction(List<Document> documents, WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
