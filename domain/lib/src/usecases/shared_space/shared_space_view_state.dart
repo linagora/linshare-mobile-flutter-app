@@ -289,7 +289,7 @@ class CreateSharedSpaceFolderViewState extends ViewState {
 }
 
 class CreateSharedSpaceFolderFailure extends FeatureFailure {
-  final Exception exception;
+  final exception;
 
   CreateSharedSpaceFolderFailure(this.exception);
 
