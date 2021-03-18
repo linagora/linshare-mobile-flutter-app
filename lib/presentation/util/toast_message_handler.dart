@@ -82,6 +82,9 @@ class ToastMessageHandler {
       } else if (failure is RemoveMultipleDocumentsAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
         _cleanMySpaceViewState();
+      } else if (failure is NoDocumentPreviewAvailable) {
+        appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
+        _cleanMySpaceViewState();
       }
     }, (success) {
       if (success is CopyToSharedSpaceViewState || success is CopyMultipleFilesToSharedSpaceAllSuccessViewState) {
