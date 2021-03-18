@@ -30,4 +30,4 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum UploadDestinationType { mySpace, workGroup }
+enum DestinationType { mySpace, workGroup }

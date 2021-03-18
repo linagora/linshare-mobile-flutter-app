@@ -39,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/model/file/selected_presentati
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
@@ -46,14 +47,12 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
-
-import 'upload_destination_type.dart';
 
 enum ContactSuggestionSource {
   all, linShareContact, deviceContact
@@ -116,8 +115,8 @@ class UploadFileViewModel extends BaseViewModel {
   final BehaviorSubject<ShareButtonType> _uploadAndShareButtonType = BehaviorSubject.seeded(ShareButtonType.justUpload);
   StreamView<ShareButtonType> get uploadAndShareButtonType => _uploadAndShareButtonType;
 
-  final BehaviorSubject<UploadDestinationType> _uploadDestinationTypeObservable = BehaviorSubject.seeded(UploadDestinationType.mySpace);
-  BehaviorSubject<UploadDestinationType> get uploadDestinationTypeObservable => _uploadDestinationTypeObservable;
+  final BehaviorSubject<DestinationType> _uploadDestinationTypeObservable = BehaviorSubject.seeded(DestinationType.mySpace);
+  BehaviorSubject<DestinationType> get uploadDestinationTypeObservable => _uploadDestinationTypeObservable;
 
   void backToMySpace() {
     _appNavigation.popBack();
@@ -171,9 +170,9 @@ class UploadFileViewModel extends BaseViewModel {
             data.sharedSpaceNodeNested,
             data.folder,
             data.folderType));
-        _uploadDestinationTypeObservable.add(UploadDestinationType.workGroup);
+        _uploadDestinationTypeObservable.add(DestinationType.workGroup);
       } else {
-        _uploadDestinationTypeObservable.add(UploadDestinationType.mySpace);
+        _uploadDestinationTypeObservable.add(DestinationType.mySpace);
       }
     });
 
@@ -200,7 +199,7 @@ class UploadFileViewModel extends BaseViewModel {
     if (_uploadFilesArgument == null) {
       return;
     }
-    if (_uploadDestinationTypeObservable.value == UploadDestinationType.workGroup) {
+    if (_uploadDestinationTypeObservable.value == DestinationType.workGroup) {
       _uploadToSharedSpace(_uploadFilesArgument);
     } else {
       if (_autoCompleteResultListObservable.value.isEmpty) {
