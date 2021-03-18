@@ -546,5 +546,20 @@
   "@all_shared_spaces_have_been_deleted": {
     "type": "text",
     "placeholders": {}
+  },
+  "preview": "Preview",
+  "@preview": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no_preview_available": "No preview available",
+  "@no_preview_available": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preparing_to_preview_file": "Preparing to preview file",
+  "@preparing_to_preview_file": {
+    "type": "text",
+    "placeholders": {}
   }
 }

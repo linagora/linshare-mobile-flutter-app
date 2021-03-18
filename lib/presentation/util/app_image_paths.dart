@@ -73,6 +73,7 @@ class AppImagePaths {
   String get icReceived => _getImagePath('ic_received.svg');
   String get icSearchBlue => _getImagePath('ic_search_blue.svg');
   String get icCopy => _getImagePath('ic_copy.svg');
+  String get icPreview => _getImagePath('ic_preview.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

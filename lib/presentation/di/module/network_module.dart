@@ -40,8 +40,8 @@ class NetworkModule {
   NetworkModule() {
     _provideBaseOption();
     _provideDio();
-    _provideHttpClient();
     _provideRemoteExceptionThrower();
+    _provideHttpClient();
   }
 
   void _provideBaseOption() {
@@ -69,12 +69,15 @@ class NetworkModule {
     };
   }
 
+  void _provideRemoteExceptionThrower() {
+    getIt.registerSingleton<RemoteExceptionThrower>(RemoteExceptionThrower());
+  }
+
   void _provideHttpClient() {
     getIt.registerSingleton(DioClient(getIt<Dio>()));
     getIt.registerSingleton(LinShareHttpClient(getIt<DioClient>()));
-  }
-
-  void _provideRemoteExceptionThrower() {
-    getIt.registerSingleton<RemoteExceptionThrower>(RemoteExceptionThrower());
+    getIt.registerFactory(() => LinShareDownloadManager(
+        getIt<RemoteExceptionThrower>(),
+        getIt<LinShareHttpClient>()));
   }
 }
