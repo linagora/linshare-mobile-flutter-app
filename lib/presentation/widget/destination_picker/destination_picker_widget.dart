@@ -46,7 +46,7 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_destination_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 
 import 'destination_picker_action/negative_destination_picker_action.dart';
 import 'destination_picker_viewmodel.dart';
@@ -235,21 +235,24 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     return ListView.builder(
       key: Key('shared_spaces_list'),
       padding: EdgeInsets.zero,
-      itemCount: _destinationPickerViewModel.uploadDestinationTypeList.length,
+      itemCount: _destinationPickerViewModel.destinationTypeList.length,
       itemBuilder: (context, index) {
-        return _buildUploadDestinationPickerListItem(_destinationPickerViewModel.uploadDestinationTypeList[index]);
+        return _buildUploadDestinationPickerListItem(_destinationPickerViewModel.destinationTypeList[index]);
       },
     );
   }
 
-  Widget _buildUploadDestinationPickerListItem(UploadDestinationType uploadDestinationType) {
+  Widget _buildUploadDestinationPickerListItem(DestinationType destinationType) {
     return ListTile(
       leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SvgPicture.asset(uploadDestinationType == UploadDestinationType.mySpace ? _imagePath.icHome : _imagePath.icSharedSpace,
+        SvgPicture.asset(
+            destinationType == DestinationType.mySpace 
+                ? _imagePath.icHome 
+                : _imagePath.icSharedSpace,
             width: 20, height: 24, fit: BoxFit.fill)
       ]),
       title: Text(
-        uploadDestinationType == UploadDestinationType.mySpace
+        destinationType == DestinationType.mySpace
             ? AppLocalizations.of(context).my_space_title
             : AppLocalizations.of(context).current_uploads_shared_space_tab,
         maxLines: 1,
@@ -257,7 +260,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
             fontSize: 14, color: AppColor.documentNameItemTextColor),
       ),
       onTap: () => _destinationPickerViewModel.onUploadDestinationPressed(
-          uploadDestinationType,
+          destinationType,
           _destinationPickerArguments.actionList.firstWhere(
               (element) => element is ChooseDestinationPickerAction)),
     );
