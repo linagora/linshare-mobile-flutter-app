@@ -33,15 +33,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+
 class ContextMenuBuilder {
   final imagePath = getIt<AppImagePaths>();
 
   final BuildContext _context;
   final List<Widget> _actionTiles = [];
+
+  final bool areTilesHorizontal;
+
   Widget _header;
   Widget _footer;
 
-  ContextMenuBuilder(this._context);
+  ContextMenuBuilder(this._context, { this.areTilesHorizontal = false });
 
   ContextMenuBuilder addTiles(List<Widget> tiles) {
     _actionTiles.addAll(tiles);
@@ -78,7 +82,9 @@ class ContextMenuBuilder {
             children: <Widget>[
               _header ?? SizedBox.shrink(),
               Divider(),
-              ..._actionTiles,
+              areTilesHorizontal ?
+                Row(children: [..._actionTiles]) :
+                Column(children: [..._actionTiles]),
               _footer != null ? Padding(
                 padding: EdgeInsets.only(bottom: 10.0),
                 child: Wrap(

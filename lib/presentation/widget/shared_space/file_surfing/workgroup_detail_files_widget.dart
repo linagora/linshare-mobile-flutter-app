@@ -38,7 +38,9 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_horizontal_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -69,6 +71,7 @@ class WorkGroupDetailFilesWidget extends StatefulWidget {
 class WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> {
   final AppImagePaths imagePath = getIt<AppImagePaths>();
   final workGroupDetailFilesViewModel = getIt<WorkGroupDetailFilesViewModel>();
+  final appNavigation = getIt<AppNavigation>();
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +146,10 @@ class WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> 
             onTap: () => widget.sharedSpaceNode.sharedSpaceRole.name ==
                     SharedSpaceRoleName.READER
                 ? {}
-                : workGroupDetailFilesViewModel.openUploadFileMenu(
-                    context, uploadFileMenuActionTiles(context)),
+                : workGroupDetailFilesViewModel.openAddNewFileOrFolderMenu(
+                    context,
+                    addNewFileOrFolderMenuActionTiles(context)
+                ),
             child: _buildUploadWidget(),
           ),
         ),
@@ -184,6 +189,35 @@ class WorkGroupDetailFilesWidgetState extends State<WorkGroupDetailFilesWidget> 
         ),
       ),
     );
+  }
+
+  List<Widget> addNewFileOrFolderMenuActionTiles(BuildContext context) {
+    return [
+      uploadFileAction(),
+      addNewFolderAction()
+    ];
+  }
+
+  Widget addNewFolderAction() {
+    return SimpleHorizontalContextMenuActionBuilder(
+            Key('add_new_folder_context_menu_action'),
+            SvgPicture.asset(imagePath.icCreateFolder,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).create_folder)
+        .onActionClick((_) =>
+            workGroupDetailFilesViewModel.openCreateFolderModal(context, widget._workgroupNavigatorKey.currentState.widget.currentPageData))
+        .build();
+  }
+
+  Widget uploadFileAction() {
+    return SimpleHorizontalContextMenuActionBuilder(
+            Key('upload_file_context_menu_action'),
+            SvgPicture.asset(imagePath.icPublish,
+                width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).upload_file_title)
+        .onActionClick((_) =>
+            workGroupDetailFilesViewModel.openUploadFileMenu(context, uploadFileMenuActionTiles(context)))
+        .build();
   }
 
   List<Widget> uploadFileMenuActionTiles(BuildContext context) {
