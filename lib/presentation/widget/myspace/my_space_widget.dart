@@ -293,6 +293,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   Widget _buildMySpaceListItem(BuildContext context, SelectableElement<Document> document) {
     return ListTile(
+      onTap: () => mySpaceViewModel.previewDocument(context, document.element),
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -409,6 +410,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       if (Platform.isAndroid) _downloadAction(document),
       _shareAction([document]),
       _copyToWorkGroupAction(context, [document]),
+      _previewDocumentAction(document)
     ];
   }
 
@@ -613,6 +615,16 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         documents[0])
         .onActionClick((data) => mySpaceViewModel.exportFile(context, documents,
             itemSelectionType: ItemSelectionType.multiple))
+        .build();
+  }
+
+  Widget _previewDocumentAction(Document document) {
+    return DocumentContextMenuTileBuilder(
+            Key('preview_document_context_menu_action'),
+            SvgPicture.asset(imagePath.icPreview, width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).preview,
+            document)
+        .onActionClick((data) => mySpaceViewModel.previewDocument(context, document))
         .build();
   }
 }

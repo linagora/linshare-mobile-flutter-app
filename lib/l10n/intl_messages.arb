@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-02T17:40:48.174892",
+  "@@last_modified": "2021-03-18T17:02:52.039332",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -554,6 +554,21 @@
   },
   "all_shared_spaces_have_been_deleted": "All Shared Spaces have been deleted",
   "@all_shared_spaces_have_been_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preview": "Preview",
+  "@preview": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no_preview_available": "No preview available",
+  "@no_preview_available": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preparing_to_preview_file": "Preparing to preview file",
+  "@preparing_to_preview_file": {
     "type": "text",
     "placeholders": {}
   }
