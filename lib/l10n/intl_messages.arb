@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-02T17:40:48.174892",
+  "@@last_modified": "2021-03-19T11:22:26.017745",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -554,6 +554,36 @@
   },
   "all_shared_spaces_have_been_deleted": "All Shared Spaces have been deleted",
   "@all_shared_spaces_have_been_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "modification_date": "Modification date",
+  "@modification_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creation_date": "Creation date",
+  "@creation_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "size": "Size",
+  "@size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Name",
+  "@name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared": "Shared",
+  "@shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order_by": "Order by",
+  "@order_by": {
     "type": "text",
     "placeholders": {}
   }

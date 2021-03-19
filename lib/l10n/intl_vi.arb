@@ -546,5 +546,35 @@
   "@all_shared_spaces_have_been_deleted": {
     "type": "text",
     "placeholders": {}
+  },
+  "modification_date": "Ngày sửa đổi",
+  "@modification_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creation_date": "Ngày khởi tạo",
+  "@creation_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "size": "Kích cỡ",
+  "@size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Tên",
+  "@name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared": "Đã chia sẻ",
+  "@shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order_by": "Sắp xếp theo",
+  "@order_by": {
+    "type": "text",
+    "placeholders": {}
   }
 }
