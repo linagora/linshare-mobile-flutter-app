@@ -86,3 +86,19 @@ class MySpaceSetSearchResultAction extends ActionOffline {
 
   MySpaceSetSearchResultAction(this.documentList);
 }
+
+@immutable
+class MySpaceSetOrderResultAction extends ActionOffline {
+  final List<Document> documentList;
+  final Sorter sorter;
+
+  MySpaceSetOrderResultAction(this.documentList, this.sorter);
+}
+
+@immutable
+class MySpaceSetSorterListResultAction extends ActionOffline {
+  final List<Sorter> sorterList;
+  final Sorter sorter;
+
+  MySpaceSetSorterListResultAction(this.sorterList, this.sorter);
+}

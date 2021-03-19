@@ -43,25 +43,29 @@ import 'package:equatable/equatable.dart';
 class MySpaceState extends LinShareState with EquatableMixin {
   final List<SelectableElement<Document>> documentList;
   final SelectMode selectMode;
+  final Sorter sorter;
+  final List<SelectableElement<Sorter>> sorterList;
 
   MySpaceState(
     Either<Failure, Success> viewState,
     this.documentList,
-    this.selectMode
+    this.selectMode,
+    this.sorter,
+    this.sorterList,
   ) : super(viewState);
 
   factory MySpaceState.initial() {
-    return MySpaceState(Right(IdleState()), [], SelectMode.INACTIVE);
+    return MySpaceState(Right(IdleState()), [], SelectMode.INACTIVE, Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending), []);
   }
 
   @override
   LinShareState clearViewState() {
-    return MySpaceState(Right(IdleState()), documentList, selectMode);
+    return MySpaceState(Right(IdleState()), documentList, selectMode, sorter, sorterList);
   }
 
   @override
   LinShareState sendViewState({Either<Failure, Success> viewState}) {
-    return MySpaceState(viewState, documentList, selectMode);
+    return MySpaceState(viewState, documentList, selectMode, sorter, sorterList);
   }
 
   LinShareState setDocuments({Either<Failure, Success> viewState, List<Document> newDocumentList}) {
@@ -72,36 +76,64 @@ class MySpaceState extends LinShareState with EquatableMixin {
           if (selectedElements.contains(document))
             SelectableElement<Document>(document, SelectMode.ACTIVE)
           else SelectableElement<Document>(document, SelectMode.INACTIVE)}.toList(),
-      selectMode);
+      selectMode, sorter, sorterList);
   }
 
   LinShareState selectDocument(SelectableElement<Document> selectedDocument) {
     documentList.firstWhere((document) => document == selectedDocument).toggleSelect();
-    return MySpaceState(viewState, documentList, SelectMode.ACTIVE);
+    return MySpaceState(viewState, documentList, SelectMode.ACTIVE, sorter, sorterList);
   }
 
   LinShareState cancelSelectedDocuments() {
-    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.INACTIVE);
+    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.INACTIVE, sorter, sorterList);
   }
 
   LinShareState selectAllDocuments() {
-    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.ACTIVE)).toList(), SelectMode.ACTIVE);
+    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.ACTIVE)).toList(), SelectMode.ACTIVE, sorter, sorterList);
   }
 
   LinShareState unSelectAllDocuments() {
-    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.ACTIVE);
+    return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.ACTIVE, sorter, sorterList);
   }
 
   @override
   MySpaceState startLoadingState() {
-    return MySpaceState(Right(LoadingState()), documentList, selectMode);
+    return MySpaceState(Right(LoadingState()), documentList, selectMode, sorter, sorterList);
+  }
+
+  LinShareState setSortDocuments({Either<Failure, Success> viewState, List<Document> newDocumentList, Sorter newSorter}) {
+    final selectedElements = documentList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
+
+    return MySpaceState(viewState ?? this.viewState,
+        {for (var document in newDocumentList)
+          if (selectedElements.contains(document))
+            SelectableElement<Document>(document, SelectMode.ACTIVE)
+          else SelectableElement<Document>(document, SelectMode.INACTIVE)}.toList(),
+        selectMode, newSorter, {for (var sorter in sorterList)
+          if (newSorter.orderBy == sorter.element.orderBy)
+            SelectableElement<Sorter>(Sorter(sorter.element.orderScreen, sorter.element.orderBy, newSorter.orderType), SelectMode.ACTIVE)
+          else
+            SelectableElement<Sorter>(Sorter(sorter.element.orderScreen, sorter.element.orderBy, newSorter.orderType), SelectMode.INACTIVE)
+        }.toList());
+  }
+
+  LinShareState setSorterList({Either<Failure, Success> viewState, List<Sorter> newSorterList, Sorter newSorter}) {
+    return MySpaceState(viewState ?? this.viewState, documentList, selectMode, newSorter,
+        {for (var sort in newSorterList)
+          if (newSorter.orderBy == sort.orderBy)
+            SelectableElement<Sorter>(Sorter(sort.orderScreen, sort.orderBy, newSorter.orderType), SelectMode.ACTIVE)
+          else
+            SelectableElement<Sorter>(Sorter(sort.orderScreen, sort.orderBy, newSorter.orderType), SelectMode.INACTIVE)
+        }.toList());
   }
 
   @override
   List<Object> get props => [
     ...super.props,
     documentList,
-    selectMode
+    selectMode,
+    sorter,
+    sorterList
   ];
 }
 

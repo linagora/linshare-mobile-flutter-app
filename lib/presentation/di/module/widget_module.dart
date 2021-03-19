@@ -63,6 +63,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 import 'package:redux/redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WidgetModule {
   WidgetModule() {
@@ -113,7 +114,10 @@ class WidgetModule {
       getIt<CopyMultipleFilesToSharedSpaceInteractor>(),
       getIt<RemoveMultipleDocumentsInteractor>(),
       getIt<DownloadMultipleFileIOSInteractor>(),
-      getIt<SearchDocumentInteractor>()
+      getIt<SearchDocumentInteractor>(),
+      getIt<SortFileByOrderInteractor>(),
+      getIt<GetSortFileInteractor>(),
+      getIt<SharedPreferences>()
     ));
   }
 

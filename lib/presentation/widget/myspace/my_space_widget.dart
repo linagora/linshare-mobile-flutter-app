@@ -53,6 +53,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/media_type_ext
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/order_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/document_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
@@ -123,6 +124,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                       ) : SizedBox.shrink();
                     },
                   ),
+                  _buildSorterMenu(),
                   StoreConnector<AppState, dartz.Either<Failure, Success>>(
                     converter: (store) => store.state.mySpaceState.viewState,
                     builder: (context, viewState) {
@@ -615,4 +617,54 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             itemSelectionType: ItemSelectionType.multiple))
         .build();
   }
+
+  Widget _buildSorterMenu() {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (context, appState) {
+        return (!appState.uiState.isInSearchState() && appState.mySpaceState.selectMode == SelectMode.INACTIVE) ? ListTile(
+          leading: Transform(
+            transform: Matrix4.translationValues(5, 5, 0.0),
+            child: SvgPicture.asset(
+              appState.mySpaceState.sorter.orderType == OrderType.ascending ? imagePath.icSortUpCurrent : imagePath.icSortDownCurrent,
+              width: 15,
+              height: 15,
+              fit: BoxFit.fill,
+              color: AppColor.primaryColor,
+            ),
+          ),
+          title: Transform(
+              transform: Matrix4.translationValues(-25, 0.0, 0.0),
+              child: Text(mySpaceViewModel.getTitleOrderBy(context, appState.mySpaceState.sorter.orderBy),
+                maxLines: 1,
+                style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+              )
+          ),
+          tileColor: AppColor.topBarBackgroundColor,
+          onTap: () => mySpaceViewModel.openActionSorterMenu(context, _sorterListActions(context, appState.mySpaceState.sorterList, appState.mySpaceState.sorter)),
+        ) : SizedBox.shrink();
+      },
+    );
+  }
+
+  List<Widget> _sorterListActions(BuildContext context, List<SelectableElement<Sorter>> sorterList, Sorter sorterCurrent) {
+    var list = <Widget>[];
+    sorterList.forEach((element) {
+      list.add(_sorterTileAction(context, element, sorterCurrent));
+    });
+    return list;
+  }
+
+  Widget _sorterTileAction(BuildContext context, SelectableElement<Sorter> sorter, Sorter sorterCurrent) {
+    return OrderMenuTileBuilder(
+          Key(sorter.element.orderBy.toString()),
+          SvgPicture.asset(sorter.element.orderType == OrderType.ascending ? imagePath.icSortUpItem : imagePath.icSortDownItem, width: 18, height: 18, fit: BoxFit.fill),
+          mySpaceViewModel.getTitleOrderBy(context, sorter.element.orderBy),
+          sorter.element,
+          sorter.element.orderBy == sorterCurrent.orderBy ? true : false
+        )
+        .onActionClick((data) => {mySpaceViewModel.sortFileByOrder(sorter.element)})
+        .build();
+  }
+
 }

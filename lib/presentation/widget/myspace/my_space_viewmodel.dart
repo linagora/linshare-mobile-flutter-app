@@ -68,6 +68,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MySpaceViewModel extends BaseViewModel {
   final LocalFilePicker _localFilePicker;
@@ -78,11 +79,15 @@ class MySpaceViewModel extends BaseViewModel {
   final RemoveMultipleDocumentsInteractor _removeMultipleDocumentsInteractor;
   final DownloadMultipleFileIOSInteractor _downloadMultipleFileIOSInteractor;
   final SearchDocumentInteractor _searchDocumentInteractor;
+  final SortFileByOrderInteractor _sortFileByOrderInteractor;
+  final GetSortFileInteractor _getSortFileInteractor;
   StreamSubscription _storeStreamSubscription;
   List<Document> _documentList = [];
 
   SearchQuery _searchQuery = SearchQuery('');
   SearchQuery get searchQuery  => _searchQuery;
+
+  final SharedPreferences _sharedPreferences;
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
@@ -92,7 +97,10 @@ class MySpaceViewModel extends BaseViewModel {
       this._copyMultipleFilesToSharedSpaceInteractor,
       this._removeMultipleDocumentsInteractor,
       this._downloadMultipleFileIOSInteractor,
-      this._searchDocumentInteractor
+      this._searchDocumentInteractor,
+      this._sortFileByOrderInteractor,
+      this._getSortFileInteractor,
+      this._sharedPreferences,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.mySpaceState.viewState.fold(
@@ -345,8 +353,9 @@ class MySpaceViewModel extends BaseViewModel {
   OnlineThunkAction _getAllDocumentAction() {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartMySpaceLoadingAction());
+      await store.dispatch(_generateSorterList(OrderScreen.mySpace));
       await _getAllDocumentInteractor
-          .execute()
+          .execute(store.state.mySpaceState.sorter)
           .then((result) => result.fold(
               (failure) {
                 store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
@@ -440,6 +449,67 @@ class MySpaceViewModel extends BaseViewModel {
     }
   }
 
+  ThunkAction<AppState> _generateSorterList(OrderScreen orderScreen) {
+    return (Store<AppState> store) async {
+      await _getSortFileInteractor.execute(orderScreen).then((result) => result.fold(
+              (failure) => store.dispatch(MySpaceSetSorterListResultAction([], Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending))),
+              (success) => store.dispatch(MySpaceSetSorterListResultAction(success is SorterFileSuccess ? success.sorterList : [],
+                  success is SorterFileSuccess ? success.sorter : Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending))
+              )));
+    };
+  }
+
+  void openActionSorterMenu(BuildContext context, List<Widget> actionTiles) {
+    ContextMenuBuilder(context)
+        .addHeader(SimpleBottomSheetHeaderBuilder(Key('order_by_menu_header'))
+                .addLabel(AppLocalizations.of(context).order_by)
+                .build())
+        .addTiles(actionTiles)
+        .build();
+  }
+
+  void sortFileByOrder(Sorter sorter) {
+    _appNavigation.popBack();
+    store.dispatch(_sortDocumentByOrderAction(sorter));
+  }
+
+  ThunkAction<AppState> _sortDocumentByOrderAction(Sorter sorter) {
+    return (Store<AppState> store) async {
+      final newSorter = await store.state.mySpaceState.sorter == sorter ? Sorter(sorter.orderScreen, sorter.orderBy, sorter.orderType == OrderType.ascending ? OrderType.descending : OrderType.ascending) : sorter;
+      await _storeSorterFile(newSorter);
+      await _sortFileByOrderInteractor.execute(_documentList, newSorter).then((result) => result.fold(
+              (failure) {
+                store.dispatch(MySpaceSetOrderResultAction([], newSorter));
+          },
+              (success) {
+                store.dispatch(MySpaceSetOrderResultAction(success is SortFileByOrderSuccess ? success.fileList : [], newSorter));
+          })
+      );
+    };
+  }
+
+  void _storeSorterFile(Sorter sorter) {
+    _sharedPreferences.setString('sort_file_order_by_${sorter.orderScreen.toString()}', sorter.orderBy.toString());
+    _sharedPreferences.setString('sort_file_order_type_${sorter.orderScreen.toString()}', sorter.orderType.toString());
+  }
+
+  String getTitleOrderBy(BuildContext context, OrderBy orderBy) {
+    switch(orderBy) {
+      case OrderBy.modificationDate:
+        return AppLocalizations.of(context).modification_date;
+      case OrderBy.creationDate:
+        return AppLocalizations.of(context).creation_date;
+      case OrderBy.fileSize:
+        return AppLocalizations.of(context).size;
+      case OrderBy.name:
+        return AppLocalizations.of(context).name;
+      case OrderBy.shared:
+        return AppLocalizations.of(context).shared;
+      default:
+        return AppLocalizations.of(context).modification_date;
+    }
+  }
+
   void cancelSelection() {
     store.dispatch(MySpaceClearSelectedDocumentsAction());
   }
@@ -454,7 +524,6 @@ class MySpaceViewModel extends BaseViewModel {
         .addFooter(footerAction)
         .build();
   }
-
   bool _isInSearchState() {
     return store.state.uiState.isInSearchState();
   }

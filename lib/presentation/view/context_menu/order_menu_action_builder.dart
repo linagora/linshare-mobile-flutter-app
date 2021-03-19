@@ -17,8 +17,7 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-//
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -26,48 +25,32 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses
-// for the GNU Affero General Public License version
-//
-// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-// for
-//
-// the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+//  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/material/list_tile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:meta/meta.dart';
-typedef OnContextMenuActionClick<T> = void Function(T data);
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-abstract class ContextMenuActionBuilder<T> {
-  @protected final Key key;
-  @protected final SvgPicture actionIcon;
-  @protected final String actionName;
-  @protected OnContextMenuActionClick<T> onContextMenuActionClick;
+class OrderMenuTileBuilder extends ContextMenuActionBuilder<Sorter> {
+  final Sorter _sorter;
+  final bool _isSelected;
 
-  ContextMenuActionBuilder(
-      this.key,
-      this.actionIcon,
-      this.actionName);
+  OrderMenuTileBuilder(Key key, SvgPicture actionIcon, String actionName,
+      this._sorter, this._isSelected)
+      : super(key, actionIcon, actionName);
 
-  ContextMenuActionBuilder onActionClick(OnContextMenuActionClick<T> onContextMenuActionClick) {
-    this.onContextMenuActionClick = onContextMenuActionClick;
-    return this;
+  @override
+  ListTile build() {
+    return ListTile(
+        key: key,
+        leading: _isSelected ? actionIcon : SizedBox.shrink(),
+        title: Text(actionName,
+            style: _isSelected ? actionTextStyleSelected() : actionTextStyle()),
+        onTap: () => onContextMenuActionClick(_sorter));
   }
-
-  TextStyle actionTextStyle() {
-    return TextStyle(
-        fontSize: 16,
-        color: AppColor.documentNameItemTextColor);
-  }
-
-  TextStyle actionTextStyleSelected() {
-    return TextStyle(
-        fontSize: 16,
-        color: AppColor.primaryColor);
-  }
-
-  ListTile build();
 }
