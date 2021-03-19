@@ -98,7 +98,7 @@ void main() {
 
       final expectedState = createAppStateWithNetworkConnectivityState(
           NetworkConnectivityState(Right(IdleState()), ConnectivityResult.wifi),
-          mySpaceState: MySpaceState(Right(LoadingState()), [], SelectMode.INACTIVE));
+          mySpaceState: MySpaceState(Right(LoadingState()), [], SelectMode.INACTIVE, Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending), []));
 
       expect(store.state, expectedState);
     });
@@ -118,7 +118,7 @@ void main() {
 
       final expectedState = createAppStateWithNetworkConnectivityState(
           NetworkConnectivityState(Right(IdleState()), ConnectivityResult.mobile),
-          mySpaceState: MySpaceState(Right(LoadingState()), [], SelectMode.INACTIVE));
+          mySpaceState: MySpaceState(Right(LoadingState()), [], SelectMode.INACTIVE, Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending), []));
 
       expect(store.state, expectedState);
     });

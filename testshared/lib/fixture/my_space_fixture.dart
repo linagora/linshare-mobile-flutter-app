@@ -202,3 +202,7 @@ final recipients = [
 
 final fileInfo1 = FileInfo('fileInfo1', 'filePath1', 10);
 final fileInfo2 = FileInfo('fileInfo1', 'filePath1', 20);
+
+final sorter1 = Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending);
+final sorter2 = Sorter(OrderScreen.mySpace, OrderBy.creationDate, OrderType.descending);
+final sorter3 = Sorter(OrderScreen.mySpace, OrderBy.fileSize, OrderType.descending);
