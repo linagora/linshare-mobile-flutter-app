@@ -2,6 +2,7 @@ library domain;
 
 // extension
 export 'src/extension/email_validator_string_extension.dart';
+export 'src/extension/sort_file_extension.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -93,6 +94,8 @@ export 'src/model/functionality/functionality_size.dart';
 export 'src/model/functionality/functionality_string.dart';
 export 'src/model/functionality/functionality_time.dart';
 export 'src/model/functionality/functionality_identifier.dart';
+export 'src/model/order/order.dart';
+export 'src/model/order/sorter.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -130,6 +133,10 @@ export 'src/usecases/search_shared_space_node_nested/search_shared_space_node_ne
 export 'src/usecases/shared_space/remove_shared_space_interactor.dart';
 export 'src/usecases/shared_space/remove_multiple_shared_spaces_interactor.dart';
 export 'src/usecases/shared_space/download_workgroup_node_interactor.dart';
+export 'src/usecases/order/sort_file_by_order_view_state.dart';
+export 'src/usecases/order/sort_file_by_order_interactor.dart';
+export 'src/usecases/order/get_sort_file_interactor.dart';
+export 'src/usecases/order/get_sort_file_view_state.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -141,6 +148,7 @@ export 'src/repository/sharedspacedocument/shared_space_document_repository.dart
 export 'src/repository/quota/quota_repository.dart';
 export 'src/repository/received/received_share_repository.dart';
 export 'src/repository/functionality/functionality_repository.dart';
+export 'src/repository/order/sorter_repository.dart';
 
 // errorcode
 export 'src/errorcode/business_error_code.dart';

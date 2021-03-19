@@ -53,7 +53,7 @@ void main() {
     test('getAllDocumentInteractor should return success with documentList', () async {
       when(documentRepository.getAll()).thenAnswer((_) async => [document1, document2, document3]);
 
-      final result = await getAllDocumentInteractor.execute();
+      final result = await getAllDocumentInteractor.execute(Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending));
 
       final documentList = result.map((success) => (success as MySpaceViewState).documentList)
           .getOrElse(() => []);
@@ -67,7 +67,7 @@ void main() {
       final exception = Exception('get list documents failed');
       when(documentRepository.getAll()).thenThrow(exception);
 
-      final result = await getAllDocumentInteractor.execute();
+      final result = await getAllDocumentInteractor.execute(Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending));
 
       result.fold(
               (failure) => expect(failure, isA<MySpaceFailure>()),

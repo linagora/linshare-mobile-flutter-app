@@ -28,30 +28,43 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/repository/document/document_repository.dart';
-import 'package:domain/src/state/failure.dart';
-import 'package:domain/src/state/success.dart';
-import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
-class GetAllDocumentInteractor {
-  final DocumentRepository _documentRepository;
-
-  GetAllDocumentInteractor(this._documentRepository);
-
-  Future<Either<Failure, Success>> execute(Sorter sorter) async {
-    final resultState = await catching(() => _documentRepository.getAll())
-        .fold(
-          (exception) => Left<Failure, Success>(MySpaceFailure(exception)),
-          (documents) async {
-            final listDocument = await documents;
-            listDocument.sortFiles(sorter);
-            return Right<Failure, Success>(MySpaceViewState(listDocument));
-          }
-    );
-    return resultState;
+extension SortFilesExtension<T> on List<T> {
+  void sortFiles(Sorter sorter) {
+    sort((node1, node2) {
+      if (sorter.orderType == OrderType.ascending) {
+        switch (sorter.orderBy) {
+          case OrderBy.modificationDate:
+            return (node2 as Document).modificationDate.compareTo((node1 as Document).modificationDate) * -1;
+          case OrderBy.creationDate:
+            return (node2 as Document).creationDate.compareTo((node1 as Document).creationDate) * -1;
+          case OrderBy.fileSize:
+            return (node2 as Document).size.compareTo((node1 as Document).size) * -1;
+          case OrderBy.name:
+            return (node2 as Document).name.compareTo((node1 as Document).name) * -1;
+          case OrderBy.shared:
+            return (node2 as Document).shared.compareTo((node1 as Document).shared) * -1;
+          default:
+            return (node2 as Document).modificationDate.compareTo((node1 as Document).modificationDate) * -1;
+        }
+      } else {
+        switch (sorter.orderBy) {
+          case OrderBy.modificationDate:
+            return (node2 as Document).modificationDate.compareTo((node1 as Document).modificationDate);
+          case OrderBy.creationDate:
+            return (node2 as Document).creationDate.compareTo((node1 as Document).creationDate);
+          case OrderBy.fileSize:
+            return (node2 as Document).size.compareTo((node1 as Document).size);
+          case OrderBy.name:
+            return (node2 as Document).name.compareTo((node1 as Document).name);
+          case OrderBy.shared:
+            return (node2 as Document).shared.compareTo((node1 as Document).shared);
+          default:
+            return (node2 as Document).modificationDate.compareTo((node1 as Document).modificationDate);
+        }
+      }
+    });
   }
 }

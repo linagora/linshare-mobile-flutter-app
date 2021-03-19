@@ -28,30 +28,18 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/repository/document/document_repository.dart';
-import 'package:domain/src/state/failure.dart';
-import 'package:domain/src/state/success.dart';
-import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
-class GetAllDocumentInteractor {
-  final DocumentRepository _documentRepository;
+class SortFileByOrderInteractor<T> {
 
-  GetAllDocumentInteractor(this._documentRepository);
-
-  Future<Either<Failure, Success>> execute(Sorter sorter) async {
-    final resultState = await catching(() => _documentRepository.getAll())
-        .fold(
-          (exception) => Left<Failure, Success>(MySpaceFailure(exception)),
-          (documents) async {
-            final listDocument = await documents;
-            listDocument.sortFiles(sorter);
-            return Right<Failure, Success>(MySpaceViewState(listDocument));
-          }
-    );
-    return resultState;
+  Future<Either<Failure, Success>> execute(List<T> fileList, Sorter sorter) async {
+    try {
+      fileList.sortFiles(sorter);
+      return Right<Failure, Success>(SortFileByOrderSuccess(fileList, sorter));
+    } catch (exception) {
+      return Left<Failure, Success>(SortFileByOrderFailure(exception));
+    }
   }
 }
