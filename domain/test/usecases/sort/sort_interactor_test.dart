@@ -28,62 +28,38 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
+
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:domain/src/usecases/sort/sort_interactor.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-@immutable
-class StartMySpaceLoadingAction extends ActionOnline {}
+import '../../mock/repository/mock_sort_repository.dart';
 
-@immutable
-class MySpaceAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
+void main() {
+  group('get_sorter_interactor_test', () {
+    MockSortRepository sortRepository;
+    SortInteractor sortInteractor;
 
-  MySpaceAction(this.viewState);
-}
+    setUp(() {
+      sortRepository = MockSortRepository();
+      sortInteractor = SortInteractor(sortRepository);
+    });
 
-@immutable
-class MySpaceGetAllDocumentAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-  final Sorter sorter;
+    test('getSorter should return success with sorter', () async {
+      when(sortRepository.getSorter(OrderScreen.mySpace)).thenAnswer((
+          _) async => sorter);
 
-  MySpaceGetAllDocumentAction(this.viewState, this.sorter);
-}
+      final result = await sortInteractor.execute(OrderScreen.mySpace);
 
-@immutable
-class MySpaceSelectDocumentAction extends ActionOffline {
-  final SelectableElement<Document> selectedDocument;
+      final newSorter = result.map((success) =>
+      (success as GetSorterSuccess).sorter)
+          .getOrElse(() => Sorter(OrderScreen.mySpace, OrderBy.modificationDate,
+          OrderType.descending));
 
-  MySpaceSelectDocumentAction(this.selectedDocument);
-}
-
-@immutable
-class MySpaceClearSelectedDocumentsAction extends ActionOffline {
-  MySpaceClearSelectedDocumentsAction();
-}
-
-@immutable
-class MySpaceSelectAllDocumentsAction extends ActionOffline {
-  MySpaceSelectAllDocumentsAction();
-}
-
-@immutable
-class MySpaceUnselectAllDocumentsAction extends ActionOffline {
-  MySpaceUnselectAllDocumentsAction();
-}
-
-@immutable
-class CleanMySpaceStateAction extends ActionOffline {
-  CleanMySpaceStateAction();
-}
-
-@immutable
-class MySpaceSetSearchResultAction extends ActionOffline {
-  final List<Document> documentList;
-
-  MySpaceSetSearchResultAction(this.documentList);
+      expect(newSorter, sorter);
+    });
+  });
 }

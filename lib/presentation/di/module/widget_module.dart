@@ -113,7 +113,8 @@ class WidgetModule {
       getIt<CopyMultipleFilesToSharedSpaceInteractor>(),
       getIt<RemoveMultipleDocumentsInteractor>(),
       getIt<DownloadMultipleFileIOSInteractor>(),
-      getIt<SearchDocumentInteractor>()
+      getIt<SearchDocumentInteractor>(),
+      getIt<SortInteractor>()
     ));
   }
 

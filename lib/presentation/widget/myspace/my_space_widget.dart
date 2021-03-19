@@ -73,7 +73,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   @override
   void initState() {
     super.initState();
-    mySpaceViewModel.getAllDocument();
+    mySpaceViewModel.getSorter(OrderScreen.mySpace);
   }
 
   @override
@@ -258,7 +258,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   Widget _buildNormalMySpaceList(MySpaceState mySpaceState) {
     return mySpaceState.viewState.fold(
         (failure) => RefreshIndicator(
-            onRefresh: () async => mySpaceViewModel.getAllDocument(),
+            onRefresh: () async => mySpaceViewModel.getAllDocument(mySpaceState.sorter),
             child: failure is MySpaceFailure
                 ? BackgroundWidgetBuilder()
                     .key(Key('my_space_error_background'))
@@ -271,7 +271,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         (success) => success is LoadingState
             ? _buildMySpaceListView(context, mySpaceState.documentList)
             : RefreshIndicator(
-                onRefresh: () async => mySpaceViewModel.getAllDocument(),
+                onRefresh: () async => mySpaceViewModel.getAllDocument(mySpaceState.sorter),
                 child: _buildMySpaceListView(context, mySpaceState.documentList)));
   }
 

@@ -43,7 +43,7 @@ final mySpaceReducer = combineReducers<MySpaceState>([
         viewState: action.viewState,
         newDocumentList: action.viewState.fold(
           (failure) => [],
-          (success) => (success is MySpaceViewState) ? success.documentList : []))),
+          (success) => (success is MySpaceViewState) ? success.documentList : []), newSorter: action.sorter)),
   TypedReducer<MySpaceState, MySpaceSetSearchResultAction>((MySpaceState state, MySpaceSetSearchResultAction action) =>
       state.setDocuments(newDocumentList: action.documentList)),
   TypedReducer<MySpaceState, MySpaceSelectDocumentAction>((MySpaceState state, MySpaceSelectDocumentAction action) => state.selectDocument(action.selectedDocument)),

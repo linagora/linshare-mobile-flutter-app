@@ -42,11 +42,16 @@ class GetAllDocumentInteractor {
 
   GetAllDocumentInteractor(this._documentRepository);
 
-  Future<Either<Failure, Success>> execute() async {
+  Future<Either<Failure, Success>> execute(Sorter sorter) async {
     final resultState = await catching(() => _documentRepository.getAll())
         .fold(
           (exception) => Left<Failure, Success>(MySpaceFailure(exception)),
-          (documents) async => Right<Failure, Success>(MySpaceViewState(await documents)));
+          (documents) async  {
+            final listDocument = await documents;
+            listDocument.sortFiles(sorter);
+            return Right<Failure, Success>(MySpaceViewState(listDocument));
+          }
+    );
     return resultState;
   }
 }

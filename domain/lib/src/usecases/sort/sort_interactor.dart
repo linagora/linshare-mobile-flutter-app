@@ -28,62 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-@immutable
-class StartMySpaceLoadingAction extends ActionOnline {}
+class SortInteractor {
 
-@immutable
-class MySpaceAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
+  final SortRepository _sortRepository;
 
-  MySpaceAction(this.viewState);
-}
+  SortInteractor(this._sortRepository);
 
-@immutable
-class MySpaceGetAllDocumentAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-  final Sorter sorter;
+  Future<Either<Failure, Success>> execute(OrderScreen orderScreen) async {
+    final resultState = await catching(() => _sortRepository.getSorter(orderScreen))
+        .fold(
+            (exception) => Left<Failure, Success>(GetSorterFailure(exception)),
+            (sorter) async => Right<Failure, Success>(GetSorterSuccess(await sorter)));
+    return resultState;
+  }
 
-  MySpaceGetAllDocumentAction(this.viewState, this.sorter);
-}
-
-@immutable
-class MySpaceSelectDocumentAction extends ActionOffline {
-  final SelectableElement<Document> selectedDocument;
-
-  MySpaceSelectDocumentAction(this.selectedDocument);
-}
-
-@immutable
-class MySpaceClearSelectedDocumentsAction extends ActionOffline {
-  MySpaceClearSelectedDocumentsAction();
-}
-
-@immutable
-class MySpaceSelectAllDocumentsAction extends ActionOffline {
-  MySpaceSelectAllDocumentsAction();
-}
-
-@immutable
-class MySpaceUnselectAllDocumentsAction extends ActionOffline {
-  MySpaceUnselectAllDocumentsAction();
-}
-
-@immutable
-class CleanMySpaceStateAction extends ActionOffline {
-  CleanMySpaceStateAction();
-}
-
-@immutable
-class MySpaceSetSearchResultAction extends ActionOffline {
-  final List<Document> documentList;
-
-  MySpaceSetSearchResultAction(this.documentList);
 }

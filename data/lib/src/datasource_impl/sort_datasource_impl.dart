@@ -28,62 +28,43 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-@immutable
-class StartMySpaceLoadingAction extends ActionOnline {}
+class SortDataSourceImpl implements SortDataSource {
+  final SharedPreferences _sharedPreferences;
 
-@immutable
-class MySpaceAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
+  SortDataSourceImpl(this._sharedPreferences);
 
-  MySpaceAction(this.viewState);
-}
+  @override
+  Future<Sorter> getSorter(OrderScreen orderScreen) {
+    final orderByStr = _sharedPreferences
+        .getString('sort_file_order_by_${orderScreen.toString()}') ?? OrderBy.modificationDate.toString();
+    final orderTypeStr = _sharedPreferences
+        .getString('sort_file_order_type_${orderScreen.toString()}') ?? OrderType.descending.toString();
 
-@immutable
-class MySpaceGetAllDocumentAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-  final Sorter sorter;
+    var orderBy = OrderBy.modificationDate;
+    if (orderByStr == OrderBy.modificationDate.toString()) {
+      orderBy = OrderBy.modificationDate;
+    } else if (orderByStr == OrderBy.creationDate.toString()) {
+      orderBy = OrderBy.creationDate;
+    } else if (orderByStr == OrderBy.fileSize.toString()) {
+      orderBy = OrderBy.fileSize;
+    } else if (orderByStr == OrderBy.name.toString()) {
+      orderBy = OrderBy.name;
+    } else if (orderByStr == OrderBy.shared.toString()) {
+      orderBy = OrderBy.shared;
+    }
+    final orderType = orderTypeStr == OrderType.descending.toString()
+        ? OrderType.descending
+        : OrderType.ascending;
 
-  MySpaceGetAllDocumentAction(this.viewState, this.sorter);
-}
-
-@immutable
-class MySpaceSelectDocumentAction extends ActionOffline {
-  final SelectableElement<Document> selectedDocument;
-
-  MySpaceSelectDocumentAction(this.selectedDocument);
-}
-
-@immutable
-class MySpaceClearSelectedDocumentsAction extends ActionOffline {
-  MySpaceClearSelectedDocumentsAction();
-}
-
-@immutable
-class MySpaceSelectAllDocumentsAction extends ActionOffline {
-  MySpaceSelectAllDocumentsAction();
-}
-
-@immutable
-class MySpaceUnselectAllDocumentsAction extends ActionOffline {
-  MySpaceUnselectAllDocumentsAction();
-}
-
-@immutable
-class CleanMySpaceStateAction extends ActionOffline {
-  CleanMySpaceStateAction();
-}
-
-@immutable
-class MySpaceSetSearchResultAction extends ActionOffline {
-  final List<Document> documentList;
-
-  MySpaceSetSearchResultAction(this.documentList);
+    return Future.sync(() async {
+      return Sorter(orderScreen, orderBy, orderType);
+    }).catchError((error) {
+      throw UnknownError(error.response.statusMessage);
+    });
+  }
 }

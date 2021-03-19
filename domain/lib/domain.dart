@@ -2,6 +2,7 @@ library domain;
 
 // extension
 export 'src/extension/email_validator_string_extension.dart';
+export 'src/extension/sort_file_extension.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -93,6 +94,7 @@ export 'src/model/functionality/functionality_size.dart';
 export 'src/model/functionality/functionality_string.dart';
 export 'src/model/functionality/functionality_time.dart';
 export 'src/model/functionality/functionality_identifier.dart';
+export 'src/model/sort/sorter.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -131,6 +133,8 @@ export 'src/usecases/shared_space/remove_shared_space_interactor.dart';
 export 'src/usecases/shared_space/remove_multiple_shared_spaces_interactor.dart';
 export 'src/usecases/shared_space/download_workgroup_node_interactor.dart';
 export 'src/usecases/received/download_received_shares_interactor.dart';
+export 'src/usecases/sort/sort_interactor.dart';
+export 'src/usecases/sort/sort_view_state.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -142,6 +146,7 @@ export 'src/repository/sharedspacedocument/shared_space_document_repository.dart
 export 'src/repository/quota/quota_repository.dart';
 export 'src/repository/received/received_share_repository.dart';
 export 'src/repository/functionality/functionality_repository.dart';
+export 'src/repository/sort/sort_repository.dart';
 
 // errorcode
 export 'src/errorcode/business_error_code.dart';

@@ -78,6 +78,7 @@ class MySpaceViewModel extends BaseViewModel {
   final RemoveMultipleDocumentsInteractor _removeMultipleDocumentsInteractor;
   final DownloadMultipleFileIOSInteractor _downloadMultipleFileIOSInteractor;
   final SearchDocumentInteractor _searchDocumentInteractor;
+  final SortInteractor _sortInteractor;
   StreamSubscription _storeStreamSubscription;
   List<Document> _documentList = [];
 
@@ -92,7 +93,8 @@ class MySpaceViewModel extends BaseViewModel {
       this._copyMultipleFilesToSharedSpaceInteractor,
       this._removeMultipleDocumentsInteractor,
       this._downloadMultipleFileIOSInteractor,
-      this._searchDocumentInteractor
+      this._searchDocumentInteractor,
+      this._sortInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.mySpaceState.viewState.fold(
@@ -106,7 +108,7 @@ class MySpaceViewModel extends BaseViewModel {
             } else if (success is RemoveDocumentViewState ||
                 success is RemoveMultipleDocumentsAllSuccessViewState ||
                 success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
-              getAllDocument();
+              getAllDocument(event.mySpaceState.sorter);
             }
       });
     });
@@ -272,8 +274,12 @@ class MySpaceViewModel extends BaseViewModel {
     });
   }
 
-  void getAllDocument() {
-    store.dispatch(_getAllDocumentAction());
+  void getSorter(OrderScreen orderScreen) {
+    store.dispatch(_getSorter(orderScreen));
+  }
+
+  void getAllDocument(Sorter sorter) {
+    store.dispatch(_getAllDocumentAction(sorter));
   }
 
   void openFilePickerByType(BuildContext context, FileType fileType) {
@@ -342,18 +348,29 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  OnlineThunkAction _getAllDocumentAction() {
+  ThunkAction<AppState> _getSorter(OrderScreen orderScreen) {
+    return (Store<AppState> store) async {
+      await _sortInteractor.execute(orderScreen).then((result) => result.fold(
+              (failure) {
+                getAllDocument(Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending));
+              }, (success) {
+                getAllDocument(success is GetSorterSuccess ? success.sorter : Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending));
+              }));
+    };
+  }
+
+  OnlineThunkAction _getAllDocumentAction(Sorter sorter) {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartMySpaceLoadingAction());
       await _getAllDocumentInteractor
-          .execute()
+          .execute(sorter)
           .then((result) => result.fold(
               (failure) {
-                store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
+                store.dispatch(MySpaceGetAllDocumentAction(Left(failure), sorter));
                 _documentList = [];
               },
               (success) {
-                store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
+                store.dispatch(MySpaceGetAllDocumentAction(Right(success), sorter));
                 _documentList = success is MySpaceViewState ? success.documentList : [];
               }));
     });

@@ -90,6 +90,8 @@ class AppModule {
     getIt.registerLazySingleton(() => FunctionalityDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => SortDataSourceImpl(
+        getIt<SharedPreferences>()));
   }
 
   void _provideDataSource() {
@@ -106,6 +108,7 @@ class AppModule {
     getIt.registerFactory<QuotaDataSource>(() => getIt<QuotaDataSourceImpl>());
     getIt.registerFactory<ReceivedShareDataSource>(() => getIt<ReceivedShareDataSourceImp>());
     getIt.registerFactory<FunctionalityDataSource>(() => getIt<FunctionalityDataSourceImpl>());
+    getIt.registerFactory<SortDataSource>(() => getIt<SortDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -119,6 +122,7 @@ class AppModule {
     getIt.registerFactory(() => QuotaRepositoryImpl(getIt<QuotaDataSource>()));
     getIt.registerFactory(() => ReceivedShareRepositoryImp(getIt<ReceivedShareDataSource>()));
     getIt.registerFactory(() => FunctionalityRepositoryImpl(getIt<FunctionalityDataSource>()));
+    getIt.registerFactory(() => SortRepositoryImpl(getIt<SortDataSource>()));
   }
 
   void _provideRepository() {
@@ -132,6 +136,7 @@ class AppModule {
     getIt.registerFactory<QuotaRepository>(() => getIt<QuotaRepositoryImpl>());
     getIt.registerFactory<ReceivedShareRepository>(() => getIt<ReceivedShareRepositoryImp>());
     getIt.registerFactory<FunctionalityRepository>(() => getIt<FunctionalityRepositoryImpl>());
+    getIt.registerFactory<SortRepository>(() => getIt<SortRepositoryImpl>());
   }
 
   void _provideInterActor() {
@@ -194,6 +199,7 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
     getIt.registerFactory(() => DownloadReceivedSharesInteractor(getIt<ReceivedShareRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => SortInteractor(getIt<SortRepository>()));
   }
 
   void _provideSharePreference() {
