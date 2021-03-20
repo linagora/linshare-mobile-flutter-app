@@ -32,7 +32,6 @@
 
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/quota/quota_id.dart';
-import 'package:domain/src/model/sort/sorter.dart';
 import 'package:http_parser/http_parser.dart';
 
 const linShareUrl = 'http://linshare.org';
@@ -92,5 +91,3 @@ final accountQuota1 = AccountQuota(
   maxFileSize: QuotaSize(30),
   maintenance: true
 );
-
-final sorter = Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending);

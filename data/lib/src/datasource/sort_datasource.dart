@@ -33,4 +33,6 @@ import 'package:domain/domain.dart';
 
 abstract class SortDataSource {
   Future<Sorter> getSorter(OrderScreen orderScreen);
+
+  Future<List<T>> sortFiles<T>(List<T> listFiles, Sorter sorter);
 }

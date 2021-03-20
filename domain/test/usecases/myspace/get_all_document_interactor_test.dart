@@ -39,21 +39,24 @@ import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../mock/repository/authentication/mock_document_repository.dart';
+import '../../mock/repository/authentication/mock_sort_repository.dart';
 
 void main() {
   group('get_all_document_interactor_test', () {
     MockDocumentRepository documentRepository;
+    MockSortRepository sortRepository;
     GetAllDocumentInteractor getAllDocumentInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
-      getAllDocumentInteractor = GetAllDocumentInteractor(documentRepository);
+      sortRepository = MockSortRepository();
+      getAllDocumentInteractor = GetAllDocumentInteractor(documentRepository, sortRepository);
     });
 
     test('getAllDocumentInteractor should return success with documentList', () async {
       when(documentRepository.getAll()).thenAnswer((_) async => [document1, document2, document3]);
 
-      final result = await getAllDocumentInteractor.execute(Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending));
+      final result = await getAllDocumentInteractor.execute();
 
       final documentList = result.map((success) => (success as MySpaceViewState).documentList)
           .getOrElse(() => []);
@@ -67,13 +70,25 @@ void main() {
       final exception = Exception('get list documents failed');
       when(documentRepository.getAll()).thenThrow(exception);
 
-      final result = await getAllDocumentInteractor.execute(Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending));
+      final result = await getAllDocumentInteractor.execute();
 
       result.fold(
               (failure) => expect(failure, isA<MySpaceFailure>()),
               (success) => expect(success, isA<MySpaceViewState>()));
 
       expect(result, Left<Failure, Success>(MySpaceFailure(exception)));
+    });
+
+    test('getAllDocumentInteractor should return success with documentList has been sorted', () async {
+      when(sortRepository.getSorter(orderScreen)).thenAnswer((_) async => sorter);
+      when(documentRepository.getAll()).thenAnswer((_) async => [documentSort1, documentSort2, documentSort3]);
+      when(sortRepository.sortFiles([documentSort1, documentSort2, documentSort3], sorter)).thenAnswer((_) async => [documentSort3, documentSort2, documentSort1]);
+
+      final result = await getAllDocumentInteractor.executeWithSorter(sorter);
+
+      final documentList = result.map((success) => (success as MySpaceViewState).documentList).getOrElse(() => []);
+
+      expect(documentList, [documentSort3, documentSort2, documentSort1]);
     });
   });
 }

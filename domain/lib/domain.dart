@@ -2,7 +2,6 @@ library domain;
 
 // extension
 export 'src/extension/email_validator_string_extension.dart';
-export 'src/extension/sort_file_extension.dart';
 
 // viewState
 export 'src/state/failure.dart';

@@ -35,4 +35,6 @@ abstract class SortRepository {
 
   Future<Sorter> getSorter(OrderScreen orderScreen);
 
+  Future<List<T>> sortFiles<T>(List<T> listFiles, Sorter sorter);
+
 }

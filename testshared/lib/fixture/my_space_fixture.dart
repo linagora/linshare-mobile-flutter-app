@@ -204,3 +204,46 @@ final fileInfo1 = FileInfo('fileInfo1', 'filePath1', 10);
 final fileInfo2 = FileInfo('fileInfo1', 'filePath1', 20);
 
 final sorter = Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending);
+final orderScreen = OrderScreen.mySpace;
+
+final documentSort1 = Document(
+    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),
+    'description 1',
+    DateTime.fromMillisecondsSinceEpoch(1616243657188),
+    DateTime.fromMillisecondsSinceEpoch(1616243657188),
+    DateTime.fromMillisecondsSinceEpoch(1616243657188),
+    false,
+    'document 1',
+    189366,
+    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995c',
+    true,
+    0,
+    MediaType.parse('image/png'));
+
+final documentSort2 = Document(
+    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),
+    'description 1',
+    DateTime.fromMillisecondsSinceEpoch(1616243658188),
+    DateTime.fromMillisecondsSinceEpoch(1616243658188),
+    DateTime.fromMillisecondsSinceEpoch(1616243658188),
+    false,
+    'document 1',
+    189366,
+    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995c',
+    true,
+    0,
+    MediaType.parse('image/png'));
+
+final documentSort3 = Document(
+    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),
+    'description 1',
+    DateTime.fromMillisecondsSinceEpoch(1616243659188),
+    DateTime.fromMillisecondsSinceEpoch(1616243659188),
+    DateTime.fromMillisecondsSinceEpoch(1616243659188),
+    false,
+    'document 1',
+    189366,
+    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995c',
+    true,
+    0,
+    MediaType.parse('image/png'));

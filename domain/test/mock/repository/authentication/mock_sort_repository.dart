@@ -28,42 +28,8 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-import 'package:domain/domain.dart';
 
-extension SortFilesExtension<T> on List<T> {
-  void sortFiles(Sorter sorter) {
-    sort((node1, node2) {
-      if (sorter.orderType == OrderType.ascending) {
-        switch (sorter.orderBy) {
-          case OrderBy.modificationDate:
-            return (node2 as Document).modificationDate.compareTo((node1 as Document).modificationDate) * -1;
-          case OrderBy.creationDate:
-            return (node2 as Document).creationDate.compareTo((node1 as Document).creationDate) * -1;
-          case OrderBy.fileSize:
-            return (node2 as Document).size.compareTo((node1 as Document).size) * -1;
-          case OrderBy.name:
-            return (node2 as Document).name.compareTo((node1 as Document).name) * -1;
-          case OrderBy.shared:
-            return (node2 as Document).shared.compareTo((node1 as Document).shared) * -1;
-          default:
-            return (node2 as Document).modificationDate.compareTo((node1 as Document).modificationDate) * -1;
-        }
-      } else {
-        switch (sorter.orderBy) {
-          case OrderBy.modificationDate:
-            return (node2 as Document).modificationDate.compareTo((node1 as Document).modificationDate);
-          case OrderBy.creationDate:
-            return (node2 as Document).creationDate.compareTo((node1 as Document).creationDate);
-          case OrderBy.fileSize:
-            return (node2 as Document).size.compareTo((node1 as Document).size);
-          case OrderBy.name:
-            return (node2 as Document).name.compareTo((node1 as Document).name);
-          case OrderBy.shared:
-            return (node2 as Document).shared.compareTo((node1 as Document).shared);
-          default:
-            return (node2 as Document).modificationDate.compareTo((node1 as Document).modificationDate);
-        }
-      }
-    });
-  }
-}
+import 'package:domain/domain.dart';
+import 'package:mockito/mockito.dart';
+
+class MockSortRepository extends Mock implements SortRepository {}

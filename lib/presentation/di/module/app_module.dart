@@ -150,7 +150,7 @@ class AppModule {
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
-    getIt.registerFactory(() => GetAllDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => GetAllDocumentInteractor(getIt<DocumentRepository>(), getIt<SortRepository>()));
     getIt.registerFactory(() => DownloadFileInteractor(
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),

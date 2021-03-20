@@ -43,4 +43,9 @@ class SortRepositoryImpl implements SortRepository {
     return _sortDataSource.getSorter(orderScreen);
   }
 
+  @override
+  Future<List<T>> sortFiles<T>(List<T> listFiles, Sorter sorter) {
+    return _sortDataSource.sortFiles(listFiles, sorter);
+  }
+
 }

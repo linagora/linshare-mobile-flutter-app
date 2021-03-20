@@ -67,4 +67,32 @@ class SortDataSourceImpl implements SortDataSource {
       throw UnknownError(error.response.statusMessage);
     });
   }
+
+  @override
+  Future<List<T>> sortFiles<T>(List<T> listFiles, Sorter sorter) {
+    if (T == Document) {
+      listFiles.sort((file1, file2) {
+        switch (sorter.orderBy) {
+          case OrderBy.modificationDate:
+            return (file2 as Document).modificationDate.compareTo((file1 as Document).modificationDate) * (sorter.orderType == OrderType.ascending ? -1 : 1);
+          case OrderBy.creationDate:
+            return (file2 as Document).creationDate.compareTo((file1 as Document).creationDate) * (sorter.orderType == OrderType.ascending ? -1 : 1);
+          case OrderBy.fileSize:
+            return (file2 as Document).size.compareTo((file1 as Document).size) * (sorter.orderType == OrderType.ascending ? -1 : 1);
+          case OrderBy.name:
+            return (file2 as Document).name.compareTo((file1 as Document).name) * (sorter.orderType == OrderType.ascending ? -1 : 1);
+          case OrderBy.shared:
+            return (file2 as Document).shared.compareTo((file1 as Document).shared) * (sorter.orderType == OrderType.ascending ? -1 : 1);
+          default:
+            return (file2 as Document).modificationDate.compareTo((file1 as Document).modificationDate) * (sorter.orderType == OrderType.ascending ? -1 : 1);
+        }
+      });
+    }
+
+    return Future.sync(() async {
+      return listFiles;
+    }).catchError((error) {
+      throw UnknownError(error.response.statusMessage);
+    });
+  }
 }

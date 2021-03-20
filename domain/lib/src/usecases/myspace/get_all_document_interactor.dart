@@ -39,18 +39,26 @@ import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
 class GetAllDocumentInteractor {
   final DocumentRepository _documentRepository;
+  final SortRepository _sortRepository;
 
-  GetAllDocumentInteractor(this._documentRepository);
+  GetAllDocumentInteractor(this._documentRepository, this._sortRepository);
 
-  Future<Either<Failure, Success>> execute(Sorter sorter) async {
+  Future<Either<Failure, Success>> execute() async {
     final resultState = await catching(() => _documentRepository.getAll())
         .fold(
           (exception) => Left<Failure, Success>(MySpaceFailure(exception)),
-          (documents) async  {
-            final listDocument = await documents;
-            listDocument.sortFiles(sorter);
-            return Right<Failure, Success>(MySpaceViewState(listDocument));
-          }
+          (documents) async  => Right<Failure, Success>(MySpaceViewState(await documents)));
+    return resultState;
+  }
+
+  Future<Either<Failure, Success>> executeWithSorter(Sorter sorter) async {
+    final resultState = await catching(() => _documentRepository.getAll())
+        .fold(
+            (exception) => Left<Failure, Success>(MySpaceFailure(exception)),
+            (documents) async  {
+          final listDocument = await _sortRepository.sortFiles(await documents, sorter);
+          return Right<Failure, Success>(MySpaceViewState(listDocument));
+        }
     );
     return resultState;
   }

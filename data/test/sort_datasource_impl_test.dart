@@ -46,8 +46,13 @@ void main() {
       });
 
     test('getSorter should return success with valid data', () async {
-      final result = await _sortDataSourceImpl.getSorter(OrderScreen.mySpace);
+      final result = await _sortDataSourceImpl.getSorter(orderScreen);
       expect(result, sorter);
+    });
+
+    test('sortFiles should return success with list file has been sorted', () async {
+      final result = await _sortDataSourceImpl.sortFiles([documentSort1, documentSort2, documentSort3], sorter);
+      expect(result, [documentSort3, documentSort2, documentSort1]);
     });
   });
 }

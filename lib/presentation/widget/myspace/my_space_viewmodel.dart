@@ -363,7 +363,7 @@ class MySpaceViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartMySpaceLoadingAction());
       await _getAllDocumentInteractor
-          .execute(sorter)
+          .executeWithSorter(sorter)
           .then((result) => result.fold(
               (failure) {
                 store.dispatch(MySpaceGetAllDocumentAction(Left(failure), sorter));
