@@ -79,7 +79,8 @@ class AppModule {
         getIt<RemoteExceptionThrower>()));
     getIt.registerFactory(() => SharedSpaceDocumentDataSourceImpl(
         getIt<LinShareHttpClient>(),
-        getIt<RemoteExceptionThrower>()));
+        getIt<RemoteExceptionThrower>(),
+        getIt<LinShareDownloadManager>()));
     getIt.registerLazySingleton(() => FileUploadDataSourceImpl(
         getIt.get<FlutterUploader>()));
     getIt.registerFactory(() => ReceivedShareDataSourceImp(
@@ -213,6 +214,11 @@ class AppModule {
     getIt.registerFactory(() => SaveSorterInteractor(getIt<SortRepository>()));
     getIt.registerFactory(() => CreateSharedSpaceFolderInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => VerifyNameInteractor());
+    getIt.registerFactory(() => DownloadPreviewWorkGroupDocumentInteractor(
+      getIt<SharedSpaceDocumentRepository>(),
+      getIt<TokenRepository>(),
+      getIt<CredentialRepository>()
+    ));
   }
 
   void _provideSharePreference() {
