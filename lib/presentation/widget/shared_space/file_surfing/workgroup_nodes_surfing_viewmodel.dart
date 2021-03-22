@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -61,6 +62,7 @@ import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:share/share.dart' as share_library;
+import 'package:open_file/open_file.dart' as open_file;
 
 class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
@@ -69,6 +71,7 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   final DownloadMultipleNodeIOSInteractor _downloadMultipleNodeIOSInteractor;
   final SearchWorkGroupNodeInteractor _searchWorkGroupNodeInteractor;
   final DownloadWorkGroupNodeInteractor _downloadWorkGroupNodeInteractor;
+  final DownloadPreviewWorkGroupDocumentInteractor _downloadPreviewWorkGroupDocumentInteractor;
   final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
@@ -91,7 +94,8 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     this._copyMultipleToMySpaceInteractor,
     this._downloadMultipleNodeIOSInteractor,
     this._searchWorkGroupNodeInteractor,
-    this._downloadWorkGroupNodeInteractor
+    this._downloadWorkGroupNodeInteractor,
+    this._downloadPreviewWorkGroupDocumentInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -420,5 +424,76 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
         .addTiles(actionTiles)
         .addFooter(footerAction)
         .build();
+  }
+
+  void previewWorkGroupDocument(BuildContext context, WorkGroupDocument workGroupDocument) {
+    _appNavigation.popBack();
+    final canPreviewDocument = Platform.isIOS ? workGroupDocument.mediaType.isIOSSupportedPreview() : workGroupDocument.mediaType.isAndroidSupportedPreview();
+    if (canPreviewDocument || workGroupDocument.hasThumbnail) {
+      final cancelToken = CancelToken();
+      _showPrepareToPreviewFileDialog(context, workGroupDocument, cancelToken);
+
+      var downloadPreviewType = DownloadPreviewType.original;
+      if (workGroupDocument.mediaType.isImageFile()) {
+        downloadPreviewType = DownloadPreviewType.image;
+      } else if (!canPreviewDocument) {
+        downloadPreviewType = DownloadPreviewType.thumbnail;
+      }
+
+      store.dispatch(_handleDownloadPreviewWorkGroupDocument(workGroupDocument, downloadPreviewType, cancelToken));
+    }
+  }
+
+  OnlineThunkAction _handleDownloadPreviewWorkGroupDocument(
+    WorkGroupDocument workGroupDocument,
+    DownloadPreviewType downloadPreviewType,
+    CancelToken cancelToken
+  ) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadPreviewWorkGroupDocumentInteractor
+        .execute(workGroupDocument, downloadPreviewType, cancelToken)
+        .then((result) => result.fold(
+            (failure) {
+              if (failure is DownloadPreviewWorkGroupDocumentFailure && !(failure.downloadPreviewException is CancelDownloadFileException)) {
+                store.dispatch(SharedSpaceAction(Left(NoWorkGroupDocumentPreviewAvailable())));
+              }
+            },
+            (success) {
+              if (success is DownloadPreviewWorkGroupDocumentViewState) {
+                _openDownloadedPreviewWorkGroupDocument(workGroupDocument, success);
+              }
+        }));
+    });
+  }
+
+  void _openDownloadedPreviewWorkGroupDocument(
+    WorkGroupDocument workGroupDocument,
+    DownloadPreviewWorkGroupDocumentViewState viewState
+  ) async {
+    _appNavigation.popBack();
+
+    final openResult = await open_file.OpenFile.open(
+      Uri.decodeFull(viewState.filePath.path),
+      type: Platform.isAndroid ? workGroupDocument.mediaType.mimeType : null,
+      uti:  Platform.isIOS ? workGroupDocument.mediaType.getDocumentUti().value : null);
+
+    if (openResult.type != open_file.ResultType.done) {
+      store.dispatch(SharedSpaceAction(Left(NoWorkGroupDocumentPreviewAvailable())));
+    }
+  }
+
+  void _showPrepareToPreviewFileDialog(
+    BuildContext context,
+    WorkGroupDocument workGroupDocument,
+    CancelToken cancelToken
+  ) {
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+        .key(Key('prepare_to_preview_file_dialog'))
+        .title(AppLocalizations.of(context).preparing_to_preview_file)
+        .content(AppLocalizations.of(context).downloading_file(workGroupDocument.name))
+        .actionText(AppLocalizations.of(context).cancel)
+        .build());
   }
 }

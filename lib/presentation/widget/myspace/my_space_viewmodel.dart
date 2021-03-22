@@ -301,13 +301,13 @@ class MySpaceViewModel extends BaseViewModel {
 
   void previewDocument(BuildContext context, Document document) {
     _appNavigation.popBack();
-    final canPreviewDocument = Platform.isIOS ? document.isIOSSupportedPreview() : document.isAndroidSupportedPreview();
+    final canPreviewDocument = Platform.isIOS ? document.mediaType.isIOSSupportedPreview() : document.mediaType.isAndroidSupportedPreview();
     if (canPreviewDocument || document.hasThumbnail) {
       final cancelToken = CancelToken();
       _showPrepareToPreviewFileDialog(context, document, cancelToken);
 
       var downloadPreviewType = DownloadPreviewType.original;
-      if (document.isImageFile()) {
+      if (document.mediaType.isImageFile()) {
         downloadPreviewType = DownloadPreviewType.image;
       } else if (!canPreviewDocument) {
         downloadPreviewType = DownloadPreviewType.thumbnail;
@@ -340,7 +340,7 @@ class MySpaceViewModel extends BaseViewModel {
     final openResult = await open_file.OpenFile.open(
         Uri.decodeFull(viewState.filePath.path),
         type: Platform.isAndroid ? document.mediaType.mimeType : null,
-        uti:  Platform.isIOS ? document.getDocumentUti().value : null);
+        uti:  Platform.isIOS ? document.mediaType.getDocumentUti().value : null);
 
     if (openResult.type != open_file.ResultType.done) {
       store.dispatch(MySpaceAction(Left(NoDocumentPreviewAvailable())));
