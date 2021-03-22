@@ -33,40 +33,43 @@ import 'package:domain/domain.dart';
 import 'package:test/test.dart';
 import 'package:testshared/fixture/my_space_fixture.dart';
 import 'package:domain/src/model/document/document.dart';
+import 'package:testshared/testshared.dart';
 
 void main() {
-  group('document_extension_test', () {
+  group('preview_extension_test', () {
     test('isAndroidSupportedPreview() should return true with supported mime type', () {
-      expect(true, document1.isAndroidSupportedPreview());
+      expect(true, document1.mediaType.isAndroidSupportedPreview());
     });
 
     test('isAndroidSupportedPreview() should return false with unsupported mime type', () {
-      expect(false, document4.isAndroidSupportedPreview());
+      expect(false, document4.mediaType.isAndroidSupportedPreview());
     });
 
     test('isIOSSupportedPreview() should return true with supported mime type', () {
-      expect(true, document1.isIOSSupportedPreview());
+      expect(true, document1.mediaType.isIOSSupportedPreview());
     });
 
     test('isIOSSupportedPreview() should return false with unsupported mime type', () {
-      expect(false, document4.isIOSSupportedPreview());
-    });
-
-    test('getDocumentUti() should return uti with supported mime type', () {
-      final validUti = DocumentUti('public.png');
-      expect(validUti, document1.getDocumentUti());
-    });
-
-    test('getDocumentUti() should return null with unsupported mime type', () {
-      expect(DocumentUti(null), document4.getDocumentUti());
+      expect(false, document4.mediaType.isIOSSupportedPreview());
     });
 
     test('isImageFile() should return true with valid mime type', () {
-      expect(true, document1.isImageFile());
+      expect(true, document1.mediaType.isImageFile());
     });
 
     test('isImageFile() should return false with invalid mime type', () {
-      expect(false, document4.isImageFile());
+      expect(false, document4.mediaType.isImageFile());
+    });
+
+    group('document_extension_tests', () {
+      test('getDocumentUti() should return uti with supported mime type', () {
+        final validUti = DocumentUti('public.png');
+        expect(validUti, document1.mediaType.getDocumentUti());
+      });
+
+      test('getDocumentUti() should return null with unsupported mime type', () {
+        expect(DocumentUti(null), document4.mediaType.getDocumentUti());
+      });
     });
   });
 }
