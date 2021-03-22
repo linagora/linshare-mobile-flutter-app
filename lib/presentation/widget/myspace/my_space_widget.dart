@@ -278,93 +278,89 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                 child: _buildMySpaceListView(context, mySpaceState.documentList)));
   }
 
-  Widget _buildMySpaceListView(BuildContext context, List<SelectableElement<Document>> documentList) {
+  Widget _buildMySpaceListView(
+      BuildContext context, List<SelectableElement<Document>> documentList) {
     if (documentList.isEmpty) {
       return _buildUploadFileHere(context);
     } else {
-      return ListView.builder(
-        padding: ResponsiveWidget.isLargeScreen(context) ?
-          EdgeInsets.symmetric(horizontal: 132.0)
-          : EdgeInsets.zero,
-        key: Key('my_space_documents_list'),
-        itemCount: documentList.length,
-        itemBuilder: (context, index) {
-          return _buildMySpaceListItem(context, documentList[index]);
-        });
+      return StoreConnector<AppState, SelectMode>(
+          converter: (store) => store.state.mySpaceState.selectMode,
+          builder: (context, selectMode) {
+            return ListView.builder(
+                padding: ResponsiveWidget.isLargeScreen(context)
+                    ? EdgeInsets.symmetric(horizontal: 132.0)
+                    : EdgeInsets.zero,
+                key: Key('my_space_documents_list'),
+                itemCount: documentList.length,
+                itemBuilder: (context, index) {
+                  return _buildMySpaceListItem(context, documentList[index], selectMode);
+                });
+          });
     }
   }
 
-  Widget _buildMySpaceListItem(BuildContext context, SelectableElement<Document> document) {
+  Widget _buildMySpaceListItem(
+      BuildContext context, SelectableElement<Document> document, SelectMode currentSelectMode) {
     return ListTile(
-      onTap: () => mySpaceViewModel.previewDocument(context, document.element),
-      leading: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-          document.element.mediaType.getFileTypeImagePath(imagePath),
-          width: 20,
-          height: 24,
-          fit: BoxFit.fill)
-        ]
-      ),
-      title: ResponsiveWidget(
-        mediumScreen: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  _buildDocumentName(document.element.name),
-                  _buildSharedIcon(document.element.isShared())
-                ]
-              ),
+        onTap: () {
+          if (currentSelectMode == SelectMode.ACTIVE) {
+            mySpaceViewModel.selectItem(document);
+          } else {
+            mySpaceViewModel.previewDocument(context, document.element);
+          }
+        },
+        leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SvgPicture.asset(document.element.mediaType.getFileTypeImagePath(imagePath),
+              width: 20, height: 24, fit: BoxFit.fill)
+        ]),
+        title: ResponsiveWidget(
+          mediumScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Row(children: [
+                _buildDocumentName(document.element.name),
+                _buildSharedIcon(document.element.isShared())
+              ]),
               Align(
-                alignment: Alignment.centerRight,
-                child: _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
-                  document.element.modificationDate.getMMMddyyyyFormatString())))
-            ]
+                  alignment: Alignment.centerRight,
+                  child: _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
+                      document.element.modificationDate.getMMMddyyyyFormatString())))
+            ]),
+          ),
+          smallScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: _buildDocumentName(document.element.name),
           ),
         ),
-        smallScreen: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: _buildDocumentName(document.element.name),
-        ),
-      ),
-      subtitle: ResponsiveWidget.isSmallScreen(context) ? Transform(
-        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-        child: Row(
-          children: [
-            _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
-                  document.element.modificationDate.getMMMddyyyyFormatString())),
-            _buildSharedIcon(document.element.isShared())
-          ],
-        ),
-      ) : null,
-      trailing: StoreConnector<AppState, SelectMode>(
-        converter: (store) => store.state.mySpaceState.selectMode,
-        builder: (context, selectMode) {
-          return selectMode == SelectMode.ACTIVE ?
-            Checkbox(
-              value: document.selectMode == SelectMode.ACTIVE,
-              onChanged: (bool value) => mySpaceViewModel.selectItem(document),
-              activeColor: AppColor.primaryColor,
-            ) :
-            IconButton(
-              icon: SvgPicture.asset(
-                imagePath.icContextMenu,
-                width: 24,
-                height: 24,
-                fit: BoxFit.fill,
-              ),
+        subtitle: ResponsiveWidget.isSmallScreen(context)
+            ? Transform(
+                transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                child: Row(
+                  children: [
+                    _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
+                        document.element.modificationDate.getMMMddyyyyFormatString())),
+                    _buildSharedIcon(document.element.isShared())
+                  ],
+                ),
+              )
+            : null,
+        trailing: currentSelectMode == SelectMode.ACTIVE
+            ? Checkbox(
+                value: document.selectMode == SelectMode.ACTIVE,
+                onChanged: (bool value) => mySpaceViewModel.selectItem(document),
+                activeColor: AppColor.primaryColor,
+              )
+            : IconButton(
+                icon: SvgPicture.asset(
+                  imagePath.icContextMenu,
+                  width: 24,
+                  height: 24,
+                  fit: BoxFit.fill,
+                ),
                 onPressed: () => mySpaceViewModel.openContextMenu(
-                          context,
-                          document.element,
-                    _contextMenuActionTiles(context, document.element),
-                          footerAction: _removeFileAction([document.element])));
-            }),
-        onLongPress: () => mySpaceViewModel.selectItem(document)
-    );
+                    context, document.element, _contextMenuActionTiles(context, document.element),
+                    footerAction: _removeFileAction([document.element]))),
+        onLongPress: () => mySpaceViewModel.selectItem(document));
   }
 
   Widget _buildDocumentName(String documentName) {

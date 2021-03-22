@@ -279,7 +279,15 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
               _model.openFolderContextMenu(context, node.element, _contextMenuFolderActionTiles(context, node.element)) :
               _model.openDocumentContextMenu(context, node.element, _contextMenuDocumentActionTiles(context, node.element), _removeWorkGroupNodeAction([node.element]))
       ),
-      onTap: () => currentSelectMode == SelectMode.ACTIVE ? _model.selectItem(node) : widget.nodeClickedCallback(node.element),
+      onTap: () {
+        if (currentSelectMode == SelectMode.ACTIVE) {
+          _model.selectItem(node);
+        } else if (node.element.type == WorkGroupNodeType.DOCUMENT) {
+          _model.previewWorkGroupDocument(context, node.element);
+        } else {
+          widget.nodeClickedCallback(node.element);
+        }
+      },
       onLongPress: () => _model.selectItem(node),
     );
   }
@@ -372,8 +380,19 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
     return [
       _copyToMySpaceAction(context, [workGroupDocument]),
       if (Platform.isIOS) _exportFileAction([workGroupDocument]),
-      if (Platform.isAndroid) _downloadFilesAction([workGroupDocument])
+      if (Platform.isAndroid) _downloadFilesAction([workGroupDocument]),
+      _previewWorkGroupDocumentAction(workGroupDocument)
     ];
+  }
+
+  Widget _previewWorkGroupDocumentAction(WorkGroupDocument workGroupDocument) {
+    return WorkGroupDocumentContextMenuTileBuilder(
+            Key('preview_work_group_document_context_menu_action'),
+            SvgPicture.asset(imagePath.icPreview, width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).preview,
+            workGroupDocument)
+        .onActionClick((data) => _model.previewWorkGroupDocument(context, workGroupDocument))
+        .build();
   }
 
   Widget _removeWorkGroupNodeAction(List<WorkGroupNode> workGroupNodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
