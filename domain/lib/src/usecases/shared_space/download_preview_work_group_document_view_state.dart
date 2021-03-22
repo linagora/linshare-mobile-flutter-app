@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -11,7 +11,7 @@
 // subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
 // display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
 // the words “You are using the Free and Open Source version of LinShare™, powered by
-// Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+// Linagora © 2009–2021. Contribute to Linshare R&D by subscribing to an Enterprise
 // offer!”. You must also retain the latter notice in all asynchronous messages such as
 // e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
@@ -28,61 +28,31 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/copy/copy_request.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
-import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
 
-abstract class SharedSpaceDocumentRepository {
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+class DownloadPreviewWorkGroupDocumentViewState extends ViewState {
+  final Uri filePath;
 
-  Future<List<WorkGroupNode>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+  DownloadPreviewWorkGroupDocumentViewState(this.filePath);
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
-  );
+  @override
+  List<Object> get props => [filePath];
+}
 
-  Future<WorkGroupNode> removeSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId);
+class DownloadPreviewWorkGroupDocumentFailure extends FeatureFailure {
+  final dynamic downloadPreviewException;
 
-  Future<List<DownloadTaskId>> downloadNodes(
-    List<WorkGroupNode> workgroupNodes,
-    Token token,
-    Uri baseUrl
-  );
+  DownloadPreviewWorkGroupDocumentFailure(this.downloadPreviewException);
 
-  Future<Uri> downloadNodeIOS(
-    WorkGroupNode workgroupNode,
-    Token token,
-    Uri baseUrl,
-    CancelToken cancelToken
-  );
+  @override
+  List<Object> get props => [downloadPreviewException];
+}
 
-  Future<WorkGroupFolder> createSharedSpaceFolder(
-    SharedSpaceId sharedSpaceId,
-    CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
-  );
+class NoWorkGroupDocumentPreviewAvailable extends FeatureFailure {
 
-  Future<Uri> downloadPreviewWorkGroupDocument(
-    WorkGroupDocument workGroupDocument,
-    DownloadPreviewType downloadPreviewType,
-    Token token,
-    Uri baseUrl,
-    CancelToken cancelToken
-  );
+  NoWorkGroupDocumentPreviewAvailable();
+
+  @override
+  List<Object> get props => [];
 }

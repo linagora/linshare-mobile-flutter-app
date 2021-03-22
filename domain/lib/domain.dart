@@ -7,6 +7,7 @@ export 'src/extension/integer_extension.dart';
 export 'src/extension/string_extension.dart';
 export 'src/extension/list_document_extension.dart';
 export 'src/extension/order_by_extension.dart';
+export 'src/extension/media_type_extension.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -29,6 +30,7 @@ export 'src/usecases/functionality/functionality_view_state.dart';
 export 'src/usecases/search_shared_space_node_nested/search_shared_space_node_nested_view_state.dart';
 export 'src/usecases/preview_file/download_preview_document_view_state.dart';
 export 'src/usecases/name_verification/verify_name_view_state.dart';
+export 'src/usecases/shared_space/download_preview_work_group_document_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -152,6 +154,7 @@ export 'src/usecases/sort/get_sorter_interactor.dart';
 export 'src/usecases/sort/save_sort_interactor.dart';
 export 'src/usecases/shared_space/create_shared_space_folder_interactor.dart';
 export 'src/usecases/name_verification/verify_name_interactor.dart';
+export 'src/usecases/shared_space/download_preview_work_group_document_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
