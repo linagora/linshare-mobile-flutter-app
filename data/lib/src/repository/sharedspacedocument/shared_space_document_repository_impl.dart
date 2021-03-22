@@ -101,4 +101,15 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   ) {
     return _sharedSpaceDocumentDataSource.createSharedSpaceFolder(sharedSpaceId, createSharedSpaceNodeRequest);
   }
+
+  @override
+  Future<Uri> downloadPreviewWorkGroupDocument(
+    WorkGroupDocument workGroupDocument,
+    DownloadPreviewType downloadPreviewType,
+    Token token,
+    Uri baseUrl,
+    CancelToken cancelToken
+  ) {
+    return _sharedSpaceDocumentDataSource.downloadPreviewWorkGroupDocument(workGroupDocument, downloadPreviewType, token, baseUrl, cancelToken);
+  }
 }

@@ -66,4 +66,12 @@ abstract class SharedSpaceDocumentDataSource {
     SharedSpaceId sharedSpaceId,
     CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
   );
+
+  Future<Uri> downloadPreviewWorkGroupDocument(
+    WorkGroupDocument workGroupDocument,
+    DownloadPreviewType downloadPreviewType,
+    Token token,
+    Uri baseUrl,
+    CancelToken cancelToken
+  );
 }
