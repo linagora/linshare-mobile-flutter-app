@@ -203,7 +203,6 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()
     ));
-    getIt.registerFactory(() => DownloadReceivedSharesInteractor(getIt<ReceivedShareRepository>(), getIt<TokenRepository>(), getIt<CredentialRepository>()));
     getIt.registerFactory(() => CreateSharedSpaceFolderInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => VerifyNameInteractor());
   }
