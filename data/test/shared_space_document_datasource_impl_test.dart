@@ -45,12 +45,15 @@ void main() {
     MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
     SharedSpaceDocumentDataSourceImpl _sharedSpaceDataSourceImpl;
+    MockLinShareDownloadManager _linShareDownloadManager;
+
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
       _sharedSpaceDataSourceImpl = SharedSpaceDocumentDataSourceImpl(
           _linShareHttpClient,
-          _remoteExceptionThrower
+          _remoteExceptionThrower,
+          _linShareDownloadManager
       );
     });
 
