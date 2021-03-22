@@ -52,10 +52,12 @@ import 'package:path_provider/path_provider.dart';
 class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource {
   final LinShareHttpClient _linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
+  final LinShareDownloadManager _linShareDownloadManager;
 
   SharedSpaceDocumentDataSourceImpl(
     this._linShareHttpClient,
     this._remoteExceptionThrower,
+    this._linShareDownloadManager
   );
 
   @override
@@ -164,71 +166,22 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
           openFileFromNotification: true);
         }));
 
-    return taskIds.map((taskId) => DownloadTaskId(taskId));
+    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
   }
 
   @override
-  Future<Uri> downloadNodeIOS(WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) async {
-    final streamController = StreamController<Uri>();
-    try {
-      await Future.wait([
-        _linShareHttpClient.downloadFile(
-            Endpoint.sharedSpaces
-                .withPathParameter(workgroupNode.sharedSpaceId.uuid)
-                .withPathParameter('nodes')
-                .withPathParameter(workgroupNode.workGroupNodeId.uuid)
-                .withPathParameter(Endpoint.download)
-                .generateEndpointPath(),
-            cancelToken,
-            token),
-        getTemporaryDirectory()
-      ]).then((values) {
-        final fileStream = (values[0] as ResponseBody).stream;
-        final tempFilePath = '${(values[1] as Directory).absolute.path}/${workgroupNode.name}';
-
-        final file = File(tempFilePath);
-        file.createSync(recursive: true);
-        var randomAccessFile = file.openSync(mode: FileMode.write);
-        StreamSubscription subscription;
-
-        subscription = fileStream
-            .takeWhile((_) => cancelToken == null || !cancelToken.isCancelled)
-            .listen((data) {
-          subscription.pause();
-          randomAccessFile.writeFrom(data).then((_randomAccessFile) {
-            randomAccessFile = _randomAccessFile;
-            subscription.resume();
-          }).catchError((error) async {
-            await subscription.cancel();
-            streamController.sink.addError(DownloadFileException(error.toString()));
-            await streamController.close();
-          });
-        }, onDone: () async {
-          await randomAccessFile.close();
-          if (cancelToken.isCancelled) {
-            streamController.sink.addError(CancelDownloadFileException(cancelToken.cancelError.message));
-          } else {
-            streamController.sink.add(Uri.parse(tempFilePath));
-          }
-          await streamController.close();
-        }, onError: (error) async {
-          await randomAccessFile.close();
-          await file.delete();
-          streamController.sink.addError(DownloadFileException(error.toString()));
-          await streamController.close();
-        });
-      });
-    } catch(exception) {
-      _remoteExceptionThrower.throwRemoteException(exception, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
-          throw DocumentNotFound();
-        } else {
-          throw UnknownError(error.response.statusMessage);
-        }
-      });
-    }
-
-    return streamController.stream.first;
+  Future<Uri> downloadNodeIOS(
+      WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) async {
+    return _linShareDownloadManager.downloadFile(
+        Endpoint.sharedSpaces
+            .withPathParameter(workgroupNode.sharedSpaceId.uuid)
+            .withPathParameter('nodes')
+            .withPathParameter(workgroupNode.workGroupNodeId.uuid)
+            .generateDownloadUrl(baseUrl),
+        getTemporaryDirectory(),
+        workgroupNode.name,
+        token,
+        cancelToken: cancelToken);
   }
 
   @override
@@ -249,5 +202,34 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         }
       });
     });
+  }
+
+  @override
+  Future<Uri> downloadPreviewWorkGroupDocument(WorkGroupDocument workGroupDocument,
+      DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken) {
+    var downloadUrl;
+    if (downloadPreviewType == DownloadPreviewType.original) {
+      downloadUrl = Endpoint.sharedSpaces
+          .withPathParameter(workGroupDocument.sharedSpaceId.uuid)
+          .withPathParameter('nodes')
+          .downloadServicePath(workGroupDocument.workGroupNodeId.uuid)
+          .generateDownloadUrl(baseUrl);
+    } else {
+      downloadUrl = Endpoint.sharedSpaces
+          .withPathParameter(workGroupDocument.sharedSpaceId.uuid)
+          .withPathParameter('nodes')
+          .withPathParameter(workGroupDocument.workGroupNodeId.uuid)
+          .withPathParameter(Endpoint.thumbnail)
+          .withPathParameter(
+              downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
+          .generateEndpointPath();
+    }
+    return _linShareDownloadManager.downloadFile(
+        downloadUrl,
+        getTemporaryDirectory(),
+        workGroupDocument.name +
+            '${downloadPreviewType == DownloadPreviewType.thumbnail ? '.pdf' : ''}',
+        token,
+        cancelToken: cancelToken);
   }
 }
