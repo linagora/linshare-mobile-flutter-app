@@ -77,6 +77,10 @@ class AppImagePaths {
   String get icPublish => _getImagePath('ic_publish.svg');
   String get icNewFolder => _getImagePath('ic_new_folder.svg');
   String get icCreateFolder => _getImagePath('ic_create_folder.svg');
+  String get icSortDownItem => _getImagePath('ic_sort_down_item.svg');
+  String get icSortUpItem => _getImagePath('ic_sort_up_item.svg');
+  String get icSortDownCurrent => _getImagePath('ic_sort_down_current.svg');
+  String get icSortUpCurrent => _getImagePath('ic_sort_up_current.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

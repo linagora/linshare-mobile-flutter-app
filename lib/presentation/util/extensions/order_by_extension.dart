@@ -28,76 +28,26 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
-
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 
-@immutable
-class StartMySpaceLoadingAction extends ActionOnline {}
+extension OrderByExtension on OrderBy {
 
-@immutable
-class MySpaceAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
-
-  MySpaceAction(this.viewState);
-}
-
-@immutable
-class MySpaceGetAllDocumentAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  MySpaceGetAllDocumentAction(this.viewState);
-}
-
-@immutable
-class MySpaceSelectDocumentAction extends ActionOffline {
-  final SelectableElement<Document> selectedDocument;
-
-  MySpaceSelectDocumentAction(this.selectedDocument);
-}
-
-@immutable
-class MySpaceClearSelectedDocumentsAction extends ActionOffline {
-  MySpaceClearSelectedDocumentsAction();
-}
-
-@immutable
-class MySpaceSelectAllDocumentsAction extends ActionOffline {
-  MySpaceSelectAllDocumentsAction();
-}
-
-@immutable
-class MySpaceUnselectAllDocumentsAction extends ActionOffline {
-  MySpaceUnselectAllDocumentsAction();
-}
-
-@immutable
-class CleanMySpaceStateAction extends ActionOffline {
-  CleanMySpaceStateAction();
-}
-
-@immutable
-class MySpaceSetSearchResultAction extends ActionOffline {
-  final List<Document> documentList;
-
-  MySpaceSetSearchResultAction(this.documentList);
-}
-
-@immutable
-class MySpaceSortDocumentAction extends ActionOffline {
-  final List<Document> documentList;
-  final Sorter sorter;
-
-  MySpaceSortDocumentAction(this.documentList, this.sorter);
-}
-
-@immutable
-class MySpaceGetSorterAction extends ActionOffline {
-  final Sorter sorter;
-
-  MySpaceGetSorterAction(this.sorter);
+  String getName(BuildContext context) {
+    switch(this) {
+      case OrderBy.modificationDate:
+        return AppLocalizations.of(context).modification_date;
+      case OrderBy.creationDate:
+        return AppLocalizations.of(context).creation_date;
+      case OrderBy.fileSize:
+        return AppLocalizations.of(context).size;
+      case OrderBy.name:
+        return AppLocalizations.of(context).name;
+      case OrderBy.shared:
+        return AppLocalizations.of(context).shared;
+      default:
+        return '';
+    }
+  }
 }

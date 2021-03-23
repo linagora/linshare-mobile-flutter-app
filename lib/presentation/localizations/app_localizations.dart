@@ -800,6 +800,46 @@ class AppLocalizations {
       name: 'create_new_folder',
     );
   }
+
+  String get modification_date {
+    return Intl.message(
+      'Modification date',
+      name: 'modification_date',
+    );
+  }
+
+  String get creation_date {
+    return Intl.message(
+      'Creation date',
+      name: 'creation_date',
+    );
+  }
+
+  String get size {
+    return Intl.message(
+      'Size',
+      name: 'size',
+    );
+  }
+
+  String get name {
+    return Intl.message(
+      'Name',
+      name: 'name',
+    );
+  }
+
+  String get shared {
+    return Intl.message(
+      'Shared',
+      name: 'shared',
+    );
+  }
+
+  String get order_by {
+    return Intl.message('Order by',
+        name: 'order_by');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

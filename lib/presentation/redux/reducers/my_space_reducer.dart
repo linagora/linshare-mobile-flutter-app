@@ -51,4 +51,8 @@ final mySpaceReducer = combineReducers<MySpaceState>([
   TypedReducer<MySpaceState, MySpaceSelectAllDocumentsAction>((MySpaceState state, MySpaceSelectAllDocumentsAction action) => state.selectAllDocuments()),
   TypedReducer<MySpaceState, MySpaceUnselectAllDocumentsAction>((MySpaceState state, MySpaceUnselectAllDocumentsAction action) => state.unSelectAllDocuments()),
   TypedReducer<MySpaceState, CleanMySpaceStateAction>((MySpaceState state, _) => state.clearViewState()),
+  TypedReducer<MySpaceState, MySpaceGetSorterAction>((MySpaceState state, MySpaceGetSorterAction action) =>
+      state.setSorter(newSorter: action.sorter)),
+  TypedReducer<MySpaceState, MySpaceSortDocumentAction>((MySpaceState state, MySpaceSortDocumentAction action) =>
+      state.setDocumentsWithSorter(newDocumentList: action.documentList, newSorter: action.sorter))
 ]);
