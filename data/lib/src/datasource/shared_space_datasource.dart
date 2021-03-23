@@ -35,4 +35,12 @@ abstract class SharedSpaceDataSource {
   Future<List<SharedSpaceNodeNested>> getSharedSpaces();
 
   Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+
+  Future<SharedSpaceNodeNested> getSharedSpace(
+    SharedSpaceId sharedSpaceId,
+    {
+      MembersParameter membersParameter = MembersParameter.withoutMembers,
+      RolesParameter rolesParameter = RolesParameter.withRole
+    }
+  );
 }
