@@ -63,5 +63,11 @@ abstract class ContextMenuActionBuilder<T> {
         color: AppColor.documentNameItemTextColor);
   }
 
+  TextStyle actionTextStyleSelected() {
+    return TextStyle(
+        fontSize: 16,
+        color: AppColor.primaryColor);
+  }
+
   Widget build();
 }
