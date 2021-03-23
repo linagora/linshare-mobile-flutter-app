@@ -194,7 +194,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response.statusCode == 404) {
-          throw SharedSpacesNotFound();
+          throw SharedSpaceNotFound();
         } else if (error.response.statusCode == 403) {
           throw NotAuthorized();
         } else {

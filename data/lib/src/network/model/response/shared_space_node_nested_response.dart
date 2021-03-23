@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/quota_id_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/sharedspace/shared_space_role_dto.dart';
 import 'package:data/src/util/attribute.dart';
@@ -41,6 +42,7 @@ part 'shared_space_node_nested_response.g.dart';
 
 @JsonSerializable()
 @DatetimeConverter()
+@QuotaIdConverter()
 @SharedSpaceIdConverter()
 class SharedSpaceNodeNestedResponse extends Equatable {
   SharedSpaceNodeNestedResponse(
@@ -50,6 +52,7 @@ class SharedSpaceNodeNestedResponse extends Equatable {
     this.modificationDate,
     this.name,
     this.nodeType,
+    this.quotaId
   );
 
   @JsonKey(name: Attribute.uuid)
@@ -60,6 +63,9 @@ class SharedSpaceNodeNestedResponse extends Equatable {
   final DateTime modificationDate;
   final String name;
   final LinShareNodeType nodeType;
+
+  @JsonKey(name: Attribute.quotaUuid)
+  final QuotaId quotaId;
 
   factory SharedSpaceNodeNestedResponse.fromJson(Map<String, dynamic> json) => _$SharedSpaceNodeNestedResponseFromJson(json);
   Map<String, dynamic> toJson() => _$SharedSpaceNodeNestedResponseToJson(this);
@@ -72,6 +78,7 @@ class SharedSpaceNodeNestedResponse extends Equatable {
     modificationDate,
     name,
     nodeType,
+    quotaId
   ];
 }
 
@@ -83,6 +90,8 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
       creationDate,
       modificationDate,
       name,
-      nodeType);
+      nodeType,
+      quotaId ?? QuotaId.initial()
+    );
   }
 }
