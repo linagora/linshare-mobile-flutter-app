@@ -50,8 +50,8 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response.statusCode == 404) {
-          throw SharedSpacesNotFound();
-        } if (error.response.statusCode == 403) {
+          throw SharedSpaceNotFound();
+        } else if (error.response.statusCode == 403) {
           throw NotAuthorized();
         } else {
           throw UnknownError(error.response.statusMessage);
@@ -67,8 +67,35 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response.statusCode == 404) {
-          throw SharedSpacesNotFound();
-        } if (error.response.statusCode == 403) {
+          throw SharedSpaceNotFound();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<SharedSpaceNodeNested> getSharedSpace(
+    SharedSpaceId sharedSpaceId,
+    {
+      MembersParameter membersParameter = MembersParameter.withoutMembers,
+      RolesParameter rolesParameter = RolesParameter.withRole
+    }
+  ) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getSharedSpace(
+        sharedSpaceId,
+        membersParameter: membersParameter,
+        rolesParameter: rolesParameter
+      )).toSharedSpaceNodeNested();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw SharedSpaceNotFound();
+        } else if (error.response.statusCode == 403) {
           throw NotAuthorized();
         } else {
           throw UnknownError(error.response.statusMessage);
