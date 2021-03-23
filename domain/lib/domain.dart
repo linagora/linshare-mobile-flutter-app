@@ -2,6 +2,11 @@ library domain;
 
 // extension
 export 'src/extension/email_validator_string_extension.dart';
+export 'src/extension/date_time_extension.dart';
+export 'src/extension/integer_extension.dart';
+export 'src/extension/string_extension.dart';
+export 'src/extension/list_document_extension.dart';
+export 'src/extension/order_by_extension.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -98,6 +103,10 @@ export 'src/model/functionality/functionality_time.dart';
 export 'src/model/functionality/functionality_identifier.dart';
 export 'src/model/preview/document_uti.dart';
 export 'src/model/preview/download_preview_type.dart';
+export 'src/model/sort/sorter.dart';
+export 'src/model/sort/order_screen.dart';
+export 'src/model/sort/order_by.dart';
+export 'src/model/sort/order_type.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -137,6 +146,10 @@ export 'src/usecases/shared_space/remove_multiple_shared_spaces_interactor.dart'
 export 'src/usecases/shared_space/download_workgroup_node_interactor.dart';
 export 'src/usecases/received/download_received_shares_interactor.dart';
 export 'src/usecases/preview_file/download_preview_document_interactor.dart';
+export 'src/usecases/sort/sort_interactor.dart';
+export 'src/usecases/sort/sort_view_state.dart';
+export 'src/usecases/sort/get_sorter_interactor.dart';
+export 'src/usecases/sort/save_sort_interactor.dart';
 export 'src/usecases/shared_space/create_shared_space_folder_interactor.dart';
 export 'src/usecases/name_verification/verify_name_interactor.dart';
 
@@ -150,6 +163,7 @@ export 'src/repository/sharedspacedocument/shared_space_document_repository.dart
 export 'src/repository/quota/quota_repository.dart';
 export 'src/repository/received/received_share_repository.dart';
 export 'src/repository/functionality/functionality_repository.dart';
+export 'src/repository/sort/sort_repository.dart';
 
 // errorcode
 export 'src/errorcode/business_error_code.dart';
