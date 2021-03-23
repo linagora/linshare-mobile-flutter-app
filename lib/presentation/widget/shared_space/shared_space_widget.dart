@@ -224,7 +224,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       (failure) =>
         RefreshIndicator(
           onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(),
-          child: failure is SharedSpaceFailure ? 
+          child: failure is SharedSpacesFailure ? 
             BackgroundWidgetBuilder()
                 .key(Key('shared_space_error_background'))
                 .image(SvgPicture.asset(

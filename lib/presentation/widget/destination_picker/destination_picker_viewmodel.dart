@@ -81,7 +81,7 @@ class DestinationPickerViewModel extends BaseViewModel {
       await _getAllSharedSpacesInteractor.execute().then((result) => result.fold(
               (failure) => store.dispatch(DestinationPickerGetAllSharedSpacesAction([])),
               (success) => store.dispatch(DestinationPickerGetAllSharedSpacesAction(
-                  (success as SharedSpaceViewState).sharedSpacesList
+                  (success as SharedSpacesViewState).sharedSpacesList
                       .where((element) {
                         if (destinationPickerType == DestinationPickerType.copy) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles

@@ -32,19 +32,19 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class SharedSpaceViewState extends ViewState {
+class SharedSpacesViewState extends ViewState {
   final List<SharedSpaceNodeNested> sharedSpacesList;
 
-  SharedSpaceViewState(this.sharedSpacesList);
+  SharedSpacesViewState(this.sharedSpacesList);
 
   @override
   List<Object> get props => [sharedSpacesList];
 }
 
-class SharedSpaceFailure extends FeatureFailure {
+class SharedSpacesFailure extends FeatureFailure {
   final Exception exception;
 
-  SharedSpaceFailure(this.exception);
+  SharedSpacesFailure(this.exception);
 
   @override
   List<Object> get props => [exception];
@@ -292,6 +292,24 @@ class CreateSharedSpaceFolderFailure extends FeatureFailure {
   final exception;
 
   CreateSharedSpaceFolderFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class SharedSpaceViewState extends ViewState {
+  final SharedSpaceNodeNested sharedSpace;
+
+  SharedSpaceViewState(this.sharedSpace);
+
+  @override
+  List<Object> get props => [sharedSpace];
+}
+
+class SharedSpaceFailure extends FeatureFailure {
+  final exception;
+
+  SharedSpaceFailure(this.exception);
 
   @override
   List<Object> get props => [exception];
