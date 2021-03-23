@@ -298,4 +298,22 @@ class LinShareHttpClient {
         data: createSharedSpaceNodeRequest.toJson().toString());
     return WorkGroupNodeFolderDto.fromJson(resultJson);
   }
+
+  Future<SharedSpaceNodeNestedResponse> getSharedSpace(
+    SharedSpaceId sharedSpaceId,
+    {
+      MembersParameter membersParameter = MembersParameter.withoutMembers,
+      RolesParameter rolesParameter = RolesParameter.withRole
+    }
+  ) async {
+    final resultJson = await _dioClient.get(
+        Endpoint.sharedSpaces
+            .withPathParameter(sharedSpaceId.uuid)
+            .generateEndpointPath(),
+        queryParameters: [
+          BooleanQueryParameter('members', membersParameter == MembersParameter.withMembers),
+          BooleanQueryParameter('withRole', rolesParameter == RolesParameter.withRole),
+        ].toMap());
+    return SharedSpaceNodeNestedResponse.fromJson(resultJson);
+  }
 }
