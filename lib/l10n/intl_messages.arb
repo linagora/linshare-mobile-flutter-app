@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-19T14:59:50.725025",
+  "@@last_modified": "2021-03-24T11:09:14.115550",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -604,6 +604,36 @@
   },
   "create_new_folder": "Create new folder",
   "@create_new_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "modification_date": "Modification date",
+  "@modification_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creation_date": "Creation date",
+  "@creation_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "size": "Size",
+  "@size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Name",
+  "@name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared": "Shared",
+  "@shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order_by": "Order by",
+  "@order_by": {
     "type": "text",
     "placeholders": {}
   }

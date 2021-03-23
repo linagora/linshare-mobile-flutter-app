@@ -28,76 +28,30 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/material/list_tile.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-@immutable
-class StartMySpaceLoadingAction extends ActionOnline {}
+class SorterMenuTileBuilder extends ContextMenuActionBuilder<Sorter> {
+  final Sorter _sorter;
+  final SelectMode _selectMode;
 
-@immutable
-class MySpaceAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
+  SorterMenuTileBuilder(Key key, SvgPicture actionIcon, String actionName,
+      this._sorter, this._selectMode)
+      : super(key, actionIcon, actionName);
 
-  MySpaceAction(this.viewState);
-}
-
-@immutable
-class MySpaceGetAllDocumentAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  MySpaceGetAllDocumentAction(this.viewState);
-}
-
-@immutable
-class MySpaceSelectDocumentAction extends ActionOffline {
-  final SelectableElement<Document> selectedDocument;
-
-  MySpaceSelectDocumentAction(this.selectedDocument);
-}
-
-@immutable
-class MySpaceClearSelectedDocumentsAction extends ActionOffline {
-  MySpaceClearSelectedDocumentsAction();
-}
-
-@immutable
-class MySpaceSelectAllDocumentsAction extends ActionOffline {
-  MySpaceSelectAllDocumentsAction();
-}
-
-@immutable
-class MySpaceUnselectAllDocumentsAction extends ActionOffline {
-  MySpaceUnselectAllDocumentsAction();
-}
-
-@immutable
-class CleanMySpaceStateAction extends ActionOffline {
-  CleanMySpaceStateAction();
-}
-
-@immutable
-class MySpaceSetSearchResultAction extends ActionOffline {
-  final List<Document> documentList;
-
-  MySpaceSetSearchResultAction(this.documentList);
-}
-
-@immutable
-class MySpaceSortDocumentAction extends ActionOffline {
-  final List<Document> documentList;
-  final Sorter sorter;
-
-  MySpaceSortDocumentAction(this.documentList, this.sorter);
-}
-
-@immutable
-class MySpaceGetSorterAction extends ActionOffline {
-  final Sorter sorter;
-
-  MySpaceGetSorterAction(this.sorter);
+  @override
+  ListTile build() {
+    return ListTile(
+        key: key,
+        leading: _selectMode == SelectMode.ACTIVE ? actionIcon : SizedBox.shrink(),
+        title: Text(actionName,
+            style: _selectMode == SelectMode.ACTIVE ? actionTextStyleSelected() : actionTextStyle()),
+        onTap: () => onContextMenuActionClick(_sorter));
+  }
 }

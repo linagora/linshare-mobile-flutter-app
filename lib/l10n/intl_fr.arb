@@ -562,6 +562,36 @@
     "type": "text",
     "placeholders": {}
   },
+  "modification_date": "Modification date",
+  "@modification_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creation_date": "Creation date",
+  "@creation_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "size": "Size",
+  "@size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Name",
+  "@name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared": "Shared",
+  "@shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order_by": "Order by",
+  "@order_by": {
+    "type": "text",
+    "placeholders": {}
+  },
   "add_new_file_or_folder": "Add new file or folder",
   "@add_new_file_or_folder": {
     "type": "text",
