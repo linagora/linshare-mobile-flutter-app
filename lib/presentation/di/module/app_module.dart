@@ -94,6 +94,7 @@ class AppModule {
         getIt<RemoteExceptionThrower>()));
     getIt.registerFactory(() => SortDataSourceImpl(
         getIt<SharedPreferences>()));
+    getIt.registerFactory(() => ContactDataSourceImpl());
   }
 
   void _provideDataSource() {
@@ -111,6 +112,7 @@ class AppModule {
     getIt.registerFactory<ReceivedShareDataSource>(() => getIt<ReceivedShareDataSourceImp>());
     getIt.registerFactory<FunctionalityDataSource>(() => getIt<FunctionalityDataSourceImpl>());
     getIt.registerFactory<SortDataSource>(() => getIt<SortDataSourceImpl>());
+    getIt.registerFactory<ContactDataSource>(() => getIt<ContactDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -125,6 +127,7 @@ class AppModule {
     getIt.registerFactory(() => ReceivedShareRepositoryImp(getIt<ReceivedShareDataSource>()));
     getIt.registerFactory(() => FunctionalityRepositoryImpl(getIt<FunctionalityDataSource>()));
     getIt.registerFactory(() => SortRepositoryImpl(getIt<SortDataSource>()));
+    getIt.registerFactory(() => ContactRepositoryImpl(getIt<ContactDataSource>()));
   }
 
   void _provideRepository() {
@@ -139,6 +142,7 @@ class AppModule {
     getIt.registerFactory<ReceivedShareRepository>(() => getIt<ReceivedShareRepositoryImp>());
     getIt.registerFactory<FunctionalityRepository>(() => getIt<FunctionalityRepositoryImpl>());
     getIt.registerFactory<SortRepository>(() => getIt<SortRepositoryImpl>());
+    getIt.registerFactory<ContactRepository>(() => getIt<ContactRepositoryImpl>());
   }
 
   void _provideInteractor() {
@@ -219,6 +223,10 @@ class AppModule {
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()
     ));
+    getIt.registerFactory(() => GetDeviceContactSuggestionsInteractor(getIt<ContactRepository>()));
+    getIt.registerFactory(() => GetAutoCompleteSharingWithDeviceContactInteractor(
+        getIt<GetAutoCompleteSharingInteractor>(),
+        getIt<GetDeviceContactSuggestionsInteractor>()));
   }
 
   void _provideSharePreference() {

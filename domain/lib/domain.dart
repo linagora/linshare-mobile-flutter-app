@@ -30,6 +30,7 @@ export 'src/usecases/functionality/functionality_view_state.dart';
 export 'src/usecases/search_shared_space_node_nested/search_shared_space_node_nested_view_state.dart';
 export 'src/usecases/preview_file/download_preview_document_view_state.dart';
 export 'src/usecases/name_verification/verify_name_view_state.dart';
+export 'src/usecases/contact/get_device_contact_suggestions_view_state.dart';
 export 'src/usecases/shared_space/download_preview_work_group_document_view_state.dart';
 
 // exception
@@ -109,6 +110,8 @@ export 'src/model/sort/sorter.dart';
 export 'src/model/sort/order_screen.dart';
 export 'src/model/sort/order_by.dart';
 export 'src/model/sort/order_type.dart';
+export 'src/model/contact/contact.dart';
+export 'src/model/contact/device_contact.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -154,6 +157,8 @@ export 'src/usecases/sort/get_sorter_interactor.dart';
 export 'src/usecases/sort/save_sort_interactor.dart';
 export 'src/usecases/shared_space/create_shared_space_folder_interactor.dart';
 export 'src/usecases/name_verification/verify_name_interactor.dart';
+export 'src/usecases/contact/get_device_contact_suggestions_interactor.dart';
+export 'src/usecases/autocomplete/get_autocomplete_sharing_with_device_contact_interactor.dart';
 export 'src/usecases/shared_space/download_preview_work_group_document_interactor.dart';
 
 // repository
@@ -166,6 +171,7 @@ export 'src/repository/sharedspacedocument/shared_space_document_repository.dart
 export 'src/repository/quota/quota_repository.dart';
 export 'src/repository/received/received_share_repository.dart';
 export 'src/repository/functionality/functionality_repository.dart';
+export 'src/repository/contact/contact_repository.dart';
 export 'src/repository/sort/sort_repository.dart';
 
 // errorcode
