@@ -37,6 +37,8 @@ final simpleAutoCompleteResult1 = SimpleAutoCompleteResult('e05bd6ee-e040-497f-9
 
 final simpleAutoCompleteResult2 = SimpleAutoCompleteResult('e05bd6ee-e040-497f-94cc-a4b52f9da141', 'user2@linshare.org');
 
+final simpleAutoCompleteResult3 = SimpleAutoCompleteResult('test1@gmail.com', 'contact 1');
+
 final userAutoCompleteResult1 = UserAutoCompleteResult(
     'e05bd6ee-e040-497f-94cc-a4b52f9da140',
     'user1@linshare.org',
