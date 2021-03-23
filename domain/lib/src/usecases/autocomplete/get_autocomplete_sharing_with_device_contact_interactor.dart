@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -11,7 +11,7 @@
 // subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
 // display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
 // the words “You are using the Free and Open Source version of LinShare™, powered by
-// Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+// Linagora © 2009–2021. Contribute to Linshare R&D by subscribing to an Enterprise
 // offer!”. You must also retain the latter notice in all asynchronous messages such as
 // e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
@@ -28,26 +28,39 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/state/failure.dart';
-import 'package:domain/src/state/success.dart';
 
-class AutoCompleteViewState extends ViewState {
-  final List<AutoCompleteResult> results;
+class GetAutoCompleteSharingWithDeviceContactInteractor {
+  final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
+  final GetDeviceContactSuggestionsInteractor _getDeviceContactSuggestionsInteractor;
 
-  AutoCompleteViewState(this.results);
+  GetAutoCompleteSharingWithDeviceContactInteractor(
+    this._getAutoCompleteSharingInteractor,
+    this._getDeviceContactSuggestionsInteractor);
 
-  @override
-  List<Object> get props => [results];
-}
+  Future<Either<Failure, Success>> execute(AutoCompletePattern autoCompletePattern, AutoCompleteType autoCompleteType) async {
+    try {
+      final resultExecutions = await Future.wait([
+        _getAutoCompleteSharingInteractor.execute(autoCompletePattern, autoCompleteType),
+        _getDeviceContactSuggestionsInteractor.execute(autoCompletePattern)]);
 
-class AutoCompleteFailure extends FeatureFailure {
-  final exception;
+      final autoCompleteResults = resultExecutions.first.fold(
+        (failure) => <AutoCompleteResult>[],
+        (success) => success is AutoCompleteViewState ? success.results : <AutoCompleteResult>[]);
 
-  AutoCompleteFailure(this.exception);
+      resultExecutions.last.fold(
+        (failure) => null,
+        (success) {
+          if (success is GetDeviceContactSuggestionsViewState && success.results.isNotEmpty) {
+            autoCompleteResults.addAll(success.results.map((contact) => contact.toSimpleAutoCompleteResult()));
+          }
+        });
 
-  @override
-  List<Object> get props => [exception];
+      return Right<Failure, Success>(AutoCompleteViewState(autoCompleteResults));
+    } catch (exception) {
+      return Left<Failure, Success>(AutoCompleteFailure(exception));
+    }
+  }
 }
