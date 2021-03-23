@@ -146,7 +146,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
     return state.viewState.fold(
         (failure) => RefreshIndicator(
             onRefresh: () async => receivedShareViewModel.getAllReceivedShare(),
-            child: failure is SharedSpaceFailure
+            child: failure is SharedSpacesFailure
                 ? BackgroundWidgetBuilder()
                     .key(Key('received_share_error_background'))
                     .image(SvgPicture.asset(imagePath.icUnexpectedError,

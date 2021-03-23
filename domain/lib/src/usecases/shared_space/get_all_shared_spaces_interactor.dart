@@ -42,9 +42,9 @@ class GetAllSharedSpacesInteractor {
   Future<Either<Failure, Success>> execute() async {
     try {
       final sharedspaces = await _sharedSpaceRepository.getSharedSpaces();
-      return Right<Failure, Success>(SharedSpaceViewState(sharedspaces));
+      return Right<Failure, Success>(SharedSpacesViewState(sharedspaces));
     } catch (exception) {
-      return Left<Failure, Success>(SharedSpaceFailure(exception));
+      return Left<Failure, Success>(SharedSpacesFailure(exception));
     }
   }
 }
