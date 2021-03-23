@@ -39,38 +39,58 @@ import 'package:testshared/testshared.dart';
 import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
-  group('get_all_shared_spaces_interactor', () {
+  group('get_shared_space_interactor', () {
     MockSharedSpaceRepository sharedSpaceRepository;
-    GetAllSharedSpacesInteractor getAllSharedSpacesInteractor;
+    GetSharedSpaceInteractor getSharedSpaceInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
-      getAllSharedSpacesInteractor = GetAllSharedSpacesInteractor(sharedSpaceRepository);
+      getSharedSpaceInteractor = GetSharedSpaceInteractor(sharedSpaceRepository);
     });
 
-    test('get all shared spaces interactor should return success with shared spaces list', () async {
-      when(sharedSpaceRepository.getSharedSpaces()).thenAnswer((_) async => [sharedSpace1, sharedSpace2]);
+    test('get shared space interactor should return success with shared space', () async {
+      when(sharedSpaceRepository.getSharedSpace(sharedSpaceId1))
+          .thenAnswer((_) async => sharedSpace1);
 
-      final result = await getAllSharedSpacesInteractor.execute();
+      final result = await getSharedSpaceInteractor.execute(sharedSpaceId1);
 
-      final sharedSpacesList = result.map((success) => (success as SharedSpacesViewState).sharedSpacesList)
-          .getOrElse(() => []);
+      final sharedSpace = result
+          .map((success) => (success as SharedSpaceViewState).sharedSpace)
+          .getOrElse(() => null);
 
-      expect(sharedSpacesList, containsAllInOrder([sharedSpace1, sharedSpace2]));
+      expect(sharedSpace, sharedSpace1);
     });
 
+    test('get shared space interactor should return success with complete data', () async {
+      when(sharedSpaceRepository.getSharedSpace(
+        sharedSpaceId1,
+        membersParameter: MembersParameter.withoutMembers,
+        rolesParameter: RolesParameter.withoutRole
+      )).thenAnswer((_) async => sharedSpace1);
 
-    test('get all shared spaces interactor should fail when getAllSharedSpaces fail', () async {
+      final result = await getSharedSpaceInteractor.execute(
+        sharedSpaceId1,
+        membersParameter: MembersParameter.withoutMembers,
+        rolesParameter: RolesParameter.withoutRole
+      );
+
+      final sharedSpace = result
+          .map((success) => (success as SharedSpaceViewState).sharedSpace)
+          .getOrElse(() => null);
+
+      expect(sharedSpace, sharedSpace1);
+    });
+
+    test('get shared space interactor should fail when getSharedSpace fail', () async {
       final exception = Exception();
-      when(sharedSpaceRepository.getSharedSpaces()).thenThrow(exception);
+      when(sharedSpaceRepository.getSharedSpace(sharedSpaceId1)).thenThrow(exception);
 
-      final result = await getAllSharedSpacesInteractor.execute();
+      final result = await getSharedSpaceInteractor.execute(sharedSpaceId1);
 
-      result.fold(
-        (failure) => expect(failure, isA<SharedSpacesFailure>()),
-        (success) => expect(success, isA<SharedSpacesViewState>()));
+      result.fold((failure) => expect(failure, isA<SharedSpaceFailure>()),
+          (success) => expect(success, isA<SharedSpaceViewState>()));
 
-      expect(result, Left<Failure, Success>(SharedSpacesFailure(exception)));
+      expect(result, Left<Failure, Success>(SharedSpaceFailure(exception)));
     });
   });
 }

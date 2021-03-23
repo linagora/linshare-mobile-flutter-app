@@ -99,7 +99,7 @@ class SharedSpaceViewModel extends BaseViewModel {
         },
         (success) {
           store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpaceViewState) ? success.sharedSpacesList : [];
+          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
         }));
     };
   }

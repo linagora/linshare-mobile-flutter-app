@@ -112,6 +112,8 @@ export 'src/model/sort/order_by.dart';
 export 'src/model/sort/order_type.dart';
 export 'src/model/contact/contact.dart';
 export 'src/model/contact/device_contact.dart';
+export 'src/model/sharedspace/members_parameter.dart';
+export 'src/model/sharedspace/roles_parameter.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -160,6 +162,7 @@ export 'src/usecases/name_verification/verify_name_interactor.dart';
 export 'src/usecases/contact/get_device_contact_suggestions_interactor.dart';
 export 'src/usecases/autocomplete/get_autocomplete_sharing_with_device_contact_interactor.dart';
 export 'src/usecases/shared_space/download_preview_work_group_document_interactor.dart';
+export 'src/usecases/shared_space/get_shared_space_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

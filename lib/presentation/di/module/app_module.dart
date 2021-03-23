@@ -227,6 +227,7 @@ class AppModule {
     getIt.registerFactory(() => GetAutoCompleteSharingWithDeviceContactInteractor(
         getIt<GetAutoCompleteSharingInteractor>(),
         getIt<GetDeviceContactSuggestionsInteractor>()));
+    getIt.registerFactory(() => GetSharedSpaceInteractor(getIt<SharedSpaceRepository>()));
   }
 
   void _provideSharePreference() {

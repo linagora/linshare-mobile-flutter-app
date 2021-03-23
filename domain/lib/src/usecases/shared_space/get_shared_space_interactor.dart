@@ -32,45 +32,29 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:testshared/testshared.dart';
+import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
-import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
+class GetSharedSpaceInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-void main() {
-  group('get_all_shared_spaces_interactor', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    GetAllSharedSpacesInteractor getAllSharedSpacesInteractor;
+  GetSharedSpaceInteractor(this._sharedSpaceRepository);
 
-    setUp(() {
-      sharedSpaceRepository = MockSharedSpaceRepository();
-      getAllSharedSpacesInteractor = GetAllSharedSpacesInteractor(sharedSpaceRepository);
-    });
-
-    test('get all shared spaces interactor should return success with shared spaces list', () async {
-      when(sharedSpaceRepository.getSharedSpaces()).thenAnswer((_) async => [sharedSpace1, sharedSpace2]);
-
-      final result = await getAllSharedSpacesInteractor.execute();
-
-      final sharedSpacesList = result.map((success) => (success as SharedSpacesViewState).sharedSpacesList)
-          .getOrElse(() => []);
-
-      expect(sharedSpacesList, containsAllInOrder([sharedSpace1, sharedSpace2]));
-    });
-
-
-    test('get all shared spaces interactor should fail when getAllSharedSpaces fail', () async {
-      final exception = Exception();
-      when(sharedSpaceRepository.getSharedSpaces()).thenThrow(exception);
-
-      final result = await getAllSharedSpacesInteractor.execute();
-
-      result.fold(
-        (failure) => expect(failure, isA<SharedSpacesFailure>()),
-        (success) => expect(success, isA<SharedSpacesViewState>()));
-
-      expect(result, Left<Failure, Success>(SharedSpacesFailure(exception)));
-    });
-  });
+  Future<Either<Failure, Success>> execute(
+    SharedSpaceId sharedSpaceId,
+    {
+      MembersParameter membersParameter = MembersParameter.withoutMembers,
+      RolesParameter rolesParameter = RolesParameter.withRole
+    }
+  ) async {
+    try {
+      final sharedspace = await _sharedSpaceRepository.getSharedSpace(
+        sharedSpaceId,
+        membersParameter: membersParameter,
+        rolesParameter: rolesParameter
+      );
+      return Right<Failure, Success>(SharedSpaceViewState(sharedspace));
+    } catch (exception) {
+      return Left<Failure, Success>(SharedSpaceFailure(exception));
+    }
+  }
 }
