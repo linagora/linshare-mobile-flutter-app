@@ -43,7 +43,7 @@ final sharedSpaceReducer = combineReducers<SharedSpaceState>([
         viewState: action.viewState,
         newSharedSpacesList: action.viewState.fold(
           (failure) => [],
-          (success) => (success is SharedSpaceViewState) ? success.sharedSpacesList : []))),
+          (success) => (success is SharedSpacesViewState) ? success.sharedSpacesList : []))),
   TypedReducer<SharedSpaceState, SharedSpaceSetSearchResultAction>((SharedSpaceState state, SharedSpaceSetSearchResultAction action) =>
       state.setSharedSpaces(newSharedSpacesList: action.sharedSpaceNodes)),
   TypedReducer<SharedSpaceState, CleanSharedSpaceStateAction>((SharedSpaceState state, _) => state.clearViewState()),

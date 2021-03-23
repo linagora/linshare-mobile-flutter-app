@@ -269,7 +269,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         (failure) => RefreshIndicator(
             onRefresh: () async =>
                 _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.destinationPickerType),
-            child: failure is SharedSpaceFailure
+            child: failure is SharedSpacesFailure
                 ? BackgroundWidgetBuilder()
                     .key(Key('shared_space_error_background'))
                     .image(SvgPicture.asset(_imagePath.icUnexpectedError,

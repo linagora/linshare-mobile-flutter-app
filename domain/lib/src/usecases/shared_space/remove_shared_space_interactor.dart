@@ -45,7 +45,7 @@ class RemoveSharedSpaceInteractor {
       final sharedSpace = await _sharedSpaceRepository.deleteSharedSpace(sharedSpaceId);
       return Right<Failure, Success>(RemoveSharedSpaceViewState(sharedSpace));
     } catch (exception) {
-      if (exception is SharedSpacesNotFound) {
+      if (exception is SharedSpaceNotFound) {
         return Left<Failure, Success>(RemoveSharedSpaceNotFoundFailure());
       } else {
         return Left<Failure, Success>(RemoveSharedSpaceFailure(exception));

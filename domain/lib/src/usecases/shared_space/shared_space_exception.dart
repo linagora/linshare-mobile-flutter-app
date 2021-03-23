@@ -33,13 +33,13 @@
 import 'package:domain/src/usecases/remote_exception.dart';
 
 abstract class SharedSpaceException extends RemoteException {
-  static final SharedSpacesNotFound = 'SharedSpace not found';
+  static final SharedSpaceNotFound = 'SharedSpace not found';
 
   SharedSpaceException(String message) : super(message);
 }
 
-class SharedSpacesNotFound extends SharedSpaceException {
-  SharedSpacesNotFound() : super(SharedSpaceException.SharedSpacesNotFound);
+class SharedSpaceNotFound extends SharedSpaceException {
+  SharedSpaceNotFound() : super(SharedSpaceException.SharedSpaceNotFound);
 
   @override
   List<Object> get props => [];
