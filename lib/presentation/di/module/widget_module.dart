@@ -114,7 +114,10 @@ class WidgetModule {
       getIt<RemoveMultipleDocumentsInteractor>(),
       getIt<DownloadMultipleFileIOSInteractor>(),
       getIt<SearchDocumentInteractor>(),
-      getIt<DownloadPreviewDocumentInteractor>()
+      getIt<DownloadPreviewDocumentInteractor>(),
+      getIt<SortInteractor>(),
+      getIt<GetSorterInteractor>(),
+      getIt<SaveSorterInteractor>()
     ));
   }
 
