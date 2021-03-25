@@ -114,6 +114,7 @@ class AppModule {
     getIt.registerFactory<FunctionalityDataSource>(() => getIt<FunctionalityDataSourceImpl>());
     getIt.registerFactory<SortDataSource>(() => getIt<SortDataSourceImpl>());
     getIt.registerFactory<ContactDataSource>(() => getIt<ContactDataSourceImpl>());
+    getIt.registerFactory<SharedSpaceMemberDataSource>(() => getIt<SharedSpaceMemberDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -129,6 +130,7 @@ class AppModule {
     getIt.registerFactory(() => FunctionalityRepositoryImpl(getIt<FunctionalityDataSource>()));
     getIt.registerFactory(() => SortRepositoryImpl(getIt<SortDataSource>()));
     getIt.registerFactory(() => ContactRepositoryImpl(getIt<ContactDataSource>()));
+    getIt.registerFactory(() => SharedSpaceMemberRepositoryImpl(getIt<SharedSpaceMemberDataSource>()));
   }
 
   void _provideRepository() {
@@ -144,6 +146,7 @@ class AppModule {
     getIt.registerFactory<FunctionalityRepository>(() => getIt<FunctionalityRepositoryImpl>());
     getIt.registerFactory<SortRepository>(() => getIt<SortRepositoryImpl>());
     getIt.registerFactory<ContactRepository>(() => getIt<ContactRepositoryImpl>());
+    getIt.registerFactory<SharedSpaceMemberRepository>(() => getIt<SharedSpaceMemberRepositoryImpl>());
   }
 
   void _provideInteractor() {
@@ -234,6 +237,7 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()
     ));
+    getIt.registerFactory(() => GetAllSharedSpaceMembersInteractor(getIt<SharedSpaceMemberRepository>()));
   }
 
   void _provideSharePreference() {
