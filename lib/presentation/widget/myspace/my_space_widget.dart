@@ -54,13 +54,12 @@ import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/context_menu/sorter_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/document_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:redux/redux.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/order_by_extension.dart';
 
 class MySpaceWidget extends StatefulWidget {
   @override
@@ -627,56 +626,16 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         .build();
   }
 
-  String _getIconSort(OrderType orderType) {
-    return orderType == OrderType.ascending ? imagePath.icSortUpCurrent : imagePath.icSortDownCurrent;
-  }
-
   Widget _buildMenuSorter() {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       builder: (context, appState) {
-        return (!appState.uiState.isInSearchState() && appState.mySpaceState.documentList.isNotEmpty) ? ListTile(
-          leading: Transform(
-            transform: Matrix4.translationValues(5, 5, 0.0),
-            child: SvgPicture.asset(
-              _getIconSort(appState.mySpaceState.sorter.orderType),
-              width: 15,
-              height: 15,
-              fit: BoxFit.fill,
-              color: AppColor.primaryColor,
-            ),
-          ),
-          title: Transform(
-              transform: Matrix4.translationValues(-25, 0.0, 0.0),
-              child: Text(appState.mySpaceState.sorter.orderBy.getName(context),
-                maxLines: 1,
-                style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
-              )
-          ),
-          tileColor: AppColor.topBarBackgroundColor,
-          onTap: () => {mySpaceViewModel.openPopupMenuSorter(context, _listSorterActions(context, appState.mySpaceState.sorter))},
-        ) : SizedBox.shrink();
+        return !appState.uiState.isInSearchState()
+            ? OrderByButtonBuilder(context, appState.mySpaceState.sorter)
+                .onOpenOrderMenuAction((currentSorter) => mySpaceViewModel.openPopupMenuSorter(context, currentSorter))
+                .build()
+            : SizedBox.shrink();
       },
     );
-  }
-
-  List<Widget> _listSorterActions(BuildContext context, Sorter currentSorter) =>
-      currentSorter.getListSorter(currentSorter.orderScreen).map((element) {
-        return _sorterTileAction(
-            context,
-            Sorter(
-                element.orderScreen, element.orderBy, currentSorter.orderType),
-            currentSorter);
-      }).toList();
-
-  Widget _sorterTileAction(BuildContext context, Sorter sorter, Sorter currentSorter) {
-    return SorterMenuTileBuilder(
-          Key(sorter.orderBy.toString()),
-          SvgPicture.asset(_getIconSort(sorter.orderType), width: 18, height: 18, fit: BoxFit.fill),
-          sorter.orderBy.getName(context),
-          sorter,
-          sorter.orderBy == currentSorter.orderBy ? SelectMode.ACTIVE : SelectMode.INACTIVE)
-        .onActionClick((data) => {mySpaceViewModel.sortFiles(sorter)})
-        .build();
   }
 }

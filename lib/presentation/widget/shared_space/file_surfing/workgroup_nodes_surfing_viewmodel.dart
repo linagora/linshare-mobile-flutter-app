@@ -53,7 +53,9 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
@@ -72,10 +74,14 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   final SearchWorkGroupNodeInteractor _searchWorkGroupNodeInteractor;
   final DownloadWorkGroupNodeInteractor _downloadWorkGroupNodeInteractor;
   final DownloadPreviewWorkGroupDocumentInteractor _downloadPreviewWorkGroupDocumentInteractor;
+  final SortInteractor _sortInteractor;
+  final GetSorterInteractor _getSorterInteractor;
+  final SaveSorterInteractor _saveSorterInteractor;
   final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
-      BehaviorSubject.seeded(WorkGroupNodesSurfingState(null, [], FolderNodeType.normal));
+      BehaviorSubject.seeded(WorkGroupNodesSurfingState(null, [], FolderNodeType.normal,
+          sorter: Sorter.fromOrderScreen(OrderScreen.sharedSpace)));
   StreamView<WorkGroupNodesSurfingState> get stateSubscription => _stateSubscription;
 
   WorkGroupNodesSurfingState get currentState => _stateSubscription.value;
@@ -95,7 +101,10 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     this._downloadMultipleNodeIOSInteractor,
     this._searchWorkGroupNodeInteractor,
     this._downloadWorkGroupNodeInteractor,
-    this._downloadPreviewWorkGroupDocumentInteractor
+    this._downloadPreviewWorkGroupDocumentInteractor,
+    this._sortInteractor,
+    this._getSorterInteractor,
+    this._saveSorterInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -115,6 +124,8 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
               loadAllChildNodes();
             } else if (success is CreateSharedSpaceFolderViewState) {
               loadAllChildNodes();
+            } else if (success is SharedSpaceViewState) {
+              loadSorterAndAllChildNodes();
             }
       });
     });
@@ -195,6 +206,8 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
         }
       },
     );
+
+    store.dispatch(_sortFilesAction(currentState.sorter));
   }
 
   void openFolderContextMenu(BuildContext context, WorkGroupFolder workGroupFolder, List<Widget> actionTiles) {
@@ -495,5 +508,69 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
         .content(AppLocalizations.of(context).downloading_file(workGroupDocument.name))
         .actionText(AppLocalizations.of(context).cancel)
         .build());
+  }
+
+  void openPopupMenuSorter(BuildContext context, Sorter currentSorter) {
+    ContextMenuBuilder(context)
+        .addHeader(SimpleBottomSheetHeaderBuilder(Key('order_by_menu_header'))
+            .addLabel(AppLocalizations.of(context).order_by)
+            .build())
+        .addTiles(OrderByDialogBottomSheetBuilder(context, currentSorter)
+            .onSelectSorterAction((sorterSelected) => _sortFiles(sorterSelected))
+            .build())
+        .build();
+  }
+
+  void loadSorterAndAllChildNodes() async {
+    _stateSubscription.add(currentState.copyWith(showLoading: true));
+
+    final isRootFolder = currentState.folderNodeType == FolderNodeType.root;
+    final defaultSorter = Sorter.fromOrderScreen(OrderScreen.sharedSpace);
+
+    await Future.wait([
+      _getSorterInteractor.execute(OrderScreen.sharedSpace),
+      _getAllChildNodesInteractor.execute(isRootFolder ? currentState.sharedSpaceId : currentState.node.sharedSpaceId,
+        parentId: isRootFolder ? null : currentState.node.workGroupNodeId,
+      )
+    ]).then((response) async {
+      response[0].fold((failure) {
+        _stateSubscription.add(currentState.copyWith(sorter: defaultSorter));
+      }, (success) {
+        _stateSubscription.add(currentState.copyWith(sorter: success is GetSorterSuccess ? success.sorter : defaultSorter));
+      });
+      response[1].fold(
+        (failure) {
+          _workGroupNodesList = [];
+          _stateSubscription.add(currentState.copyWith(children: [], showLoading: false));
+        },
+        (success) {
+          _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : [];
+          _stateSubscription.add(currentState.setWorkGroupNodesList(_workGroupNodesList, showLoading: false));
+        },
+      );
+    });
+
+    store.dispatch(_sortFilesAction(currentState.sorter));
+  }
+
+  ThunkAction<AppState> _sortFilesAction(Sorter sorter) {
+    return (Store<AppState> store) async {
+      await Future.wait([
+        _saveSorterInteractor.execute(sorter),
+        _sortInteractor.execute(_workGroupNodesList, sorter)
+      ]).then((response) => response[1].fold((failure) {
+        _workGroupNodesList = [];
+        _stateSubscription.add(currentState.setWorkGroupNodesList(_workGroupNodesList, newSorter: sorter));
+      }, (success) {
+        _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : [];
+        _stateSubscription.add(currentState.setWorkGroupNodesList(_workGroupNodesList, newSorter: sorter));
+      }));
+    };
+  }
+
+  void _sortFiles(Sorter sorter) {
+    final newSorter = currentState.sorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
+    _appNavigation.popBack();
+    store.dispatch(_sortFilesAction(newSorter));
   }
 }
