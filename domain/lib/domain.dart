@@ -10,6 +10,7 @@ export 'src/extension/order_by_extension.dart';
 export 'src/extension/media_type_extension.dart';
 export 'src/extension/list_work_group_node_extension.dart';
 export 'src/extension/document_extensions.dart';
+export 'src/extension/work_group_node_extensions.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -116,6 +117,7 @@ export 'src/model/contact/contact.dart';
 export 'src/model/contact/device_contact.dart';
 export 'src/model/sharedspace/members_parameter.dart';
 export 'src/model/sharedspace/roles_parameter.dart';
+export 'src/model/operation.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';

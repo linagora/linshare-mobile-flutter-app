@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
@@ -56,20 +57,25 @@ import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
+import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:share/share.dart' as share_library;
-import 'package:open_file/open_file.dart' as open_file;
 
 class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
   final CopyMultipleFilesToMySpaceInteractor _copyMultipleToMySpaceInteractor;
+  final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
   final DownloadMultipleNodeIOSInteractor _downloadMultipleNodeIOSInteractor;
   final SearchWorkGroupNodeInteractor _searchWorkGroupNodeInteractor;
   final DownloadWorkGroupNodeInteractor _downloadWorkGroupNodeInteractor;
@@ -98,6 +104,7 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     this._getAllChildNodesInteractor,
     this._removeMultipleSharedSpaceNodesInteractor,
     this._copyMultipleToMySpaceInteractor,
+    this._copyMultipleFilesToSharedSpaceInteractor,
     this._downloadMultipleNodeIOSInteractor,
     this._searchWorkGroupNodeInteractor,
     this._downloadWorkGroupNodeInteractor,
@@ -418,6 +425,56 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
           .then((result) => result.fold(
               (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
               (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+    });
+  }
+
+  void copyTo(BuildContext context, List<WorkGroupNode> nodes, List<DestinationType> availableDestinationTypes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    final cancelAction = NegativeDestinationPickerAction(context,
+        label: AppLocalizations.of(context).cancel.toUpperCase());
+    cancelAction.onDestinationPickerActionClick((_) => _appNavigation.popBack());
+
+    final copyAction = CopyDestinationPickerAction(context);
+    copyAction.onDestinationPickerActionClick((data) {
+      if (data == DestinationType.mySpace) {
+        copyToMySpace(nodes);
+      }
+      if (data is WorkGroupNodesSurfingArguments){
+        _appNavigation.popBack();
+        store.dispatch(_copyToWorkgroupAction(nodes, data));
+      }
+    });
+
+    _appNavigation.push(RoutePaths.destinationPicker,
+        arguments: DestinationPickerArguments(
+            actionList: [copyAction, cancelAction],
+            operator: Operation.copyTo,
+            availableDestinationTypes: availableDestinationTypes
+        ));
+  }
+
+  OnlineThunkAction _copyToWorkgroupAction(List<WorkGroupNode> nodes, WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final parentNodeId = workGroupNodesSurfingArguments.folder != null
+        ? workGroupNodesSurfingArguments.folder.workGroupNodeId
+        : null;
+      await _copyMultipleFilesToSharedSpaceInteractor.execute(
+          copyRequests: nodes.map((node) => node.toCopyRequest()).toList(),
+          destinationSharedSpaceId: workGroupNodesSurfingArguments.sharedSpaceNodeNested.sharedSpaceId,
+          destinationParentNodeId: parentNodeId)
+        .then((result) => result.fold(
+          (failure) {
+            print('$failure');
+            store.dispatch(SharedSpaceAction(Left(failure)));
+          },
+          (success) {
+            print('$success');
+            store.dispatch(SharedSpaceAction(Right(success)));
+          }));
     });
   }
 
