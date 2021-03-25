@@ -119,6 +119,9 @@ export 'src/model/contact/device_contact.dart';
 export 'src/model/sharedspace/members_parameter.dart';
 export 'src/model/sharedspace/roles_parameter.dart';
 export 'src/model/operation.dart';
+export 'src/model/sharedspace/shared_space_member_id.dart';
+export 'src/model/sharedspace/shared_space_member.dart';
+export 'src/model/sharedspace/shared_space_member_node.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -169,6 +172,7 @@ export 'src/usecases/autocomplete/get_autocomplete_sharing_with_device_contact_i
 export 'src/usecases/shared_space/download_preview_work_group_document_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_interactor.dart';
 export 'src/usecases/received/download_preview_received_share_interactor.dart';
+export 'src/usecases/shared_space/get_all_shared_space_members_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -182,6 +186,7 @@ export 'src/repository/received/received_share_repository.dart';
 export 'src/repository/functionality/functionality_repository.dart';
 export 'src/repository/contact/contact_repository.dart';
 export 'src/repository/sort/sort_repository.dart';
+export 'src/repository/sharedspacemember/shared_space_member_repository.dart';
 
 // errorcode
 export 'src/errorcode/business_error_code.dart';
