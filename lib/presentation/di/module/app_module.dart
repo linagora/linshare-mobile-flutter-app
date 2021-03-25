@@ -96,6 +96,9 @@ class AppModule {
     getIt.registerFactory(() => SortDataSourceImpl(
         getIt<SharedPreferences>()));
     getIt.registerFactory(() => ContactDataSourceImpl());
+    getIt.registerLazySingleton(() => SharedSpaceMemberDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {

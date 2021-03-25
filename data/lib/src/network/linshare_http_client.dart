@@ -53,6 +53,7 @@ import 'package:data/src/network/model/request/share_document_body_request.dart'
 import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
+import 'package:data/src/network/model/response/shared_space_member_response.dart';
 import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/network/model/share/received_share_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
@@ -315,5 +316,15 @@ class LinShareHttpClient {
           BooleanQueryParameter('withRole', rolesParameter == RolesParameter.withRole),
         ].toMap());
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
+  }
+
+  Future<List<SharedSpaceMemberResponse>> getSharedSpaceMembers(SharedSpaceId sharedSpaceId) async {
+    final sharedSpaceMemberPath = Endpoint.sharedSpaces.withPathParameter(sharedSpaceId.uuid).withPathParameter('members').generateEndpointPath();
+
+    final List membersJson = await _dioClient.get(sharedSpaceMemberPath);
+
+    return membersJson
+      .map((data) => SharedSpaceMemberResponse.fromJson(data))
+      .toList();
   }
 }
