@@ -40,6 +40,18 @@ class Sorter extends Equatable {
 
   Sorter(this.orderScreen, this.orderBy, this.orderType);
 
+  static Sorter fromSorter(Sorter sorter, Sorter sorterSelected) {
+    if (sorter.orderBy == sorterSelected.orderBy) {
+      return Sorter(sorter.orderScreen, sorter.orderBy, sorterSelected.orderType);
+    } else {
+      return Sorter(sorter.orderScreen, sorter.orderBy, sorter.orderType);
+    }
+  }
+
+  static Sorter fromOrderScreen(OrderScreen orderScreen) {
+    return Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending);
+  }
+
   @override
   List<Object> get props => [orderScreen, orderBy, orderType];
 }
@@ -55,7 +67,7 @@ extension SorterExtension on Sorter {
       Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
       Sorter(orderScreen, OrderBy.fileSize, OrderType.descending),
       Sorter(orderScreen, OrderBy.name, OrderType.descending),
-      Sorter(orderScreen, OrderBy.shared, OrderType.descending)
+      if (orderScreen == OrderScreen.mySpace) Sorter(orderScreen, OrderBy.shared, OrderType.descending)
     ];
   }
 }
