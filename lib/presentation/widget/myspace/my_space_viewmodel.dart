@@ -231,7 +231,7 @@ class MySpaceViewModel extends BaseViewModel {
     _appNavigation.push(RoutePaths.destinationPicker,
         arguments: DestinationPickerArguments(
             actionList: [copyAction, cancelAction],
-            operator: Operation.copy));
+            operator: Operation.copyFromMySpace));
   }
 
   ThunkAction<AppState> _copyToWorkgroupAction(List<Document> documents, WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
@@ -240,7 +240,7 @@ class MySpaceViewModel extends BaseViewModel {
           ? workGroupNodesSurfingArguments.folder.workGroupNodeId
           : null;
       await _copyMultipleFilesToSharedSpaceInteractor.execute(
-          copyRequests: documents.map((document) => document.toCopyRequest()),
+          copyRequests: documents.map((document) => document.toCopyRequest()).toList(),
           destinationSharedSpaceId: workGroupNodesSurfingArguments.sharedSpaceNodeNested.sharedSpaceId,
           destinationParentNodeId: parentNodeId)
       .then((result) => result.fold(

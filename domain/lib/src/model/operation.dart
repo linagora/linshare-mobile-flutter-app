@@ -31,4 +31,9 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-enum Operation { copy, upload }
+enum Operation {
+  copyTo,
+  copyFromMySpace,
+  upload,
+  none
+}
