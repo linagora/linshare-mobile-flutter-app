@@ -8,6 +8,7 @@ export 'src/extension/string_extension.dart';
 export 'src/extension/list_document_extension.dart';
 export 'src/extension/order_by_extension.dart';
 export 'src/extension/media_type_extension.dart';
+export 'src/extension/list_work_group_node_extension.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -156,7 +157,7 @@ export 'src/usecases/preview_file/download_preview_document_interactor.dart';
 export 'src/usecases/sort/sort_interactor.dart';
 export 'src/usecases/sort/sort_view_state.dart';
 export 'src/usecases/sort/get_sorter_interactor.dart';
-export 'src/usecases/sort/save_sort_interactor.dart';
+export 'src/usecases/sort/save_sorter_interactor.dart';
 export 'src/usecases/shared_space/create_shared_space_folder_interactor.dart';
 export 'src/usecases/name_verification/verify_name_interactor.dart';
 export 'src/usecases/contact/get_device_contact_suggestions_interactor.dart';
