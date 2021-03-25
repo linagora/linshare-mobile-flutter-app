@@ -28,23 +28,26 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-
 import 'package:domain/domain.dart';
 
-class GetChildNodesViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNodes;
-
-  GetChildNodesViewState(this.workGroupNodes);
-
-  @override
-  List<Object> get props => [workGroupNodes];
-}
-
-class GetChildNodesFailure extends FeatureFailure {
-  final exception;
-
-  GetChildNodesFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+extension ListWorkGroupNode on List<WorkGroupNode> {
+  void sortFiles(OrderBy orderBy, OrderType orderType) {
+    sort((file1, file2) {
+      switch (orderBy) {
+        case OrderBy.modificationDate:
+          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
+        case OrderBy.creationDate:
+          return file2.creationDate.compareToSort(file1.creationDate, orderType);
+        case OrderBy.name:
+          return file2.name.compareToSort(file1.name, orderType);
+        case OrderBy.fileSize:
+          if (file2 is WorkGroupDocument && file1 is WorkGroupDocument) {
+            return file2.size.compareToSort(file1.size, orderType);
+          }
+          return 0;
+        default:
+          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
+      }
+    });
+  }
 }
