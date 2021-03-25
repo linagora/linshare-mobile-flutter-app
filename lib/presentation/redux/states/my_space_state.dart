@@ -53,7 +53,7 @@ class MySpaceState extends LinShareState with EquatableMixin {
   ) : super(viewState);
 
   factory MySpaceState.initial() {
-    return MySpaceState(Right(IdleState()), [], SelectMode.INACTIVE, Sorter(OrderScreen.mySpace, OrderBy.modificationDate, OrderType.descending));
+    return MySpaceState(Right(IdleState()), [], SelectMode.INACTIVE, Sorter.fromOrderScreen(OrderScreen.mySpace));
   }
 
   @override
