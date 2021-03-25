@@ -59,6 +59,7 @@ import 'package:linshare_flutter_app/presentation/view/header/context_menu_heade
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
@@ -424,13 +425,11 @@ class MySpaceViewModel extends BaseViewModel {
         _getAllDocumentInteractor.execute()
       ]).then((response) async {
         response[0].fold((failure) {
-          store.dispatch(MySpaceGetSorterAction(Sorter(OrderScreen.mySpace,
-              OrderBy.modificationDate, OrderType.descending)));
+          store.dispatch(MySpaceGetSorterAction(Sorter.fromOrderScreen(OrderScreen.mySpace)));
         }, (success) {
           store.dispatch(MySpaceGetSorterAction(success is GetSorterSuccess
               ? success.sorter
-              : Sorter(OrderScreen.mySpace, OrderBy.modificationDate,
-                  OrderType.descending)));
+              : Sorter.fromOrderScreen(OrderScreen.mySpace)));
         });
         response[1].fold((failure) {
           store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
@@ -564,16 +563,18 @@ class MySpaceViewModel extends BaseViewModel {
     return store.state.uiState.isInSearchState();
   }
 
-  void openPopupMenuSorter(BuildContext context, List<Widget> actionTiles) {
+  void openPopupMenuSorter(BuildContext context, Sorter currentSorter) {
     ContextMenuBuilder(context)
         .addHeader(SimpleBottomSheetHeaderBuilder(Key('order_by_menu_header'))
-        .addLabel(AppLocalizations.of(context).order_by)
-        .build())
-        .addTiles(actionTiles)
+            .addLabel(AppLocalizations.of(context).order_by)
+            .build())
+        .addTiles(OrderByDialogBottomSheetBuilder(context, currentSorter)
+            .onSelectSorterAction((sorterSelected) => _sortFiles(sorterSelected))
+            .build())
         .build();
   }
 
-  void sortFiles(Sorter sorter) {
+  void _sortFiles(Sorter sorter) {
     final newSorter = store.state.mySpaceState.sorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
     _appNavigation.popBack();
     store.dispatch(_sortFilesAction(newSorter));
