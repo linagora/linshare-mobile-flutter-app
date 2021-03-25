@@ -32,6 +32,7 @@
 
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:testshared/fixture/shared_space_document_fixture.dart';
 
 final sharedSpace1 = SharedSpaceNodeNested(
   SharedSpaceId('e352ed55-abef-4630-816f-c025caa3b025'),
@@ -83,4 +84,64 @@ final sharedSpaceResponse2 = SharedSpaceNodeNestedResponse(
   'Shared Space 2',
   LinShareNodeType.DRIVE,
   QuotaId('e352ed55-abef-4630-816f-c025caa3b025')
+);
+
+final sharedSpaceMember1 = SharedSpaceMember(
+  SharedSpaceMemberId('b4c8e5ba-8d94-11eb-8dcd-0242ac130003'),
+  account1,
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  SharedSpaceMemberNode(
+    SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+    'Shared Space Member Node 1',
+    LinShareNodeType.WORK_GROUP,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  ),
+  SharedSpaceRole(SharedSpaceRoleId('an id'), SharedSpaceRoleName.ADMIN),
+);
+
+final sharedSpaceMember2 = SharedSpaceMember(
+  SharedSpaceMemberId('d00df810-8d94-11eb-8dcd-0242ac130003'),
+  account2,
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  SharedSpaceMemberNode(
+    SharedSpaceId('e352ed55-ebef-4230-856f-c055caa6b025'),
+    'Shared Space Member Node 2',
+    LinShareNodeType.WORK_GROUP,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  ),
+  SharedSpaceRole(SharedSpaceRoleId('an id 2'), SharedSpaceRoleName.READER),
+);
+
+final sharedSpaceMemberResponse1 = SharedSpaceMemberResponse(
+  accountDto1,
+  SharedSpaceMemberNodeDto(
+    SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+    'Shared Space Member Node 1',
+    LinShareNodeType.WORK_GROUP,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  ),
+  SharedSpaceRoleDto(SharedSpaceRoleId('an id'), SharedSpaceRoleName.ADMIN),
+  SharedSpaceMemberId('b4c8e5ba-8d94-11eb-8dcd-0242ac130003'),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+);
+
+final sharedSpaceMemberResponse2 = SharedSpaceMemberResponse(
+  accountDto2,
+  SharedSpaceMemberNodeDto(
+    SharedSpaceId('e352ed55-ebef-4230-856f-c055caa6b025'),
+    'Shared Space Member Node 2',
+    LinShareNodeType.WORK_GROUP,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  ),
+  SharedSpaceRoleDto(SharedSpaceRoleId('an id 2'), SharedSpaceRoleName.READER),
+  SharedSpaceMemberId('d00df810-8d94-11eb-8dcd-0242ac130003'),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
 );

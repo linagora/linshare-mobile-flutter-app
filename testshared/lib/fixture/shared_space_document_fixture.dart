@@ -125,8 +125,20 @@ final sharedSpaceId1 = SharedSpaceId('1');
 final parentWorkGroupNodeId1 = WorkGroupNodeId('0');
 final workGroupNodeId1 = WorkGroupNodeId('1');
 final workGroupNodeId2 = WorkGroupNodeId('1');
-final account1 = AccountDto(
+final accountDto1 = AccountDto(
   'User1', 'user1@linagora.org', AccountId('1'), AccountType.INTERNAL, '', 'User1',
+);
+
+final accountDto2 = AccountDto(
+  'User2', 'user2@linagora.org', AccountId('2'), AccountType.INTERNAL, '', 'User2',
+);
+
+final account1 = Account(
+  'User1', 'user1@linagora.org', AccountId('1'), AccountType.INTERNAL, '', 'User1',
+);
+
+final account2 = Account(
+  'User2', 'user2@linagora.org', AccountId('2'), AccountType.INTERNAL, '', 'User2',
 );
 
 final sharedSpaceFolder1 = WorkGroupNodeFolderDto(
@@ -138,7 +150,7 @@ final sharedSpaceFolder1 = WorkGroupNodeFolderDto(
     DateTime.now(),
     'Folder 1',
     'Folder 1',
-    account1);
+    accountDto1);
 
 final sharedSpaceFolder2 = WorkGroupNodeFolderDto(
     workGroupNodeId2,
@@ -149,4 +161,4 @@ final sharedSpaceFolder2 = WorkGroupNodeFolderDto(
     DateTime.now(),
     'Folder 2',
     'Folder 2',
-    account1);
+    accountDto1);

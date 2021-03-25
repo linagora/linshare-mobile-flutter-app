@@ -60,7 +60,7 @@ class CopyToSharedSpaceViewState extends ViewState {
 }
 
 class CopyToSharedSpaceFailure extends FeatureFailure {
-  final Exception exception;
+  final exception;
 
   CopyToSharedSpaceFailure(this.exception);
 
@@ -105,7 +105,7 @@ class RemoveSharedSpaceNodeViewState extends ViewState {
 }
 
 class RemoveSharedSpaceNodeFailure extends FeatureFailure {
-  final Exception exception;
+  final exception;
 
   RemoveSharedSpaceNodeFailure(this.exception);
 
@@ -310,6 +310,24 @@ class SharedSpaceFailure extends FeatureFailure {
   final exception;
 
   SharedSpaceFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class SharedSpaceMembersViewState extends ViewState {
+  final List<SharedSpaceMember> members;
+
+  SharedSpaceMembersViewState(this.members);
+
+  @override
+  List<Object> get props => [members];
+}
+
+class SharedSpaceMembersFailure extends FeatureFailure {
+  final exception;
+
+  SharedSpaceMembersFailure(this.exception);
 
   @override
   List<Object> get props => [exception];
