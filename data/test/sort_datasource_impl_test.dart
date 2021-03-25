@@ -31,27 +31,37 @@
 
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
+import 'fixture/sort_fixture.dart';
+
 void main() {
+  getSorterTest();
+  sortFilesTest();
+  saveSorterTest();
+}
+
+void getSorterTest() {
   group('sort_data_source_impl getSorter test', () {
     SortDataSourceImpl _sortDataSourceImpl;
+    SharedPreferences _sharedPreferences;
 
-    test(
-        'getSorter should return success with order_by is modificationDate & order_type is descending saved',
-        () async {
+    Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({
         'sort_file_order_by_${sorter.orderScreen.toString()}':
-            OrderBy.modificationDate.toString(),
+        OrderBy.modificationDate.toString(),
         'sort_file_order_type_${sorter.orderScreen.toString()}':
-            OrderType.descending.toString()
+        OrderType.descending.toString()
       });
 
-      final _sharedPreferences = await SharedPreferences.getInstance();
-
+      _sharedPreferences = await SharedPreferences.getInstance();
       _sortDataSourceImpl = SortDataSourceImpl(_sharedPreferences);
+    }
+
+    test('getSorter should return success with order_by is modificationDate & order_type is descending saved', () async {
+      await _initDataSource();
 
       final result = await _sortDataSourceImpl.getSorter(sorter.orderScreen);
 
@@ -65,19 +75,8 @@ void main() {
           result.orderType.toString());
     });
 
-    test(
-        'getSorter should return success with order_by is creationDate & order_type is descending saved',
-        () async {
-      SharedPreferences.setMockInitialValues({
-        'sort_file_order_by_${sorter.orderScreen.toString()}':
-            OrderBy.creationDate.toString(),
-        'sort_file_order_type_${sorter.orderScreen.toString()}':
-            OrderType.descending.toString()
-      });
-
-      final _sharedPreferences = await SharedPreferences.getInstance();
-
-      _sortDataSourceImpl = SortDataSourceImpl(_sharedPreferences);
+    test('getSorter should return success with order_by is creationDate & order_type is descending saved', () async {
+      await _initDataSource();
 
       final result = await _sortDataSourceImpl.getSorter(sorter1.orderScreen);
 
@@ -90,33 +89,51 @@ void main() {
               'sort_file_order_type_${sorter1.orderScreen.toString()}'),
           result.orderType.toString());
     });
+  });
+}
 
-    test(
-        'sortFiles should return success with list file has been sorted modification date',
-        () async {
+void sortFilesTest() {
+  group('sort_data_source_impl sort files test', () {
+    SortDataSourceImpl _sortDataSourceImpl;
+    SharedPreferences _sharedPreferences;
+
+    Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({});
-
-      final _sharedPreferences = await SharedPreferences.getInstance();
-
+      _sharedPreferences = await SharedPreferences.getInstance();
       _sortDataSourceImpl = SortDataSourceImpl(_sharedPreferences);
+    }
 
-      final result = await _sortDataSourceImpl
-          .sortFiles([documentSort1, documentSort2, documentSort3], sorter);
+    test('sortFiles should return success with list file has been sorted modification date', () async {
+      await _initDataSource();
+
+      final result = await _sortDataSourceImpl.sortFiles([documentSort1, documentSort2, documentSort3], sorter);
       expect(result, [documentSort3, documentSort2, documentSort1]);
     });
-  });
 
+    test('sortFiles should return success with list WorkGroupNode has been sorted modification date', () async {
+      await _initDataSource();
+
+      final result = await _sortDataSourceImpl.sortFiles(
+          [workGroupDocument1, workGroupDocument2, workGroupFolder1],
+          sorterSharedSpace);
+      expect(result, [workGroupDocument1, workGroupDocument2, workGroupFolder1]);
+    });
+  });
+}
+
+void saveSorterTest() {
   group('sort_data_source_impl saveSorter test', () {
     SortDataSourceImpl _sortDataSourceImpl;
+    SharedPreferences _sharedPreferences;
 
-    test(
-        'saveSorter should return success with order_by is modificationDate & order_type is descending saved',
-        () async {
+    Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({});
-
-      final _sharedPreferences = await SharedPreferences.getInstance();
-
+      _sharedPreferences = await SharedPreferences.getInstance();
       _sortDataSourceImpl = SortDataSourceImpl(_sharedPreferences);
+    }
+
+    test('saveSorter should return success with order_by is modificationDate & order_type is descending saved', () async {
+      await _initDataSource();
 
       await _sharedPreferences.setString(
           'sort_file_order_by_${sorter.orderScreen.toString()}',
@@ -137,14 +154,8 @@ void main() {
           result.orderType.toString());
     });
 
-    test(
-        'saveSorter should return success with order_by is creationDate & order_type is descending saved',
-        () async {
-      SharedPreferences.setMockInitialValues({});
-
-      final _sharedPreferences = await SharedPreferences.getInstance();
-
-      _sortDataSourceImpl = SortDataSourceImpl(_sharedPreferences);
+    test('saveSorter should return success with order_by is creationDate & order_type is descending saved', () async {
+      await _initDataSource();
 
       await _sharedPreferences.setString(
           'sort_file_order_by_${sorter1.orderScreen.toString()}',
