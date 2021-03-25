@@ -34,41 +34,43 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
-import 'package:equatable/equatable.dart';
 
 @immutable
 class DestinationPickerState extends LinShareState with EquatableMixin {
   final List<SharedSpaceNodeNested> sharedSpacesList;
   final DestinationPickerRouteData routeData;
+  final Operation operation;
 
-  DestinationPickerState(Either<Failure, Success> viewState, this.sharedSpacesList, this.routeData) : super(viewState);
+  DestinationPickerState(Either<Failure, Success> viewState, this.sharedSpacesList, this.routeData, this.operation) : super(viewState);
 
   factory DestinationPickerState.initial() {
-    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial());
+    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial(), Operation.none);
   }
 
   @override
   LinShareState clearViewState() {
-    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial());
+    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial(), Operation.none);
   }
 
   @override
   LinShareState sendViewState({Either<Failure, Success> viewState}) {
-    return DestinationPickerState(viewState, sharedSpacesList, routeData);
+    return DestinationPickerState(viewState, sharedSpacesList, routeData, operation);
   }
 
   LinShareState setDestinationPickerState(
       {Either<Failure, Success> viewState,
       List<SharedSpaceNodeNested> newSharedSpacesList,
-      DestinationPickerRouteData routeData}) {
-    return DestinationPickerState(viewState, newSharedSpacesList, routeData ?? this.routeData);
+      DestinationPickerRouteData routeData,
+      Operation operation}) {
+    return DestinationPickerState(viewState, newSharedSpacesList, routeData ?? this.routeData, operation ?? this.operation);
   }
 
   @override
   DestinationPickerState startLoadingState() {
-    return DestinationPickerState(Right(LoadingState()), sharedSpacesList, routeData);
+    return DestinationPickerState(Right(LoadingState()), sharedSpacesList, routeData, operation);
   }
 
   @override
@@ -93,5 +95,5 @@ class DestinationPickerRouteData with EquatableMixin {
 }
 
 enum DestinationPickerCurrentView {
-  sharedSpace, sharedSpaceInside, uploadDestination
+  sharedSpace, sharedSpaceInside, chooseSpaceDestination
 }
