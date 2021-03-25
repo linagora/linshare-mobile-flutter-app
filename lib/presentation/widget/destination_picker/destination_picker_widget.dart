@@ -41,7 +41,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/destination_picke
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/choose_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
@@ -121,14 +120,14 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         leading: StoreConnector<AppState, DestinationPickerState>(
             converter: (store) => store.state.destinationPickerState,
             builder: (context, state)  {
-              if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.uploadDestination) {
+              if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.chooseSpaceDestination) {
                 return IconButton(icon: SvgPicture.asset(_imagePath.icClose),
                     onPressed: () => _destinationPickerViewModel.handleOnSharedSpaceBackPress());
               } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpace) {
                 if (_destinationPickerArguments.operator == Operation.upload) {
                   return IconButton(
                       icon: SvgPicture.asset(_imagePath.icBackBlue),
-                      onPressed: () => _destinationPickerViewModel.backToUploadDestination());
+                      onPressed: () => _destinationPickerViewModel.backToChooseSpaceDestination());
                 }
                 return IconButton(
                     icon: SvgPicture.asset(_imagePath.icClose),
@@ -149,14 +148,11 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               child: StoreConnector<AppState, DestinationPickerState>(
                   converter: (store) => store.state.destinationPickerState,
                   builder: (context, state) {
-                    if (state.routeData.destinationPickerCurrentView ==
-                        DestinationPickerCurrentView.sharedSpace) {
+                    if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpace) {
                       return _buildSharedSpacesList(context, state);
-                    } else if (state.routeData.destinationPickerCurrentView ==
-                        DestinationPickerCurrentView.uploadDestination) {
-                      return _buildUploadDestinationPickerList();
-                    } else if (state.routeData.destinationPickerCurrentView ==
-                        DestinationPickerCurrentView.sharedSpaceInside) {
+                    } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.chooseSpaceDestination) {
+                      return _buildChooseSpaceDestination(state.operation);
+                    } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
                       return WorkGroupDetailFilesWidget(
                         _workGroupDetailFilesWidgetKey,
                         state.routeData.sharedSpaceNodeNested,
@@ -231,18 +227,18 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     return listAction;
   }
 
-  Widget _buildUploadDestinationPickerList() {
+  Widget _buildChooseSpaceDestination(Operation pickerForOperation) {
     return ListView.builder(
       key: Key('shared_spaces_list'),
       padding: EdgeInsets.zero,
       itemCount: _destinationPickerViewModel.destinationTypeList.length,
       itemBuilder: (context, index) {
-        return _buildUploadDestinationPickerListItem(_destinationPickerViewModel.destinationTypeList[index]);
+        return _buildChooseSpaceDestinationItem(pickerForOperation, _destinationPickerViewModel.destinationTypeList[index]);
       },
     );
   }
 
-  Widget _buildUploadDestinationPickerListItem(DestinationType destinationType) {
+  Widget _buildChooseSpaceDestinationItem(Operation pickerForOperation, DestinationType destinationType) {
     return _isDestinationAvailable(destinationType)
       ? ListTile(
           leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -260,10 +256,10 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
             style: TextStyle(
                 fontSize: 14, color: AppColor.documentNameItemTextColor),
           ),
-          onTap: () => _destinationPickerViewModel.onUploadDestinationPressed(
+          onTap: () => _destinationPickerViewModel.onChoseSpaceDestination(
               destinationType,
-              _destinationPickerArguments.actionList.firstWhere(
-                  (element) => element is ChooseDestinationPickerAction)),)
+              pickerForOperation,
+              _destinationPickerArguments.actionList))
         : SizedBox.shrink();
   }
 
@@ -360,12 +356,8 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   }
 
   bool _isDestinationAvailable(DestinationType destinationType) {
-    if (_destinationPickerArguments != null
+    return _destinationPickerArguments != null
         && _destinationPickerArguments.availableDestinationTypes != null
         && _destinationPickerArguments.availableDestinationTypes.contains(destinationType)
-    ) {
-      return true;
-    }
-    return false;
   }
 }

@@ -60,14 +60,16 @@ class DestinationPickerBackToSharedSpaceAction extends ActionOnline {
 
 @immutable
 class DestinationPickerGoToSharedSpaceAction extends ActionOnline {
+  final Operation pickerForOperation;
 
-  DestinationPickerGoToSharedSpaceAction();
+  DestinationPickerGoToSharedSpaceAction(this.pickerForOperation);
 }
 
 @immutable
-class DestinationPickerGoToUploadDestinationAction extends ActionOnline {
+class GoToChooseSpaceAction extends ActionOnline {
+  final Operation pickerForOperation;
 
-  DestinationPickerGoToUploadDestinationAction();
+  GoToChooseSpaceAction(this.pickerForOperation);
 }
 
 @immutable
