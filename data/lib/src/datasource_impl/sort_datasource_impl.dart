@@ -34,6 +34,7 @@ import 'package:domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SortDataSourceImpl implements SortDataSource {
+
   final SharedPreferences _sharedPreferences;
 
   SortDataSourceImpl(this._sharedPreferences);
@@ -60,14 +61,32 @@ class SortDataSourceImpl implements SortDataSource {
   Future<List<T>> sortFiles<T>(List<T> listFiles, Sorter sorter) {
     return Future.sync(() async {
       if (listFiles is List<Document>) {
-        (listFiles as List<Document>).sortFiles(sorter.orderBy, sorter.orderType);
+        listFiles.cast<Document>().sortFiles(sorter.orderBy, sorter.orderType);
+      } else if (listFiles is List<WorkGroupNode>) {
+        if (sorter.orderBy == OrderBy.fileSize) {
+          final listWorkGroupFolder = listFiles.whereType<WorkGroupFolder>()
+                                               .toList();
+          final listWorkGroupDocument = listFiles.whereType<WorkGroupDocument>()
+                                                 .toList()
+          ..sortFiles(sorter.orderBy, sorter.orderType);
+
+          listFiles = (sorter.orderType == OrderType.descending
+                  ? [listWorkGroupDocument, listWorkGroupFolder]
+                  : [listWorkGroupFolder, listWorkGroupDocument])
+              .expand((workGroupNode) => workGroupNode)
+              .cast<T>()
+              .toList();
+        } else {
+          listFiles.cast<WorkGroupNode>()
+                   .sortFiles(sorter.orderBy, sorter.orderType);
+        }
       }
       return listFiles;
     });
   }
 
   @override
-  Future<Sorter> saveSorter(Sorter sorter) {
+  Future<Sorter> saveSorter(Sorter sorter) async {
     return Future.wait([
       _sharedPreferences.setString(
           'sort_file_order_by_${sorter.orderScreen.toString()}',
