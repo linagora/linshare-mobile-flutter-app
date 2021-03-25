@@ -51,6 +51,7 @@ import 'package:linshare_flutter_app/presentation/view/background_widgets/backgr
 import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_document_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/workgroupnode_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
@@ -85,7 +86,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context).settings.arguments as WorkGroupNodesSurfingArguments;
       _model.initial(_arguments);
-      _model.loadAllChildNodes();
+      _model.loadSorterAndAllChildNodes();
     });
   }
 
@@ -104,6 +105,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
           children: [
             widget.nodeSurfingType == NodeSurfingType.normal ? _buildTopBar() : SizedBox.shrink(),
             snapshot.data?.selectMode == SelectMode.ACTIVE ? _buildMultipleSelectionTopBar(snapshot.data) : SizedBox.shrink(),
+            _buildMenuSorter(),
             _buildResultCount(),
             Expanded(child: RefreshIndicator(
               key: _refreshIndicatorKey,
@@ -578,6 +580,19 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMenuSorter() {
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, appState) {
+        return !appState.uiState.isInSearchState()
+            ? OrderByButtonBuilder(context, _model.currentState.sorter)
+                .onOpenOrderMenuAction((currentSorter) => _model.openPopupMenuSorter(context, currentSorter))
+                .build()
+            : SizedBox.shrink();
+      },
     );
   }
 }

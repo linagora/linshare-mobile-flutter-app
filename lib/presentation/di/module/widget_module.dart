@@ -178,7 +178,10 @@ class WidgetModule {
       getIt.get<DownloadMultipleNodeIOSInteractor>(),
       getIt.get<SearchWorkGroupNodeInteractor>(),
       getIt.get<DownloadWorkGroupNodeInteractor>(),
-      getIt.get<DownloadPreviewWorkGroupDocumentInteractor>()
+      getIt.get<DownloadPreviewWorkGroupDocumentInteractor>(),
+      getIt.get<SortInteractor>(),
+      getIt.get<GetSorterInteractor>(),
+      getIt.get<SaveSorterInteractor>()
     ));
     getIt.registerFactory(() => WorkGroupDetailFilesViewModel(
       getIt.get<Store<AppState>>(),

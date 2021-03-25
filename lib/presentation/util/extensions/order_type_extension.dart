@@ -28,23 +28,12 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-import 'package:domain/domain.dart';
 
-extension ListWorkGroupDocument on List<WorkGroupDocument> {
-  void sortFiles(OrderBy orderBy, OrderType orderType) {
-    sort((file1, file2) {
-      switch (orderBy) {
-        case OrderBy.modificationDate:
-          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
-        case OrderBy.creationDate:
-          return file2.creationDate.compareToSort(file1.creationDate, orderType);
-        case OrderBy.fileSize:
-          return file2.size.compareToSort(file1.size, orderType);
-        case OrderBy.name:
-          return file2.name.compareToSort(file1.name, orderType);
-        default:
-          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
-      }
-    });
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+
+extension OrderTypeExtension on OrderType {
+  String getSortIconPath(AppImagePaths imagePath) {
+    return this == OrderType.ascending ? imagePath.icSortUpCurrent : imagePath.icSortDownCurrent;
   }
 }
