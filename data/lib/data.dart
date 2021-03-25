@@ -12,6 +12,7 @@ export 'src/datasource/quota_datasource.dart';
 export 'src/datasource/functionality_datasource.dart';
 export 'src/datasource/sort_datasource.dart';
 export 'src/datasource/contact_datasource.dart';
+export 'src/datasource/shared_space_member_datasource.dart';
 
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
@@ -24,6 +25,7 @@ export 'src/datasource_impl/quota_datasource_impl.dart';
 export 'src/datasource_impl/functionality_datasource_impl.dart';
 export 'src/datasource_impl/contact_datasource_impl.dart';
 export 'src/datasource_impl/sort_datasource_impl.dart';
+export 'src/datasource_impl/shared_space_member_datasource_impl.dart';
 
 // config
 export 'src/network/config/dynamic_url_interceptors.dart';
@@ -48,6 +50,8 @@ export 'src/network/model/autocomplete/mailing_list_autocomplete_result_dto.dart
 export 'src/network/model/autocomplete/simple_autocomplete_result_dto.dart';
 export 'src/network/model/autocomplete/user_autocomplete_result_dto.dart';
 export 'src/network/model/request/create_shared_space_node_folder_request.dart';
+export 'package:data/src/network/model/response/shared_space_member_response.dart';
+export 'package:data/src/network/model/response/shared_space_member_node_dto.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
@@ -62,6 +66,7 @@ export 'src/repository/quota/quota_repository_impl.dart';
 export 'src/repository/functionality/functionality_repository_impl.dart';
 export 'src/repository/sort/sort_repository_impl.dart';
 export 'src/repository/contact/contact_repository_impl.dart';
+export 'src/repository/sharedspacemember/shared_space_member_repository_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';

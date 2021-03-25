@@ -170,7 +170,7 @@ void main() {
         DateTime.now(),
         'Dat is good',
         'description',
-        account1
+        accountDto1
       );
 
       final request = CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId);
@@ -198,7 +198,7 @@ void main() {
         DateTime.now(),
         'Dat is good',
         'description',
-        account1
+        accountDto1
       );
 
       final request = CreateSharedSpaceNodeFolderRequest('Dat is good');
