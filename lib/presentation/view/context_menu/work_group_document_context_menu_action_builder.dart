@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu
 
 class WorkGroupDocumentContextMenuTileBuilder extends ContextMenuActionBuilder<WorkGroupNode> {
   final WorkGroupNode _workGroupNode;
+  Widget _trailing;
 
   WorkGroupDocumentContextMenuTileBuilder(
     Key key,
@@ -51,11 +52,17 @@ class WorkGroupDocumentContextMenuTileBuilder extends ContextMenuActionBuilder<W
     this._workGroupNode
   ) : super(key, actionIcon, actionName);
 
+  WorkGroupDocumentContextMenuTileBuilder trailing(Widget trailing) {
+    _trailing = trailing;
+    return this;
+  }
+
   @override
   ListTile build() {
     return ListTile(
       key: key,
       leading: actionIcon,
+      trailing: _trailing,
       title: Text(
         actionName,
         style: actionTextStyle()),

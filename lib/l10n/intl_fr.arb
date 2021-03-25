@@ -696,5 +696,10 @@
   "@no_description": {
     "type": "text",
     "placeholders": {}
+  },
+  "copy_to": "Copy to",
+  "@copy_to": {
+    "type": "text",
+    "placeholders": {}
   }
 }

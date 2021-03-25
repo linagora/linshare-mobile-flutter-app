@@ -896,6 +896,13 @@ class AppLocalizations {
       name: 'no_description',
     );
   }
+
+  String get copy_to {
+    return Intl.message(
+      'Copy to',
+      name : 'copy_to'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
