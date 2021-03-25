@@ -40,9 +40,27 @@ class GetSorterSuccess extends ViewState {
   List<Object> get props => [sorter];
 }
 class GetSorterFailure extends Failure {
-  final dynamic exception;
+  final exception;
 
   GetSorterFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class SortFileSuccess extends ViewState {
+  final List listFiles;
+
+  SortFileSuccess(this.listFiles);
+
+  @override
+  List<Object> get props => [listFiles];
+}
+
+class SortFileFailure extends Failure {
+  final exception;
+
+  SortFileFailure(this.exception);
 
   @override
   List<Object> get props => [exception];

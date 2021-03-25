@@ -57,5 +57,15 @@ void main() {
 
       expect(documentList, [documentSort3, documentSort2, documentSort1]);
     });
+
+    test('sortFiles should return success with WorkGroupNode has been sorted by modificationDate', () async {
+      when(sortRepository.sortFiles([workGroupDocument1, workGroupDocument2, workGroupFolder1], sorter)).thenAnswer((_) async => [workGroupDocument1, workGroupDocument2, workGroupFolder1]);
+
+      final result = await sortInteractor.execute([workGroupDocument1, workGroupDocument2, workGroupFolder1], sorter);
+
+      final workGroupNodes = result.map((success) => (success as GetChildNodesViewState).workGroupNodes).getOrElse(() => []);
+
+      expect(workGroupNodes, [workGroupDocument1, workGroupDocument2, workGroupFolder1]);
+    });
   });
 }

@@ -38,23 +38,26 @@ class SortInteractor {
 
   SortInteractor(this._sortRepository);
 
-  Future<Either<Failure, Success>> execute<T>(List<T> listDocument, Sorter sorter) async {
-    final resultState = await catching(() => _sortRepository.sortFiles(listDocument, sorter))
-        .fold(
-            (exception) async {
-              switch(sorter.orderScreen) {
-                case OrderScreen.mySpace:
-                  return Left<Failure, Success>(MySpaceFailure(exception));
-              }
-            },
-            (documents) async {
-              final result = await documents;
-              if (result is List<Document>) {
-                return Right<Failure, Success>(MySpaceViewState(result as List<Document>));
-              } else {
-                return Right<Failure, Success>(MySpaceViewState([]));
-              }
-            });
-    return resultState;
+  Future<Either<Failure, Success>> execute<T>(List<T> listFiles, Sorter sorter) async {
+    try {
+      final filesSorted = await _sortRepository.sortFiles(listFiles, sorter);
+
+      if (filesSorted is List<Document>) {
+        return Right<Failure, Success>(MySpaceViewState(filesSorted.cast<Document>()));
+      } else if (filesSorted is List<WorkGroupNode>) {
+        return Right<Failure, Success>(GetChildNodesViewState(filesSorted.cast<WorkGroupNode>()));
+      } else {
+        return Right<Failure, Success>(SortFileSuccess(filesSorted));
+      }
+    } catch (exception) {
+      switch (sorter.orderScreen) {
+        case OrderScreen.mySpace:
+          return Left<Failure, Success>(MySpaceFailure(exception));
+        case OrderScreen.sharedSpace:
+          return Left<Failure, Success>(GetChildNodesFailure(exception));
+        default:
+          return Left<Failure, Success>(SortFileFailure(exception));
+      }
+    }
   }
 }
