@@ -175,6 +175,7 @@ class WidgetModule {
       getIt.get<GetAllChildNodesInteractor>(),
       getIt.get<RemoveMultipleSharedSpaceNodesInteractor>(),
       getIt.get<CopyMultipleFilesToMySpaceInteractor>(),
+      getIt.get<CopyMultipleFilesToSharedSpaceInteractor>(),
       getIt.get<DownloadMultipleNodeIOSInteractor>(),
       getIt.get<SearchWorkGroupNodeInteractor>(),
       getIt.get<DownloadWorkGroupNodeInteractor>(),
