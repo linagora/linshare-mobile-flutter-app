@@ -35,7 +35,9 @@ import 'package:linshare_flutter_app/presentation/redux/actions/destination_pick
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/base_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/choose_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 import 'package:redux/src/store.dart';
@@ -51,22 +53,31 @@ class DestinationPickerViewModel extends BaseViewModel {
   DestinationPickerViewModel(Store<AppState> store, this._getAllSharedSpacesInteractor, this._appNavigation) : super(store);
 
   void setCurrentViewByOperation(Operation operation) {
-    if (operation == Operation.upload) {
-      store.dispatch(DestinationPickerGoToUploadDestinationAction());
-    } else {
-      store.dispatch(DestinationPickerGoToSharedSpaceAction());
-      getAllSharedSpaces(operation);
+    switch (operation) {
+      case Operation.copyTo:
+        store.dispatch(GoToChooseSpaceAction(operation));
+        break;
+      case Operation.upload:
+        store.dispatch(GoToChooseSpaceAction(operation));
+        break;
+      default:
+        store.dispatch(DestinationPickerGoToSharedSpaceAction(operation));
+        getAllSharedSpaces(operation);
     }
   }
 
-  void onUploadDestinationPressed(DestinationType uploadDestinationType, ChooseDestinationPickerAction action) {
-    if (uploadDestinationType == DestinationType.workGroup) {
-      store.dispatch(DestinationPickerGoToSharedSpaceAction());
-      getAllSharedSpaces(Operation.upload);
-    } else if (uploadDestinationType == DestinationType.mySpace) {
-      if (action != null) {
-        action.actionClick(null);
-      }
+  void onChoseSpaceDestination(DestinationType choseDestinationType, Operation pickerForOperation, List<BaseDestinationPickerAction> actionList) {
+    if (choseDestinationType == DestinationType.workGroup) {
+      store.dispatch(DestinationPickerGoToSharedSpaceAction(pickerForOperation));
+      getAllSharedSpaces(pickerForOperation);
+    } else if (choseDestinationType == DestinationType.mySpace) {
+      actionList.forEach((action) {
+        if (action != null) {
+          if (action is CopyDestinationPickerAction || action is ChooseDestinationPickerAction) {
+            action.actionClick(choseDestinationType);
+          }
+        }
+      });
     }
   }
 
@@ -82,11 +93,14 @@ class DestinationPickerViewModel extends BaseViewModel {
               (success) => store.dispatch(DestinationPickerGetAllSharedSpacesAction(
                   (success as SharedSpacesViewState).sharedSpacesList
                       .where((element) {
-                        if (operation == Operation.copy) {
+                        if (operation == Operation.copyFromMySpace) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles
                               .contains(element.sharedSpaceRole.name);
                         } else if (operation == Operation.upload) {
                           return SharedSpaceOperationRole.uploadToSharedSpaceRoles
+                              .contains(element.sharedSpaceRole.name);
+                        } else if (operation == Operation.copyTo) {
+                          return SharedSpaceOperationRole.copyToSharedSpaceRoles
                               .contains(element.sharedSpaceRole.name);
                         }
                         return true;
@@ -103,8 +117,8 @@ class DestinationPickerViewModel extends BaseViewModel {
     store.dispatch(DestinationPickerBackToSharedSpaceAction());
   }
 
-  void backToUploadDestination() {
-    store.dispatch(DestinationPickerGoToUploadDestinationAction());
+  void backToChooseSpaceDestination() {
+    store.dispatch(GoToChooseSpaceAction(null));
   }
 
   void handleOnSharedSpaceBackPress() {
