@@ -48,23 +48,31 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'upload_destination_type.dart';
 
+enum ContactSuggestionSource {
+  all, linShareContact, deviceContact
+}
+
 class UploadFileViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final UploadShareFileManager _uploadShareFileManager;
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
+  final GetAutoCompleteSharingWithDeviceContactInteractor _getAutoCompleteSharingWithDeviceContactInteractor;
   StreamSubscription _autoCompleteResultListSubscription;
+  ContactSuggestionSource _contactSuggestionSource = ContactSuggestionSource.linShareContact;
 
   UploadFileViewModel(
     Store<AppState> store,
     this._appNavigation,
     this._uploadShareFileManager,
     this._getAutoCompleteSharingInteractor,
+    this._getAutoCompleteSharingWithDeviceContactInteractor,
   ) : super(store) {
     _autoCompleteResultListSubscription = _autoCompleteResultListObservable.listen((shareMails) {
       switch (_shareTypeArgument) {
@@ -86,6 +94,8 @@ class UploadFileViewModel extends BaseViewModel {
           break;
       }
     });
+
+    Future.delayed(Duration(milliseconds: 500), () => _checkContactPermission());
   }
 
   List<FileInfo> _uploadFilesArgument;
@@ -222,8 +232,17 @@ class UploadFileViewModel extends BaseViewModel {
     }
   }
 
-  Future<List<AutoCompleteResult>> getAutoCompleteSharing(
-      String pattern) async {
+  Future<List<AutoCompleteResult>> getAutoCompleteSharing(String pattern) async {
+    if (_contactSuggestionSource == ContactSuggestionSource.all) {
+      return await _getAutoCompleteSharingWithDeviceContactInteractor
+          .execute(AutoCompletePattern(pattern), AutoCompleteType.sharing)
+          .then(
+            (viewState) => viewState.fold(
+              (failure) => <AutoCompleteResult>[],
+              (success) => (success as AutoCompleteViewState).results,
+        ),
+      );
+    }
     return await _getAutoCompleteSharingInteractor
         .execute(AutoCompletePattern(pattern), AutoCompleteType.sharing)
         .then(
@@ -287,6 +306,18 @@ class UploadFileViewModel extends BaseViewModel {
 
   void cancelSelection() {
     store.dispatch(MySpaceClearSelectedDocumentsAction());
+  }
+
+  void _checkContactPermission() async {
+    final permissionStatus = await Permission.contacts.status;
+    if (permissionStatus.isGranted) {
+      _contactSuggestionSource = ContactSuggestionSource.all;
+    } else if (!permissionStatus.isPermanentlyDenied) {
+      final requestedPermission = await Permission.contacts.request();
+      _contactSuggestionSource = requestedPermission == PermissionStatus.granted
+          ? ContactSuggestionSource.all
+          : _contactSuggestionSource;
+    }
   }
 
   @override
