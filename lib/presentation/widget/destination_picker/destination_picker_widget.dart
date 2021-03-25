@@ -358,6 +358,6 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   bool _isDestinationAvailable(DestinationType destinationType) {
     return _destinationPickerArguments != null
         && _destinationPickerArguments.availableDestinationTypes != null
-        && _destinationPickerArguments.availableDestinationTypes.contains(destinationType)
+        && _destinationPickerArguments.availableDestinationTypes.contains(destinationType);
   }
 }

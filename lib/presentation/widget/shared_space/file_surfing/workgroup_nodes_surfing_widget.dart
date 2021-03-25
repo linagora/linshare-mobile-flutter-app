@@ -56,6 +56,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfi
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 
 import 'workgroup_nodes_surfing_navigator_widget.dart';
 
@@ -380,10 +381,10 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
 
   List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument) {
     return [
-      _copyToMySpaceAction(context, [workGroupDocument]),
       if (Platform.isIOS) _exportFileAction([workGroupDocument]),
       if (Platform.isAndroid) _downloadFilesAction([workGroupDocument]),
-      _previewWorkGroupDocumentAction(workGroupDocument)
+      _previewWorkGroupDocumentAction(workGroupDocument),
+      _copyToAction(context, [workGroupDocument])
     ];
   }
 
@@ -491,16 +492,28 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         .build();
   }
 
-  Widget _copyToMySpaceAction(BuildContext context, List<WorkGroupNode> workGroupNodes) {
-    return workGroupNodes.any((element) => element is WorkGroupFolder) ?
-      SizedBox.shrink() :
-      WorkGroupDocumentContextMenuTileBuilder(
-        Key('copy_in_my_space_context_menu_action'),
-        SvgPicture.asset(imagePath.icCopy,
+  Widget _copyToAction(
+    BuildContext context,
+    List<WorkGroupNode> nodes,
+    {ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    return nodes.any((element) => element is WorkGroupFolder)
+      ? SizedBox.shrink()
+      : WorkGroupDocumentContextMenuTileBuilder(
+          Key('copy_to_context_menu_action'),
+          SvgPicture.asset(
+            imagePath.icSharedSpace,
             width: 24, height: 24, fit: BoxFit.fill),
-        AppLocalizations.of(context).copy_to_my_space,
-        workGroupNodes.first)
-        .onActionClick((data) => _model.copyToMySpace(workGroupNodes))
+          AppLocalizations.of(context).copy_to, nodes[0])
+        .trailing(SvgPicture.asset(
+          imagePath.icArrowRight,
+          width: 24, height: 24,
+          fit: BoxFit.fill))
+        .onActionClick((data) => _model.copyTo(
+          context,
+          nodes,
+          [DestinationType.mySpace, DestinationType.workGroup],
+          itemSelectionType: itemSelectionType))
         .build();
   }
 
@@ -549,9 +562,9 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
 
   List<Widget> _moreActionList(BuildContext context, List<WorkGroupNode> workGroupNodes) {
     return [
-      _copyToMySpaceAction(context, workGroupNodes),
       if (Platform.isIOS) _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
-      if (Platform.isAndroid) _downloadFilesAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple)
+      if (Platform.isAndroid) _downloadFilesAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
+      _copyToAction(context, workGroupNodes, itemSelectionType: ItemSelectionType.multiple)
     ];
   }
 

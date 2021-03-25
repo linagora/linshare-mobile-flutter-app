@@ -34,6 +34,8 @@
 import 'dart:async';
 
 import 'package:domain/domain.dart';
+import 'package:filesize/filesize.dart';
+import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
@@ -51,9 +53,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:redux/redux.dart';
-import 'package:filesize/filesize.dart';
-
-import 'package:flutter/material.dart';
 
 class ToastMessageHandler {
   final Store<AppState> _store = getIt<Store<AppState>>();
@@ -187,6 +186,9 @@ class ToastMessageHandler {
         _cleanSharedSpaceViewState();
       } else if (failure is RemoveSharedSpaceNotFoundFailure) {
         _cleanSharedSpaceViewState();
+      } else if (failure is CopyToSharedSpaceFailure || failure is CopyMultipleFilesToSharedSpaceAllFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
+        _cleanSharedSpaceViewState();
       }
     }, (success) {
       if (success is RemoveSharedSpaceNodeViewState) {
@@ -215,6 +217,9 @@ class ToastMessageHandler {
         _cleanSharedSpaceViewState();
       } else if (success is RemoveSomeSharedSpacesSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+        _cleanSharedSpaceViewState();
+      } else  if (success is CopyToSharedSpaceViewState || success is CopyMultipleFilesToSharedSpaceAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_is_copied_to_a_shared_space);
         _cleanSharedSpaceViewState();
       }
     });
