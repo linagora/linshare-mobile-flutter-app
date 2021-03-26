@@ -30,36 +30,53 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/model/shared_space_details_info.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
+import 'package:redux/redux.dart';
 
-class UploadFileArguments extends RouterArguments {
-  final List<FileInfo> uploadFiles;
-  ShareType shareType;
-  List<Document> documents;
-  WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo;
+class SharedSpaceDetailsViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
+  final GetSharedSpaceInteractor _getSharedSpaceInteractor;
+  final GetQuotaInteractor _getQuotaInteractor;
 
-  UploadFileArguments(this.uploadFiles, {
-    ShareType shareType = ShareType.uploadAndShare,
-    List<Document> documents,
-    WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo
-  }) {
-    this.shareType = shareType;
-    this.documents = documents;
-    this.workGroupDocumentUploadInfo = workGroupDocumentUploadInfo;
+  SharedSpaceNodeNested sharedSpaceNodeNested;
+
+  SharedSpaceDetailsViewModel(
+    Store<AppState> store,
+    this._appNavigation,
+    this._getSharedSpaceInteractor,
+    this._getQuotaInteractor
+  ) : super(store);
+
+  Future<SharedSpaceNodeNested> getSharedSpace(SharedSpaceId sharedSpaceId) async {
+    return (await _getSharedSpaceInteractor.execute(sharedSpaceId))
+        .map((result) => result as SharedSpaceViewState)
+        .getOrElse(() => null)
+        .sharedSpace;
   }
-}
 
-enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
+  Future<AccountQuota> getAccountQuota(QuotaId quotaId) async {
+    return (await _getQuotaInteractor.execute(quotaId))
+        .map((result) => result as AccountQuotaViewState)
+        .getOrElse(() => null)
+        .accountQuota;
+  }
 
-enum ShareButtonType { justUpload, uploadAndShare, workGroup }
+  Future<SharedSpaceDetailsInfo> getSharedSpaceDetails(SharedSpaceDetailsArguments sharedSpaceDetailsArguments) async {
+    return await getSharedSpace(sharedSpaceDetailsArguments.sharedSpaceId).then(
+      (sharedSpace) => getAccountQuota(sharedSpace.quotaId).then((accountQuota) =>
+        SharedSpaceDetailsInfo(sharedSpace, accountQuota)));
+  }
 
-class WorkGroupDocumentUploadInfo {
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
-  final WorkGroupNode currentNode;
-  final FolderNodeType folderType;
+  void backToSharedSpacesList() {
+    _appNavigation.popBack();
+  }
 
-  WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);
-
-  bool isRootNode() => folderType == FolderNodeType.root ? true : false;
+  @override
+  void onDisposed() {
+    super.onDisposed();
+  }
 }

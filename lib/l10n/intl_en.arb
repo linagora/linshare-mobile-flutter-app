@@ -626,5 +626,75 @@
   "@create_new_folder": {
     "type": "text",
     "placeholders": {}
+  },
+  "modification_date": "Modification date",
+  "@modification_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creation_date": "Creation date",
+  "@creation_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "size": "Size",
+  "@size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Name",
+  "@name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared": "Shared",
+  "@shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order_by": "Order by",
+  "@order_by": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "details": "Details",
+  "@details": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "members": "Members",
+  "@members": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "modified": "Modified",
+  "@modified": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "created": "Created",
+  "@created": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_rights": "My rights",
+  "@my_rights": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "max_file_size": "Max file size",
+  "@max_file_size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "description": "Description",
+  "@description": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no_description": "No description",
+  "@no_description": {
+    "type": "text",
+    "placeholders": {}
   }
 }
