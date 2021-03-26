@@ -31,8 +31,9 @@
 //
 
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
-class WorkGroupNodesSurfingArguments{
+class WorkGroupNodesSurfingArguments extends RouterArguments {
   final FolderNodeType folderType;
   final WorkGroupFolder folder;
   final SharedSpaceNodeNested sharedSpaceNodeNested;

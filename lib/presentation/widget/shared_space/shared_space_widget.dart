@@ -316,7 +316,9 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   }
 
   List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
-    return [];
+    return [
+      _sharedSpaceDetailsAction(sharedSpace.element)
+    ];
   }
 
   Widget _contextMenuFooterAction(SharedSpaceNodeNested sharedSpace) {
@@ -329,6 +331,15 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                 (data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
             .build()
         : SizedBox.shrink();
+  }
+
+  Widget _sharedSpaceDetailsAction(SharedSpaceNodeNested sharedSpace) {
+    return SimpleContextMenuActionBuilder(
+            Key('shared_space_details_context_menu_action'),
+            SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).details)
+        .onActionClick((data) => sharedSpaceViewModel.goToSharedSpaceDetails(sharedSpace))
+        .build();
   }
 
   Widget _buildSharedSpaceName(String sharedSpaceName) {

@@ -57,6 +57,8 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfi
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
@@ -78,6 +80,7 @@ class WidgetModule {
     _provideDestinationPickerComponent();
     _provideAccountDetailsComponent();
     _provideReceivedShareWidgetComponent();
+    _provideSharedSpaceDetailsWidgetComponent();
   }
 
   void _provideLoginComponent() {
@@ -221,6 +224,16 @@ class WidgetModule {
         getIt.get<AppNavigation>(),
         getIt.get<CopyMultipleFilesFromReceivedSharesToMySpaceInteractor>(),
         getIt.get<DownloadReceivedSharesInteractor>()
+    ));
+  }
+
+  void _provideSharedSpaceDetailsWidgetComponent() {
+    getIt.registerFactory(() => SharedSpaceDetailsWidget());
+    getIt.registerFactory(() => SharedSpaceDetailsViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetSharedSpaceInteractor>(),
+        getIt.get<GetQuotaInteractor>()
     ));
   }
 }
