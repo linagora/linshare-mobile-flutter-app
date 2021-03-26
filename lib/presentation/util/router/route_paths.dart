@@ -41,4 +41,5 @@ class RoutePaths {
   static const String destinationPicker = 'destination_picker';
   static const String account_details = 'account_details';
   static const String received_shares = 'received_shares';
+  static const String sharedSpaceDetails = 'shared_space_details';
 }

@@ -50,6 +50,7 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -222,6 +223,14 @@ class SharedSpaceViewModel extends BaseViewModel {
 
   void cancelSelection() {
     store.dispatch(SharedSpaceClearSelectedSharedSpacesAction());
+  }
+
+  void goToSharedSpaceDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
+    _appNavigation.popBack();
+    _appNavigation.push(
+      RoutePaths.sharedSpaceDetails,
+      arguments: SharedSpaceDetailsArguments(sharedSpaceNodeNested.sharedSpaceId)
+    );
   }
 
   @override
