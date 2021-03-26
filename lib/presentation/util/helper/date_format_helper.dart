@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,38 +28,8 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:intl/intl.dart';
 
-class UploadFileArguments extends RouterArguments {
-  final List<FileInfo> uploadFiles;
-  ShareType shareType;
-  List<Document> documents;
-  WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo;
-
-  UploadFileArguments(this.uploadFiles, {
-    ShareType shareType = ShareType.uploadAndShare,
-    List<Document> documents,
-    WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo
-  }) {
-    this.shareType = shareType;
-    this.documents = documents;
-    this.workGroupDocumentUploadInfo = workGroupDocumentUploadInfo;
-  }
-}
-
-enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
-
-enum ShareButtonType { justUpload, uploadAndShare, workGroup }
-
-class WorkGroupDocumentUploadInfo {
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
-  final WorkGroupNode currentNode;
-  final FolderNodeType folderType;
-
-  WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);
-
-  bool isRootNode() => folderType == FolderNodeType.root ? true : false;
-}
+final DateFormat workGroupDetailsDateFormat = DateFormat('EEEE dd, yyyy');

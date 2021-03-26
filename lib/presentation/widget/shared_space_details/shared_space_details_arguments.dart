@@ -31,35 +31,9 @@
 
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
 
-class UploadFileArguments extends RouterArguments {
-  final List<FileInfo> uploadFiles;
-  ShareType shareType;
-  List<Document> documents;
-  WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo;
+class SharedSpaceDetailsArguments extends RouterArguments {
+  final SharedSpaceId sharedSpaceId;
 
-  UploadFileArguments(this.uploadFiles, {
-    ShareType shareType = ShareType.uploadAndShare,
-    List<Document> documents,
-    WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo
-  }) {
-    this.shareType = shareType;
-    this.documents = documents;
-    this.workGroupDocumentUploadInfo = workGroupDocumentUploadInfo;
-  }
-}
-
-enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
-
-enum ShareButtonType { justUpload, uploadAndShare, workGroup }
-
-class WorkGroupDocumentUploadInfo {
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
-  final WorkGroupNode currentNode;
-  final FolderNodeType folderType;
-
-  WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);
-
-  bool isRootNode() => folderType == FolderNodeType.root ? true : false;
+  SharedSpaceDetailsArguments(this.sharedSpaceId);
 }

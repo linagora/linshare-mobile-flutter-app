@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-24T11:09:14.115550",
+  "@@last_modified": "2021-03-26T11:17:02.580452",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -634,6 +634,46 @@
   },
   "order_by": "Order by",
   "@order_by": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "details": "Details",
+  "@details": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "members": "Members",
+  "@members": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "modified": "Modified",
+  "@modified": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "created": "Created",
+  "@created": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_rights": "My rights",
+  "@my_rights": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "max_file_size": "Max file size",
+  "@max_file_size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "description": "Description",
+  "@description": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no_description": "No description",
+  "@no_description": {
     "type": "text",
     "placeholders": {}
   }

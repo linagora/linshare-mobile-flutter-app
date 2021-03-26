@@ -840,6 +840,62 @@ class AppLocalizations {
     return Intl.message('Order by',
         name: 'order_by');
   }
+
+  String get details {
+    return Intl.message(
+      'Details',
+      name: 'details',
+    );
+  }
+
+  String get members {
+    return Intl.message(
+      'Members',
+      name: 'members',
+    );
+  }
+
+  String get modified {
+    return Intl.message(
+      'Modified',
+      name: 'modified',
+    );
+  }
+
+  String get created {
+    return Intl.message(
+      'Created',
+      name: 'created',
+    );
+  }
+
+  String get my_rights {
+    return Intl.message(
+      'My rights',
+      name: 'my_rights',
+    );
+  }
+
+  String get max_file_size {
+    return Intl.message(
+      'Max file size',
+      name: 'max_file_size',
+    );
+  }
+
+  String get description {
+    return Intl.message(
+      'Description',
+      name: 'description',
+    );
+  }
+
+  String get no_description {
+    return Intl.message(
+      'No description',
+      name: 'no_description',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

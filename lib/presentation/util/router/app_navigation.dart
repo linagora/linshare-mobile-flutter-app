@@ -30,13 +30,14 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
 class AppNavigation {
   final GlobalKey<NavigatorState> navigatorKey;
 
   AppNavigation(this.navigatorKey);
 
-  Future push(String routeName, {Object arguments}) {
+  Future push(String routeName, {RouterArguments arguments}) {
     return navigatorKey.currentState
         .pushNamed(routeName, arguments: RouteSettings(arguments: arguments));
   }
