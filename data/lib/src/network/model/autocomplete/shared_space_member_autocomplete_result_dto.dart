@@ -30,22 +30,63 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/datasource/autocomplete_datasource.dart';
+import 'package:data/src/network/model/converter/account_id_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:data/src/network/model/converter/thread_id_converter.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class AutoCompleteRepositoryImpl implements AutoCompleteRepository {
-  final AutoCompleteDataSource _autoCompleteDataSource;
+part 'shared_space_member_autocomplete_result_dto.g.dart';
 
-  AutoCompleteRepositoryImpl(this._autoCompleteDataSource);
+@JsonSerializable()
+@ThreadIdConverter()
+@AccountIdConverter()
+class SharedSpaceMemberAutoCompleteResultDto extends AutoCompleteResult {
+  final String firstName;
+  final String lastName;
+  final String domain;
+  final String mail;
+  final bool member;
+
+  @JsonKey(name: 'threadUuid')
+  final ThreadId threadId;
+  final String type;
+
+  @JsonKey(name: 'userUuid')
+  final AccountId accountId;
+
+  SharedSpaceMemberAutoCompleteResultDto(
+    String identifier,
+    String display,
+    this.firstName,
+    this.lastName,
+    this.domain,
+    this.mail,
+    this.member,
+    this.threadId,
+    this.type,
+    this.accountId
+  ) : super(identifier, display);
+
+  factory SharedSpaceMemberAutoCompleteResultDto.fromJson(Map<String, dynamic> json) => _$SharedSpaceMemberAutoCompleteResultDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SharedSpaceMemberAutoCompleteResultDtoToJson(this);
 
   @override
-  Future<List<AutoCompleteResult>> getAutoComplete(
-      AutoCompletePattern autoCompletePattern,
-      AutoCompleteType autoCompleteType,
-      {
-        ThreadId threadId
-      }
-  ) async {
-    return _autoCompleteDataSource.getAutoComplete(autoCompletePattern, autoCompleteType, threadId: threadId);
-  }
+  List<Object> get props => [identifier, display, firstName, lastName, domain, mail];
+}
+
+extension UserAutoCompleteResultDtoExtension on SharedSpaceMemberAutoCompleteResultDto {
+  SharedSpaceMemberAutoCompleteResult toSharedSpaceMemberAutoCompleteResult() =>
+      SharedSpaceMemberAutoCompleteResult(
+        identifier,
+        display,
+        firstName,
+        lastName,
+        domain,
+        mail,
+        member,
+        threadId,
+        type,
+        accountId
+      );
 }

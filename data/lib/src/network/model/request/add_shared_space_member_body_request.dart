@@ -28,24 +28,46 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:data/src/datasource/autocomplete_datasource.dart';
+import 'package:data/src/network/model/converter/account_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_role_id_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'dart:convert';
 
-class AutoCompleteRepositoryImpl implements AutoCompleteRepository {
-  final AutoCompleteDataSource _autoCompleteDataSource;
+part 'add_shared_space_member_body_request.g.dart';
 
-  AutoCompleteRepositoryImpl(this._autoCompleteDataSource);
+@JsonSerializable()
+@AccountIdConverter()
+@SharedSpaceIdConverter()
+@SharedSpaceRoleIdConverter()
+class AddSharedSpaceMemberBodyRequest with EquatableMixin {
+  final AccountId account;
+  final SharedSpaceId node;
+  final SharedSpaceRoleId role;
+
+  AddSharedSpaceMemberBodyRequest(
+    this.account,
+    this.node,
+    this.role
+  );
+
+  factory AddSharedSpaceMemberBodyRequest.fromJson(Map<String, dynamic> json) => _$AddSharedSpaceMemberBodyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('account'): { jsonEncode('uuid'): jsonEncode(account.uuid) },
+    jsonEncode('node'): { jsonEncode('uuid'): jsonEncode(node.uuid) },
+    jsonEncode('role'): { jsonEncode('uuid'): jsonEncode(role.uuid) },
+  };
 
   @override
-  Future<List<AutoCompleteResult>> getAutoComplete(
-      AutoCompletePattern autoCompletePattern,
-      AutoCompleteType autoCompleteType,
-      {
-        ThreadId threadId
-      }
-  ) async {
-    return _autoCompleteDataSource.getAutoComplete(autoCompletePattern, autoCompleteType, threadId: threadId);
+  List<Object> get props => [account, node, role];
+}
+
+extension AddSharedSpaceMemberExtension on AddSharedSpaceMemberRequest {
+  AddSharedSpaceMemberBodyRequest toBodyRequest() {
+    return AddSharedSpaceMemberBodyRequest(account, node, role);
   }
 }

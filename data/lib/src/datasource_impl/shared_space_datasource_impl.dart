@@ -120,4 +120,21 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
       });
     });
   }
+
+  @override
+  Future<List<SharedSpaceRole>> getSharedSpaceRoles() {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getSharedSpaceRoles()).map((role) => role.toSharedSpaceRole()).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw SharedSpaceRolesNotFound();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }

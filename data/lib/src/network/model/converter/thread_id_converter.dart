@@ -30,22 +30,17 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/datasource/autocomplete_datasource.dart';
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class AutoCompleteRepositoryImpl implements AutoCompleteRepository {
-  final AutoCompleteDataSource _autoCompleteDataSource;
-
-  AutoCompleteRepositoryImpl(this._autoCompleteDataSource);
+class ThreadIdConverter implements JsonConverter<ThreadId, String> {
+  const ThreadIdConverter();
 
   @override
-  Future<List<AutoCompleteResult>> getAutoComplete(
-      AutoCompletePattern autoCompletePattern,
-      AutoCompleteType autoCompleteType,
-      {
-        ThreadId threadId
-      }
-  ) async {
-    return _autoCompleteDataSource.getAutoComplete(autoCompletePattern, autoCompleteType, threadId: threadId);
-  }
+  ThreadId fromJson(String json) => ThreadId(json);
+
+  @override
+  String toJson(ThreadId object) => jsonEncode(object.uuid);
 }
