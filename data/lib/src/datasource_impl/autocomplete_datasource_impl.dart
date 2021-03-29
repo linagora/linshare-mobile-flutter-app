@@ -33,6 +33,7 @@
 import 'package:data/src/datasource/autocomplete_datasource.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/model/autocomplete/mailing_list_autocomplete_result_dto.dart';
+import 'package:data/src/network/model/autocomplete/shared_space_member_autocomplete_result_dto.dart';
 import 'package:data/src/network/model/autocomplete/simple_autocomplete_result_dto.dart';
 import 'package:data/src/network/model/autocomplete/user_autocomplete_result_dto.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
@@ -51,14 +52,20 @@ class AutoCompleteDataSourceImpl implements AutoCompleteDataSource {
   @override
   Future<List<AutoCompleteResult>> getAutoComplete(
       AutoCompletePattern autoCompletePattern,
-      AutoCompleteType autoCompleteType) {
+      AutoCompleteType autoCompleteType,
+      {
+        ThreadId threadId
+      }
+  ) {
     return Future.sync(() async {
-      final listAutoCompleteResultDto = await _linShareHttpClient.getSharingAutoComplete(autoCompletePattern);
+      final listAutoCompleteResultDto = await _linShareHttpClient.getSharingAutoComplete(autoCompletePattern, autoCompleteType, threadId: threadId);
       return listAutoCompleteResultDto.map((data) {
         if (data is SimpleAutoCompleteResultDto) {
           return data.toSimpleAutoCompleteResult();
         } else if (data is UserAutoCompleteResultDto) {
           return data.toUserAutoCompleteResult();
+        } else if (data is SharedSpaceMemberAutoCompleteResultDto) {
+          return data.toSharedSpaceMemberAutoCompleteResult();
         } else {
           return (data as MailingListAutoCompleteResultDto).toMailingListAutoCompleteResult();
         }

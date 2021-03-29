@@ -52,10 +52,10 @@ void main() {
     });
 
     test('getAutoComplete should return success with valid data', () async {
-      when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('user')))
+      when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('user'), AutoCompleteType.SHARING))
           .thenAnswer((_) async => [simpleAutoCompleteResultDto1, userAutoCompleteResultDto1, mailingListAutoCompleteResultDto1]);
 
-      final result = await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('user'), AutoCompleteType.sharing);
+      final result = await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('user'), AutoCompleteType.SHARING);
       expect(result, [simpleAutoCompleteResult1, userAutoCompleteResult1, mailingListAutoCompleteResult1]);
     });
 
@@ -64,10 +64,10 @@ void main() {
           type: DioErrorType.RESPONSE,
           response: Response(statusCode: 404)
       );
-      when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('user')))
+      when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('user'), AutoCompleteType.SHARING))
           .thenThrow(error);
 
-      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('user'), AutoCompleteType.sharing)
+      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('user'), AutoCompleteType.SHARING)
           .catchError((error) => expect(error, isA<DocumentNotFound>()));
     });
 
@@ -76,18 +76,18 @@ void main() {
           type: DioErrorType.RESPONSE,
           response: Response(statusCode: 500, data: {'errCode': 1000})
       );
-      when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('us')))
+      when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(error);
 
-      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.sharing)
+      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING)
           .catchError((error) => expect(error, isA<InvalidPatternMinimumCharactersLengthException>()));
     });
 
     test('getAutoComplete should throw exception when linShareHttpClient throw exception', () async {
-      when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('us')))
+      when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(Exception());
 
-      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.sharing)
+      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING)
           .catchError((error) => expect(error, isA<UnknownError>()));
     });
   });
