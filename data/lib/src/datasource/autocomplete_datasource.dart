@@ -33,5 +33,11 @@
 import 'package:domain/domain.dart';
 
 abstract class AutoCompleteDataSource {
-  Future<List<AutoCompleteResult>> getAutoComplete(AutoCompletePattern autoCompletePattern, AutoCompleteType autoCompleteType);
+  Future<List<AutoCompleteResult>> getAutoComplete(
+    AutoCompletePattern autoCompletePattern,
+    AutoCompleteType autoCompleteType,
+    {
+      ThreadId threadId
+    }
+  );
 }

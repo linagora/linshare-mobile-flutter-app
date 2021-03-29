@@ -62,12 +62,14 @@ import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.d
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
+import 'model/autocomplete/shared_space_member_autocomplete_result_dto.dart';
 import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
 import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
+import 'model/request/add_shared_space_member_body_request.dart';
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -167,12 +169,18 @@ class LinShareHttpClient {
   }
 
   Future<List<AutoCompleteResult>> getSharingAutoComplete(
-      AutoCompletePattern autoCompletePattern) async {
+      AutoCompletePattern autoCompletePattern,
+      AutoCompleteType autoCompleteType,
+      { ThreadId threadId }
+  ) async {
     final List resultJson = await _dioClient.get(
         Endpoint.autocomplete
             .withPathParameter(autoCompletePattern.value)
             .generateEndpointPath(),
-        queryParameters: [StringQueryParameter('type', 'SHARING')].toMap());
+        queryParameters: [
+          threadId != null ? StringQueryParameter('threadUuid', threadId.uuid) : null,
+          StringQueryParameter('type', autoCompleteType.toString().split('.').last)
+        ].toMap());
     return resultJson.map((data) => _getDynamicAutoCompleteResult(data)).toList();
   }
 
@@ -216,6 +224,8 @@ class LinShareHttpClient {
       return SimpleAutoCompleteResultDto.fromJson(map);
     } else if (type == AutoCompleteResultType.user.value) {
       return UserAutoCompleteResultDto.fromJson(map);
+    } else if (type == AutoCompleteResultType.threadmember.value) {
+      return SharedSpaceMemberAutoCompleteResultDto.fromJson(map);
     } else {
       return MailingListAutoCompleteResultDto.fromJson(map);
     }
@@ -382,5 +392,24 @@ class LinShareHttpClient {
     );
 
     return _convertToWorkGroupNodeChild(workGroupNode);
+  }
+
+  Future<SharedSpaceMemberResponse> addSharedSpaceMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request) async {
+    final resultJson = await _dioClient.post(
+      Endpoint.sharedSpaces
+        .withPathParameter(sharedSpaceId.uuid)
+        .withPathParameter('members')
+        .generateEndpointPath(),
+        data: request.toBodyRequest().toJson().toString());
+    return SharedSpaceMemberResponse.fromJson(resultJson);
+  }
+
+  Future<List<SharedSpaceRoleDto>> getSharedSpaceRoles() async {
+    final sharedSpaceRolesPath = Endpoint.sharedSpaceRoles.generateEndpointPath();
+    final List rolesJson = await _dioClient.get(sharedSpaceRolesPath);
+
+    return rolesJson
+      .map((data) => SharedSpaceRoleDto.fromJson(data))
+      .toList();
   }
 }

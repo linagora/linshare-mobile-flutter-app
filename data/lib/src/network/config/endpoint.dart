@@ -56,6 +56,8 @@ class Endpoint {
   static final ServicePath functionality = ServicePath('/functionalities');
 
   static final ServicePath workGroups = ServicePath('/work_groups');
+
+  static final ServicePath sharedSpaceRoles = ServicePath('/shared_space_roles');
 }
 
 extension ServicePathExtension on ServicePath {
