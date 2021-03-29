@@ -30,22 +30,13 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/sharedspace/shared_space_role_id.dart';
-import 'package:domain/src/model/sharedspace/shared_space_role_name.dart';
 import 'package:equatable/equatable.dart';
 
-class SharedSpaceRole extends Equatable {
-  final SharedSpaceRoleId sharedSpaceRoleId;
-  final SharedSpaceRoleName name;
+class ThreadId extends Equatable {
+  final String uuid;
 
-  final bool enabled;
-
-  SharedSpaceRole(this.sharedSpaceRoleId, this.name, {this.enabled = true});
-
-  factory SharedSpaceRole.initial() {
-    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
-  }
+  ThreadId(this.uuid);
 
   @override
-  List<Object> get props => [sharedSpaceRoleId, name, enabled];
+  List<Object> get props => [uuid];
 }

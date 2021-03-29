@@ -30,22 +30,43 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/sharedspace/shared_space_role_id.dart';
-import 'package:domain/src/model/sharedspace/shared_space_role_name.dart';
-import 'package:equatable/equatable.dart';
+import 'package:domain/src/model/autocomplete/autocomplete_result.dart';
+import 'package:domain/domain.dart';
 
-class SharedSpaceRole extends Equatable {
-  final SharedSpaceRoleId sharedSpaceRoleId;
-  final SharedSpaceRoleName name;
+class SharedSpaceMemberAutoCompleteResult extends AutoCompleteResult {
+  final String firstName;
+  final String lastName;
+  final String domain;
+  final String mail;
+  final bool member;
+  final ThreadId threadUuid;
+  final String type;
+  final AccountId userUuid;
 
-  final bool enabled;
-
-  SharedSpaceRole(this.sharedSpaceRoleId, this.name, {this.enabled = true});
-
-  factory SharedSpaceRole.initial() {
-    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
-  }
+  SharedSpaceMemberAutoCompleteResult(
+      String identifier,
+      String display,
+      this.firstName,
+      this.lastName,
+      this.domain,
+      this.mail,
+      this.member,
+      this.threadUuid,
+      this.type,
+      this.userUuid
+  ) : super(identifier, display);
 
   @override
-  List<Object> get props => [sharedSpaceRoleId, name, enabled];
+  List<Object> get props => [
+    identifier,
+    display,
+    firstName,
+    lastName,
+    domain,
+    mail,
+    member,
+    threadUuid,
+    type,
+    userUuid
+  ];
 }

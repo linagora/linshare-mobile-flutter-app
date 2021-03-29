@@ -49,10 +49,10 @@ void main() {
     });
 
     test('getAutoCompleteSharingInteractor should success with valid data', () async {
-      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('user'), AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('user'), AutoCompleteType.SHARING))
           .thenAnswer((_) async => [simpleAutoCompleteResult1, userAutoCompleteResult1, mailingListAutoCompleteResult1]);
 
-      final state = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('user'), AutoCompleteType.sharing);
+      final state = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('user'), AutoCompleteType.SHARING);
       final autoCompleteResultList = state.map((success) => (success as AutoCompleteViewState).results)
           .getOrElse(() => []);
       
@@ -63,46 +63,46 @@ void main() {
 
     test('getAutoCompleteSharingInteractor should fail when pattern size is less than 3', () async {
       final exception = InvalidPatternMinimumCharactersLengthException();
-      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(exception);
 
-      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.sharing);
+      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.SHARING);
       expect(result, Left<Failure, Success>(AutoCompleteFailure(exception)));
     });
 
     test('getAutoCompleteSharingInteractor should return failure ServerNotFound', () async {
       final exception = ServerNotFound();
-      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(exception);
 
-      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.sharing);
+      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.SHARING);
       expect(result, Left<Failure, Success>(AutoCompleteFailure(exception)));
     });
 
     test('getAutoCompleteSharingInteractor should return failure ConnectError', () async {
       final exception = ConnectError();
-      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(exception);
 
-      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.sharing);
+      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.SHARING);
       expect(result, Left<Failure, Success>(AutoCompleteFailure(exception)));
     });
 
     test('getAutoCompleteSharingInteractor should return failure DocumentNotFound', () async {
       final exception = DocumentNotFound();
-      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(exception);
 
-      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.sharing);
+      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.SHARING);
       expect(result, Left<Failure, Success>(AutoCompleteFailure(exception)));
     });
 
     test('getAutoCompleteSharingInteractor should return failure UnknownError', () async {
       final exception = UnknownError('unknown error');
-      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(exception);
 
-      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.sharing);
+      final result = await getAutoCompleteSharingInteractor.execute(AutoCompletePattern('us'), AutoCompleteType.SHARING);
       expect(result, Left<Failure, Success>(AutoCompleteFailure(exception)));
     });
   });

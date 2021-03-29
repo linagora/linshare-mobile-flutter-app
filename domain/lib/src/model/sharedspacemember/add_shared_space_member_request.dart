@@ -28,24 +28,21 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:domain/src/model/sharedspace/shared_space_role_id.dart';
-import 'package:domain/src/model/sharedspace/shared_space_role_name.dart';
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
-class SharedSpaceRole extends Equatable {
-  final SharedSpaceRoleId sharedSpaceRoleId;
-  final SharedSpaceRoleName name;
+class AddSharedSpaceMemberRequest extends Equatable {
+  final AccountId account;
+  final SharedSpaceId node;
+  final SharedSpaceRoleId role;
 
-  final bool enabled;
-
-  SharedSpaceRole(this.sharedSpaceRoleId, this.name, {this.enabled = true});
-
-  factory SharedSpaceRole.initial() {
-    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
-  }
+  AddSharedSpaceMemberRequest(
+    this.account,
+    this.node,
+    this.role
+  );
 
   @override
-  List<Object> get props => [sharedSpaceRoleId, name, enabled];
+  List<Object> get props => [account, node, role];
 }
