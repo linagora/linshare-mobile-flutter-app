@@ -30,22 +30,25 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/sharedspace/shared_space_role_id.dart';
-import 'package:domain/src/model/sharedspace/shared_space_role_name.dart';
-import 'package:equatable/equatable.dart';
+import 'package:domain/src/usecases/remote_exception.dart';
 
-class SharedSpaceRole extends Equatable {
-  final SharedSpaceRoleId sharedSpaceRoleId;
-  final SharedSpaceRoleName name;
+abstract class AddSharedSpaceMembersException extends RemoteException {
+  static final RolesListNotFound = 'Roles list not found';
+  static final SelectedRoleNotFound = 'Selected role not found';
 
-  final bool enabled;
+  AddSharedSpaceMembersException(String message) : super(message);
+}
 
-  SharedSpaceRole(this.sharedSpaceRoleId, this.name, {this.enabled = true});
-
-  factory SharedSpaceRole.initial() {
-    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
-  }
+class RolesListNotFound extends AddSharedSpaceMembersException {
+  RolesListNotFound() : super(AddSharedSpaceMembersException.RolesListNotFound);
 
   @override
-  List<Object> get props => [sharedSpaceRoleId, name, enabled];
+  List<Object> get props => [];
+}
+
+class SelectedRoleNotFound extends AddSharedSpaceMembersException {
+  SelectedRoleNotFound() : super(AddSharedSpaceMembersException.SelectedRoleNotFound);
+
+  @override
+  List<Object> get props => [];
 }

@@ -250,6 +250,8 @@ class AppModule {
     getIt.registerFactory(() => SharedSpaceActivitiesInteractor(getIt<SharedSpaceActivitiesRepository>()));
     getIt.registerFactory(() => CreateWorkGroupInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RenameSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
+    getIt.registerFactory(() => AddSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
+    getIt.registerFactory(() => GetAllSharedSpaceRolesInteractor(getIt<SharedSpaceRepository>()));
   }
 
   void _provideSharePreference() {
