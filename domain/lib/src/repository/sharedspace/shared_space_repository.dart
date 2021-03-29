@@ -45,4 +45,6 @@ abstract class SharedSpaceRepository {
   );
 
   Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
+
+  Future<List<SharedSpaceRole>> getSharedSpacesRoles();
 }

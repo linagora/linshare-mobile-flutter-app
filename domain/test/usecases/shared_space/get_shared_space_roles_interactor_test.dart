@@ -30,22 +30,47 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/sharedspace/shared_space_role_id.dart';
-import 'package:domain/src/model/sharedspace/shared_space_role_name.dart';
-import 'package:equatable/equatable.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class SharedSpaceRole extends Equatable {
-  final SharedSpaceRoleId sharedSpaceRoleId;
-  final SharedSpaceRoleName name;
+import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
-  final bool enabled;
+void main() {
+  group('get_shared_space_roles_interactor', () {
+    MockSharedSpaceRepository sharedSpaceRepository;
+    GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
 
-  SharedSpaceRole(this.sharedSpaceRoleId, this.name, {this.enabled = true});
+    setUp(() {
+      sharedSpaceRepository = MockSharedSpaceRepository();
+      _getAllSharedSpaceRolesInteractor = GetAllSharedSpaceRolesInteractor(sharedSpaceRepository);
+    });
 
-  factory SharedSpaceRole.initial() {
-    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
-  }
+    test('getAllSharedSpaceRolesInteractor should return success with roles list', () async {
+      when(sharedSpaceRepository.getSharedSpacesRoles()).thenAnswer((_) async => [sharedSpaceRole1, sharedSpaceRole2, sharedSpaceRole3, sharedSpaceRole4]);
 
-  @override
-  List<Object> get props => [sharedSpaceRoleId, name, enabled];
+      final result = await _getAllSharedSpaceRolesInteractor.execute();
+
+      final rolesList = result.map((success) => (success as SharedSpaceRolesViewState).roles)
+          .getOrElse(() => []);
+
+      expect(rolesList, containsAllInOrder([sharedSpaceRole1, sharedSpaceRole2, sharedSpaceRole3, sharedSpaceRole4]));
+    });
+
+
+    test('getAllSharedSpaceRolesInteractor should fail when getSharedSpaceRoles fail', () async {
+      final exception = Exception();
+      when(sharedSpaceRepository.getSharedSpacesRoles()).thenThrow(exception);
+
+      final result = await _getAllSharedSpaceRolesInteractor.execute();
+
+      result.fold(
+        (failure) => expect(failure, isA<SharedSpaceRolesFailure>()),
+        (success) => expect(success, isA<SharedSpaceRolesViewState>()));
+
+      expect(result, Left<Failure, Success>(SharedSpaceRolesFailure(exception)));
+    });
+  });
 }
