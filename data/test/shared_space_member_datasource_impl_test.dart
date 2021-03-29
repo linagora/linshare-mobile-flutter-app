@@ -72,5 +72,38 @@ void main() {
       await _sharedSpaceMemberDataSourceImpl.getMembers(sharedSpaceId1)
           .catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
     });
+
+    test('addMember should return success with valid data', () async {
+      final request = AddSharedSpaceMemberRequest(
+        AccountId('An Account'),
+        sharedSpaceId1,
+        SharedSpaceRoleId('A Role')
+      );
+
+      when(_linShareHttpClient.addSharedSpaceMember(sharedSpaceId1, request))
+          .thenAnswer((_) async => sharedSpaceMemberResponse1);
+
+      final result = await _sharedSpaceMemberDataSourceImpl.addMember(sharedSpaceId1, request);
+      expect(result, sharedSpaceMember1);
+    });
+
+    test('addMember should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+
+      final request = AddSharedSpaceMemberRequest(
+        AccountId('An Account'),
+        sharedSpaceId1,
+        SharedSpaceRoleId('A Role')
+      );
+
+      when(_linShareHttpClient.addSharedSpaceMember(sharedSpaceId1, request))
+          .thenThrow(error);
+
+      await _sharedSpaceMemberDataSourceImpl.addMember(sharedSpaceId1, request)
+          .catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
+    });
   });
 }
