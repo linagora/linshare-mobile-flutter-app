@@ -30,22 +30,58 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/sharedspace/shared_space_role_id.dart';
-import 'package:domain/src/model/sharedspace/shared_space_role_name.dart';
-import 'package:equatable/equatable.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class SharedSpaceRole extends Equatable {
-  final SharedSpaceRoleId sharedSpaceRoleId;
-  final SharedSpaceRoleName name;
+import '../../mock/repository/shared_space/mock_shared_space_member_repository.dart';
 
-  final bool enabled;
+void main() {
+  group('add_shared_space_member_interactor test', () {
+    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
+    AddSharedSpaceMemberInteractor addSharedSpaceMemberInteractor;
 
-  SharedSpaceRole(this.sharedSpaceRoleId, this.name, {this.enabled = true});
+    setUp(() {
+      sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();
+      addSharedSpaceMemberInteractor = AddSharedSpaceMemberInteractor(sharedSpaceMemberRepository);
+    });
 
-  factory SharedSpaceRole.initial() {
-    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
-  }
+    test('add_shared_space_member_interactor should return success with one valid data', () async {
+      final request = AddSharedSpaceMemberRequest(
+        AccountId('An Account'),
+        sharedSpaceId1,
+        SharedSpaceRoleId('A Role')
+      );
 
-  @override
-  List<Object> get props => [sharedSpaceRoleId, name, enabled];
+      when(sharedSpaceMemberRepository.addMember(
+          sharedSpaceId1,
+          request
+      )).thenAnswer((_) async => sharedSpaceMember1);
+
+      final result = await addSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
+      final sharedSpaceMember = result
+          .map((success) => (success as AddSharedSpaceMemberViewState).member)
+          .getOrElse(() => null);
+      expect(sharedSpaceMember, sharedSpaceMember1);
+    });
+
+    test('add_shared_space_member_interactor should fail when addMember fail', () async {
+      final exception = Exception();
+      final request = AddSharedSpaceMemberRequest(
+        AccountId('An Account'),
+        sharedSpaceId1,
+        SharedSpaceRoleId('A Role')
+      );
+
+      when(sharedSpaceMemberRepository.addMember(
+          sharedSpaceId1,
+          request
+      )).thenThrow(exception);
+
+      final result = await addSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
+      expect(result, Left<Failure, Success>(AddSharedSpaceMemberFailure(exception)));
+    });
+  });
 }

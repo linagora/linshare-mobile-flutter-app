@@ -31,7 +31,7 @@
 //
 
 enum AutoCompleteResultType {
-  simple, user, mailingList
+  simple, user, mailingList, threadmember
 }
 
 extension AutoCompleteResultTypeExtension on AutoCompleteResultType {
@@ -43,6 +43,8 @@ extension AutoCompleteResultTypeExtension on AutoCompleteResultType {
         return 'user';
       case AutoCompleteResultType.mailingList:
         return 'mailinglist';
+      case AutoCompleteResultType.threadmember:
+        return 'threadmember';
       default:
         return 'simple';
     }

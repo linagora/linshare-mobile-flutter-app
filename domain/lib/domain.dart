@@ -57,6 +57,7 @@ export 'src/usecases/quota/quota_exception.dart';
 export 'src/usecases/quota/quota_verification_exception.dart';
 export 'src/usecases/name_verification/verify_name_exception.dart';
 export 'src/usecases/shared_space_activities/shared_space_activities_exception.dart';
+export 'src/usecases/shared_space/add_shared_space_member_exception.dart';
 
 // model
 export 'src/model/authentication/token.dart';
@@ -87,6 +88,7 @@ export 'src/model/autocomplete/autocomplete_result_type.dart';
 export 'src/model/autocomplete/subtype/simple_autocomplete_result.dart';
 export 'src/model/autocomplete/subtype/user_autocomplete_result.dart';
 export 'src/model/autocomplete/subtype/mailing_list_autocomplete_result.dart';
+export 'src/model/autocomplete/subtype/shared_space_member_autocomplete_result.dart';
 export 'src/model/linshare_error_code.dart';
 export 'src/model/account/account.dart';
 export 'src/model/account/account_id.dart';
@@ -157,6 +159,8 @@ export 'src/model/verification/composite_name_validator.dart';
 export 'src/model/suggestion/suggest_name_type.dart';
 export 'src/model/sharedspacedocument/rename_work_group_node_request.dart';
 export 'src/model/verification/last_dot_validator.dart';
+export 'src/model/sharedspacemember/add_shared_space_member_request.dart';
+export 'src/model/sharedspace/thread_id.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -208,9 +212,11 @@ export 'src/usecases/shared_space/download_preview_work_group_document_interacto
 export 'src/usecases/shared_space/get_shared_space_interactor.dart';
 export 'src/usecases/received/download_preview_received_share_interactor.dart';
 export 'src/usecases/shared_space/get_all_shared_space_members_interactor.dart';
-export 'src/usecases/shared_space_activities/shared_space_acitivities_interactor.dart';
+export 'src/usecases/shared_space_activities/shared_space_activities_interactor.dart';
 export 'src/usecases/shared_space/create_work_group_interactor.dart';
 export 'src/usecases/shared_space/rename_shared_space_node_interactor.dart';
+export 'src/usecases/shared_space/add_shared_space_member_interactor.dart';
+export 'src/usecases/shared_space/get_shared_space_roles_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

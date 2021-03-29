@@ -31,5 +31,5 @@
 //
 
 enum AutoCompleteType {
-  sharing, threadMembers
+  SHARING, THREAD_MEMBERS
 }
