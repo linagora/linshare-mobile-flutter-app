@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,22 +30,22 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/sharedspace/shared_space_role_id.dart';
-import 'package:domain/src/model/sharedspace/shared_space_role_name.dart';
-import 'package:equatable/equatable.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/model/sharedspace/shared_space_id.dart';
+import 'package:domain/src/state/success.dart';
 
-class SharedSpaceRole extends Equatable {
-  final SharedSpaceRoleId sharedSpaceRoleId;
-  final SharedSpaceRoleName name;
+class AddSharedSpaceMemberInteractor {
+  final SharedSpaceMemberRepository _sharedSpaceMemberRepository;
 
-  final bool enabled;
+  AddSharedSpaceMemberInteractor(this._sharedSpaceMemberRepository);
 
-  SharedSpaceRole(this.sharedSpaceRoleId, this.name, {this.enabled = true});
-
-  factory SharedSpaceRole.initial() {
-    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
+  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request) async {
+    try {
+      final result = await _sharedSpaceMemberRepository.addMember(sharedSpaceId, request);
+      return Right<Failure, Success>(AddSharedSpaceMemberViewState(result));
+    } catch (exception) {
+      return Left<Failure, Success>(AddSharedSpaceMemberFailure(exception));
+    }
   }
-
-  @override
-  List<Object> get props => [sharedSpaceRoleId, name, enabled];
 }

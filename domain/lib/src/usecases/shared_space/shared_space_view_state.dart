@@ -368,3 +368,38 @@ class RenameSharedSpaceNodeFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+class AddSharedSpaceMemberViewState extends ViewState {
+  final SharedSpaceMember member;
+
+  AddSharedSpaceMemberViewState(this.member);
+
+  @override
+  List<Object> get props => [member];
+}
+
+class AddSharedSpaceMemberFailure extends FeatureFailure {
+  final exception;
+
+  AddSharedSpaceMemberFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class SharedSpaceRolesViewState extends ViewState {
+  final List<SharedSpaceRole> roles;
+
+  SharedSpaceRolesViewState(this.roles);
+
+  @override
+  List<Object> get props => [roles];
+}
+
+class SharedSpaceRolesFailure extends FeatureFailure {
+  final exception;
+
+  SharedSpaceRolesFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

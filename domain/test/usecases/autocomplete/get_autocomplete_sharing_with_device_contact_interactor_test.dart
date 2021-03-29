@@ -58,12 +58,12 @@ void main() {
 
     test('get autocomplete should return results with valid data', () async {
       final pattern = AutoCompletePattern('user');
-      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.SHARING))
         .thenAnswer((_) async => [simpleAutoCompleteResult1, userAutoCompleteResult1]);
       when(contactRepository.getContactSuggestions(pattern))
         .thenAnswer((_) async => [contact1]);
 
-      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.sharing);
+      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.SHARING);
       state.fold(
         (failure) => null,
         (success) {
@@ -76,12 +76,12 @@ void main() {
 
     test('get autocomplete should return results when no result found from device contact', () async {
       final pattern = AutoCompletePattern('user');
-      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.SHARING))
         .thenAnswer((_) async => [simpleAutoCompleteResult1, userAutoCompleteResult1]);
       when(contactRepository.getContactSuggestions(pattern))
         .thenAnswer((_) async => []);
 
-      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.sharing);
+      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.SHARING);
       state.fold(
         (failure) => null,
         (success) {
@@ -94,12 +94,12 @@ void main() {
 
     test('get autocomplete should return results when no result found from remote', () async {
       final pattern = AutoCompletePattern('user');
-      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.SHARING))
           .thenAnswer((_) async => []);
       when(contactRepository.getContactSuggestions(pattern))
           .thenAnswer((_) async => [contact1]);
 
-      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.sharing);
+      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.SHARING);
       state.fold(
         (failure) => null,
         (success) {
@@ -112,12 +112,12 @@ void main() {
 
     test('get autocomplete should failure when get suggest from device contact throw exception', () async {
       final pattern = AutoCompletePattern('user');
-      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.SHARING))
         .thenAnswer((_) async => [simpleAutoCompleteResult1, userAutoCompleteResult1]);
       when(contactRepository.getContactSuggestions(pattern))
         .thenThrow(Exception());
 
-      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.sharing);
+      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.SHARING);
       state.fold(
         (failure) => expect(failure, isA<AutoCompleteFailure>()),
         (success) => null);
@@ -125,12 +125,12 @@ void main() {
 
     test('get autocomplete should failure when get suggest from remote throw exception', () async {
       final pattern = AutoCompletePattern('user');
-      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.sharing))
+      when(autoCompleteRepository.getAutoComplete(pattern, AutoCompleteType.SHARING))
         .thenThrow(Exception());
       when(contactRepository.getContactSuggestions(pattern))
         .thenAnswer((_) async => [contact1]);
 
-      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.sharing);
+      final state = await getAutoCompleteSharingWithDeviceContactInteractor.execute(pattern, AutoCompleteType.SHARING);
       state.fold(
         (failure) => expect(failure, isA<AutoCompleteFailure>()),
         (success) => null);

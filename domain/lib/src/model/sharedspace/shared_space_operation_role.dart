@@ -48,4 +48,8 @@ class SharedSpaceOperationRole {
   static const deleteSharedSpaceRoles = [
     SharedSpaceRoleName.ADMIN,
   ];
+
+  static const addMemberSharedSpaceRoles = [
+    SharedSpaceRoleName.ADMIN,
+  ];
 }

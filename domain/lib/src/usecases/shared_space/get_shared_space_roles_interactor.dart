@@ -30,22 +30,21 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/model/sharedspace/shared_space_role_id.dart';
-import 'package:domain/src/model/sharedspace/shared_space_role_name.dart';
-import 'package:equatable/equatable.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
-class SharedSpaceRole extends Equatable {
-  final SharedSpaceRoleId sharedSpaceRoleId;
-  final SharedSpaceRoleName name;
+class GetAllSharedSpaceRolesInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  final bool enabled;
+  GetAllSharedSpaceRolesInteractor(this._sharedSpaceRepository);
 
-  SharedSpaceRole(this.sharedSpaceRoleId, this.name, {this.enabled = true});
-
-  factory SharedSpaceRole.initial() {
-    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.READER);
+  Future<Either<Failure, Success>> execute() async {
+    try {
+      final roles = await _sharedSpaceRepository.getSharedSpacesRoles();
+      return Right<Failure, Success>(SharedSpaceRolesViewState(roles));
+    } catch (exception) {
+      return Left<Failure, Success>(SharedSpaceRolesFailure(exception));
+    }
   }
-
-  @override
-  List<Object> get props => [sharedSpaceRoleId, name, enabled];
 }
