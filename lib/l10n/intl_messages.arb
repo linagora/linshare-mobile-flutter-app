@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-30T14:07:52.974020",
+  "@@last_modified": "2021-03-31T09:09:33.370705",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -329,11 +329,6 @@
   },
   "copy_to_a_workgroup": "Copy to a workgroup",
   "@copy_to_a_workgroup": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "copy_to": "Copy to",
-  "@copy_to": {
     "type": "text",
     "placeholders": {}
   },
@@ -679,6 +674,36 @@
   },
   "no_description": "No description",
   "@no_description": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "copy_to": "Copy to",
+  "@copy_to": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "admin": "Admin",
+  "@admin": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "reader": "Reader",
+  "@reader": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "contributor": "Contributor",
+  "@contributor": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "writer": "Writer",
+  "@writer": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_role": "Unknown Role",
+  "@unknown_role": {
     "type": "text",
     "placeholders": {}
   }

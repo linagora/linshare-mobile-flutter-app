@@ -701,5 +701,30 @@
   "@copy_to": {
     "type": "text",
     "placeholders": {}
+  },
+  "admin": "Admin",
+  "@admin": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "reader": "Reader",
+  "@reader": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "contributor": "Contributor",
+  "@contributor": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "writer": "Writer",
+  "@writer": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_role": "Unknown Role",
+  "@unknown_role": {
+    "type": "text",
+    "placeholders": {}
   }
 }
