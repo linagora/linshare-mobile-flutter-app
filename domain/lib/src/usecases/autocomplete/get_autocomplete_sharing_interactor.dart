@@ -41,9 +41,13 @@ class GetAutoCompleteSharingInteractor {
 
   Future<Either<Failure, Success>> execute(
       AutoCompletePattern autoCompletePattern,
-      AutoCompleteType autoCompleteType) async {
+      AutoCompleteType autoCompleteType,
+      {
+        ThreadId threadId
+      }
+  ) async {
     try {
-      final resultList = await _autoCompleteRepository.getAutoComplete(autoCompletePattern, autoCompleteType);
+      final resultList = await _autoCompleteRepository.getAutoComplete(autoCompletePattern, autoCompleteType, threadId: threadId);
       if (resultList.isEmpty && autoCompletePattern.value.isValidEmail()) {
         resultList.add(SimpleAutoCompleteResult(autoCompletePattern.value, autoCompletePattern.value));
       }
