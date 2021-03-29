@@ -38,7 +38,10 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/shared_space_details_info.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/date_format_helper.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 
 import 'shared_space_details_viewmodel.dart';
 
@@ -95,7 +98,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                       ),
                       Expanded(
                           child: TabBarView(
-                        children: [_detailsTabWidget(snapshot.data), _membersTabWidget()],
+                        children: [_detailsTabWidget(snapshot.data), _membersTabWidget(snapshot.data.members)],
                       ))
                     ],
                   ),
@@ -157,11 +160,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                 workGroupDetailsDateFormat.format(details.sharedSpaceNodeNested.creationDate.toLocal())),
             _sharedSpaceInformationTile(
                 AppLocalizations.of(context).my_rights,
-                toBeginningOfSentenceCase(details.sharedSpaceNodeNested.sharedSpaceRole.name
-                    .toString()
-                    .split('.')
-                    .last
-                    .toLowerCase())),
+                toBeginningOfSentenceCase(details.sharedSpaceNodeNested.sharedSpaceRole.name.getRoleName(context))),
             _sharedSpaceInformationTile(AppLocalizations.of(context).max_file_size,
                 filesize(details.quota.maxFileSize.size)),
           ],
@@ -211,7 +210,52 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
     );
   }
 
-  Widget _membersTabWidget() {
-    return SizedBox.shrink();
+  Widget _membersTabWidget(List<SharedSpaceMember> members) {
+    return ListView.builder(
+      itemCount: members.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          contentPadding: EdgeInsets.only(left: 24, top: 10, bottom: 10),
+          leading: LabelAvatarBuilder(members[index].account.name.characters.first.toUpperCase())
+            .key(Key('label_shared_space_member_avatar'))
+            .build(),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 8),
+                child: Text(
+                members[index].account.name,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal,
+                  color: AppColor.loginTextFieldTextColor
+                )
+              )),
+              Text(
+                members[index].account.mail,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.italic,
+                  color: AppColor.documentModifiedDateItemTextColor
+                )
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  toBeginningOfSentenceCase(members[index].role.name.getRoleName(context)),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: AppColor.workgroupNodesSurfingBackTitleColor
+                  )
+                )),
+            ]),
+        );
+      }
+    );
   }
 }
