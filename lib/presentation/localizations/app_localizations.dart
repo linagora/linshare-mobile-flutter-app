@@ -903,6 +903,41 @@ class AppLocalizations {
       name : 'copy_to'
     );
   }
+
+  String get admin {
+    return Intl.message(
+      'Admin',
+      name: 'admin',
+    );
+  }
+
+  String get reader {
+    return Intl.message(
+      'Reader',
+      name: 'reader',
+    );
+  }
+
+  String get contributor {
+    return Intl.message(
+      'Contributor',
+      name: 'contributor',
+    );
+  }
+
+  String get writer {
+    return Intl.message(
+      'Writer',
+      name: 'writer',
+    );
+  }
+
+  String get unknown_role {
+    return Intl.message(
+      'Unknown Role',
+      name: 'unknown_role',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

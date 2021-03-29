@@ -238,7 +238,8 @@ class WidgetModule {
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
         getIt.get<GetSharedSpaceInteractor>(),
-        getIt.get<GetQuotaInteractor>()
+        getIt.get<GetQuotaInteractor>(),
+        getIt.get<GetAllSharedSpaceMembersInteractor>()
     ));
   }
 }
