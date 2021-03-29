@@ -45,4 +45,6 @@ abstract class SharedSpaceDataSource {
   );
 
   Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
+
+  Future<List<SharedSpaceRole>> getSharedSpaceRoles();
 }
