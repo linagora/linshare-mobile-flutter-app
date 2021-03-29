@@ -145,3 +145,8 @@ final sharedSpaceMemberResponse2 = SharedSpaceMemberResponse(
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
 );
+
+final sharedSpaceRole1 = SharedSpaceRole(SharedSpaceRoleId('an id 1'), SharedSpaceRoleName.READER);
+final sharedSpaceRole2 = SharedSpaceRole(SharedSpaceRoleId('an id 2'), SharedSpaceRoleName.ADMIN);
+final sharedSpaceRole3 = SharedSpaceRole(SharedSpaceRoleId('an id 3'), SharedSpaceRoleName.CONTRIBUTOR);
+final sharedSpaceRole4 = SharedSpaceRole(SharedSpaceRoleId('an id 4'), SharedSpaceRoleName.WRITER);

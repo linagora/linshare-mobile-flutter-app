@@ -33,4 +33,6 @@ import 'package:domain/domain.dart';
 
 abstract class SharedSpaceMemberDataSource {
   Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId);
+
+  Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request);
 }
