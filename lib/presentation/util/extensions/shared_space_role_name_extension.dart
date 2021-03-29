@@ -17,8 +17,7 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-//
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -26,28 +25,28 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses
-// for the GNU Affero General Public License version
+// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+//  the Additional Terms applicable to LinShare software.
 //
-// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-// for
-//
-// the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 
-class SharedSpaceDetailsInfo extends Equatable {
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
-  final AccountQuota quota;
-  final List<SharedSpaceMember> members;
-
-  SharedSpaceDetailsInfo(this.sharedSpaceNodeNested, this.quota, this.members);
-
-  @override
-  List<Object> get props => [
-    sharedSpaceNodeNested,
-    quota,
-    members
-  ];
+extension SharedSpaceRoleNameExtension on SharedSpaceRoleName {
+  String getRoleName(BuildContext context) {
+    switch (this) {
+      case SharedSpaceRoleName.ADMIN:
+        return AppLocalizations.of(context).admin;
+      case SharedSpaceRoleName.READER:
+        return AppLocalizations.of(context).reader;
+      case SharedSpaceRoleName.CONTRIBUTOR:
+        return AppLocalizations.of(context).contributor;
+      case SharedSpaceRoleName.WRITER:
+        return AppLocalizations.of(context).writer;
+      default:
+        return AppLocalizations.of(context).unknown_role;
+    }
+  }
 }
