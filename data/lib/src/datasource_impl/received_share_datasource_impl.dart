@@ -35,6 +35,7 @@ import 'dart:io';
 
 import 'package:data/src/datasource/received_share_datasource.dart';
 import 'package:data/src/network/config/endpoint.dart';
+import 'package:data/src/network/linshare_download_manager.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:data/src/util/constant.dart';
@@ -44,14 +45,16 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 
-class ReceivedShareDataSourceImp extends ReceivedShareDataSource {
+class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
   final LinShareHttpClient _linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
+  final LinShareDownloadManager _linShareDownloadManager;
 
-  ReceivedShareDataSourceImp(
-      this._linShareHttpClient,
-      this._remoteExceptionThrower
-    );
+  ReceivedShareDataSourceImpl(
+    this._linShareHttpClient,
+    this._remoteExceptionThrower,
+    this._linShareDownloadManager
+ );
 
   @override
   Future<List<ReceivedShare>> getAllReceivedShares() async {
@@ -90,5 +93,28 @@ class ReceivedShareDataSourceImp extends ReceivedShareDataSource {
             openFileFromNotification: true)));
 
     return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
+  }
+
+  @override
+  Future<Uri> downloadPreviewReceivedShare(ReceivedShare receivedShare,
+      DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
+    var downloadUrl;
+    if (downloadPreviewType == DownloadPreviewType.original) {
+      downloadUrl = Endpoint.receivedShares
+          .downloadServicePath(receivedShare.shareId.uuid)
+          .generateDownloadUrl(baseUrl);
+    } else {
+      downloadUrl = Endpoint.receivedShares
+          .withPathParameter(receivedShare.shareId.uuid)
+          .withPathParameter(Endpoint.thumbnail)
+          .withPathParameter(downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
+          .generateEndpointPath();
+    }
+    return _linShareDownloadManager.downloadFile(
+        downloadUrl,
+        getTemporaryDirectory(),
+        receivedShare.name + '${downloadPreviewType == DownloadPreviewType.thumbnail ? '.pdf' : ''}',
+        permanentToken,
+        cancelToken: cancelToken);
   }
 }

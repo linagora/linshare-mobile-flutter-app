@@ -32,12 +32,13 @@
  */
 
 import 'package:data/src/datasource/received_share_datasource.dart';
+import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
 
-class ReceivedShareRepositoryImp extends ReceivedShareRepository {
+class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
   final ReceivedShareDataSource _receivedShareDataSource;
 
-  ReceivedShareRepositoryImp(this._receivedShareDataSource);
+  ReceivedShareRepositoryImpl(this._receivedShareDataSource);
 
   @override
   Future<List<ReceivedShare>> getAllReceivedShares() {
@@ -47,5 +48,10 @@ class ReceivedShareRepositoryImp extends ReceivedShareRepository {
   @override
   Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) {
     return _receivedShareDataSource.downloadReceivedShares(shareIds, token, baseUrl);
+  }
+
+  @override
+  Future<Uri> downloadPreviewReceivedShare(ReceivedShare receivedShare, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
+    return _receivedShareDataSource.downloadPreviewReceivedShare(receivedShare, downloadPreviewType, permanentToken, baseUrl, cancelToken);
   }
 }

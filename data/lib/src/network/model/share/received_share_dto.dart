@@ -57,6 +57,7 @@ class ReceivedShareDto {
   final String description;
   final GenericUserDto recipient;
   final int size;
+  final bool hasThumbnail;
 
   @JsonKey(name: Attribute.type, fromJson: mediaTypeFromJson, toJson: mediaTypeToJson)
   final MediaType mediaType;
@@ -74,7 +75,8 @@ class ReceivedShareDto {
     this.recipient,
     this.size,
     this.mediaType,
-    this.sender
+    this.sender,
+    this.hasThumbnail
   );
 
   factory ReceivedShareDto.fromJson(Map<String, dynamic> json) => _$ReceivedShareDtoFromJson(json);
@@ -94,7 +96,8 @@ extension ReceivedShareDtoExtension on ReceivedShareDto {
       mediaType,
       sender != null ? sender.toGenericUser() : null,
       downloaded,
-      size
+      size,
+      hasThumbnail
     );
   }
 }
