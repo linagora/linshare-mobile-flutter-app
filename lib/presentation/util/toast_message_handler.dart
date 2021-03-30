@@ -189,6 +189,9 @@ class ToastMessageHandler {
       } else if (failure is CopyToSharedSpaceFailure || failure is CopyMultipleFilesToSharedSpaceAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
         _cleanSharedSpaceViewState();
+      } else if (failure is NoWorkGroupDocumentPreviewAvailable) {
+        appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
+        _cleanSharedSpaceViewState();
       }
     }, (success) {
       if (success is RemoveSharedSpaceNodeViewState) {
