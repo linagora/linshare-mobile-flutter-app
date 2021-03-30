@@ -16,7 +16,7 @@ export 'src/datasource/contact_datasource.dart';
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
 export 'src/datasource_impl/file_upload_datasource_impl.dart';
-export 'src/datasource_impl/received_share_datasource_imp.dart';
+export 'src/datasource_impl/received_share_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_document_datasource_impl.dart';
 export 'src/datasource_impl/autocomplete_datasource_impl.dart';
