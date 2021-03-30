@@ -35,6 +35,7 @@ export 'src/usecases/preview_file/download_preview_document_view_state.dart';
 export 'src/usecases/name_verification/verify_name_view_state.dart';
 export 'src/usecases/contact/get_device_contact_suggestions_view_state.dart';
 export 'src/usecases/shared_space/download_preview_work_group_document_view_state.dart';
+export 'src/usecases/received/download_preview_received_share_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -167,6 +168,7 @@ export 'src/usecases/contact/get_device_contact_suggestions_interactor.dart';
 export 'src/usecases/autocomplete/get_autocomplete_sharing_with_device_contact_interactor.dart';
 export 'src/usecases/shared_space/download_preview_work_group_document_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_interactor.dart';
+export 'src/usecases/received/download_preview_received_share_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
