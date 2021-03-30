@@ -31,6 +31,7 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 abstract class ReceivedShareDataSource {
@@ -38,4 +39,12 @@ abstract class ReceivedShareDataSource {
   Future<List<ReceivedShare>> getAllReceivedShares();
 
   Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
+
+  Future<Uri> downloadPreviewReceivedShare(
+    ReceivedShare receivedShare,
+    DownloadPreviewType downloadPreviewType,
+    Token permanentToken,
+    Uri baseUrl,
+    CancelToken cancelToken
+  );
 }
