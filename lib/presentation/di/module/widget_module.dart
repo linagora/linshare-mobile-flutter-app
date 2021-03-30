@@ -227,7 +227,8 @@ class WidgetModule {
         getIt.get<GetAllReceivedSharesInteractor>(),
         getIt.get<AppNavigation>(),
         getIt.get<CopyMultipleFilesFromReceivedSharesToMySpaceInteractor>(),
-        getIt.get<DownloadReceivedSharesInteractor>()
+        getIt.get<DownloadReceivedSharesInteractor>(),
+        getIt.get<DownloadPreviewReceivedShareInteractor>()
     ));
   }
 

@@ -244,6 +244,9 @@ class ToastMessageHandler {
       } else if (failure is CopyMultipleToMySpaceFromReceivedSharesAllFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
         _cleanReceivedShareViewState();
+      } else if (failure is NoReceivedSharePreviewAvailable) {
+        appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
+        _cleanReceivedShareViewState();
       }
     }, (success) {
       if (success is CopyToMySpaceViewState) {

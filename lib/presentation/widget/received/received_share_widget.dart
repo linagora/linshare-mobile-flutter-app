@@ -47,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/received_share_st
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/received_share_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/share_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
@@ -153,16 +154,16 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                         width: 120, height: 120, fit: BoxFit.fill))
                     .text(AppLocalizations.of(context).common_error_occured_message)
                     .build()
-                : _buildReceivedShareListView(context, state.receivedSharesList)),
+                : _buildReceivedShareListView(context, state.receivedSharesList, state.selectMode)),
         (success) => success is LoadingState
-            ? _buildReceivedShareListView(context, state.receivedSharesList)
+            ? _buildReceivedShareListView(context, state.receivedSharesList, state.selectMode)
             : RefreshIndicator(
                 onRefresh: () async => receivedShareViewModel.getAllReceivedShare(),
-                child: _buildReceivedShareListView(context, state.receivedSharesList)));
+                child: _buildReceivedShareListView(context, state.receivedSharesList, state.selectMode)));
   }
 
   Widget _buildReceivedShareListView(
-      BuildContext context, List<SelectableElement<ReceivedShare>> receivedList) {
+      BuildContext context, List<SelectableElement<ReceivedShare>> receivedList, SelectMode currentSelectMode) {
     if (receivedList.isEmpty) {
       return _buildNoReceivedShareYet(context);
     } else {
@@ -171,7 +172,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
         padding: EdgeInsets.zero,
         itemCount: receivedList.length,
         itemBuilder: (context, index) {
-          return _buildReceivedShareListItem(context, receivedList[index]);
+          return _buildReceivedShareListItem(context, receivedList[index], currentSelectMode);
         },
       );
     }
@@ -187,15 +188,15 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   }
 
   Widget _buildReceivedShareListItem(
-      BuildContext context, SelectableElement<ReceivedShare> shareItem) {
+      BuildContext context, SelectableElement<ReceivedShare> receivedShareItem, SelectMode currentSelectMode) {
     return ListTile(
         leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(shareItem.element.mediaType.getFileTypeImagePath(imagePath),
+          SvgPicture.asset(receivedShareItem.element.mediaType.getFileTypeImagePath(imagePath),
               width: 20, height: 24, fit: BoxFit.fill)
         ]),
         title: Transform(
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: _buildFileName(shareItem.element.name),
+          child: _buildFileName(receivedShareItem.element.name),
         ),
         subtitle: Transform(
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
@@ -205,9 +206,9 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSenderName(shareItem.element.sender.fullName()),
+                    _buildSenderName(receivedShareItem.element.sender.fullName()),
                     _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
-                        shareItem.element.creationDate.getMMMddyyyyFormatString())),
+                        receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
                   ],
                 ),
               )
@@ -219,8 +220,8 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
             builder: (context, selectMode) {
               return selectMode == SelectMode.ACTIVE
                   ? Checkbox(
-                      value: shareItem.selectMode == SelectMode.ACTIVE,
-                      onChanged: (bool value) => receivedShareViewModel.selectItem(shareItem),
+                      value: receivedShareItem.selectMode == SelectMode.ACTIVE,
+                      onChanged: (bool value) => receivedShareViewModel.selectItem(receivedShareItem),
                       activeColor: AppColor.primaryColor,
                     )
                   : IconButton(
@@ -231,10 +232,16 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                         fit: BoxFit.fill,
                       ),
                       onPressed: () => receivedShareViewModel.openContextMenu(context,
-                          shareItem.element, _contextMenuActionTiles(context, shareItem.element)));
+                          receivedShareItem.element, _contextMenuActionTiles(context, receivedShareItem.element)));
             }),
-        onTap: () {},
-        onLongPress: () => receivedShareViewModel.selectItem(shareItem));
+        onTap: () {
+          if (currentSelectMode == SelectMode.ACTIVE) {
+            receivedShareViewModel.selectItem(receivedShareItem);
+          } else {
+            receivedShareViewModel.previewReceivedShare(context, receivedShareItem.element);
+          }
+        },
+        onLongPress: () => receivedShareViewModel.selectItem(receivedShareItem));
   }
 
   Widget _buildFileName(String fileName) {
@@ -265,10 +272,11 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
     );
   }
 
-  List<Widget> _contextMenuActionTiles(BuildContext context, ReceivedShare share) {
+  List<Widget> _contextMenuActionTiles(BuildContext context, ReceivedShare receivedShare) {
     return [
-      if (Platform.isAndroid) _downloadAction(share),
-      _copyToMySpaceAction(context, share),
+      if (Platform.isAndroid) _downloadAction(receivedShare),
+      _copyToMySpaceAction(context, receivedShare),
+      _previewReceivedShareAction(receivedShare)
     ];
   }
 
@@ -328,5 +336,16 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
             shares.map((share) => share.shareId).toList(),
             itemSelectionType: ItemSelectionType.multiple))
         .build();
+  }
+
+  Widget _previewReceivedShareAction(ReceivedShare receivedShare) {
+    return ReceivedShareContextMenuTileBuilder(
+              Key('preview_received_share_context_menu_action'),
+              SvgPicture.asset(imagePath.icPreview, width: 24, height: 24, fit: BoxFit.fill),
+              AppLocalizations.of(context).preview,
+              receivedShare
+           )
+           .onActionClick((data) => receivedShareViewModel.previewReceivedShare(context, receivedShare))
+           .build();
   }
 }
