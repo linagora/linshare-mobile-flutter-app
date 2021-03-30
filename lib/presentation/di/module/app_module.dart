@@ -83,9 +83,10 @@ class AppModule {
         getIt<LinShareDownloadManager>()));
     getIt.registerLazySingleton(() => FileUploadDataSourceImpl(
         getIt.get<FlutterUploader>()));
-    getIt.registerFactory(() => ReceivedShareDataSourceImp(
+    getIt.registerFactory(() => ReceivedShareDataSourceImpl(
         getIt<LinShareHttpClient>(),
-        getIt<RemoteExceptionThrower>()));
+        getIt<RemoteExceptionThrower>(),
+        getIt<LinShareDownloadManager>()));
     getIt.registerLazySingleton(() => QuotaDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
@@ -109,7 +110,7 @@ class AppModule {
     getIt.registerFactory<SharedSpaceDocumentDataSource>(() => getIt<SharedSpaceDocumentDataSourceImpl>());
     getIt.registerFactory<FileUploadDataSource>(() => getIt<FileUploadDataSourceImpl>());
     getIt.registerFactory<QuotaDataSource>(() => getIt<QuotaDataSourceImpl>());
-    getIt.registerFactory<ReceivedShareDataSource>(() => getIt<ReceivedShareDataSourceImp>());
+    getIt.registerFactory<ReceivedShareDataSource>(() => getIt<ReceivedShareDataSourceImpl>());
     getIt.registerFactory<FunctionalityDataSource>(() => getIt<FunctionalityDataSourceImpl>());
     getIt.registerFactory<SortDataSource>(() => getIt<SortDataSourceImpl>());
     getIt.registerFactory<ContactDataSource>(() => getIt<ContactDataSourceImpl>());
@@ -124,7 +125,7 @@ class AppModule {
     getIt.registerFactory(() => AutoCompleteRepositoryImpl(getIt<AutoCompleteDataSource>()));
     getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(getIt<SharedSpaceDocumentDataSource>(), getIt<FileUploadDataSource>()));
     getIt.registerFactory(() => QuotaRepositoryImpl(getIt<QuotaDataSource>()));
-    getIt.registerFactory(() => ReceivedShareRepositoryImp(getIt<ReceivedShareDataSource>()));
+    getIt.registerFactory(() => ReceivedShareRepositoryImpl(getIt<ReceivedShareDataSource>()));
     getIt.registerFactory(() => FunctionalityRepositoryImpl(getIt<FunctionalityDataSource>()));
     getIt.registerFactory(() => SortRepositoryImpl(getIt<SortDataSource>()));
     getIt.registerFactory(() => ContactRepositoryImpl(getIt<ContactDataSource>()));
@@ -139,7 +140,7 @@ class AppModule {
     getIt.registerFactory<SharedSpaceRepository>(() => getIt<SharedSpaceRepositoryImpl>());
     getIt.registerFactory<SharedSpaceDocumentRepository>(() => getIt<SharedSpaceDocumentRepositoryImpl>());
     getIt.registerFactory<QuotaRepository>(() => getIt<QuotaRepositoryImpl>());
-    getIt.registerFactory<ReceivedShareRepository>(() => getIt<ReceivedShareRepositoryImp>());
+    getIt.registerFactory<ReceivedShareRepository>(() => getIt<ReceivedShareRepositoryImpl>());
     getIt.registerFactory<FunctionalityRepository>(() => getIt<FunctionalityRepositoryImpl>());
     getIt.registerFactory<SortRepository>(() => getIt<SortRepositoryImpl>());
     getIt.registerFactory<ContactRepository>(() => getIt<ContactRepositoryImpl>());
@@ -228,6 +229,11 @@ class AppModule {
         getIt<GetAutoCompleteSharingInteractor>(),
         getIt<GetDeviceContactSuggestionsInteractor>()));
     getIt.registerFactory(() => GetSharedSpaceInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => DownloadPreviewReceivedShareInteractor(
+        getIt<ReceivedShareRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()
+    ));
   }
 
   void _provideSharePreference() {

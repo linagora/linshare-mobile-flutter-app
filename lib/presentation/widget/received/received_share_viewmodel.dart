@@ -31,9 +31,14 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/share_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
@@ -43,24 +48,28 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:open_file/open_file.dart' as open_file;
 
 class ReceivedShareViewModel extends BaseViewModel {
   final GetAllReceivedSharesInteractor _getAllReceivedInteractor;
   final AppNavigation _appNavigation;
   final CopyMultipleFilesFromReceivedSharesToMySpaceInteractor _copyMultipleFilesFromReceivedSharesToMySpaceInteractor;
   final DownloadReceivedSharesInteractor _downloadReceivedSharesInteractor;
+  final DownloadPreviewReceivedShareInteractor _downloadPreviewReceivedShareInteractor;
 
   ReceivedShareViewModel(
       Store<AppState> store,
       this._getAllReceivedInteractor,
       this._appNavigation,
       this._copyMultipleFilesFromReceivedSharesToMySpaceInteractor,
-      this._downloadReceivedSharesInteractor
+      this._downloadReceivedSharesInteractor,
+      this._downloadPreviewReceivedShareInteractor
   ) : super(store);
 
   void getAllReceivedShare() {
@@ -171,6 +180,66 @@ class ReceivedShareViewModel extends BaseViewModel {
         (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
         (success) => store.dispatch(ReceivedShareAction(Right(success)))));
     });
+  }
+
+  void _showPrepareToPreviewFileDialog(BuildContext context, ReceivedShare receivedShare, CancelToken cancelToken) {
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+        .key(Key('prepare_to_preview_file_dialog'))
+        .title(AppLocalizations.of(context).preparing_to_preview_file)
+        .content(AppLocalizations.of(context).downloading_file(receivedShare.name))
+        .actionText(AppLocalizations.of(context).cancel)
+        .build()
+    );
+  }
+
+  void previewReceivedShare(BuildContext context, ReceivedShare receivedShare) {
+    _appNavigation.popBack();
+    final canPreviewReceivedShare = Platform.isIOS ? receivedShare.mediaType.isIOSSupportedPreview() : receivedShare.mediaType.isAndroidSupportedPreview();
+    if (canPreviewReceivedShare || receivedShare.hasThumbnail) {
+      final cancelToken = CancelToken();
+      _showPrepareToPreviewFileDialog(context, receivedShare, cancelToken);
+
+      var downloadPreviewType = DownloadPreviewType.original;
+      if (receivedShare.mediaType.isImageFile()) {
+        downloadPreviewType = DownloadPreviewType.image;
+      } else if (!canPreviewReceivedShare) {
+        downloadPreviewType = DownloadPreviewType.thumbnail;
+      }
+      store.dispatch(_handleDownloadPreviewReceivedShare(receivedShare, downloadPreviewType, cancelToken));
+    }
+  }
+
+  OnlineThunkAction _handleDownloadPreviewReceivedShare(ReceivedShare receivedShare, DownloadPreviewType downloadPreviewType, CancelToken cancelToken) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadPreviewReceivedShareInteractor
+          .execute(receivedShare, downloadPreviewType, cancelToken)
+          .then((result) => result.fold(
+              (failure) {
+                if (failure is DownloadPreviewReceivedShareFailure && !(failure.downloadPreviewException is CancelDownloadFileException)) {
+                  store.dispatch(ReceivedShareAction(Left(NoReceivedSharePreviewAvailable())));
+                }
+              },
+              (success) {
+                if (success is DownloadPreviewReceivedShareViewState) {
+                  _openDownloadedPreviewReceivedShare(receivedShare, success);
+                }
+          }));
+    });
+  }
+
+  void _openDownloadedPreviewReceivedShare(ReceivedShare receivedShare, DownloadPreviewReceivedShareViewState viewState) async {
+    _appNavigation.popBack();
+
+    final openResult = await open_file.OpenFile.open(
+        Uri.decodeFull(viewState.filePath.path),
+        type: Platform.isAndroid ? receivedShare.mediaType.mimeType : null,
+        uti:  Platform.isIOS ? receivedShare.mediaType.getDocumentUti().value : null);
+
+    if (openResult.type != open_file.ResultType.done) {
+      store.dispatch(ReceivedShareAction(Left(NoReceivedSharePreviewAvailable())));
+    }
   }
 
   @override
