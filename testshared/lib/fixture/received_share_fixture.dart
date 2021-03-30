@@ -58,7 +58,8 @@ final receivedShare1 = ReceivedShare(
     MediaType.parse('image/png'),
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     3,
-    29832983
+    29832983,
+    true
 );
 
 final receivedShare2 = ReceivedShare(
@@ -72,5 +73,6 @@ final receivedShare2 = ReceivedShare(
     MediaType.parse('image/png'),
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     5,
-    289323
+    289323,
+    false
 );
