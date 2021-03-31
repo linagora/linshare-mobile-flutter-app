@@ -1,6 +1,6 @@
 {
   "@@last_modified": "2020-11-10T17:18:26.612601",
-  "initializing_data": "Initializing data...",
+  "initializing_data": "Инициализация данных...",
   "@initializing_data": {
     "type": "text",
     "placeholders": {}
@@ -50,7 +50,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "upload_prepare_text": "Preparing to upload...",
+  "upload_prepare_text": "Подготовка к загрузке…",
   "@upload_prepare_text": {
     "type": "text",
     "placeholders": {}
@@ -60,12 +60,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "upload_failure_text": "Failed to upload file",
+  "upload_failure_text": "Не удалось загрузить файл",
   "@upload_failure_text": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_success_text": "File uploaded",
+  "upload_success_text": "Файл загружен",
   "@upload_success_text": {
     "type": "text",
     "placeholders": {}
@@ -97,22 +97,22 @@
     "type": "text",
     "placeholders": {}
   },
-  "common_error_occured_message": "Unexpected error occurs\nPlease reload or try again later",
+  "common_error_occured_message": "Произошла непредвиденная ошибка\\nПовторите загрузку или повторите попытку позже",
   "@common_error_occured_message": {
     "type": "text",
     "placeholders": {}
   },
-  "download_to_device" :"Download to device",
+  "download_to_device" :"Загрузить на устройство",
   "@download_to_device": {
     "type": "text",
     "placeholders": {}
   },
-  "export_file" :"Export file",
+  "export_file" :"Экспорт файла",
   "@export_file": {
     "type": "text",
     "placeholders": {}
   },
-  "preparing_to_export" :"Preparing to export",
+  "preparing_to_export" :"Подготовавливаем экспорт",
   "@preparing_to_export": {
     "type": "text",
     "placeholders": {}
@@ -122,7 +122,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "downloading_file": "Downloading {fileName}",
+  "downloading_file": "Загрузка {fileName}",
   "@downloading_file": {
     "type": "text",
     "placeholders": {
@@ -149,12 +149,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "file_is_successfully_shared" :"The file is successfully shared",
+  "file_is_successfully_shared" :"Вы успешно поделились файлом",
   "@file_is_successfully_shared": {
     "type": "text",
     "placeholders": {}
   },
-  "file_could_not_be_share" :"The file could not be shared",
+  "file_could_not_be_share" :"Не удалось поделиться файлом",
   "@file_could_not_be_share": {
     "type": "text",
     "placeholders": {}
@@ -184,130 +184,130 @@
     "type": "text",
     "placeholders": {}
   },
-  "upload_and_share_button": "Upload and Share",
+  "upload_and_share_button": "Загрузить и поделиться",
   "@upload_and_share_button": {
     "type": "text",
     "placeholders": {}
   },
-  "sharing_single_after_uploaded_success": "The file is uploaded and shared with {recipientName}",
+  "sharing_single_after_uploaded_success": "Файл загружен. Доступ к файлу предоставлен {recipientName}",
   "@sharing_single_after_uploaded_success": {
     "type": "text",
     "placeholders": {
       "recipientName": {}
     }
   },
-  "sharing_multiple_after_uploaded_success": "The file is uploaded and shared with {numberOfRecipients} people",
+  "sharing_multiple_after_uploaded_success": "Файл загружен. Доступ предоставлен {numberOfRecipients} пользователям",
   "@sharing_multiple_after_uploaded_success": {
     "type": "text",
     "placeholders": {
       "numberOfRecipients": {}
     }
   },
-  "sharing_after_uploaded_failure": "The file will be ready for upload and sharing once connection is available",
+  "sharing_after_uploaded_failure": "Файл будет готов для загрузки и после доступ будет предоставлен другим пользователям, как только соединение с сетью будет установлено",
   "@sharing_after_uploaded_failure": {
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_nodes_surfing_root_back_title": "Back to Shared Space",
+  "workgroup_nodes_surfing_root_back_title": "Вернуться к рабочим группам",
   "@workgroup_nodes_surfing_root_back_title": {
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_nodes_surfing_sort_type_title": "Modification date",
+  "workgroup_nodes_surfing_sort_type_title": "Дата изменения",
   "@workgroup_nodes_surfing_sort_type_title": {
     "type": "text",
     "placeholders": {}
   },
-  "destination": "Destination",
+  "destination": "Назначение",
   "@destination": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_to_workspace": "Upload to Workspace",
+  "upload_to_workspace": "Загрузить в рабочее пространство",
   "@upload_to_workspace": {
     "type": "text",
     "placeholders": {}
   },
-  "photos_and_videos": "Photos and Videos",
+  "photos_and_videos": "Фото и видео",
   "@photos_and_videos": {
     "type": "text",
     "placeholders": {}
   },
-  "browse": "Browse",
+  "browse": "Поиск",
   "@browse": {
     "type": "text",
     "placeholders": {}
   },
-  "select_all": "Select all",
+  "select_all": "Выбрать все",
   "@select_all": {
     "type": "text",
     "placeholders": {}
   },
-  "unselect_all": "Unselect all",
+  "unselect_all": "Снять выделение",
   "@unselect_all": {
     "type": "text",
     "placeholders": {}
   },
-  "items": "{numberOfItems,plural, =0{No item}=1{{numberOfItems} item}other{{numberOfItems} items}}",
+  "items": "{numberOfItems,plural, =0{нет предмета}=1{{numberOfItems} элемент}other{{numberOfItems} элементы}}",
   "@items": {
     "type": "text",
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "items_selected": "{numberOfItems,plural, =1{{numberOfItems} item selected}other{{numberOfItems} items selected}}",
+  "items_selected": "{numberOfItems,plural, =1{{numberOfItems} элемент выбран}other{{numberOfItems} элемента выбрано}}",
   "@items_selected": {
     "type": "text",
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "uploading_files_status_title": "Uploading files",
+  "uploading_files_status_title": "Загрузка файлов",
   "@uploading_files_status_title": {
     "type": "text",
     "placeholders": {}
   },
-  "uploading_files_view_button": "View",
+  "uploading_files_view_button": "Просмотр",
   "@uploading_files_view_button": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_screen_title": "Current uploads",
+  "current_uploads_screen_title": "Текущие загрузки",
   "@current_uploads_screen_title": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_my_space_tab": "My Space",
+  "current_uploads_my_space_tab": "Мое пространство",
   "@current_uploads_my_space_tab": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_shared_space_tab": "Shared Space",
+  "current_uploads_shared_space_tab": "Рабочие группы",
   "@current_uploads_shared_space_tab": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_waiting_status": "Waiting",
+  "current_uploads_waiting_status": "Ожидание",
   "@current_uploads_waiting_status": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_uploading_status": "Uploading",
+  "current_uploads_uploading_status": "Загрузка",
   "@current_uploads_uploading_status": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_upload_failed_status": "Upload failed",
+  "current_uploads_upload_failed_status": "Ошибка загрузки",
   "@current_uploads_upload_failed_status": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_share_failed_status": "Share failed",
+  "current_uploads_share_failed_status": "Не удалось поделиться файлом",
   "@current_uploads_share_failed_status": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_succeed_status": "Completed",
+  "current_uploads_succeed_status": "Завершено",
   "@current_uploads_succeed_status": {
     "type": "text",
     "placeholders": {}
@@ -317,7 +317,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "copy_here": "copy here",
+  "copy_here": "скопировать сюда",
   "@copy_here": {
     "type": "text",
     "placeholders": {}
@@ -337,12 +337,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "some_items_could_not_be_copied_to_shared_space": "Some items could not be copied to Shared space",
+  "some_items_could_not_be_copied_to_shared_space": "Некоторые элементы не могут быть скопированы в рабочие группы",
   "@some_items_could_not_be_copied_to_shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_multiple": "{numberOfItems,plural, =1{Are you sure you want to delete \"{singleItemName}\"?}other{Are you sure you want to delete {numberOfItems} items?}}",
+  "are_you_sure_you_want_to_delete_multiple": "{numberOfItems,plural, =1{Вы уверены, что хотите удалить \"{singleItemName}\"?}other{Вы уверены, что хотите удалить {numberOfItems} объекта?}}",
   "@are_you_sure_you_want_to_delete_multiple": {
     "type": "text",
     "placeholders": {
@@ -350,37 +350,37 @@
       "singleItemName": {}
     }
   },
-  "the_file_has_been_successfully_deleted": "The file has been successfully deleted",
+  "the_file_has_been_successfully_deleted": "Файл был успешно удален",
   "@the_file_has_been_successfully_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "files_have_been_successfully_deleted": "Files have been successfully deleted",
+  "files_have_been_successfully_deleted": "Файлы были успешно удалены",
   "@files_have_been_successfully_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "the_file_could_not_be_deleted": "The file could not be deleted",
+  "the_file_could_not_be_deleted": "Не удалось удалить файл",
   "@the_file_could_not_be_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "files_could_not_be_deleted": "Files could not be deleted",
+  "files_could_not_be_deleted": "Файлы не могут быть удалены",
   "@files_could_not_be_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "some_items_could_not_be_deleted": "Some items could not be deleted",
+  "some_items_could_not_be_deleted": "Некоторые элементы не могут быть удалены",
   "@some_items_could_not_be_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "some_items_are_successfully_deleted": "Some items are successfully deleted",
+  "some_items_are_successfully_deleted": "Некоторые элементы успешно удалены",
   "@some_items_are_successfully_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "downloading_files": "{numberOfFiles,plural, =1{Downloading {numberOfFiles} file}other{Downloading {numberOfFiles} files}}",
+  "downloading_files": "{numberOfFiles,plural, =1{скачивание {numberOfFiles} файла}other{скачивание {numberOfFiles} файлов}}",
   "@downloading_files": {
     "type": "text",
     "placeholders": {
@@ -407,32 +407,32 @@
     "type": "text",
     "placeholders": {}
   },
-  "account_details": "Account details",
+  "account_details": "Детали аккаунта",
   "@account_details": {
     "type": "text",
     "placeholders": {}
   },
-  "first_name": "First name",
+  "first_name": "Имя",
   "@first_name": {
     "type": "text",
     "placeholders": {}
   },
-  "last_name": "Last name",
+  "last_name": "Фамилия",
   "@last_name": {
     "type": "text",
     "placeholders": {}
   },
-  "last_login": "Last login",
+  "last_login": "Последний вход",
   "@last_login": {
     "type": "text",
     "placeholders": {}
   },
-  "available_space": "Available space",
+  "available_space": "Доступное пространство хранилища",
   "@available_space": {
     "type": "text",
     "placeholders": {}
   },
-  "available_space_value": "{usedSpace} on {quota}",
+  "available_space_value": "{usedSpace} из {quota}",
   "@available_space_value": {
     "type": "text",
     "placeholders": {
@@ -457,14 +457,14 @@
       "dateString": {}
     }
   },
-  "notEnoughQuota": "You have reached the max quota of {quota}",
+  "notEnoughQuota": "Вы достигли максимальной квоты {quota}",
   "@notEnoughQuota": {
     "type": "text",
     "placeholders": {
       "quota": {}
     }
   },
-  "tooBigFiles": "{nbFiles,plural, =1{{firstElementName} has exceeded the max file of {quota}}other{Some files have exceeded the max file of {quota}}}",
+  "tooBigFiles": "{nbFiles,plural, =1{{firstElementName} превысил максимальный размер файла в {quota}}other{Некоторые файлы превысили максимальный размер в {quota}}}",
   "@tooBigFiles": {
     "type": "text",
     "placeholders": {
@@ -473,32 +473,32 @@
       "firstElementName": {}
     }
   },
-  "copy_to_my_space": "Copy to My Space",
+  "copy_to_my_space": "Копировать в мое простанство",
   "@copy_to_my_space": {
     "type": "text",
     "placeholders": {}
   },
-  "the_file_has_been_copied_successfully": "The file has been copied successfully",
+  "the_file_has_been_copied_successfully": "Файл успешно скопирован",
   "@the_file_has_been_copied_successfully": {
     "type": "text",
     "placeholders": {}
   },
-  "the_file_could_not_be_copied": "The file could not be copied",
+  "the_file_could_not_be_copied": "Не удалось скопировать файл",
   "@the_file_could_not_be_copied": {
     "type": "text",
     "placeholders": {}
   },
-  "cannot_copy_files_to_my_space": "Can not copy files to My Space",
+  "cannot_copy_files_to_my_space": "Невозможно копировать файлы в мое пространство",
   "@cannot_copy_files_to_my_space": {
     "type": "text",
     "placeholders": {}
   },
-  "some_items_have_been_copied_to_my_space": "Some items have been copied to My Space",
+  "some_items_have_been_copied_to_my_space": "Некоторые элементы были скопированы в мое пространство",
   "@some_items_have_been_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
   },
-  "all_items_have_been_copied_to_my_space": "All items have been copied to My Space",
+  "all_items_have_been_copied_to_my_space": "Все элементы были скопированы в мое пространство",
   "@all_items_have_been_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
@@ -508,7 +508,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "search_in_shared_space_files": "Search in Shared Space files",
+  "search_in_shared_space_files": "Искать в файлах рабочих групп",
   "@search_in_shared_space_files": {
     "type": "text",
     "placeholders": {}
@@ -525,104 +525,74 @@
     "type": "text",
     "placeholders": {}
   },
-  "search_in_shared_space": "Search in Shared Space",
+  "search_in_shared_space": "Искать в рабочих группах",
   "@search_in_shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "shared_spaces_could_not_be_deleted": "{sharedSpacesNumber,plural, =1{The Shared Space could not be deleted}other{Shared Spaces could not be deleted}}",
+  "shared_spaces_could_not_be_deleted": "{sharedSpacesNumber,plural, =1{Рабочая группа не может быть удалена}other{Рабочие группы не могут быть удалены}}",
   "@shared_spaces_could_not_be_deleted": {
     "type": "text",
     "placeholders": {
       "sharedSpacesNumber": {}
     }
   },
-  "shared_space_has_been_deleted": "The Shared Space has been deleted",
+  "shared_space_has_been_deleted": "Рабочая группа удалена",
   "@shared_space_has_been_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "all_shared_spaces_have_been_deleted": "All Shared Spaces have been deleted",
+  "all_shared_spaces_have_been_deleted": "Все рабочие группы удалены",
   "@all_shared_spaces_have_been_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "preview": "Preview",
+  "preview": "предварительный просмотр",
   "@preview": {
     "type": "text",
     "placeholders": {}
   },
-  "no_preview_available": "No preview available",
+  "no_preview_available": "Предварительный просмотр недоступен",
   "@no_preview_available": {
     "type": "text",
     "placeholders": {}
   },
-  "preparing_to_preview_file": "Preparing to preview file",
+  "preparing_to_preview_file": "Подготовка к предварительному просмотру файла",
   "@preparing_to_preview_file": {
     "type": "text",
     "placeholders": {}
   },
-  "modification_date": "Modification date",
-  "@modification_date": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "creation_date": "Creation date",
-  "@creation_date": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "size": "Size",
-  "@size": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "name": "Name",
-  "@name": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "shared": "Shared",
-  "@shared": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "order_by": "Order by",
-  "@order_by": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_new_file_or_folder": "Add new file or folder",
+  "add_new_file_or_folder": "Добавить новый файл или папку",
   "@add_new_file_or_folder": {
     "type": "text",
     "placeholders": {}
   },
-  "create_folder": "Create Folder",
+  "create_folder": "Создать папку",
   "@create_folder": {
     "type": "text",
     "placeholders": {}
   },
-  "new_folder": "New folder",
+  "new_folder": "Новая папка",
   "@new_folder": {
     "type": "text",
     "placeholders": {}
   },
-  "rename": "Rename",
+  "rename": "Переименовать",
   "@rename": {
     "type": "text",
     "placeholders": {}
   },
-  "name_not_empty": "The name cannot be empty!",
+  "name_not_empty": "Поле имени не может быть пустым!",
   "@name_not_empty": {
     "type": "text",
     "placeholders": {}
   },
-  "name_already_exists": "The name already exists!",
+  "name_already_exists": "Такое имя уже существует!",
   "@name_already_exists": {
     "type": "text",
     "placeholders": {}
   },
-  "create_new_folder": "Create new folder",
+  "create_new_folder": "Создать новую папку",
   "@create_new_folder": {
     "type": "text",
     "placeholders": {}
