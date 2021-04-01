@@ -31,6 +31,7 @@
 //
 
 import 'package:data/src/network/model/converter/account_id_converter.dart';
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -44,6 +45,7 @@ class AccountDto with EquatableMixin {
   final String mail;
   final String firstName;
   final String lastName;
+  @JsonKey(name: Attribute.uuid)
   final AccountId accountId;
   final AccountType accountType;
 

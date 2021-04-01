@@ -42,6 +42,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   final GetSharedSpaceInteractor _getSharedSpaceInteractor;
   final GetQuotaInteractor _getQuotaInteractor;
   final GetAllSharedSpaceMembersInteractor _getAllSharedSpaceMembersInteractor;
+  final SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
 
   SharedSpaceNodeNested sharedSpaceNodeNested;
 
@@ -50,7 +51,8 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     this._appNavigation,
     this._getSharedSpaceInteractor,
     this._getQuotaInteractor,
-    this._getAllSharedSpaceMembersInteractor
+    this._getAllSharedSpaceMembersInteractor,
+    this._sharedSpaceActivitiesInteractor
   ) : super(store);
 
   Future<SharedSpaceNodeNested> getSharedSpace(SharedSpaceId sharedSpaceId) async {
@@ -65,18 +67,26 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
         .getOrElse(() => null);
   }
 
-  Future<List<SharedSpaceMember>> getSharedSpaceMembers(SharedSpaceId sharedSpaceId) async {
-    return (await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId))
-        .map((result) => result is SharedSpaceMembersViewState ? result.members : null)
-        .getOrElse(() => []);
-  }
-
   Future<SharedSpaceDetailsInfo> getSharedSpaceDetails(SharedSpaceDetailsArguments sharedSpaceDetailsArguments) async {
     return await getSharedSpace(sharedSpaceDetailsArguments.sharedSpaceId).then(
-      (sharedSpace) => getAccountQuota(sharedSpace.quotaId).then((accountQuota) async {
-        final members = await getSharedSpaceMembers(sharedSpace.sharedSpaceId);
-        return SharedSpaceDetailsInfo(sharedSpace, accountQuota, members);
-      }));
+      (sharedSpace) async {
+        return await Future.wait([
+            _getQuotaInteractor.execute(sharedSpace.quotaId),
+            _getAllSharedSpaceMembersInteractor.execute(sharedSpace.sharedSpaceId),
+            _sharedSpaceActivitiesInteractor.execute(sharedSpace.sharedSpaceId)
+        ]).then((response) async {
+          final accountQuota = response[0]
+              .map((result) => result is AccountQuotaViewState ? result.accountQuota : [])
+              .getOrElse(() => []);
+          final members = response[1]
+              .map((result) => result is SharedSpaceMembersViewState ? result.members : [])
+              .getOrElse(() => []);
+          final activities = response[2]
+              .map((result) => result is SharedSpacesActivitiesViewState ? result.auditLogEntryUserList : [])
+              .getOrElse(() => []);
+          return SharedSpaceDetailsInfo(sharedSpace, accountQuota, members, activities);
+        });
+      });
   }
 
   void backToSharedSpacesList() {

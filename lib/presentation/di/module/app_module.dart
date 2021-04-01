@@ -99,6 +99,9 @@ class AppModule {
     getIt.registerLazySingleton(() => SharedSpaceMemberDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerLazySingleton(() => SharedSpaceActivitiesDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -118,6 +121,7 @@ class AppModule {
     getIt.registerFactory<SortDataSource>(() => getIt<SortDataSourceImpl>());
     getIt.registerFactory<ContactDataSource>(() => getIt<ContactDataSourceImpl>());
     getIt.registerFactory<SharedSpaceMemberDataSource>(() => getIt<SharedSpaceMemberDataSourceImpl>());
+    getIt.registerFactory<SharedSpaceActivitiesDataSource>(() => getIt<SharedSpaceActivitiesDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -134,6 +138,7 @@ class AppModule {
     getIt.registerFactory(() => SortRepositoryImpl(getIt<SortDataSource>()));
     getIt.registerFactory(() => ContactRepositoryImpl(getIt<ContactDataSource>()));
     getIt.registerFactory(() => SharedSpaceMemberRepositoryImpl(getIt<SharedSpaceMemberDataSource>()));
+    getIt.registerFactory(() => SharedSpaceActivitiesRepositoryImpl(getIt<SharedSpaceActivitiesDataSource>()));
   }
 
   void _provideRepository() {
@@ -150,6 +155,7 @@ class AppModule {
     getIt.registerFactory<SortRepository>(() => getIt<SortRepositoryImpl>());
     getIt.registerFactory<ContactRepository>(() => getIt<ContactRepositoryImpl>());
     getIt.registerFactory<SharedSpaceMemberRepository>(() => getIt<SharedSpaceMemberRepositoryImpl>());
+    getIt.registerFactory<SharedSpaceActivitiesRepository>(() => getIt<SharedSpaceActivitiesRepositoryImpl>());
   }
 
   void _provideInteractor() {
@@ -241,6 +247,7 @@ class AppModule {
         getIt<CredentialRepository>()
     ));
     getIt.registerFactory(() => GetAllSharedSpaceMembersInteractor(getIt<SharedSpaceMemberRepository>()));
+    getIt.registerFactory(() => SharedSpaceActivitiesInteractor(getIt<SharedSpaceActivitiesRepository>()));
   }
 
   void _provideSharePreference() {
