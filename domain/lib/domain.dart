@@ -11,6 +11,7 @@ export 'src/extension/media_type_extension.dart';
 export 'src/extension/list_work_group_node_extension.dart';
 export 'src/extension/document_extensions.dart';
 export 'src/extension/work_group_node_extensions.dart';
+export 'src/extension/audit_log_entry_type.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -36,6 +37,7 @@ export 'src/usecases/name_verification/verify_name_view_state.dart';
 export 'src/usecases/contact/get_device_contact_suggestions_view_state.dart';
 export 'src/usecases/shared_space/download_preview_work_group_document_view_state.dart';
 export 'src/usecases/received/download_preview_received_share_view_state.dart';
+export 'src/usecases/shared_space_activities/shared_space_activities_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -52,6 +54,7 @@ export 'src/usecases/authentication/user_exception.dart';
 export 'src/usecases/quota/quota_exception.dart';
 export 'src/usecases/quota/quota_verification_exception.dart';
 export 'src/usecases/name_verification/verify_name_exception.dart';
+export 'src/usecases/shared_space_activities/shared_space_activities_exception.dart';
 
 // model
 export 'src/model/authentication/token.dart';
@@ -122,6 +125,26 @@ export 'src/model/operation.dart';
 export 'src/model/sharedspace/shared_space_member_id.dart';
 export 'src/model/sharedspace/shared_space_member.dart';
 export 'src/model/sharedspace/shared_space_member_node.dart';
+export 'src/model/audit/audit_log_entry_id.dart';
+export 'src/model/audit/audit_log_entry_type.dart';
+export 'src/model/audit/audit_log_entry.dart';
+export 'src/model/audit/audit_log_entry_user.dart';
+export 'src/model/audit/audit_log_resource_id.dart';
+export 'src/model/audit/log_action.dart';
+export 'src/model/audit/log_action_cause.dart';
+export 'src/model/audit/workgroup/work_group_document_audit_log_entry.dart';
+export 'src/model/audit/workgroup/work_group_document_revision_audit_log_entry.dart';
+export 'src/model/audit/workgroup/work_group_folder_audit_log_entry.dart';
+export 'src/model/audit/workgroup/shared_space_member_audit_log_entry.dart';
+export 'src/model/audit/workgroup/shared_space_node_audit_log_entry.dart';
+export 'src/model/audit/audit_log_action_message.dart';
+export 'src/model/audit/client_log_action.dart';
+export 'src/model/audit/work_group_light.dart';
+export 'src/model/audit/work_group_copy.dart';
+export 'src/model/audit/space_kind.dart';
+export 'src/model/audit/copy_context_id.dart';
+export 'src/model/audit/audit_log_action_message_param.dart';
+export 'src/model/audit/audit_log_action_detail.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -173,6 +196,7 @@ export 'src/usecases/shared_space/download_preview_work_group_document_interacto
 export 'src/usecases/shared_space/get_shared_space_interactor.dart';
 export 'src/usecases/received/download_preview_received_share_interactor.dart';
 export 'src/usecases/shared_space/get_all_shared_space_members_interactor.dart';
+export 'src/usecases/shared_space_activities/shared_space_acitivities_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -187,6 +211,7 @@ export 'src/repository/functionality/functionality_repository.dart';
 export 'src/repository/contact/contact_repository.dart';
 export 'src/repository/sort/sort_repository.dart';
 export 'src/repository/sharedspacemember/shared_space_member_repository.dart';
+export 'src/repository/shared_space_activities/shared_space_acitivities_repository.dart';
 
 // errorcode
 export 'src/errorcode/business_error_code.dart';
