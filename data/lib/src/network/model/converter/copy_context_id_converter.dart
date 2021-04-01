@@ -28,15 +28,19 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class Attribute {
-  static const uuid = 'uuid';
-  static const type = 'type';
-  static const mimeType = 'mimeType';
-  static const workGroup = 'workGroup';
-  static const parent = 'parent';
-  static const quotaUuid = 'quotaUuid';
-  static const resourceUuid = 'resourceUuid';
-  static const fromResourceUuid = 'fromResourceUuid';
-  static const contextUuid = 'contextUuid';
+import 'dart:convert';
+
+import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+class CopyContextIdConverter implements JsonConverter<CopyContextId, String> {
+  const CopyContextIdConverter();
+
+  @override
+  CopyContextId fromJson(String json) => CopyContextId(json);
+
+  @override
+  String toJson(CopyContextId object) => jsonEncode(object.uuid);
 }

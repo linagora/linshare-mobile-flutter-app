@@ -81,11 +81,11 @@ extension SharedSpaceMemberResponseExtension on SharedSpaceMemberResponse {
   SharedSpaceMember toSharedSpaceMember() {
     return SharedSpaceMember(
       sharedSpaceMemberId,
-      account.toAccount(),
+      account != null ? account.toAccount() : null,
       creationDate,
       modificationDate,
-      node.toSharedSpaceMemberNode(),
-      role.toSharedSpaceRole(),
+      node != null ? node.toSharedSpaceMemberNode() : null,
+      role != null ? role.toSharedSpaceRole() : null,
     );
   }
 }

@@ -28,15 +28,51 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+import 'package:data/data.dart';
+import 'package:data/src/util/attribute.dart';
+import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Attribute {
-  static const uuid = 'uuid';
-  static const type = 'type';
-  static const mimeType = 'mimeType';
-  static const workGroup = 'workGroup';
-  static const parent = 'parent';
-  static const quotaUuid = 'quotaUuid';
-  static const resourceUuid = 'resourceUuid';
-  static const fromResourceUuid = 'fromResourceUuid';
-  static const contextUuid = 'contextUuid';
+class AuditLogEntryUserDto with EquatableMixin {
+  @JsonKey(name: Attribute.uuid)
+  final AuditLogEntryId auditLogEntryId;
+
+  @JsonKey(name: Attribute.resourceUuid)
+  final AuditLogResourceId resourceId;
+
+  @JsonKey(name: Attribute.fromResourceUuid)
+  final AuditLogResourceId fromResourceId;
+
+  final DateTime creationDate;
+  final AccountDto actor;
+  final AccountDto authUser;
+  final AuditLogEntryType type;
+  final LogAction action;
+  final LogActionCause cause;
+
+  AuditLogEntryUserDto(
+      this.auditLogEntryId,
+      this.resourceId,
+      this.fromResourceId,
+      this.creationDate,
+      this.authUser,
+      this.type,
+      this.action,
+      this.cause,
+      this.actor
+  );
+
+  @override
+  List<Object> get props => [
+    auditLogEntryId,
+    resourceId,
+    fromResourceId,
+    creationDate,
+    authUser,
+    type,
+    action,
+    cause,
+    actor
+  ];
 }

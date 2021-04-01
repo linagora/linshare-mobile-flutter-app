@@ -13,6 +13,7 @@ export 'src/datasource/functionality_datasource.dart';
 export 'src/datasource/sort_datasource.dart';
 export 'src/datasource/contact_datasource.dart';
 export 'src/datasource/shared_space_member_datasource.dart';
+export 'src/datasource/shared_space_activities_datasource.dart';
 
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
@@ -26,6 +27,7 @@ export 'src/datasource_impl/functionality_datasource_impl.dart';
 export 'src/datasource_impl/contact_datasource_impl.dart';
 export 'src/datasource_impl/sort_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_member_datasource_impl.dart';
+export 'src/datasource_impl/shared_space_activities_datasource_impl.dart';
 
 // config
 export 'src/network/config/dynamic_url_interceptors.dart';
@@ -52,6 +54,14 @@ export 'src/network/model/autocomplete/user_autocomplete_result_dto.dart';
 export 'src/network/model/request/create_shared_space_node_folder_request.dart';
 export 'package:data/src/network/model/response/shared_space_member_response.dart';
 export 'package:data/src/network/model/response/shared_space_member_node_dto.dart';
+export 'src/network/model/shared_space_activities/audit_log_entry_user_dto.dart';
+export 'src/network/model/shared_space_activities/shared_space_member_audit_log_entry_dto.dart';
+export 'src/network/model/shared_space_activities/shared_space_node_audit_log_entry_dto.dart';
+export 'src/network/model/shared_space_activities/work_group_copy_dto.dart';
+export 'src/network/model/shared_space_activities/work_group_document_audit_log_entry_dto.dart';
+export 'src/network/model/shared_space_activities/work_group_document_revision_audit_log_entry_dto.dart';
+export 'src/network/model/shared_space_activities/work_group_folder_audit_log_entry_dto.dart';
+export 'src/network/model/shared_space_activities/work_group_light_dto.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
@@ -67,6 +77,7 @@ export 'src/repository/functionality/functionality_repository_impl.dart';
 export 'src/repository/sort/sort_repository_impl.dart';
 export 'src/repository/contact/contact_repository_impl.dart';
 export 'src/repository/sharedspacemember/shared_space_member_repository_impl.dart';
+export 'src/repository/shared_space_activities/shared_space_activities_repository_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';
