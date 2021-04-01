@@ -29,14 +29,39 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Attribute {
-  static const uuid = 'uuid';
-  static const type = 'type';
-  static const mimeType = 'mimeType';
-  static const workGroup = 'workGroup';
-  static const parent = 'parent';
-  static const quotaUuid = 'quotaUuid';
-  static const resourceUuid = 'resourceUuid';
-  static const fromResourceUuid = 'fromResourceUuid';
-  static const contextUuid = 'contextUuid';
+import 'package:data/src/network/model/converter/copy_context_id_converter.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
+import 'package:data/src/util/attribute.dart';
+import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'work_group_copy_dto.g.dart';
+
+@JsonSerializable()
+@WorkGroupNodeIdConverter()
+@CopyContextIdConverter()
+class WorkGroupCopyDto with EquatableMixin {
+  @JsonKey(name: Attribute.uuid)
+  final WorkGroupNodeId workGroupNodeId;
+
+  @JsonKey(name: Attribute.contextUuid)
+  final CopyContextId contextId;
+
+  final String name;
+  final SpaceType kind;
+  final WorkGroupNodeType nodeType;
+
+  WorkGroupCopyDto(this.workGroupNodeId, this.contextId, this.name, this.kind, this.nodeType);
+
+  @override
+  List<Object> get props => [workGroupNodeId, contextId, name, kind, nodeType];
+
+  factory WorkGroupCopyDto.fromJson(Map<String, dynamic> json) => _$WorkGroupCopyDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$WorkGroupCopyDtoToJson(this);
+}
+
+extension WorkGroupCopyDtoExtension on WorkGroupCopyDto {
+  WorkGroupCopy toWorkGroupCopy() => WorkGroupCopy(workGroupNodeId, contextId, name, kind, nodeType);
 }

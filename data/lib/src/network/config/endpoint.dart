@@ -54,6 +54,8 @@ class Endpoint {
   static final ServicePath quota = ServicePath('/quota');
 
   static final ServicePath functionality = ServicePath('/functionalities');
+
+  static final ServicePath workGroups = ServicePath('/work_groups');
 }
 
 extension ServicePathExtension on ServicePath {

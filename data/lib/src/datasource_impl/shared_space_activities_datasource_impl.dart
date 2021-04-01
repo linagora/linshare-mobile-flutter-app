@@ -29,14 +29,46 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Attribute {
-  static const uuid = 'uuid';
-  static const type = 'type';
-  static const mimeType = 'mimeType';
-  static const workGroup = 'workGroup';
-  static const parent = 'parent';
-  static const quotaUuid = 'quotaUuid';
-  static const resourceUuid = 'resourceUuid';
-  static const fromResourceUuid = 'fromResourceUuid';
-  static const contextUuid = 'contextUuid';
+
+import 'package:data/data.dart';
+import 'package:dio/dio.dart';
+import 'package:domain/domain.dart';
+
+class SharedSpaceActivitiesDataSourceImpl implements SharedSpaceActivitiesDataSource  {
+  final LinShareHttpClient _linShareHttpClient;
+  final RemoteExceptionThrower _remoteExceptionThrower;
+
+  SharedSpaceActivitiesDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
+
+  @override
+  Future<List<AuditLogEntryUser>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getSharedSpaceActivities(sharedSpaceId))
+          .map<AuditLogEntryUser>((auditLogEntryUserDto) {
+            if (auditLogEntryUserDto is SharedSpaceNodeAuditLogEntryDto) {
+              return auditLogEntryUserDto.toSharedSpaceNodeAuditLogEntry();
+            } else if (auditLogEntryUserDto is SharedSpaceMemberAuditLogEntryDto) {
+              return auditLogEntryUserDto.toSharedSpaceMemberAuditLogEntry();
+            } else if (auditLogEntryUserDto is WorkGroupDocumentAuditLogEntryDto) {
+              return auditLogEntryUserDto.toWorkGroupDocumentAuditLogEntry();
+            } else if (auditLogEntryUserDto is WorkGroupDocumentRevisionAuditLogEntryDto) {
+              return auditLogEntryUserDto.toWorkGroupDocumentRevisionAuditLogEntry();
+            } else if (auditLogEntryUserDto is WorkGroupFolderAuditLogEntryDto) {
+              return auditLogEntryUserDto.toWorkGroupFolderAuditLogEntry();
+            }
+            return null;
+          })
+          .toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw SharedSpaceActivitiesNotFound();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }

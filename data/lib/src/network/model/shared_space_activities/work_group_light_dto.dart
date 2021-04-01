@@ -29,14 +29,34 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Attribute {
-  static const uuid = 'uuid';
-  static const type = 'type';
-  static const mimeType = 'mimeType';
-  static const workGroup = 'workGroup';
-  static const parent = 'parent';
-  static const quotaUuid = 'quotaUuid';
-  static const resourceUuid = 'resourceUuid';
-  static const fromResourceUuid = 'fromResourceUuid';
-  static const contextUuid = 'contextUuid';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
+import 'package:data/src/util/attribute.dart';
+import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'work_group_light_dto.g.dart';
+
+@JsonSerializable()
+@DatetimeConverter()
+@WorkGroupNodeIdConverter()
+class WorkGroupLightDto with EquatableMixin {
+  @JsonKey(name: Attribute.uuid)
+  final WorkGroupNodeId workGroupNodeId;
+
+  final DateTime creationDate;
+  final String name;
+
+  WorkGroupLightDto(this.workGroupNodeId, this.creationDate, this.name);
+
+  @override
+  List<Object> get props => [workGroupNodeId, creationDate, name];
+
+  factory WorkGroupLightDto.fromJson(Map<String, dynamic> json) => _$WorkGroupLightDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$WorkGroupLightDtoToJson(this);
+}
+
+extension WorkGroupLightDtoExtension on WorkGroupLightDto {
+  WorkGroupLight toWorkGroupLight() => WorkGroupLight(workGroupNodeId, creationDate, name);
 }

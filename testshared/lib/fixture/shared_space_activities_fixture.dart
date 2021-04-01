@@ -36,10 +36,24 @@ import 'package:http_parser/http_parser.dart';
 
 final sharedSpaceIdForAuditLog = SharedSpaceId('eda9a917-10a7-44e0-98dc-7179ab914ab7');
 
+final workGroupLightDto = WorkGroupLightDto(
+    WorkGroupNodeId('eda9a917-10a7-44e0-98dc-7179ab914ab7'),
+    DateTime.fromMillisecondsSinceEpoch(1616088020412),
+    'New workgroup (2)'
+);
+
 final workGroupLight = WorkGroupLight(
     WorkGroupNodeId('eda9a917-10a7-44e0-98dc-7179ab914ab7'),
     DateTime.fromMillisecondsSinceEpoch(1616088020412),
     'New workgroup (2)'
+);
+
+final workGroupCopyDto = WorkGroupCopyDto(
+    WorkGroupNodeId('543bde3b-f161-4d30-b480-593052f5e56f'),
+    CopyContextId('741ddf11-0e1c-4dcf-9fc5-1833db9173bf'),
+    'sample.ods',
+    SpaceKind.SHARED_SPACE,
+    WorkGroupNodeType.DOCUMENT
 );
 
 final workGroupCopy = WorkGroupCopy(
@@ -48,6 +62,14 @@ final workGroupCopy = WorkGroupCopy(
     'sample.ods',
     SpaceType.SHARED_SPACE,
     WorkGroupNodeType.DOCUMENT
+);
+
+final workGroupCopyDto2 = WorkGroupCopyDto(
+    WorkGroupNodeId('543bde3b-f161-4d30-b480-593052f5e56f'),
+    CopyContextId('741ddf11-0e1c-4dcf-9fc5-1833db9173bf'),
+    'sample.ods',
+    SpaceKind.SHARED_SPACE,
+    WorkGroupNodeType.FOLDER
 );
 
 final workGroupCopy2 = WorkGroupCopy(
@@ -116,6 +138,41 @@ final workGroupFolder = WorkGroupFolder(
     '',
     'sample.ods',
     account1
+);
+
+
+final documentAuditLogDto = WorkGroupDocumentAuditLogEntryDto(
+    AuditLogEntryId('119b56e8-3d43-43a0-a422-0037c96e5b1c'),
+    AuditLogResourceId('2638b3a2-f782-4bf1-9015-200ee0067921'),
+    AuditLogResourceId('2638b3a2-f782-4bf1-9015-200ee0067921'),
+    DateTime.fromMillisecondsSinceEpoch(1617156864861),
+    accountDto1,
+    AuditLogEntryType.WORKGROUP_DOCUMENT,
+    LogAction.DOWNLOAD,
+    LogActionCause.COPY,
+    accountDto1,
+    workGroupLightDto,
+    workGroupDocumentDto,
+    workGroupDocumentDto,
+    workGroupCopyDto,
+    workGroupCopyDto
+);
+
+final folderAuditLogDto = WorkGroupFolderAuditLogEntryDto(
+    AuditLogEntryId('119b56e8-3d43-43a0-a422-0037c96e5b1c'),
+    AuditLogResourceId('2638b3a2-f782-4bf1-9015-200ee0067921'),
+    AuditLogResourceId('2638b3a2-f782-4bf1-9015-200ee0067921'),
+    DateTime.fromMillisecondsSinceEpoch(1617156864861),
+    accountDto1,
+    AuditLogEntryType.WORKGROUP_FOLDER,
+    LogAction.UPDATE,
+    LogActionCause.COPY,
+    accountDto1,
+    workGroupLightDto,
+    workGroupFolderDto,
+    workGroupFolderDto,
+    workGroupCopyDto2,
+    workGroupCopyDto2
 );
 
 final documentAuditLog = WorkGroupDocumentAuditLogEntry(
