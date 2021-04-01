@@ -28,74 +28,63 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
-
-import 'package:data/src/network/model/account/account_dto.dart';
+import 'package:data/data.dart';
+import 'package:data/src/network/model/converter/audit_log_entry_id_converter.dart';
+import 'package:data/src/network/model/converter/audit_log_resource_id_converter.dart';
 import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
-import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
-import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
+import 'package:data/src/network/model/shared_space_activities/audit_log_entry_user_dto.dart';
+import 'package:data/src/network/model/shared_space_activities/work_group_light_dto.dart';
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'work_group_folder_dto.g.dart';
+part 'shared_space_node_audit_log_entry_dto.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 @DatetimeConverter()
-@WorkGroupNodeIdConverter()
-@SharedSpaceIdConverter()
-class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
-  WorkGroupNodeFolderDto(
-    WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId parentWorkGroupNodeId,
-    WorkGroupNodeType type,
-    SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String description,
-    String name,
-    AccountDto lastAuthor,
-  ) : super(
-          workGroupNodeId,
-          parentWorkGroupNodeId,
-          type,
-          sharedSpaceId,
-          creationDate,
-          modificationDate,
-          description,
-          name,
-          lastAuthor,
-        );
+@AuditLogEntryIdConverter()
+@AuditLogResourceIdConverter()
+class SharedSpaceNodeAuditLogEntryDto extends AuditLogEntryUserDto {
 
-  factory WorkGroupNodeFolderDto.fromJson(Map<String, dynamic> json) =>
-      _$WorkGroupNodeFolderDtoFromJson(json);
+  final SharedSpaceNodeNestedResponse resource;
+  final SharedSpaceNodeNestedResponse resourceUpdated;
 
-  Map<String, dynamic> toJson() => _$WorkGroupNodeFolderDtoToJson(this);
+  SharedSpaceNodeAuditLogEntryDto(
+      AuditLogEntryId auditLogEntryId,
+      AuditLogResourceId resourceId,
+      AuditLogResourceId fromResourceId,
+      DateTime creationDate,
+      AccountDto authUser,
+      AuditLogEntryType type,
+      LogAction action,
+      LogActionCause cause,
+      AccountDto actor,
+      this.resource,
+      this.resourceUpdated
+      ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
   List<Object> get props => [
-        workGroupNodeId,
-        parentWorkGroupNodeId,
-        type,
-        sharedSpaceId,
-        creationDate,
-        modificationDate,
-        description,
-        name,
-        lastAuthor,
-      ];
+    ...super.props,
+    resource,
+    resourceUpdated
+  ];
+
+  factory SharedSpaceNodeAuditLogEntryDto.fromJson(Map<String, dynamic> json) => _$SharedSpaceNodeAuditLogEntryDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$SharedSpaceNodeAuditLogEntryDtoToJson(this);
 }
 
-extension WorkGroupNodeFolderDtoExtension on WorkGroupNodeFolderDto {
-  WorkGroupFolder toWorkGroupFolder() => WorkGroupFolder(
-        workGroupNodeId,
-        parentWorkGroupNodeId,
-        type,
-        sharedSpaceId,
-        creationDate,
-        modificationDate,
-        description,
-        name,
-        lastAuthor != null ? lastAuthor.toAccount() : null
-      );
+extension SharedSpaceNodeAuditLogEntryDtoExtension on SharedSpaceNodeAuditLogEntryDto {
+  SharedSpaceNodeAuditLogEntry toSharedSpaceNodeAuditLogEntry() => SharedSpaceNodeAuditLogEntry(
+      auditLogEntryId,
+      resourceId,
+      fromResourceId,
+      creationDate,
+      authUser != null ? authUser.toAccount() : null,
+      type,
+      action,
+      cause,
+      actor != null ? actor.toAccount() : null,
+      resource != null ? resource.toSharedSpaceNodeNested() : null,
+      resourceUpdated != null ? resourceUpdated.toSharedSpaceNodeNested() : null
+  );
 }

@@ -56,6 +56,7 @@ import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/shared_space_member_response.dart';
 import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/network/model/share/received_share_dto.dart';
+import 'package:data/src/network/model/shared_space_activities/shared_space_member_audit_log_entry_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -135,6 +136,33 @@ class LinShareHttpClient {
             .generateEndpointPath(),
         queryParameters: [BooleanQueryParameter('withRole', true)].toMap());
     return resultJson.map((data) => SharedSpaceNodeNestedResponse.fromJson(data)).toList();
+  }
+
+  Future<List<AuditLogEntryUserDto>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) async {
+    final List membersJson = await _dioClient.get(
+        Endpoint.workGroups
+                .withPathParameter(sharedSpaceId.uuid)
+                .withPathParameter('audit')
+                .generateEndpointPath());
+    return membersJson
+        .map((data) => _convertToAuditLogEntryNodeChild(data))
+        .toList();
+  }
+
+  AuditLogEntryUserDto _convertToAuditLogEntryNodeChild(Map<String, dynamic> nodeChildJson) {
+    if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP.value) {
+      return SharedSpaceNodeAuditLogEntryDto.fromJson(nodeChildJson);
+    } else if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP_MEMBER.value) {
+      return SharedSpaceMemberAuditLogEntryDto.fromJson(nodeChildJson);
+    } else if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP_DOCUMENT.value) {
+      return WorkGroupDocumentAuditLogEntryDto.fromJson(nodeChildJson);
+    } else if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION.value) {
+      return WorkGroupDocumentRevisionAuditLogEntryDto.fromJson(nodeChildJson);
+    } else if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP_FOLDER.value) {
+      return WorkGroupFolderAuditLogEntryDto.fromJson(nodeChildJson);
+    } else {
+      return null;
+    }
   }
 
   Future<List<AutoCompleteResult>> getSharingAutoComplete(
