@@ -41,13 +41,15 @@ class SharedSpaceDetailsInfo extends Equatable {
   final SharedSpaceNodeNested sharedSpaceNodeNested;
   final AccountQuota quota;
   final List<SharedSpaceMember> members;
+  final List<AuditLogEntryUser> activitiesList;
 
-  SharedSpaceDetailsInfo(this.sharedSpaceNodeNested, this.quota, this.members);
+  SharedSpaceDetailsInfo(this.sharedSpaceNodeNested, this.quota, this.members, this.activitiesList);
 
   @override
   List<Object> get props => [
     sharedSpaceNodeNested,
     quota,
-    members
+    members,
+    activitiesList
   ];
 }
