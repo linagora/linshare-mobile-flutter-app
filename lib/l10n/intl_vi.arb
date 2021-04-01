@@ -726,5 +726,292 @@
   "@unknown_role": {
     "type": "text",
     "placeholders": {}
+  },
+  "activities": "Hoạt động",
+  "@activities": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_log_actor": "bởi {actorName}",
+  "@audit_log_actor": {
+    "type": "text",
+    "placeholders": {
+      "actorName": {}
+    }
+  },
+  "audit_action_title_addition": "Thêm mới:",
+  "@audit_action_title_addition": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_delete": "Xóa:",
+  "@audit_action_title_delete": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_update": "Cập nhật:",
+  "@audit_action_title_update": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_create": "Tạo mới:",
+  "@audit_action_title_create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_upload": "Tải tệp lên:",
+  "@audit_action_title_upload": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_copy": "Sao chép:",
+  "@audit_action_title_copy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_download": "Tải xuống:",
+  "@audit_action_title_download": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_upload_revision": "Tải lên phiên bản:",
+  "@audit_action_title_upload_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_delete_revision": "Xóa phiên bản:",
+  "@audit_action_title_delete_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_restore_revision": "Khôi phục phiên bản:",
+  "@audit_action_title_restore_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_download_revision": "Tải xuống phiên bản:",
+  "@audit_action_title_download_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_message_create_workgroup": "{authorName} đã tạo nhóm làm việc mới : {resourceName}.",
+  "@audit_action_message_create_workgroup": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_delete_workgroup": "{authorName} đã xóa nhóm làm việc : {resourceName}.",
+  "@audit_action_message_delete_workgroup": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_update_workgroup": "{authorName} đã sửa nhóm làm việc : {resourceName}.",
+  "@audit_action_message_update_workgroup": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_add_member": "{authorName} đã thêm thành viên mới : {resourceName} trong nhóm làm việc : {nameVarious}.",
+  "@audit_action_message_add_member": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_member": "{authorName} đã xóa thành viên : {resourceName} từ nhóm làm việc : {nameVarious}.",
+  "@audit_action_message_delete_member": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_member": "{authorName} đã sửa thành viên : {resourceName} từ nhóm làm việc : {nameVarious}.",
+  "@audit_action_message_update_member": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_create_folder": "{authorName} đã tạo thư mục mới : {resourceName} trong nhóm làm việc {nameVarious}.",
+  "@audit_action_message_create_folder": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_folder": "{authorName} đã xóa thư mục : {resourceName} từ nhóm làm việc : {nameVarious}.",
+  "@audit_action_message_delete_folder": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_folder": "{authorName} đã sửa thư mục : {resourceName} từ nhóm làm việc : {nameVarious}.",
+  "@audit_action_message_update_folder": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_download_folder": "{authorName} đã tải xuống thư mục : {resourceName} từ nhóm làm việc : {nameVarious}.",
+  "@audit_action_message_download_folder": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_document": "{authorName} đã xóa tệp : {resourceName} từ nhóm làm việc {nameVarious}.",
+  "@audit_action_message_delete_workgroup_document": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_workgroup_document": "{authorName} đã sửa tệp : {resourceName} từ nhóm làm việc {nameVarious}.",
+  "@audit_action_message_update_workgroup_document": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_download_workgroup_document": "{authorName} đã tải xuống tệp : {resourceName} từ nhóm làm việc {nameVarious}.",
+  "@audit_action_message_download_workgroup_document": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_upload_workgroup_document": "{authorName} đã tải lên tệp mới : {resourceName} trong nhóm làm việc : {nameVarious}.",
+  "@audit_action_message_upload_workgroup_document": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space": "{authorName} đã tạo tài liệu : {resourceName} đến {nameVarious}, từ không gian riêng {whose}.",
+  "@audit_action_message_copy_document_from_personal_space": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {},
+      "whose": {}
+    }
+  },
+  "audit_action_message_copy_document_from_received_share": "{authorName} đã tạo tài liệu : {resourceName} đến {nameVarious}, từ chia sẻ nhận được {whose}.",
+  "@audit_action_message_copy_document_from_received_share": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {},
+      "whose": {}
+    }
+  },
+  "audit_action_message_copy_document_from_shared_space": "{authorName} đã tạo tệp này bằng sao chép : {resourceName} từ nhóm làm việc khác.",
+  "@audit_action_message_copy_document_from_shared_space": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_copy_document_to_personal_space": "{authorName} đã sao chép : {resourceName} sang không gian riêng {whose}.",
+  "@audit_action_message_copy_document_to_personal_space": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "whose": {}
+    }
+  },
+  "audit_action_message_copy_document_to_shared_space": "{authorName} đã tạo bảo sao của tệp này vào {nameVarious}.",
+  "@audit_action_message_copy_document_to_shared_space": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_upload_revision": "Phiên bản của tệp {resourceName} đã được thêm vào nhóm làm việc {nameVarious}.",
+  "@audit_action_message_upload_revision": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_revision": "hiên bản của tệp {resourceName} đã bị xóa khỏi nhóm làm việc {nameVarious}.",
+  "@audit_action_message_delete_revision": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_revision_from_shared_space": "Tài liệu đã được khôi phục với phiên bản {resourceName}.",
+  "@audit_action_message_copy_revision_from_shared_space": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_download_revision": "{authorName} đã tải xuống phiên bản : {resourceName} từ nhóm làm việc {nameVarious}.",
+  "@audit_action_message_download_revision": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "you": "Bạn",
+  "@you": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "me": "Tôi",
+  "@me": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "his": "của anh ấy",
+  "@his": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "your": "của bạn",
+  "@your": {
+    "type": "text",
+    "placeholders": {}
   }
 }
