@@ -89,13 +89,13 @@ void main() {
 
     test('Copy To SharedSpace Should Return Success Copied Document', () async {
       when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
-        CopyBodyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+        CopyBodyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
         sharedSpaceId1,
         destinationParentNodeId: workGroupDocument1.workGroupNodeId
       )).thenAnswer((_) async => [sharedSpaceFolder1]);
 
       final result = await _sharedSpaceDataSourceImpl.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
           sharedSpaceId1,
           destinationParentNodeId: workGroupDocument1.workGroupNodeId);
       expect(result, [sharedSpaceFolder1.toWorkGroupFolder()]);
@@ -103,12 +103,12 @@ void main() {
 
     test('Copy To SharedSpace Should Return Success Copied Document Without Destination Parent NodeId', () async {
       when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
-        CopyBodyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+        CopyBodyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
         sharedSpaceId1
       )).thenAnswer((_) async => [sharedSpaceFolder1]);
 
       final result = await _sharedSpaceDataSourceImpl.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
           sharedSpaceId1);
       expect(result, [sharedSpaceFolder1.toWorkGroupFolder()]);
     });
@@ -119,12 +119,12 @@ void main() {
           response: Response(statusCode: 404)
       );
       when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
-        CopyBodyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+        CopyBodyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
           sharedSpaceId1,
       )).thenThrow(error);
 
       await _sharedSpaceDataSourceImpl.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.sharedSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
           sharedSpaceId1
       ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));;
     });

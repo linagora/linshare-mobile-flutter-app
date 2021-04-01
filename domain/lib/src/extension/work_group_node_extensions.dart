@@ -37,6 +37,6 @@ import 'package:domain/src/model/sharedspacedocument/work_group_node.dart';
 
 extension WorkGroupNodeExtensions on WorkGroupNode {
   CopyRequest toCopyRequest() {
-    return CopyRequest(workGroupNodeId.uuid, SpaceType.sharedSpace);
+    return CopyRequest(workGroupNodeId.uuid, SpaceType.SHARED_SPACE);
   }
 }

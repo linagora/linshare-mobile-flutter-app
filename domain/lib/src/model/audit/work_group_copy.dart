@@ -37,7 +37,7 @@ class WorkGroupCopy with EquatableMixin {
   final WorkGroupNodeId workGroupNodeId;
   final CopyContextId contextId;
   final String name;
-  final SpaceKind kind;
+  final SpaceType kind;
   final WorkGroupNodeType nodeType;
 
   WorkGroupCopy(this.workGroupNodeId, this.contextId, this.name, this.kind, this.nodeType);

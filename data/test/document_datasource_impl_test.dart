@@ -272,7 +272,7 @@ void removeDocumentTest() {
     });
 
     test('copy to my space should return success with valid data', () async {
-      final copyRequest = CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid);
+      final copyRequest = CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid);
       when(_linShareHttpClient.copyToMySpace(copyRequest.toCopyBodyRequest()))
           .thenAnswer((_) async => [documentResponse1]);
 
@@ -285,7 +285,7 @@ void removeDocumentTest() {
           type: DioErrorType.RESPONSE,
           response: Response(statusCode: 404)
       );
-      final copyRequest = CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid);
+      final copyRequest = CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid);
       when(_linShareHttpClient.copyToMySpace(copyRequest.toCopyBodyRequest()))
           .thenThrow(error);
 
