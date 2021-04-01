@@ -141,7 +141,6 @@ export 'src/model/audit/audit_log_action_message.dart';
 export 'src/model/audit/client_log_action.dart';
 export 'src/model/audit/work_group_light.dart';
 export 'src/model/audit/work_group_copy.dart';
-export 'src/model/audit/space_kind.dart';
 export 'src/model/audit/copy_context_id.dart';
 export 'src/model/audit/audit_log_action_message_param.dart';
 export 'src/model/audit/audit_log_action_detail.dart';

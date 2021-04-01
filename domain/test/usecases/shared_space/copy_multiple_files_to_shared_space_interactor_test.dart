@@ -51,11 +51,11 @@ void main() {
 
     test('copy to shared space interactor should return success with valid data', () async {
       when(sharedSpaceDocumentRepository.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenAnswer((_) async => [workGroupDocument1]);
       when(sharedSpaceDocumentRepository.copyToSharedSpace(
-          CopyRequest(document2.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document2.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenAnswer((_) async => [workGroupDocument2]);
 
@@ -76,11 +76,11 @@ void main() {
 
     test('copy to shared space interactor should return success with some file failed to copy', () async {
       when(sharedSpaceDocumentRepository.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
           .thenAnswer((_) async => [workGroupDocument1]);
       when(sharedSpaceDocumentRepository.copyToSharedSpace(
-          CopyRequest(document2.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document2.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenThrow(Exception());
 
@@ -100,11 +100,11 @@ void main() {
 
     test('copy to shared space interactor should return failure with all file failed to copy', () async {
       when(sharedSpaceDocumentRepository.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
           .thenThrow(Exception());
       when(sharedSpaceDocumentRepository.copyToSharedSpace(
-          CopyRequest(document2.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document2.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenThrow(Exception());
 
