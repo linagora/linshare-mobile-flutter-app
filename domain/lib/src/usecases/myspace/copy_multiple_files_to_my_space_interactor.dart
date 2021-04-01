@@ -45,7 +45,7 @@ class CopyMultipleFilesToMySpaceInteractor {
     }
 
     final copyRequestsList = workGroupNodes.whereType<WorkGroupDocument>().map((wkNode) =>
-        CopyRequest(wkNode.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: wkNode.sharedSpaceId.uuid)).toList();
+        CopyRequest(wkNode.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: wkNode.sharedSpaceId.uuid)).toList();
     final listResult = await Future.wait(copyRequestsList.map((element) =>
         _copyToMySpaceInteractor.execute(element)));
     if (listResult.length == 1) {

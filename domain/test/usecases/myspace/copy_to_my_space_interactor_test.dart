@@ -50,11 +50,11 @@ void main() {
 
     test('copy to my space interactor should return success with valid data', () async {
       when(documentRepository.copyToMySpace(
-          CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
+          CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
 
       final result = await copyToMySpaceInteractor.execute(
-        CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid));
+        CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid));
       final documentsList = result
           .map((success) => (success as CopyToMySpaceViewState).documentsList)
           .getOrElse(() => []);
@@ -64,11 +64,11 @@ void main() {
     test('copy to my space interactor should fail success with invalid data', () async {
       final exception = DocumentNotFound();
       when(documentRepository.copyToMySpace(
-          CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
+          CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenThrow(exception);
 
       final result = await copyToMySpaceInteractor.execute(
-        CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.sharedSpace, contextUuid: workGroupDocument1.sharedSpaceId.uuid));
+        CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid));
       expect(result, Left<Failure, Success>(CopyToMySpaceFailure(exception)));
     });
   });
