@@ -50,12 +50,12 @@ void main() {
 
     test('copy to shared space interactor should return success with valid data', () async {
       when(sharedSpaceDocumentRepository.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenAnswer((_) async => [workGroupDocument1]);
 
       final result = await copyDocumentsToSharedSpaceInteractor.execute(
-          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId);
       final workGroupList = result
           .map((success) => (success as CopyToSharedSpaceViewState).workGroupNode)
@@ -66,12 +66,12 @@ void main() {
     test('copy to shared space interactor should fail when copyToSharedSpace fail', () async {
       final exception = Exception();
       when(sharedSpaceDocumentRepository.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
           .thenThrow(exception);
 
       final result = await copyDocumentsToSharedSpaceInteractor.execute(
-          CopyRequest(document1.documentId.uuid, SpaceType.personalSpace),
+          CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId);
       expect(result, Left<Failure, Success>(CopyToSharedSpaceFailure(exception)));
     });

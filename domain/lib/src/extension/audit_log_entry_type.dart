@@ -91,24 +91,24 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
       if (auditLogEntry is WorkGroupDocumentAuditLogEntry) {
         if (auditLogEntry.copiedFrom != null) {
           switch(auditLogEntry.copiedFrom.kind) {
-            case SpaceKind.PERSONAL_SPACE:
+            case SpaceType.PERSONAL_SPACE:
               return ClientLogAction.COPY_FROM_PERSONAL_SPACE;
-            case SpaceKind.RECEIVED_SHARE:
+            case SpaceType.RECEIVED_SHARE:
               return ClientLogAction.COPY_FROM_RECEIVED_SHARE;
-            case SpaceKind.SHARED_SPACE:
+            case SpaceType.SHARED_SPACE:
               return ClientLogAction.COPY_FROM_SHARED_SPACE;
           }
         }
 
         if (auditLogEntry.copiedTo != null) {
-            if (auditLogEntry.copiedTo.kind == SpaceKind.SHARED_SPACE) {
+            if (auditLogEntry.copiedTo.kind == SpaceType.SHARED_SPACE) {
               return ClientLogAction.COPY_TO_SHARED_SPACE;
             } else {
               return ClientLogAction.COPY_TO_PERSONAL_SPACE;
             }
         }
       } else if (auditLogEntry is WorkGroupDocumentRevisionAuditLogEntry) {
-        if (auditLogEntry.copiedFrom != null && auditLogEntry.copiedFrom.kind == SpaceKind.SHARED_SPACE) {
+        if (auditLogEntry.copiedFrom != null && auditLogEntry.copiedFrom.kind == SpaceType.SHARED_SPACE) {
           return ClientLogAction.RESTORE_REVISION;
         }
       }

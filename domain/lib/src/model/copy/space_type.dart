@@ -29,16 +29,16 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-enum SpaceType { personalSpace, receivedShare, sharedSpace }
+enum SpaceType { PERSONAL_SPACE, RECEIVED_SHARE, SHARED_SPACE }
 
 extension SpaceTypeExtension on SpaceType {
   String get value {
     switch (this) {
-      case SpaceType.personalSpace:
+      case SpaceType.PERSONAL_SPACE:
         return 'PERSONAL_SPACE';
-      case SpaceType.receivedShare:
+      case SpaceType.RECEIVED_SHARE:
         return 'RECEIVED_SHARE';
-      case SpaceType.sharedSpace:
+      case SpaceType.SHARED_SPACE:
         return 'SHARED_SPACE';
       default:
         return 'PERSONAL_SPACE';

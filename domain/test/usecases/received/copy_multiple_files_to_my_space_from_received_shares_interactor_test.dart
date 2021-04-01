@@ -52,11 +52,11 @@ void main() {
 
     test('copy multiples files to my space from received shares interactor should return success with valid data', () async {
       when(documentRepository.copyToMySpace(
-          CopyRequest(receivedShare1.shareId.uuid, SpaceType.receivedShare)))
+          CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document1]);
 
       when(documentRepository.copyToMySpace(
-          CopyRequest(receivedShare2.shareId.uuid, SpaceType.receivedShare)))
+          CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document2]);
 
       final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: [receivedShare1, receivedShare2]);
@@ -69,11 +69,11 @@ void main() {
     test('copy multiples files to my space from received shares interactor should return success with some failures', () async {
       final exception = DocumentNotFound();
       when(documentRepository.copyToMySpace(
-          CopyRequest(receivedShare1.shareId.uuid, SpaceType.receivedShare)))
+          CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenThrow(exception);
 
       when(documentRepository.copyToMySpace(
-          CopyRequest(receivedShare2.shareId.uuid, SpaceType.receivedShare)))
+          CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document2]);
 
       final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: [receivedShare1, receivedShare2]);
@@ -85,7 +85,7 @@ void main() {
 
     test('copy multiples files to my space from received shares interactor should return success with one document', () async {
       when(documentRepository.copyToMySpace(
-          CopyRequest(receivedShare1.shareId.uuid, SpaceType.receivedShare)))
+          CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document1]);
 
       final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: [receivedShare1]);
@@ -98,11 +98,11 @@ void main() {
     test('copy multiples files to my space from received shares interactor should fail with only failures', () async {
       final exception = DocumentNotFound();
       when(documentRepository.copyToMySpace(
-          CopyRequest(receivedShare1.shareId.uuid, SpaceType.receivedShare)))
+          CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenThrow(exception);
 
       when(documentRepository.copyToMySpace(
-          CopyRequest(receivedShare2.shareId.uuid, SpaceType.receivedShare)))
+          CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenThrow(exception);
 
       final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: [receivedShare1, receivedShare2]);

@@ -37,6 +37,6 @@ import 'package:domain/src/model/document/document.dart';
 
 extension DocumentExtensions on Document {
   CopyRequest toCopyRequest() {
-    return CopyRequest(documentId.uuid, SpaceType.personalSpace);
+    return CopyRequest(documentId.uuid, SpaceType.PERSONAL_SPACE);
   }
 }
