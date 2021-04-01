@@ -66,4 +66,6 @@ abstract class AuditLogEntry with EquatableMixin {
   ];
 
   Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents();
+
+  String getResourceName();
 }

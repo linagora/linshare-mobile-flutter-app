@@ -696,5 +696,292 @@
   "@unknown_role": {
     "type": "text",
     "placeholders": {}
+  },
+  "activities": "Activities",
+  "@activities": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_log_actor": "by {actorName}",
+  "@audit_log_actor": {
+    "type": "text",
+    "placeholders": {
+      "actorName": {}
+    }
+  },
+  "audit_action_title_addition": "Addition:",
+  "@audit_action_title_addition": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_delete": "Delete:",
+  "@audit_action_title_delete": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_update": "Update:",
+  "@audit_action_title_update": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_create": "Creation:",
+  "@audit_action_title_create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_upload": "Upload file:",
+  "@audit_action_title_upload": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_copy": "Copy:",
+  "@audit_action_title_copy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_download": "Download:",
+  "@audit_action_title_download": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_upload_revision": "Version uploaded:",
+  "@audit_action_title_upload_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_delete_revision": "Version deleted:",
+  "@audit_action_title_delete_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_restore_revision": "Restore version:",
+  "@audit_action_title_restore_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_download_revision": "Version downloaded:",
+  "@audit_action_title_download_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_message_create_workgroup": "{authorName} has created a new Workgroup : {resourceName}.",
+  "@audit_action_message_create_workgroup": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_delete_workgroup": "{authorName} has deleted the Workgroup : {resourceName}.",
+  "@audit_action_message_delete_workgroup": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_update_workgroup": "{authorName} has edited the Workgroup : {resourceName}.",
+  "@audit_action_message_update_workgroup": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_add_member": "{authorName} has added a new member : {resourceName} to the Workgroup : {nameVarious}.",
+  "@audit_action_message_add_member": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_member": "{authorName} has removed the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_delete_member": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_member": "{authorName} has edited the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_update_member": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_create_folder": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "@audit_action_message_create_folder": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_folder": "{authorName} has deleted the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_delete_folder": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_folder": "{authorName} has edited the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_update_folder": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_download_folder": "{authorName} has downloaded the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_download_folder": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_document": "{authorName} has deleted the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_delete_workgroup_document": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_workgroup_document": "{authorName} has edited the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_update_workgroup_document": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_download_workgroup_document": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_download_workgroup_document": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_upload_workgroup_document": "{authorName} has upload a new file : {resourceName} into the Workgroup : {nameVarious}.",
+  "@audit_action_message_upload_workgroup_document": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space": "{authorName} has created the document : {resourceName} into {nameVarious}, from {whose} Personal Space.",
+  "@audit_action_message_copy_document_from_personal_space": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {},
+      "whose": {}
+    }
+  },
+  "audit_action_message_copy_document_from_received_share": "{authorName} has created the document : {resourceName} into {nameVarious}, from {whose} received share.",
+  "@audit_action_message_copy_document_from_received_share": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {},
+      "whose": {}
+    }
+  },
+  "audit_action_message_copy_document_from_shared_space": "{authorName} has created this file by copying : {resourceName} from another Workgroup.",
+  "@audit_action_message_copy_document_from_shared_space": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_copy_document_to_personal_space": "{authorName} has copied the document : {resourceName} into {whose} Personal Space.",
+  "@audit_action_message_copy_document_to_personal_space": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "whose": {}
+    }
+  },
+  "audit_action_message_copy_document_to_shared_space": "{authorName} has created a duplicated of this file into {nameVarious}.",
+  "@audit_action_message_copy_document_to_shared_space": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_upload_revision": "A version of the file {resourceName} has been added in the workgroup {nameVarious}.",
+  "@audit_action_message_upload_revision": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_revision": "The version of the file {resourceName} had been removed from the workgroup {nameVarious}.",
+  "@audit_action_message_delete_revision": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_revision_from_shared_space": "The document was restore with the version {resourceName}.",
+  "@audit_action_message_copy_revision_from_shared_space": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_download_revision": "{authorName} has downloaded the version : {resourceName} from the workgroup {nameVarious}.",
+  "@audit_action_message_download_revision": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "you": "You",
+  "@you": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "me": "Me",
+  "@me": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "his": "his",
+  "@his": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "your": "your",
+  "@your": {
+    "type": "text",
+    "placeholders": {}
   }
 }

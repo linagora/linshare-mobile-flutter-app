@@ -938,6 +938,310 @@ class AppLocalizations {
       name: 'unknown_role',
     );
   }
+
+  String get activities {
+    return Intl.message(
+      'Activities',
+      name: 'activities',
+    );
+  }
+
+  String audit_log_actor(String actorName) {
+    return Intl.message(
+      'by $actorName',
+      name: 'audit_log_actor',
+      args: [actorName]
+    );
+  }
+
+  String get audit_action_title_addition {
+    return Intl.message(
+      'Addition:',
+      name: 'audit_action_title_addition',
+    );
+  }
+
+  String get audit_action_title_delete {
+    return Intl.message(
+      'Delete:',
+      name: 'audit_action_title_delete',
+    );
+  }
+
+  String get audit_action_title_update {
+    return Intl.message(
+      'Update:',
+      name: 'audit_action_title_update',
+    );
+  }
+
+  String get audit_action_title_create {
+    return Intl.message(
+      'Creation:',
+      name: 'audit_action_title_create',
+    );
+  }
+
+  String get audit_action_title_upload {
+    return Intl.message(
+      'Upload file:',
+      name: 'audit_action_title_upload',
+    );
+  }
+
+  String get audit_action_title_copy {
+    return Intl.message(
+      'Copy:',
+      name: 'audit_action_title_copy',
+    );
+  }
+
+  String get audit_action_title_download {
+    return Intl.message(
+      'Download:',
+      name: 'audit_action_title_download',
+    );
+  }
+
+  String get audit_action_title_upload_revision {
+    return Intl.message(
+      'Version uploaded:',
+      name: 'audit_action_title_upload_revision',
+    );
+  }
+
+  String get audit_action_title_delete_revision {
+    return Intl.message(
+      'Version deleted:',
+      name: 'audit_action_title_delete_revision',
+    );
+  }
+
+  String get audit_action_title_restore_revision {
+    return Intl.message(
+      'Restore version:',
+      name: 'audit_action_title_restore_revision',
+    );
+  }
+
+  String get audit_action_title_download_revision {
+    return Intl.message(
+      'Version downloaded:',
+      name: 'audit_action_title_download_revision',
+    );
+  }
+
+  String audit_action_message_create_workgroup(String authorName, String resourceName) {
+    return Intl.message(
+        '$authorName has created a new Workgroup : $resourceName.',
+        name: 'audit_action_message_create_workgroup',
+        args: [authorName, resourceName]
+    );
+  }
+
+  String audit_action_message_delete_workgroup(String authorName, String resourceName) {
+    return Intl.message(
+        '$authorName has deleted the Workgroup : $resourceName.',
+        name: 'audit_action_message_delete_workgroup',
+        args: [authorName, resourceName]
+    );
+  }
+
+  String audit_action_message_update_workgroup(String authorName, String resourceName) {
+    return Intl.message(
+        '$authorName has edited the Workgroup : $resourceName.',
+        name: 'audit_action_message_update_workgroup',
+        args: [authorName, resourceName]
+    );
+  }
+
+  String audit_action_message_add_member(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has added a new member : $resourceName to the Workgroup : $nameVarious.',
+        name: 'audit_action_message_add_member',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_delete_member(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has removed the member : $resourceName from the Workgroup : $nameVarious.',
+        name: 'audit_action_message_delete_member',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_update_member(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has edited the member : $resourceName from the Workgroup : $nameVarious.',
+        name: 'audit_action_message_update_member',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_create_folder(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has created a new folder : $resourceName into the Workgroup $nameVarious.',
+        name: 'audit_action_message_create_folder',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_delete_folder(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has deleted the folder : $resourceName from the Workgroup : $nameVarious.',
+        name: 'audit_action_message_delete_folder',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_update_folder(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has edited the folder : $resourceName from the Workgroup : $nameVarious.',
+        name: 'audit_action_message_update_folder',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_download_folder(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has downloaded the folder : $resourceName from the Workgroup : $nameVarious.',
+        name: 'audit_action_message_download_folder',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_delete_workgroup_document(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has deleted the file : $resourceName from the Workgroup $nameVarious.',
+        name: 'audit_action_message_delete_workgroup_document',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_update_workgroup_document(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has edited the file : $resourceName from the Workgroup $nameVarious.',
+        name: 'audit_action_message_update_workgroup_document',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_download_workgroup_document(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has downloaded the file : $resourceName from the Workgroup $nameVarious.',
+        name: 'audit_action_message_download_workgroup_document',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_upload_workgroup_document(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has upload a new file : $resourceName into the Workgroup : $nameVarious.',
+        name: 'audit_action_message_upload_workgroup_document',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_copy_document_from_personal_space(String authorName, String resourceName, String nameVarious, String whose) {
+    return Intl.message(
+        '$authorName has created the document : $resourceName into $nameVarious, from $whose Personal Space.',
+        name: 'audit_action_message_copy_document_from_personal_space',
+        args: [authorName, resourceName, nameVarious, whose]
+    );
+  }
+
+  String audit_action_message_copy_document_from_received_share(String authorName, String resourceName, String nameVarious, String whose) {
+    return Intl.message(
+        '$authorName has created the document : $resourceName into $nameVarious, from $whose received share.',
+        name: 'audit_action_message_copy_document_from_received_share',
+        args: [authorName, resourceName, nameVarious, whose]
+    );
+  }
+
+  String audit_action_message_copy_document_from_shared_space(String authorName, String resourceName) {
+    return Intl.message(
+        '$authorName has created this file by copying : $resourceName from another Workgroup.',
+        name: 'audit_action_message_copy_document_from_shared_space',
+        args: [authorName, resourceName]
+    );
+  }
+
+  String audit_action_message_copy_document_to_personal_space(String authorName, String resourceName, String whose) {
+    return Intl.message(
+        '$authorName has copied the document : $resourceName into $whose Personal Space.',
+        name: 'audit_action_message_copy_document_to_personal_space',
+        args: [authorName, resourceName, whose]
+    );
+  }
+
+  String audit_action_message_copy_document_to_shared_space(String authorName, String nameVarious) {
+    return Intl.message(
+        '$authorName has created a duplicated of this file into $nameVarious.',
+        name: 'audit_action_message_copy_document_to_shared_space',
+        args: [authorName, nameVarious]
+    );
+  }
+
+  String audit_action_message_upload_revision(String resourceName, String nameVarious) {
+    return Intl.message(
+        'A version of the file $resourceName has been added in the workgroup $nameVarious.',
+        name: 'audit_action_message_upload_revision',
+        args: [resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_delete_revision(String resourceName, String nameVarious) {
+    return Intl.message(
+        'The version of the file $resourceName had been removed from the workgroup $nameVarious.',
+        name: 'audit_action_message_delete_revision',
+        args: [resourceName, nameVarious]
+    );
+  }
+
+  String audit_action_message_copy_revision_from_shared_space(String resourceName) {
+    return Intl.message(
+        'The document was restore with the version $resourceName.',
+        name: 'audit_action_message_copy_revision_from_shared_space',
+        args: [resourceName]
+    );
+  }
+
+  String audit_action_message_download_revision(String authorName, String resourceName, String nameVarious) {
+    return Intl.message(
+        '$authorName has downloaded the version : $resourceName from the workgroup $nameVarious.',
+        name: 'audit_action_message_download_revision',
+        args: [authorName, resourceName, nameVarious]
+    );
+  }
+
+  String get you {
+    return Intl.message(
+      'You',
+      name: 'you',
+    );
+  }
+
+  String get me {
+    return Intl.message(
+      'Me',
+      name: 'me',
+    );
+  }
+
+  String get his {
+    return Intl.message(
+      'his',
+      name: 'his',
+    );
+  }
+
+  String get your {
+    return Intl.message(
+      'your',
+      name: 'your',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -73,4 +73,9 @@ class WorkGroupDocumentRevisionAuditLogEntry extends AuditLogEntryUser {
       AuditLogActionMessageParam.nameVarious : workGroup != null ? workGroup.name : ''
     };
   }
+
+  @override
+  String getResourceName() {
+    return resource.name;
+  }
 }

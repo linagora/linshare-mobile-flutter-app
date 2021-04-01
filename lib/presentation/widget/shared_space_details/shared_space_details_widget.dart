@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,8 +41,8 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/date_format_helper.dart';
-import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entry_user_extension.dart';
 
 import 'shared_space_details_viewmodel.dart';
 
@@ -67,7 +68,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
         builder: (BuildContext context, AsyncSnapshot<SharedSpaceDetailsInfo> snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
             return DefaultTabController(
-                length: 2,
+                length: 3,
                 child: Scaffold(
                   appBar: AppBar(
                     leading: IconButton(
@@ -92,30 +93,38 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                           unselectedLabelColor: AppColor.loginTextFieldTextColor,
                           tabs: [
                             _tabTextWidget(AppLocalizations.of(context).details),
-                            _tabTextWidget(AppLocalizations.of(context).members)
+                            _tabTextWidget(AppLocalizations.of(context).members),
+                            _tabTextWidget(AppLocalizations.of(context).activities)
                           ],
                         ),
                       ),
                       Expanded(
                           child: TabBarView(
-                        children: [_detailsTabWidget(snapshot.data), _membersTabWidget(snapshot.data.members)],
-                      ))
+                            children: [
+                              _detailsTabWidget(snapshot.data),
+                              _membersTabWidget(snapshot.data.members),
+                              _activitiesTabWidget(snapshot.data.activitiesList)
+                            ]
+                          )
+                      )
                     ],
                   ),
                 ));
           } else if (snapshot.hasError) {
             return SizedBox.shrink();
           } else {
-            return Align(
-              alignment: Alignment.center,
-              child: Container(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(
-                  backgroundColor: AppColor.primaryColor,
-                ),
-              ),
-            );
+            return Container(
+                color: AppColor.userTagBackgroundColor,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(
+                      backgroundColor: AppColor.primaryColor,
+                    ),
+                  ),
+                ));
           }
         });
   }
@@ -256,6 +265,73 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
             ]),
         );
       }
+    );
+  }
+
+  Widget _activitiesTabWidget(List<AuditLogEntryUser> activitiesList) {
+    return activitiesList.isEmpty ?
+      SizedBox.shrink() :
+      ListView.builder(
+        key: Key('activities_list'),
+        padding: EdgeInsets.zero,
+        itemCount: activitiesList.length,
+        itemBuilder: (context, index) {
+          return _buildActivitiesListItem(context, activitiesList[index]);
+        },
+      );
+  }
+
+  Widget _buildActivitiesListItem(BuildContext context, AuditLogEntryUser auditLogEntryUser) {
+    return ListTile(
+        contentPadding: EdgeInsets.only(left: 24, top: 0),
+        leading: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset(auditLogEntryUser.getAuditLogIconPath(imagePath), width: 20, height: 20, fit: BoxFit.fill)
+            ]
+        ),
+        title: Transform(
+          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      auditLogEntryUser.getResourceName(),
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+                    )
+                ),
+                _buildActionDetailsText(auditLogEntryUser.getActionDetails(context, _model.store.state.account.user.userId.uuid)),
+                Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      auditLogEntryUser.getLogTimeAndByActor(context, _model.store.state.account.user.userId.uuid),
+                      style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
+                    )
+                )
+              ]
+          ),
+        )
+    );
+  }
+
+  Widget _buildActionDetailsText(Map<AuditLogActionDetail, dynamic> actionDetails) {
+    return Padding(
+        padding: EdgeInsets.only(top: 8),
+        child: RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 13, color: AppColor.documentNameItemTextColor),
+              children: <TextSpan>[
+                TextSpan(
+                    text: actionDetails[AuditLogActionDetail.TITLE], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColor.documentNameItemTextColor)),
+                TextSpan(
+                    text: ' ${actionDetails[AuditLogActionDetail.DETAIL]}',
+                    style: TextStyle(fontSize: 13, color: AppColor.documentNameItemTextColor))
+              ],
+            )
+        )
     );
   }
 }

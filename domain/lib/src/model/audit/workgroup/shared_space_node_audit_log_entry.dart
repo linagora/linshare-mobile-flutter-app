@@ -64,4 +64,9 @@ class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
       AuditLogActionMessageParam.nameVarious : resource != null ? resource.name : ''
     };
   }
+
+  @override
+  String getResourceName() {
+    return resource.name;
+  }
 }

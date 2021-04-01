@@ -52,7 +52,7 @@ final workGroupCopyDto = WorkGroupCopyDto(
     WorkGroupNodeId('543bde3b-f161-4d30-b480-593052f5e56f'),
     CopyContextId('741ddf11-0e1c-4dcf-9fc5-1833db9173bf'),
     'sample.ods',
-    SpaceKind.SHARED_SPACE,
+    SpaceType.SHARED_SPACE,
     WorkGroupNodeType.DOCUMENT
 );
 
@@ -68,7 +68,7 @@ final workGroupCopyDto2 = WorkGroupCopyDto(
     WorkGroupNodeId('543bde3b-f161-4d30-b480-593052f5e56f'),
     CopyContextId('741ddf11-0e1c-4dcf-9fc5-1833db9173bf'),
     'sample.ods',
-    SpaceKind.SHARED_SPACE,
+    SpaceType.SHARED_SPACE,
     WorkGroupNodeType.FOLDER
 );
 
