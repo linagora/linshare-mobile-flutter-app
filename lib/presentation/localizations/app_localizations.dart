@@ -1263,6 +1263,35 @@ class AppLocalizations {
       name: 'go_to_setup',
     );
   }
+
+  String get second_factor_authentication {
+    return Intl.message(
+      'SECOND FACTOR AUTHENTICATION',
+      name : 'second_factor_authentication'
+    );
+  }
+
+  String get input_6_digit_from_free_otp {
+    return Intl.message(
+      'Input the 6-digit code in your FreeOTP app',
+      name : 'input_6_digit_from_free_otp'
+    );
+  }
+
+  String get submit {
+    return Intl.message(
+      'Submit',
+      name : 'submit'
+    );
+  }
+
+  String get please_fill_up_all_numbers {
+    return Intl.message(
+      'Please fill up all numbers',
+      name : 'please_fill_up_all_numbers'
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

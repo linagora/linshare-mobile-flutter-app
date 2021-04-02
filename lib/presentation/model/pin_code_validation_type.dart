@@ -28,16 +28,20 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-import 'package:domain/domain.dart';
 
-extension StringExtension on String {
-  int compareToSort(String value, OrderType orderType) =>
-      compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+enum PinCodeValidationType {
+  CORRECT, ERROR
+}
 
-  bool isIntegerNumber() {
-    if (this == null) {
-      return false;
+extension PinCodeValidationTypeExtension on PinCodeValidationType {
+  bool get value {
+    switch (this) {
+      case PinCodeValidationType.CORRECT:
+        return true;
+      case PinCodeValidationType.ERROR:
+        return false;
+      default:
+        return false;
     }
-    return int.tryParse(this) != null;
   }
 }

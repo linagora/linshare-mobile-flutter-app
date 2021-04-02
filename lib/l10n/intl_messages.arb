@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-01T17:49:42.321915",
+  "@@last_modified": "2021-04-02T11:38:40.996308",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -991,6 +991,26 @@
   },
   "your": "your",
   "@your": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "second_factor_authentication": "SECOND FACTOR AUTHENTICATION",
+  "@second_factor_authentication": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "input_6_digit_from_free_otp": "Input the 6-digit code in your FreeOTP app",
+  "@input_6_digit_from_free_otp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "submit": "Submit",
+  "@submit": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_fill_up_all_numbers": "Please fill up all numbers",
+  "@please_fill_up_all_numbers": {
     "type": "text",
     "placeholders": {}
   }

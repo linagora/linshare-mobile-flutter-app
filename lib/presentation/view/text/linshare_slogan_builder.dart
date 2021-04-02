@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,19 +26,62 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
-import 'package:domain/domain.dart';
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
-extension StringExtension on String {
-  int compareToSort(String value, OrderType orderType) =>
-      compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+import 'package:flutter/material.dart';
 
-  bool isIntegerNumber() {
-    if (this == null) {
-      return false;
-    }
-    return int.tryParse(this) != null;
+/// A builder which builds a reusable slogan widget.
+/// This contains the LinShare logo and the slogan text.
+/// The elements are arranged in a column.
+class LinShareSloganBuilder {
+  Key _key;
+  String _text;
+  TextStyle _textStyle;
+  TextAlign _textAlign;
+  String _logo;
+
+  LinShareSloganBuilder key(Key key) {
+    _key = key;
+    return this;
+  }
+
+  LinShareSloganBuilder setSloganText(String text) {
+    _text = text;
+    return this;
+  }
+
+  LinShareSloganBuilder setSloganTextStyle(TextStyle textStyle) {
+    _textStyle = textStyle;
+    return this;
+  }
+
+  LinShareSloganBuilder setSloganTextAlign(TextAlign textAlign) {
+    _textAlign = textAlign;
+    return this;
+  }
+
+  LinShareSloganBuilder setLogo(String logo) {
+    _logo = logo;
+    return this;
+  }
+
+  Widget build() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image(image: AssetImage(_logo), alignment: Alignment.center),
+        Padding(
+          padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+          child:
+              Text(_text, key: _key, style: _textStyle, textAlign: _textAlign),
+        ),
+      ],
+    );
   }
 }

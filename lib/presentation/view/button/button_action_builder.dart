@@ -28,16 +28,40 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-import 'package:domain/domain.dart';
 
-extension StringExtension on String {
-  int compareToSort(String value, OrderType orderType) =>
-      compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+import 'package:flutter/material.dart';
 
-  bool isIntegerNumber() {
-    if (this == null) {
-      return false;
-    }
-    return int.tryParse(this) != null;
+typedef ButtonCallback = void Function();
+
+abstract class ButtonActionBuilder {
+  @protected final Key key;
+  @protected final ButtonCallback onButtonClick;
+  @protected Color backgroundColor = Colors.white;
+  @protected double widthButton = 20.0;
+  @protected double heightButton = 20.0;
+  @protected BorderRadius borderRadius = BorderRadius.all(Radius.circular(4));
+
+  ButtonActionBuilder(this.key, {@required this.onButtonClick}) : assert(onButtonClick != null);
+
+  ButtonActionBuilder setWidth(double widthSize) {
+    widthButton = widthSize;
+    return this;
   }
+
+  ButtonActionBuilder setHeight(double heightSize) {
+    heightButton = heightSize;
+    return this;
+  }
+
+  ButtonActionBuilder setBorderRadius(BorderRadius radius) {
+    borderRadius = radius;
+    return this;
+  }
+
+  ButtonActionBuilder setBackgroundColor(Color bgColor) {
+    backgroundColor = bgColor;
+    return this;
+  }
+
+  Widget build(BuildContext context);
 }

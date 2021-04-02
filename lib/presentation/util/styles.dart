@@ -28,16 +28,15 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-import 'package:domain/domain.dart';
 
-extension StringExtension on String {
-  int compareToSort(String value, OrderType orderType) =>
-      compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
-  bool isIntegerNumber() {
-    if (this == null) {
-      return false;
-    }
-    return int.tryParse(this) != null;
-  }
+class CommonTextStyle {
+  static final textStyleNormal = TextStyle(
+    color: AppColor.primaryColor,
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.normal,
+  );
 }
