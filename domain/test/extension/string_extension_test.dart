@@ -28,16 +28,29 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+
+import 'package:flutter_test/flutter_test.dart';
 import 'package:domain/domain.dart';
 
-extension StringExtension on String {
-  int compareToSort(String value, OrderType orderType) =>
-      compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+void main() {
+  group('string_extension_is_number_test', () {
+    test('isNumber should return true when input string is a integer number format', () {
+      expect(true, '123'.isIntegerNumber());
+    });
+    test('isNumber should return false when input string is a double number format', () {
+      expect(false, '123.1'.isIntegerNumber());
+    });
 
-  bool isIntegerNumber() {
-    if (this == null) {
-      return false;
-    }
-    return int.tryParse(this) != null;
-  }
+    test('isNumber should return false when input string is not a number format', () {
+      expect(false, 'abc'.isIntegerNumber());
+    });
+
+    test('isNumber should return false when input string is null', () {
+      expect(false, null.isIntegerNumber());
+    });
+
+    test('isNumber should return false when input string is empty string', () {
+      expect(false, ''.isIntegerNumber());
+    });
+  });
 }

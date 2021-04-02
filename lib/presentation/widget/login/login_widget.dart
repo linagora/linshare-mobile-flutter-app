@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/authentication_st
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/text/input_decoration_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/text/linshare_slogan_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/text/login_text_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/text/text_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
@@ -76,26 +77,19 @@ class _LoginWidgetState extends State<LoginWidget> {
               SingleChildScrollView(
                 reverse: true,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(top: 100),
                     child: Column(
                       key: Key('login_logo_header'),
                       children: [
-                        Image(
-                            image: AssetImage(imagePath.icLoginLogo),
-                            alignment: Alignment.center),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(top: 16, left: 16, right: 16),
-                          child: Text(
-                            AppLocalizations.of(context).login_text_slogan,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                        LinShareSloganBuilder()
+                            .setSloganText(AppLocalizations.of(context).login_text_slogan)
+                            .setSloganTextAlign(TextAlign.center)
+                            .setSloganTextStyle(TextStyle(color: Colors.white, fontSize: 16))
+                            .setLogo(imagePath.icLoginLogo)
+                            .build(),
                         SizedBox(height: 80),
                         Padding(
                           padding: EdgeInsets.only(bottom: 24),
@@ -181,14 +175,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     ),
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),
       ),
     );
   }
-  
+
   String _getLoginMessage(dartz.Either<Failure, Success> viewState) {
     return viewState.fold(
         (failure) => _getErrorMessage(failure),
@@ -201,7 +195,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         (success) => Colors.white);
     return TextStyle(color: messageColor);
   }
-  
+
   String _getErrorMessage(Failure failure) {
     if (failure is AuthenticationFailure) {
       if (failure.authenticationException is UnknownError) {
