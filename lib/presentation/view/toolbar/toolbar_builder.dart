@@ -28,16 +28,51 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-import 'package:domain/domain.dart';
 
-extension StringExtension on String {
-  int compareToSort(String value, OrderType orderType) =>
-      compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+import 'package:flutter/material.dart';
 
-  bool isIntegerNumber() {
-    if (this == null) {
-      return false;
-    }
-    return int.tryParse(this) != null;
+typedef ButtonActionCallback = void Function();
+
+class ToolbarBuilder {
+  final Key key;
+  final ButtonActionCallback onButtonActionClick;
+  final double height;
+  final EdgeInsets contentPadding;
+  final Color backgroundColor;
+  final String title;
+  final TextStyle titleTextStyle;
+  final String actionIcon;
+
+  ToolbarBuilder(
+    this.key, {
+    @required this.onButtonActionClick,
+    this.actionIcon = '',
+    this.title = '',
+    this.titleTextStyle = const TextStyle(color: Colors.white),
+    this.height = 48.0,
+    this.contentPadding = const EdgeInsets.all(4.0),
+    this.backgroundColor = Colors.transparent,
+  }) : assert(onButtonActionClick != null);
+
+  Widget build() {
+    return Container(
+      key: key,
+      height: height,
+      color: backgroundColor,
+      child: Padding(
+        padding: contentPadding,
+        child: Row(
+          children: [
+            actionIcon.isNotEmpty
+                ? IconButton(
+                    onPressed: onButtonActionClick,
+                    icon: Image(image: AssetImage(actionIcon), alignment: Alignment.center),
+                  )
+                : Container(),
+            Expanded(child: title.isNotEmpty ? Text(title, style: titleTextStyle) : Container())
+          ],
+        ),
+      ),
+    );
   }
 }
