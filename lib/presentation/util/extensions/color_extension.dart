@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 
 extension AppColor on Color {
   static const primaryColor = Color(0xff4AC6FF);
+  static const primaryDarkColor = Color(0xff1B7EC7);
   static const loginTextFieldHintColor = Color(0xffAFAFAF);
   static const loginTextFieldTextColor = Color(0xff7B7B7B);
   static const loginTextFieldErrorBorder = Color(0xffFF5858);
@@ -73,4 +74,11 @@ extension AppColor on Color {
   static const searchBottomBarColor = Color(0xffF2F2F2);
   static const searchResultsCountTextColor = Color(0xffACACAC);
   static const workGroupDetailsName = Color(0xff070707);
+  static const pinCodeTitleColor = Color(0xff1B7EC7);
+  static const pinCodeSubTitleColor = Color(0xffFFFFFF);
+  static const pinCodePadBackgroundColor = Color(0xffFFFFFF);
+  static const pinCodePadTextColor = Color(0xff1B7EC7);
+  static const pinCodeErrorTextColor = Color(0xffFF5858);
+  static const pinCodeSubmitButtonBGColor = Color(0xff1B7EC7);
+  static const pinCodeSubmitButtonTextColor = Color(0xffFFFFFF);
 }

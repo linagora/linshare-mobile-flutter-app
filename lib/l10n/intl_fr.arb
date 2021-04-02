@@ -1003,5 +1003,25 @@
   "@your": {
     "type": "text",
     "placeholders": {}
+  },
+  "second_factor_authentication": "SECOND FACTOR AUTHENTICATION",
+  "@second_factor_authentication": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "input_6_digit_from_free_otp": "Input the 6-digit code in your FreeOTP app",
+  "@input_6_digit_from_free_otp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "submit": "Submit",
+  "@submit": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_fill_up_all_numbers": "Please fill up all numbers",
+  "@please_fill_up_all_numbers": {
+    "type": "text",
+    "placeholders": {}
   }
 }
