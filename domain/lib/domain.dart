@@ -125,6 +125,7 @@ export 'src/model/operation.dart';
 export 'src/model/sharedspace/shared_space_member_id.dart';
 export 'src/model/sharedspace/shared_space_member.dart';
 export 'src/model/sharedspace/shared_space_member_node.dart';
+export 'src/model/authentication/otp_code.dart';
 export 'src/model/audit/audit_log_entry_id.dart';
 export 'src/model/audit/audit_log_entry_type.dart';
 export 'src/model/audit/audit_log_entry.dart';

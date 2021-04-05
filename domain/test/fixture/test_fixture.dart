@@ -80,7 +80,9 @@ final user1 = User(
   true,
   true,
   AccountType.INTERNAL,
-  QuotaId('quotaUuid')
+  QuotaId('quotaUuid'),
+  false,
+  false
 );
 
 final quotaId1 = QuotaId('q1');
