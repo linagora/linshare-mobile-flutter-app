@@ -12,6 +12,8 @@ export 'src/extension/list_work_group_node_extension.dart';
 export 'src/extension/document_extensions.dart';
 export 'src/extension/work_group_node_extensions.dart';
 export 'src/extension/audit_log_entry_type.dart';
+export 'src/extension/name_validator_string_extension.dart';
+export 'src/extension/list_validator_extension.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -145,6 +147,14 @@ export 'src/model/audit/work_group_copy.dart';
 export 'src/model/audit/copy_context_id.dart';
 export 'src/model/audit/audit_log_action_message_param.dart';
 export 'src/model/audit/audit_log_action_detail.dart';
+export 'src/model/sharedspace/create_work_group_request.dart';
+export 'src/model/verification/validator.dart';
+export 'src/model/verification/empty_name_validator.dart';
+export 'src/model/verification/duplicate_name_validator.dart';
+export 'src/model/verification/special_character_validator.dart';
+export 'src/model/verification/new_name_request.dart';
+export 'src/model/verification/composite_name_validator.dart';
+export 'src/model/suggestion/suggest_name_type.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -197,6 +207,7 @@ export 'src/usecases/shared_space/get_shared_space_interactor.dart';
 export 'src/usecases/received/download_preview_received_share_interactor.dart';
 export 'src/usecases/shared_space/get_all_shared_space_members_interactor.dart';
 export 'src/usecases/shared_space_activities/shared_space_acitivities_interactor.dart';
+export 'src/usecases/shared_space/create_work_group_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

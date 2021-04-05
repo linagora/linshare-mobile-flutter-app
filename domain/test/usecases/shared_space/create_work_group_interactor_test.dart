@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,33 +30,44 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:data/data.dart';
+import 'package:testshared/testshared.dart';
 
-abstract class VerifyNameException extends RemoteException {
-  static const DuplicatedName = 'The name already exists!';
-  static const EmptyName = 'The name cannot be empty!';
-  static const NameContainSpecialCharacter = 'The name cannot contain special characters';
+import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
-  VerifyNameException(String message) : super(message);
-}
+void main() {
+  group('create_work_group_interactor test', () {
+    MockSharedSpaceRepository sharedSpaceRepository;
+    CreateWorkGroupInteractor createWorkGroupInteractor;
 
-class EmptyNameException extends VerifyNameException {
-  EmptyNameException() : super(VerifyNameException.EmptyName);
+    setUp(() {
+      sharedSpaceRepository = MockSharedSpaceRepository();
+      createWorkGroupInteractor = CreateWorkGroupInteractor(sharedSpaceRepository);
+    });
 
-  @override
-  List<Object> get props => [];
-}
+    test('Create Work Group interactor should return success with valid data', () async {
+      when(sharedSpaceRepository.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
+          .thenAnswer((_) async => sharedSpace1);
 
-class DuplicatedNameException extends VerifyNameException {
-  DuplicatedNameException() : super(VerifyNameException.DuplicatedName);
+      final result = await createWorkGroupInteractor.execute(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
 
-  @override
-  List<Object> get props => [];
-}
+      final sharedSpace = result
+          .map((success) => (success as CreateWorkGroupViewState).sharedSpaceNodeNested)
+          .getOrElse(() => null);
+      expect(sharedSpace, sharedSpaceResponse1.toSharedSpaceNodeNested());
+    });
 
-class SpecialCharacterException extends VerifyNameException {
-  SpecialCharacterException() : super(VerifyNameException.NameContainSpecialCharacter);
+    test('Create Work Group interactor should fail when createSharedSpaceWorkGroup fail', () async {
+      final exception = Exception();
+      when(sharedSpaceRepository.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))).thenThrow(exception);
 
-  @override
-  List<Object> get props => [];
+      final result = await createWorkGroupInteractor.execute(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
+
+      expect(result, Left<Failure, Success>(CreateWorkGroupFailure(exception)));
+    });
+  });
 }
