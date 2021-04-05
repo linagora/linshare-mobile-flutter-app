@@ -165,5 +165,37 @@ void main() {
       await _sharedSpaceDataSourceImpl.getSharedSpace(sharedSpaceId1)
           .catchError((error) => expect(error, isA<NotAuthorized>()));
     });
+
+    test('create shared space work group should return success with valid data', () async {
+      when(_linShareHttpClient.createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
+          .thenAnswer((_) async => sharedSpaceResponse1);
+
+      final result = await _sharedSpaceDataSourceImpl.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
+      expect(result, sharedSpaceResponse1.toSharedSpaceNodeNested());
+    });
+
+    test('create shared space work group should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
+          .thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))
+          .catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
+    });
+
+    test('create shared space should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 403)
+      );
+      when(_linShareHttpClient.createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
+          .thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))
+          .catchError((error) => expect(error, isA<NotAuthorized>()));
+    });
   });
 }
