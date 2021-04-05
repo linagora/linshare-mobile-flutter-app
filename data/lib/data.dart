@@ -62,6 +62,7 @@ export 'src/network/model/shared_space_activities/work_group_document_audit_log_
 export 'src/network/model/shared_space_activities/work_group_document_revision_audit_log_entry_dto.dart';
 export 'src/network/model/shared_space_activities/work_group_folder_audit_log_entry_dto.dart';
 export 'src/network/model/shared_space_activities/work_group_light_dto.dart';
+export 'src/network/model/request/create_work_group_body_request.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
