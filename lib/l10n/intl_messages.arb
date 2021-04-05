@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-01T17:49:42.321915",
+  "@@last_modified": "2021-04-06T17:47:02.440798",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -991,6 +991,36 @@
   },
   "your": "your",
   "@your": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_workgroup": "Create new workgroup",
+  "@create_new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_workgroup": "New Workgroup",
+  "@new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create": "Create",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_not_empty": "Workgroup name cannot be blank",
+  "@workgroup_name_not_empty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_already_exists": "Workgroup name already exists",
+  "@workgroup_name_already_exists": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_contain_special_character": "Workgroup name cannot contain special characters",
+  "@workgroup_name_contain_special_character": {
     "type": "text",
     "placeholders": {}
   }
