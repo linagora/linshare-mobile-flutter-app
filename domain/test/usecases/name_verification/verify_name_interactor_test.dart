@@ -44,19 +44,20 @@ void main() {
     });
 
     test('verifyNameInteractor should return success if name is valid', () async {
-      final result = await _verifyNameInteractor.execute(namesListFixture, 'phuong');
+      final result = await _verifyNameInteractor.execute('phuong',
+          [EmptyNameValidator(), DuplicateNameValidator(namesListFixture), SpecialCharacterValidator()]);
 
       expect(result, Right<Failure, Success>(VerifyNameViewState()));
     });
 
     test('verifyNameInteractor should fail if name is null', () async {
-      final result = await _verifyNameInteractor.execute(namesListFixture, null);
+      final result = await _verifyNameInteractor.execute(null, [EmptyNameValidator(), DuplicateNameValidator(namesListFixture),SpecialCharacterValidator()]);
 
       expect(result, Left<Failure, Success>(VerifyNameFailure(EmptyNameException())));
     });
 
     test('verifyNameInteractor should fail if name exists', () async {
-      final result = await _verifyNameInteractor.execute(namesListFixture, 'julian');
+      final result = await _verifyNameInteractor.execute('julian', [EmptyNameValidator(), DuplicateNameValidator(namesListFixture),SpecialCharacterValidator()]);
 
       expect(result, Left<Failure, Success>(VerifyNameFailure(DuplicatedNameException())));
     });
