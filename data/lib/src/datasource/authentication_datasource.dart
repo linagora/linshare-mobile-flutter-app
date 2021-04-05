@@ -33,6 +33,7 @@ import 'package:data/data.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/user_response.dart';
+import 'package:data/src/util/constant.dart';
 import 'package:data/src/util/device_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -45,18 +46,23 @@ class AuthenticationDataSource {
 
   AuthenticationDataSource(this.linShareHttpClient, this.deviceManager, this._remoteExceptionThrower);
 
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password) async {
+  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode otpCode}) async {
     return Future.sync(() async {
       final deviceUUID = await deviceManager.getDeviceUUID();
       final permanentToken = await linShareHttpClient.createPermanentToken(
           baseUrl,
           userName.userName,
           password.value,
-          PermanentTokenBodyRequest('LinShare-${deviceManager.getPlatformString()}-$deviceUUID'));
+          PermanentTokenBodyRequest('LinShare-${deviceManager.getPlatformString()}-$deviceUUID'),
+          otpCode: otpCode);
       return permanentToken.toToken();
     }).catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
           if (error.response.statusCode == 401) {
+            final authErrorCode = LinShareErrorCode(int.tryParse(error.response.headers.value(Constant.linShareAuthErrorCode)) ?? 1);
+            if (isAuthenticateWithOTPError(authErrorCode)) {
+              throw NeedAuthenticateWithOTP();
+            }
             throw BadCredentials();
           } else {
             throw UnknownError(error.response.statusMessage);
@@ -64,6 +70,9 @@ class AuthenticationDataSource {
         });
     });
   }
+
+  bool isAuthenticateWithOTPError(LinShareErrorCode authErrorCode) =>
+      BusinessErrorCode.missingOTPAuthentication.contains(authErrorCode);
 
   Future<bool> deletePermanentToken(Token token) async {
     return Future.sync(() async => await linShareHttpClient.deletePermanentToken(token.toPermanentToken()))

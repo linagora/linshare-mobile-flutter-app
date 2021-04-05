@@ -44,7 +44,9 @@ final userResponse1 = UserResponse(
   true,
   true,
   AccountType.INTERNAL,
-  QuotaId('quotaUuid')
+  QuotaId('quotaUuid'),
+  false,
+  false
 );
 
 
