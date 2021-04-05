@@ -1242,6 +1242,48 @@ class AppLocalizations {
       name: 'your',
     );
   }
+
+  String get create_new_workgroup {
+    return Intl.message(
+      'Create new workgroup',
+      name: 'create_new_workgroup',
+    );
+  }
+
+  String get new_workgroup {
+    return Intl.message(
+      'New Workgroup',
+      name: 'new_workgroup',
+    );
+  }
+
+  String get create {
+    return Intl.message(
+      'Create',
+      name: 'create',
+    );
+  }
+
+  String get workgroup_name_not_empty {
+    return Intl.message(
+      'Workgroup name cannot be blank',
+      name: 'workgroup_name_not_empty',
+    );
+  }
+
+  String get workgroup_name_already_exists {
+    return Intl.message(
+      'Workgroup name already exists',
+      name: 'workgroup_name_already_exists',
+    );
+  }
+
+  String get workgroup_name_contain_special_character {
+    return Intl.message(
+      'Workgroup name cannot contain special characters',
+      name: 'workgroup_name_contain_special_character',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

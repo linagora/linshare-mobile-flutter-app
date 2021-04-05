@@ -1013,5 +1013,35 @@
   "@your": {
     "type": "text",
     "placeholders": {}
+  },
+  "create_new_workgroup": "Tạo nhóm làm việc mới",
+  "@create_new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_workgroup": "Nhóm làm việc mới",
+  "@new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create": "Tạo",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_not_empty": "Tên nhóm làm việc không được để trống",
+  "@workgroup_name_not_empty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_already_exists": "Tên nhóm làm việc đã tồn tại",
+  "@workgroup_name_already_exists": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_contain_special_character": "Tên nhóm làm việc không được chứa các ký tự đặc biệt",
+  "@workgroup_name_contain_special_character": {
+    "type": "text",
+    "placeholders": {}
   }
 }

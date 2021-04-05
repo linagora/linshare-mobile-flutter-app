@@ -161,7 +161,27 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                     .build();
               }
               return SizedBox.shrink();
-            }));
+            }),
+        floatingActionButton: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (context, appState) {
+            if (!appState.uiState.isInSearchState() &&
+                appState.sharedSpaceState.selectMode == SelectMode.INACTIVE) {
+              return FloatingActionButton(
+                key: Key('shared_space_create_new_workgroup_button'),
+                onPressed: () => sharedSpaceViewModel.openCreateNewWorkGroupModal(context),
+                backgroundColor: AppColor.primaryColor,
+                child: SvgPicture.asset(
+                  imagePath.icPlus,
+                  width: 24,
+                  height: 24,
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
   }
 
   Widget buildSharedSpaceListBySearchState() {
