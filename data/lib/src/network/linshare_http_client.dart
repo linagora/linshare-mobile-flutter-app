@@ -58,6 +58,7 @@ import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/network/model/share/received_share_dto.dart';
 import 'package:data/src/network/model/shared_space_activities/shared_space_member_audit_log_entry_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
+import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
@@ -77,11 +78,15 @@ class LinShareHttpClient {
       Uri authenticateUrl,
       String userName,
       String password,
-      PermanentTokenBodyRequest bodyRequest) async {
+      PermanentTokenBodyRequest bodyRequest,
+      {OTPCode otpCode}) async {
     final basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
 
     final headerParam = _dioClient.getHeaders();
     headerParam[HttpHeaders.authorizationHeader] = basicAuth;
+    if (otpCode != null && otpCode.value.isNotEmpty) {
+      headerParam[Constant.linShare2FAPin] = otpCode.value;
+    }
 
     final resultJson = await _dioClient.post(
         Endpoint.authentication.generateAuthenticationUrl(authenticateUrl),
