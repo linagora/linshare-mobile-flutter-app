@@ -34,4 +34,6 @@ class Constant {
   static const fileSizeDataForm = 'filesize';
   static const authorization = 'Authorization';
   static const accept = 'accept';
+  static const linShareAuthErrorCode = 'X-Linshare-Auth-Error-Code';
+  static const linShare2FAPin = 'x-linShare-2fa-pin';
 }
