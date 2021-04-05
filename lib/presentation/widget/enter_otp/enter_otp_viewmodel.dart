@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -11,7 +11,7 @@
 // subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
 // display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
 // the words “You are using the Free and Open Source version of LinShare™, powered by
-// Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+// Linagora © 2009–2021. Contribute to Linshare R&D by subscribing to an Enterprise
 // offer!”. You must also retain the latter notice in all asynchronous messages such as
 // e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
@@ -29,80 +29,61 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_argument.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux/src/store.dart';
 
-class LoginViewModel extends BaseViewModel {
-  LoginViewModel(
+class EnterOTPViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
+  final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
+  final DynamicUrlInterceptors _dynamicUrlInterceptors;
+  final AppToast _appToast;
+  EnterOTPArgument _enterOTPArgument;
+
+  EnterOTPViewModel(
     Store<AppState> store,
-    this._getPermanentTokenInteractor,
     this._appNavigation,
-    this._dynamicUrlInterceptors
+    this._getPermanentTokenInteractor,
+    this._dynamicUrlInterceptors,
+    this._appToast
   ) : super(store);
 
-  final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
-  final AppNavigation _appNavigation;
-  final DynamicUrlInterceptors _dynamicUrlInterceptors;
-
-  String _urlText = '';
-  String _emailText = '';
-  String _passwordText = '';
-
-  void setUrlText(String url) => _urlText = url;
-
-  void setEmailText(String email) => _emailText = email;
-
-  void setPasswordText(String password) => _passwordText = password;
-
-  void handleLoginPressed() {
-    store.dispatch(loginAction(_parseUri(_urlText), _parseUserName(_emailText),
-        _parsePassword(_passwordText)));
+  void setEnterOTPArgument(EnterOTPArgument argument) {
+    _enterOTPArgument = argument;
   }
 
-  Uri _parseUri(String url) => Uri.parse(url);
-
-  UserName _parseUserName(String userName) => UserName(userName);
-
-  Password _parsePassword(String password) => Password(password);
-
-  ThunkAction<AppState> loginAction(Uri baseUrl, UserName userName, Password password) {
-    return (Store<AppState> store) async {
-      store.dispatch(StartAuthenticationLoadingAction());
-      await _getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
-          (result) => result.fold(
-              (failure) => _loginFailureAction(failure),
-              ((success) => store.dispatch(loginSuccessAction(success)))));
-    };
+  void onBackPressed() {
+    _appNavigation.popBack();
   }
 
-  ThunkAction<AppState> loginSuccessAction(AuthenticationViewState success) {
-    return (Store<AppState> store) async {
-      store.dispatch(AuthenticationAction(Right(success)));
-      _dynamicUrlInterceptors.changeBaseUrl(_urlText);
-      await _appNavigation.push(RoutePaths.authentication, arguments: AuthenticationArguments(_parseUri(_urlText)));
-    };
+  void onLoginPressed(String otp) {
+    store.dispatch(_loginWithOTPAction(otp));
   }
 
-  void _loginFailureAction(AuthenticationFailure failure) async {
-    store.dispatch(AuthenticationAction(Left(failure)));
-    if (failure.authenticationException is NeedAuthenticateWithOTP) {
-      await _appNavigation.push(RoutePaths.enter_otp,
-          arguments: EnterOTPArgument(_parseUri(_urlText), _parseUserName(_emailText), _parsePassword(_passwordText)));
-    }
+  OnlineThunkAction _loginWithOTPAction(String otp) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _getPermanentTokenInteractor
+          .execute(_enterOTPArgument.baseUrl, _enterOTPArgument.email, _enterOTPArgument.password, otpCode: OTPCode(otp))
+          .then(
+              (result) => result.fold(
+                  (failure) => {
+                    // todo show toast message here
+                    _appToast.showErrorToast('invalid otp')
+                  },
+                  ((success) => _loginSuccess())));
+    });
   }
 
-  @override
-  void onDisposed() {
-    super.onDisposed();
+  void _loginSuccess() async {
+    _dynamicUrlInterceptors.changeBaseUrl(_enterOTPArgument.baseUrl.origin);
+    await _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(_enterOTPArgument.baseUrl));
   }
 }

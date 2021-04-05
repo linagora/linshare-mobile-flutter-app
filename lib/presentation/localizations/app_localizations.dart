@@ -1242,6 +1242,27 @@ class AppLocalizations {
       name: 'your',
     );
   }
+
+  String get second_factor_authentication_is_required_for_your_account {
+    return Intl.message(
+      'Second factor Authentication is required for your account',
+      name: 'second_factor_authentication_is_required_for_your_account',
+    );
+  }
+
+  String get please_enable_second_factor_authentication_to_continue {
+    return Intl.message(
+      'Please enable Second factor Authentication to continue',
+      name: 'please_enable_second_factor_authentication_to_continue',
+    );
+  }
+
+  String get go_to_setup {
+    return Intl.message(
+      'Go to Setup',
+      name: 'go_to_setup',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

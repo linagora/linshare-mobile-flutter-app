@@ -73,16 +73,6 @@ class _LoginWidgetState extends State<LoginWidget> {
         child: SafeArea(
           child: Stack(
             children: [
-              Positioned(
-                left: 10,
-                child: IconButton(
-                  key: Key('login_arrow_back_button'),
-                  onPressed: () => {},
-                  icon: Image(
-                      image: AssetImage(imagePath.icArrowBack),
-                      alignment: Alignment.center),
-                ),
-              ),
               SingleChildScrollView(
                 reverse: true,
                 child: Padding(
