@@ -332,3 +332,21 @@ class SharedSpaceMembersFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class CreateWorkGroupViewState extends ViewState {
+  final SharedSpaceNodeNested sharedSpaceNodeNested;
+
+  CreateWorkGroupViewState(this.sharedSpaceNodeNested);
+
+  @override
+  List<Object> get props => [sharedSpaceNodeNested];
+}
+
+class CreateWorkGroupFailure extends FeatureFailure {
+  final exception;
+
+  CreateWorkGroupFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
