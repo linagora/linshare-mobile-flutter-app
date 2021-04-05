@@ -54,6 +54,8 @@ class UserResponse with EquatableMixin  {
     this.canCreateGuest,
     this.accountType,
     this.quotaUuid,
+    this.secondFAEnabled,
+    this.secondFARequired,
   );
 
   @JsonKey(name: Attribute.uuid)
@@ -68,6 +70,8 @@ class UserResponse with EquatableMixin  {
   final bool canUpload;
   final bool canCreateGuest;
   final AccountType accountType;
+  final bool secondFAEnabled;
+  final bool secondFARequired;
 
   @JsonKey(name: Attribute.quotaUuid)
   final QuotaId quotaUuid;
@@ -89,6 +93,8 @@ class UserResponse with EquatableMixin  {
     canCreateGuest,
     accountType,
     quotaUuid,
+    secondFAEnabled,
+    secondFARequired
   ];
 }
 
@@ -105,7 +111,9 @@ extension UserResponseExtension on UserResponse {
       canUpload,
       canCreateGuest,
       accountType,
-      quotaUuid
+      quotaUuid,
+      secondFAEnabled,
+      secondFARequired
     );
   }
 }
