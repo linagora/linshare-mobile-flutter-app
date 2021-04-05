@@ -136,6 +136,7 @@ class WorkGroupDetailFilesViewModel extends BaseViewModel {
           .title(AppLocalizations.of(context).create_new_folder)
           .cancelText(AppLocalizations.of(context).cancel)
           .hintText(AppLocalizations.of(context).new_folder)
+          .setTextController(TextEditingController())
           .onConfirmAction(AppLocalizations.of(context).rename,
               (value) => this.store.dispatch(_createNewFolderAction(value, arguments)))
           .setErrorString((value) => getErrorString(context, value, arguments))
@@ -147,11 +148,14 @@ class WorkGroupDetailFilesViewModel extends BaseViewModel {
       BuildContext context, String value, WorkGroupNodesSurfingArguments arguments) {
     return _verifyNameInteractor
         .execute(
-            _workGroupNodesList
-                .whereType<WorkGroupFolder>()
-                .map((node) => node.name)
-                .toList(),
-            value)
+            value,
+            [EmptyNameValidator(), DuplicateNameValidator(
+                _workGroupNodesList
+                  .whereType<WorkGroupFolder>()
+                  .map((node) => node.name)
+                  .toList())
+            ]
+        )
         .fold((failure) {
       if (failure is VerifyNameFailure) {
         if (failure.exception is EmptyNameException) {
