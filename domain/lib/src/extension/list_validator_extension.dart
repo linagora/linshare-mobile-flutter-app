@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,33 +30,17 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class VerifyNameException extends RemoteException {
-  static const DuplicatedName = 'The name already exists!';
-  static const EmptyName = 'The name cannot be empty!';
-  static const NameContainSpecialCharacter = 'The name cannot contain special characters';
-
-  VerifyNameException(String message) : super(message);
-}
-
-class EmptyNameException extends VerifyNameException {
-  EmptyNameException() : super(VerifyNameException.EmptyName);
-
-  @override
-  List<Object> get props => [];
-}
-
-class DuplicatedNameException extends VerifyNameException {
-  DuplicatedNameException() : super(VerifyNameException.DuplicatedName);
-
-  @override
-  List<Object> get props => [];
-}
-
-class SpecialCharacterException extends VerifyNameException {
-  SpecialCharacterException() : super(VerifyNameException.NameContainSpecialCharacter);
-
-  @override
-  List<Object> get props => [];
+extension ListValidatorExtension on List<Validator> {
+  Either<Failure, Success> getValidatorNameViewState(NewNameRequest newNameRequest) {
+    for (var validator in this) {
+      final either = validator.validate(newNameRequest);
+      if (either.isLeft()) {
+        return either;
+      }
+    }
+    return Right<Failure, Success>(VerifyNameViewState());
+  }
 }
