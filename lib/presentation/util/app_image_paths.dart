@@ -83,6 +83,7 @@ class AppImagePaths {
   String get icSortUpCurrent => _getImagePath('ic_sort_up_current.svg');
   String get icInfo => _getImagePath('ic_info.svg');
   String get icAddMember => _getImagePath('ic_add_member.svg');
+  String get icSecurity => _getImagePath('ic_security.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;
