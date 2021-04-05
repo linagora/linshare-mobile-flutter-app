@@ -175,6 +175,8 @@ class WidgetModule {
       getIt.get<GetAllSharedSpacesInteractor>(),
       getIt<SearchSharedSpaceNodeNestedInteractor>(),
       getIt.get<RemoveMultipleSharedSpacesInteractor>(),
+      getIt.get<CreateWorkGroupInteractor>(),
+      getIt.get<VerifyNameInteractor>()
     ));
   }
 
