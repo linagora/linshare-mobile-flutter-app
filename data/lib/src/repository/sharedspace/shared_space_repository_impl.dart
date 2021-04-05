@@ -57,4 +57,9 @@ class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
   ) {
     return _sharedSpaceDataSource.getSharedSpace(sharedSpaceId, membersParameter: membersParameter, rolesParameter: rolesParameter);
   }
+
+  @override
+  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest) {
+    return _sharedSpaceDataSource.createSharedSpaceWorkGroup(createWorkGroupRequest);
+  }
 }
