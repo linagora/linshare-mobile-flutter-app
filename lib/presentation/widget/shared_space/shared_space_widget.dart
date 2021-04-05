@@ -40,16 +40,16 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/shared_space_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 
 class SharedSpaceWidget extends StatefulWidget {
   @override
@@ -161,7 +161,27 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                     .build();
               }
               return SizedBox.shrink();
-            }));
+            }),
+        floatingActionButton: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (context, appState) {
+            if (!appState.uiState.isInSearchState() &&
+                appState.sharedSpaceState.selectMode == SelectMode.INACTIVE) {
+              return FloatingActionButton(
+                key: Key('shared_space_create_new_workgroup_button'),
+                onPressed: () => sharedSpaceViewModel.openCreateNewWorkGroupModal(context),
+                backgroundColor: AppColor.primaryColor,
+                child: SvgPicture.asset(
+                  imagePath.icPlus,
+                  width: 24,
+                  height: 24,
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
   }
 
   Widget buildSharedSpaceListBySearchState() {
