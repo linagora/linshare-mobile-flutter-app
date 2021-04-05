@@ -49,7 +49,7 @@ class EditTextModalSheetBuilder {
   final AppNavigation _appNavigation;
 
   @protected
-  final textController = TextEditingController();
+  TextEditingController _textController;
 
   @protected
   Key _key;
@@ -100,6 +100,11 @@ class EditTextModalSheetBuilder {
     return this;
   }
 
+  EditTextModalSheetBuilder setTextController(TextEditingController textEditingController) {
+    _textController = textEditingController;
+    return this;
+  }
+
   EditTextModalSheetBuilder setErrorString(SetErrorString setErrorString) {
     _setErrorString = setErrorString;
     return this;
@@ -147,7 +152,7 @@ class EditTextModalSheetBuilder {
                           child: TextFormField(
                             onChanged: (value) => _onTextChanged(value, setState),
                             autofocus: true,
-                            controller: textController,
+                            controller: _textController,
                             decoration: InputDecoration(
                                 errorText: _error,
                                 enabledBorder: UnderlineInputBorder(
@@ -165,7 +170,7 @@ class EditTextModalSheetBuilder {
                                 style: TextStyle(color: AppColor.primaryColor)),
                           ),
                           TextButton(
-                            onPressed: () => _onConfirmActionClick(textController.text),
+                            onPressed: () => _onConfirmActionClick(_textController.text),
                             child: Text(_confirmText.toUpperCase(),
                                 style: TextStyle(color: AppColor.primaryColor)),
                           )

@@ -1043,5 +1043,65 @@
   "@user_locked_message": {
     "type": "text",
     "placeholders": {}
+  },
+  "create_new_workgroup": "Create new workgroup",
+  "@create_new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_workgroup": "New Workgroup",
+  "@new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create": "Create",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_not_empty": "Workgroup name cannot be blank",
+  "@workgroup_name_not_empty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_already_exists": "Workgroup name already exists",
+  "@workgroup_name_already_exists": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_contain_special_character": "Workgroup name cannot contain special characters",
+  "@workgroup_name_contain_special_character": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_workgroup": "Create new workgroup",
+  "@create_new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_workgroup": "New Workgroup",
+  "@new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create": "Create",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_not_empty": "Workgroup name cannot be blank",
+  "@workgroup_name_not_empty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_already_exists": "Workgroup name already exists",
+  "@workgroup_name_already_exists": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_name_contain_special_character": "Workgroup name cannot contain special characters",
+  "@workgroup_name_contain_special_character": {
+    "type": "text",
+    "placeholders": {}
   }
 }
