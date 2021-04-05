@@ -59,8 +59,16 @@ class GetAuthorizedUserViewState extends ViewState {
   List<Object> get props => [user];
 }
 
+class NeedSetup2FA extends FeatureFailure {
+
+  NeedSetup2FA();
+
+  @override
+  List<Object> get props => [];
+}
+
 class GetAuthorizedUserFailure extends FeatureFailure {
-  final RemoteException exception;
+  final exception;
 
   GetAuthorizedUserFailure(this.exception);
 

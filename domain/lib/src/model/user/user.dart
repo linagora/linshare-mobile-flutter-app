@@ -45,6 +45,8 @@ class User with EquatableMixin  {
     this.canCreateGuest,
     this.accountType,
     this.quotaUuid,
+    this.secondFAEnabled,
+    this.secondFARequired,
   );
 
   final UserId userId;
@@ -58,6 +60,8 @@ class User with EquatableMixin  {
   final bool canCreateGuest;
   final AccountType accountType;
   final QuotaId quotaUuid;
+  final bool secondFAEnabled;
+  final bool secondFARequired;
 
   @override
   List<Object> get props => [
@@ -72,5 +76,7 @@ class User with EquatableMixin  {
     canCreateGuest,
     accountType,
     quotaUuid,
+    secondFAEnabled,
+    secondFARequired
   ];
 }
