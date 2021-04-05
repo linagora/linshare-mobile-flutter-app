@@ -33,10 +33,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 
@@ -54,6 +57,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<DestinationPickerWidget>(), settings: settings.arguments);
     case RoutePaths.sharedSpaceDetails:
       return MaterialPageRoute(builder: (context) => getIt<SharedSpaceDetailsWidget>(), settings: settings.arguments);
+    case RoutePaths.authentication:
+      return MaterialPageRoute(builder: (context) => getIt<AuthenticationWidget>(), settings: settings.arguments);
+    case RoutePaths.enter_otp:
+      return MaterialPageRoute(builder: (context) => getIt<EnterOTPWidget>(), settings: settings.arguments);
+    case RoutePaths.second_factor_authentication:
+      return MaterialPageRoute(builder: (context) => getIt<SecondFactorAuthenticationWidget>(), settings: settings.arguments);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

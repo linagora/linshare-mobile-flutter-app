@@ -42,4 +42,7 @@ class RoutePaths {
   static const String account_details = 'account_details';
   static const String received_shares = 'received_shares';
   static const String sharedSpaceDetails = 'shared_space_details';
+  static const String authentication = 'authentication';
+  static const String enter_otp = 'enter_otp';
+  static const String second_factor_authentication = 'second_factor_authentication';
 }

@@ -35,14 +35,19 @@ import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
@@ -53,6 +58,8 @@ import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmo
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
@@ -81,6 +88,9 @@ class WidgetModule {
     _provideAccountDetailsComponent();
     _provideReceivedShareWidgetComponent();
     _provideSharedSpaceDetailsWidgetComponent();
+    _provideAuthenticationWidgetComponent();
+    _provideEnterOTPWidgetComponent();
+    _provide2FAWidgetComponent();
   }
 
   void _provideLoginComponent() {
@@ -242,5 +252,33 @@ class WidgetModule {
         getIt.get<GetAllSharedSpaceMembersInteractor>(),
         getIt.get<SharedSpaceActivitiesInteractor>()
     ));
+  }
+
+  void _provideAuthenticationWidgetComponent() {
+    getIt.registerFactory(() => AuthenticationWidget());
+    getIt.registerFactory(() => AuthenticationViewModel(
+        getIt<Store<AppState>>(),
+        getIt<GetAuthorizedInteractor>(),
+        getIt<DeletePermanentTokenInteractor>(),
+        getIt<AppNavigation>()
+    ));
+  }
+
+  void _provideEnterOTPWidgetComponent() {
+    getIt.registerFactory(() => EnterOTPWidget());
+    getIt.registerFactory(() => EnterOTPViewModel(
+        getIt<Store<AppState>>(),
+        getIt<AppNavigation>(),
+        getIt<CreatePermanentTokenInteractor>(),
+        getIt<DynamicUrlInterceptors>(),
+        getIt<AppToast>()
+    ));
+  }
+
+  void _provide2FAWidgetComponent() {
+    getIt.registerFactory(() => SecondFactorAuthenticationWidget());
+    getIt.registerFactory(() => SecondFactorAuthenticationViewModel(
+      getIt<Store<AppState>>(),
+      getIt<AppNavigation>(),));
   }
 }
