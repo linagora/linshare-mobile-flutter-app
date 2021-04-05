@@ -48,6 +48,7 @@ import 'package:data/src/network/model/functionality/functionality_size_dto.dart
 import 'package:data/src/network/model/functionality/functionality_string_dto.dart';
 import 'package:data/src/network/model/functionality/functionality_time_dto.dart';
 import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:data/src/network/model/request/create_work_group_body_request.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:data/src/network/model/response/account_quota_response.dart';
@@ -354,5 +355,12 @@ class LinShareHttpClient {
     return membersJson
       .map((data) => SharedSpaceMemberResponse.fromJson(data))
       .toList();
+  }
+
+  Future<SharedSpaceNodeNestedResponse> createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest createWorkGroupBodyRequest) async {
+    final resultJson = await _dioClient.post(
+        Endpoint.sharedSpaces.generateEndpointPath(),
+        data: createWorkGroupBodyRequest.toJson().toString());
+    return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
 }

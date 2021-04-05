@@ -29,20 +29,27 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class SharedSpaceDataSource {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+class CreateWorkGroupBodyRequest with EquatableMixin {
+  final String name;
+  final LinShareNodeType nodeType;
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId sharedSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
-  );
+  CreateWorkGroupBodyRequest(this.name, this.nodeType);
 
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('name'): jsonEncode(name),
+    jsonEncode('nodeType'): jsonEncode(nodeType.value)
+  };
+
+  @override
+  List<Object> get props => [name, nodeType];
+}
+
+extension CreateWorkGroupRequestExtension on CreateWorkGroupRequest {
+  CreateWorkGroupBodyRequest toCreateWorkGroupBodyRequest() => CreateWorkGroupBodyRequest(name, nodeType);
 }
