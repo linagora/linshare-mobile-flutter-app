@@ -43,4 +43,6 @@ abstract class SharedSpaceRepository {
       RolesParameter rolesParameter = RolesParameter.withRole
     }
   );
+
+  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
 }

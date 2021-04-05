@@ -34,19 +34,9 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class VerifyNameInteractor {
-  Either<Failure, Success> execute(List<String> namesList, String newName) {
+  Either<Failure, Success> execute(String newName, List<Validator> listValidator) {
     try {
-      if (newName == null || newName.isEmpty) {
-        throw EmptyNameException();
-      }
-
-      final name = newName.toLowerCase();
-
-      if (namesList.map((name) => name.toLowerCase()).contains(name)) {
-        throw DuplicatedNameException();
-      }
-
-      return Right<Failure, Success>(VerifyNameViewState());
+      return CompositeNameValidator(listValidator).validate(NewNameRequest(newName));
     } catch (exception) {
       return Left<Failure, Success>(VerifyNameFailure(exception));
     }
