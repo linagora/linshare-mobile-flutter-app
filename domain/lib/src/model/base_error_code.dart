@@ -30,8 +30,13 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-abstract class BaseErrorCode {
+import 'package:equatable/equatable.dart';
+
+abstract class BaseErrorCode with EquatableMixin {
   final int value;
 
   BaseErrorCode(this.value);
+
+  @override
+  List<Object> get props => [value];
 }

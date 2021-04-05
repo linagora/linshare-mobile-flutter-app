@@ -41,9 +41,14 @@ class GetAuthorizedInteractor {
   Future<Either<Failure, Success>> execute() async {
     try {
       final user = await authenticationRepository.getAuthorizedUser();
+      if (_needSetup2FA(user)) {
+        return Left(NeedSetup2FA());
+      }
       return Right(GetAuthorizedUserViewState(user));
     } catch (exception) {
       return Left(GetAuthorizedUserFailure(exception));
     }
   }
+
+  bool _needSetup2FA(User user) => !user.secondFAEnabled && user.secondFARequired;
 }
