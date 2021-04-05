@@ -33,3 +33,16 @@
 enum LinShareNodeType {
   DRIVE, WORK_GROUP
 }
+
+extension LinShareNodeTypeExtension on LinShareNodeType {
+  String get value {
+    switch(this) {
+      case LinShareNodeType.DRIVE:
+        return 'DRIVE';
+      case LinShareNodeType.WORK_GROUP:
+        return 'WORK_GROUP';
+      default:
+        return toString();
+    }
+  }
+}
