@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-02T11:38:40.996308",
+  "@@last_modified": "2021-04-08T10:14:21.932827",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -994,6 +994,21 @@
     "type": "text",
     "placeholders": {}
   },
+  "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
+  "@second_factor_authentication_is_required_for_your_account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_enable_second_factor_authentication_to_continue": "Please enable Second factor Authentication to continue",
+  "@please_enable_second_factor_authentication_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_setup": "Go to Setup",
+  "@go_to_setup": {
+    "type": "text",
+    "placeholders": {}
+  },
   "second_factor_authentication": "SECOND FACTOR AUTHENTICATION",
   "@second_factor_authentication": {
     "type": "text",
@@ -1011,6 +1026,16 @@
   },
   "please_fill_up_all_numbers": "Please fill up all numbers",
   "@please_fill_up_all_numbers": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalid_otp": "Invalid OTP",
+  "@invalid_otp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "user_locked_message": "Sorry! Your account is locked\nPlease contact the support to unlock!",
+  "@user_locked_message": {
     "type": "text",
     "placeholders": {}
   }
