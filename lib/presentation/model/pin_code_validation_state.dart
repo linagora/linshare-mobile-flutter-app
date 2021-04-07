@@ -28,12 +28,7 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:domain/src/model/linshare_error_code.dart';
-
-class BusinessErrorCode {
-  static final invalidPatternMinimumCharactersLength = LinShareErrorCode(1000);
-  static final missingOTPAuthentication = [LinShareErrorCode(1002), LinShareErrorCode(1003)];
-  static final authenErrorUserLocked = [LinShareErrorCode(1004)];
+enum PinCodeValidationState {
+  Idle, Loading
 }

@@ -1292,6 +1292,20 @@ class AppLocalizations {
     );
   }
 
+  String get invalid_otp {
+    return Intl.message(
+      'Invalid OTP',
+      name : 'invalid_otp'
+    );
+  }
+
+  String get user_locked_message {
+    return Intl.message(
+        'Sorry! Your account is locked\nPlease contact the support to unlock!',
+        name : 'user_locked_message'
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

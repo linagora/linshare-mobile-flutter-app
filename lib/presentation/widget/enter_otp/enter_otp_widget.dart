@@ -30,17 +30,33 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/model/pin_code_validation_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/selectors/authentication_selector.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/styles.dart';
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_argument.dart';
-
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/view/pin_code/pin_code_widget.dart';
+import 'package:linshare_flutter_app/presentation/view/text/linshare_slogan_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/toolbar/toolbar_builder.dart';
 import 'enter_otp_viewmodel.dart';
+
+final _titleTextStyle = CommonTextStyle.textStyleNormal.copyWith(color: AppColor.pinCodeTitleColor, fontSize: 16);
+final _subTitleTextStyle = CommonTextStyle.textStyleNormal.copyWith(color: AppColor.pinCodeSubTitleColor, fontSize: 15);
+final _padTextStyle = CommonTextStyle.textStyleNormal.copyWith(color: AppColor.pinCodePadTextColor, fontSize: 20);
+final _errorTextStyle = CommonTextStyle.textStyleNormal.copyWith(color: AppColor.pinCodeErrorTextColor);
+final _buttonActionTextStyle = CommonTextStyle.textStyleNormal.copyWith(color: AppColor.pinCodeSubmitButtonTextColor, fontSize: 16);
 
 class EnterOTPWidget extends StatelessWidget {
   final enterOTPViewModel = getIt<EnterOTPViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final textController = TextEditingController();
+  final PinCodeValidationStateNotifier pinCodeValidationStateNotifier = PinCodeValidationStateNotifier();
 
   @override
   Widget build(BuildContext context) {
@@ -48,45 +64,76 @@ class EnterOTPWidget extends StatelessWidget {
     enterOTPViewModel.setEnterOTPArgument(arguments);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       backgroundColor: AppColor.primaryColor,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                onPressed: () => enterOTPViewModel.onBackPressed(),
-                icon: Image(
-                    image: AssetImage(imagePath.icArrowBack),
-                    alignment: Alignment.center),
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                height: 200,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      child: TextField(
-                        controller: textController,
-                      ),
-                      width: 200,
-                    ),
-                    GestureDetector(
-                      onTap: () => enterOTPViewModel.onLoginPressed(textController.text),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Text('submit'),
-                      ),
-                    )
-                  ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          child: Stack(children: [
+            SingleChildScrollView(
+              reverse: false,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Container(
+                  alignment: Alignment.topCenter,
+                  padding: EdgeInsets.only(top: 100),
+                  child: Column(
+                    children: [
+                      LinShareSloganBuilder()
+                          .setSloganText(AppLocalizations.of(context).login_text_slogan)
+                          .setSloganTextAlign(TextAlign.center)
+                          .setSloganTextStyle(TextStyle(color: Colors.white, fontSize: 16))
+                          .setLogo(imagePath.icLoginLogo)
+                          .build(),
+                      SizedBox(height: 80),
+                      StoreConnector<AppState, AuthenticationState>(
+                        converter: (store) => store.state.authenticationState,
+                        builder: (context, authenticationState) {
+                          pinCodeValidationStateNotifier.value =
+                                authenticationState.isAuthenticationLoading()
+                                    ? PinCodeValidationState.Loading
+                                    : PinCodeValidationState.Idle;
+                          return PinCodeWidget.twoFactorAuthen(
+                            title: AppLocalizations.of(context).second_factor_authentication,
+                            titleStyle: _titleTextStyle,
+                            subTitle: AppLocalizations.of(context).input_6_digit_from_free_otp,
+                            subTitleStyle: _subTitleTextStyle,
+                            pinCodeFieldBackgroundColor: AppColor.primaryColor,
+                            pinBackgroundColor: AppColor.pinCodePadBackgroundColor,
+                            pinTextStyle: _padTextStyle,
+                            errorText: AppLocalizations.of(context).please_fill_up_all_numbers,
+                            errorStyle: _errorTextStyle,
+                            buttonText: AppLocalizations.of(context).submit,
+                            buttonBackgroundColor: AppColor.pinCodeSubmitButtonBGColor,
+                            buttonStyle: _buttonActionTextStyle,
+                            onButtonClick: (enteredPin) => _onSubmitPressed(enteredPin, context),
+                            pinCodeValidationStateNotifier: pinCodeValidationStateNotifier,
+                          );
+                        }
+                      )
+                    ],
+                  ),
                 ),
               ),
-            )
-          ],
+            ),
+            ToolbarBuilder(
+                Key('enter_otp_arrow_back_button'),
+                contentPadding: EdgeInsets.only(left: 10),
+                actionIcon: imagePath.icArrowBack,
+                onButtonActionClick: _onBackPress)
+                .build(),
+          ]),
         ),
       ),
     );
+  }
+
+  void _onBackPress() {
+    enterOTPViewModel.onBackPressed();
+  }
+
+  void _onSubmitPressed(String otpCode, BuildContext context) {
+    enterOTPViewModel.onLoginPressed(otpCode, context);
   }
 }
