@@ -32,5 +32,5 @@ import 'package:domain/domain.dart';
 
 extension StringExtension on String {
   int compareToSort(String value, OrderType orderType) =>
-      compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+      toLowerCase().compareTo(value.toLowerCase()) * (orderType == OrderType.ascending ? -1 : 1);
 }
