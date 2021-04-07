@@ -52,9 +52,9 @@ class GetSharedSpaceInteractor {
         membersParameter: membersParameter,
         rolesParameter: rolesParameter
       );
-      return Right<Failure, Success>(SharedSpaceViewState(sharedspace));
+      return Right<Failure, Success>(SharedSpaceDetailViewState(sharedspace));
     } catch (exception) {
-      return Left<Failure, Success>(SharedSpaceFailure(exception));
+      return Left<Failure, Success>(SharedSpaceDetailFailure(exception));
     }
   }
 }
