@@ -131,7 +131,7 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
               loadAllChildNodes();
             } else if (success is CreateSharedSpaceFolderViewState) {
               loadAllChildNodes();
-            } else if (success is SharedSpaceViewState) {
+            } else if (success is SharedSpaceDetailViewState || success is SharedSpacesViewState) {
               loadSorterAndAllChildNodes();
             }
       });

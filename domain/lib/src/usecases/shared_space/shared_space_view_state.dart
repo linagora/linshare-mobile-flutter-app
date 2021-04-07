@@ -297,19 +297,19 @@ class CreateSharedSpaceFolderFailure extends FeatureFailure {
   List<Object> get props => [exception];
 }
 
-class SharedSpaceViewState extends ViewState {
+class SharedSpaceDetailViewState extends ViewState {
   final SharedSpaceNodeNested sharedSpace;
 
-  SharedSpaceViewState(this.sharedSpace);
+  SharedSpaceDetailViewState(this.sharedSpace);
 
   @override
   List<Object> get props => [sharedSpace];
 }
 
-class SharedSpaceFailure extends FeatureFailure {
+class SharedSpaceDetailFailure extends FeatureFailure {
   final exception;
 
-  SharedSpaceFailure(this.exception);
+  SharedSpaceDetailFailure(this.exception);
 
   @override
   List<Object> get props => [exception];
