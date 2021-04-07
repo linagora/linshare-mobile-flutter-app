@@ -55,7 +55,7 @@ void main() {
       final result = await getSharedSpaceInteractor.execute(sharedSpaceId1);
 
       final sharedSpace = result
-          .map((success) => (success as SharedSpaceViewState).sharedSpace)
+          .map((success) => (success as SharedSpaceDetailViewState).sharedSpace)
           .getOrElse(() => null);
 
       expect(sharedSpace, sharedSpace1);
@@ -75,7 +75,7 @@ void main() {
       );
 
       final sharedSpace = result
-          .map((success) => (success as SharedSpaceViewState).sharedSpace)
+          .map((success) => (success as SharedSpaceDetailViewState).sharedSpace)
           .getOrElse(() => null);
 
       expect(sharedSpace, sharedSpace1);
@@ -87,10 +87,10 @@ void main() {
 
       final result = await getSharedSpaceInteractor.execute(sharedSpaceId1);
 
-      result.fold((failure) => expect(failure, isA<SharedSpaceFailure>()),
-          (success) => expect(success, isA<SharedSpaceViewState>()));
+      result.fold((failure) => expect(failure, isA<SharedSpaceDetailFailure>()),
+          (success) => expect(success, isA<SharedSpaceDetailViewState>()));
 
-      expect(result, Left<Failure, Success>(SharedSpaceFailure(exception)));
+      expect(result, Left<Failure, Success>(SharedSpaceDetailFailure(exception)));
     });
   });
 }
