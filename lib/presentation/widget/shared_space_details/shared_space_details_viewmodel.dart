@@ -57,7 +57,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
 
   Future<SharedSpaceNodeNested> getSharedSpace(SharedSpaceId sharedSpaceId) async {
     return (await _getSharedSpaceInteractor.execute(sharedSpaceId))
-        .map((result) => result is SharedSpaceViewState ? result.sharedSpace : null)
+        .map((result) => result is SharedSpaceDetailViewState ? result.sharedSpace : null)
         .getOrElse(() => null);
   }
 
