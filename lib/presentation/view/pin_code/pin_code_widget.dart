@@ -32,6 +32,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/model/pin_code_validation_state.dart';
 import 'package:linshare_flutter_app/presentation/model/pin_code_validation_type.dart';
 import 'package:linshare_flutter_app/presentation/view/button/button_text_action_builder.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -39,8 +40,12 @@ import 'package:domain/domain.dart';
 
 typedef ButtonCallback = void Function(String enteredPin);
 
-class PinCodeValidationNotifier extends ValueNotifier<PinCodeValidationType> {
-  PinCodeValidationNotifier() : super(PinCodeValidationType.CORRECT);
+class PinCodeErrorValidationNotifier extends ValueNotifier<PinCodeValidationType> {
+  PinCodeErrorValidationNotifier() : super(PinCodeValidationType.Correct);
+}
+
+class PinCodeValidationStateNotifier extends ValueNotifier<PinCodeValidationState> {
+  PinCodeValidationStateNotifier() : super(PinCodeValidationState.Idle);
 }
 
 /// Pin Code Widget which combines title, pin fields for inputting and submit button
@@ -85,6 +90,7 @@ class PinCodeWidget extends StatefulWidget {
   final TextStyle buttonStyle;
   final Color buttonBackgroundColor;
   final ButtonCallback onButtonClick;
+  final PinCodeValidationStateNotifier pinCodeValidationStateNotifier;
 
   const PinCodeWidget({
     Key key,
@@ -109,11 +115,12 @@ class PinCodeWidget extends StatefulWidget {
     this.buttonWidth,
     this.buttonHeight,
     this.buttonBorderRadius,
-    this.onButtonClick
+    this.onButtonClick,
+    this.pinCodeValidationStateNotifier
   }) : super(key: key);
 
   const PinCodeWidget.twoFactorAuthen({
-    key = const Key('two_factor_authen_pin_code_widget'),
+    key = const Key('pin_code_widget'),
     this.distanceSpaceVertical = 20,
     this.pinCodeFieldPaddingHorizontal = 36,
     this.pinCount = 6,
@@ -135,7 +142,8 @@ class PinCodeWidget extends StatefulWidget {
     this.buttonText,
     this.buttonStyle,
     this.buttonBackgroundColor,
-    this.onButtonClick
+    this.onButtonClick,
+    this.pinCodeValidationStateNotifier
   });
 
   @override
@@ -147,7 +155,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
 
   String currentText = '';
   final formKey = GlobalKey<FormState>();
-  PinCodeValidationNotifier pinCodeValueNotifier = PinCodeValidationNotifier();
+  PinCodeErrorValidationNotifier pinCodeErrorNotifier = PinCodeErrorValidationNotifier();
 
   @override
   void initState() {
@@ -158,7 +166,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
   @override
   void dispose() {
     errorController.close();
-    pinCodeValueNotifier.dispose();
+    pinCodeErrorNotifier.dispose();
+    widget.pinCodeValidationStateNotifier.dispose();
     super.dispose();
   }
 
@@ -179,31 +188,13 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
         SizedBox(height: widget.distanceSpaceVertical),
         _buildListPinCodeFields,
         SizedBox(height: widget.distanceSpaceVertical),
-        ButtonTextActionBuilder(
-          Key('button_action_pin_code'),
-          text: widget.buttonText,
-          onButtonClick: () {
-            formKey.currentState.validate();
-            if (currentText.length != widget.pinCount) {
-              errorController.add(ErrorAnimationType.shake);
-              pinCodeValueNotifier.value = PinCodeValidationType.ERROR;
-            } else {
-              pinCodeValueNotifier.value = PinCodeValidationType.CORRECT;
-              widget.onButtonClick.call(currentText);
-            }
-          })
-          .setTextStyle(widget.buttonStyle)
-          .setWidth(widget.buttonWidth)
-          .setHeight(widget.buttonHeight)
-          .setBackgroundColor(widget.buttonBackgroundColor)
-          .setBorderRadius(BorderRadius.all(Radius.circular(widget.buttonBorderRadius)))
-          .build(context)
+        _buildActionWidget
       ],
     );
   }
 
   Widget get _buildListPinCodeFields => ValueListenableBuilder(
-    valueListenable: pinCodeValueNotifier,
+    valueListenable: pinCodeErrorNotifier,
     builder: (BuildContext context, PinCodeValidationType type, Widget child) {
       return Container(
         child: Column(
@@ -251,7 +242,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
                       )
                     ],
                     onCompleted: (v) {
-                      pinCodeValueNotifier.value = PinCodeValidationType.CORRECT;
+                      pinCodeErrorNotifier.value = PinCodeValidationType.Correct;
                     },
                     onChanged: (value) {
                       currentText = value;
@@ -264,7 +255,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: widget.pinCodeFieldPaddingHorizontal),
               child: Text(
-                type == PinCodeValidationType.CORRECT ? '' : widget.errorText,
+                type == PinCodeValidationType.Correct ? '' : widget.errorText,
                 style: widget.errorStyle,
               ),
             ),
@@ -272,5 +263,42 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
         ),
       );
     }
+  );
+
+  Widget get _buildActionWidget => ValueListenableBuilder(
+    valueListenable: widget.pinCodeValidationStateNotifier,
+    builder: (BuildContext context, PinCodeValidationState codeValidationState, Widget child) {
+      if (codeValidationState == PinCodeValidationState.Loading) {
+        return _loadingCircularProgress;
+      } else {
+        return _buttonAction;
+      }
+  });
+
+  Widget get _buttonAction =>
+      ButtonTextActionBuilder(Key('pin_code_button_action'),
+              text: widget.buttonText, onButtonClick: () {
+          formKey.currentState.validate();
+          if (currentText.length != widget.pinCount) {
+            errorController.add(ErrorAnimationType.shake);
+            pinCodeErrorNotifier.value = PinCodeValidationType.Error;
+          } else {
+            pinCodeErrorNotifier.value = PinCodeValidationType.Correct;
+            widget.onButtonClick.call(currentText);
+          }
+        }
+      )
+      .setTextStyle(widget.buttonStyle)
+      .setWidth(widget.buttonWidth)
+      .setHeight(widget.buttonHeight)
+      .setBackgroundColor(widget.buttonBackgroundColor)
+      .setBorderRadius(BorderRadius.all(Radius.circular(widget.buttonBorderRadius)))
+      .build(context);
+
+  Widget get _loadingCircularProgress => SizedBox(
+    key: Key('pin_code_loading_icon'),
+    width: 40,
+    height: 40,
+    child: CircularProgressIndicator(),
   );
 }

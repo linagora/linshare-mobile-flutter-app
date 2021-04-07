@@ -62,6 +62,8 @@ class AuthenticationDataSource {
             final authErrorCode = LinShareErrorCode(int.tryParse(error.response.headers.value(Constant.linShareAuthErrorCode)) ?? 1);
             if (isAuthenticateWithOTPError(authErrorCode)) {
               throw NeedAuthenticateWithOTP();
+            } else if (isAuthenticateErrorUserLocked(authErrorCode)) {
+              throw UserLocked();
             }
             throw BadCredentials();
           } else {
@@ -73,6 +75,9 @@ class AuthenticationDataSource {
 
   bool isAuthenticateWithOTPError(LinShareErrorCode authErrorCode) =>
       BusinessErrorCode.missingOTPAuthentication.contains(authErrorCode);
+
+  bool isAuthenticateErrorUserLocked(LinShareErrorCode authErrorCode) =>
+      BusinessErrorCode.authenErrorUserLocked.contains(authErrorCode);
 
   Future<bool> deletePermanentToken(Token token) async {
     return Future.sync(() async => await linShareHttpClient.deletePermanentToken(token.toPermanentToken()))

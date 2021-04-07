@@ -33,6 +33,7 @@ import 'package:domain/src/usecases/remote_exception.dart';
 
 abstract class AuthenticationException extends RemoteException {
   static final wrongCredential = 'Credential is wrong';
+  static final userLocked = 'User is locked';
   static final needAuthenticateWithOTP = 'Need authenticate with OTP';
 
   AuthenticationException(String message) : super(message);
@@ -40,6 +41,13 @@ abstract class AuthenticationException extends RemoteException {
 
 class BadCredentials extends AuthenticationException {
   BadCredentials() : super(AuthenticationException.wrongCredential);
+
+  @override
+  List<Object> get props => [];
+}
+
+class UserLocked extends AuthenticationException {
+  UserLocked() : super(AuthenticationException.userLocked);
 
   @override
   List<Object> get props => [];

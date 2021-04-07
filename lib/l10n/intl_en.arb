@@ -1033,5 +1033,15 @@
   "@please_fill_up_all_numbers": {
     "type": "text",
     "placeholders": {}
+  },
+  "invalid_otp": "Invalid OTP",
+  "@invalid_otp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "user_locked_message": "Sorry! Your account is locked\nPlease contact the support to unlock!",
+  "@user_locked_message": {
+    "type": "text",
+    "placeholders": {}
   }
 }
