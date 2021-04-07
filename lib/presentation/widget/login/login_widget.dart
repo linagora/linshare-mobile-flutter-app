@@ -92,7 +92,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             .build(),
                         SizedBox(height: 80),
                         Padding(
-                          padding: EdgeInsets.only(bottom: 24),
+                          padding: EdgeInsets.only(bottom: 24, left: 40, right: 40),
                           child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
                               converter: (store) => store.state.authenticationState.viewState,
                               builder: (context, viewState) {
@@ -198,15 +198,15 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   String _getErrorMessage(Failure failure) {
     if (failure is AuthenticationFailure) {
-      if (failure.authenticationException is UnknownError) {
-        return AppLocalizations.of(context).unknown_error_login_message;
-      } else if (_checkCredentialError(failure)) {
-        return AppLocalizations.of(context).credential_error_message;
+      if (_checkCredentialError(failure)) {
+        return _getCredentialErrorMessage(failure);
       } else if (_checkUrlError(failure)) {
         return AppLocalizations.of(context).wrong_url_message;
+      } else if (failure.authenticationException is UnknownError) {
+        return AppLocalizations.of(context).unknown_error_login_message;
       }
     }
-    return AppLocalizations.of(context).unknown_error_login_message;
+    return '';
   }
 
   InputDecoration _buildUrlInputDecoration(dartz.Either<Failure, Success> viewState) {
@@ -258,9 +258,18 @@ class _LoginWidgetState extends State<LoginWidget> {
   bool _checkCredentialError(Failure failure) {
     if (failure is AuthenticationFailure) {
       return failure.authenticationException is BadCredentials ||
-          failure.authenticationException is UnknownError;
+          failure.authenticationException is UserLocked  ||
+          failure.authenticationException is UnknownError ;
     }
     return false;
+  }
+
+  String _getCredentialErrorMessage(
+      AuthenticationFailure authenticationFailure) {
+    var authenException = authenticationFailure.authenticationException;
+    return authenException is UserLocked
+        ? AppLocalizations.of(context).user_locked_message
+        : AppLocalizations.of(context).credential_error_message;
   }
 
   Widget loadingCircularProgress() {

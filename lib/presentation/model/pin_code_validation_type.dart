@@ -30,18 +30,9 @@
 //  the Additional Terms applicable to LinShare software.
 
 enum PinCodeValidationType {
-  CORRECT, ERROR
+  Correct, Error
 }
 
 extension PinCodeValidationTypeExtension on PinCodeValidationType {
-  bool get value {
-    switch (this) {
-      case PinCodeValidationType.CORRECT:
-        return true;
-      case PinCodeValidationType.ERROR:
-        return false;
-      default:
-        return false;
-    }
-  }
+  bool get value => this == PinCodeValidationType.Correct;
 }

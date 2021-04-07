@@ -29,8 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
@@ -64,25 +68,34 @@ class EnterOTPViewModel extends BaseViewModel {
     _appNavigation.popBack();
   }
 
-  void onLoginPressed(String otp) {
-    store.dispatch(_loginWithOTPAction(otp));
+  void onLoginPressed(String otp, BuildContext context) {
+    store.dispatch(_loginWithOTPAction(otp, context));
   }
 
-  OnlineThunkAction _loginWithOTPAction(String otp) {
+  OnlineThunkAction _loginWithOTPAction(String otp, BuildContext context) {
     return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartAuthenticationLoadingAction());
       await _getPermanentTokenInteractor
           .execute(_enterOTPArgument.baseUrl, _enterOTPArgument.email, _enterOTPArgument.password, otpCode: OTPCode(otp))
           .then(
               (result) => result.fold(
-                  (failure) => {
-                    // todo show toast message here
-                    _appToast.showErrorToast('invalid otp')
-                  },
-                  ((success) => _loginSuccess())));
+                  (failure) => _loginFailure(failure, context),
+                  ((success) => _loginSuccess(success))));
     });
   }
 
-  void _loginSuccess() async {
+  void _loginFailure(AuthenticationFailure authenticationFailure, BuildContext context) async {
+    final authenException = authenticationFailure.authenticationException;
+    store.dispatch(AuthenticationAction(Left(authenticationFailure)));
+    if (authenException is UserLocked) {
+      await _appNavigation.popBack();
+    } else {
+      _appToast.showErrorToast(AppLocalizations.of(context).invalid_otp);
+    }
+  }
+
+  void _loginSuccess(AuthenticationViewState success) async {
+    store.dispatch(AuthenticationAction(Right(success)));
     _dynamicUrlInterceptors.changeBaseUrl(_enterOTPArgument.baseUrl.origin);
     await _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(_enterOTPArgument.baseUrl));
   }
