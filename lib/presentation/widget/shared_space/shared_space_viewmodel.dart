@@ -238,7 +238,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     _appNavigation.popBack();
     _appNavigation.push(
       RoutePaths.sharedSpaceDetails,
-      arguments: SharedSpaceDetailsArguments(sharedSpaceNodeNested.sharedSpaceId)
+      arguments: SharedSpaceDetailsArguments(sharedSpaceNodeNested)
     );
   }
 

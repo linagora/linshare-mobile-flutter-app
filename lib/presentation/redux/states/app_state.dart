@@ -31,12 +31,14 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
@@ -56,6 +58,8 @@ class AppState with EquatableMixin {
   final NetworkConnectivityState networkConnectivityState;
   final AccountState account;
   final FunctionalityState functionalityState;
+  final SharedSpaceDetailsState sharedSpaceDetailsState;
+  final AddSharedSpaceMembersState addSharedSpaceMembersState;
 
   AppState(
       {@required this.uiState,
@@ -68,7 +72,9 @@ class AppState with EquatableMixin {
       @required this.destinationPickerState,
       @required this.networkConnectivityState,
       @required this.account,
-      @required this.functionalityState});
+      @required this.functionalityState,
+      @required this.sharedSpaceDetailsState,
+      @required this.addSharedSpaceMembersState});
 
   factory AppState.initial() {
     return AppState(
@@ -82,7 +88,9 @@ class AppState with EquatableMixin {
         destinationPickerState: DestinationPickerState.initial(),
         networkConnectivityState: NetworkConnectivityState.initial(),
         account: AccountState.initial(),
-        functionalityState: FunctionalityState.initial());
+        functionalityState: FunctionalityState.initial(),
+        sharedSpaceDetailsState: SharedSpaceDetailsState.initial(),
+        addSharedSpaceMembersState: AddSharedSpaceMembersState.initial());
   }
 
   @override
@@ -97,6 +105,8 @@ class AppState with EquatableMixin {
         destinationPickerState,
         networkConnectivityState,
         account,
-        functionalityState
+        functionalityState,
+        sharedSpaceDetailsState,
+        addSharedSpaceMembersState
       ];
 }

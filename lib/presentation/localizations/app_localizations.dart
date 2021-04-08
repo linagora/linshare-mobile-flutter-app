@@ -1374,6 +1374,37 @@ class AppLocalizations {
         args: [nodeName]
     );
   }
+
+  String get add_team_members {
+    return Intl.message(
+      'Add team members',
+      name: 'add_team_members',
+    );
+  }
+
+  String existing_members(int nbMembers) {
+    return Intl.message(
+      '''${Intl.plural(nbMembers,
+          one: 'Existing member: ${nbMembers}',
+          other: 'Existing members: ${nbMembers}')}''',
+      name: 'existing_members',
+      args: [nbMembers],
+    );
+  }
+
+  String get shared_space_member_could_not_be_added {
+    return Intl.message(
+      'Shared Space Member could not be added',
+      name: 'shared_space_member_could_not_be_added',
+    );
+  }
+
+  String get shared_space_member_has_been_added {
+    return Intl.message(
+      'Shared Space Member has been successfully added',
+      name: 'shared_space_member_has_been_added',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

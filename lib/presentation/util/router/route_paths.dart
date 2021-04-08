@@ -45,4 +45,5 @@ class RoutePaths {
   static const String authentication = 'authentication';
   static const String enter_otp = 'enter_otp';
   static const String second_factor_authentication = 'second_factor_authentication';
+  static const String addSharedSpaceMember = 'add_shared_space_member';
 }
