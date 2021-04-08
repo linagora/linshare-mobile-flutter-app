@@ -29,18 +29,51 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
-  static const String currentUploads = 'current_uploads';
-  static const String destinationPicker = 'destination_picker';
-  static const String account_details = 'account_details';
-  static const String received_shares = 'received_shares';
-  static const String sharedSpaceDetails = 'shared_space_details';
-  static const String addSharedSpaceMember = 'add_shared_space_member';
+import 'package:flutter/src/material/list_tile.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
+
+class SharedSpaceMemberListTileBuilder {
+  final String _name;
+  final String _email;
+  final String _roleName;
+
+  Color tileColor;
+
+  SharedSpaceMemberListTileBuilder(this._name, this._email, this._roleName, {this.tileColor});
+
+  ListTile build() {
+    return ListTile(
+      contentPadding: EdgeInsets.only(left: 24, top: 10, bottom: 10),
+      leading: LabelAvatarBuilder(_name.characters.first.toUpperCase())
+          .key(Key('label_shared_space_member_avatar'))
+          .build(),
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Text(_name,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    color: AppColor.loginTextFieldTextColor))),
+        Text(_email,
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+                color: AppColor.documentModifiedDateItemTextColor)),
+        Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Text(_roleName,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: AppColor.workgroupNodesSurfingBackTitleColor))),
+      ]),
+      tileColor: tileColor,
+    );
+  }
 }

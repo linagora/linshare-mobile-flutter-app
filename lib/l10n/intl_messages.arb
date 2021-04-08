@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-08T11:10:01.727957",
+  "@@last_modified": "2021-04-09T16:21:06.766984",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -1048,5 +1048,27 @@
     "placeholders": {
       "nodeName": {}
     }
+  },
+  "add_team_members": "Add team members",
+  "@add_team_members": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "existing_members": "{nbMembers,plural, =1{Existing member: {nbMembers}}other{Existing members: {nbMembers}}}",
+  "@existing_members": {
+    "type": "text",
+    "placeholders": {
+      "nbMembers": {}
+    }
+  },
+  "shared_space_member_could_not_be_added": "Shared Space Member could not be added",
+  "@shared_space_member_could_not_be_added": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_space_member_has_been_added": "Shared Space Member has been successfully added",
+  "@shared_space_member_has_been_added": {
+    "type": "text",
+    "placeholders": {}
   }
 }

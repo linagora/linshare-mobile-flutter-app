@@ -28,19 +28,28 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
-  static const String currentUploads = 'current_uploads';
-  static const String destinationPicker = 'destination_picker';
-  static const String account_details = 'account_details';
-  static const String received_shares = 'received_shares';
-  static const String sharedSpaceDetails = 'shared_space_details';
-  static const String addSharedSpaceMember = 'add_shared_space_member';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+
+@immutable
+class AddSharedSpaceMembersAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+
+  AddSharedSpaceMembersAction(this.viewState);
+}
+
+@immutable
+class AddSharedSpaceMembersSetRoleAction extends ActionOffline {
+  final SharedSpaceRoleName newRole;
+
+  AddSharedSpaceMembersSetRoleAction(this.newRole);
+}
+
+@immutable
+class CleanAddSharedSpaceMembersStateAction extends ActionOffline {
+  CleanAddSharedSpaceMembersStateAction();
 }

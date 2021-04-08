@@ -32,73 +32,53 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class StartSharedSpaceLoadingAction extends ActionOnline {}
+class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
+  final SharedSpaceNodeNested sharedSpace;
+  final List<SharedSpaceMember> membersList;
+  final List<AuditLogEntryUser> activitiesList;
+  final AccountQuota quota;
 
-@immutable
-class SharedSpaceAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+  SharedSpaceDetailsState(Either<Failure, Success> viewState, this.sharedSpace, this.membersList, this.activitiesList, this.quota) : super(viewState);
 
-  SharedSpaceAction(this.viewState);
-}
+  factory SharedSpaceDetailsState.initial() {
+    return SharedSpaceDetailsState(Right(IdleState()), null, [], [], null);
+  }
 
-@immutable
-class SharedSpaceGetAllSharedSpacesAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+  @override
+  SharedSpaceDetailsState clearViewState() {
+    return SharedSpaceDetailsState(Right(IdleState()), null, [], [], null);
+  }
 
-  SharedSpaceGetAllSharedSpacesAction(this.viewState);
-}
+  @override
+  SharedSpaceDetailsState sendViewState({Either<Failure, Success> viewState}) {
+    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, activitiesList, quota);
+  }
 
-@immutable
-class CleanSharedSpaceStateAction extends ActionOffline {
-  CleanSharedSpaceStateAction();
-}
+  @override
+  SharedSpaceDetailsState startLoadingState() {
+    return SharedSpaceDetailsState(Right(LoadingState()), sharedSpace, membersList, activitiesList, quota);
+  }
 
-@immutable
-class EnableUploadButtonAction extends ActionOffline {
-  EnableUploadButtonAction();
-}
+  SharedSpaceDetailsState setSharedSpaceMembers({Either<Failure, Success> viewState, List<SharedSpaceMember> newMembers}) {
+    return SharedSpaceDetailsState(viewState, sharedSpace, newMembers, activitiesList, quota);
+  }
 
-@immutable
-class DisableUploadButtonAction extends ActionOffline {
-  DisableUploadButtonAction();
-}
+  SharedSpaceDetailsState setSharedSpace({Either<Failure, Success> viewState, SharedSpaceNodeNested newSharedSpace}) {
+    return SharedSpaceDetailsState(viewState, newSharedSpace, membersList, activitiesList, quota);
+  }
 
-@immutable
-class SharedSpaceSetSearchResultAction extends ActionOffline {
-  final List<SharedSpaceNodeNested> sharedSpaceNodes;
+  SharedSpaceDetailsState setSharedSpaceActivities({Either<Failure, Success> viewState, List<AuditLogEntryUser> newActivities}) {
+    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, newActivities, quota);
+  }
 
-  SharedSpaceSetSearchResultAction(this.sharedSpaceNodes);
-}
-
-class SharedSpaceSelectSharedSpaceAction extends ActionOffline {
-  final SelectableElement<SharedSpaceNodeNested> selectedSharedSpace;
-
-  SharedSpaceSelectSharedSpaceAction(this.selectedSharedSpace);
-}
-
-@immutable
-class SharedSpaceClearSelectedSharedSpacesAction extends ActionOffline {
-  SharedSpaceClearSelectedSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceSelectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceSelectAllSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceUnselectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceUnselectAllSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceGetSharedSpaceRolesListAction extends ActionOffline {
-  final List<SharedSpaceRole> rolesList;
-
-  SharedSpaceGetSharedSpaceRolesListAction(this.rolesList);
+  SharedSpaceDetailsState setAccountQuota({Either<Failure, Success> viewState, AccountQuota newQuota}) {
+    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, activitiesList, newQuota);
+  }
 }
