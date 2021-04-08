@@ -33,72 +33,23 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
-class StartSharedSpaceLoadingAction extends ActionOnline {}
-
-@immutable
-class SharedSpaceAction extends ActionOnline {
+class AddSharedSpaceMembersAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
-  SharedSpaceAction(this.viewState);
+  AddSharedSpaceMembersAction(this.viewState);
 }
 
 @immutable
-class SharedSpaceGetAllSharedSpacesAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+class AddSharedSpaceMembersSetRoleAction extends ActionOffline {
+  final SharedSpaceRoleName newRole;
 
-  SharedSpaceGetAllSharedSpacesAction(this.viewState);
+  AddSharedSpaceMembersSetRoleAction(this.newRole);
 }
 
 @immutable
-class CleanSharedSpaceStateAction extends ActionOffline {
-  CleanSharedSpaceStateAction();
-}
-
-@immutable
-class EnableUploadButtonAction extends ActionOffline {
-  EnableUploadButtonAction();
-}
-
-@immutable
-class DisableUploadButtonAction extends ActionOffline {
-  DisableUploadButtonAction();
-}
-
-@immutable
-class SharedSpaceSetSearchResultAction extends ActionOffline {
-  final List<SharedSpaceNodeNested> sharedSpaceNodes;
-
-  SharedSpaceSetSearchResultAction(this.sharedSpaceNodes);
-}
-
-class SharedSpaceSelectSharedSpaceAction extends ActionOffline {
-  final SelectableElement<SharedSpaceNodeNested> selectedSharedSpace;
-
-  SharedSpaceSelectSharedSpaceAction(this.selectedSharedSpace);
-}
-
-@immutable
-class SharedSpaceClearSelectedSharedSpacesAction extends ActionOffline {
-  SharedSpaceClearSelectedSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceSelectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceSelectAllSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceUnselectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceUnselectAllSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceGetSharedSpaceRolesListAction extends ActionOffline {
-  final List<SharedSpaceRole> rolesList;
-
-  SharedSpaceGetSharedSpaceRolesListAction(this.rolesList);
+class CleanAddSharedSpaceMembersStateAction extends ActionOffline {
+  CleanAddSharedSpaceMembersStateAction();
 }

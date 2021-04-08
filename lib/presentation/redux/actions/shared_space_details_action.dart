@@ -33,72 +33,47 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
-class StartSharedSpaceLoadingAction extends ActionOnline {}
+class StartSharedSpaceDetailsLoadingAction extends ActionOnline {}
 
 @immutable
-class SharedSpaceAction extends ActionOnline {
+class SharedSpaceDetailsAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
-  SharedSpaceAction(this.viewState);
+  SharedSpaceDetailsAction(this.viewState);
 }
 
 @immutable
-class SharedSpaceGetAllSharedSpacesAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+class SharedSpaceDetailsGetAllSharedSpaceMembersAction extends ActionOnline {
+  final Either<Failure, Success> getMembersViewState;
 
-  SharedSpaceGetAllSharedSpacesAction(this.viewState);
+  SharedSpaceDetailsGetAllSharedSpaceMembersAction(this.getMembersViewState);
 }
 
 @immutable
-class CleanSharedSpaceStateAction extends ActionOffline {
-  CleanSharedSpaceStateAction();
+class CleanSharedSpaceDetailsStateAction extends ActionOffline {
+  CleanSharedSpaceDetailsStateAction();
 }
 
 @immutable
-class EnableUploadButtonAction extends ActionOffline {
-  EnableUploadButtonAction();
+class SharedSpaceDetailsGetAllSharedSpaceActivitesAction extends ActionOnline {
+  final Either<Failure, Success> getActivitesViewState;
+
+  SharedSpaceDetailsGetAllSharedSpaceActivitesAction(this.getActivitesViewState);
 }
 
 @immutable
-class DisableUploadButtonAction extends ActionOffline {
-  DisableUploadButtonAction();
+class SharedSpaceDetailsGetSharedSpaceDetailsAction extends ActionOnline {
+  final Either<Failure, Success> getSharedSpaceViewState;
+
+  SharedSpaceDetailsGetSharedSpaceDetailsAction(this.getSharedSpaceViewState);
 }
 
 @immutable
-class SharedSpaceSetSearchResultAction extends ActionOffline {
-  final List<SharedSpaceNodeNested> sharedSpaceNodes;
+class SharedSpaceDetailsGetAccountQuotaAction extends ActionOnline {
+  final Either<Failure, Success> getAccountQuotaViewState;
 
-  SharedSpaceSetSearchResultAction(this.sharedSpaceNodes);
-}
-
-class SharedSpaceSelectSharedSpaceAction extends ActionOffline {
-  final SelectableElement<SharedSpaceNodeNested> selectedSharedSpace;
-
-  SharedSpaceSelectSharedSpaceAction(this.selectedSharedSpace);
-}
-
-@immutable
-class SharedSpaceClearSelectedSharedSpacesAction extends ActionOffline {
-  SharedSpaceClearSelectedSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceSelectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceSelectAllSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceUnselectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceUnselectAllSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceGetSharedSpaceRolesListAction extends ActionOffline {
-  final List<SharedSpaceRole> rolesList;
-
-  SharedSpaceGetSharedSpaceRolesListAction(this.rolesList);
+  SharedSpaceDetailsGetAccountQuotaAction(this.getAccountQuotaViewState);
 }
