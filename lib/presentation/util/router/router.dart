@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_wid
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 
@@ -63,6 +64,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<EnterOTPWidget>(), settings: settings.arguments);
     case RoutePaths.second_factor_authentication:
       return MaterialPageRoute(builder: (context) => getIt<SecondFactorAuthenticationWidget>(), settings: settings.arguments);
+    case RoutePaths.addSharedSpaceMember:
+      return MaterialPageRoute(builder: (context) => getIt<AddSharedSpaceMemberWidget>(), settings: settings.arguments);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

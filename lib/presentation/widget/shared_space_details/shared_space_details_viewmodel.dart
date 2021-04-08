@@ -30,12 +30,16 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/model/shared_space_details_info.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:redux/redux.dart';
+
+import 'add_shared_space_member/add_shared_space_member_arguments.dart';
 
 class SharedSpaceDetailsViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
@@ -43,8 +47,6 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   final GetQuotaInteractor _getQuotaInteractor;
   final GetAllSharedSpaceMembersInteractor _getAllSharedSpaceMembersInteractor;
   final SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
-
-  SharedSpaceNodeNested sharedSpaceNodeNested;
 
   SharedSpaceDetailsViewModel(
     Store<AppState> store,
@@ -55,46 +57,58 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     this._sharedSpaceActivitiesInteractor
   ) : super(store);
 
-  Future<SharedSpaceNodeNested> getSharedSpace(SharedSpaceId sharedSpaceId) async {
-    return (await _getSharedSpaceInteractor.execute(sharedSpaceId))
-        .map((result) => result is SharedSpaceDetailViewState ? result.sharedSpace : null)
-        .getOrElse(() => null);
+  void initState(SharedSpaceDetailsArguments arguments) {
+    refreshSharedSpaceMembers(arguments.sharedSpace.sharedSpaceId);
+    store.dispatch(_getSharedSpaceAction(arguments.sharedSpace.sharedSpaceId));
+    store.dispatch(_getSharedSpaceActivitiesAction(arguments.sharedSpace.sharedSpaceId));
   }
 
-  Future<AccountQuota> getAccountQuota(QuotaId quotaId) async {
-    return (await _getQuotaInteractor.execute(quotaId))
-        .map((result) => result is AccountQuotaViewState ? result.accountQuota : null)
-        .getOrElse(() => null);
-  }
-
-  Future<SharedSpaceDetailsInfo> getSharedSpaceDetails(SharedSpaceDetailsArguments sharedSpaceDetailsArguments) async {
-    return await getSharedSpace(sharedSpaceDetailsArguments.sharedSpaceId).then(
-      (sharedSpace) async {
-        return await Future.wait([
-            _getQuotaInteractor.execute(sharedSpace.quotaId),
-            _getAllSharedSpaceMembersInteractor.execute(sharedSpace.sharedSpaceId),
-            _sharedSpaceActivitiesInteractor.execute(sharedSpace.sharedSpaceId)
-        ]).then((response) async {
-          final accountQuota = response[0]
-              .map((result) => result is AccountQuotaViewState ? result.accountQuota : [])
-              .getOrElse(() => []);
-          final members = response[1]
-              .map((result) => result is SharedSpaceMembersViewState ? result.members : [])
-              .getOrElse(() => []);
-          final activities = response[2]
-              .map((result) => result is SharedSpacesActivitiesViewState ? result.auditLogEntryUserList : [])
-              .getOrElse(() => []);
-          return SharedSpaceDetailsInfo(sharedSpace, accountQuota, members, activities);
-        });
-      });
+  @override
+  void onDisposed() {
+    store.dispatch(CleanSharedSpaceDetailsStateAction());
+    super.onDisposed();
   }
 
   void backToSharedSpacesList() {
     _appNavigation.popBack();
   }
 
-  @override
-  void onDisposed() {
-    super.onDisposed();
+  void refreshSharedSpaceMembers(SharedSpaceId sharedSpaceId) {
+    store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
+  }
+
+  void goToAddSharedSpaceMember(SharedSpaceNodeNested sharedSpace, List<SharedSpaceMember> members) {
+    _appNavigation.push(
+      RoutePaths.addSharedSpaceMember,
+      arguments: AddSharedSpaceMemberArgument(sharedSpace, members),
+    );
+  }
+
+  OnlineThunkAction _getSharedSpaceMembersAction(SharedSpaceId sharedSpaceId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(SharedSpaceDetailsGetAllSharedSpaceMembersAction(await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId)));
+    });
+  }
+
+  OnlineThunkAction _getSharedSpaceActivitiesAction(SharedSpaceId sharedSpaceId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(SharedSpaceDetailsGetAllSharedSpaceActivitesAction(await _sharedSpaceActivitiesInteractor.execute(sharedSpaceId)));
+    });
+  }
+
+  OnlineThunkAction _getSharedSpaceAction(SharedSpaceId sharedSpaceId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final sharedSpaceViewState = await _getSharedSpaceInteractor.execute(sharedSpaceId);
+      store.dispatch(SharedSpaceDetailsGetSharedSpaceDetailsAction(sharedSpaceViewState));
+
+      await sharedSpaceViewState.fold(
+        (_) => null,
+        (success) async {
+          if (success is SharedSpaceDetailViewState) {
+            store.dispatch(SharedSpaceDetailsGetAccountQuotaAction(await _getQuotaInteractor.execute(success.sharedSpace.quotaId)));
+          }
+        }
+      );
+    });
   }
 }

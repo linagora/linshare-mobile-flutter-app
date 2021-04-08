@@ -17,8 +17,7 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-//
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -26,30 +25,48 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses
-// for the GNU Affero General Public License version
+// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+//  the Additional Terms applicable to LinShare software.
 //
-// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-// for
-//
-// the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-class SharedSpaceDetailsInfo extends Equatable {
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
-  final AccountQuota quota;
-  final List<SharedSpaceMember> members;
-  final List<AuditLogEntryUser> activitiesList;
+@immutable
+class AddSharedSpaceMembersState extends LinShareState with EquatableMixin {
+  final SharedSpaceRoleName selectedRole;
 
-  SharedSpaceDetailsInfo(this.sharedSpaceNodeNested, this.quota, this.members, this.activitiesList);
+  AddSharedSpaceMembersState(
+    Either<Failure, Success> viewState,
+    {
+      this.selectedRole = SharedSpaceRoleName.READER
+    }
+  ) : super(viewState);
+
+  factory AddSharedSpaceMembersState.initial() {
+    return AddSharedSpaceMembersState(Right(IdleState()), selectedRole: SharedSpaceRoleName.READER);
+  }
 
   @override
-  List<Object> get props => [
-    sharedSpaceNodeNested,
-    quota,
-    members,
-    activitiesList
-  ];
+  AddSharedSpaceMembersState clearViewState() {
+    return AddSharedSpaceMembersState(Right(IdleState()), selectedRole: selectedRole);
+  }
+
+  @override
+  AddSharedSpaceMembersState sendViewState({Either<Failure, Success> viewState}) {
+    return AddSharedSpaceMembersState(viewState, selectedRole: selectedRole);
+  }
+
+  AddSharedSpaceMembersState setRoleName(SharedSpaceRoleName newRole) {
+    return AddSharedSpaceMembersState(viewState, selectedRole: newRole);
+  }
+
+  @override
+  AddSharedSpaceMembersState startLoadingState() {
+    return AddSharedSpaceMembersState(Right(LoadingState()), selectedRole: selectedRole);
+  }
 }
