@@ -253,7 +253,7 @@ class SharedSpaceViewModel extends BaseViewModel {
           _sharedSpaceNodes.map((sharedSpaced) => sharedSpaced.name).toList()
         );
     return (Store<AppState> store) async {
-      EditTextModalSheetBuilder(_appNavigation)
+      EditTextModalSheetBuilder()
           .key(Key('create_new_workgroup_modal'))
           .title(AppLocalizations.of(context).create_new_workgroup)
           .cancelText(AppLocalizations.of(context).cancel)
@@ -283,11 +283,11 @@ class SharedSpaceViewModel extends BaseViewModel {
         .fold((failure) {
       if (failure is VerifyNameFailure) {
         if (failure.exception is EmptyNameException) {
-          return AppLocalizations.of(context).workgroup_name_not_empty;
+          return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).workgroup);
         } else if (failure.exception is DuplicatedNameException) {
-          return AppLocalizations.of(context).workgroup_name_already_exists;
+          return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workgroup);
         } else if (failure.exception is SpecialCharacterException) {
-          return AppLocalizations.of(context).workgroup_name_contain_special_character;
+          return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
         } else {
           return null;
         }
