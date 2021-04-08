@@ -232,4 +232,26 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         token,
         cancelToken: cancelToken);
   }
+
+  @override
+  Future<WorkGroupNode> renameSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId, RenameWorkGroupNodeRequest renameRequest) {
+    return Future.sync(() async {
+      final workGroupNode = await _linShareHttpClient.renameSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId, renameRequest.toRenameWorkGroupNodeBodyRequest());
+
+      if (workGroupNode is WorkGroupDocumentDto) return workGroupNode.toWorkGroupDocument();
+      if (workGroupNode is WorkGroupNodeFolderDto) return workGroupNode.toWorkGroupFolder();
+
+      return null;
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw WorkGroupNodeNotFoundException();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }

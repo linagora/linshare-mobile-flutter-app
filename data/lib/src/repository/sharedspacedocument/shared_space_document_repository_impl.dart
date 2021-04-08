@@ -112,4 +112,9 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   ) {
     return _sharedSpaceDocumentDataSource.downloadPreviewWorkGroupDocument(workGroupDocument, downloadPreviewType, token, baseUrl, cancelToken);
   }
+
+  @override
+  Future<WorkGroupNode> renameSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId, RenameWorkGroupNodeRequest renameWorkGroupNodeRequest) {
+    return _sharedSpaceDocumentDataSource.renameSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId, renameWorkGroupNodeRequest);
+  }
 }
