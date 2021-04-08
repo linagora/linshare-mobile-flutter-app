@@ -184,7 +184,9 @@ class WidgetModule {
       getIt.get<DownloadPreviewWorkGroupDocumentInteractor>(),
       getIt.get<SortInteractor>(),
       getIt.get<GetSorterInteractor>(),
-      getIt.get<SaveSorterInteractor>()
+      getIt.get<SaveSorterInteractor>(),
+      getIt.get<RenameSharedSpaceNodeInteractor>(),
+      getIt.get<VerifyNameInteractor>()
     ));
     getIt.registerFactory(() => WorkGroupDetailFilesViewModel(
       getIt.get<Store<AppState>>(),

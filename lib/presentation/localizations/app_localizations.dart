@@ -780,20 +780,6 @@ class AppLocalizations {
     );
   }
 
-  String get name_not_empty {
-    return Intl.message(
-      'The name cannot be empty!',
-      name: 'name_not_empty',
-    );
-  }
-
-  String get name_already_exists {
-    return Intl.message(
-      'The name already exists!',
-      name: 'name_already_exists',
-    );
-  }
-
   String get create_new_folder {
     return Intl.message(
       'Create new folder',
@@ -1264,24 +1250,64 @@ class AppLocalizations {
     );
   }
 
-  String get workgroup_name_not_empty {
+  String rename_node(String nodeName) {
     return Intl.message(
-      'Workgroup name cannot be blank',
-      name: 'workgroup_name_not_empty',
+        'Rename $nodeName',
+        name: 'rename_node',
+        args: [nodeName]
     );
   }
 
-  String get workgroup_name_already_exists {
+  String get workgroup {
     return Intl.message(
-      'Workgroup name already exists',
-      name: 'workgroup_name_already_exists',
+      'Workgroup',
+      name: 'workgroup',
     );
   }
 
-  String get workgroup_name_contain_special_character {
+  String get file {
     return Intl.message(
-      'Workgroup name cannot contain special characters',
-      name: 'workgroup_name_contain_special_character',
+      'File',
+      name: 'file',
+    );
+  }
+
+  String get folder {
+    return Intl.message(
+      'Folder',
+      name: 'folder',
+    );
+  }
+
+  String node_name_not_empty(String nodeName) {
+    return Intl.message(
+        '$nodeName name cannot be blank',
+        name: 'node_name_not_empty',
+        args: [nodeName]
+    );
+  }
+
+  String node_name_already_exists(String nodeName) {
+    return Intl.message(
+        '$nodeName name already exists',
+        name: 'node_name_already_exists',
+        args: [nodeName]
+    );
+  }
+
+  String node_name_contain_special_character(String nodeName) {
+    return Intl.message(
+        '$nodeName name cannot contain special characters',
+        name: 'node_name_contain_special_character',
+        args: [nodeName]
+    );
+  }
+
+  String node_name_contain_last_dot(String nodeName) {
+    return Intl.message(
+        '$nodeName name cannot finishes by character "."',
+        name: 'node_name_contain_last_dot',
+        args: [nodeName]
     );
   }
 }

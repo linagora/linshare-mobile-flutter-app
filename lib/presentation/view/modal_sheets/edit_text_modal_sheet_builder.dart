@@ -39,15 +39,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 
 typedef OnConfirmActionClick = void Function(String);
+typedef OnCancelActionClick = void Function();
 typedef SetErrorString = String Function(String);
 
 class EditTextModalSheetBuilder {
-  @protected
-  final AppNavigation _appNavigation;
-
   @protected
   TextEditingController _textController;
 
@@ -78,7 +75,10 @@ class EditTextModalSheetBuilder {
   @protected
   Timer _debounce;
 
-  EditTextModalSheetBuilder(this._appNavigation);
+  @protected
+  OnCancelActionClick _onCancelActionClick;
+
+  EditTextModalSheetBuilder();
 
   EditTextModalSheetBuilder key(Key key) {
     _key = key;
@@ -114,6 +114,11 @@ class EditTextModalSheetBuilder {
       String confirmText, OnConfirmActionClick onConfirmActionClick) {
     _onConfirmActionClick = onConfirmActionClick;
     _confirmText = confirmText;
+    return this;
+  }
+
+  EditTextModalSheetBuilder onCancelAction(OnCancelActionClick onCancelActionClick) {
+    _onCancelActionClick = onCancelActionClick;
     return this;
   }
 
@@ -165,14 +170,16 @@ class EditTextModalSheetBuilder {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () => {_appNavigation.popBack(), _debounce?.cancel()},
+                            onPressed: () => {Navigator.pop(context), _debounce?.cancel(), _onCancelActionClick()},
                             child: Text(_cancelText.toUpperCase(),
                                 style: TextStyle(color: AppColor.primaryColor)),
                           ),
                           TextButton(
-                            onPressed: () => _onConfirmActionClick(_textController.text),
-                            child: Text(_confirmText.toUpperCase(),
-                                style: TextStyle(color: AppColor.primaryColor)),
+                            onPressed: () => (_error == null || _error.isEmpty) ? _onConfirmActionClick(_textController.text) : null,
+                            child: Text(
+                                _confirmText.toUpperCase(),
+                                style: TextStyle(color: (_error == null || _error.isEmpty) ? AppColor.primaryColor : AppColor.unselectedElementColor)
+                            ),
                           )
                         ],
                       )
@@ -180,6 +187,6 @@ class EditTextModalSheetBuilder {
                   )));
         });
       },
-    );
+    ).whenComplete(() => _onCancelActionClick());
   }
 }
