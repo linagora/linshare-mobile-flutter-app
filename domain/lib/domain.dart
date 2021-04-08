@@ -154,6 +154,8 @@ export 'src/model/verification/special_character_validator.dart';
 export 'src/model/verification/new_name_request.dart';
 export 'src/model/verification/composite_name_validator.dart';
 export 'src/model/suggestion/suggest_name_type.dart';
+export 'src/model/sharedspacedocument/rename_work_group_node_request.dart';
+export 'src/model/verification/last_dot_validator.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -207,6 +209,7 @@ export 'src/usecases/received/download_preview_received_share_interactor.dart';
 export 'src/usecases/shared_space/get_all_shared_space_members_interactor.dart';
 export 'src/usecases/shared_space_activities/shared_space_acitivities_interactor.dart';
 export 'src/usecases/shared_space/create_work_group_interactor.dart';
+export 'src/usecases/shared_space/rename_shared_space_node_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
