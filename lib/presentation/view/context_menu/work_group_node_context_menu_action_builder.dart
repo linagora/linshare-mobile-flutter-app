@@ -41,18 +41,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-class WorkGroupDocumentContextMenuTileBuilder extends ContextMenuActionBuilder<WorkGroupNode> {
+class WorkGroupNodeContextMenuTileBuilder extends ContextMenuActionBuilder<WorkGroupNode> {
   final WorkGroupNode _workGroupNode;
   Widget _trailing;
 
-  WorkGroupDocumentContextMenuTileBuilder(
+  WorkGroupNodeContextMenuTileBuilder(
     Key key,
     SvgPicture actionIcon,
     String actionName,
     this._workGroupNode
   ) : super(key, actionIcon, actionName);
 
-  WorkGroupDocumentContextMenuTileBuilder trailing(Widget trailing) {
+  WorkGroupNodeContextMenuTileBuilder trailing(Widget trailing) {
     _trailing = trailing;
     return this;
   }

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-08T10:14:21.932827",
+  "@@last_modified": "2021-04-08T11:10:01.727957",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -592,16 +592,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "name_not_empty": "The name cannot be empty!",
-  "@name_not_empty": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "name_already_exists": "The name already exists!",
-  "@name_already_exists": {
-    "type": "text",
-    "placeholders": {}
-  },
   "create_new_folder": "Create new folder",
   "@create_new_folder": {
     "type": "text",
@@ -1068,5 +1058,55 @@
   "@workgroup_name_contain_special_character": {
     "type": "text",
     "placeholders": {}
+  },
+  "rename_node": "Rename {nodeName}",
+  "@rename_node": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "workgroup": "Workgroup",
+  "@workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file": "File",
+  "@file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "folder": "Folder",
+  "@folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "node_name_not_empty": "{nodeName} name cannot be blank",
+  "@node_name_not_empty": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_already_exists": "{nodeName} name already exists",
+  "@node_name_already_exists": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_contain_special_character": "{nodeName} name cannot contain special characters",
+  "@node_name_contain_special_character": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_contain_last_dot": "{nodeName} name cannot finishes by character \".\"",
+  "@node_name_contain_last_dot": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
   }
 }
