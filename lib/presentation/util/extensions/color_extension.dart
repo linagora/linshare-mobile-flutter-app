@@ -81,4 +81,7 @@ extension AppColor on Color {
   static const pinCodeErrorTextColor = Color(0xffFF5858);
   static const pinCodeSubmitButtonBGColor = Color(0xff1B7EC7);
   static const pinCodeSubmitButtonTextColor = Color(0xffFFFFFF);
+  static const addSharedSpaceMemberTitleColor = Color(0xff7B7B7B);
+  static const addSharedSpaceMemberRoleColor = Color(0xffF2F2F2);
+  static const addSharedSpaceMemberRoleTileColor = Color(0xff7B7B7B);
 }

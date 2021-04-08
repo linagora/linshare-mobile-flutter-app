@@ -28,77 +28,52 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:flutter/src/material/list_tile.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 
-@immutable
-class StartSharedSpaceLoadingAction extends ActionOnline {}
+class SharedSpaceMemberListTileBuilder {
+  final String _name;
+  final String _email;
+  final String _roleName;
 
-@immutable
-class SharedSpaceAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+  Color tileColor;
 
-  SharedSpaceAction(this.viewState);
-}
+  SharedSpaceMemberListTileBuilder(this._name, this._email, this._roleName, {this.tileColor});
 
-@immutable
-class SharedSpaceGetAllSharedSpacesAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  SharedSpaceGetAllSharedSpacesAction(this.viewState);
-}
-
-@immutable
-class CleanSharedSpaceStateAction extends ActionOffline {
-  CleanSharedSpaceStateAction();
-}
-
-@immutable
-class EnableUploadButtonAction extends ActionOffline {
-  EnableUploadButtonAction();
-}
-
-@immutable
-class DisableUploadButtonAction extends ActionOffline {
-  DisableUploadButtonAction();
-}
-
-@immutable
-class SharedSpaceSetSearchResultAction extends ActionOffline {
-  final List<SharedSpaceNodeNested> sharedSpaceNodes;
-
-  SharedSpaceSetSearchResultAction(this.sharedSpaceNodes);
-}
-
-class SharedSpaceSelectSharedSpaceAction extends ActionOffline {
-  final SelectableElement<SharedSpaceNodeNested> selectedSharedSpace;
-
-  SharedSpaceSelectSharedSpaceAction(this.selectedSharedSpace);
-}
-
-@immutable
-class SharedSpaceClearSelectedSharedSpacesAction extends ActionOffline {
-  SharedSpaceClearSelectedSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceSelectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceSelectAllSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceUnselectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceUnselectAllSharedSpacesAction();
-}
-
-@immutable
-class SharedSpaceGetSharedSpaceRolesListAction extends ActionOffline {
-  final List<SharedSpaceRole> rolesList;
-
-  SharedSpaceGetSharedSpaceRolesListAction(this.rolesList);
+  ListTile build() {
+    return ListTile(
+      contentPadding: EdgeInsets.only(left: 24, top: 10, bottom: 10),
+      leading: LabelAvatarBuilder(_name.characters.first.toUpperCase())
+          .key(Key('label_shared_space_member_avatar'))
+          .build(),
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Text(_name,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    color: AppColor.loginTextFieldTextColor))),
+        Text(_email,
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+                color: AppColor.documentModifiedDateItemTextColor)),
+        Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Text(_roleName,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: AppColor.workgroupNodesSurfingBackTitleColor))),
+      ]),
+      tileColor: tileColor,
+    );
+  }
 }

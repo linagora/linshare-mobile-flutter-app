@@ -161,7 +161,7 @@
       "fileName": {}
     }
   },
-  "logout" :"Log out",
+  "logout": "Log out",
   "@logout": {
     "type": "text",
     "placeholders": {}
@@ -1012,6 +1012,280 @@
     "placeholders": {
       "nbMembers": {}
     }
+  },
+  "the_file_has_been_successfully_renamed": "The file has been successfully renamed",
+  "@the_file_has_been_successfully_renamed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_could_not_be_renamed": "The file could not be renamed",
+  "@the_file_could_not_be_renamed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sender": "Sender",
+  "@sender": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search_in_my_received_shares": "Search in Received Shares",
+  "@search_in_my_received_shares": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_member": "Are you sure you want to delete {memberName} from {workspaceName}?",
+  "@are_you_sure_you_want_to_delete_member": {
+    "type": "text",
+    "placeholders": {
+      "memberName": {},
+      "workspaceName": {}
+    }
+  },
+  "user_could_not_be_removed": "The user could not be removed",
+  "@user_could_not_be_removed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "user_is_successfully_removed": "The user is successfully removed",
+  "@user_is_successfully_removed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "expiration": "Expiration",
+  "@expiration": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_with": "{nbContacts,plural, =0{Shared with: {nbContacts} contact}=1{Shared with: {nbContacts} contact}other{Shared with: {nbContacts} contacts}}",
+  "@shared_with": {
+    "type": "text",
+    "placeholders": {
+      "nbContacts": {}
+    }
+  },
+  "modified_by": "Modified by",
+  "@modified_by": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication": "Biometric authentication",
+  "@biometric_authentication": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "face_id": "Face ID",
+  "@face_id": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "fingerprint": "Fingerprint",
+  "@fingerprint": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_message": "Allow {biometricKind} to secure access to this app",
+  "@biometric_authentication_message": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "biometric_authentication_not_enrolled": "{biometricKind} must be enabled to turn on biometric authentication",
+  "@biometric_authentication_not_enrolled": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "biometric_authentication_localized_reason_enable": "Please authenticate to enable biometric authentication for application",
+  "@biometric_authentication_localized_reason_enable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason_disable": "Please authenticate to disable biometric authentication for application",
+  "@biometric_authentication_localized_reason_disable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "manage_version": "Manage version",
+  "@manage_version": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "version": "Version {version}",
+  "@version": {
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "face": "Face",
+  "@face": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "touch_id": "TouchID",
+  "@touch_id": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "touch_id_or_face_id": "TouchID or FaceID",
+  "@touch_id_or_face_id": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "fingerprint_or_face": "Fingerprint or Face",
+  "@fingerprint_or_face": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason": "Scan your {biometricKind} to authentication",
+  "@biometric_authentication_localized_reason": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "biometric_disabled_in_setting_app": "Please enable {biometricKind} in the Settings app on your phone to use biometric authentication",
+  "@biometric_disabled_in_setting_app": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "open_with_biometric": "Open with {biometricKind}",
+  "@open_with_biometric": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "or": "Or",
+  "@or": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_sign_in": "Go to Sign-In",
+  "@go_to_sign_in": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_is_locked": "Biometric authentication is locked due to exceeded number of attempts.",
+  "@biometric_authentication_is_locked": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "duplicate": "Duplicate",
+  "@duplicate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_have_been_successfully_duplicated": "Files have been successfully duplicated",
+  "@files_have_been_successfully_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_could_not_be_duplicated": "The files could not be duplicated",
+  "@files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_files_could_not_be_duplicated": "Some files could not be duplicated",
+  "@some_files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "restore": "Restore",
+  "@restore": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_workgroup": "Create new workgroup",
+  "@create_new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_workgroup": "New Workgroup",
+  "@new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create": "Create",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "rename_node": "Rename {nodeName}",
+  "@rename_node": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "workgroup": "Workgroup",
+  "@workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file": "File",
+  "@file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "folder": "Folder",
+  "@folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "node_name_not_empty": "{nodeName} name cannot be blank",
+  "@node_name_not_empty": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_already_exists": "{nodeName} name already exists",
+  "@node_name_already_exists": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_contain_special_character": "{nodeName} name cannot contain special characters",
+  "@node_name_contain_special_character": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_contain_last_dot": "{nodeName} name cannot finishes by character \".\"",
+  "@node_name_contain_last_dot": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "add_team_members": "Add team members",
+  "@add_team_members": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "existing_members": "{nbMembers,plural, =1{Existing member: {nbMembers}}other{Existing members: {nbMembers}}}",
+  "@existing_members": {
+    "type": "text",
+    "placeholders": {
+      "nbMembers": {}
+    }
+  },
+  "shared_space_member_could_not_be_added": "Shared Space Member could not be added",
+  "@shared_space_member_could_not_be_added": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_space_member_has_been_added": "Shared Space Member has been successfully added",
+  "@shared_space_member_has_been_added": {
+    "type": "text",
+    "placeholders": {}
   },
   "the_file_has_been_successfully_renamed": "The file has been successfully renamed",
   "@the_file_has_been_successfully_renamed": {
