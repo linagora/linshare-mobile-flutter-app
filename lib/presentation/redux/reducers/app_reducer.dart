@@ -33,6 +33,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
@@ -40,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reduce
 import 'package:linshare_flutter_app/presentation/redux/reducers/network_connectivity_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/received_shares_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
@@ -59,7 +61,9 @@ AppState appStateReducer(AppState state, action) {
         destinationPickerState: destinationPickerReducer(state.destinationPickerState, action),
         networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action),
         account: accountReducer(state.account, action),
-        functionalityState: functionalityReducer(state.functionalityState, action));
+        functionalityState: functionalityReducer(state.functionalityState, action),
+        sharedSpaceDetailsState: sharedSpaceDetailsReducer(state.sharedSpaceDetailsState, action),
+        addSharedSpaceMembersState: addSharedSpaceMembersReducer(state.addSharedSpaceMembersState, action));
   }
   return AppState(
       uiState: state.uiState,
@@ -74,7 +78,9 @@ AppState appStateReducer(AppState state, action) {
           Right(NoInternetConnectionState()),
           state.networkConnectivityState.connectivityResult),
       account: state.account,
-      functionalityState: state.functionalityState);
+      functionalityState: state.functionalityState,
+      sharedSpaceDetailsState: state.sharedSpaceDetailsState,
+      addSharedSpaceMembersState: state.addSharedSpaceMembersState);
 }
 
 bool canExecuteAction(AppState state, action) {

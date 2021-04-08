@@ -64,6 +64,8 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfi
 import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfing_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
@@ -91,6 +93,7 @@ class WidgetModule {
     _provideAuthenticationWidgetComponent();
     _provideEnterOTPWidgetComponent();
     _provide2FAWidgetComponent();
+    _provideAddSharedSpaceMemberComponent();
   }
 
   void _provideLoginComponent() {
@@ -254,8 +257,19 @@ class WidgetModule {
         getIt.get<GetSharedSpaceInteractor>(),
         getIt.get<GetQuotaInteractor>(),
         getIt.get<GetAllSharedSpaceMembersInteractor>(),
-        getIt.get<SharedSpaceActivitiesInteractor>()
-    ));
+        getIt.get<SharedSpaceActivitiesInteractor>()));
+  }
+
+  void _provideAddSharedSpaceMemberComponent() {
+    getIt.registerFactory(() => AddSharedSpaceMemberWidget());
+    getIt.registerFactory(() => AddSharedSpaceMemberViewModel(
+          getIt.get<Store<AppState>>(),
+          getIt.get<AppNavigation>(),
+          getIt.get<GetAutoCompleteSharingInteractor>(),
+          getIt.get<AddSharedSpaceMemberInteractor>(),
+          getIt.get<GetAllSharedSpaceRolesInteractor>(),
+          getIt.get<GetAllSharedSpaceMembersInteractor>(),
+        ));
   }
 
   void _provideAuthenticationWidgetComponent() {
