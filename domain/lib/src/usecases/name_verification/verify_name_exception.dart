@@ -36,6 +36,7 @@ abstract class VerifyNameException extends RemoteException {
   static const DuplicatedName = 'The name already exists!';
   static const EmptyName = 'The name cannot be empty!';
   static const NameContainSpecialCharacter = 'The name cannot contain special characters';
+  static const NameContainLastDot = 'The name cannot finishes by character "."';
 
   VerifyNameException(String message) : super(message);
 }
@@ -56,6 +57,13 @@ class DuplicatedNameException extends VerifyNameException {
 
 class SpecialCharacterException extends VerifyNameException {
   SpecialCharacterException() : super(VerifyNameException.NameContainSpecialCharacter);
+
+  @override
+  List<Object> get props => [];
+}
+
+class LastDotException extends VerifyNameException {
+  LastDotException() : super(VerifyNameException.NameContainLastDot);
 
   @override
   List<Object> get props => [];
