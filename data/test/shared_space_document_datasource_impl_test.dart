@@ -35,8 +35,7 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:testshared/fixture/my_space_fixture.dart';
-import 'package:testshared/fixture/shared_space_document_fixture.dart';
+import 'package:testshared/testshared.dart';
 
 import 'fixture/mock/mock_fixtures.dart';
 
@@ -228,6 +227,41 @@ void main() {
             sharedSpaceFolder1.sharedSpaceId,
             CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId)
           ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+    });
+
+    test('Rename Shared Space Node Should Return Success Renamed Node', () async {
+      when(_linShareHttpClient.renameSharedSpaceNode(
+          workGroupDocumentDto.sharedSpaceId,
+          workGroupDocumentDto.workGroupNodeId,
+          RenameWorkGroupNodeBodyRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
+      )).thenAnswer((_) async => workGroupDocumentDto);
+
+      final result = await _sharedSpaceDataSourceImpl.renameSharedSpaceNode(
+          workGroupDocumentDto.sharedSpaceId,
+          workGroupDocumentDto.workGroupNodeId,
+          RenameWorkGroupNodeRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
+      );
+
+      expect(result, workGroupDocumentDto.toWorkGroupDocument());
+    });
+
+    test('Rename Shared Space Node Should Throw Exception When Renamed Failed', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+
+      when(_linShareHttpClient.renameSharedSpaceNode(
+          workGroupDocumentDto.sharedSpaceId,
+          workGroupDocumentDto.workGroupNodeId,
+          RenameWorkGroupNodeBodyRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.renameSharedSpaceNode(
+          workGroupDocumentDto.sharedSpaceId,
+          workGroupDocumentDto.workGroupNodeId,
+          RenameWorkGroupNodeRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
+      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
     });
   });
 }

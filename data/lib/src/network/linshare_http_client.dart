@@ -368,4 +368,24 @@ class LinShareHttpClient {
         data: createWorkGroupBodyRequest.toJson().toString());
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
+
+  Future<WorkGroupNodeDto> renameSharedSpaceNode(
+      SharedSpaceId sharedSpaceId,
+      WorkGroupNodeId sharedSpaceNodeId,
+      RenameWorkGroupNodeBodyRequest renameWorkGroupNodeBodyRequest
+  ) async {
+    final workGroupNode = await _dioClient.put(
+        Endpoint.sharedSpaces
+            .withPathParameter(sharedSpaceId.uuid)
+            .withPathParameter('nodes')
+            .withPathParameter(sharedSpaceNodeId.uuid)
+            .generateEndpointPath(),
+        data: renameWorkGroupNodeBodyRequest.toJson().toString(),
+        options: Options(headers: {
+          'Content-Type': 'application/json'
+        })
+    );
+
+    return _convertToWorkGroupNodeChild(workGroupNode);
+  }
 }
