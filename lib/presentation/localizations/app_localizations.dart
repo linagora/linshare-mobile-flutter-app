@@ -1801,26 +1801,311 @@ class AppLocalizations {
     );
   }
 
-  String get workgroup_name_not_empty {
+  String rename_node(String nodeName) {
     return Intl.message(
-      'Workgroup name cannot be blank',
-      name: 'workgroup_name_not_empty',
+        'Rename $nodeName',
+        name: 'rename_node',
+        args: [nodeName]
     );
   }
 
-  String get workgroup_name_already_exists {
+  String get workgroup {
     return Intl.message(
-      'Workgroup name already exists',
-      name: 'workgroup_name_already_exists',
+      'Workgroup',
+      name: 'workgroup',
     );
   }
 
-  String get workgroup_name_contain_special_character {
+  String get file {
     return Intl.message(
-      'Workgroup name cannot contain special characters',
-      name: 'workgroup_name_contain_special_character',
+      'File',
+      name: 'file',
     );
   }
+
+  String get folder {
+    return Intl.message(
+      'Folder',
+      name: 'folder',
+    );
+  }
+
+  String node_name_not_empty(String nodeName) {
+    return Intl.message(
+        '$nodeName name cannot be blank',
+        name: 'node_name_not_empty',
+        args: [nodeName]
+    );
+  }
+
+  String node_name_already_exists(String nodeName) {
+    return Intl.message(
+        '$nodeName name already exists',
+        name: 'node_name_already_exists',
+        args: [nodeName]
+    );
+  }
+
+  String node_name_contain_special_character(String nodeName) {
+    return Intl.message(
+        '$nodeName name cannot contain special characters',
+        name: 'node_name_contain_special_character',
+        args: [nodeName]
+    );
+  }
+
+  String node_name_contain_last_dot(String nodeName) {
+    return Intl.message(
+        '$nodeName name cannot finishes by character "."',
+        name: 'node_name_contain_last_dot',
+        args: [nodeName]
+    );
+  }
+
+  String get add_team_members {
+    return Intl.message(
+      'Add team members',
+      name: 'add_team_members',
+    );
+  }
+
+  String existing_members(int nbMembers) {
+    return Intl.message(
+      '''${Intl.plural(nbMembers,
+          one: 'Existing member: ${nbMembers}',
+          other: 'Existing members: ${nbMembers}')}''',
+      name: 'existing_members',
+      args: [nbMembers],
+    );
+  }
+
+  String get the_file_has_been_successfully_renamed {
+    return Intl.message(
+      'The file has been successfully renamed',
+      name: 'the_file_has_been_successfully_renamed',
+    );
+  }
+
+  String get the_file_could_not_be_renamed {
+    return Intl.message(
+      'The file could not be renamed',
+      name: 'the_file_could_not_be_renamed',
+    );
+  }
+
+  String get sender {
+    return Intl.message(
+      'Sender',
+      name: 'sender',
+    );
+  }
+
+  String get search_in_my_received_shares {
+    return Intl.message(
+      'Search in Received Shares',
+      name: 'search_in_my_received_shares',
+    );
+  }
+
+  String are_you_sure_you_want_to_delete_member(String memberName, String workspaceName) {
+    return Intl.message(
+      'Are you sure you want to delete $memberName from $workspaceName?',
+      name: 'are_you_sure_you_want_to_delete_member',
+      args: [memberName, workspaceName],
+    );
+  }
+
+  String get user_could_not_be_removed {
+    return Intl.message(
+      'The user could not be removed',
+      name: 'user_could_not_be_removed',
+    );
+  }
+
+  String get user_is_successfully_removed {
+    return Intl.message(
+      'The user is successfully removed',
+      name: 'user_is_successfully_removed'
+    );
+  }
+
+  String get expiration {
+    return Intl.message(
+      'Expiration',
+      name: 'expiration',
+    );
+  }
+
+  String shared_with(int nbContacts) {
+    return Intl.message(
+      '''${Intl.plural(nbContacts,
+          zero: 'Shared with: $nbContacts contact',
+          one: 'Shared with: $nbContacts contact',
+          other: 'Shared with: $nbContacts contacts')}''',
+      name: 'shared_with',
+      args: [nbContacts],
+    );
+  }
+
+  String get modified_by {
+    return Intl.message(
+      'Modified by',
+      name: 'modified_by',
+    );
+  }
+
+  String get biometric_authentication {
+    return Intl.message('Biometric authentication',
+        name: 'biometric_authentication');
+  }
+
+  String get face_id {
+    return Intl.message('Face ID',
+        name: 'face_id');
+  }
+
+  String get fingerprint {
+    return Intl.message('Fingerprint',
+        name: 'fingerprint');
+  }
+
+  String biometric_authentication_message(String biometricKind) {
+    return Intl.message(
+        'Allow $biometricKind to secure access to this app',
+        name: 'biometric_authentication_message',
+        args: [biometricKind]
+    );
+  }
+
+  String biometric_authentication_not_enrolled(String biometricKind) {
+    return Intl.message(
+        '$biometricKind must be enabled to turn on biometric authentication',
+        name: 'biometric_authentication_not_enrolled',
+        args: [biometricKind]
+    );
+  }
+
+  String get biometric_authentication_localized_reason_enable {
+    return Intl.message('Please authenticate to enable biometric authentication for application',
+        name: 'biometric_authentication_localized_reason_enable');
+  }
+
+  String get biometric_authentication_localized_reason_disable {
+    return Intl.message('Please authenticate to disable biometric authentication for application',
+        name: 'biometric_authentication_localized_reason_disable');
+  }
+
+  String get manage_version {
+    return Intl.message(
+      'Manage version',
+      name: 'manage_version',
+    );
+  }
+
+  String version(int version) {
+    return Intl.message(
+      'Version ${version}',
+      name: 'version',
+      args: [version],
+    );
+  }
+
+  String get face {
+    return Intl.message('Face',
+        name: 'face');
+  }
+
+  String get touch_id {
+    return Intl.message('TouchID',
+        name: 'touch_id');
+  }
+
+  String get touch_id_or_face_id {
+    return Intl.message(
+        'TouchID or FaceID',
+        name: 'touch_id_or_face_id'
+    );
+  }
+
+  String get fingerprint_or_face {
+    return Intl.message(
+        'Fingerprint or Face',
+        name: 'fingerprint_or_face'
+    );
+  }
+
+  String biometric_authentication_localized_reason(String biometricKind) {
+    return Intl.message(
+        'Scan your $biometricKind to authentication',
+        name: 'biometric_authentication_localized_reason',
+        args: [biometricKind]
+    );
+  }
+
+  String biometric_disabled_in_setting_app(String biometricKind) {
+    return Intl.message(
+        'Please enable $biometricKind in the Settings app on your phone to use biometric authentication',
+        name: 'biometric_disabled_in_setting_app',
+        args: [biometricKind]
+    );
+  }
+
+  String open_with_biometric(String biometricKind) {
+    return Intl.message(
+        'Open with $biometricKind',
+        name: 'open_with_biometric',
+        args: [biometricKind]
+    );
+  }
+
+  String get or {
+    return Intl.message('Or',
+        name: 'or');
+  }
+
+  String get go_to_sign_in {
+    return Intl.message('Go to Sign-In',
+        name: 'go_to_sign_in');
+  }
+
+  String get biometric_authentication_is_locked {
+    return Intl.message('Biometric authentication is locked due to exceeded number of attempts.',
+        name: 'biometric_authentication_is_locked');
+  }
+
+  String get duplicate {
+    return Intl.message('Duplicate',
+        name: 'duplicate');
+  }
+
+  String get files_have_been_successfully_duplicated {
+    return Intl.message(
+      'Files have been successfully duplicated',
+      name: 'files_have_been_successfully_duplicated',
+    );
+  }
+
+  String get files_could_not_be_duplicated {
+    return Intl.message(
+      'The files could not be duplicated',
+      name: 'files_could_not_be_duplicated',
+    );
+  }
+
+  String get some_files_could_not_be_duplicated {
+    return Intl.message(
+      'Some files could not be duplicated',
+      name: 'some_files_could_not_be_duplicated',
+    );
+  }
+
+  String get restore {
+    return Intl.message(
+      'Restore',
+      name: 'restore',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -48,7 +48,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_document_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_node_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/workgroupnode_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
@@ -376,7 +376,9 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   }
 
   List<Widget> _contextMenuFolderActionTiles(BuildContext context, WorkGroupFolder workGroupFolder) {
-    return [];
+    return [
+      _renameWorkGroupNodeAction(workGroupFolder)
+    ];
   }
 
   List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument) {
@@ -384,12 +386,13 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       if (Platform.isIOS) _exportFileAction([workGroupDocument]),
       if (Platform.isAndroid) _downloadFilesAction([workGroupDocument]),
       _previewWorkGroupDocumentAction(workGroupDocument),
-      _copyToAction(context, [workGroupDocument])
+      _copyToAction(context, [workGroupDocument]),
+      _renameWorkGroupNodeAction(workGroupDocument)
     ];
   }
 
   Widget _previewWorkGroupDocumentAction(WorkGroupDocument workGroupDocument) {
-    return WorkGroupDocumentContextMenuTileBuilder(
+    return WorkGroupNodeContextMenuTileBuilder(
             Key('preview_work_group_document_context_menu_action'),
             SvgPicture.asset(imagePath.icPreview, width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).preview,
@@ -398,8 +401,18 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
         .build();
   }
 
+  Widget _renameWorkGroupNodeAction(WorkGroupNode workGroupNode) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('rename_work_group_document_context_menu_action'),
+          SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).rename,
+          workGroupNode)
+        .onActionClick((workgroupNode) => _model.openRenameWorkGroupNodeModal(context, workgroupNode))
+        .build();
+  }
+
   Widget _removeWorkGroupNodeAction(List<WorkGroupNode> workGroupNodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    return WorkGroupDocumentContextMenuTileBuilder(
+    return WorkGroupNodeContextMenuTileBuilder(
       Key('remove_work_group_document_context_menu_action'),
       SvgPicture.asset(imagePath.icDelete,
           width: 24, height: 24, fit: BoxFit.fill),
@@ -499,7 +512,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   ) {
     return nodes.any((element) => element is WorkGroupFolder)
       ? SizedBox.shrink()
-      : WorkGroupDocumentContextMenuTileBuilder(
+      : WorkGroupNodeContextMenuTileBuilder(
           Key('copy_to_context_menu_action'),
           SvgPicture.asset(
             imagePath.icSharedSpace,
@@ -520,7 +533,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
   Widget _downloadFilesAction(List<WorkGroupNode> workGroupNodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return workGroupNodes.any((element) => element is WorkGroupFolder)
         ? SizedBox.shrink()
-        : WorkGroupDocumentContextMenuTileBuilder(
+        : WorkGroupNodeContextMenuTileBuilder(
             Key('download_file_context_menu_action'),
             SvgPicture.asset(imagePath.icFileDownload,
               width: 24, height: 24, fit: BoxFit.fill),
@@ -534,7 +547,7 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return workGroupNodes.any((element) => element is WorkGroupFolder) ?
     SizedBox.shrink() :
-    WorkGroupDocumentContextMenuTileBuilder(
+    WorkGroupNodeContextMenuTileBuilder(
         Key('export_file_context_menu_action'),
         SvgPicture.asset(imagePath.icExportFile,
             width: 24, height: 24, fit: BoxFit.fill),

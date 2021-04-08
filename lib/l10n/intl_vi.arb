@@ -607,53 +607,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "rename": "Rename",
+  "rename": "Đổi tên",
   "@rename": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "name_not_empty": "The name cannot be empty!",
-  "@name_not_empty": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "name_already_exists": "The name already exists!",
-  "@name_already_exists": {
     "type": "text",
     "placeholders": {}
   },
   "create_new_folder": "Create new folder",
   "@create_new_folder": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "modification_date": "Modification date",
-  "@modification_date": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "creation_date": "Creation date",
-  "@creation_date": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "size": "Size",
-  "@size": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "name": "Name",
-  "@name": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "shared": "Shared",
-  "@shared": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "order_by": "Order by",
-  "@order_by": {
     "type": "text",
     "placeholders": {}
   },
@@ -1059,49 +1019,54 @@
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_name_not_empty": "Tên nhóm làm việc không được để trống",
-  "@workgroup_name_not_empty": {
+  "rename_node": "Đổi tên {nodeName}",
+  "@rename_node": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "workgroup": "Nhóm làm việc",
+  "@workgroup": {
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_name_already_exists": "Tên nhóm làm việc đã tồn tại",
-  "@workgroup_name_already_exists": {
+  "file": "Tài liệu",
+  "@file": {
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_name_contain_special_character": "Tên nhóm làm việc không được chứa các ký tự đặc biệt",
-  "@workgroup_name_contain_special_character": {
+  "folder": "Thư mục",
+  "@folder": {
     "type": "text",
     "placeholders": {}
   },
-  "create_new_workgroup": "Tạo nhóm làm việc mới",
-  "@create_new_workgroup": {
+  "node_name_not_empty": "Tên {nodeName} không được để trống",
+  "@node_name_not_empty": {
     "type": "text",
-    "placeholders": {}
+    "placeholders": {
+      "nodeName": {}
+    }
   },
-  "new_workgroup": "Nhóm làm việc mới",
-  "@new_workgroup": {
+  "node_name_already_exists": "Tên {nodeName} đã tồn tại",
+  "@node_name_already_exists": {
     "type": "text",
-    "placeholders": {}
+    "placeholders": {
+      "nodeName": {}
+    }
   },
-  "create": "Tạo",
-  "@create": {
+  "node_name_contain_special_character": "Tên {nodeName} không được chứa các ký tự đặc biệt",
+  "@node_name_contain_special_character": {
     "type": "text",
-    "placeholders": {}
+    "placeholders": {
+      "nodeName": {}
+    }
   },
-  "workgroup_name_not_empty": "Tên nhóm làm việc không được để trống",
-  "@workgroup_name_not_empty": {
+  "node_name_contain_last_dot": "Tên {nodeName} không được kết thúc bằng ký tự \".\"",
+  "@node_name_contain_last_dot": {
     "type": "text",
-    "placeholders": {}
-  },
-  "workgroup_name_already_exists": "Tên nhóm làm việc đã tồn tại",
-  "@workgroup_name_already_exists": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "workgroup_name_contain_special_character": "Tên nhóm làm việc không được chứa các ký tự đặc biệt",
-  "@workgroup_name_contain_special_character": {
-    "type": "text",
-    "placeholders": {}
+    "placeholders": {
+      "nodeName": {}
+    }
   }
 }

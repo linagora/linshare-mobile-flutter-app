@@ -56,6 +56,7 @@ import 'package:linshare_flutter_app/presentation/view/header/context_menu_heade
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
@@ -83,6 +84,8 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   final SortInteractor _sortInteractor;
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
+  final RenameSharedSpaceNodeInteractor _renameSharedSpaceNodeInteractor;
+  final VerifyNameInteractor _verifyNameInteractor;
   final AppNavigation _appNavigation;
 
   final BehaviorSubject<WorkGroupNodesSurfingState> _stateSubscription =
@@ -111,7 +114,9 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     this._downloadPreviewWorkGroupDocumentInteractor,
     this._sortInteractor,
     this._getSorterInteractor,
-    this._saveSorterInteractor
+    this._saveSorterInteractor,
+    this._renameSharedSpaceNodeInteractor,
+    this._verifyNameInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -127,9 +132,9 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
               _stateSubscription.add(currentState.setWorkGroupNodesList([], showLoading: false));
             } else if (success is RemoveSharedSpaceNodeViewState ||
                 success is RemoveAllSharedSpaceNodesSuccessViewState ||
-                success is RemoveSomeSharedSpaceNodesSuccessViewState) {
-              loadAllChildNodes();
-            } else if (success is CreateSharedSpaceFolderViewState) {
+                success is RemoveSomeSharedSpaceNodesSuccessViewState ||
+                success is CreateSharedSpaceFolderViewState ||
+                success is RenameSharedSpaceNodeViewState) {
               loadAllChildNodes();
             } else if (success is SharedSpaceDetailViewState || success is SharedSpacesViewState) {
               loadSorterAndAllChildNodes();
@@ -629,5 +634,85 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     final newSorter = currentState.sorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
     _appNavigation.popBack();
     store.dispatch(_sortFilesAction(newSorter));
+  }
+
+  void openRenameWorkGroupNodeModal(BuildContext context, WorkGroupNode workGroupNode) {
+    _appNavigation.popBack();
+    store.dispatch(DisableUploadButtonAction());
+
+    final nodeName = workGroupNode is WorkGroupDocument ? AppLocalizations.of(context).file : AppLocalizations.of(context).folder;
+
+    EditTextModalSheetBuilder()
+        .key(Key('rename_work_group_node_modal'))
+        .title(AppLocalizations.of(context).rename_node(nodeName.toLowerCase()))
+        .cancelText(AppLocalizations.of(context).cancel)
+        .onConfirmAction(AppLocalizations.of(context).rename,
+            (value) => store.dispatch(_renameWorkGroupNodeAction(context, value, workGroupNode)))
+        .onCancelAction(() => store.dispatch(EnableUploadButtonAction()))
+        .setErrorString((value) => _getErrorString(context, workGroupNode, value))
+        .setTextController(
+          TextEditingController.fromValue(
+            TextEditingValue(
+                text: workGroupNode.name,
+                selection: TextSelection(
+                    baseOffset: 0,
+                    extentOffset: workGroupNode.name.length
+                )
+            ),
+          ))
+        .show(context);
+  }
+
+  String _getErrorString(BuildContext context, WorkGroupNode workGroupNode, String value) {
+    final listName = workGroupNode is WorkGroupDocument
+        ? _workGroupNodesList
+            .whereType<WorkGroupDocument>()
+            .map((node) => node.name)
+            .toList()
+        : _workGroupNodesList
+            .whereType<WorkGroupFolder>()
+            .map((node) => node.name)
+            .toList();
+
+    return _verifyNameInteractor
+        .execute(
+          value,
+          [
+            EmptyNameValidator(),
+            DuplicateNameValidator(listName),
+            SpecialCharacterValidator(),
+            if (workGroupNode is WorkGroupDocument) LastDotValidator()
+          ])
+        .fold((failure) {
+          if (failure is VerifyNameFailure) {
+            final nodeName = workGroupNode is WorkGroupDocument ? AppLocalizations.of(context).file : AppLocalizations.of(context).folder;
+            if (failure.exception is EmptyNameException) {
+              return AppLocalizations.of(context).node_name_not_empty(nodeName);
+            } else if (failure.exception is DuplicatedNameException) {
+              return AppLocalizations.of(context).node_name_already_exists(nodeName);
+            } else if (failure.exception is SpecialCharacterException) {
+              return AppLocalizations.of(context).node_name_contain_special_character(nodeName);
+            } else if (failure.exception is LastDotException) {
+              return AppLocalizations.of(context).node_name_contain_last_dot(nodeName);
+            } else {
+              return null;
+            }
+          } else {
+            return null;
+          }
+        }, (success) => null);
+  }
+
+  OnlineThunkAction _renameWorkGroupNodeAction(BuildContext context, String newName, WorkGroupNode workGroupNode) {
+    Navigator.pop(context);
+    store.dispatch(EnableUploadButtonAction());
+
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _renameSharedSpaceNodeInteractor
+          .execute(workGroupNode.sharedSpaceId, workGroupNode.workGroupNodeId, RenameWorkGroupNodeRequest(newName, workGroupNode.type))
+          .then((result) => result.fold(
+              (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+              (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+    });
   }
 }
