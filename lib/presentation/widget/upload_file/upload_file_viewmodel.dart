@@ -234,7 +234,7 @@ class UploadFileViewModel extends BaseViewModel {
   Future<List<AutoCompleteResult>> getAutoCompleteSharing(String pattern) async {
     if (_contactSuggestionSource == ContactSuggestionSource.all) {
       return await _getAutoCompleteSharingWithDeviceContactInteractor
-          .execute(AutoCompletePattern(pattern), AutoCompleteType.sharing)
+          .execute(AutoCompletePattern(pattern), AutoCompleteType.SHARING)
           .then(
             (viewState) => viewState.fold(
               (failure) => <AutoCompleteResult>[],
@@ -243,7 +243,7 @@ class UploadFileViewModel extends BaseViewModel {
       );
     }
     return await _getAutoCompleteSharingInteractor
-        .execute(AutoCompletePattern(pattern), AutoCompleteType.sharing)
+        .execute(AutoCompletePattern(pattern), AutoCompleteType.SHARING)
         .then(
           (viewState) => viewState.fold(
             (failure) => <AutoCompleteResult>[],

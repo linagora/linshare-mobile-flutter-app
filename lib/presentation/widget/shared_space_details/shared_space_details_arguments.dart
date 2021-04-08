@@ -33,7 +33,7 @@ import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
 class SharedSpaceDetailsArguments extends RouterArguments {
-  final SharedSpaceId sharedSpaceId;
+  final SharedSpaceNodeNested sharedSpace;
 
-  SharedSpaceDetailsArguments(this.sharedSpaceId);
+  SharedSpaceDetailsArguments(this.sharedSpace);
 }

@@ -73,4 +73,7 @@ extension AppColor on Color {
   static const searchBottomBarColor = Color(0xffF2F2F2);
   static const searchResultsCountTextColor = Color(0xffACACAC);
   static const workGroupDetailsName = Color(0xff070707);
+  static const addSharedSpaceMemberTitleColor = Color(0xff7B7B7B);
+  static const addSharedSpaceMemberRoleColor = Color(0xffF2F2F2);
+  static const addSharedSpaceMemberRoleTileColor = Color(0xff7B7B7B);
 }

@@ -44,26 +44,29 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
   final List<SelectableElement<SharedSpaceNodeNested>> sharedSpacesList;
   final bool showUploadButton;
   final SelectMode selectMode;
+  final List<SharedSpaceRole> rolesList;
+
 
   SharedSpaceState(
     Either<Failure, Success> viewState,
     this.sharedSpacesList,
+    this.rolesList,
     this.selectMode,
     {this.showUploadButton = true}
   ) : super(viewState);
 
   factory SharedSpaceState.initial() {
-    return SharedSpaceState(Right(IdleState()), [], SelectMode.INACTIVE);
+    return SharedSpaceState(Right(IdleState()), [], [], SelectMode.INACTIVE);
   }
 
   @override
   SharedSpaceState clearViewState() {
-    return SharedSpaceState(Right(IdleState()), sharedSpacesList, selectMode, showUploadButton: showUploadButton);
+    return SharedSpaceState(Right(IdleState()), sharedSpacesList, rolesList, selectMode, showUploadButton: showUploadButton);
   }
 
   @override
   SharedSpaceState sendViewState({Either<Failure, Success> viewState}) {
-    return SharedSpaceState(viewState, sharedSpacesList, selectMode, showUploadButton: showUploadButton);
+    return SharedSpaceState(viewState, sharedSpacesList, rolesList, selectMode, showUploadButton: showUploadButton);
   }
 
   SharedSpaceState setSharedSpaces({Either<Failure, Success> viewState, List<SharedSpaceNodeNested> newSharedSpacesList}) {
@@ -74,44 +77,69 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
           if (selectedElements.contains(sharedSpace))
             SelectableElement<SharedSpaceNodeNested>(sharedSpace, SelectMode.ACTIVE)
           else SelectableElement<SharedSpaceNodeNested>(sharedSpace, SelectMode.INACTIVE)}.toList(),
+      rolesList,
       selectMode);
   }
 
   SharedSpaceState disableUploadButton() {
-    return SharedSpaceState(viewState, sharedSpacesList, selectMode, showUploadButton: false);
+    return SharedSpaceState(viewState, sharedSpacesList, rolesList, selectMode, showUploadButton: false);
   }
 
   SharedSpaceState enableUploadButton() {
-    return SharedSpaceState(viewState, sharedSpacesList, selectMode, showUploadButton: true);
+    return SharedSpaceState(viewState, sharedSpacesList, rolesList, selectMode, showUploadButton: true);
   }
 
   @override
   SharedSpaceState startLoadingState() {
-    return SharedSpaceState(Right(LoadingState()), sharedSpacesList, selectMode);
+    return SharedSpaceState(Right(LoadingState()), sharedSpacesList, rolesList, selectMode);
   }
 
   LinShareState selectSharedSpace(SelectableElement<SharedSpaceNodeNested> selectedSharedSpace) {
     sharedSpacesList.firstWhere((sharedSpace) => sharedSpace == selectedSharedSpace).toggleSelect();
-    return SharedSpaceState(viewState, sharedSpacesList, SelectMode.ACTIVE);
+    return SharedSpaceState(viewState, sharedSpacesList, rolesList, SelectMode.ACTIVE);
   }
 
   LinShareState cancelSelectedSharedSpaces() {
-    return SharedSpaceState(viewState, sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.INACTIVE);
+    return SharedSpaceState(
+      viewState,
+      sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(),
+      rolesList,
+      SelectMode.INACTIVE
+    );
   }
 
   LinShareState selectAllSharedSpaces() {
-    return SharedSpaceState(viewState, sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.ACTIVE)).toList(), SelectMode.ACTIVE);
+    return SharedSpaceState(
+      viewState,
+      sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.ACTIVE)).toList(),
+      rolesList,
+      SelectMode.ACTIVE
+    );
   }
 
   LinShareState unSelectAllSharedSpaces() {
-    return SharedSpaceState(viewState, sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.ACTIVE);
+    return SharedSpaceState(
+      viewState, 
+      sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(),
+      rolesList,
+      SelectMode.ACTIVE
+    );
   }
 
+  LinShareState setSharedSpaceRolesList(List<SharedSpaceRole> roles) {
+    return SharedSpaceState(
+      viewState,
+      sharedSpacesList,
+      roles,
+      selectMode
+    );
+  }
 
   @override
   List<Object> get props => [
     ...super.props,
     sharedSpacesList,
+    rolesList,
     showUploadButton
   ];
 }
