@@ -350,3 +350,21 @@ class CreateWorkGroupFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class RenameSharedSpaceNodeViewState extends ViewState {
+  final WorkGroupNode workGroupNode;
+
+  RenameSharedSpaceNodeViewState(this.workGroupNode);
+
+  @override
+  List<Object> get props => [workGroupNode];
+}
+
+class RenameSharedSpaceNodeFailure extends FeatureFailure {
+  final exception;
+
+  RenameSharedSpaceNodeFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
