@@ -131,7 +131,7 @@ class WorkGroupDetailFilesViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       loadAllChildNodes(arguments);
 
-      EditTextModalSheetBuilder(_appNavigation)
+      EditTextModalSheetBuilder()
           .key(Key('create_new_folder_modal'))
           .title(AppLocalizations.of(context).create_new_folder)
           .cancelText(AppLocalizations.of(context).cancel)
@@ -159,9 +159,9 @@ class WorkGroupDetailFilesViewModel extends BaseViewModel {
         .fold((failure) {
       if (failure is VerifyNameFailure) {
         if (failure.exception is EmptyNameException) {
-          return AppLocalizations.of(context).name_not_empty;
+          return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).folder);
         } else if (failure.exception is DuplicatedNameException) {
-          return AppLocalizations.of(context).name_already_exists;
+          return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).folder);
         } else {
           return null;
         }
