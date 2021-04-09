@@ -40,4 +40,9 @@ extension StringExtension on String {
     }
     return int.tryParse(this) != null;
   }
+
+  String toMiddleEllipsis() {
+    final subLength = length - split('.').last.length;
+    return '...' + substring(subLength - 3, subLength) + split('.').last;
+  }
 }
