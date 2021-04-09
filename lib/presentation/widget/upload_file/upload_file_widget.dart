@@ -31,6 +31,7 @@
 
 import 'package:domain/domain.dart';
 import 'package:filesize/filesize.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -173,10 +174,10 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                       ])
                 : SizedBox(
                     width: double.maxFinite,
-                    height: 56,
-                    child: ListTile(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: ListTile(
                         dense: true,
-                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                         leading: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -189,11 +190,18 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                           ],
                         ),
                         title: Transform(
-                          transform: Matrix4.translationValues(-20, 0.0, 0.0),
-                          child: Text(uploadFileViewModel.filesInfos[0].fileName,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColor.multipleSelectionBarTextColor)),
+                            transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
+                            child: CustomPaint(
+                              size: Size(double.infinity, 14),
+                              painter: EllipsisTextPainter(
+                                text: TextSpan(text: uploadFileViewModel.filesInfos[0].fileName, style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.multipleSelectionBarTextColor),
+                                ),
+                                ellipsis: uploadFileViewModel.filesInfos[0].fileName.toMiddleEllipsis(),
+                                maxLines: 1,
+                              ),
+                            )
                         ),
                         trailing: Text(
                           '${filesize(uploadFileViewModel.filesInfos[0].fileSize)}',
@@ -201,7 +209,8 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                           style: TextStyle(
                               fontSize: 14,
                               color: AppColor.uploadFileFileSizeTextColor),
-                        )
+                        ),
+                      ),
                     )
                   ),
             StreamBuilder<DestinationType>(
@@ -450,7 +459,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
             ),
           ),
           SizedBox(
-            height: 14.0,
+            height: 17.0,
           ),
           TypeAheadFormField(
               textFieldConfiguration: TextFieldConfiguration(
@@ -555,5 +564,27 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
             ),
           );
         });
+  }
+}
+
+class EllipsisTextPainter extends CustomPainter {
+  final TextSpan text;
+  final int maxLines;
+  final String ellipsis;
+
+  EllipsisTextPainter({this.text, this.ellipsis, this.maxLines}) : super();
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    TextPainter painter = TextPainter(
+      text: text,
+      maxLines: maxLines,
+      textDirection: TextDirection.ltr,
+    )..ellipsis = this.ellipsis;
+    painter.layout(maxWidth: size.width);
+    painter.paint(canvas, Offset(0, 0));
   }
 }
