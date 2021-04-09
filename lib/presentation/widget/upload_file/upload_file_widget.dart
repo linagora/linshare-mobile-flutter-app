@@ -173,8 +173,9 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                       ])
                 : SizedBox(
                     width: double.maxFinite,
-                    height: 56,
+                    height: 50,
                     child: ListTile(
+                      contentPadding: EdgeInsets.only(top: 8, right: 20, left: 20),
                         dense: true,
                         visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                         leading: Column(
@@ -190,10 +191,17 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                         ),
                         title: Transform(
                           transform: Matrix4.translationValues(-20, 0.0, 0.0),
-                          child: Text(uploadFileViewModel.filesInfos[0].fileName,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColor.multipleSelectionBarTextColor)),
+                          child: CustomPaint(
+                            size: Size(double.infinity, 14),
+                            painter: MyTextPainter(
+                              text: TextSpan(text: uploadFileViewModel.filesInfos[0].fileName, style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.multipleSelectionBarTextColor),
+                                  ),
+                              ellipsis: displayFileName(uploadFileViewModel.filesInfos[0].fileName),
+                              maxLines: 1,
+                            ),
+                          )
                         ),
                         trailing: Text(
                           '${filesize(uploadFileViewModel.filesInfos[0].fileSize)}',
@@ -257,6 +265,13 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
+  String displayFileName(String filename)
+  {
+    var a = filename.length - filename.split(".").last.length;
+    return "..." + filename.substring(a-2,a) + filename.split('.').last;
+  }
+
 
   Widget _buildUploadDestinationPicker() {
     return StoreConnector<AppState, FunctionalityState>(
@@ -555,5 +570,27 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
             ),
           );
         });
+  }
+}
+
+class MyTextPainter extends CustomPainter {
+  final TextSpan text;
+  final int maxLines;
+  final String ellipsis;
+
+  MyTextPainter({this.text, this.ellipsis, this.maxLines}) : super();
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    TextPainter painter = TextPainter(
+      text: text,
+      maxLines: maxLines,
+      textDirection: TextDirection.ltr,
+    )..ellipsis = this.ellipsis;
+    painter.layout(maxWidth: size.width);
+    painter.paint(canvas, Offset(0, 0));
   }
 }
