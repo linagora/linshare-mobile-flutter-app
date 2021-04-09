@@ -32,7 +32,8 @@
 
 enum WorkGroupNodeType {
   FOLDER,
-  DOCUMENT
+  DOCUMENT,
+  DOCUMENT_REVISION
 }
 
 extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
@@ -42,6 +43,8 @@ extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
         return 'FOLDER';
       case WorkGroupNodeType.DOCUMENT:
         return 'DOCUMENT';
+      case WorkGroupNodeType.DOCUMENT_REVISION:
+        return 'DOCUMENT_REVISION';
       default:
         return toString();
     }
