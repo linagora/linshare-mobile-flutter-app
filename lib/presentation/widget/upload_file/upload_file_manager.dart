@@ -37,19 +37,23 @@ import 'package:rxdart/rxdart.dart';
 
 class UploadFileManager {
   final _filePathUtil = getIt<FilePathUtil>();
-  final BehaviorSubject<List<FileInfo>> _pendingListFileInfo = BehaviorSubject.seeded([]);
+  BehaviorSubject<List<FileInfo>> _pendingListFileInfo = BehaviorSubject.seeded([]);
   BehaviorSubject<List<FileInfo>> get pendingListFileInfo => _pendingListFileInfo;
 
   void setPendingFiles(List<String> filePaths) async {
     await Future.wait(filePaths.map((element) => _filePathUtil.getFileInfoFromFilePath(element)))
     .then((result) {
-      _pendingListFileInfo.add([]);
+      clearPendingFile();
       _pendingListFileInfo.add(result);
     });
   }
 
   void clearPendingFile() {
-    _pendingListFileInfo.add([]);
+    if(_pendingListFileInfo.isClosed) {
+      _pendingListFileInfo = BehaviorSubject.seeded([]);
+    } else {
+      _pendingListFileInfo.add([]);
+    }
   }
 
   void closeUploadFileManagerStream() {
