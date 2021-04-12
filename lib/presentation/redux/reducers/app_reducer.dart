@@ -42,6 +42,8 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/network_connect
 import 'package:linshare_flutter_app/presentation/redux/reducers/received_shares_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_details_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_destination_picker_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
@@ -57,6 +59,8 @@ AppState appStateReducer(AppState state, action) {
         mySpaceState: mySpaceReducer(state.mySpaceState, action),
         shareState: shareReducer(state.shareState, action),
         sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),
+        sharedSpaceDocumentState: sharedSpaceDocumentReducer(state.sharedSpaceDocumentState, action),
+        sharedSpaceDocumentDestinationPickerState: sharedSpaceDocumentDestinationPickerReducer(state.sharedSpaceDocumentDestinationPickerState, action),
         receivedShareState: receivedSharesReducer(state.receivedShareState, action),
         destinationPickerState: destinationPickerReducer(state.destinationPickerState, action),
         networkConnectivityState: networkConnectivityReducer(state.networkConnectivityState, action),
@@ -72,6 +76,8 @@ AppState appStateReducer(AppState state, action) {
       mySpaceState: state.mySpaceState,
       shareState: state.shareState,
       sharedSpaceState: state.sharedSpaceState,
+      sharedSpaceDocumentState: state.sharedSpaceDocumentState,
+      sharedSpaceDocumentDestinationPickerState: state.sharedSpaceDocumentDestinationPickerState,
       receivedShareState: state.receivedShareState,
       destinationPickerState: state.destinationPickerState,
       networkConnectivityState: NetworkConnectivityState(

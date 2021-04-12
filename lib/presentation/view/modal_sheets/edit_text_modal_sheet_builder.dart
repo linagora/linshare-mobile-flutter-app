@@ -41,7 +41,6 @@ import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 typedef OnConfirmActionClick = void Function(String);
-typedef OnCancelActionClick = void Function();
 typedef SetErrorString = String Function(String);
 
 class EditTextModalSheetBuilder {
@@ -74,9 +73,6 @@ class EditTextModalSheetBuilder {
 
   @protected
   Timer _debounce;
-
-  @protected
-  OnCancelActionClick _onCancelActionClick;
 
   EditTextModalSheetBuilder();
 
@@ -117,11 +113,6 @@ class EditTextModalSheetBuilder {
     return this;
   }
 
-  EditTextModalSheetBuilder onCancelAction(OnCancelActionClick onCancelActionClick) {
-    _onCancelActionClick = onCancelActionClick;
-    return this;
-  }
-
   void _onTextChanged(String name, StateSetter setState) {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
@@ -129,6 +120,18 @@ class EditTextModalSheetBuilder {
         _error = _setErrorString(name);
       });
     });
+  }
+
+  void _onConfirmButtonPress(BuildContext context) {
+    if (_error == null || _error.isEmpty) {
+      Navigator.pop(context);
+      _onConfirmActionClick(_textController.text);
+    }
+  }
+
+  void _onCancelButtonPress(BuildContext context) {
+    Navigator.pop(context);
+    _debounce?.cancel();
   }
 
   void show(context) {
@@ -170,12 +173,12 @@ class EditTextModalSheetBuilder {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () => {Navigator.pop(context), _debounce?.cancel(), _onCancelActionClick()},
+                            onPressed: () => _onCancelButtonPress(context),
                             child: Text(_cancelText.toUpperCase(),
                                 style: TextStyle(color: AppColor.primaryColor)),
                           ),
                           TextButton(
-                            onPressed: () => (_error == null || _error.isEmpty) ? _onConfirmActionClick(_textController.text) : null,
+                            onPressed: () => _onConfirmButtonPress(context),
                             child: Text(
                                 _confirmText.toUpperCase(),
                                 style: TextStyle(color: (_error == null || _error.isEmpty) ? AppColor.primaryColor : AppColor.unselectedElementColor)
@@ -187,6 +190,6 @@ class EditTextModalSheetBuilder {
                   )));
         });
       },
-    ).whenComplete(() => _onCancelActionClick());
+    );
   }
 }
