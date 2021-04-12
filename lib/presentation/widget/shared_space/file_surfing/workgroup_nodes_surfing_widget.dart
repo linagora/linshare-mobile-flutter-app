@@ -47,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/widget_utils.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_node_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
@@ -278,10 +279,8 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
               height: 24,
               fit: BoxFit.fill,
             ),
-            onPressed: () => node.element.type == WorkGroupNodeType.FOLDER ?
-              _model.openFolderContextMenu(context, node.element, _contextMenuFolderActionTiles(context, node.element)) :
-              _model.openDocumentContextMenu(context, node.element, _contextMenuDocumentActionTiles(context, node.element), _removeWorkGroupNodeAction([node.element]))
-      ),
+            onPressed: () => _openContextMenu(node)
+          ),
       onTap: () {
         if (currentSelectMode == SelectMode.ACTIVE) {
           _model.selectItem(node);
@@ -293,6 +292,26 @@ class _WorkGroupNodesSurfingWidgetState extends State<WorkGroupNodesSurfingWidge
       },
       onLongPress: () => _model.selectItem(node),
     );
+  }
+
+  void _openContextMenu(SelectableElement<WorkGroupNode> node) {
+    node.element.type == WorkGroupNodeType.FOLDER
+      ? _model.openFolderContextMenu(
+          context,
+          node.element,
+          _contextMenuFolderActionTiles(context, node.element),
+          SharedSpaceOperationRole.deleteNodeInSharedSpace
+            .contains(_arguments.sharedSpaceNodeNested.sharedSpaceRole.name)
+              ? _removeWorkGroupNodeAction([node.element])
+              : WidgetConstant.NO_WIDGET)
+      : _model.openDocumentContextMenu(
+          context,
+          node.element,
+          _contextMenuDocumentActionTiles(context, node.element),
+          SharedSpaceOperationRole.deleteNodeInSharedSpace
+            .contains(_arguments.sharedSpaceNodeNested.sharedSpaceRole.name)
+              ? _removeWorkGroupNodeAction([node.element])
+              : WidgetConstant.NO_WIDGET);
   }
 
   Widget _buildNodeItemDestinationPicker(
