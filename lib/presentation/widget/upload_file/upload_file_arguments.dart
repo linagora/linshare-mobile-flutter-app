@@ -31,7 +31,7 @@
 
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
 
 class UploadFileArguments extends RouterArguments {
   final List<FileInfo> uploadFiles;
@@ -57,9 +57,9 @@ enum ShareButtonType { justUpload, uploadAndShare, workGroup }
 class WorkGroupDocumentUploadInfo {
   final SharedSpaceNodeNested sharedSpaceNodeNested;
   final WorkGroupNode currentNode;
-  final FolderNodeType folderType;
+  final SharedSpaceDocumentType folderType;
 
   WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);
 
-  bool isRootNode() => folderType == FolderNodeType.root ? true : false;
+  bool isRootNode() => folderType == SharedSpaceDocumentType.root ? true : false;
 }
