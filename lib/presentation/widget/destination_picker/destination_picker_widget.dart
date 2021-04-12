@@ -42,9 +42,10 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/node_surfing_type.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_navigator_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_ui_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 
 import 'destination_picker_action/negative_destination_picker_action.dart';
@@ -60,7 +61,8 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   final _destinationPickerKey = GlobalKey<ScaffoldState>();
   final _imagePath = getIt<AppImagePaths>();
   final _destinationPickerViewModel = getIt<DestinationPickerViewModel>();
-  final GlobalKey<WorkGroupDetailFilesWidgetState> _workGroupDetailFilesWidgetKey = GlobalKey();
+  final _sharedSpaceDocumentNavigatorKey = GlobalKey<SharedSpaceDocumentNavigatorWidgetState>();
+
   DestinationPickerArguments _destinationPickerArguments;
 
   @override
@@ -91,7 +93,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         elevation: 1.0,
         title: StreamBuilder(
           stream: _destinationPickerViewModel.currentNodeObservable.stream,
-          builder: (context, AsyncSnapshot<WorkGroupNodesSurfingArguments> snapshot) {
+          builder: (context, AsyncSnapshot<SharedSpaceDocumentArguments> snapshot) {
             if (snapshot.data == null) {
               return Text(
                 AppLocalizations.of(context).pick_the_destination,
@@ -99,16 +101,16 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                     fontSize: 20.0,
                     color: AppColor.destinationPickerAppBarTitleColor),
               );
-            } else if (snapshot.data.folderType == FolderNodeType.normal) {
+            } else if (snapshot.data.documentType == SharedSpaceDocumentType.children) {
               return Text(
-                snapshot.data.folder.name,
+                snapshot.data.workGroupFolder.name,
                 style: TextStyle(
                     fontSize: 20.0,
                     color: AppColor.destinationPickerAppBarTitleColor),
               );
             } else {
               return Text(
-                snapshot.data.sharedSpaceNodeNested.name,
+                snapshot.data.sharedSpaceNode.name,
                 style: TextStyle(
                     fontSize: 20.0,
                     color: AppColor.destinationPickerAppBarTitleColor),
@@ -135,7 +137,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
                 return IconButton(
                     icon: SvgPicture.asset(_imagePath.icBackBlue),
-                    onPressed: () => _workGroupDetailFilesWidgetKey.currentState.widget.nodeSurfingNavigateBack());
+                    onPressed: () => _sharedSpaceDocumentNavigatorKey.currentState.wantToBack());
               }
               return SizedBox.shrink();
             }),
@@ -153,12 +155,12 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                     } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.chooseSpaceDestination) {
                       return _buildChooseSpaceDestination(state.operation);
                     } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
-                      return WorkGroupDetailFilesWidget(
-                        _workGroupDetailFilesWidgetKey,
+                      return SharedSpaceDocumentNavigatorWidget(
+                        _sharedSpaceDocumentNavigatorKey,
                         state.routeData.sharedSpaceNodeNested,
-                            () => _destinationPickerViewModel.backToSharedSpace(),
-                        nodeSurfingType: NodeSurfingType.destinationPicker,
-                        currentNodeObservable: _destinationPickerViewModel.currentNodeObservable,
+                        onBackSharedSpaceClickedCallback: () => _destinationPickerViewModel.backToSharedSpace(),
+                        sharedSpaceDocumentUIType: SharedSpaceDocumentUIType.destinationPicker,
+                        currentNodeObservable: _destinationPickerViewModel.currentNodeObservable
                       );
                     }
                     return SizedBox.shrink();

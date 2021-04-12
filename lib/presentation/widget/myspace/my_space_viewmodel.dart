@@ -64,7 +64,7 @@ import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dar
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
@@ -229,7 +229,7 @@ class MySpaceViewModel extends BaseViewModel {
     final copyAction = CopyDestinationPickerAction(context);
     copyAction.onDestinationPickerActionClick((data) {
       _appNavigation.popBack();
-      if (data is WorkGroupNodesSurfingArguments) {
+      if (data is SharedSpaceDocumentArguments) {
         store.dispatch(_copyToWorkgroupAction(documents, data));
       }
     });
@@ -240,14 +240,14 @@ class MySpaceViewModel extends BaseViewModel {
             operator: Operation.copyFromMySpace));
   }
 
-  ThunkAction<AppState> _copyToWorkgroupAction(List<Document> documents, WorkGroupNodesSurfingArguments workGroupNodesSurfingArguments) {
+  ThunkAction<AppState> _copyToWorkgroupAction(List<Document> documents, SharedSpaceDocumentArguments sharedSpaceDocumentArguments) {
     return (Store<AppState> store) async {
-      final parentNodeId = workGroupNodesSurfingArguments.folder != null
-          ? workGroupNodesSurfingArguments.folder.workGroupNodeId
+      final parentNodeId = sharedSpaceDocumentArguments.workGroupFolder != null
+          ? sharedSpaceDocumentArguments.workGroupFolder.workGroupNodeId
           : null;
       await _copyMultipleFilesToSharedSpaceInteractor.execute(
           copyRequests: documents.map((document) => document.toCopyRequest()).toList(),
-          destinationSharedSpaceId: workGroupNodesSurfingArguments.sharedSpaceNodeNested.sharedSpaceId,
+          destinationSharedSpaceId: sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
           destinationParentNodeId: parentNodeId)
       .then((result) => result.fold(
               (failure) => store.dispatch(MySpaceAction(Left(failure))),
