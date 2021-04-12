@@ -46,7 +46,7 @@ import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dar
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/choose_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -165,11 +165,11 @@ class UploadFileViewModel extends BaseViewModel {
     final chooseAction = ChooseDestinationPickerAction(context);
     chooseAction.onDestinationPickerActionClick((data) {
       _appNavigation.popBack();
-      if (data != null && data is WorkGroupNodesSurfingArguments) {
+      if (data != null && data is SharedSpaceDocumentArguments) {
         setWorkGroupDocumentUploadInfoArgument(WorkGroupDocumentUploadInfo(
-            data.sharedSpaceNodeNested,
-            data.folder,
-            data.folderType));
+            data.sharedSpaceNode,
+            data.workGroupFolder,
+            data.documentType));
         _uploadDestinationTypeObservable.add(DestinationType.workGroup);
       } else {
         _uploadDestinationTypeObservable.add(DestinationType.mySpace);
