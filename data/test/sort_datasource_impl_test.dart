@@ -35,8 +35,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/sort_fixture.dart';
-
 void main() {
   getSorterTest();
   sortFilesTest();
@@ -115,7 +113,7 @@ void sortFilesTest() {
 
       final result = await _sortDataSourceImpl.sortFiles(
           [workGroupDocument1, workGroupDocument2, workGroupFolder1],
-          sorterSharedSpace);
+          Sorter.fromOrderScreen(OrderScreen.sharedSpaceDocument));
       expect(result, [workGroupDocument1, workGroupDocument2, workGroupFolder1]);
     });
   });
