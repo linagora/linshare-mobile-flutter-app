@@ -42,13 +42,13 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
+import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_app_bar.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_detail_files_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 
 import 'home_viewmodel.dart';
@@ -114,12 +114,10 @@ class _HomeWidgetState extends State<HomeWidget> {
       case RoutePaths.sharedSpace:
         return getIt<SharedSpaceWidget>();
       case RoutePaths.sharedSpaceInside:
-        return WorkGroupDetailFilesWidget(
-          Key('work_group_detail_files_widget_key'),
+        return SharedSpaceDocumentNavigatorWidget(
+          Key('shared_space_document_navigator_widget_key'),
           uiState.selectedSharedSpace,
-          () { // Back to shared spaces screen
-            homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-          },
+          onBackSharedSpaceClickedCallback: () => homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace))
         );
       case RoutePaths.account_details:
         return getIt<AccountDetailsWidget>();

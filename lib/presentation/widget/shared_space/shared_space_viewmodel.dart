@@ -303,7 +303,6 @@ class SharedSpaceViewModel extends BaseViewModel {
   }
 
   OnlineThunkAction _createNewWorkGroupAction(String newName) {
-    _appNavigation.popBack();
     return OnlineThunkAction((Store<AppState> store) async {
       await _createWorkGroupInteractor
           .execute(CreateWorkGroupRequest(newName, LinShareNodeType.WORK_GROUP))

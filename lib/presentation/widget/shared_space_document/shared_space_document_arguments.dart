@@ -32,13 +32,21 @@
 
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_ui_type.dart';
 
-class WorkGroupNodesSurfingArguments extends RouterArguments {
-  final FolderNodeType folderType;
-  final WorkGroupFolder folder;
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
+class SharedSpaceDocumentArguments extends RouterArguments {
+  final SharedSpaceDocumentType documentType;
+  final WorkGroupFolder workGroupFolder;
+  final SharedSpaceNodeNested sharedSpaceNode;
+  final SharedSpaceDocumentUIType documentUIType;
 
-  WorkGroupNodesSurfingArguments(this.folderType, this.sharedSpaceNodeNested, {this.folder});
+  SharedSpaceDocumentArguments(
+    this.documentType, 
+    this.sharedSpaceNode, 
+    {
+      this.workGroupFolder, 
+      this.documentUIType = SharedSpaceDocumentUIType.sharedSpace
+    }
+  );
 }
-
-enum FolderNodeType { root, normal, }

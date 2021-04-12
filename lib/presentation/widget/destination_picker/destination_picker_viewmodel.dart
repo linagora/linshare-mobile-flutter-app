@@ -38,7 +38,7 @@ import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dar
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/base_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/choose_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/file_surfing/workgroup_nodes_surfling_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -47,7 +47,7 @@ import 'package:rxdart/rxdart.dart';
 class DestinationPickerViewModel extends BaseViewModel {
   final GetAllSharedSpacesInteractor _getAllSharedSpacesInteractor;
   final AppNavigation _appNavigation;
-  final BehaviorSubject<WorkGroupNodesSurfingArguments> currentNodeObservable = BehaviorSubject.seeded(null);
+  final BehaviorSubject<SharedSpaceDocumentArguments> currentNodeObservable = BehaviorSubject.seeded(null);
   final destinationTypeList = [DestinationType.mySpace, DestinationType.workGroup];
 
   DestinationPickerViewModel(Store<AppState> store, this._getAllSharedSpacesInteractor, this._appNavigation) : super(store);

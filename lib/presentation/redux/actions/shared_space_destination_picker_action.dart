@@ -28,7 +28,60 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 
-final sorterSharedSpace = Sorter.fromOrderScreen(OrderScreen.sharedSpace);
+@immutable
+class StartSharedSpaceDestinationLoadingAction extends ActionOnline {}
+
+@immutable
+class SharedSpaceDestinationAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+
+  SharedSpaceDestinationAction(this.viewState);
+}
+
+@immutable
+class SharedSpaceDestinationGetSorterAndAllNodeAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+  final Sorter sorter;
+
+  SharedSpaceDestinationGetSorterAndAllNodeAction(this.viewState, this.sorter);
+}
+
+@immutable
+class SharedSpaceDestinationGetAllNodeAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+
+  SharedSpaceDestinationGetAllNodeAction(this.viewState);
+}
+
+@immutable
+class CleanSharedSpaceDestinationStateAction extends ActionOffline {
+  CleanSharedSpaceDestinationStateAction();
+}
+
+@immutable
+class UpdateSharedSpaceDestinationArgumentsAction extends ActionOffline {
+  final SharedSpaceDocumentArguments documentArguments;
+
+  UpdateSharedSpaceDestinationArgumentsAction(this.documentArguments);
+}
+
+@immutable
+class SharedSpaceDestinationSortNodeAction extends ActionOffline {
+  final List<WorkGroupNode> workGroupNodes;
+  final Sorter sorter;
+
+  SharedSpaceDestinationSortNodeAction(this.workGroupNodes, this.sorter);
+}
+
+@immutable
+class ClearNodeListSharedSpaceDestinationAction extends ActionOffline {
+  ClearNodeListSharedSpaceDestinationAction();
+}

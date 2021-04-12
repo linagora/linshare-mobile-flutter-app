@@ -39,6 +39,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/network_connectiv
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
@@ -53,6 +55,8 @@ class AppState with EquatableMixin {
   final MySpaceState mySpaceState;
   final ShareState shareState;
   final SharedSpaceState sharedSpaceState;
+  final SharedSpaceDocumentState sharedSpaceDocumentState;
+  final SharedSpaceDocumentDestinationPickerState sharedSpaceDocumentDestinationPickerState;
   final ReceivedShareState receivedShareState;
   final DestinationPickerState destinationPickerState;
   final NetworkConnectivityState networkConnectivityState;
@@ -68,6 +72,8 @@ class AppState with EquatableMixin {
       @required this.mySpaceState,
       @required this.shareState,
       @required this.sharedSpaceState,
+      @required this.sharedSpaceDocumentState,
+      @required this.sharedSpaceDocumentDestinationPickerState,
       @required this.receivedShareState,
       @required this.destinationPickerState,
       @required this.networkConnectivityState,
@@ -84,6 +90,8 @@ class AppState with EquatableMixin {
         mySpaceState: MySpaceState.initial(),
         shareState: ShareState.initial(),
         sharedSpaceState: SharedSpaceState.initial(),
+        sharedSpaceDocumentState: SharedSpaceDocumentState.initial(),
+        sharedSpaceDocumentDestinationPickerState: SharedSpaceDocumentDestinationPickerState.initial(),
         receivedShareState: ReceivedShareState.initial(),
         destinationPickerState: DestinationPickerState.initial(),
         networkConnectivityState: NetworkConnectivityState.initial(),
@@ -101,6 +109,8 @@ class AppState with EquatableMixin {
         mySpaceState,
         shareState,
         sharedSpaceState,
+        sharedSpaceDocumentState,
+        sharedSpaceDocumentDestinationPickerState,
         receivedShareState,
         destinationPickerState,
         networkConnectivityState,

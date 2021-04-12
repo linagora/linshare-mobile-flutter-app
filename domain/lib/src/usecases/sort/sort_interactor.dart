@@ -53,7 +53,7 @@ class SortInteractor {
       switch (sorter.orderScreen) {
         case OrderScreen.mySpace:
           return Left<Failure, Success>(MySpaceFailure(exception));
-        case OrderScreen.sharedSpace:
+        case OrderScreen.sharedSpaceDocument:
           return Left<Failure, Success>(GetChildNodesFailure(exception));
         default:
           return Left<Failure, Success>(SortFileFailure(exception));
