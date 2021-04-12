@@ -82,14 +82,19 @@ class ContextMenuBuilder {
             children: <Widget>[
               _header ?? SizedBox.shrink(),
               Divider(),
-              areTilesHorizontal ?
-                Row(children: [..._actionTiles]) :
-                Column(children: [..._actionTiles]),
+              areTilesHorizontal
+                ? Row(children: [
+                    ..._actionTiles,
+                    _actionTiles.isNotEmpty ? Divider() : SizedBox.shrink()
+                  ])
+                : Column(children: [
+                    ..._actionTiles,
+                    _actionTiles.isNotEmpty ? Divider() : SizedBox.shrink()
+                  ]),
               _footer != null ? Padding(
                 padding: EdgeInsets.only(bottom: 10.0),
                 child: Wrap(
                   children: [
-                    Divider(),
                     _footer
                   ],
                 ),

@@ -222,8 +222,8 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
     store.dispatch(_sortFilesAction(currentState.sorter));
   }
 
-  void openFolderContextMenu(BuildContext context, WorkGroupFolder workGroupFolder, List<Widget> actionTiles) {
-    store.dispatch(_handleContextMenuFolderAction(context, workGroupFolder, actionTiles));
+  void openFolderContextMenu(BuildContext context, WorkGroupFolder workGroupFolder, List<Widget> actionTiles, Widget footerAction) {
+    store.dispatch(_handleContextMenuFolderAction(context, workGroupFolder, actionTiles, footerAction));
   }
 
   void openDocumentContextMenu(BuildContext context, WorkGroupDocument workGroupDocument, List<Widget> actionTiles, Widget footerAction) {
@@ -245,13 +245,14 @@ class WorkGroupNodesSurfingViewModel extends BaseViewModel {
   }
 
   ThunkAction<AppState> _handleContextMenuFolderAction(
-      BuildContext context, WorkGroupFolder workGroupFolder, List<Widget> actionTiles) {
+      BuildContext context, WorkGroupFolder workGroupFolder, List<Widget> actionTiles, Widget footerAction) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
         .addHeader(ContextMenuHeaderBuilder(
           Key('context_menu_header'),
           WorkGroupFolderPresentationFile.fromWorkGroupFolder(workGroupFolder)).build())
         .addTiles(actionTiles)
+        .addFooter(footerAction)
         .build();
       store.dispatch(SharedSpaceAction(Right(ContextMenuWorkGroupNodeViewState(workGroupFolder))));
     };
