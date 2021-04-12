@@ -268,8 +268,8 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
 
   String displayFileName(String filename)
   {
-    var a = filename.length - filename.split(".").last.length;
-    return "..." + filename.substring(a-2,a) + filename.split('.').last;
+    final sublength = filename.length - filename.split('.').last.length;
+    return '...' + filename.substring(sublength-3,sublength) + filename.split('.').last;
   }
 
 
