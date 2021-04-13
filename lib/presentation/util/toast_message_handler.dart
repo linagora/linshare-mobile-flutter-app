@@ -38,14 +38,12 @@ import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/add_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
@@ -71,7 +69,6 @@ class ToastMessageHandler {
       _handleSharedSpaceDocumentToastMessage(context, event.sharedSpaceDocumentState);
       _handleNetworkStateToastMessage(context, event.networkConnectivityState);
       _handleReceivedShareToastMessage(context, event.receivedShareState);
-      _handleAddSharedSpaceMembersToastMessage(context, event.addSharedSpaceMembersState);
     });
   }
 
@@ -156,20 +153,6 @@ class ToastMessageHandler {
         appToast.showToast(_buildSharingMessage(context, success.recipients));
         _cleanUploadViewState();
         _cleanShareViewState();
-      }
-    });
-  }
-
-  void _handleAddSharedSpaceMembersToastMessage(BuildContext context, AddSharedSpaceMembersState addSharedSpaceMembersState) {
-    addSharedSpaceMembersState.viewState.fold((failure) {
-      if (failure is AddSharedSpaceMemberFailure) {
-        appToast.showErrorToast(AppLocalizations.of(context).shared_space_member_could_not_be_added);
-        _cleanAddSharedSpaceMembersViewState();
-      }
-    }, (success) {
-      if (success is AddSharedSpaceMemberViewState) {
-        appToast.showToast(AppLocalizations.of(context).shared_space_member_has_been_added);
-        _cleanAddSharedSpaceMembersViewState();
       }
     });
   }
@@ -305,10 +288,6 @@ class ToastMessageHandler {
 
   void _cleanReceivedShareViewState() {
     _store.dispatch(CleanReceivedShareStateAction());
-  }
-
-  void _cleanAddSharedSpaceMembersViewState() {
-    _store.dispatch(CleanAddSharedSpaceMembersStateAction());
   }
 
   void cancelSubscription() {

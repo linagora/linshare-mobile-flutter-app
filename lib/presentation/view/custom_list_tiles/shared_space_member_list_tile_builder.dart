@@ -29,19 +29,23 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:flutter/material.dart';
 import 'package:flutter/src/material/list_tile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 
+typedef SelectRoleCallback = void Function();
+
 class SharedSpaceMemberListTileBuilder {
   final String _name;
   final String _email;
   final String _roleName;
+  final SelectRoleCallback onSelectedRoleCallback;
 
   Color tileColor;
 
-  SharedSpaceMemberListTileBuilder(this._name, this._email, this._roleName, {this.tileColor});
+  SharedSpaceMemberListTileBuilder(this._name, this._email, this._roleName, {this.tileColor, this.onSelectedRoleCallback});
 
   ListTile build() {
     return ListTile(
@@ -66,12 +70,25 @@ class SharedSpaceMemberListTileBuilder {
                 color: AppColor.documentModifiedDateItemTextColor)),
         Padding(
             padding: EdgeInsets.only(top: 8),
-            child: Text(_roleName,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: AppColor.workgroupNodesSurfingBackTitleColor))),
+            child: GestureDetector(
+              onTap: () {
+                if(onSelectedRoleCallback != null) {
+                  onSelectedRoleCallback.call();
+                }
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(_roleName,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontStyle: FontStyle.normal,
+                          color: AppColor.workgroupNodesSurfingBackTitleColor)),
+                  Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
+                ],
+              ),
+            )),
       ]),
       tileColor: tileColor,
     );

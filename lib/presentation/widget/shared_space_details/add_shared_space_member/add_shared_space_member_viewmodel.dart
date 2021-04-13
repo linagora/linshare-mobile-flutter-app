@@ -32,8 +32,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_shared_space_members_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/update_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -44,7 +44,7 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
   final AddSharedSpaceMemberInteractor _addSharedSpaceMemberInteractor;
-  final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
+  final UpdateSharedSpaceMemberInteractor _updateSharedSpaceMemberInteractor;
   final GetAllSharedSpaceMembersInteractor _getAllSharedSpaceMembersInteractor;
 
   AddSharedSpaceMemberViewModel(
@@ -52,12 +52,11 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
       this._appNavigation,
       this._getAutoCompleteSharingInteractor,
       this._addSharedSpaceMemberInteractor,
-      this._getAllSharedSpaceRolesInteractor,
+      this._updateSharedSpaceMemberInteractor,
       this._getAllSharedSpaceMembersInteractor)
       : super(store);
 
   void initState() {
-    store.dispatch(_getSharedSpaceRolesAction());
   }
 
   void backToSharedSpacesDetails() {
@@ -66,6 +65,24 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
 
   void selectRole(SharedSpaceRoleName role) {
     store.dispatch(AddSharedSpaceMembersSetRoleAction(role));
+    _appNavigation.popBack();
+  }
+
+  void addSharedSpaceMember(SharedSpaceId sharedSpaceId,
+      SharedSpaceMemberAutoCompleteResult autoCompleteResult) {
+    store.dispatch(
+        _addSharedSpaceAction(
+            sharedSpaceId,
+            AccountId(autoCompleteResult.userUuid.uuid)));
+  }
+
+  void changeMemberRole(SharedSpaceId sharedSpaceId,
+      SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
+    store.dispatch(
+        _updateSharedSpaceMemberRoleAction(
+            sharedSpaceId,
+            AccountId(fromMember.account.accountId.uuid),
+            changeToRole));
     _appNavigation.popBack();
   }
 
@@ -85,12 +102,6 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
                 .toList(),
           ),
         );
-  }
-
-  void addSharedSpaceMember(
-      SharedSpaceId sharedSpaceId, SharedSpaceMemberAutoCompleteResult autoCompleteResult) {
-    store.dispatch(
-        _addSharedSpaceAction(sharedSpaceId, AccountId(autoCompleteResult.userUuid.uuid)));
   }
 
   OnlineThunkAction _addSharedSpaceAction(SharedSpaceId sharedSpaceId, AccountId accountId) {
@@ -119,19 +130,56 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
       await _addSharedSpaceMemberInteractor
           .execute(sharedSpaceId,
               AddSharedSpaceMemberRequest(accountId, sharedSpaceId, role.sharedSpaceRoleId))
-          .then((result) => store.dispatch(SharedSpaceAction(result)));
+          .then((result) => result.fold(
+                  (failure) => store.dispatch(AddSharedSpaceMembersAction(
+                      Left<Failure, Success>(AddSharedSpaceMemberFailure(AddMemberFailed())))),
+                  (success) {
+                    store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
+              }));
+    });
+  }
+
+  OnlineThunkAction _updateSharedSpaceMemberRoleAction(
+      SharedSpaceId sharedSpaceId, AccountId accountId, SharedSpaceRoleName newRole) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final rolesList = store.state.sharedSpaceState.rolesList;
+      if (rolesList.isEmpty) {
+        store.dispatch(UpdateSharedSpaceMembersAction(
+            Left<Failure, Success>(UpdateSharedSpaceMemberFailure(RolesListNotFound()))));
+        return;
+      }
+
+      final role = rolesList.firstWhere((_role) => _role.name == newRole, orElse: () => null);
+      if (role == null) {
+        store.dispatch(UpdateSharedSpaceMembersAction(
+            Left<Failure, Success>(UpdateSharedSpaceMemberFailure(SelectedRoleNotFound()))));
+        return;
+      }
+
+      await _updateSharedSpaceMemberInteractor
+          .execute(sharedSpaceId,
+              UpdateSharedSpaceMemberRequest(accountId, sharedSpaceId, role.sharedSpaceRoleId))
+          .then((result) => result.fold(
+                  (failure) => store.dispatch(UpdateSharedSpaceMembersAction(
+                      Left<Failure, Success>(UpdateSharedSpaceMemberFailure(UpdateRoleFailed())))),
+                  (success) {
+                store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
+              }));
+    });
+  }
+
+  OnlineThunkAction _getSharedSpaceMembersAction(SharedSpaceId sharedSpaceId) {
+    return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(SharedSpaceDetailsGetAllSharedSpaceMembersAction(
           await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId)));
     });
   }
 
-  OnlineThunkAction _getSharedSpaceRolesAction() {
-    return OnlineThunkAction((Store<AppState> store) async {
-      final roles = (await _getAllSharedSpaceRolesInteractor.execute())
-          .map((result) => result is SharedSpaceRolesViewState ? result.roles : null)
-          .getOrElse(() => []);
-
-      store.dispatch(SharedSpaceGetSharedSpaceRolesListAction(roles));
-    });
+  @override
+  void onDisposed() {
+    store.dispatch(CleanAddSharedSpaceMembersStateAction());
+    store.dispatch(CleanUpdateSharedSpaceMembersStateAction());
+    super.onDisposed();
   }
+
 }
