@@ -33,47 +33,29 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class StartSharedSpaceDetailsLoadingAction extends ActionOnline {}
+class UpdateSharedSpaceMembersState extends LinShareState with EquatableMixin {
+  UpdateSharedSpaceMembersState(Either<Failure, Success> viewState) : super(viewState);
 
-@immutable
-class SharedSpaceDetailsAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+  factory UpdateSharedSpaceMembersState.initial() {
+    return UpdateSharedSpaceMembersState(Right(IdleState()));
+  }
 
-  SharedSpaceDetailsAction(this.viewState);
-}
+  @override
+  UpdateSharedSpaceMembersState sendViewState({Either<Failure, Success> viewState}) {
+    return UpdateSharedSpaceMembersState(viewState);
+  }
 
-@immutable
-class SharedSpaceDetailsGetAllSharedSpaceMembersAction extends ActionOnline {
-  final Either<Failure, Success> getMembersViewState;
+  @override
+  UpdateSharedSpaceMembersState clearViewState() {
+    return UpdateSharedSpaceMembersState(Right(IdleState()));
+  }
 
-  SharedSpaceDetailsGetAllSharedSpaceMembersAction(this.getMembersViewState);
-}
-
-@immutable
-class CleanSharedSpaceDetailsStateAction extends ActionOffline {
-  CleanSharedSpaceDetailsStateAction();
-}
-
-@immutable
-class SharedSpaceDetailsGetAllSharedSpaceActivitesAction extends ActionOnline {
-  final Either<Failure, Success> getActivitesViewState;
-
-  SharedSpaceDetailsGetAllSharedSpaceActivitesAction(this.getActivitesViewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetSharedSpaceDetailsAction extends ActionOnline {
-  final Either<Failure, Success> getSharedSpaceViewState;
-
-  SharedSpaceDetailsGetSharedSpaceDetailsAction(this.getSharedSpaceViewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetAccountQuotaAction extends ActionOnline {
-  final Either<Failure, Success> getAccountQuotaViewState;
-
-  SharedSpaceDetailsGetAccountQuotaAction(this.getAccountQuotaViewState);
+  @override
+  UpdateSharedSpaceMembersState startLoadingState() {
+    return UpdateSharedSpaceMembersState(Right(LoadingState()));
+  }
 }
