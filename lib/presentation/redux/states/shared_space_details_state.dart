@@ -81,4 +81,5 @@ class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
   SharedSpaceDetailsState setAccountQuota({Either<Failure, Success> viewState, AccountQuota newQuota}) {
     return SharedSpaceDetailsState(viewState, sharedSpace, membersList, activitiesList, newQuota);
   }
+
 }

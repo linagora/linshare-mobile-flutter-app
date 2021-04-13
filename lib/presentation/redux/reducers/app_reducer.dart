@@ -46,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_do
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/update_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
@@ -67,7 +68,8 @@ AppState appStateReducer(AppState state, action) {
         account: accountReducer(state.account, action),
         functionalityState: functionalityReducer(state.functionalityState, action),
         sharedSpaceDetailsState: sharedSpaceDetailsReducer(state.sharedSpaceDetailsState, action),
-        addSharedSpaceMembersState: addSharedSpaceMembersReducer(state.addSharedSpaceMembersState, action));
+        addSharedSpaceMembersState: addSharedSpaceMembersReducer(state.addSharedSpaceMembersState, action),
+        updateSharedSpaceMembersState: updateSharedSpaceMembersReducer(state.updateSharedSpaceMembersState, action));
   }
   return AppState(
       uiState: state.uiState,
@@ -86,7 +88,8 @@ AppState appStateReducer(AppState state, action) {
       account: state.account,
       functionalityState: state.functionalityState,
       sharedSpaceDetailsState: state.sharedSpaceDetailsState,
-      addSharedSpaceMembersState: state.addSharedSpaceMembersState);
+      addSharedSpaceMembersState: state.addSharedSpaceMembersState,
+      updateSharedSpaceMembersState: state.updateSharedSpaceMembersState);
 }
 
 bool canExecuteAction(AppState state, action) {
