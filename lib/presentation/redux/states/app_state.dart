@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_docu
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:meta/meta.dart';
 
@@ -64,6 +65,7 @@ class AppState with EquatableMixin {
   final FunctionalityState functionalityState;
   final SharedSpaceDetailsState sharedSpaceDetailsState;
   final AddSharedSpaceMembersState addSharedSpaceMembersState;
+  final UpdateSharedSpaceMembersState updateSharedSpaceMembersState;
 
   AppState(
       {@required this.uiState,
@@ -80,7 +82,8 @@ class AppState with EquatableMixin {
       @required this.account,
       @required this.functionalityState,
       @required this.sharedSpaceDetailsState,
-      @required this.addSharedSpaceMembersState});
+      @required this.addSharedSpaceMembersState,
+      @required this.updateSharedSpaceMembersState});
 
   factory AppState.initial() {
     return AppState(
@@ -98,7 +101,8 @@ class AppState with EquatableMixin {
         account: AccountState.initial(),
         functionalityState: FunctionalityState.initial(),
         sharedSpaceDetailsState: SharedSpaceDetailsState.initial(),
-        addSharedSpaceMembersState: AddSharedSpaceMembersState.initial());
+        addSharedSpaceMembersState: AddSharedSpaceMembersState.initial(),
+        updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial());
   }
 
   @override

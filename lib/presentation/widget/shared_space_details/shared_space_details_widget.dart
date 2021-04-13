@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/date_format_helper.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 
 import 'shared_space_details_viewmodel.dart';
@@ -241,11 +242,13 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           body: ListView.builder(
               itemCount: state.membersList.length,
               itemBuilder: (context, index) {
+                var member = state.membersList[index];
                 return SharedSpaceMemberListTileBuilder(
-                        state.membersList[index].account.name,
-                        state.membersList[index].account.mail,
-                        state.membersList[index].role.name.getRoleName(context))
-                    .build();
+                    member.account.name, member.account.mail, member.role.name.getRoleName(context),
+                    onSelectedRoleCallback: () =>
+                        selectRoleBottomSheet(context, member.role.name, (newRole) {
+                          _model.changeMemberRole(state.sharedSpace.sharedSpaceId, member, newRole);
+                        })).build();
               }),
           floatingActionButton: SharedSpaceOperationRole.deleteSharedSpaceRoles
                   .contains(state.sharedSpace.sharedSpaceRole.name)
@@ -321,5 +324,17 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                 style: TextStyle(fontSize: 13, color: AppColor.documentNameItemTextColor))
           ],
         )));
+  }
+
+  void selectRoleBottomSheet(
+      BuildContext context,
+      SharedSpaceRoleName selectedRole,
+      Function(SharedSpaceRoleName) onSelectedRoleCallback) {
+    SelectRoleModalSheetBuilder(
+            key: Key('select_role_on_shared_space_member_details'),
+            selectedRole: selectedRole)
+        .onConfirmAction((role) {
+      onSelectedRoleCallback.call(role);
+    }).show(context);
   }
 }

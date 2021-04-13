@@ -36,44 +36,13 @@ import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
-class StartSharedSpaceDetailsLoadingAction extends ActionOnline {}
-
-@immutable
-class SharedSpaceDetailsAction extends ActionOnline {
+class UpdateSharedSpaceMembersAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
-  SharedSpaceDetailsAction(this.viewState);
+  UpdateSharedSpaceMembersAction(this.viewState);
 }
 
 @immutable
-class SharedSpaceDetailsGetAllSharedSpaceMembersAction extends ActionOnline {
-  final Either<Failure, Success> getMembersViewState;
-
-  SharedSpaceDetailsGetAllSharedSpaceMembersAction(this.getMembersViewState);
-}
-
-@immutable
-class CleanSharedSpaceDetailsStateAction extends ActionOffline {
-  CleanSharedSpaceDetailsStateAction();
-}
-
-@immutable
-class SharedSpaceDetailsGetAllSharedSpaceActivitesAction extends ActionOnline {
-  final Either<Failure, Success> getActivitesViewState;
-
-  SharedSpaceDetailsGetAllSharedSpaceActivitesAction(this.getActivitesViewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetSharedSpaceDetailsAction extends ActionOnline {
-  final Either<Failure, Success> getSharedSpaceViewState;
-
-  SharedSpaceDetailsGetSharedSpaceDetailsAction(this.getSharedSpaceViewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetAccountQuotaAction extends ActionOnline {
-  final Either<Failure, Success> getAccountQuotaViewState;
-
-  SharedSpaceDetailsGetAccountQuotaAction(this.getAccountQuotaViewState);
+class CleanUpdateSharedSpaceMembersStateAction extends ActionOffline {
+  CleanUpdateSharedSpaceMembersStateAction();
 }

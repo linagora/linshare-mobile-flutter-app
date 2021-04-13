@@ -30,50 +30,13 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/update_shared_space_members_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
+import 'package:redux/redux.dart';
 
-@immutable
-class StartSharedSpaceDetailsLoadingAction extends ActionOnline {}
-
-@immutable
-class SharedSpaceDetailsAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  SharedSpaceDetailsAction(this.viewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetAllSharedSpaceMembersAction extends ActionOnline {
-  final Either<Failure, Success> getMembersViewState;
-
-  SharedSpaceDetailsGetAllSharedSpaceMembersAction(this.getMembersViewState);
-}
-
-@immutable
-class CleanSharedSpaceDetailsStateAction extends ActionOffline {
-  CleanSharedSpaceDetailsStateAction();
-}
-
-@immutable
-class SharedSpaceDetailsGetAllSharedSpaceActivitesAction extends ActionOnline {
-  final Either<Failure, Success> getActivitesViewState;
-
-  SharedSpaceDetailsGetAllSharedSpaceActivitesAction(this.getActivitesViewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetSharedSpaceDetailsAction extends ActionOnline {
-  final Either<Failure, Success> getSharedSpaceViewState;
-
-  SharedSpaceDetailsGetSharedSpaceDetailsAction(this.getSharedSpaceViewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetAccountQuotaAction extends ActionOnline {
-  final Either<Failure, Success> getAccountQuotaViewState;
-
-  SharedSpaceDetailsGetAccountQuotaAction(this.getAccountQuotaViewState);
-}
+final updateSharedSpaceMembersReducer = combineReducers<UpdateSharedSpaceMembersState>([
+  TypedReducer<UpdateSharedSpaceMembersState, UpdateSharedSpaceMembersAction>(
+          (UpdateSharedSpaceMembersState state, UpdateSharedSpaceMembersAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<UpdateSharedSpaceMembersState, CleanUpdateSharedSpaceMembersStateAction>(
+          (UpdateSharedSpaceMembersState state, _) => state.clearViewState()),
+]);
