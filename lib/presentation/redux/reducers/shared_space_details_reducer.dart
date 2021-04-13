@@ -62,5 +62,5 @@ final sharedSpaceDetailsReducer = combineReducers<SharedSpaceDetailsState>([
           newQuota: action.getAccountQuotaViewState.fold(
                   (failure) => null,
                   (success) => (success is AccountQuotaViewState) ? success.accountQuota : null),
-          viewState: action.getAccountQuotaViewState)),
+          viewState: action.getAccountQuotaViewState))
 ]);
