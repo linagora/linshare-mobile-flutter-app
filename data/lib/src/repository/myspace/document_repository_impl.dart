@@ -86,4 +86,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
   Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken) {
     return _documentDataSource.downloadPreviewDocument(document, downloadPreviewType, token, baseUrl, cancelToken);
   }
+
+  @override
+  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest) {
+    return _documentDataSource.rename(documentId, renameDocumentRequest);
+  }
 }
