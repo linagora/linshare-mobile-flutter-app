@@ -90,6 +90,8 @@ class ToastMessageHandler {
       } else if (failure is NoDocumentPreviewAvailable) {
         appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
         _cleanMySpaceViewState();
+      } else if (failure is RenameDocumentFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_renamed);
       }
     }, (success) {
       if (success is CopyToSharedSpaceViewState || success is CopyMultipleFilesToSharedSpaceAllSuccessViewState) {
@@ -107,6 +109,8 @@ class ToastMessageHandler {
       } else if (success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
         _cleanMySpaceViewState();
+      } else if (success is RenameDocumentViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_renamed);
       }
     });
   }
