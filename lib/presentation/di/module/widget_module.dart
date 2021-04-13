@@ -243,7 +243,10 @@ class WidgetModule {
         getIt.get<GetSharedSpaceInteractor>(),
         getIt.get<GetQuotaInteractor>(),
         getIt.get<GetAllSharedSpaceMembersInteractor>(),
-        getIt.get<SharedSpaceActivitiesInteractor>()));
+        getIt.get<SharedSpaceActivitiesInteractor>(),
+        getIt.get<GetAllSharedSpaceRolesInteractor>(),
+        getIt.get<UpdateSharedSpaceMemberInteractor>()
+    ));
   }
 
   void _provideAddSharedSpaceMemberComponent() {
@@ -253,7 +256,7 @@ class WidgetModule {
           getIt.get<AppNavigation>(),
           getIt.get<GetAutoCompleteSharingInteractor>(),
           getIt.get<AddSharedSpaceMemberInteractor>(),
-          getIt.get<GetAllSharedSpaceRolesInteractor>(),
+          getIt.get<UpdateSharedSpaceMemberInteractor>(),
           getIt.get<GetAllSharedSpaceMembersInteractor>(),
         ));
   }

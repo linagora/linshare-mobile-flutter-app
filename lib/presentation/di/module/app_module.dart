@@ -251,6 +251,7 @@ class AppModule {
     getIt.registerFactory(() => CreateWorkGroupInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RenameSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => AddSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
+    getIt.registerFactory(() => UpdateSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => GetAllSharedSpaceRolesInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RenameDocumentInteractor(getIt<DocumentRepository>()));
   }
