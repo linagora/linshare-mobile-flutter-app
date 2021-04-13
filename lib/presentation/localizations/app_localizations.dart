@@ -1405,6 +1405,20 @@ class AppLocalizations {
       name: 'shared_space_member_has_been_added',
     );
   }
+
+  String get the_file_has_been_successfully_renamed {
+    return Intl.message(
+      'The file has been successfully renamed',
+      name: 'the_file_has_been_successfully_renamed',
+    );
+  }
+
+  String get the_file_could_not_be_renamed {
+    return Intl.message(
+      'The file could not be renamed',
+      name: 'the_file_could_not_be_renamed',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
