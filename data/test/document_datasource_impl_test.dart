@@ -45,6 +45,7 @@ void main() {
   getAllDocumentTest();
   shareDocumentTest();
   removeDocumentTest();
+  renameDocumentTest();
 }
 
 void getAllDocumentTest() {
@@ -290,6 +291,44 @@ void removeDocumentTest() {
           .thenThrow(error);
 
       await _documentDataSourceImpl.copyToMySpace(copyRequest)
+          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+    });
+  });
+}
+
+void renameDocumentTest() {
+  group('rename document test', () {
+    MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    DocumentDataSourceImpl _documentDataSourceImpl;
+    MockLinShareDownloadManager _linShareDownloadManager;
+
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _documentDataSourceImpl = DocumentDataSourceImpl(
+          _linShareHttpClient,
+          _remoteExceptionThrower,
+          _linShareDownloadManager);
+    });
+
+    test('rename document should return success with valid data', () async {
+      when(_linShareHttpClient.renameDocument(document1.documentId, RenameDocumentRequest(document1.name)))
+          .thenAnswer((_) async => documentResponse1);
+
+      final result = await _documentDataSourceImpl.rename(document1.documentId, RenameDocumentRequest(document1.name));
+      expect(result, document1);
+    });
+
+    test('rename document should throw DataNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.renameDocument(document1.documentId, RenameDocumentRequest(document1.name)))
+          .thenThrow(error);
+
+      await _documentDataSourceImpl.rename(document1.documentId, RenameDocumentRequest(document1.name))
           .catchError((error) => expect(error, isA<DocumentNotFound>()));
     });
   });

@@ -190,4 +190,20 @@ class DocumentDataSourceImpl implements DocumentDataSource {
         permanentToken,
         cancelToken: cancelToken);
   }
+
+  @override
+  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest) {
+    return Future.sync(() async {
+      final documentResponse = await _linShareHttpClient.renameDocument(documentId, renameDocumentRequest);
+      return documentResponse.toDocument();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw DocumentNotFound();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }
