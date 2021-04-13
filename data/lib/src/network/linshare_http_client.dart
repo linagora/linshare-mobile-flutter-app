@@ -71,6 +71,7 @@ import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
 import 'model/request/add_shared_space_member_body_request.dart';
+import 'model/request/update_shared_space_member_body_request.dart';
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -430,4 +431,16 @@ class LinShareHttpClient {
       .map((data) => SharedSpaceRoleDto.fromJson(data))
       .toList();
   }
+
+  Future<SharedSpaceMemberResponse> updateRoleSharedSpaceMember(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request) async {
+    final resultJson = await _dioClient.put(
+        Endpoint.sharedSpaces
+            .withPathParameter(sharedSpaceId.uuid)
+            .withPathParameter('members')
+            .withPathParameter(request.account.uuid)
+            .generateEndpointPath(),
+        data: request.toBodyRequest().toJson().toString());
+    return SharedSpaceMemberResponse.fromJson(resultJson);
+  }
+
 }
