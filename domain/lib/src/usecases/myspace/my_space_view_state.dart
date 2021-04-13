@@ -223,3 +223,21 @@ class CopyMultipleContainsFoldersToMySpaceFailure extends FeatureFailure {
   @override
   List<Object> get props => [];
 }
+
+class RenameDocumentViewState extends ViewState {
+  final Document document;
+
+  RenameDocumentViewState(this.document);
+
+  @override
+  List<Object> get props => [document];
+}
+
+class RenameDocumentFailure extends FeatureFailure {
+  final exception;
+
+  RenameDocumentFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
