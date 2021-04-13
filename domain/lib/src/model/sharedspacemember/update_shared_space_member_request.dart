@@ -28,27 +28,21 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AddSharedSpaceMembersException extends RemoteException {
-  static final RolesListNotFound = 'Roles list not found';
-  static final SelectedRoleNotFound = 'Selected role not found';
+class UpdateSharedSpaceMemberRequest extends Equatable {
+  final AccountId account;
+  final SharedSpaceId node;
+  final SharedSpaceRoleId role;
 
-  AddSharedSpaceMembersException(String message) : super(message);
-}
-
-class RolesListNotFound extends AddSharedSpaceMembersException {
-  RolesListNotFound() : super(AddSharedSpaceMembersException.RolesListNotFound);
-
-  @override
-  List<Object> get props => [];
-}
-
-class SelectedRoleNotFound extends AddSharedSpaceMembersException {
-  SelectedRoleNotFound() : super(AddSharedSpaceMembersException.SelectedRoleNotFound);
+  UpdateSharedSpaceMemberRequest(
+    this.account,
+    this.node,
+    this.role
+  );
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [account, node, role];
 }

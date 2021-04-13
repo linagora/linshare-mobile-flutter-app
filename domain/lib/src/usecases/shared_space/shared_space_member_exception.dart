@@ -28,13 +28,43 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/remote_exception.dart';
 
-abstract class SharedSpaceMemberRepository {
-  Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId);
+abstract class SharedSpaceMembersException extends RemoteException {
+  static final RolesListNotFound = 'Roles list not found';
+  static final SelectedRoleNotFound = 'Selected role not found';
+  static final UpdateRoleFailed = 'Update role failed';
+  static final AddMemberFailed = 'Add member failed';
 
-  Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request);
+  SharedSpaceMembersException(String message) : super(message);
+}
 
-  Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request);
+class RolesListNotFound extends SharedSpaceMembersException {
+  RolesListNotFound() : super(SharedSpaceMembersException.RolesListNotFound);
+
+  @override
+  List<Object> get props => [];
+}
+
+class SelectedRoleNotFound extends SharedSpaceMembersException {
+  SelectedRoleNotFound() : super(SharedSpaceMembersException.SelectedRoleNotFound);
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddMemberFailed extends SharedSpaceMembersException {
+  AddMemberFailed() : super(SharedSpaceMembersException.AddMemberFailed);
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateRoleFailed extends SharedSpaceMembersException {
+  UpdateRoleFailed() : super(SharedSpaceMembersException.UpdateRoleFailed);
+
+  @override
+  List<Object> get props => [];
 }
