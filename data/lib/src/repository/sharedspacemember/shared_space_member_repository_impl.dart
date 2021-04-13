@@ -46,4 +46,9 @@ class SharedSpaceMemberRepositoryImpl implements SharedSpaceMemberRepository {
   Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request) {
     return _sharedSpaceMemberDataSource.addMember(sharedSpaceId, request);
   }
+
+  @override
+  Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request) {
+    return _sharedSpaceMemberDataSource.updateMemberRole(sharedSpaceId, request);
+  }
 }

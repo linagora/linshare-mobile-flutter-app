@@ -29,12 +29,45 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/network/model/converter/account_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_role_id_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'dart:convert';
 
-abstract class SharedSpaceMemberDataSource {
-  Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId);
+part 'update_shared_space_member_body_request.g.dart';
 
-  Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request);
+@JsonSerializable()
+@AccountIdConverter()
+@SharedSpaceIdConverter()
+@SharedSpaceRoleIdConverter()
+class UpdateSharedSpaceMemberBodyRequest with EquatableMixin {
+  final AccountId account;
+  final SharedSpaceId node;
+  final SharedSpaceRoleId role;
 
-  Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request);
+  UpdateSharedSpaceMemberBodyRequest(
+    this.account,
+    this.node,
+    this.role
+  );
+
+  factory UpdateSharedSpaceMemberBodyRequest.fromJson(Map<String, dynamic> json) => _$UpdateSharedSpaceMemberBodyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('account'): { jsonEncode('uuid'): jsonEncode(account.uuid) },
+    jsonEncode('node'): { jsonEncode('uuid'): jsonEncode(node.uuid) },
+    jsonEncode('role'): { jsonEncode('uuid'): jsonEncode(role.uuid) },
+  };
+
+  @override
+  List<Object> get props => [account, node, role];
+}
+
+extension UpdateSharedSpaceMemberExtension on UpdateSharedSpaceMemberRequest {
+  UpdateSharedSpaceMemberBodyRequest toBodyRequest() {
+    return UpdateSharedSpaceMemberBodyRequest(account, node, role);
+  }
 }
