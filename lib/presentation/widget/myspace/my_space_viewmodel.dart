@@ -52,6 +52,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/dialog/loading_dialog.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
@@ -59,6 +60,7 @@ import 'package:linshare_flutter_app/presentation/view/header/context_menu_heade
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
@@ -85,6 +87,8 @@ class MySpaceViewModel extends BaseViewModel {
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final DownloadPreviewDocumentInteractor _downloadPreviewDocumentInteractor;
+  final RenameDocumentInteractor _renameDocumentInteractor;
+  final VerifyNameInteractor _verifyNameInteractor;
   StreamSubscription _storeStreamSubscription;
   List<Document> _documentList = [];
 
@@ -103,7 +107,9 @@ class MySpaceViewModel extends BaseViewModel {
       this._downloadPreviewDocumentInteractor,
       this._sortInteractor,
       this._getSorterInteractor,
-      this._saveSorterInteractor
+      this._saveSorterInteractor,
+      this._renameDocumentInteractor,
+      this._verifyNameInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.mySpaceState.viewState.fold(
@@ -287,6 +293,63 @@ class MySpaceViewModel extends BaseViewModel {
               (failure) => store.dispatch(MySpaceAction(Left(failure))),
               (success) => store.dispatch(MySpaceAction(Right(success)))));
     });
+  }
+
+  void renameDocument(BuildContext context, Document document) {
+    _appNavigation.popBack();
+
+    EditTextModalSheetBuilder()
+        .key(Key('rename_modal_sheet'))
+        .title(AppLocalizations.of(context).rename_node(AppLocalizations.of(context).file.toLowerCase()))
+        .cancelText(AppLocalizations.of(context).cancel)
+        .onConfirmAction(AppLocalizations.of(context).rename,
+            (value) => store.dispatch(_renameWorkGroupNodeAction(context, value, document)))
+        .setErrorString((value) => _getErrorString(context, document, value))
+        .setTextController(
+          TextEditingController.fromValue(
+            TextEditingValue(
+                text: document.name,
+                selection: TextSelection(
+                    baseOffset: 0,
+                    extentOffset: document.name.length
+                )
+            ),
+          ))
+        .show(context);
+  }
+
+  OnlineThunkAction _renameWorkGroupNodeAction(BuildContext context, String newName, Document document) {
+    _appNavigation.popBack();
+
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _renameDocumentInteractor
+          .execute(document.documentId, RenameDocumentRequest(newName))
+          .then((result) => result.fold(
+              (failure) => store.dispatch(MySpaceAction(Left(failure))),
+              (success) => store.dispatch(MySpaceAction(Right(success)))));
+
+      getAllDocument();
+    });
+  }
+
+  String _getErrorString(BuildContext context, Document document, String value) {
+    final listName = _documentList.map((doc) => doc.name).toList();
+
+    return _verifyNameInteractor.execute(value, [
+              EmptyNameValidator(),
+              DuplicateNameValidator(listName),
+              SpecialCharacterValidator(),
+              LastDotValidator()
+            ])
+        .fold(
+            (failure) {
+              if (failure is VerifyNameFailure) {
+                return failure.getMessage(context);
+              } else {
+                return null;
+              }},
+            (success) => null
+    );
   }
 
   void getAllDocument() {

@@ -408,8 +408,18 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       if (Platform.isAndroid) _downloadAction(document),
       _shareAction([document]),
       _copyToWorkGroupAction(context, [document]),
-      _previewDocumentAction(document)
+      _previewDocumentAction(document),
+      _renameDocumentAction(context, document)
     ];
+  }
+
+  Widget _renameDocumentAction(BuildContext context, Document document) {
+    return DocumentContextMenuTileBuilder(
+            Key('rename_context_menu_action'),
+            SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).rename, document)
+        .onActionClick((data) => mySpaceViewModel.renameDocument(context, data))
+        .build();
   }
 
   Widget _removeFileAction(List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
