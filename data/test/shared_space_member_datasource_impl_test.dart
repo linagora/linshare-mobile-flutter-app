@@ -105,5 +105,58 @@ void main() {
       await _sharedSpaceMemberDataSourceImpl.addMember(sharedSpaceId1, request)
           .catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
     });
+
+    test('updateRoleSharedSpaceMember should return success with valid data', () async {
+      final request = UpdateSharedSpaceMemberRequest(
+          AccountId('user 1'),
+          sharedSpaceId1,
+          SharedSpaceRoleId('Update new role')
+      );
+
+      when(_linShareHttpClient.updateRoleSharedSpaceMember(sharedSpaceId1, request))
+          .thenAnswer((_) async => sharedSpaceMemberResponse1);
+
+      final result = await _sharedSpaceMemberDataSourceImpl.updateMemberRole(sharedSpaceId1, request);
+      expect(result, sharedSpaceMember1);
+    });
+
+    test('updateRoleSharedSpaceMember should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+
+      final request = UpdateSharedSpaceMemberRequest(
+          AccountId('user 1'),
+          sharedSpaceId1,
+          SharedSpaceRoleId('Update new role')
+      );
+
+      when(_linShareHttpClient.updateRoleSharedSpaceMember(sharedSpaceId1, request))
+          .thenThrow(error);
+
+      await _sharedSpaceMemberDataSourceImpl.updateMemberRole(sharedSpaceId1, request)
+          .catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
+    });
+
+    test('updateRoleSharedSpaceMember should throw NotAuthorized when linShareHttpClient response error with 403', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 403)
+      );
+
+      final request = UpdateSharedSpaceMemberRequest(
+          AccountId('user 1'),
+          sharedSpaceId1,
+          SharedSpaceRoleId('Update new role')
+      );
+
+      when(_linShareHttpClient.updateRoleSharedSpaceMember(sharedSpaceId1, request))
+          .thenThrow(error);
+
+      await _sharedSpaceMemberDataSourceImpl.updateMemberRole(sharedSpaceId1, request)
+          .catchError((error) => expect(error, isA<NotAuthorized>()));
+    });
+
   });
 }
