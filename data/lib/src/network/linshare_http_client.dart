@@ -267,6 +267,19 @@ class LinShareHttpClient {
     return DocumentResponse.fromJson(resultJson);
   }
 
+  Future<DocumentResponse> renameDocument(DocumentId documentId, RenameDocumentRequest renameDocumentRequest) async {
+    final resultJson = await _dioClient.put(
+        Endpoint.documents
+            .withPathParameter(documentId.uuid)
+            .generateEndpointPath(),
+        data: renameDocumentRequest.toJson().toString(),
+        options: Options(headers: {
+          'Content-Type': 'application/json'
+        })
+    );
+    return DocumentResponse.fromJson(resultJson);
+  }
+
   Future<WorkGroupNodeDto> removeSharedSpaceNode(
     SharedSpaceId sharedSpaceId,
     WorkGroupNodeId sharedSpaceNodeId
