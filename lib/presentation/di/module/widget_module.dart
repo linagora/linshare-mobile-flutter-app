@@ -123,7 +123,9 @@ class WidgetModule {
       getIt<DownloadPreviewDocumentInteractor>(),
       getIt<SortInteractor>(),
       getIt<GetSorterInteractor>(),
-      getIt<SaveSorterInteractor>()
+      getIt<SaveSorterInteractor>(),
+      getIt<RenameDocumentInteractor>(),
+      getIt<VerifyNameInteractor>()
     ));
   }
 
