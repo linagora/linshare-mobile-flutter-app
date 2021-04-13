@@ -57,7 +57,7 @@ export 'src/usecases/quota/quota_exception.dart';
 export 'src/usecases/quota/quota_verification_exception.dart';
 export 'src/usecases/name_verification/verify_name_exception.dart';
 export 'src/usecases/shared_space_activities/shared_space_activities_exception.dart';
-export 'src/usecases/shared_space/add_shared_space_member_exception.dart';
+export 'src/usecases/shared_space/shared_space_member_exception.dart';
 
 // model
 export 'src/model/authentication/token.dart';
@@ -160,6 +160,7 @@ export 'src/model/suggestion/suggest_name_type.dart';
 export 'src/model/sharedspacedocument/rename_work_group_node_request.dart';
 export 'src/model/verification/last_dot_validator.dart';
 export 'src/model/sharedspacemember/add_shared_space_member_request.dart';
+export 'src/model/sharedspacemember/update_shared_space_member_request.dart';
 export 'src/model/sharedspace/thread_id.dart';
 export 'src/model/myspace/rename_document_request.dart';
 
@@ -217,6 +218,7 @@ export 'src/usecases/shared_space_activities/shared_space_activities_interactor.
 export 'src/usecases/shared_space/create_work_group_interactor.dart';
 export 'src/usecases/shared_space/rename_shared_space_node_interactor.dart';
 export 'src/usecases/shared_space/add_shared_space_member_interactor.dart';
+export 'src/usecases/shared_space/update_shared_space_member_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_roles_interactor.dart';
 export 'src/usecases/myspace/rename_document_interactor.dart';
 
