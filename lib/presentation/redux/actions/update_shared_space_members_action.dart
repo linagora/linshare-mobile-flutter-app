@@ -32,54 +32,17 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/state/failure.dart';
-import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
-import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
-class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
-  final SharedSpaceNodeNested sharedSpace;
-  final List<SharedSpaceMember> membersList;
-  final List<AuditLogEntryUser> activitiesList;
-  final AccountQuota quota;
+class UpdateSharedSpaceMembersAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
 
-  SharedSpaceDetailsState(Either<Failure, Success> viewState, this.sharedSpace, this.membersList, this.activitiesList, this.quota) : super(viewState);
+  UpdateSharedSpaceMembersAction(this.viewState);
+}
 
-  factory SharedSpaceDetailsState.initial() {
-    return SharedSpaceDetailsState(Right(IdleState()), null, [], [], null);
-  }
-
-  @override
-  SharedSpaceDetailsState clearViewState() {
-    return SharedSpaceDetailsState(Right(IdleState()), null, [], [], null);
-  }
-
-  @override
-  SharedSpaceDetailsState sendViewState({Either<Failure, Success> viewState}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, activitiesList, quota);
-  }
-
-  @override
-  SharedSpaceDetailsState startLoadingState() {
-    return SharedSpaceDetailsState(Right(LoadingState()), sharedSpace, membersList, activitiesList, quota);
-  }
-
-  SharedSpaceDetailsState setSharedSpaceMembers({Either<Failure, Success> viewState, List<SharedSpaceMember> newMembers}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, newMembers, activitiesList, quota);
-  }
-
-  SharedSpaceDetailsState setSharedSpace({Either<Failure, Success> viewState, SharedSpaceNodeNested newSharedSpace}) {
-    return SharedSpaceDetailsState(viewState, newSharedSpace, membersList, activitiesList, quota);
-  }
-
-  SharedSpaceDetailsState setSharedSpaceActivities({Either<Failure, Success> viewState, List<AuditLogEntryUser> newActivities}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, newActivities, quota);
-  }
-
-  SharedSpaceDetailsState setAccountQuota({Either<Failure, Success> viewState, AccountQuota newQuota}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, activitiesList, newQuota);
-  }
-
+@immutable
+class CleanUpdateSharedSpaceMembersStateAction extends ActionOffline {
+  CleanUpdateSharedSpaceMembersStateAction();
 }

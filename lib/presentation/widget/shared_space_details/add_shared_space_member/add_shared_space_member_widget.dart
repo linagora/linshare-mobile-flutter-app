@@ -42,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
@@ -89,16 +90,13 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
               style: TextStyle(fontSize: 24, color: Colors.white)),
           backgroundColor: AppColor.primaryColor,
         ),
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          StoreConnector<AppState, SharedSpaceDetailsState>(
-            converter: (store) => store.state.sharedSpaceDetailsState,
-            builder: (_, state) => _addMemberWidget(state.sharedSpace, state.membersList),
-          ),
-          StoreConnector<AppState, List<SharedSpaceMember>>(
-            converter: (store) => store.state.sharedSpaceDetailsState.membersList,
-            builder: (_, members) => Expanded(child: _membersListWidget(members)),
-          )
-        ]));
+        body: StoreConnector<AppState, SharedSpaceDetailsState>(
+          converter: (store) => store.state.sharedSpaceDetailsState,
+          builder: (_, state) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            _addMemberWidget(state.sharedSpace, state.membersList),
+            Expanded(child: _membersListWidget(state.sharedSpace, state.membersList))
+          ]),
+        ));
   }
 
   Padding _addMemberWidget(SharedSpaceNodeNested sharedSpace, List<SharedSpaceMember> members) {
@@ -112,18 +110,20 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              FlatButton(
-                  onPressed: () => selectRoleBottomSheet(context),
-                  color: AppColor.addSharedSpaceMemberRoleColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36.0)),
-                  child: Row(children: [
-                    StoreConnector<AppState, SharedSpaceRoleName>(
-                      converter: (store) => store.state.addSharedSpaceMembersState.selectedRole,
-                      builder: (_, role) => Text(role.getRoleName(context),
+              StoreConnector<AppState, SharedSpaceRoleName>(
+                converter: (store) => store.state.addSharedSpaceMembersState.selectedRole,
+                builder: (_, role) =>  FlatButton(
+                    onPressed: () => selectRoleBottomSheet(context, role, (newRole) {
+                      _model.selectRole(newRole);
+                    }),
+                    color: AppColor.addSharedSpaceMemberRoleColor,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36.0)),
+                    child: Row(children: [
+                      Text(role.getRoleName(context),
                           style: TextStyle(color: AppColor.primaryColor, fontSize: 14)),
-                    ),
-                    Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
-                  ])),
+                      Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
+                    ])),
+              ),
               Expanded(
                   child: Padding(
                       padding: EdgeInsets.only(bottom: 18, left: 18),
@@ -184,65 +184,44 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
         ]));
   }
 
-  Widget _membersListWidget(List<SharedSpaceMember> members) {
+  Widget _membersListWidget(
+      SharedSpaceNodeNested sharedSpace, List<SharedSpaceMember> members) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
           width: double.infinity,
           padding: EdgeInsets.all(24),
           color: AppColor.topBarBackgroundColor,
-          child: Text(AppLocalizations.of(context).existing_members(members.length),
-              style: TextStyle(color: AppColor.addSharedSpaceMemberTitleColor, fontSize: 16))),
+          child: Text(
+              AppLocalizations.of(context).existing_members(members.length),
+              style: TextStyle(
+                  color: AppColor.addSharedSpaceMemberTitleColor,
+                  fontSize: 16))),
       Expanded(
           child: ListView.builder(
               shrinkWrap: true,
               itemCount: members.length,
               itemBuilder: (context, index) {
-                return SharedSpaceMemberListTileBuilder(members[index].account.name,
-                        members[index].account.mail, members[index].role.name.getRoleName(context),
-                        tileColor: Colors.white)
-                    .build();
+                var member = members[index];
+                return SharedSpaceMemberListTileBuilder(
+                    member.account.name, member.account.mail, member.role.name.getRoleName(context),
+                    tileColor: Colors.white,
+                    onSelectedRoleCallback: () =>
+                        selectRoleBottomSheet(context, member.role.name, (newRole) {
+                          _model.changeMemberRole(sharedSpace.sharedSpaceId, member, newRole);
+                        })).build();
               }))
     ]);
   }
 
-  void selectRoleBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0))),
-        context: context,
-        builder: (BuildContext context) {
-          return StoreConnector<AppState, SharedSpaceRoleName>(
-            converter: (store) => store.state.addSharedSpaceMembersState.selectedRole,
-            builder: (_, role) => Container(
-                child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _getSelectingRoleTile(SharedSpaceRoleName.READER, role),
-                        _getSelectingRoleTile(SharedSpaceRoleName.ADMIN, role),
-                        _getSelectingRoleTile(SharedSpaceRoleName.CONTRIBUTOR, role),
-                        _getSelectingRoleTile(SharedSpaceRoleName.WRITER, role),
-                      ],
-                    ))),
-          );
-        });
-  }
-
-  ListTile _getSelectingRoleTile(SharedSpaceRoleName role, SharedSpaceRoleName selectedRole) {
-    return ListTile(
-      title: Text(role.getRoleName(context),
-          style: TextStyle(
-            color: selectedRole == role
-                ? AppColor.primaryColor
-                : AppColor.addSharedSpaceMemberRoleTileColor,
-            fontSize: 16,
-          )),
-      leading: selectedRole == role
-          ? Icon(Icons.check, color: AppColor.primaryColor)
-          : SizedBox(),
-      onTap: () => _model.selectRole(role),
-    );
+  void selectRoleBottomSheet(
+      BuildContext context,
+      SharedSpaceRoleName selectedRole,
+      Function(SharedSpaceRoleName) onSelectedRoleCallback) {
+    SelectRoleModalSheetBuilder(
+            key: Key('select_role_on_add_shared_space_member'),
+            selectedRole: selectedRole)
+        .onConfirmAction((role) {
+      onSelectedRoleCallback.call(role);
+    }).show(context);
   }
 }

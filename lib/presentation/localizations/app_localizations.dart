@@ -1328,20 +1328,6 @@ class AppLocalizations {
     );
   }
 
-  String get shared_space_member_could_not_be_added {
-    return Intl.message(
-      'Shared Space Member could not be added',
-      name: 'shared_space_member_could_not_be_added',
-    );
-  }
-
-  String get shared_space_member_has_been_added {
-    return Intl.message(
-      'Shared Space Member has been successfully added',
-      name: 'shared_space_member_has_been_added',
-    );
-  }
-
   String get the_file_has_been_successfully_renamed {
     return Intl.message(
       'The file has been successfully renamed',
