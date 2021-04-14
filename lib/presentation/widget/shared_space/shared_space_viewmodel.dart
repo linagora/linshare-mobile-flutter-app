@@ -43,11 +43,11 @@ import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_act
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
@@ -178,7 +178,6 @@ class SharedSpaceViewModel extends BaseViewModel {
         .addTiles(actionTiles)
         .addFooter(footerAction)
         .build();
-      store.dispatch(SharedSpaceAction(Right(SharedSpaceContextMenuItemViewState(sharedSpace))));
     };
   }
 
@@ -234,7 +233,13 @@ class SharedSpaceViewModel extends BaseViewModel {
     store.dispatch(SharedSpaceClearSelectedSharedSpacesAction());
   }
 
-  void goToSharedSpaceDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
+  void clickOnDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      _goToSharedSpaceDetails(sharedSpaceNodeNested);
+    }));
+  }
+
+  void _goToSharedSpaceDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
     _appNavigation.popBack();
     _appNavigation.push(
       RoutePaths.sharedSpaceDetails,
