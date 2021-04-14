@@ -305,7 +305,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           if (currentSelectMode == SelectMode.ACTIVE) {
             mySpaceViewModel.selectItem(document);
           } else {
-            mySpaceViewModel.previewDocument(context, document.element);
+            mySpaceViewModel.onClickPreviewFile(context, document.element);
           }
         },
         leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -619,7 +619,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             SvgPicture.asset(imagePath.icPreview, width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).preview,
             document)
-        .onActionClick((data) => mySpaceViewModel.previewDocument(context, document))
+        .onActionClick((data) => mySpaceViewModel.onClickPreviewFile(context, document))
         .build();
   }
 
