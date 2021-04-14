@@ -580,10 +580,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                     SvgPicture.asset(imagePath.icSharedSpace,
                         width: 24, height: 24, fit: BoxFit.fill),
                     AppLocalizations.of(context).copy_to_a_workgroup, documents[0])
-                .onActionClick((data) => mySpaceViewModel.copyToAWorkgroup(
-                  context,
-                  documents,
-                  itemSelectionType: itemSelectionType))
+                .onActionClick((data) => mySpaceViewModel.clickOnCopyToAWorkGroup(context, documents, itemSelectionType: itemSelectionType))
                 .build()
             : SizedBox.shrink());
   }
