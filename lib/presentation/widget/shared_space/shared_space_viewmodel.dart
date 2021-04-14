@@ -178,7 +178,6 @@ class SharedSpaceViewModel extends BaseViewModel {
         .addTiles(actionTiles)
         .addFooter(footerAction)
         .build();
-      store.dispatch(SharedSpaceAction(Right(SharedSpaceContextMenuItemViewState(sharedSpace))));
     };
   }
 
@@ -234,7 +233,13 @@ class SharedSpaceViewModel extends BaseViewModel {
     store.dispatch(SharedSpaceClearSelectedSharedSpacesAction());
   }
 
-  void goToSharedSpaceDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
+  void clickOnDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      _goToSharedSpaceDetails(sharedSpaceNodeNested);
+    }));
+  }
+
+  void _goToSharedSpaceDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
     _appNavigation.popBack();
     _appNavigation.push(
       RoutePaths.sharedSpaceDetails,
