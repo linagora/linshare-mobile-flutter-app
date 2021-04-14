@@ -46,6 +46,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/received_share_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/share_context_menu_action_builder.dart';
@@ -53,8 +55,6 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/simple_conte
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/received_share_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 
 class ReceivedShareWidget extends StatefulWidget {
   @override
@@ -238,7 +238,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
           if (currentSelectMode == SelectMode.ACTIVE) {
             receivedShareViewModel.selectItem(receivedShareItem);
           } else {
-            receivedShareViewModel.previewReceivedShare(context, receivedShareItem.element);
+            receivedShareViewModel.onClickPreviewFile(context, receivedShareItem.element);
           }
         },
         onLongPress: () => receivedShareViewModel.selectItem(receivedShareItem));
@@ -340,12 +340,11 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
 
   Widget _previewReceivedShareAction(ReceivedShare receivedShare) {
     return ReceivedShareContextMenuTileBuilder(
-              Key('preview_received_share_context_menu_action'),
-              SvgPicture.asset(imagePath.icPreview, width: 24, height: 24, fit: BoxFit.fill),
-              AppLocalizations.of(context).preview,
-              receivedShare
-           )
-           .onActionClick((data) => receivedShareViewModel.previewReceivedShare(context, receivedShare))
-           .build();
+          Key('preview_received_share_context_menu_action'),
+          SvgPicture.asset(imagePath.icPreview, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).preview,
+          receivedShare)
+       .onActionClick((data) => receivedShareViewModel.onClickPreviewFile(context, receivedShare))
+       .build();
   }
 }
