@@ -210,7 +210,13 @@ class MySpaceViewModel extends BaseViewModel {
             documents: documents));
   }
 
-  void copyToAWorkgroup(BuildContext context, List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+  void clickOnCopyToAWorkGroup(BuildContext context, List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      _copyToAWorkgroup(context, documents, itemSelectionType: itemSelectionType);
+    }));
+  }
+
+  void _copyToAWorkgroup(BuildContext context, List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     _appNavigation.popBack();
     if (itemSelectionType == ItemSelectionType.multiple) {
       cancelSelection();
