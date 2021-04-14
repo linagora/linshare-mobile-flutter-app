@@ -40,16 +40,16 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/shared_space_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 
 class SharedSpaceWidget extends StatefulWidget {
   @override
@@ -347,8 +347,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                 Key('delete_shared_space_context_menu_action'),
                 SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
                 AppLocalizations.of(context).delete)
-            .onActionClick(
-                (data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
+            .onActionClick((data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
             .build()
         : SizedBox.shrink();
   }
@@ -358,7 +357,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             Key('shared_space_details_context_menu_action'),
             SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).details)
-        .onActionClick((data) => sharedSpaceViewModel.goToSharedSpaceDetails(sharedSpace))
+        .onActionClick((data) => sharedSpaceViewModel.clickOnDetails(sharedSpace))
         .build();
   }
 
