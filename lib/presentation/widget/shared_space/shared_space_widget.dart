@@ -347,8 +347,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                 Key('delete_shared_space_context_menu_action'),
                 SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
                 AppLocalizations.of(context).delete)
-            .onActionClick(
-                (data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
+            .onActionClick((data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
             .build()
         : SizedBox.shrink();
   }
@@ -358,7 +357,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             Key('shared_space_details_context_menu_action'),
             SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).details)
-        .onActionClick((data) => sharedSpaceViewModel.goToSharedSpaceDetails(sharedSpace))
+        .onActionClick((data) => sharedSpaceViewModel.clickOnDetails(sharedSpace))
         .build();
   }
 
