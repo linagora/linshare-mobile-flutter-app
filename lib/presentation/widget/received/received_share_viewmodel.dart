@@ -43,18 +43,18 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/file/share_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:open_file/open_file.dart' as open_file;
 
 class ReceivedShareViewModel extends BaseViewModel {
   final GetAllReceivedSharesInteractor _getAllReceivedInteractor;
@@ -194,7 +194,13 @@ class ReceivedShareViewModel extends BaseViewModel {
     );
   }
 
-  void previewReceivedShare(BuildContext context, ReceivedShare receivedShare) {
+  void onClickPreviewFile(BuildContext context, ReceivedShare receivedShare) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      _previewReceivedShare(context, receivedShare);
+    }));
+  }
+
+  void _previewReceivedShare(BuildContext context, ReceivedShare receivedShare) {
     _appNavigation.popBack();
     final canPreviewReceivedShare = Platform.isIOS ? receivedShare.mediaType.isIOSSupportedPreview() : receivedShare.mediaType.isAndroidSupportedPreview();
     if (canPreviewReceivedShare || receivedShare.hasThumbnail) {
