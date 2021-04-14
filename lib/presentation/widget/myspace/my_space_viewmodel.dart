@@ -305,8 +305,14 @@ class MySpaceViewModel extends BaseViewModel {
   void openUploadFileMenu(BuildContext context, List<Widget> actionTiles) {
     store.dispatch(_handleUploadFileMenuAction(context, actionTiles));
   }
+  
+  void onClickPreviewFile(BuildContext context, Document document) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      _previewDocument(context, document);
+    }));
+  }
 
-  void previewDocument(BuildContext context, Document document) {
+  void _previewDocument(BuildContext context, Document document) {
     _appNavigation.popBack();
     final canPreviewDocument = Platform.isIOS ? document.mediaType.isIOSSupportedPreview() : document.mediaType.isAndroidSupportedPreview();
     if (canPreviewDocument || document.hasThumbnail) {
