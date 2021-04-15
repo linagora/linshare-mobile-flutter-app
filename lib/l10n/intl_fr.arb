@@ -1070,5 +1070,23 @@
   "@search_in_my_received_shares": {
     "type": "text",
     "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_member": "Are you sure you want to delete {memberName} from {workspaceName}?",
+  "@are_you_sure_you_want_to_delete_member": {
+    "type": "text",
+    "placeholders": {
+      "memberName": {},
+      "workspaceName": {}
+    }
+  },
+  "user_could_not_be_removed": "The user could not be removed",
+  "@user_could_not_be_removed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "user_is_successfully_removed": "The user is successfully removed",
+  "@user_is_successfully_removed": {
+    "type": "text",
+    "placeholders": {}
   }
 }

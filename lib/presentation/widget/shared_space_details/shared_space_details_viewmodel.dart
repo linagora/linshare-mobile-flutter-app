@@ -34,6 +34,7 @@ import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_details_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/update_shared_space_members_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -52,6 +53,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   final SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
   final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
   final UpdateSharedSpaceMemberInteractor _updateSharedSpaceMemberInteractor;
+  final DeleteSharedSpaceMemberInteractor _deleteSharedSpaceMemberInteractor;
 
   SharedSpaceDetailsViewModel(
     Store<AppState> store,
@@ -61,7 +63,8 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     this._getAllSharedSpaceMembersInteractor,
     this._sharedSpaceActivitiesInteractor,
     this._getAllSharedSpaceRolesInteractor,
-    this._updateSharedSpaceMemberInteractor
+    this._updateSharedSpaceMemberInteractor,
+    this._deleteSharedSpaceMemberInteractor
   ) : super(store);
 
   void initState(SharedSpaceDetailsArguments arguments) {
@@ -88,6 +91,11 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
 
   void changeMemberRole(SharedSpaceId sharedSpaceId, SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
     store.dispatch(_updateSharedSpaceMemberRoleAction(sharedSpaceId, AccountId(fromMember.account.accountId.uuid), changeToRole));
+    _appNavigation.popBack();
+  }
+
+  void deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) {
+    store.dispatch(_deleteSharedSpaceMemberAction(sharedSpaceId, sharedSpaceMemberId));
     _appNavigation.popBack();
   }
 
@@ -150,9 +158,25 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
           .execute(sharedSpaceId,
               UpdateSharedSpaceMemberRequest(accountId, sharedSpaceId, role.sharedSpaceRoleId))
           .then((result) => result.fold(
-                  (failure) => store.dispatch(UpdateSharedSpaceMembersAction(
-                      Left<Failure, Success>(UpdateSharedSpaceMemberFailure(UpdateRoleFailed())))),
-                  (success) {
+              (failure) => store.dispatch(UpdateSharedSpaceMembersAction(
+                  Left<Failure, Success>(UpdateSharedSpaceMemberFailure(UpdateRoleFailed())))),
+              (success) {
+                store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
+              }));
+    });
+  }
+
+  OnlineThunkAction _deleteSharedSpaceMemberAction(
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceMemberId sharedSpaceMemberId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _deleteSharedSpaceMemberInteractor
+          .execute(sharedSpaceId, sharedSpaceMemberId)
+          .then((result) => result.fold(
+              (failure) => store.dispatch(DeleteSharedSpaceMembersAction(
+                  Left<Failure, Success>(DeleteSharedSpaceMemberFailure(DeleteMemberFailed())))),
+              (success) {
+                store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
                 store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
               }));
     });
@@ -162,6 +186,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   void onDisposed() {
     store.dispatch(CleanSharedSpaceDetailsStateAction());
     store.dispatch(CleanUpdateSharedSpaceMembersStateAction());
+    store.dispatch(CleanDeleteSharedSpaceMembersStateAction());
     super.onDisposed();
   }
 

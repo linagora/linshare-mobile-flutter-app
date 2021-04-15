@@ -38,6 +38,7 @@ import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
@@ -45,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dar
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
@@ -69,6 +71,7 @@ class ToastMessageHandler {
       _handleSharedSpaceDocumentToastMessage(context, event.sharedSpaceDocumentState);
       _handleNetworkStateToastMessage(context, event.networkConnectivityState);
       _handleReceivedShareToastMessage(context, event.receivedShareState);
+      _handleDeleteSharedSpaceMembersToastMessage(context, event.deleteSharedSpaceMembersState);
     });
   }
 
@@ -266,6 +269,20 @@ class ToastMessageHandler {
     });
   }
 
+  void _handleDeleteSharedSpaceMembersToastMessage(BuildContext context, DeleteSharedSpaceMembersState deleteSharedSpaceMembersState) {
+    deleteSharedSpaceMembersState.viewState.fold((failure) {
+      if (failure is DeleteSharedSpaceMemberFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).user_could_not_be_removed);
+        _cleanDeleteSharedSpaceMembersViewState();
+      }
+    }, (success) {
+      if (success is DeleteSharedSpaceMemberViewState) {
+        appToast.showToast(AppLocalizations.of(context).user_is_successfully_removed);
+        _cleanDeleteSharedSpaceMembersViewState();
+      }
+    });
+  }
+
   void _cleanMySpaceViewState() {
     _store.dispatch(CleanMySpaceStateAction());
   }
@@ -288,6 +305,10 @@ class ToastMessageHandler {
 
   void _cleanReceivedShareViewState() {
     _store.dispatch(CleanReceivedShareStateAction());
+  }
+
+  void _cleanDeleteSharedSpaceMembersViewState() {
+    _store.dispatch(CleanDeleteSharedSpaceMembersStateAction());
   }
 
   void cancelSubscription() {

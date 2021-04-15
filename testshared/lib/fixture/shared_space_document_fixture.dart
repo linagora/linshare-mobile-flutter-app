@@ -122,6 +122,7 @@ final workGroupDocument3 = WorkGroupDocument(
     '557c7bf3f95d00547b83ad0f7d75b1bb345d80947b2f0c4ca14643298fbde4ab');
 
 final sharedSpaceId1 = SharedSpaceId('1');
+final sharedMemberId1 = SharedSpaceMemberId('1');
 final parentWorkGroupNodeId1 = WorkGroupNodeId('0');
 final workGroupNodeId1 = WorkGroupNodeId('1');
 final workGroupNodeId2 = WorkGroupNodeId('1');

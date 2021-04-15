@@ -248,7 +248,8 @@ class WidgetModule {
         getIt.get<GetAllSharedSpaceMembersInteractor>(),
         getIt.get<SharedSpaceActivitiesInteractor>(),
         getIt.get<GetAllSharedSpaceRolesInteractor>(),
-        getIt.get<UpdateSharedSpaceMemberInteractor>()
+        getIt.get<UpdateSharedSpaceMemberInteractor>(),
+        getIt.get<DeleteSharedSpaceMemberInteractor>(),
     ));
   }
 
@@ -261,6 +262,7 @@ class WidgetModule {
           getIt.get<AddSharedSpaceMemberInteractor>(),
           getIt.get<UpdateSharedSpaceMemberInteractor>(),
           getIt.get<GetAllSharedSpaceMembersInteractor>(),
+          getIt.get<DeleteSharedSpaceMemberInteractor>(),
         ));
   }
 }

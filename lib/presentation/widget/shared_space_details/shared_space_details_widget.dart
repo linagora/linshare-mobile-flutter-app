@@ -44,7 +44,9 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/date_format_helper.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entry_user_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 
@@ -58,6 +60,7 @@ class SharedSpaceDetailsWidget extends StatefulWidget {
 class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   final _model = getIt<SharedSpaceDetailsViewModel>();
   final imagePath = getIt<AppImagePaths>();
+  final appNavigation = getIt<AppNavigation>();
 
   @override
   void initState() {
@@ -235,32 +238,42 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
 
   Widget _membersTabWidget(SharedSpaceDetailsState state) {
     return RefreshIndicator(
-        onRefresh: () async {
-          _model.refreshSharedSpaceMembers(state.sharedSpace.sharedSpaceId);
-        },
-        child: Scaffold(
-          body: ListView.builder(
-              itemCount: state.membersList.length,
-              itemBuilder: (context, index) {
-                var member = state.membersList[index];
-                return SharedSpaceMemberListTileBuilder(
-                    member.account.name, member.account.mail, member.role.name.getRoleName(context),
-                    onSelectedRoleCallback: () =>
-                        selectRoleBottomSheet(context, member.role.name, (newRole) {
-                          _model.changeMemberRole(state.sharedSpace.sharedSpaceId, member, newRole);
-                        })).build();
+      onRefresh: () async {
+        _model.refreshSharedSpaceMembers(state.sharedSpace.sharedSpaceId);
+      },
+      child: Scaffold(
+        body: ListView.builder(
+          itemCount: state.membersList.length,
+          itemBuilder: (context, index) {
+            var member = state.membersList[index];
+            return SharedSpaceMemberListTileBuilder(
+              member.account.name,
+              member.account.mail,
+              member.role.name.getRoleName(context),
+              userCurrentRole: state.sharedSpace.sharedSpaceRole.name,
+              onSelectedRoleCallback: () => selectRoleBottomSheet(
+                context,
+                member.role.name,
+                state.sharedSpace.sharedSpaceId,
+                member),
+              onDeleteMemberCallback: () => confirmDeleteMember(
+                context,
+                member.account.name,
+                state.sharedSpace.name,
+                state.sharedSpace.sharedSpaceId,
+                member.sharedSpaceMemberId)).build();
               }),
-          floatingActionButton: SharedSpaceOperationRole.deleteSharedSpaceRoles
-                  .contains(state.sharedSpace.sharedSpaceRole.name)
-              ? FloatingActionButton(
-                  onPressed: () =>
-                      _model.goToAddSharedSpaceMember(state.sharedSpace, state.membersList),
-                  child: Icon(Icons.person_add, color: Colors.white, size: 24.0),
-                  backgroundColor: AppColor.primaryColor,
-                )
-              : SizedBox.shrink(),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        ));
+        floatingActionButton:
+          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(state.sharedSpace.sharedSpaceRole.name)
+          ? FloatingActionButton(
+              onPressed: () => _model.goToAddSharedSpaceMember(state.sharedSpace, state.membersList),
+              child: Icon(Icons.person_add, color: Colors.white, size: 24.0),
+              backgroundColor: AppColor.primaryColor,
+            )
+          : SizedBox.shrink(),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerFloat,
+      ));
   }
 
   Widget _activitiesTabWidget(List<AuditLogEntryUser> activitiesList) {
@@ -329,12 +342,30 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   void selectRoleBottomSheet(
       BuildContext context,
       SharedSpaceRoleName selectedRole,
-      Function(SharedSpaceRoleName) onSelectedRoleCallback) {
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceMember member) {
     SelectRoleModalSheetBuilder(
-            key: Key('select_role_on_shared_space_member_details'),
-            selectedRole: selectedRole)
-        .onConfirmAction((role) {
-      onSelectedRoleCallback.call(role);
-    }).show(context);
+        key: Key('select_role_on_shared_space_member_details'),
+        selectedRole: selectedRole)
+        .onConfirmAction((role) => _model.changeMemberRole(sharedSpaceId, member, role))
+        .show(context);
   }
+
+  void confirmDeleteMember(
+      BuildContext context,
+      String memberName,
+      String workspaceName,
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceMemberId sharedSpaceMemberId) {
+    final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_member(memberName, workspaceName);
+    ConfirmModalSheetBuilder(appNavigation)
+        .key(Key('delete_member_shared_space_confirm_modal'))
+        .title(deleteTitle)
+        .cancelText(AppLocalizations.of(context).cancel)
+        .onConfirmAction(
+        AppLocalizations.of(context).delete,
+            () => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
+        .show(context);
+  }
+
 }
