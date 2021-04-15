@@ -30,55 +30,13 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:testshared/testshared.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
+import 'package:redux/redux.dart';
 
-import '../../mock/repository/shared_space/mock_shared_space_member_repository.dart';
-
-void main() {
-  group('update_shared_space_member_interactor test', () {
-    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
-    UpdateSharedSpaceMemberInteractor updateSharedSpaceMemberInteractor;
-
-    setUp(() {
-      sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();
-      updateSharedSpaceMemberInteractor = UpdateSharedSpaceMemberInteractor(sharedSpaceMemberRepository);
-    });
-
-    test('update_shared_space_member_interactor should return success state', () async {
-      final request = UpdateSharedSpaceMemberRequest(
-        AccountId('user 1'),
-        sharedSpaceId1,
-        SharedSpaceRoleId('Update new role')
-      );
-
-      when(sharedSpaceMemberRepository.updateMemberRole(
-          sharedSpaceId1,
-          request
-      )).thenAnswer((_) async => sharedSpaceMember1);
-
-      final result = await updateSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
-      expect(result, Right<Failure, Success>(UpdateSharedSpaceMemberViewState()));
-    });
-
-    test('update_shared_space_member_interactor should fail when updateMemberRole fail', () async {
-      final exception = Exception();
-      final request = UpdateSharedSpaceMemberRequest(
-          AccountId('user 1'),
-        sharedSpaceId1,
-        SharedSpaceRoleId('Update new role')
-      );
-
-      when(sharedSpaceMemberRepository.updateMemberRole(
-          sharedSpaceId1,
-          request
-      )).thenThrow(exception);
-
-      final result = await updateSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
-      expect(result, Left<Failure, Success>(UpdateSharedSpaceMemberFailure(exception)));
-    });
-  });
-}
+final deleteSharedSpaceMembersReducer = combineReducers<DeleteSharedSpaceMembersState>([
+  TypedReducer<DeleteSharedSpaceMembersState, DeleteSharedSpaceMembersAction>(
+          (DeleteSharedSpaceMembersState state, DeleteSharedSpaceMembersAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<DeleteSharedSpaceMembersState, CleanDeleteSharedSpaceMembersStateAction>(
+          (DeleteSharedSpaceMembersState state, _) => state.clearViewState()),
+]);

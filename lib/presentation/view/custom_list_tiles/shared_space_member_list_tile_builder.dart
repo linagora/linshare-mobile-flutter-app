@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/list_tile.dart';
 import 'package:flutter/widgets.dart';
@@ -36,61 +37,86 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 
 typedef SelectRoleCallback = void Function();
+typedef DeleteMemberCallback = void Function();
 
 class SharedSpaceMemberListTileBuilder {
   final String _name;
   final String _email;
   final String _roleName;
+  final SharedSpaceRoleName userCurrentRole;
   final SelectRoleCallback onSelectedRoleCallback;
+  final DeleteMemberCallback onDeleteMemberCallback;
 
   Color tileColor;
 
-  SharedSpaceMemberListTileBuilder(this._name, this._email, this._roleName, {this.tileColor, this.onSelectedRoleCallback});
+  SharedSpaceMemberListTileBuilder(this._name, this._email, this._roleName,
+      {this.userCurrentRole,
+      this.tileColor,
+      this.onSelectedRoleCallback,
+      this.onDeleteMemberCallback});
 
   ListTile build() {
     return ListTile(
-      contentPadding: EdgeInsets.only(left: 24, top: 10, bottom: 10),
+      contentPadding: EdgeInsets.only(left: 24, top: 10, bottom: 10, right: 20),
       leading: LabelAvatarBuilder(_name.characters.first.toUpperCase())
-          .key(Key('label_shared_space_member_avatar'))
-          .build(),
+        .key(Key('label_shared_space_member_avatar'))
+        .build(),
+      trailing: SharedSpaceOperationRole.deleteMemberSharedSpaceRoles.contains(userCurrentRole)
+        ? GestureDetector(
+          onTap: () => _handleDeleteMemberTap(),
+          child: Icon(Icons.close, color: AppColor.deleteMemberIconColor))
+        : SizedBox.shrink(),
       title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
-            padding: EdgeInsets.only(bottom: 8),
-            child: Text(_name,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontStyle: FontStyle.normal,
-                    color: AppColor.loginTextFieldTextColor))),
-        Text(_email,
+          padding: EdgeInsets.only(bottom: 8),
+          child: Text(_name,
             style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                fontStyle: FontStyle.italic,
-                color: AppColor.documentModifiedDateItemTextColor)),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              fontStyle: FontStyle.normal,
+              color: AppColor.loginTextFieldTextColor))),
+        Text(_email,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+            fontStyle: FontStyle.italic,
+            color: AppColor.documentModifiedDateItemTextColor)),
         Padding(
-            padding: EdgeInsets.only(top: 8),
-            child: GestureDetector(
-              onTap: () {
-                if(onSelectedRoleCallback != null) {
-                  onSelectedRoleCallback.call();
-                }
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(_roleName,
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                          fontStyle: FontStyle.normal,
-                          color: AppColor.workgroupNodesSurfingBackTitleColor)),
-                  Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
+          padding: EdgeInsets.only(top: 8),
+          child: GestureDetector(
+            onTap: () => _handleUpdateRoleTap(),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(_roleName,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: AppColor.workgroupNodesSurfingBackTitleColor)),
+                SharedSpaceOperationRole.editMemberSharedSpaceRoles.contains(userCurrentRole)
+                ? Icon(Icons.arrow_drop_down,
+                    color: AppColor.primaryColor)
+                : SizedBox.shrink()
                 ],
-              ),
-            )),
+            ),
+          )),
       ]),
       tileColor: tileColor,
     );
   }
+
+  void _handleDeleteMemberTap() {
+    if (onDeleteMemberCallback != null) {
+      onDeleteMemberCallback.call();
+    }
+  }
+
+  void _handleUpdateRoleTap() {
+    if (onSelectedRoleCallback != null &&
+      SharedSpaceOperationRole.editMemberSharedSpaceRoles.contains(userCurrentRole)) {
+      onSelectedRoleCallback.call();
+    }
+  }
+
 }
