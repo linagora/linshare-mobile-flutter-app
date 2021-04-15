@@ -48,4 +48,5 @@ class UpdateSharedSpaceMemberInteractor {
       return Left<Failure, Success>(UpdateSharedSpaceMemberFailure(exception));
     }
   }
+
 }
