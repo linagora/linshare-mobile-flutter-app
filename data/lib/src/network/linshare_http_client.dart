@@ -443,4 +443,16 @@ class LinShareHttpClient {
     return SharedSpaceMemberResponse.fromJson(resultJson);
   }
 
+  Future<SharedSpaceMemberResponse> deleteSharedSpaceMember(
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceMemberId sharedSpaceMemberId) async {
+    final resultJson = await _dioClient.delete(
+        Endpoint.sharedSpaces
+            .withPathParameter(sharedSpaceId.uuid)
+            .withPathParameter('members')
+            .withPathParameter(sharedSpaceMemberId.uuid)
+            .generateEndpointPath(),
+        data: json.encode(null));
+    return SharedSpaceMemberResponse.fromJson(resultJson);
+  }
 }
