@@ -40,12 +40,14 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 
 class AddSharedSpaceMemberWidget extends StatefulWidget {
   AddSharedSpaceMemberWidget({Key key}) : super(key: key);
@@ -58,6 +60,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
   final _model = getIt<AddSharedSpaceMemberViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final TextEditingController _typeAheadController = TextEditingController();
+  final appNavigation = getIt<AppNavigation>();
 
   @override
   void initState() {
@@ -113,9 +116,12 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
               StoreConnector<AppState, SharedSpaceRoleName>(
                 converter: (store) => store.state.addSharedSpaceMembersState.selectedRole,
                 builder: (_, role) =>  FlatButton(
-                    onPressed: () => selectRoleBottomSheet(context, role, (newRole) {
-                      _model.selectRole(newRole);
-                    }),
+                    onPressed: () => selectRoleBottomSheet(
+                      context, 
+                      role, 
+                      onNewRoleUpdated: (newRole) {
+                        _model.selectRole(newRole);
+                      }),
                     color: AppColor.addSharedSpaceMemberRoleColor,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36.0)),
                     child: Row(children: [
@@ -197,31 +203,60 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
                   color: AppColor.addSharedSpaceMemberTitleColor,
                   fontSize: 16))),
       Expanded(
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: members.length,
-              itemBuilder: (context, index) {
-                var member = members[index];
-                return SharedSpaceMemberListTileBuilder(
-                    member.account.name, member.account.mail, member.role.name.getRoleName(context),
-                    tileColor: Colors.white,
-                    onSelectedRoleCallback: () =>
-                        selectRoleBottomSheet(context, member.role.name, (newRole) {
-                          _model.changeMemberRole(sharedSpace.sharedSpaceId, member, newRole);
-                        })).build();
-              }))
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: members.length,
+          itemBuilder: (context, index) {
+            var member = members[index];
+            return SharedSpaceMemberListTileBuilder(
+              member.account.name,
+              member.account.mail,
+              member.role.name.getRoleName(context),
+              userCurrentRole: sharedSpace.sharedSpaceRole.name,
+              tileColor: Colors.white,
+              onSelectedRoleCallback: () =>
+                selectRoleBottomSheet(
+                  context,
+                  member.role.name,
+                  onNewRoleUpdated: (newRole) {
+                    _model.changeMemberRole(sharedSpace.sharedSpaceId, member, newRole);
+                  }),
+              onDeleteMemberCallback: () => confirmDeleteMember(
+                context,
+                member.account.name,
+                sharedSpace.name,
+                sharedSpace.sharedSpaceId,
+                member.sharedSpaceMemberId)).build();
+          }))
     ]);
   }
 
   void selectRoleBottomSheet(
-      BuildContext context,
-      SharedSpaceRoleName selectedRole,
-      Function(SharedSpaceRoleName) onSelectedRoleCallback) {
+    BuildContext context,
+    SharedSpaceRoleName selectedRole,
+    {Function(SharedSpaceRoleName) onNewRoleUpdated}) {
     SelectRoleModalSheetBuilder(
-            key: Key('select_role_on_add_shared_space_member'),
-            selectedRole: selectedRole)
-        .onConfirmAction((role) {
-      onSelectedRoleCallback.call(role);
-    }).show(context);
+      key: Key('select_role_on_add_shared_space_member'),
+      selectedRole: selectedRole)
+      .onConfirmAction((role) => onNewRoleUpdated.call(role))
+      .show(context);
   }
+
+  void confirmDeleteMember(
+    BuildContext context,
+    String memberName,
+    String workspaceName,
+    SharedSpaceId sharedSpaceId,
+    SharedSpaceMemberId sharedSpaceMemberId) {
+    final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_member(memberName, workspaceName);
+    ConfirmModalSheetBuilder(appNavigation)
+      .key(Key('delete_member_shared_space_confirm_modal'))
+      .title(deleteTitle)
+      .cancelText(AppLocalizations.of(context).cancel)
+      .onConfirmAction(
+        AppLocalizations.of(context).delete,
+        () => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
+      .show(context);
+  }
+
 }
