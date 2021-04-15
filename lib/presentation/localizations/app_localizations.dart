@@ -1419,6 +1419,28 @@ class AppLocalizations {
       name: 'search_in_my_received_shares',
     );
   }
+  String are_you_sure_you_want_to_delete_member(String memberName, String workspaceName) {
+    return Intl.message(
+      'Are you sure you want to delete $memberName from $workspaceName?',
+      name: 'are_you_sure_you_want_to_delete_member',
+      args: [memberName, workspaceName],
+    );
+  }
+
+  String get user_could_not_be_removed {
+    return Intl.message(
+      'The user could not be removed',
+      name: 'user_could_not_be_removed',
+    );
+  }
+
+  String get user_is_successfully_removed {
+    return Intl.message(
+      'The user is successfully removed',
+      name: 'user_is_successfully_removed'
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
