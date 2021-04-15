@@ -35,6 +35,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart'
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
@@ -69,7 +70,8 @@ AppState appStateReducer(AppState state, action) {
         functionalityState: functionalityReducer(state.functionalityState, action),
         sharedSpaceDetailsState: sharedSpaceDetailsReducer(state.sharedSpaceDetailsState, action),
         addSharedSpaceMembersState: addSharedSpaceMembersReducer(state.addSharedSpaceMembersState, action),
-        updateSharedSpaceMembersState: updateSharedSpaceMembersReducer(state.updateSharedSpaceMembersState, action));
+        updateSharedSpaceMembersState: updateSharedSpaceMembersReducer(state.updateSharedSpaceMembersState, action),
+        deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action));
   }
   return AppState(
       uiState: state.uiState,
@@ -89,7 +91,8 @@ AppState appStateReducer(AppState state, action) {
       functionalityState: state.functionalityState,
       sharedSpaceDetailsState: state.sharedSpaceDetailsState,
       addSharedSpaceMembersState: state.addSharedSpaceMembersState,
-      updateSharedSpaceMembersState: state.updateSharedSpaceMembersState);
+      updateSharedSpaceMembersState: state.updateSharedSpaceMembersState,
+      deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState);
 }
 
 bool canExecuteAction(AppState state, action) {

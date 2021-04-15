@@ -33,6 +33,7 @@ import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
@@ -66,6 +67,7 @@ class AppState with EquatableMixin {
   final SharedSpaceDetailsState sharedSpaceDetailsState;
   final AddSharedSpaceMembersState addSharedSpaceMembersState;
   final UpdateSharedSpaceMembersState updateSharedSpaceMembersState;
+  final DeleteSharedSpaceMembersState deleteSharedSpaceMembersState;
 
   AppState(
       {@required this.uiState,
@@ -83,7 +85,8 @@ class AppState with EquatableMixin {
       @required this.functionalityState,
       @required this.sharedSpaceDetailsState,
       @required this.addSharedSpaceMembersState,
-      @required this.updateSharedSpaceMembersState});
+      @required this.updateSharedSpaceMembersState,
+      @required this.deleteSharedSpaceMembersState});
 
   factory AppState.initial() {
     return AppState(
@@ -102,7 +105,8 @@ class AppState with EquatableMixin {
         functionalityState: FunctionalityState.initial(),
         sharedSpaceDetailsState: SharedSpaceDetailsState.initial(),
         addSharedSpaceMembersState: AddSharedSpaceMembersState.initial(),
-        updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial());
+        updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
+        deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial());
   }
 
   @override
@@ -121,6 +125,7 @@ class AppState with EquatableMixin {
         account,
         functionalityState,
         sharedSpaceDetailsState,
-        addSharedSpaceMembersState
+        addSharedSpaceMembersState,
+        deleteSharedSpaceMembersState
       ];
 }

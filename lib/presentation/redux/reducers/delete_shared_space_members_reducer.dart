@@ -28,13 +28,15 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
+import 'package:redux/redux.dart';
 
-class DeleteSharedSpaceMemberRequest extends Equatable {
-
-  DeleteSharedSpaceMemberRequest();
-
-  @override
-  List<Object> get props => [];
-}
+final deleteSharedSpaceMembersReducer = combineReducers<DeleteSharedSpaceMembersState>([
+  TypedReducer<DeleteSharedSpaceMembersState, DeleteSharedSpaceMembersAction>(
+          (DeleteSharedSpaceMembersState state, DeleteSharedSpaceMembersAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<DeleteSharedSpaceMembersState, CleanDeleteSharedSpaceMembersStateAction>(
+          (DeleteSharedSpaceMembersState state, _) => state.clearViewState()),
+]);
