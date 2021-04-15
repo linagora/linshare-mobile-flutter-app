@@ -37,6 +37,8 @@ abstract class SharedSpaceMembersException extends RemoteException {
   static final SelectedRoleNotFound = 'Selected role not found';
   static final UpdateRoleFailed = 'Update role failed';
   static final AddMemberFailed = 'Add member failed';
+  static final SharedSpaceMemberNotFound = 'Shared space member not found';
+  static final DeleteMemberFailed = 'Delete member failed';
 
   SharedSpaceMembersException(String message) : super(message);
 }
@@ -64,6 +66,20 @@ class AddMemberFailed extends SharedSpaceMembersException {
 
 class UpdateRoleFailed extends SharedSpaceMembersException {
   UpdateRoleFailed() : super(SharedSpaceMembersException.UpdateRoleFailed);
+
+  @override
+  List<Object> get props => [];
+}
+
+class SharedSpaceMemberNotFound extends SharedSpaceMembersException {
+  SharedSpaceMemberNotFound() : super(SharedSpaceMembersException.SharedSpaceMemberNotFound);
+
+  @override
+  List<Object> get props => [];
+}
+
+class DeleteMemberFailed extends SharedSpaceMembersException {
+  DeleteMemberFailed() : super(SharedSpaceMembersException.DeleteMemberFailed);
 
   @override
   List<Object> get props => [];
