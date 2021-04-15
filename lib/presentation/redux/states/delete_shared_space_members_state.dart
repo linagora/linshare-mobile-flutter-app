@@ -28,13 +28,34 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-class DeleteSharedSpaceMemberRequest extends Equatable {
+@immutable
+class DeleteSharedSpaceMembersState extends LinShareState with EquatableMixin {
+  DeleteSharedSpaceMembersState(Either<Failure, Success> viewState) : super(viewState);
 
-  DeleteSharedSpaceMemberRequest();
+  factory DeleteSharedSpaceMembersState.initial() {
+    return DeleteSharedSpaceMembersState(Right(IdleState()));
+  }
 
   @override
-  List<Object> get props => [];
+  DeleteSharedSpaceMembersState sendViewState({Either<Failure, Success> viewState}) {
+    return DeleteSharedSpaceMembersState(viewState);
+  }
+
+  @override
+  DeleteSharedSpaceMembersState clearViewState() {
+    return DeleteSharedSpaceMembersState(Right(IdleState()));
+  }
+
+  @override
+  DeleteSharedSpaceMembersState startLoadingState() {
+    return DeleteSharedSpaceMembersState(Right(LoadingState()));
+  }
 }
