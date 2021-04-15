@@ -162,6 +162,7 @@ export 'src/model/sharedspacedocument/rename_work_group_node_request.dart';
 export 'src/model/verification/last_dot_validator.dart';
 export 'src/model/sharedspacemember/add_shared_space_member_request.dart';
 export 'src/model/sharedspacemember/update_shared_space_member_request.dart';
+export 'src/model/sharedspacemember/delete_shared_space_member_request.dart';
 export 'src/model/sharedspace/thread_id.dart';
 export 'src/model/myspace/rename_document_request.dart';
 
@@ -223,6 +224,7 @@ export 'src/usecases/shared_space/update_shared_space_member_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_roles_interactor.dart';
 export 'src/usecases/myspace/rename_document_interactor.dart';
 export 'src/usecases/search_received_shares/search_received_shares_interactor.dart';
+export 'src/usecases/shared_space/delete_shared_space_member_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

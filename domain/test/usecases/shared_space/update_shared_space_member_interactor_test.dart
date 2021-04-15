@@ -60,7 +60,7 @@ void main() {
           request
       )).thenAnswer((_) async => sharedSpaceMember1);
 
-      final result = await updateSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
+      final result = await updateSharedSpaceMemberInteractor.executeUpdateRole(sharedSpaceId1, request);
       expect(result, Right<Failure, Success>(UpdateSharedSpaceMemberViewState()));
     });
 
@@ -77,7 +77,7 @@ void main() {
           request
       )).thenThrow(exception);
 
-      final result = await updateSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
+      final result = await updateSharedSpaceMemberInteractor.executeUpdateRole(sharedSpaceId1, request);
       expect(result, Left<Failure, Success>(UpdateSharedSpaceMemberFailure(exception)));
     });
   });
