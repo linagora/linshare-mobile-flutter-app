@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -32,20 +32,42 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/sharedspace/shared_space_id.dart';
-import 'package:domain/src/state/success.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class DeleteSharedSpaceMemberInteractor {
-  final SharedSpaceMemberRepository _sharedSpaceMemberRepository;
+import '../../mock/repository/shared_space/mock_shared_space_member_repository.dart';
 
-  DeleteSharedSpaceMemberInteractor(this._sharedSpaceMemberRepository);
+void main() {
+  group('delete_shared_space_member_interactor test', () {
+    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
+    DeleteSharedSpaceMemberInteractor deleteSharedSpaceMemberInteractor;
 
-  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) async {
-    try {
-      await _sharedSpaceMemberRepository.deleteMember(sharedSpaceId, sharedSpaceMemberId);
-      return Right<Failure, Success>(DeleteSharedSpaceMemberViewState());
-    } catch (exception) {
-      return Left<Failure, Success>(DeleteSharedSpaceMemberFailure(exception));
-    }
-  }
+    setUp(() {
+      sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();
+      deleteSharedSpaceMemberInteractor = DeleteSharedSpaceMemberInteractor(sharedSpaceMemberRepository);
+    });
+
+    test('deleteSharedSpaceMemberInteractor should return success state when delete a member successfully', () async {
+      when(sharedSpaceMemberRepository.deleteMember(
+          sharedSpaceId1,
+          sharedMemberId1
+      )).thenAnswer((_) async => sharedSpaceMember1);
+
+      final result = await deleteSharedSpaceMemberInteractor.execute(sharedSpaceId1, sharedMemberId1);
+      expect(result, Right<Failure, Success>(DeleteSharedSpaceMemberViewState()));
+    });
+
+    test('deleteSharedSpaceMemberInteractor should fail when executeDelete fail', () async {
+      final exception = Exception();
+
+      when(sharedSpaceMemberRepository.deleteMember(
+          sharedSpaceId1,
+          sharedMemberId1
+      )).thenThrow(exception);
+
+      final result = await deleteSharedSpaceMemberInteractor.execute(sharedSpaceId1, sharedMemberId1);
+      expect(result, Left<Failure, Success>(DeleteSharedSpaceMemberFailure(exception)));
+    });
+  });
 }
