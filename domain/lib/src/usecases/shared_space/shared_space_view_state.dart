@@ -404,6 +404,23 @@ class UpdateSharedSpaceMemberFailure extends FeatureFailure {
   List<Object> get props => [exception];
 }
 
+class DeleteSharedSpaceMemberViewState extends ViewState {
+
+  DeleteSharedSpaceMemberViewState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class DeleteSharedSpaceMemberFailure extends FeatureFailure {
+  final exception;
+
+  DeleteSharedSpaceMemberFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
 class SharedSpaceRolesViewState extends ViewState {
   final List<SharedSpaceRole> roles;
 
