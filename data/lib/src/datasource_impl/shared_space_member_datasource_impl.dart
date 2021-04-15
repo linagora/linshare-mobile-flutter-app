@@ -93,4 +93,25 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
       });
     });
   }
+
+  @override
+  Future<SharedSpaceMember> deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) {
+    return Future.sync(() async {
+      final sharedSpaceMember = await _linShareHttpClient.deleteSharedSpaceMember(
+          sharedSpaceId,
+          sharedSpaceMemberId);
+      return sharedSpaceMember.toSharedSpaceMember();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw SharedSpaceMemberNotFound();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }

@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,32 +28,28 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/datasource/shared_space_member_datasource.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/sharedspace/shared_space_id.dart';
+import 'package:domain/src/state/success.dart';
 
-class SharedSpaceMemberRepositoryImpl implements SharedSpaceMemberRepository {
-  final SharedSpaceMemberDataSource _sharedSpaceMemberDataSource;
+class DeleteSharedSpaceMemberInteractor {
+  final SharedSpaceMemberRepository _sharedSpaceMemberRepository;
 
-  SharedSpaceMemberRepositoryImpl(this._sharedSpaceMemberDataSource);
+  DeleteSharedSpaceMemberInteractor(this._sharedSpaceMemberRepository);
 
-  @override
-  Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId) {
-    return _sharedSpaceMemberDataSource.getMembers(sharedSpaceId);
-  }
-
-  @override
-  Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request) {
-    return _sharedSpaceMemberDataSource.addMember(sharedSpaceId, request);
-  }
-
-  @override
-  Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request) {
-    return _sharedSpaceMemberDataSource.updateMemberRole(sharedSpaceId, request);
-  }
-
-  @override
-  Future<SharedSpaceMember> deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) {
-    return _sharedSpaceMemberDataSource.deleteMember(sharedSpaceId, sharedSpaceMemberId);
+  Future<Either<Failure, Success>> execute(
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceMemberId sharedSpaceMemberId,
+      DeleteSharedSpaceMemberRequest deleteSharedSpaceMemberRequest) async {
+    try {
+      await _sharedSpaceMemberRepository.deleteMember(
+          sharedSpaceId, sharedSpaceMemberId, deleteSharedSpaceMemberRequest);
+      return Right<Failure, Success>(DeleteSharedSpaceMemberViewState());
+    } catch (exception) {
+      return Left<Failure, Success>(DeleteSharedSpaceMemberFailure(exception));
+    }
   }
 }
