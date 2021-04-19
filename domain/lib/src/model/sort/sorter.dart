@@ -67,7 +67,8 @@ extension SorterExtension on Sorter {
       Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
       Sorter(orderScreen, OrderBy.fileSize, OrderType.descending),
       Sorter(orderScreen, OrderBy.name, OrderType.descending),
-      if (orderScreen == OrderScreen.mySpace) Sorter(orderScreen, OrderBy.shared, OrderType.descending)
+      if (orderScreen == OrderScreen.mySpace) Sorter(orderScreen, OrderBy.shared, OrderType.descending),
+      if (orderScreen == OrderScreen.receivedShares) Sorter(orderScreen, OrderBy.sender, OrderType.descending)
     ];
   }
 }
