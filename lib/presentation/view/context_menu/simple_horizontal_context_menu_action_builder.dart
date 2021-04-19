@@ -43,7 +43,7 @@ class SimpleHorizontalContextMenuActionBuilder extends ContextMenuActionBuilder<
   Widget build() {
     return GestureDetector(
         child: Container(
-          padding: EdgeInsets.only(bottom: 26, left: 26),
+          padding: EdgeInsets.only(top: 20, bottom: 36, left: 26),
             child: Column(
               children: [actionIcon, Text(actionName, style: actionTextStyle())]
             )
