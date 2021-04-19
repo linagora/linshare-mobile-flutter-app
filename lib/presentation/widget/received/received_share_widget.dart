@@ -54,7 +54,10 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/share_contex
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/received_share_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
+import 'package:redux/redux.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 
 class ReceivedShareWidget extends StatefulWidget {
   @override
@@ -129,6 +132,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                         ),
                       ))
                   : SizedBox.shrink()),
+          _buildMenuSorter(),
           Expanded(child: _buildReceivedShareList(context, state)),
           state.selectMode == SelectMode.ACTIVE && state.getAllSelectedReceivedShares().isNotEmpty
               ? MultipleSelectionBarBuilder()
@@ -346,5 +350,18 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
           receivedShare)
        .onActionClick((data) => receivedShareViewModel.onClickPreviewFile(context, receivedShare))
        .build();
+  }
+
+  Widget _buildMenuSorter() {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (context, appState) {
+        return !appState.uiState.isInSearchState()
+            ? OrderByButtonBuilder(context, appState.receivedShareState.sorter)
+                .onOpenOrderMenuAction((currentSorter) => receivedShareViewModel.openPopupMenuSorter(context, currentSorter))
+                .build()
+            : SizedBox.shrink();
+      },
+    );
   }
 }
