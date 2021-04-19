@@ -28,11 +28,26 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-enum OrderBy {
-  modificationDate,
-  creationDate,
-  fileSize,
-  name,
-  shared,
-  sender
+
+import 'package:domain/domain.dart';
+
+extension ListReceivedShare on List<ReceivedShare> {
+  void sortFiles(OrderBy orderBy, OrderType orderType) {
+    sort((file1, file2) {
+      switch (orderBy) {
+        case OrderBy.modificationDate:
+          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
+        case OrderBy.creationDate:
+          return file2.creationDate.compareToSort(file1.creationDate, orderType);
+        case OrderBy.fileSize:
+          return file2.size.compareToSort(file1.size, orderType);
+        case OrderBy.name:
+          return file2.name.compareToSort(file1.name, orderType);
+        case OrderBy.sender:
+          return file2.sender.lastName.getOrElse(() => '').compareToSort(file1.sender.lastName.getOrElse(() => ''), orderType);
+        default:
+          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
+      }
+    });
+  }
 }

@@ -46,6 +46,8 @@ class SortInteractor {
         return Right<Failure, Success>(MySpaceViewState(filesSorted.cast<Document>()));
       } else if (filesSorted is List<WorkGroupNode>) {
         return Right<Failure, Success>(GetChildNodesViewState(filesSorted.cast<WorkGroupNode>()));
+      } else if (filesSorted is List<ReceivedShare>) {
+        return Right<Failure, Success>(GetAllReceivedShareSuccess(filesSorted.cast<ReceivedShare>()));
       } else {
         return Right<Failure, Success>(SortFileSuccess(filesSorted));
       }
@@ -55,6 +57,8 @@ class SortInteractor {
           return Left<Failure, Success>(MySpaceFailure(exception));
         case OrderScreen.sharedSpaceDocument:
           return Left<Failure, Success>(GetChildNodesFailure(exception));
+        case OrderScreen.receivedShares:
+          return Left<Failure, Success>(GetAllReceivedShareFailure(exception));
         default:
           return Left<Failure, Success>(SortFileFailure(exception));
       }
