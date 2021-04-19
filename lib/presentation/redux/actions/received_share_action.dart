@@ -82,3 +82,18 @@ class ReceivedShareSelectAllAction extends ActionOffline {
 class ReceivedShareUnselectAllAction extends ActionOffline {
   ReceivedShareUnselectAllAction();
 }
+
+@immutable
+class ReceivedShareGetSorterAction extends ActionOffline {
+  final Sorter sorter;
+
+  ReceivedShareGetSorterAction(this.sorter);
+}
+
+@immutable
+class ReceivedShareSortReceivedShareAction extends ActionOffline {
+  final List<ReceivedShare> receivedSharesList;
+  final Sorter sorter;
+
+  ReceivedShareSortReceivedShareAction(this.receivedSharesList, this.sorter);
+}
