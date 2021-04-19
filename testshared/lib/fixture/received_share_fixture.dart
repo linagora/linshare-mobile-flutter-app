@@ -71,8 +71,10 @@ final receivedShare2 = ReceivedShare(
     '',
     RECIPIENT_2,
     MediaType.parse('image/png'),
-    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+    GenericUser('user1@linshare.org', lastName: optionOf('Man'), firstName: optionOf('Bat')),
     5,
     289323,
     false
 );
+
+final sorterSender = Sorter(OrderScreen.receivedShares, OrderBy.sender, OrderType.ascending);
