@@ -46,6 +46,8 @@ extension OrderByExtension on OrderBy {
         return AppLocalizations.of(context).name;
       case OrderBy.shared:
         return AppLocalizations.of(context).shared;
+      case OrderBy.sender:
+        return AppLocalizations.of(context).sender;
       default:
         return '';
     }

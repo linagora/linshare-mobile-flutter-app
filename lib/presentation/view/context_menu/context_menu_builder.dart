@@ -75,6 +75,7 @@ class ContextMenuBuilder {
     showModalBottomSheet(
       useRootNavigator: true,
       shape: _shape(),
+      isScrollControlled: true,
       context: _context,
       builder: (BuildContext buildContext) {
         return Container(
@@ -85,11 +86,11 @@ class ContextMenuBuilder {
               areTilesHorizontal
                 ? Row(children: [
                     ..._actionTiles,
-                    _actionTiles.isNotEmpty ? Divider() : SizedBox.shrink()
+                    _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
                   ])
                 : Column(children: [
                     ..._actionTiles,
-                    _actionTiles.isNotEmpty ? Divider() : SizedBox.shrink()
+                    _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
                   ]),
               _footer != null ? Padding(
                 padding: EdgeInsets.only(bottom: 10.0),
