@@ -116,6 +116,16 @@ void sortFilesTest() {
           Sorter.fromOrderScreen(OrderScreen.sharedSpaceDocument));
       expect(result, [workGroupDocument1, workGroupDocument2, workGroupFolder1]);
     });
+
+    test('sortFiles should return success with list received shares has been sorted modification date', () async {
+      await _initDataSource();
+
+      final result = await _sortDataSourceImpl.sortFiles(
+          [receivedShare1, receivedShare2],
+          Sorter.fromOrderScreen(OrderScreen.receivedShares));
+
+      expect(result, [receivedShare2, receivedShare1]);
+    });
   });
 }
 
