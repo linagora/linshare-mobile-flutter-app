@@ -60,7 +60,6 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/ad
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
@@ -231,7 +230,10 @@ class WidgetModule {
         getIt.get<AppNavigation>(),
         getIt.get<CopyMultipleFilesFromReceivedSharesToMySpaceInteractor>(),
         getIt.get<DownloadReceivedSharesInteractor>(),
-        getIt.get<DownloadPreviewReceivedShareInteractor>()
+        getIt.get<DownloadPreviewReceivedShareInteractor>(),
+        getIt<GetSorterInteractor>(),
+        getIt<SaveSorterInteractor>(),
+        getIt<SortInteractor>(),
     ));
   }
 

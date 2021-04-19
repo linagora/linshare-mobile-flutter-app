@@ -1341,6 +1341,13 @@ class AppLocalizations {
       name: 'the_file_could_not_be_renamed',
     );
   }
+
+  String get sender {
+    return Intl.message(
+      'Sender',
+      name: 'sender',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

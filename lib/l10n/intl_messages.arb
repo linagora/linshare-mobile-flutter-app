@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-19T14:54:05.455413",
+  "@@last_modified": "2021-04-19T17:39:58.845365",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -1068,6 +1068,11 @@
   },
   "the_file_could_not_be_renamed": "The file could not be renamed",
   "@the_file_could_not_be_renamed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sender": "Sender",
+  "@sender": {
     "type": "text",
     "placeholders": {}
   }
