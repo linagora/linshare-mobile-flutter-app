@@ -66,7 +66,7 @@ final receivedShare2 = ReceivedShare(
     ShareId('6c0e1f35-89e5-6bc3-a8d4-156ec8074beb'),
     'document.txt',
     DateTime.fromMillisecondsSinceEpoch(1604482138181),
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482139203),
     DateTime.fromMillisecondsSinceEpoch(1604418921982),
     '',
     RECIPIENT_2,
