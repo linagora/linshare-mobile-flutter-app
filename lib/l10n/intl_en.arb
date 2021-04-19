@@ -1060,5 +1060,10 @@
   "@the_file_could_not_be_renamed": {
     "type": "text",
     "placeholders": {}
+  },
+  "sender": "Sender",
+  "@sender": {
+    "type": "text",
+    "placeholders": {}
   }
 }

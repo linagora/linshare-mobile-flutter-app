@@ -50,6 +50,8 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
@@ -62,6 +64,10 @@ class ReceivedShareViewModel extends BaseViewModel {
   final CopyMultipleFilesFromReceivedSharesToMySpaceInteractor _copyMultipleFilesFromReceivedSharesToMySpaceInteractor;
   final DownloadReceivedSharesInteractor _downloadReceivedSharesInteractor;
   final DownloadPreviewReceivedShareInteractor _downloadPreviewReceivedShareInteractor;
+  final GetSorterInteractor _getSorterInteractor;
+  final SaveSorterInteractor _saveSorterInteractor;
+  final SortInteractor _sortInteractor;
+  List<ReceivedShare> _receivedSharesList = [];
 
   ReceivedShareViewModel(
       Store<AppState> store,
@@ -69,7 +75,10 @@ class ReceivedShareViewModel extends BaseViewModel {
       this._appNavigation,
       this._copyMultipleFilesFromReceivedSharesToMySpaceInteractor,
       this._downloadReceivedSharesInteractor,
-      this._downloadPreviewReceivedShareInteractor
+      this._downloadPreviewReceivedShareInteractor,
+      this._getSorterInteractor,
+      this._saveSorterInteractor,
+      this._sortInteractor
   ) : super(store);
 
   void getAllReceivedShare() {
@@ -80,8 +89,17 @@ class ReceivedShareViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartReceivedShareLoadingAction());
       await _getAllReceivedInteractor.execute().then((result) => result.fold(
-              (failure) => store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure))),
-              (success) => store.dispatch(ReceivedShareGetAllReceivedSharesAction(Right(success))))
+              (failure) {
+                store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure)));
+                _receivedSharesList = [];
+                store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
+              },
+              (success) {
+                store.dispatch(ReceivedShareGetAllReceivedSharesAction(Right(success)));
+                _receivedSharesList =
+                  success is GetAllReceivedShareSuccess ? success.receivedShares : [];
+                store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
+              })
       );
     });
   }
@@ -246,6 +264,72 @@ class ReceivedShareViewModel extends BaseViewModel {
     if (openResult.type != open_file.ResultType.done) {
       store.dispatch(ReceivedShareAction(Left(NoReceivedSharePreviewAvailable())));
     }
+  }
+
+  void getSorterAndAllReceivedSharesAction() {
+    store.dispatch(_getSorterAndAllReceivedSharesAction());
+  }
+
+  OnlineThunkAction _getSorterAndAllReceivedSharesAction() {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartReceivedShareLoadingAction());
+
+      await Future.wait([
+        _getSorterInteractor.execute(OrderScreen.receivedShares),
+        _getAllReceivedInteractor.execute()
+      ]).then((response) async {
+        response[0].fold((failure) {
+          store.dispatch(ReceivedShareGetSorterAction(Sorter.fromOrderScreen(OrderScreen.receivedShares)));
+        }, (success) {
+          store.dispatch(ReceivedShareGetSorterAction(success is GetSorterSuccess
+              ? success.sorter
+              : Sorter.fromOrderScreen(OrderScreen.receivedShares)));
+        });
+        response[1].fold((failure) {
+          store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure)));
+          _receivedSharesList = [];
+        }, (success) {
+          store.dispatch(ReceivedShareGetAllReceivedSharesAction(Right(success)));
+          _receivedSharesList =
+              success is GetAllReceivedShareSuccess ? success.receivedShares : [];
+        });
+      });
+
+      store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
+    });
+  }
+
+  ThunkAction<AppState> _sortFilesAction(Sorter sorter) {
+    return (Store<AppState> store) async {
+      await Future.wait([
+        _saveSorterInteractor.execute(sorter),
+        _sortInteractor.execute(_receivedSharesList, sorter)
+      ]).then((response) => response[1].fold((failure) {
+            _receivedSharesList = [];
+            store.dispatch(ReceivedShareSortReceivedShareAction(_receivedSharesList, sorter));
+          }, (success) {
+            _receivedSharesList =
+                success is GetAllReceivedShareSuccess ? success.receivedShares : [];
+            store.dispatch(ReceivedShareSortReceivedShareAction(_receivedSharesList, sorter));
+          }));
+    };
+  }
+
+  void openPopupMenuSorter(BuildContext context, Sorter currentSorter) {
+    ContextMenuBuilder(context)
+        .addHeader(SimpleBottomSheetHeaderBuilder(Key('order_by_menu_header'))
+            .addLabel(AppLocalizations.of(context).order_by)
+            .build())
+        .addTiles(OrderByDialogBottomSheetBuilder(context, currentSorter)
+            .onSelectSorterAction((sorterSelected) => _sortFiles(sorterSelected))
+            .build())
+        .build();
+  }
+
+  void _sortFiles(Sorter sorter) {
+    final newSorter = store.state.receivedShareState.sorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
+    _appNavigation.popBack();
+    store.dispatch(_sortFilesAction(newSorter));
   }
 
   @override
