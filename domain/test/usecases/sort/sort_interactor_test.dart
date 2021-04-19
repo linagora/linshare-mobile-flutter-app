@@ -67,5 +67,15 @@ void main() {
 
       expect(workGroupNodes, [workGroupDocument1, workGroupDocument2, workGroupFolder1]);
     });
+
+    test('sortFiles should return success with received shares has been sorted by sender', () async {
+      when(sortRepository.sortFiles([receivedShare1, receivedShare2], sorterSender)).thenAnswer((_) async => [receivedShare2, receivedShare1]);
+
+      final result = await sortInteractor.execute([receivedShare1, receivedShare2], sorterSender);
+
+      final receivedShares = result.map((success) => (success as GetAllReceivedShareSuccess).receivedShares).getOrElse(() => []);
+
+      expect(receivedShares, [receivedShare2, receivedShare1]);
+    });
   });
 }
