@@ -1452,5 +1452,15 @@
   "@workgroup_name_contain_special_character": {
     "type": "text",
     "placeholders": {}
+  },
+  "sender": "Sender",
+  "@sender": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sender": "Sender",
+  "@sender": {
+    "type": "text",
+    "placeholders": {}
   }
 }
