@@ -57,6 +57,7 @@ import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/re
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
 import 'package:redux/redux.dart';
+import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 
 class ReceivedShareWidget extends StatefulWidget {
@@ -85,69 +86,84 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
     return StoreConnector<AppState, ReceivedShareState>(
       converter: (store) => store.state.receivedShareState,
       builder: (context, state) {
-        return Column(children: [
-          state.selectMode == SelectMode.ACTIVE
-              ? ListTile(
-                  leading: SvgPicture.asset(imagePath.icSelectAll,
-                      width: 28,
-                      height: 28,
-                      fit: BoxFit.fill,
-                      color: state.isAllReceivedSharesSelected()
-                          ? AppColor.unselectedElementColor
-                          : AppColor.primaryColor),
-                  title: Transform(
-                      transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                      child: state.isAllReceivedSharesSelected()
-                          ? Text(AppLocalizations.of(context).unselect_all,
-                              maxLines: 1,
-                              style: TextStyle(
-                                  fontSize: 14, color: AppColor.documentNameItemTextColor))
-                          : Text(
-                              AppLocalizations.of(context).select_all,
-                              maxLines: 1,
-                              style: TextStyle(
-                                  fontSize: 14, color: AppColor.documentNameItemTextColor),
-                            )),
-                  tileColor: AppColor.topBarBackgroundColor,
-                  onTap: () => receivedShareViewModel.toggleSelectAllReceivedShares(),
-                  trailing: TextButton(
-                      onPressed: () => receivedShareViewModel.cancelSelection(),
-                      child: Text(
-                        AppLocalizations.of(context).cancel,
-                        maxLines: 1,
-                        style: TextStyle(fontSize: 14, color: AppColor.primaryColor),
-                      )),
-                )
-              : SizedBox.shrink(),
-          state.viewState.fold(
-              (failure) => SizedBox.shrink(),
-              (success) => (success is LoadingState)
-                  ? Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor),
-                        ),
-                      ))
-                  : SizedBox.shrink()),
-          _buildMenuSorter(),
-          Expanded(child: _buildReceivedShareList(context, state)),
-          state.selectMode == SelectMode.ACTIVE && state.getAllSelectedReceivedShares().isNotEmpty
-              ? MultipleSelectionBarBuilder()
-                  .key(Key('multiple_received_shares_selection_bar'))
-                  .text(AppLocalizations.of(context)
-                      .items(state.getAllSelectedReceivedShares().length))
-                  .actions(_multipleSelectionActions(state.getAllSelectedReceivedShares()))
-                  .build()
-              : SizedBox.shrink()
-        ]);
+        return Scaffold(
+          body: Column(children: [
+            state.selectMode == SelectMode.ACTIVE
+                ? ListTile(
+                    leading: SvgPicture.asset(imagePath.icSelectAll,
+                        width: 28,
+                        height: 28,
+                        fit: BoxFit.fill,
+                        color: state.isAllReceivedSharesSelected()
+                            ? AppColor.unselectedElementColor
+                            : AppColor.primaryColor),
+                    title: Transform(
+                        transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                        child: state.isAllReceivedSharesSelected()
+                            ? Text(AppLocalizations.of(context).unselect_all,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 14, color: AppColor.documentNameItemTextColor))
+                            : Text(
+                                AppLocalizations.of(context).select_all,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 14, color: AppColor.documentNameItemTextColor),
+                              )),
+                    tileColor: AppColor.topBarBackgroundColor,
+                    onTap: () => receivedShareViewModel.toggleSelectAllReceivedShares(),
+                    trailing: TextButton(
+                        onPressed: () => receivedShareViewModel.cancelSelection(),
+                        child: Text(
+                          AppLocalizations.of(context).cancel,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 14, color: AppColor.primaryColor),
+                        )),
+                  )
+                : SizedBox.shrink(),
+            _buildMenuSorter(),
+            state.viewState.fold(
+                (failure) => SizedBox.shrink(),
+                (success) => (success is LoadingState)
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor),
+                          ),
+                        ))
+                    : SizedBox.shrink()),
+            _buildResultCount(),
+            Expanded(child: buildReceivedSharesListBySearchState(context)),
+            state.selectMode == SelectMode.ACTIVE && state.getAllSelectedReceivedShares().isNotEmpty
+                ? MultipleSelectionBarBuilder()
+                    .key(Key('multiple_received_shares_selection_bar'))
+                    .text(AppLocalizations.of(context)
+                        .items(state.getAllSelectedReceivedShares().length))
+                    .actions(_multipleSelectionActions(state.getAllSelectedReceivedShares()))
+                    .build()
+                : SizedBox.shrink()
+          ]),
+          bottomNavigationBar: StoreConnector<AppState, AppState>(
+            converter: (store) => store.state,
+            builder: (context, appState) {
+              if (!appState.uiState.isInSearchState() &&
+                  appState.mySpaceState.selectMode == SelectMode.INACTIVE) {
+                return SearchBottomBarBuilder()
+                    .key(Key('search_bottom_bar'))
+                    .onSearchActionClick(() => receivedShareViewModel.openSearchState())
+                    .build();
+              }
+              return SizedBox.shrink();
+            }),
+        );
       },
     );
   }
 
-  Widget _buildReceivedShareList(BuildContext context, ReceivedShareState state) {
+  Widget _buildNormalReceivedShareList(BuildContext context, ReceivedShareState state) {
     return state.viewState.fold(
         (failure) => RefreshIndicator(
             onRefresh: () async => receivedShareViewModel.getAllReceivedShare(),
@@ -164,6 +180,34 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
             : RefreshIndicator(
                 onRefresh: () async => receivedShareViewModel.getAllReceivedShare(),
                 child: _buildReceivedShareListView(context, state.receivedSharesList, state.selectMode)));
+  }
+
+  Widget buildReceivedSharesListBySearchState(BuildContext context) {
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, appState) {
+        if (appState.uiState.isInSearchState()) {
+          return _buildSearchResultReceivedShareList(appState.receivedShareState);
+        }
+
+        return _buildNormalReceivedShareList(context, appState.receivedShareState);
+      });
+  }
+
+  Widget _buildSearchResultReceivedShareList(ReceivedShareState receivedShareState) {
+    if (receivedShareViewModel.searchQuery.value.isEmpty) {
+      return SizedBox.shrink();
+    } else if (receivedShareState.receivedSharesList.isEmpty) {
+      return _buildNoResultFound();
+    }
+
+    return _buildReceivedShareListView(context, receivedShareState.receivedSharesList, receivedShareState.selectMode);
+  }
+
+  Widget _buildNoResultFound() {
+    return BackgroundWidgetBuilder()
+        .key(Key('search_no_result_found'))
+        .text(AppLocalizations.of(context).no_results_found).build();
   }
 
   Widget _buildReceivedShareListView(
@@ -361,7 +405,34 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                 .onOpenOrderMenuAction((currentSorter) => receivedShareViewModel.openPopupMenuSorter(context, currentSorter))
                 .build()
             : SizedBox.shrink();
-      },
+      });
+  }
+
+  Widget _buildResultCount() {
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, appState) {
+        if (appState.uiState.isInSearchState() && receivedShareViewModel.searchQuery.value.isNotEmpty) {
+          return _buildResultCountRow(appState.receivedShareState.receivedSharesList);
+        }
+        return SizedBox.shrink();
+      });
+  }
+
+  Widget _buildResultCountRow(List<SelectableElement<ReceivedShare>> resultList) {
+    return Container(
+      color: AppColor.topBarBackgroundColor,
+      height: 40.0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context).results_count(resultList.length),
+            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-19T17:39:58.845365",
+  "@@last_modified": "2021-04-21T19:50:56.222902",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -1133,6 +1133,11 @@
   },
   "sender": "Sender",
   "@sender": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search_in_my_received_shares": "Search in Received Shares",
+  "@search_in_my_received_shares": {
     "type": "text",
     "placeholders": {}
   }

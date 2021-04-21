@@ -31,6 +31,7 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -43,9 +44,11 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/file/share_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
@@ -67,7 +70,14 @@ class ReceivedShareViewModel extends BaseViewModel {
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final SortInteractor _sortInteractor;
+
   List<ReceivedShare> _receivedSharesList = [];
+  final SearchReceivedSharesInteractor _searchReceivedSharesInteractor;
+
+  StreamSubscription _storeStreamSubscription;
+
+  SearchQuery _searchQuery = SearchQuery('');
+  SearchQuery get searchQuery  => _searchQuery;
 
   ReceivedShareViewModel(
       Store<AppState> store,
@@ -78,8 +88,52 @@ class ReceivedShareViewModel extends BaseViewModel {
       this._downloadPreviewReceivedShareInteractor,
       this._getSorterInteractor,
       this._saveSorterInteractor,
-      this._sortInteractor
-  ) : super(store);
+      this._sortInteractor,
+      this._searchReceivedSharesInteractor
+  ) : super(store) {
+    _storeStreamSubscription = store.onChange.listen((event) {
+      event.receivedShareState.viewState.fold(
+         (failure) => null,
+         (success) {
+            if (success is SearchReceivedSharesNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
+              _search(success.searchQuery);
+            } else if (success is DisableSearchViewState) {
+              store.dispatch((ReceivedShareSetSearchResultAction(_receivedSharesList)));
+              _searchQuery = SearchQuery('');
+            }
+      });
+    });
+  }
+
+  void _search(SearchQuery searchQuery) {
+    _searchQuery = searchQuery;
+    if (searchQuery.value.isNotEmpty) {
+      store.dispatch(_searchReceivedSharesAction(_receivedSharesList, searchQuery));
+    } else {
+      store.dispatch(ReceivedShareSetSearchResultAction([]));
+    }
+  }
+
+  ThunkAction<AppState> _searchReceivedSharesAction(List<ReceivedShare> receivedSharesList, SearchQuery searchQuery) {
+    return (Store<AppState> store) async {
+      await _searchReceivedSharesInteractor.execute(receivedSharesList, searchQuery).then((result) => result.fold(
+              (failure) {
+                if (_isInSearchState()) {
+                  store.dispatch(ReceivedShareSetSearchResultAction([]));
+                }
+              },
+              (success) {
+                if (_isInSearchState()) {
+                  store.dispatch(ReceivedShareSetSearchResultAction(success is SearchReceivedSharesSuccess ? success.receivedSharesList : []));
+                }
+              })
+      );
+    };
+  }
+
+  bool _isInSearchState() {
+    return store.state.uiState.isInSearchState();
+  }
 
   void getAllReceivedShare() {
     store.dispatch(_getAllReceivedShareAction());
@@ -92,13 +146,10 @@ class ReceivedShareViewModel extends BaseViewModel {
               (failure) {
                 store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure)));
                 _receivedSharesList = [];
-                store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
               },
               (success) {
                 store.dispatch(ReceivedShareGetAllReceivedSharesAction(Right(success)));
-                _receivedSharesList =
-                  success is GetAllReceivedShareSuccess ? success.receivedShares : [];
-                store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
+                _receivedSharesList = success is GetAllReceivedShareSuccess ? success.receivedShares : [];
               })
       );
     });
@@ -332,9 +383,15 @@ class ReceivedShareViewModel extends BaseViewModel {
     store.dispatch(_sortFilesAction(newSorter));
   }
 
+  void openSearchState() {
+    store.dispatch(EnableSearchStateAction(SearchDestination.receivedShares));
+    store.dispatch((ReceivedShareSetSearchResultAction([])));
+  }
+
   @override
   void onDisposed() {
     cancelSelection();
     super.onDisposed();
+    _storeStreamSubscription.cancel();
   }
 }

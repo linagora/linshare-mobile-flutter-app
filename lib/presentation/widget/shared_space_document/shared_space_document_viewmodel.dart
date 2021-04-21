@@ -369,7 +369,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   }
 
   void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.SHARED_SPACE));
+    store.dispatch(EnableSearchStateAction(SearchDestination.sharedSpace));
     clearWorkGroupNodeListAction();
   }
 
