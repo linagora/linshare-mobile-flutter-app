@@ -73,7 +73,7 @@ class SearchState {
   SearchState(this.searchStatus, this.searchDestination);
 
   factory SearchState.initial() {
-    return SearchState(SearchStatus.INACTIVE, SearchDestination.MY_SPACE);
+    return SearchState(SearchStatus.INACTIVE, SearchDestination.mySpace);
   }
 
   SearchState newSearchQuery(SearchQuery searchQuery) {
@@ -94,7 +94,8 @@ enum SearchStatus {
 }
 
 enum SearchDestination {
-  MY_SPACE,
-  SHARED_SPACE,
-  ALL_SHARED_SPACES
+  mySpace,
+  sharedSpace,
+  allSharedSpaces,
+  receivedShares
 }

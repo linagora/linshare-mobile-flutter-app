@@ -52,5 +52,7 @@ final receivedSharesReducer = combineReducers<ReceivedShareState>([
   TypedReducer<ReceivedShareState, ReceivedShareGetSorterAction>((ReceivedShareState state, ReceivedShareGetSorterAction action) =>
       state.setSorter(newSorter: action.sorter)),
   TypedReducer<ReceivedShareState, ReceivedShareSortReceivedShareAction>((ReceivedShareState state, ReceivedShareSortReceivedShareAction action) =>
-      state.setReceivedSharesWithSorter(newReceivedShareList: action.receivedSharesList, newSorter: action.sorter))
+      state.setReceivedSharesWithSorter(newReceivedShareList: action.receivedSharesList, newSorter: action.sorter)),
+  TypedReducer<ReceivedShareState, ReceivedShareSetSearchResultAction>((ReceivedShareState state, ReceivedShareSetSearchResultAction action) =>
+      state.setReceivedShareList(action.receivedSharesList)),
 ]);

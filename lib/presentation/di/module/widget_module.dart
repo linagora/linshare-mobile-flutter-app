@@ -234,6 +234,7 @@ class WidgetModule {
         getIt<GetSorterInteractor>(),
         getIt<SaveSorterInteractor>(),
         getIt<SortInteractor>(),
+        getIt.get<SearchReceivedSharesInteractor>()
     ));
   }
 
