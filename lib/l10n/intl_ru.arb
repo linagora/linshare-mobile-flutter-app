@@ -1065,5 +1065,10 @@
   "@sender": {
     "type": "text",
     "placeholders": {}
+  },
+  "search_in_my_received_shares": "Search in Received Shares",
+  "@search_in_my_received_shares": {
+    "type": "text",
+    "placeholders": {}
   }
 }
