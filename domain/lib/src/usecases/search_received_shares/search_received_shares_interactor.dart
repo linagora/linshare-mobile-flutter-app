@@ -30,43 +30,22 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
-import 'package:testshared/testshared.dart';
 
-void main() {
-  group('search_work_group_nodes_interactor_test', () {
-    SearchWorkGroupNodeInteractor searchWorkGroupNodeInteractor;
+class SearchReceivedSharesInteractor {
 
-    setUp(() {
-      searchWorkGroupNodeInteractor = SearchWorkGroupNodeInteractor();
-    });
+  Future<Either<Failure, Success>> execute(List<ReceivedShare> receivedShares, SearchQuery searchQuery) async {
+    try {
+      final resultList = receivedShares
+          .where((element) => element.name
+              .toLowerCase()
+              .contains(searchQuery.value.toLowerCase()))
+          .toList();
 
-    test('search workGroupNodes should return success with results', () async {
-      final state = await searchWorkGroupNodeInteractor.execute([workGroupDocument1, workGroupDocument2], SearchQuery('Workgroup Node 1'));
-      state.fold(
-        (failure) => null,
-        (success) {
-          expect(success, isA<SearchWorkGroupNodeSuccess>());
-          expect([workGroupDocument1], (success as SearchWorkGroupNodeSuccess).workGroupNodesList);
-        });
-    });
-
-    test('search workGroupNodes should return success with no result found', () async {
-      final state = await searchWorkGroupNodeInteractor.execute([workGroupDocument1, workGroupDocument2], SearchQuery('Super Dat'));
-      state.fold(
-          (failure) => null,
-          (success) {
-          expect(success, isA<SearchWorkGroupNodeSuccess>());
-          expect([], (success as SearchWorkGroupNodeSuccess).workGroupNodesList);
-      });
-    });
-
-    test('search workGroupNodes should return failure', () async {
-      final state = await searchWorkGroupNodeInteractor.execute(null, SearchQuery('Severine'));
-      state.fold(
-        (failure) => expect(failure, isA<SearchWorkGroupNodeFailure>()),
-        (success) => null);
-    });
-  });
+      return Right<Failure, Success>(SearchReceivedSharesSuccess(resultList));
+    } catch (exception) {
+      return Left<Failure, Success>(SearchReceivedSharesFailure(exception));
+    }
+  }
 }
