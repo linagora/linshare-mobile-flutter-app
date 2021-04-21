@@ -31,42 +31,36 @@
 //
 
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
-import 'package:testshared/testshared.dart';
 
-void main() {
-  group('search_work_group_nodes_interactor_test', () {
-    SearchWorkGroupNodeInteractor searchWorkGroupNodeInteractor;
+class SearchReceivedSharesSuccess extends ViewState {
+  final List<ReceivedShare> receivedSharesList;
 
-    setUp(() {
-      searchWorkGroupNodeInteractor = SearchWorkGroupNodeInteractor();
-    });
+  SearchReceivedSharesSuccess(this.receivedSharesList);
 
-    test('search workGroupNodes should return success with results', () async {
-      final state = await searchWorkGroupNodeInteractor.execute([workGroupDocument1, workGroupDocument2], SearchQuery('Workgroup Node 1'));
-      state.fold(
-        (failure) => null,
-        (success) {
-          expect(success, isA<SearchWorkGroupNodeSuccess>());
-          expect([workGroupDocument1], (success as SearchWorkGroupNodeSuccess).workGroupNodesList);
-        });
-    });
+  @override
+  List<Object> get props => [receivedSharesList];
+}
 
-    test('search workGroupNodes should return success with no result found', () async {
-      final state = await searchWorkGroupNodeInteractor.execute([workGroupDocument1, workGroupDocument2], SearchQuery('Super Dat'));
-      state.fold(
-          (failure) => null,
-          (success) {
-          expect(success, isA<SearchWorkGroupNodeSuccess>());
-          expect([], (success as SearchWorkGroupNodeSuccess).workGroupNodesList);
-      });
-    });
+class SearchReceivedSharesFailure extends FeatureFailure {
+  final exception;
 
-    test('search workGroupNodes should return failure', () async {
-      final state = await searchWorkGroupNodeInteractor.execute(null, SearchQuery('Severine'));
-      state.fold(
-        (failure) => expect(failure, isA<SearchWorkGroupNodeFailure>()),
-        (success) => null);
-    });
-  });
+  SearchReceivedSharesFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class SearchReceivedSharesNewQuery extends ViewState {
+  final SearchQuery searchQuery;
+
+  SearchReceivedSharesNewQuery(this.searchQuery);
+
+  @override
+  List<Object> get props => [searchQuery];
+}
+
+class DisableReceivedSharesSearchViewState extends ViewState {
+
+  @override
+  List<Object> get props => [];
 }

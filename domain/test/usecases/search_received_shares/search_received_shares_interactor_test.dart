@@ -35,37 +35,37 @@ import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
 void main() {
-  group('search_work_group_nodes_interactor_test', () {
-    SearchWorkGroupNodeInteractor searchWorkGroupNodeInteractor;
+  group('search_received_shares_interactor_test', () {
+    SearchReceivedSharesInteractor searchReceivedSharesInteractor;
 
     setUp(() {
-      searchWorkGroupNodeInteractor = SearchWorkGroupNodeInteractor();
+      searchReceivedSharesInteractor = SearchReceivedSharesInteractor();
     });
 
-    test('search workGroupNodes should return success with results', () async {
-      final state = await searchWorkGroupNodeInteractor.execute([workGroupDocument1, workGroupDocument2], SearchQuery('Workgroup Node 1'));
+    test('search received shares should return success with results', () async {
+      final state = await searchReceivedSharesInteractor.execute([receivedShare1, receivedShare2], SearchQuery('pizza'));
       state.fold(
         (failure) => null,
         (success) {
-          expect(success, isA<SearchWorkGroupNodeSuccess>());
-          expect([workGroupDocument1], (success as SearchWorkGroupNodeSuccess).workGroupNodesList);
+          expect(success, isA<SearchReceivedSharesSuccess>());
+          expect([receivedShare1], (success as SearchReceivedSharesSuccess).receivedSharesList);
         });
     });
 
-    test('search workGroupNodes should return success with no result found', () async {
-      final state = await searchWorkGroupNodeInteractor.execute([workGroupDocument1, workGroupDocument2], SearchQuery('Super Dat'));
+    test('search received shares should return success with no result found', () async {
+      final state = await searchReceivedSharesInteractor.execute([receivedShare1, receivedShare2], SearchQuery('Super Dat'));
       state.fold(
           (failure) => null,
           (success) {
-          expect(success, isA<SearchWorkGroupNodeSuccess>());
-          expect([], (success as SearchWorkGroupNodeSuccess).workGroupNodesList);
+          expect(success, isA<SearchReceivedSharesSuccess>());
+          expect([], (success as SearchReceivedSharesSuccess).receivedSharesList);
       });
     });
 
-    test('search workGroupNodes should return failure', () async {
-      final state = await searchWorkGroupNodeInteractor.execute(null, SearchQuery('Severine'));
+    test('search received shares should return failure', () async {
+      final state = await searchReceivedSharesInteractor.execute(null, SearchQuery('Baron Nashor'));
       state.fold(
-        (failure) => expect(failure, isA<SearchWorkGroupNodeFailure>()),
+        (failure) => expect(failure, isA<SearchReceivedSharesFailure>()),
         (success) => null);
     });
   });
