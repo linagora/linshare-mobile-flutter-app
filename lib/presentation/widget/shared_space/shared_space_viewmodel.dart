@@ -124,7 +124,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   }
 
   void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.ALL_SHARED_SPACES));
+    store.dispatch(EnableSearchStateAction(SearchDestination.allSharedSpaces));
     store.dispatch((SharedSpaceSetSearchResultAction([])));
   }
 
