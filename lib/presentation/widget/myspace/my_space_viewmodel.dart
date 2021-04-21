@@ -130,7 +130,7 @@ class MySpaceViewModel extends BaseViewModel {
   }
 
   void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.MY_SPACE));
+    store.dispatch(EnableSearchStateAction(SearchDestination.mySpace));
     store.dispatch((MySpaceSetSearchResultAction([])));
   }
 

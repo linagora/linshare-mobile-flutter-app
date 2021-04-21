@@ -38,6 +38,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/account_action.d
 import 'package:linshare_flutter_app/presentation/redux/actions/functionality_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
@@ -133,26 +134,32 @@ class HomeViewModel extends BaseViewModel {
 
   void cancelSearchState() {
     store.dispatch(DisableSearchStateAction());
-    if (store.state.uiState.searchState.searchDestination == SearchDestination.MY_SPACE) {
+    if (store.state.uiState.searchState.searchDestination == SearchDestination.mySpace) {
       store.dispatch(MySpaceAction(Right(DisableSearchViewState())));
       store.dispatch(CleanMySpaceStateAction());
-    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.SHARED_SPACE ||
-        store.state.uiState.searchState.searchDestination == SearchDestination.ALL_SHARED_SPACES) {
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.sharedSpace ||
+        store.state.uiState.searchState.searchDestination == SearchDestination.allSharedSpaces) {
       store.dispatch(SharedSpaceAction(Right(DisableSearchViewState())));
       store.dispatch(CleanSharedSpaceStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.receivedShares) {
+      store.dispatch(ReceivedShareAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanReceivedShareStateAction());
     }
   }
 
   void search(String text) {
-    if (store.state.uiState.searchState.searchDestination == SearchDestination.MY_SPACE) {
+    if (store.state.uiState.searchState.searchDestination == SearchDestination.mySpace) {
       store.dispatch(MySpaceAction(Right(SearchDocumentNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanMySpaceStateAction());
-    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.SHARED_SPACE) {
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.sharedSpace) {
       store.dispatch(SharedSpaceAction(Right(SearchWorkGroupNodeNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanSharedSpaceStateAction());
-    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.ALL_SHARED_SPACES) {
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.allSharedSpaces) {
       store.dispatch(SharedSpaceAction(Right(SearchSharedSpaceNodeNestedNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanSharedSpaceStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.receivedShares) {
+      store.dispatch(ReceivedShareAction(Right(SearchReceivedSharesNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanReceivedShareStateAction());
     }
   }
 
