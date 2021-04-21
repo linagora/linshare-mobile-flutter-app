@@ -1412,6 +1412,13 @@ class AppLocalizations {
       name: 'sender',
     );
   }
+
+  String get search_in_my_received_shares {
+    return Intl.message(
+      'Search in Received Shares',
+      name: 'search_in_my_received_shares',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

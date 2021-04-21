@@ -59,7 +59,7 @@ class ReceivedShareState extends LinShareState with EquatableMixin {
     final selectedElements = receivedSharesList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
     return ReceivedShareState(
-      viewState,
+      viewState ?? this.viewState,
       {for (var receivedShare in newReceivedShareList)
           if (selectedElements.contains(receivedShare))
             SelectableElement<ReceivedShare>(receivedShare, SelectMode.ACTIVE)

@@ -97,3 +97,9 @@ class ReceivedShareSortReceivedShareAction extends ActionOffline {
 
   ReceivedShareSortReceivedShareAction(this.receivedSharesList, this.sorter);
 }
+
+class ReceivedShareSetSearchResultAction extends ActionOffline {
+  final List<ReceivedShare> receivedSharesList;
+
+  ReceivedShareSetSearchResultAction(this.receivedSharesList);
+}
