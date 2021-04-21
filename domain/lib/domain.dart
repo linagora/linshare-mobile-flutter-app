@@ -41,6 +41,7 @@ export 'src/usecases/contact/get_device_contact_suggestions_view_state.dart';
 export 'src/usecases/shared_space/download_preview_work_group_document_view_state.dart';
 export 'src/usecases/received/download_preview_received_share_view_state.dart';
 export 'src/usecases/shared_space_activities/shared_space_activities_view_state.dart';
+export 'src/usecases/search_received_shares/search_received_shares_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -221,6 +222,7 @@ export 'src/usecases/shared_space/add_shared_space_member_interactor.dart';
 export 'src/usecases/shared_space/update_shared_space_member_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_roles_interactor.dart';
 export 'src/usecases/myspace/rename_document_interactor.dart';
+export 'src/usecases/search_received_shares/search_received_shares_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
