@@ -256,6 +256,7 @@ class AppModule {
     getIt.registerFactory(() => RenameDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => SearchReceivedSharesInteractor());
     getIt.registerFactory(() => DeleteSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
+    getIt.registerFactory(() => GetDocumentInteractor(getIt<DocumentRepository>()));
   }
 
   void _provideSharePreference() {
