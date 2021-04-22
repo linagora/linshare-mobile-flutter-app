@@ -39,6 +39,7 @@ import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/model/generic_user_dto.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:data/src/network/model/response/document_response.dart';
+import 'package:data/src/network/model/response/document_details_response.dart';
 import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
 import 'package:data/src/network/model/share/share_dto.dart';
 import 'package:data/src/network/model/share/share_id_dto.dart';
@@ -196,6 +197,21 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     return Future.sync(() async {
       final documentResponse = await _linShareHttpClient.renameDocument(documentId, renameDocumentRequest);
       return documentResponse.toDocument();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw DocumentNotFound();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<DocumentDetails> getDocument(DocumentId documentId) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getDocument(documentId)).toDocumentDetails();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response.statusCode == 404) {
