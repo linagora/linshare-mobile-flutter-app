@@ -28,39 +28,26 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:core';
-
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
+import 'package:domain/src/repository/document/document_repository.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
-abstract class DocumentRepository {
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+class GetDocumentInteractor {
+  final DocumentRepository _documentRepository;
 
-  Future<List<Document>> getAll();
+  GetDocumentInteractor(this._documentRepository);
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
-
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
-
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<Document> remove(DocumentId documentId);
-
-  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest);
-
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
-
-  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<DocumentDetails> getDocument(DocumentId documentId);
+  Future<Either<Failure, Success>> execute(DocumentId documentId) async {
+    try {
+      final document = await _documentRepository.getDocument(documentId);
+      return Right<Failure, Success>(GetDocumentViewState(document));
+    } catch (exception) {
+      return Left<Failure, Success>(GetDocumentFailure(exception));
+    }
+  }
 }
