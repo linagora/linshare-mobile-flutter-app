@@ -29,22 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
-  static const String currentUploads = 'current_uploads';
-  static const String destinationPicker = 'destination_picker';
-  static const String account_details = 'account_details';
-  static const String received_shares = 'received_shares';
-  static const String sharedSpaceDetails = 'shared_space_details';
-  static const String authentication = 'authentication';
-  static const String enter_otp = 'enter_otp';
-  static const String second_factor_authentication = 'second_factor_authentication';
-  static const String addSharedSpaceMember = 'add_shared_space_member';
-  static const String documentDetails = 'document_details';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
+
+class DocumentDetailsArguments extends RouterArguments {
+  final Document document;
+
+  DocumentDetailsArguments(this.document);
 }

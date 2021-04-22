@@ -29,22 +29,43 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
-  static const String currentUploads = 'current_uploads';
-  static const String destinationPicker = 'destination_picker';
-  static const String account_details = 'account_details';
-  static const String received_shares = 'received_shares';
-  static const String sharedSpaceDetails = 'shared_space_details';
-  static const String authentication = 'authentication';
-  static const String enter_otp = 'enter_otp';
-  static const String second_factor_authentication = 'second_factor_authentication';
-  static const String addSharedSpaceMember = 'add_shared_space_member';
-  static const String documentDetails = 'document_details';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/document_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:redux/redux.dart';
+
+import 'document_details_arguments.dart';
+
+class DocumentDetailsViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
+  final GetDocumentInteractor _getDocumentInteractor;
+
+  DocumentDetailsViewModel(
+      Store<AppState> store,
+      this._appNavigation,
+      this._getDocumentInteractor
+  ) : super(store);
+
+  void initState(DocumentDetailsArguments arguments) {
+    store.dispatch(_getDocumentAction(arguments.document.documentId));
+  }
+
+  void backToMySpace() {
+    _appNavigation.popBack();
+  }
+
+  OnlineThunkAction _getDocumentAction(DocumentId documentId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(DocumentDetailsGetDocumentAction(await _getDocumentInteractor.execute(documentId)));
+    });
+  }
+
+  @override
+  void onDisposed() {
+    store.dispatch(CleanDocumentDetailsStateAction());
+    super.onDisposed();
+  }
 }
