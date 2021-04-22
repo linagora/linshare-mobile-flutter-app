@@ -52,6 +52,8 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_red
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 
+import 'document_details_reducer.dart';
+
 AppState appStateReducer(AppState state, action) {
   if (canExecuteAction(state, action)) {
     return AppState(
@@ -71,7 +73,8 @@ AppState appStateReducer(AppState state, action) {
         sharedSpaceDetailsState: sharedSpaceDetailsReducer(state.sharedSpaceDetailsState, action),
         addSharedSpaceMembersState: addSharedSpaceMembersReducer(state.addSharedSpaceMembersState, action),
         updateSharedSpaceMembersState: updateSharedSpaceMembersReducer(state.updateSharedSpaceMembersState, action),
-        deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action));
+        deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action),
+        documentDetailsState: documentDetailsReducer(state.documentDetailsState, action));
   }
   return AppState(
       uiState: state.uiState,
@@ -92,7 +95,8 @@ AppState appStateReducer(AppState state, action) {
       sharedSpaceDetailsState: state.sharedSpaceDetailsState,
       addSharedSpaceMembersState: state.addSharedSpaceMembersState,
       updateSharedSpaceMembersState: state.updateSharedSpaceMembersState,
-      deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState);
+      deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState,
+      documentDetailsState: state.documentDetailsState);
 }
 
 bool canExecuteAction(AppState state, action) {

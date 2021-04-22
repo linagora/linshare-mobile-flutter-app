@@ -1480,5 +1480,17 @@
   "@user_is_successfully_removed": {
     "type": "text",
     "placeholders": {}
+  },
+  "expiration": "Expiration",
+  "@expiration": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_with": "{nbContacts,plural, =0{Shared with: {nbContacts} contact}=1{Shared with: {nbContacts} contact}other{Shared with: {nbContacts} contacts}}",
+  "@shared_with": {
+    "type": "text",
+    "placeholders": {
+      "nbContacts": {}
+    }
   }
 }

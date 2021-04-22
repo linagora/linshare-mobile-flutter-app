@@ -54,6 +54,8 @@ import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_w
 import 'package:linshare_flutter_app/presentation/widget/initialize_get_it/initialize_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/myspace/document_details/document_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/myspace/document_details/document_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
@@ -274,6 +276,15 @@ class WidgetModule {
           getIt.get<GetAllSharedSpaceMembersInteractor>(),
           getIt.get<DeleteSharedSpaceMemberInteractor>(),
         ));
+  }
+
+  void _provideDocumentDetailsComponent() {
+    getIt.registerFactory(() => DocumentDetailsWidget());
+    getIt.registerFactory(() => DocumentDetailsViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetDocumentInteractor>(),
+    ));
   }
 
   void _provideAuthenticationWidgetComponent() {
