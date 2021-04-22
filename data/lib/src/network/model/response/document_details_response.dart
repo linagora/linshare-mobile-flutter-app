@@ -28,28 +28,90 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:core';
-
-import 'package:dio/dio.dart';
+import 'package:data/src/network/model/converter/data_from_json_converter.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/share/document_details_received_share_dto.dart';
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-abstract class DocumentDataSource {
-  Future<List<Document>> getAll();
+import 'document_response.dart';
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
+part 'document_details_response.g.dart';
 
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
+@JsonSerializable()
+@DatetimeConverter()
+class DocumentDetailsResponse extends DocumentResponse {
+  DocumentDetailsResponse(
+    documentId,
+    description,
+    creationDate,
+    modificationDate,
+    expirationDate,
+    ciphered,
+    name,
+    size,
+    sha256sum,
+    hasThumbnail,
+    shared,
+    mediaType,
+    this.shares
+  ) : super(
+    documentId,
+    description,
+    creationDate,
+    modificationDate,
+    expirationDate,
+    ciphered,
+    name,
+    size,
+    sha256sum,
+    hasThumbnail,
+    shared,
+    mediaType
+  );
 
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+  final List<DocumentDetailsReceivedShareDto> shares;
 
-  Future<Document> remove(DocumentId documentId);
+  @override
+  factory DocumentDetailsResponse.fromJson(Map<String, dynamic> json) => _$DocumentDetailsResponseFromJson(json);
 
-  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest);
+  @override
+  Map<String, dynamic> toJson() => _$DocumentDetailsResponseToJson(this);
 
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
+  @override
+  List<Object> get props => [
+    documentId,
+    description,
+    creationDate,
+    modificationDate,
+    expirationDate,
+    ciphered,
+    name,
+    size,
+    sha256sum,
+    hasThumbnail,
+    shared,
+    shares
+  ];
+}
 
-  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<DocumentDetails> getDocument(DocumentId documentId);
+extension DocumentDetailsResponseExtension on DocumentDetailsResponse {
+  DocumentDetails toDocumentDetails() {
+    return DocumentDetails(
+        documentId,
+        description,
+        creationDate,
+        modificationDate,
+        expirationDate,
+        ciphered,
+        name,
+        size,
+        sha256sum,
+        hasThumbnail,
+        shared,
+        mediaType,
+        shares.isNotEmpty ? shares.map((share) => share.toDocumentDetailsReceivedShare()).toList() : []);
+  }
 }
