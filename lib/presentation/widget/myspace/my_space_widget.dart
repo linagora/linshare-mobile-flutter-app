@@ -409,8 +409,18 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       _shareAction([document]),
       _copyToWorkGroupAction(context, [document]),
       _previewDocumentAction(document),
-      _renameDocumentAction(context, document)
+      _renameDocumentAction(context, document),
+      _detailsAction(context, document)
     ];
+  }
+
+  Widget _detailsAction(BuildContext context, Document document) {
+    return DocumentContextMenuTileBuilder(
+          Key('details_context_menu_action'),
+          SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).details, document)
+      .onActionClick((data) => mySpaceViewModel.goToDocumentDetails(data))
+      .build();
   }
 
   Widget _renameDocumentAction(BuildContext context, Document document) {

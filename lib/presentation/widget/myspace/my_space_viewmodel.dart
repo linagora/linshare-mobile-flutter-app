@@ -74,6 +74,8 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
 
+import 'document_details/document_details_arguments.dart';
+
 class MySpaceViewModel extends BaseViewModel {
   final LocalFilePicker _localFilePicker;
   final AppNavigation _appNavigation;
@@ -316,6 +318,14 @@ class MySpaceViewModel extends BaseViewModel {
             ),
           ))
         .show(context);
+  }
+
+  void goToDocumentDetails(Document document) {
+    _appNavigation.popBack();
+    _appNavigation.push(
+      RoutePaths.documentDetails,
+      arguments: DocumentDetailsArguments(document),
+    );
   }
 
   OnlineThunkAction _renameWorkGroupNodeAction(BuildContext context, String newName, Document document) {
