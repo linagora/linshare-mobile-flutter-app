@@ -42,13 +42,13 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_deta
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/helper/date_format_helper.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entry_user_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
 import 'shared_space_details_viewmodel.dart';
 
@@ -180,9 +180,9 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
         Column(
           children: [
             _sharedSpaceInformationTile(AppLocalizations.of(context).modified,
-                workGroupDetailsDateFormat.format(state.sharedSpace.modificationDate.toLocal())),
+                state.sharedSpace.modificationDate.getMMMddyyyyFormatString()),
             _sharedSpaceInformationTile(AppLocalizations.of(context).created,
-                workGroupDetailsDateFormat.format(state.sharedSpace.creationDate.toLocal())),
+                state.sharedSpace.creationDate.getMMMddyyyyFormatString()),
             _sharedSpaceInformationTile(
                 AppLocalizations.of(context).my_rights,
                 toBeginningOfSentenceCase(

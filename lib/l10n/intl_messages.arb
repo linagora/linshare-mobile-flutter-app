@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-23T10:33:21.389891",
+  "@@last_modified": "2021-04-22T19:24:17.499296",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -1098,5 +1098,17 @@
   "@user_is_successfully_removed": {
     "type": "text",
     "placeholders": {}
+  },
+  "expiration": "Expiration",
+  "@expiration": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_with": "{nbContacts,plural, =0{Shared with: {nbContacts} contact}=1{Shared with: {nbContacts} contact}other{Shared with: {nbContacts} contacts}}",
+  "@shared_with": {
+    "type": "text",
+    "placeholders": {
+      "nbContacts": {}
+    }
   }
 }
