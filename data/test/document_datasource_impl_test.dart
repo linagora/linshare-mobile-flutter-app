@@ -46,6 +46,7 @@ void main() {
   shareDocumentTest();
   removeDocumentTest();
   renameDocumentTest();
+  getDocumentTest();
 }
 
 void getAllDocumentTest() {
@@ -329,6 +330,44 @@ void renameDocumentTest() {
           .thenThrow(error);
 
       await _documentDataSourceImpl.rename(document1.documentId, RenameDocumentRequest(document1.name))
+          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+    });
+  });
+}
+
+void getDocumentTest() {
+  group('get document test', () {
+    MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    DocumentDataSourceImpl _documentDataSourceImpl;
+    MockLinShareDownloadManager _linShareDownloadManager;
+
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _documentDataSourceImpl = DocumentDataSourceImpl(
+          _linShareHttpClient,
+          _remoteExceptionThrower,
+          _linShareDownloadManager);
+    });
+
+    test('get document should return success with valid data', () async {
+      when(_linShareHttpClient.getDocument(documentDetailsResponse1.documentId))
+          .thenAnswer((_) async => documentDetailsResponse1);
+
+      final result = await _documentDataSourceImpl.getDocument(documentDetailsResponse1.documentId);
+      expect(result, documentDetails1);
+    });
+
+    test('get document should throw DataNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+      when(_linShareHttpClient.getDocument(documentDetailsResponse1.documentId))
+          .thenThrow(error);
+
+      await _documentDataSourceImpl.getDocument(documentDetailsResponse1.documentId)
           .catchError((error) => expect(error, isA<DocumentNotFound>()));
     });
   });

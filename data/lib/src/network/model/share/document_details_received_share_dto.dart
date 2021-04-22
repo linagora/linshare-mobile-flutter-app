@@ -28,28 +28,60 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:core';
-
-import 'package:dio/dio.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/received_share_id_dto_converter.dart';
+import 'package:data/src/network/model/generic_user_dto.dart';
+import 'package:data/src/network/model/share/received_share_id_dto.dart';
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 
-abstract class DocumentDataSource {
-  Future<List<Document>> getAll();
+import 'package:json_annotation/json_annotation.dart';
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
+part 'document_details_received_share_dto.g.dart';
 
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
+@JsonSerializable()
+@DatetimeConverter()
+@ReceivedShareIdDtoConverter()
+class DocumentDetailsReceivedShareDto {
+  @JsonKey(name: Attribute.uuid)
+  final ReceivedShareIdDto shareId;
+  final String name;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final DateTime expirationDate;
+  final int downloaded;
+  final String description;
+  final GenericUserDto recipient;
 
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+  DocumentDetailsReceivedShareDto(
+    this.shareId,
+    this.name,
+    this.creationDate,
+    this.modificationDate,
+    this.expirationDate,
+    this.downloaded,
+    this.description,
+    this.recipient,
+  );
 
-  Future<Document> remove(DocumentId documentId);
+  factory DocumentDetailsReceivedShareDto.fromJson(Map<String, dynamic> json) => _$DocumentDetailsReceivedShareDtoFromJson(json);
 
-  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest);
+  Map<String, dynamic> toJson() => _$DocumentDetailsReceivedShareDtoToJson(this);
+}
 
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
-
-  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<DocumentDetails> getDocument(DocumentId documentId);
+extension DocumentDetailsReceivedShareDtoExtension on DocumentDetailsReceivedShareDto {
+  DocumentDetailsReceivedShare toDocumentDetailsReceivedShare() {
+    return DocumentDetailsReceivedShare(
+      ShareId(shareId.uuid),
+      name,
+      creationDate,
+      modificationDate,
+      expirationDate,
+      description,
+      recipient != null ? recipient.toGenericUser() : null,
+      downloaded,
+    );
+  }
 }

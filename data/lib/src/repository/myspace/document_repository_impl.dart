@@ -91,4 +91,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
   Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest) {
     return _documentDataSource.rename(documentId, renameDocumentRequest);
   }
+
+  @override
+  Future<DocumentDetails> getDocument(DocumentId documentId) {
+    return _documentDataSource.getDocument(documentId);
+  }
 }
