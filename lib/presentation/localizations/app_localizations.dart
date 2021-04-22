@@ -1355,6 +1355,7 @@ class AppLocalizations {
       name: 'search_in_my_received_shares',
     );
   }
+
   String are_you_sure_you_want_to_delete_member(String memberName, String workspaceName) {
     return Intl.message(
       'Are you sure you want to delete $memberName from $workspaceName?',
@@ -1377,6 +1378,23 @@ class AppLocalizations {
     );
   }
 
+  String get expiration {
+    return Intl.message(
+      'Expiration',
+      name: 'expiration',
+    );
+  }
+
+  String shared_with(int nbContacts) {
+    return Intl.message(
+      '''${Intl.plural(nbContacts,
+          zero: 'Shared with: $nbContacts contact',
+          one: 'Shared with: $nbContacts contact',
+          other: 'Shared with: $nbContacts contacts')}''',
+      name: 'shared_with',
+      args: [nbContacts],
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
