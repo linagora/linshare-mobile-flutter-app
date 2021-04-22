@@ -149,6 +149,80 @@ final responseJsonDocument1 = {
   'type': 'image/png'
 };
 
+final documentDetails1 = DocumentDetails(
+    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),
+    'description 1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    false,
+    'document 1',
+    189366,
+    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995c',
+    true,
+    0,
+    MediaType.parse('image/png'),
+    [
+      DocumentDetailsReceivedShare(
+        ShareId('6c0e1f35-89e5-432e-a8d4-17c8d2c3b5fa'),
+        'document1.txt',
+        DateTime.fromMillisecondsSinceEpoch(1604482138181),
+        DateTime.fromMillisecondsSinceEpoch(1604482138188),
+        DateTime.fromMillisecondsSinceEpoch(1604482928398),
+        'Bonjour',
+        GenericUser('user1@linshare.org'),
+        3
+      ),
+      DocumentDetailsReceivedShare(
+        ShareId('6c0e1f35-89e2-432e-a8d4-17t8d2c3b5fa'),
+        'document2.txt',
+        DateTime.fromMillisecondsSinceEpoch(1604482138181),
+        DateTime.fromMillisecondsSinceEpoch(1604482138188),
+        DateTime.fromMillisecondsSinceEpoch(1604482928398),
+        'Bonsoir',
+        GenericUser('user2@linshare.org'),
+        4
+      )
+    ]
+  );
+
+final documentDetailsResponse1 = DocumentDetailsResponse(
+    DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),
+    'description 1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    false,
+    'document 1',
+    189366,
+    '79c2474f47566808f1a0e068c5c290fa8476c192ca443d56345a618254e5995c',
+    true,
+    0,
+    MediaType.parse('image/png'),
+    [
+      DocumentDetailsReceivedShareDto(
+        ReceivedShareIdDto('6c0e1f35-89e5-432e-a8d4-17c8d2c3b5fa'),
+        'document1.txt',
+        DateTime.fromMillisecondsSinceEpoch(1604482138181),
+        DateTime.fromMillisecondsSinceEpoch(1604482138188),
+        DateTime.fromMillisecondsSinceEpoch(1604482928398),
+        3,
+        'Bonjour',
+        GenericUserDto('user1@linshare.org')
+      ),
+      DocumentDetailsReceivedShareDto(
+        ReceivedShareIdDto('6c0e1f35-89e2-432e-a8d4-17t8d2c3b5fa'),
+        'document2.txt',
+        DateTime.fromMillisecondsSinceEpoch(1604482138181),
+        DateTime.fromMillisecondsSinceEpoch(1604482138188),
+        DateTime.fromMillisecondsSinceEpoch(1604482928398),
+        4,
+        'Bonsoir',
+        GenericUserDto('user2@linshare.org')
+      )
+    ]
+  );
+
 final responseJsonDocument2 = {
   'uuid': '3e57d240-47a1-4a7e-b1a7-25e29870af32',
   'description': 'description 2',

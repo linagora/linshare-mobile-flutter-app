@@ -66,6 +66,7 @@ export 'src/model/authentication/token.dart';
 export 'src/model/authentication/token_id.dart';
 export 'src/model/user/user_id.dart';
 export 'src/model/document/document.dart';
+export 'src/model/document/document_details.dart';
 export 'src/model/document/document_id.dart';
 export 'src/usecases/download_file/download_task_id.dart';
 export 'src/model/file_info.dart';
@@ -164,6 +165,7 @@ export 'src/model/sharedspacemember/add_shared_space_member_request.dart';
 export 'src/model/sharedspacemember/update_shared_space_member_request.dart';
 export 'src/model/sharedspace/thread_id.dart';
 export 'src/model/myspace/rename_document_request.dart';
+export 'src/model/share/document_details_received_share.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -224,6 +226,7 @@ export 'src/usecases/shared_space/get_shared_space_roles_interactor.dart';
 export 'src/usecases/myspace/rename_document_interactor.dart';
 export 'src/usecases/search_received_shares/search_received_shares_interactor.dart';
 export 'src/usecases/shared_space/delete_shared_space_member_interactor.dart';
+export 'src/usecases/myspace/get_document_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';

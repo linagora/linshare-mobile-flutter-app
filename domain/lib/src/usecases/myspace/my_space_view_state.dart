@@ -241,3 +241,21 @@ class RenameDocumentFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class GetDocumentViewState extends ViewState {
+  final DocumentDetails document;
+
+  GetDocumentViewState(this.document);
+
+  @override
+  List<Object> get props => [document];
+}
+
+class GetDocumentFailure extends FeatureFailure {
+  final exception;
+
+  GetDocumentFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
