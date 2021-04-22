@@ -65,6 +65,7 @@ import 'package:domain/domain.dart';
 import 'model/autocomplete/shared_space_member_autocomplete_result_dto.dart';
 import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
+import 'model/response/document_details_response.dart';
 import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
@@ -448,6 +449,15 @@ class LinShareHttpClient {
             .withPathParameter(sharedSpaceMemberId.uuid)
             .generateEndpointPath(),
         data: json.encode(null));
+
     return SharedSpaceMemberResponse.fromJson(resultJson);
+  }
+
+  Future<DocumentDetailsResponse> getDocument(DocumentId documentId) async {
+    final resultJson = await _dioClient.get(Endpoint.documents
+        .withPathParameter(documentId.uuid)
+        .withQueryParameters([BooleanQueryParameter('withShares', true)]).generateEndpointPath());
+
+    return DocumentDetailsResponse.fromJson(resultJson);
   }
 }
