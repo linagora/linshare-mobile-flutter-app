@@ -30,6 +30,19 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:intl/intl.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/document_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/document_details_state.dart';
+import 'package:redux/redux.dart';
 
-final DateFormat workGroupDetailsDateFormat = DateFormat('EEEE dd, yyyy');
+final documentDetailsReducer = combineReducers<DocumentDetailsState>([
+  TypedReducer<DocumentDetailsState, StartDocumentDetailsLoadingAction>((DocumentDetailsState state, _) => state.startLoadingState()),
+  TypedReducer<DocumentDetailsState, DocumentDetailsAction>((DocumentDetailsState state, DocumentDetailsAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<DocumentDetailsState, DocumentDetailsGetDocumentAction>((DocumentDetailsState state, DocumentDetailsGetDocumentAction action) =>
+      state.setDocument(
+          newDocument: action.getDocumentViewState.fold(
+                  (failure) => null,
+                  (success) => (success is GetDocumentViewState) ? success.document : []),
+          viewState: action.getDocumentViewState)),
+  TypedReducer<DocumentDetailsState, CleanDocumentDetailsStateAction>((DocumentDetailsState state, _) => state.clearViewState()),
+]);
