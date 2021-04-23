@@ -50,7 +50,7 @@ dependencies:
   ext_storage: 1.0.3
 
   # local_auth
-  local_auth: ^0.6.3+4
+  local_auth: 0.6.3+4
 
   contacts_service:
     git:

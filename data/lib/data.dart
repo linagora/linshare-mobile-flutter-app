@@ -90,7 +90,8 @@ export 'src/repository/biometric_authentication/biometric_repository_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';
-export 'src/util/local_authentication_service.dart';
+export 'src/util/biometric_service.dart';
+export 'src/util/local_biometric_service.dart';
 
 // exception
 export 'src/exception/biometric_exception_thrower.dart';
