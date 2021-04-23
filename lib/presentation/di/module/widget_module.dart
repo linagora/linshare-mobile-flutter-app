@@ -95,9 +95,13 @@ class WidgetModule {
     _provideAccountDetailsComponent();
     _provideReceivedShareWidgetComponent();
     _provideSharedSpaceDetailsWidgetComponent();
+    _provideAuthenticationWidgetComponent();
+    _provideEnterOTPWidgetComponent();
+    _provide2FAWidgetComponent();
     _provideAddSharedSpaceMemberComponent();
     _provideDocumentDetailsComponent();
     _provideSharedSpaceNodeDetailsComponent();
+    _provideBiometricAuthenticationComponent();
   }
 
   void _provideLoginComponent() {
@@ -334,13 +338,14 @@ class WidgetModule {
   void _provideBiometricAuthenticationComponent() {
     getIt.registerFactory(() => BiometricAuthenticationWidget());
     getIt.registerFactory(() =>
-        BiometricAuthenticationViewModel(
-            getIt.get<Store<AppState>>(),
-            getIt.get<AppNavigation>(),
-            getIt.get<AuthenticationBiometricInteractor>(),
-            getIt.get<EnableBiometricInteractor>(),
-            getIt.get<GetAvailableBiometricInteractor>(),
-            getIt.get<GetBiometricSettingInteractor>()
-        ));
+      BiometricAuthenticationViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<AuthenticationBiometricInteractor>(),
+        getIt.get<EnableBiometricInteractor>(),
+        getIt.get<GetAvailableBiometricInteractor>(),
+        getIt.get<GetBiometricSettingInteractor>(),
+        getIt.get<DisableBiometricInteractor>()
+      ));
   }
 }
