@@ -85,6 +85,7 @@ class AppImagePaths {
   String get icAddMember => _getImagePath('ic_add_member.svg');
   String get icSecurity => _getImagePath('ic_security.svg');
   String get icRename => _getImagePath('ic_rename.svg');
+  String get icExpandMore => _getImagePath('ic_expand_more.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;
