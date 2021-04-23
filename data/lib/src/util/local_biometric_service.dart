@@ -29,17 +29,22 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/util/biometric_service.dart';
+import 'package:domain/domain.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:data/src/extensions/biometric_type_extension.dart';
 
-class LocalAuthenticationService {
+class LocalBiometricService extends BiometricService {
   final LocalAuthentication _localAuthentication;
 
-  LocalAuthenticationService(this._localAuthentication);
+  LocalBiometricService(this._localAuthentication);
 
+  @override
   Future<bool> isAvailable() async {
     return await _localAuthentication.canCheckBiometrics;
   }
 
+  @override
   Future<bool> authenticate(String localizedReason) async {
     return await _localAuthentication.authenticateWithBiometrics(
       localizedReason: localizedReason,
@@ -48,7 +53,9 @@ class LocalAuthenticationService {
     );
   }
 
-  Future<List<BiometricType>> getAvailableBiometrics() async {
-    return await _localAuthentication.getAvailableBiometrics();
+  @override
+  Future<List<BiometricKind>> getAvailableBiometrics() async {
+    final biometricTypes = await _localAuthentication.getAvailableBiometrics();
+    return biometricTypes.map((type) => type.getBiometricKind()).toList();
   }
 }

@@ -44,6 +44,7 @@ class BiometricAuthenticationViewModel extends BaseViewModel {
   final EnableBiometricInteractor _enableBiometricInteractor;
   final GetAvailableBiometricInteractor _getAvailableBiometricInteractor;
   final GetBiometricSettingInteractor _getBiometricSettingInteractor;
+  final DisableBiometricInteractor _disableBiometricInteractor;
 
   BiometricAuthenticationViewModel(
     Store<AppState> store,
@@ -51,7 +52,8 @@ class BiometricAuthenticationViewModel extends BaseViewModel {
     this._authenticationBiometricInteractor,
     this._enableBiometricInteractor,
     this._getAvailableBiometricInteractor,
-    this._getBiometricSettingInteractor
+    this._getBiometricSettingInteractor,
+    this._disableBiometricInteractor
     ) : super(store);
 
   void getBiometricSetting() {
@@ -79,6 +81,9 @@ class BiometricAuthenticationViewModel extends BaseViewModel {
 
   void backToAccountDetail() {
     _appNavigation.popBack();
+    if (store.state.biometricAuthenticationState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled) {
+      store.dispatch(SetAuthenticationBiometricStateAction(AuthenticationBiometricState.unAuthenticated));
+    }
   }
 
   void checkBiometricState(BuildContext context) {
@@ -106,7 +111,12 @@ class BiometricAuthenticationViewModel extends BaseViewModel {
               if (success is AuthenticationBiometricViewState) {
                 if (success.authenticationState == AuthenticationBiometricState.authenticated) {
                   final newBiometricState = biometricState == BiometricState.disabled ? BiometricState.enabled : BiometricState.disabled;
-                  _enableBiometricAuthentication(newBiometricState);
+
+                  newBiometricState == BiometricState.enabled
+                      ? _enableBiometricAuthentication(newBiometricState)
+                      : _disableBiometricAuthentication();
+
+                  store.dispatch(SetBiometricStateAction(newBiometricState));
                 }
                 store.dispatch(SetAuthenticationBiometricStateAction(success.authenticationState));
               } else {
@@ -119,7 +129,12 @@ class BiometricAuthenticationViewModel extends BaseViewModel {
   void _enableBiometricAuthentication(BiometricState biometricState) {
     store.dispatch((Store<AppState> store) async {
       await _enableBiometricInteractor.execute(biometricState);
-      store.dispatch(SetBiometricStateAction(biometricState));
+    });
+  }
+
+  void _disableBiometricAuthentication() {
+    store.dispatch((Store<AppState> store) async {
+      await _disableBiometricInteractor.execute();
     });
   }
 }

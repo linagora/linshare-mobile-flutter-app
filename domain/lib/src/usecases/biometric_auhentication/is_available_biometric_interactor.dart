@@ -41,7 +41,9 @@ class IsAvailableBiometricInteractor {
   Future<Either<Failure, Success>> execute() async {
     try {
       final isAvailable = await _biometricRepository.isAvailable();
-      return Right<Failure, Success>(IsAvailableBiometricViewState(isAvailable ? SupportBiometricState.available : SupportBiometricState.unavailable));
+      return Right<Failure, Success>(IsAvailableBiometricViewState(isAvailable
+          ? SupportBiometricState.available
+          : SupportBiometricState.unavailable));
     } catch (exception) {
       return Left<Failure, Success>(IsAvailableBiometricFailure(exception));
     }

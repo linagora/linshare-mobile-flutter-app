@@ -41,4 +41,6 @@ abstract class BiometricDataSource {
   Future<List<BiometricKind>> getAvailableBiometrics();
 
   Future<BiometricState> getBiometricSetting();
+
+  Future resetBiometricSetting();
 }
