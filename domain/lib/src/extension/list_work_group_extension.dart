@@ -28,23 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
-class GetAllSharedSpacesInteractor {
-  final SharedSpaceRepository _sharedSpaceRepository;
-
-  GetAllSharedSpacesInteractor(this._sharedSpaceRepository);
-
-  Future<Either<Failure, Success>> execute() async {
-    try {
-      final sharedSpaces = await _sharedSpaceRepository.getSharedSpaces();
-      return Right<Failure, Success>(SharedSpacesViewState(sharedSpaces));
-    } catch (exception) {
-      return Left<Failure, Success>(SharedSpacesFailure(exception));
-    }
+extension ListWorkGroup on List<SharedSpaceNodeNested> {
+  void sortFiles(OrderBy orderBy, OrderType orderType) {
+    sort((file1, file2) {
+      switch (orderBy) {
+        case OrderBy.modificationDate:
+          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
+        case OrderBy.creationDate:
+          return file2.creationDate.compareToSort(file1.creationDate, orderType);
+        case OrderBy.name:
+          return file2.name.compareToSort(file1.name, orderType);
+        default:
+          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
+      }
+    });
   }
 }

@@ -31,5 +31,6 @@
 enum OrderScreen {
   mySpace,
   sharedSpaceDocument,
+  workGroup,
   receivedShares
 }
