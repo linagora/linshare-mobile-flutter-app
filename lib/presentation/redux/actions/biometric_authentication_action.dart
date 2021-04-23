@@ -29,61 +29,51 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-class AccountDetailsViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
-  final IsAvailableBiometricInteractor _isAvailableBiometricInteractor;
+@immutable
+class StartBiometricAuthenticationLoadingAction extends ActionOffline {}
 
-  AccountDetailsViewModel(
-    Store<AppState> store,
-    this.deletePermanentTokenInteractor,
-    this._appNavigation,
-    this._isAvailableBiometricInteractor
-  ) : super(store);
+@immutable
+class BiometricAuthenticationAction extends ActionOffline {
+  final Either<Failure, Success> viewState;
 
-  void logout() {
-    store.dispatch(logoutAction());
-    _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
-    store.dispatch(ClearCurrentView());
-  }
+  BiometricAuthenticationAction(this.viewState);
+}
 
-  ThunkAction<AppState> logoutAction() {
-    return (Store<AppState> store) async {
-      await deletePermanentTokenInteractor.execute();
-    };
-  }
+@immutable
+class CleanBiometricAuthenticationStateAction extends ActionOffline {
+  CleanBiometricAuthenticationStateAction();
+}
 
-  void getSupportBiometricState() {
-    store.dispatch((Store<AppState> store) async {
-      await _isAvailableBiometricInteractor.execute()
-        .then((result) => result.fold(
-          (failure) {
-            store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          },
-          (success) {success is IsAvailableBiometricViewState
-              ? store.dispatch(SetSupportBiometricStateAction(success.supportBiometricState))
-              : store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          })
-        );
-    });
-  }
+@immutable
+class SetBiometricAuthenticationAction extends ActionOffline {
+  final BiometricState biometricState;
+  final List<BiometricKind> biometricKinds;
 
-  void goBiometricAuthentication() {
-    _appNavigation.push(RoutePaths.biometricAuthentication);
-  }
+  SetBiometricAuthenticationAction(this.biometricState, this.biometricKinds);
+}
 
-  @override
-  void onDisposed() {
-    super.onDisposed();
-  }
+@immutable
+class SetBiometricStateAction extends ActionOffline {
+  final BiometricState biometricState;
+
+  SetBiometricStateAction(this.biometricState);
+}
+
+@immutable
+class SetBiometricAvailableListAction extends ActionOffline {
+  final List<BiometricKind> biometricKinds;
+
+  SetBiometricAvailableListAction(this.biometricKinds);
+}
+
+@immutable
+class SetAuthenticationBiometricStateAction extends ActionOffline {
+  final AuthenticationBiometricState authenticationBiometricState;
+
+  SetAuthenticationBiometricStateAction(this.authenticationBiometricState);
 }

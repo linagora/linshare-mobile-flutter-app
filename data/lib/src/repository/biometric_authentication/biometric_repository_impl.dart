@@ -41,4 +41,23 @@ class BiometricRepositoryImpl extends BiometricRepository {
   Future<bool> isAvailable() {
     return _biometricDataSource.isAvailable();
   }
+
+  @override
+  Future<bool> authenticate(String localizedReason) {
+    return _biometricDataSource.authenticate(localizedReason);
+  }
+
+  @override
+  Future saveBiometricSetting(BiometricState state) {
+    return _biometricDataSource.saveBiometricSetting(state);
+  }
+
+  @override
+  Future<List<BiometricKind>> getAvailableBiometrics() {
+    return _biometricDataSource.getAvailableBiometrics();
+  }
+  @override
+  Future<BiometricState> getBiometricSetting() {
+    return _biometricDataSource.getBiometricSetting();
+  }
 }
