@@ -29,61 +29,25 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 
-class AccountDetailsViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
-  final IsAvailableBiometricInteractor _isAvailableBiometricInteractor;
+class AuthenticationBiometricInteractor {
 
-  AccountDetailsViewModel(
-    Store<AppState> store,
-    this.deletePermanentTokenInteractor,
-    this._appNavigation,
-    this._isAvailableBiometricInteractor
-  ) : super(store);
+  final BiometricRepository _biometricRepository;
 
-  void logout() {
-    store.dispatch(logoutAction());
-    _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
-    store.dispatch(ClearCurrentView());
-  }
+  AuthenticationBiometricInteractor(this._biometricRepository);
 
-  ThunkAction<AppState> logoutAction() {
-    return (Store<AppState> store) async {
-      await deletePermanentTokenInteractor.execute();
-    };
-  }
-
-  void getSupportBiometricState() {
-    store.dispatch((Store<AppState> store) async {
-      await _isAvailableBiometricInteractor.execute()
-        .then((result) => result.fold(
-          (failure) {
-            store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          },
-          (success) {success is IsAvailableBiometricViewState
-              ? store.dispatch(SetSupportBiometricStateAction(success.supportBiometricState))
-              : store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          })
-        );
-    });
-  }
-
-  void goBiometricAuthentication() {
-    _appNavigation.push(RoutePaths.biometricAuthentication);
-  }
-
-  @override
-  void onDisposed() {
-    super.onDisposed();
+  Future<Either<Failure, Success>> execute(String localizedReason) async {
+    try {
+      final isAuthenticated = await _biometricRepository.authenticate(localizedReason);
+      return Right<Failure, Success>(AuthenticationBiometricViewState(isAuthenticated ? AuthenticationBiometricState.authenticated : AuthenticationBiometricState.unAuthenticated));
+    } catch (exception) {
+      if (exception is BiometricNotEnrolled) {
+        return Right<Failure, Success>(AuthenticationBiometricViewState(AuthenticationBiometricState.unEnrolled));
+      } else {
+        return Left<Failure, Success>(AuthenticationBiometricFailure(exception));
+      }
+    }
   }
 }

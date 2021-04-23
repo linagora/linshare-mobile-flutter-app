@@ -107,7 +107,8 @@ class AppModule {
         getIt<RemoteExceptionThrower>()));
     getIt.registerFactory(() => BiometricDataSourceImpl(
         getIt<LocalAuthenticationService>(),
-        getIt<BiometricExceptionThrower>()));
+        getIt<BiometricExceptionThrower>(),
+        getIt<SharedPreferences>()));
   }
 
   void _provideDataSource() {
@@ -268,6 +269,10 @@ class AppModule {
     getIt.registerFactory(() => GetDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => GetSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => IsAvailableBiometricInteractor(getIt<BiometricRepository>()));
+    getIt.registerFactory(() => AuthenticationBiometricInteractor(getIt<BiometricRepository>()));
+    getIt.registerFactory(() => EnableBiometricInteractor(getIt<BiometricRepository>()));
+    getIt.registerFactory(() => GetAvailableBiometricInteractor(getIt<BiometricRepository>()));
+    getIt.registerFactory(() => GetBiometricSettingInteractor(getIt<BiometricRepository>()));
   }
 
   void _provideSharePreference() {
