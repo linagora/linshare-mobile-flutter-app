@@ -43,6 +43,7 @@ export 'src/usecases/shared_space/download_preview_work_group_document_view_stat
 export 'src/usecases/received/download_preview_received_share_view_state.dart';
 export 'src/usecases/shared_space_activities/shared_space_activities_view_state.dart';
 export 'src/usecases/search_received_shares/search_received_shares_view_state.dart';
+export 'src/usecases/biometric_auhentication/biometric_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -61,6 +62,7 @@ export 'src/usecases/quota/quota_verification_exception.dart';
 export 'src/usecases/name_verification/verify_name_exception.dart';
 export 'src/usecases/shared_space_activities/shared_space_activities_exception.dart';
 export 'src/usecases/shared_space/shared_space_member_exception.dart';
+export 'src/usecases/biometric_auhentication/biometric_exception.dart';
 
 // model
 export 'src/model/authentication/token.dart';
@@ -167,6 +169,7 @@ export 'src/model/sharedspacemember/update_shared_space_member_request.dart';
 export 'src/model/sharedspace/thread_id.dart';
 export 'src/model/myspace/rename_document_request.dart';
 export 'src/model/share/document_details_received_share.dart';
+export 'src/model/biometric_authentication/support_biometric_state.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -229,6 +232,7 @@ export 'src/usecases/search_received_shares/search_received_shares_interactor.da
 export 'src/usecases/shared_space/delete_shared_space_member_interactor.dart';
 export 'src/usecases/myspace/get_document_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_node_interactor.dart';
+export 'src/usecases/biometric_auhentication/is_available_biometric_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -244,6 +248,7 @@ export 'src/repository/contact/contact_repository.dart';
 export 'src/repository/sort/sort_repository.dart';
 export 'src/repository/sharedspacemember/shared_space_member_repository.dart';
 export 'src/repository/shared_space_activities/shared_space_acitivities_repository.dart';
+export 'src/repository/biometric_authentication/biometric_repository.dart';
 
 // errorcode
 export 'src/errorcode/business_error_code.dart';

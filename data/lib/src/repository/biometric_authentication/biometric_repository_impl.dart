@@ -28,38 +28,17 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
+import 'package:data/src/datasource/biometric_datasource.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-@immutable
-class StartAccountLoadingAction extends ActionOnline {}
+class BiometricRepositoryImpl extends BiometricRepository {
+  final BiometricDataSource _biometricDataSource;
 
-@immutable
-class AccountAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+  BiometricRepositoryImpl(this._biometricDataSource);
 
-  AccountAction(this.viewState);
-}
-
-@immutable
-class SetAccountInformationsAction extends ActionOnline {
-  final User newUser;
-
-  SetAccountInformationsAction(this.newUser);
-}
-
-@immutable
-class CleanAccountStateAction extends ActionOffline {
-  CleanAccountStateAction();
-}
-
-@immutable
-class SetSupportBiometricStateAction extends ActionOffline {
-  final SupportBiometricState supportBiometricState;
-
-  SetSupportBiometricStateAction(this.supportBiometricState);
+  @override
+  Future<bool> isAvailable() {
+    return _biometricDataSource.isAvailable();
+  }
 }

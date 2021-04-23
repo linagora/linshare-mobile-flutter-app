@@ -1402,6 +1402,11 @@ class AppLocalizations {
       name: 'modified_by',
     );
   }
+
+  String get biometric_authentication {
+    return Intl.message('Biometric authentication',
+        name: 'biometric_authentication');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
