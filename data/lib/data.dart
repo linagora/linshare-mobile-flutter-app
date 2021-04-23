@@ -94,3 +94,7 @@ export 'src/util/local_authentication_service.dart';
 
 // exception
 export 'src/exception/biometric_exception_thrower.dart';
+
+// extension
+export 'src/extensions/biometric_type_extension.dart';
+export 'src/extensions/platform_exception_extension.dart';

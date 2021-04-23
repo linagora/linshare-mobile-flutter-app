@@ -34,4 +34,5 @@ class Constant {
   static const fileSizeDataForm = 'filesize';
   static const authorization = 'Authorization';
   static const accept = 'accept';
+  static const biometricSettingState = 'biometric_setting_state';
 }

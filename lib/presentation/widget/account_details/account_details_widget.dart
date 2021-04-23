@@ -143,7 +143,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
       builder: (context, accountState) {
         return accountState.supportBiometricState == SupportBiometricState.available
           ? GestureDetector(
-              onTap: () => {},
+              onTap: () => accountDetailsViewModel.goBiometricAuthentication(),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -156,7 +156,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
                       imagePath.icExpandMore,
                       fit: BoxFit.none,
                       color: AppColor.documentNameItemTextColor),
-                    onPressed: () => {},
+                    onPressed: () => accountDetailsViewModel.goBiometricAuthentication(),
                   )
                 ]))
           : SizedBox.shrink();

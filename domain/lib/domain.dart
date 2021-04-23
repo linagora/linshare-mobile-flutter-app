@@ -170,6 +170,9 @@ export 'src/model/sharedspace/thread_id.dart';
 export 'src/model/myspace/rename_document_request.dart';
 export 'src/model/share/document_details_received_share.dart';
 export 'src/model/biometric_authentication/support_biometric_state.dart';
+export 'src/model/biometric_authentication/biometric_state.dart';
+export 'src/model/biometric_authentication/biometric_kind.dart';
+export 'src/model/biometric_authentication/authentication_biometric_state.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -233,6 +236,10 @@ export 'src/usecases/shared_space/delete_shared_space_member_interactor.dart';
 export 'src/usecases/myspace/get_document_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_node_interactor.dart';
 export 'src/usecases/biometric_auhentication/is_available_biometric_interactor.dart';
+export 'src/usecases/biometric_auhentication/authentication_biometric_interactor.dart';
+export 'src/usecases/biometric_auhentication/enable_biometric_interactor.dart';
+export 'src/usecases/biometric_auhentication/get_available_biometric_interactor.dart';
+export 'src/usecases/biometric_auhentication/get_biometric_setting_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
