@@ -48,3 +48,74 @@ class IsAvailableBiometricFailure extends Failure {
   @override
   List<Object> get props => [exception];
 }
+
+class AuthenticationBiometricViewState extends ViewState {
+  final AuthenticationBiometricState authenticationState;
+
+  AuthenticationBiometricViewState(this.authenticationState);
+
+  @override
+  List<Object> get props => [authenticationState];
+}
+
+class AuthenticationBiometricFailure extends Failure {
+  final exception;
+
+  AuthenticationBiometricFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class EnableBiometricViewState extends ViewState {
+  EnableBiometricViewState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class EnableBiometricFailure extends Failure {
+  final exception;
+
+  EnableBiometricFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+
+class GetAvailableBiometricViewState extends ViewState {
+  final List<BiometricKind> biometricKinds;
+
+  GetAvailableBiometricViewState(this.biometricKinds);
+
+  @override
+  List<Object> get props => [biometricKinds];
+}
+
+class GetAvailableBiometricFailure extends Failure {
+  final exception;
+
+  GetAvailableBiometricFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class GetBiometricSettingViewState extends ViewState {
+  final BiometricState biometricState;
+
+  GetBiometricSettingViewState(this.biometricState);
+
+  @override
+  List<Object> get props => [biometricState];
+}
+
+class GetBiometricSettingFailure extends Failure {
+  final exception;
+
+  GetBiometricSettingFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
