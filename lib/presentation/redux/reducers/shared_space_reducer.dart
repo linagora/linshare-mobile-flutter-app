@@ -54,4 +54,10 @@ final sharedSpaceReducer = combineReducers<SharedSpaceState>([
   TypedReducer<SharedSpaceState, SharedSpaceSelectAllSharedSpacesAction>((SharedSpaceState state, SharedSpaceSelectAllSharedSpacesAction action) => state.selectAllSharedSpaces()),
   TypedReducer<SharedSpaceState, SharedSpaceUnselectAllSharedSpacesAction>((SharedSpaceState state, SharedSpaceUnselectAllSharedSpacesAction action) => state.unSelectAllSharedSpaces()),
   TypedReducer<SharedSpaceState, SharedSpaceGetSharedSpaceRolesListAction>((SharedSpaceState state, SharedSpaceGetSharedSpaceRolesListAction action) => state.setSharedSpaceRolesList(action.rolesList)),
+  TypedReducer<SharedSpaceState, SharedSpaceGetSorterAction>((SharedSpaceState state, SharedSpaceGetSorterAction action) => state.setNewSorter(newSorter: action.sorter)),
+  TypedReducer<SharedSpaceState, SharedSpaceSortWorkGroupAction>(
+      (SharedSpaceState state, SharedSpaceSortWorkGroupAction action) =>
+          state.setSharedSpaces(
+              newSharedSpacesList: action.sharedSpaceWorkGroup,
+              newSorter: action.sorter)),
 ]);

@@ -102,3 +102,18 @@ class SharedSpaceGetSharedSpaceRolesListAction extends ActionOffline {
 
   SharedSpaceGetSharedSpaceRolesListAction(this.rolesList);
 }
+
+@immutable
+class SharedSpaceGetSorterAction extends ActionOffline {
+  final Sorter sorter;
+
+  SharedSpaceGetSorterAction(this.sorter);
+}
+
+@immutable
+class SharedSpaceSortWorkGroupAction extends ActionOffline {
+  final List<SharedSpaceNodeNested> sharedSpaceWorkGroup;
+  final Sorter sorter;
+
+  SharedSpaceSortWorkGroupAction(this.sharedSpaceWorkGroup, this.sorter);
+}

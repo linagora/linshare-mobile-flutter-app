@@ -60,6 +60,19 @@ final sharedSpace2 = SharedSpaceNodeNested(
   QuotaId('e352ed55-abef-4630-816f-c025caa3b025')
 );
 
+final sharedSpace3 = SharedSpaceNodeNested(
+    SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+    SharedSpaceRole(
+        SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
+        SharedSpaceRoleName.CONTRIBUTOR
+    ),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1619349271000),
+    'Shared Space 3',
+    LinShareNodeType.WORK_GROUP,
+    QuotaId('e352ed55-abef-4630-816f-c025caa3b025')
+);
+
 final sharedSpaceResponse1 = SharedSpaceNodeNestedResponse(
   SharedSpaceId('e352ed55-abef-4630-816f-c025caa3b025'),
   SharedSpaceRoleDto(
