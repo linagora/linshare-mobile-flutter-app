@@ -41,4 +41,16 @@ abstract class BiometricDataSource {
   Future<List<BiometricKind>> getAvailableBiometrics();
 
   Future<BiometricState> getBiometricSetting();
+
+  Future resetBiometricSetting();
+
+  Future<bool> authenticate(String localizedReason);
+
+  Future saveBiometricSetting(BiometricState state);
+
+  Future<List<BiometricKind>> getAvailableBiometrics();
+
+  Future<BiometricState> getBiometricSetting();
+
+  Future resetBiometricSetting();
 }

@@ -104,7 +104,7 @@ dependencies:
   open_file: 3.0.3
 
   # local_auth
-  local_auth: ^0.6.3+4
+  local_auth: 0.6.3+4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

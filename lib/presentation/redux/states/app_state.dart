@@ -96,6 +96,12 @@ class AppState with EquatableMixin {
       @required this.documentDetailsState,
       @required this.sharedSpaceNodeDetailsState,
       @required this.biometricAuthenticationState});
+      @required this.sharedSpaceNodeDetailsState});
+      @required this.documentDetailsState});
+      @required this.deleteSharedSpaceMembersState});
+      @required this.updateSharedSpaceMembersState,
+      @required this.deleteSharedSpaceMembersState,
+      @required this.biometricAuthenticationState});
 
   factory AppState.initial() {
     return AppState(
@@ -119,6 +125,12 @@ class AppState with EquatableMixin {
         documentDetailsState: DocumentDetailsState.initial(),
         sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
         biometricAuthenticationState: BiometricAuthenticationState.initial());
+        sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial());
+        documentDetailsState: DocumentDetailsState.initial());
+        deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial());
+        updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
+        deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial(),
+        biometricAuthenticationState: BiometricAuthenticationState.initial());
   }
 
   @override
@@ -141,6 +153,12 @@ class AppState with EquatableMixin {
         deleteSharedSpaceMembersState,
         documentDetailsState,
         sharedSpaceNodeDetailsState,
+        biometricAuthenticationState
+        sharedSpaceNodeDetailsState
+        documentDetailsState
+        deleteSharedSpaceMembersState
+        addSharedSpaceMembersState,
+        deleteSharedSpaceMembersState,
         biometricAuthenticationState
       ];
 }
