@@ -50,8 +50,10 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:redux/src/store.dart';
@@ -64,6 +66,9 @@ class SharedSpaceViewModel extends BaseViewModel {
   final CreateWorkGroupInteractor _createWorkGroupInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
   final AppNavigation _appNavigation;
+  final SortInteractor _sortInteractor;
+  final GetSorterInteractor _getSorterInteractor;
+  final SaveSorterInteractor _saveSorterInteractor;
   StreamSubscription _storeStreamSubscription;
   List<SharedSpaceNodeNested> _sharedSpaceNodes;
 
@@ -77,7 +82,10 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._searchSharedSpaceNodeNestedInteractor,
     this._removeMultipleSharedSpacesInteractor,
     this._createWorkGroupInteractor,
-    this._verifyNameInteractor
+    this._verifyNameInteractor,
+    this._sortInteractor,
+    this._getSorterInteractor,
+    this._saveSorterInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -89,18 +97,52 @@ class SharedSpaceViewModel extends BaseViewModel {
                   store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
                   _searchQuery = SearchQuery('');
                 } else if (success is CreateWorkGroupViewState) {
-                  getAllSharedSpaces();
+                  getAllSharedSpaces(needToGetOldSorter: false);
                 }
               });
     });
   }
 
-  void getAllSharedSpaces() {
-    store.dispatch(_getAllSharedSpacesAction());
+  void getAllSharedSpaces({bool needToGetOldSorter}) {
+    needToGetOldSorter
+      ? store.dispatch(_getAllSharedSpacesActionAndSort())
+      : store.dispatch(_getAllSharedSpacesAction());
   }
 
-  ThunkAction<AppState> _getAllSharedSpacesAction() {
-    return (Store<AppState> store) async {
+  OnlineThunkAction _getAllSharedSpacesActionAndSort() {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartSharedSpaceLoadingAction());
+
+      await Future.wait([
+        _getSorterInteractor.execute(OrderScreen.workGroup),
+        _getAllSharedSpacesInteractor.execute()
+      ]).then((response) async {
+        response[0].fold((failure) {
+          store.dispatch(SharedSpaceGetSorterAction(
+              Sorter.fromOrderScreen(OrderScreen.workGroup)));
+        }, (success) {
+          store.dispatch(SharedSpaceGetSorterAction(success is GetSorterSuccess
+              ? success.sorter
+              : Sorter.fromOrderScreen(OrderScreen.workGroup)));
+        });
+        response[1].fold((failure) {
+          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
+          _sharedSpaceNodes = [];
+        }, (success) {
+          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
+          _sharedSpaceNodes = (success is SharedSpacesViewState)
+              ? success.sharedSpacesList
+              : [];
+        });
+      });
+
+      store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
+
+    });
+  }
+
+  OnlineThunkAction _getAllSharedSpacesAction() {
+    return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartSharedSpaceLoadingAction());
       await _getAllSharedSpacesInteractor.execute().then((result) => result.fold(
         (failure) {
@@ -111,7 +153,10 @@ class SharedSpaceViewModel extends BaseViewModel {
           store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
           _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
         }));
-    };
+
+      store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
+
+    });
   }
 
   void openSharedSpace(SharedSpaceNodeNested sharedSpace) {
@@ -212,7 +257,7 @@ class SharedSpaceViewModel extends BaseViewModel {
           (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
           (success) => {
             store.dispatch(SharedSpaceAction(Right(success))),
-            getAllSharedSpaces()
+            getAllSharedSpaces(needToGetOldSorter: false)
           }));
     };
   }
@@ -249,6 +294,39 @@ class SharedSpaceViewModel extends BaseViewModel {
 
   void openCreateNewWorkGroupModal(BuildContext context) {
     store.dispatch(_handleCreateNewWorkgroupModalAction(context));
+  }
+
+  void openPopupMenuSorter(BuildContext context, Sorter currentSorter) {
+    ContextMenuBuilder(context)
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('order_by_menu_header'))
+        .addLabel(AppLocalizations.of(context).order_by)
+        .build())
+      .addTiles(OrderByDialogBottomSheetBuilder(context, currentSorter)
+        .onSelectSorterAction((sorterSelected) => _sortFiles(sorterSelected))
+        .build())
+      .build();
+  }
+
+  void _sortFiles(Sorter sorter) {
+    final newSorter = store.state.sharedSpaceState.sorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
+    _appNavigation.popBack();
+    store.dispatch(_sortFilesAction(newSorter));
+  }
+
+  ThunkAction<AppState> _sortFilesAction(Sorter sorter) {
+    return (Store<AppState> store) async {
+      await Future.wait([
+        _saveSorterInteractor.execute(sorter),
+        _sortInteractor.execute(_sharedSpaceNodes, sorter)
+      ]).then((response) => response[1].fold((failure) {
+        _sharedSpaceNodes = [];
+        store.dispatch(SharedSpaceSortWorkGroupAction(_sharedSpaceNodes, sorter));
+      }, (success) {
+        _sharedSpaceNodes =
+        success is SharedSpacesViewState ? success.sharedSpacesList : [];
+        store.dispatch(SharedSpaceSortWorkGroupAction(_sharedSpaceNodes, sorter));
+      }));
+    };
   }
 
   ThunkAction<AppState> _handleCreateNewWorkgroupModalAction(BuildContext context) {
