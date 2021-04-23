@@ -166,6 +166,8 @@ export 'src/repository/sharedspace/shared_space_repository.dart';
 export 'src/repository/sharedspacedocument/shared_space_document_repository.dart';
 export 'src/repository/sharedspacemember/shared_space_member_repository.dart';
 export 'src/repository/sort/sort_repository.dart';
+export 'src/model/biometric_authentication/support_biometric_state.dart';
+export 'src/repository/biometric_authentication/biometric_repository.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -175,9 +177,6 @@ export 'src/usecases/authentication/authentication_exception.dart';
 export 'src/usecases/authentication/authentication_view_state.dart';
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
-export 'src/usecases/authentication/credential_view_state.dart';
-export 'src/usecases/authentication/delete_permanent_token_interactor.dart';
-export 'src/usecases/authentication/get_authorized_user_interactor.dart';
 export 'src/usecases/authentication/get_credential_interactor.dart';
 export 'src/usecases/authentication/logout_exception.dart';
 export 'src/usecases/authentication/logout_view_state.dart';
