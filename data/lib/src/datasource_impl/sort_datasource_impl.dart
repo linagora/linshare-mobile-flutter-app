@@ -78,6 +78,8 @@ class SortDataSourceImpl implements SortDataSource {
         }
       } else if (listFiles is List<ReceivedShare>) {
         listFiles.cast<ReceivedShare>().sortFiles(sorter.orderBy, sorter.orderType);
+      } else if (listFiles is List<SharedSpaceNodeNested>) {
+        listFiles.cast<SharedSpaceNodeNested>().sortFiles(sorter.orderBy, sorter.orderType);
       }
 
       return listFiles;
