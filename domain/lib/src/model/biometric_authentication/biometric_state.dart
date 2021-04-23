@@ -29,16 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+enum BiometricState { enabled, disabled, none }
 
-abstract class BiometricRepository {
-  Future<bool> isAvailable();
-
-  Future<bool> authenticate(String localizedReason);
-
-  Future saveBiometricSetting(BiometricState state);
-
-  Future<List<BiometricKind>> getAvailableBiometrics();
-
-  Future<BiometricState> getBiometricSetting();
+extension BiometricStateExtension on BiometricState {
+  String get value {
+    switch(this) {
+      case BiometricState.enabled:
+        return 'enabled';
+      case BiometricState.disabled:
+        return 'disabled';
+      default:
+        return 'none';
+    }
+  }
 }

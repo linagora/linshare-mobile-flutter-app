@@ -29,61 +29,23 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/biometric_authentication_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_state.dart';
 import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 
-class AccountDetailsViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
-  final IsAvailableBiometricInteractor _isAvailableBiometricInteractor;
-
-  AccountDetailsViewModel(
-    Store<AppState> store,
-    this.deletePermanentTokenInteractor,
-    this._appNavigation,
-    this._isAvailableBiometricInteractor
-  ) : super(store);
-
-  void logout() {
-    store.dispatch(logoutAction());
-    _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
-    store.dispatch(ClearCurrentView());
-  }
-
-  ThunkAction<AppState> logoutAction() {
-    return (Store<AppState> store) async {
-      await deletePermanentTokenInteractor.execute();
-    };
-  }
-
-  void getSupportBiometricState() {
-    store.dispatch((Store<AppState> store) async {
-      await _isAvailableBiometricInteractor.execute()
-        .then((result) => result.fold(
-          (failure) {
-            store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          },
-          (success) {success is IsAvailableBiometricViewState
-              ? store.dispatch(SetSupportBiometricStateAction(success.supportBiometricState))
-              : store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          })
-        );
-    });
-  }
-
-  void goBiometricAuthentication() {
-    _appNavigation.push(RoutePaths.biometricAuthentication);
-  }
-
-  @override
-  void onDisposed() {
-    super.onDisposed();
-  }
-}
+final biometricAuthenticationReducer = combineReducers<BiometricAuthenticationState>([
+  TypedReducer<BiometricAuthenticationState, StartBiometricAuthenticationLoadingAction>(
+    (BiometricAuthenticationState state, _) => state.startLoadingState()),
+  TypedReducer<BiometricAuthenticationState, BiometricAuthenticationAction>(
+    (BiometricAuthenticationState state, BiometricAuthenticationAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<BiometricAuthenticationState, CleanBiometricAuthenticationStateAction>(
+    (BiometricAuthenticationState state, _) => state.clearViewState()),
+  TypedReducer<BiometricAuthenticationState, SetBiometricStateAction>(
+    (BiometricAuthenticationState state, SetBiometricStateAction action) => state.setBiometricState(action.biometricState)),
+  TypedReducer<BiometricAuthenticationState, SetBiometricAvailableListAction>(
+    (BiometricAuthenticationState state, SetBiometricAvailableListAction action) => state.setBiometricAvailableList(action.biometricKinds)),
+  TypedReducer<BiometricAuthenticationState, SetAuthenticationBiometricStateAction>(
+    (BiometricAuthenticationState state, SetAuthenticationBiometricStateAction action) => state.setAuthenticationState(action.authenticationBiometricState)),
+  TypedReducer<BiometricAuthenticationState, SetBiometricAuthenticationAction>(
+    (BiometricAuthenticationState state, SetBiometricAuthenticationAction action) => state.setBiometricAuthenticationSetting(newBiometricState : action.biometricState, newBiometricKindList: action.biometricKinds))
+]);

@@ -39,4 +39,16 @@ class LocalAuthenticationService {
   Future<bool> isAvailable() async {
     return await _localAuthentication.canCheckBiometrics;
   }
+
+  Future<bool> authenticate(String localizedReason) async {
+    return await _localAuthentication.authenticateWithBiometrics(
+      localizedReason: localizedReason,
+      useErrorDialogs: false,
+      stickyAuth: true,
+    );
+  }
+
+  Future<List<BiometricType>> getAvailableBiometrics() async {
+    return await _localAuthentication.getAvailableBiometrics();
+  }
 }

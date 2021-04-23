@@ -150,6 +150,11 @@ export 'src/model/verification/last_dot_validator.dart';
 export 'src/model/verification/new_name_request.dart';
 export 'src/model/verification/special_character_validator.dart';
 export 'src/model/verification/validator.dart';
+export 'src/model/biometric_authentication/biometric_state.dart';
+export 'src/model/biometric_authentication/biometric_kind.dart';
+export 'src/model/biometric_authentication/authentication_biometric_state.dart';
+export 'src/model/biometric_authentication/support_biometric_state.dart';
+
 export 'src/network/service_path.dart';
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -166,7 +171,6 @@ export 'src/repository/sharedspace/shared_space_repository.dart';
 export 'src/repository/sharedspacedocument/shared_space_document_repository.dart';
 export 'src/repository/sharedspacemember/shared_space_member_repository.dart';
 export 'src/repository/sort/sort_repository.dart';
-export 'src/model/biometric_authentication/support_biometric_state.dart';
 export 'src/repository/biometric_authentication/biometric_repository.dart';
 
 // viewState
@@ -275,3 +279,9 @@ export 'src/usecases/myspace/rename_document_interactor.dart';
 export 'src/usecases/search_received_shares/search_received_shares_interactor.dart';
 export 'src/usecases/shared_space/delete_shared_space_member_interactor.dart';
 export 'src/usecases/myspace/get_document_interactor.dart';
+export 'src/usecases/shared_space/get_shared_space_node_interactor.dart';
+export 'src/usecases/biometric_auhentication/is_available_biometric_interactor.dart';
+export 'src/usecases/biometric_auhentication/authentication_biometric_interactor.dart';
+export 'src/usecases/biometric_auhentication/enable_biometric_interactor.dart';
+export 'src/usecases/biometric_auhentication/get_available_biometric_interactor.dart';
+export 'src/usecases/biometric_auhentication/get_biometric_setting_interactor.dart';

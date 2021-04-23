@@ -30,10 +30,12 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/datasource_impl/biometric_datasource_impl.dart';
+import 'package:data/src/util/constant.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'fixture/mock/mock_fixtures.dart';
 
@@ -46,14 +48,22 @@ void isAvailable() {
     BiometricDataSourceImpl _biometricDataSourceImpl;
     MockLocalAuthenticationService _localAuthenticationService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
+    SharedPreferences _sharedPreferences;
 
-    setUp(() {
+    Future _initDataSource() async {
+      SharedPreferences.setMockInitialValues({
+        Constant.biometricSettingState: BiometricState.disabled
+      });
+
+      _sharedPreferences = await SharedPreferences.getInstance();
       _localAuthenticationService = MockLocalAuthenticationService();
       _biometricExceptionThrower = MockBiometricExceptionThrower();
-      _biometricDataSourceImpl = BiometricDataSourceImpl(_localAuthenticationService, _biometricExceptionThrower);
-    });
+      _biometricDataSourceImpl = BiometricDataSourceImpl(_localAuthenticationService, _biometricExceptionThrower, _sharedPreferences);
+    }
 
     test('isAvailable should return success with valid data', () async {
+      await _initDataSource();
+
       when(_localAuthenticationService.isAvailable()).thenAnswer((_) async => true);
 
       final isAvailable = await _biometricDataSourceImpl.isAvailable();
@@ -62,6 +72,8 @@ void isAvailable() {
     });
 
     test('isAvailable should throw PlatformException when _localAuthenticationService response error', () async {
+      await _initDataSource();
+
       final error = PlatformException(
           code: 'NotAvailable',
           message: 'NotAvailable'
