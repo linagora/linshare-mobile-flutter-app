@@ -28,23 +28,34 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
+import '../fixture/test_fixture.dart';
 
-class GetAllSharedSpacesInteractor {
-  final SharedSpaceRepository _sharedSpaceRepository;
+void main() {
+  group('getListSorter test', () {
 
-  GetAllSharedSpacesInteractor(this._sharedSpaceRepository);
+    test('getListSorter should return modificationDate, creationDate, name only when sorting on Shared Space WorkGroup screen', () {
+      final expectSorterList = <Sorter>[
+        Sorter(OrderScreen.workGroup, OrderBy.modificationDate, OrderType.descending),
+        Sorter(OrderScreen.workGroup, OrderBy.creationDate, OrderType.descending),
+        Sorter(OrderScreen.workGroup, OrderBy.name, OrderType.descending)
+      ];
+      expect(sharedSpaceSorter1.getListSorter(OrderScreen.workGroup), expectSorterList);
+    });
 
-  Future<Either<Failure, Success>> execute() async {
-    try {
-      final sharedSpaces = await _sharedSpaceRepository.getSharedSpaces();
-      return Right<Failure, Success>(SharedSpacesViewState(sharedSpaces));
-    } catch (exception) {
-      return Left<Failure, Success>(SharedSpacesFailure(exception));
-    }
-  }
+    test('getListSorter should not contain fileSize when sorting on Shared Space WorkGroup screen', () {
+      expect(sharedSpaceSorter1.getListSorter(OrderScreen.workGroup).contains(sharedSpaceFileSizeSorter), false);
+    });
+
+    test('getListSorter should not contain shared when sorting on Shared Space WorkGroup screen', () {
+      expect(sharedSpaceSorter1.getListSorter(OrderScreen.workGroup).contains(sharedSpaceSharedSorter), false);
+    });
+
+    test('getListSorter should not contain sender when sorting on Shared Space WorkGroup screen', () {
+      expect(sharedSpaceSorter1.getListSorter(OrderScreen.workGroup).contains(sharedSpaceSenderSorter), false);
+    });
+
+  });
 }
