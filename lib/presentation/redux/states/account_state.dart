@@ -40,32 +40,38 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 @immutable
 class AccountState extends LinShareState {
   final User user;
+  final SupportBiometricState supportBiometricState;
 
   AccountState(
     Either<Failure, Success> viewState,
-    this.user
+    this.user,
+    this.supportBiometricState
   ) : super(viewState);
 
   factory AccountState.initial() {
-    return AccountState(Right(IdleState()), null);
+    return AccountState(Right(IdleState()), null, SupportBiometricState.unavailable);
   }
 
   @override
   AccountState clearViewState() {
-    return AccountState(Right(IdleState()), user);
+    return AccountState(Right(IdleState()), user, supportBiometricState);
   }
 
   @override
   AccountState sendViewState({Either<Failure, Success> viewState}) {
-    return AccountState(viewState, user);
+    return AccountState(viewState, user, supportBiometricState);
   }
 
   AccountState setCurrentUserInfo(User newUser) {
-    return AccountState(viewState, newUser);
+    return AccountState(viewState, newUser, supportBiometricState);
+  }
+
+  AccountState setSupportBiometricState(SupportBiometricState newSupportBiometricState) {
+    return AccountState(viewState, user, newSupportBiometricState);
   }
 
   @override
   AccountState startLoadingState() {
-    return AccountState(Right(LoadingState()), user);
+    return AccountState(Right(LoadingState()), user, supportBiometricState);
   }
 }

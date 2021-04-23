@@ -28,38 +28,32 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-@immutable
-class StartAccountLoadingAction extends ActionOnline {}
+import '../../mock/repository/biometric_authentication/mock_biometric_repository.dart';
 
-@immutable
-class AccountAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
+void main() {
+  group('is_available_biometric_interactor_test', () {
+    MockBiometricRepository biometricRepository;
+    IsAvailableBiometricInteractor isAvailableBiometricInteractor;
 
-  AccountAction(this.viewState);
-}
+    setUp(() {
+      biometricRepository = MockBiometricRepository();
+      isAvailableBiometricInteractor = IsAvailableBiometricInteractor(biometricRepository);
+    });
 
-@immutable
-class SetAccountInformationsAction extends ActionOnline {
-  final User newUser;
+    test('isAvailable should return success with data valid', () async {
+      when(biometricRepository.isAvailable()).thenAnswer((_) async => true);
 
-  SetAccountInformationsAction(this.newUser);
-}
+      final result = await isAvailableBiometricInteractor.execute();
 
-@immutable
-class CleanAccountStateAction extends ActionOffline {
-  CleanAccountStateAction();
-}
+      final supportBiometricState = result.map((success) => (success as IsAvailableBiometricViewState).supportBiometricState)
+          .getOrElse(() => SupportBiometricState.unavailable);
 
-@immutable
-class SetSupportBiometricStateAction extends ActionOffline {
-  final SupportBiometricState supportBiometricState;
-
-  SetSupportBiometricStateAction(this.supportBiometricState);
+      expect(supportBiometricState, SupportBiometricState.available);
+    });
+  });
 }
