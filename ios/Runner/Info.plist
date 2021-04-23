@@ -45,6 +45,8 @@
 	<string>To save photo to library, we need permission to access your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To select and upload photo, we need permission to access your photo library.</string>
+	<key>NSFaceIDUsageDescription</key>
+    <string>To open app, we need using face id to authenticate</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

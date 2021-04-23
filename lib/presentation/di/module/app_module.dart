@@ -46,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,6 +65,8 @@ class AppModule {
     _provideFileUploader();
     _provideAppToast();
     _provideNetworkStateComponent();
+    _provideLocalAuthentication();
+    _provideBiometric();
   }
 
   void _provideDataSourceImpl() {
@@ -102,6 +105,9 @@ class AppModule {
     getIt.registerLazySingleton(() => SharedSpaceActivitiesDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => BiometricDataSourceImpl(
+        getIt<LocalAuthenticationService>(),
+        getIt<BiometricExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -122,6 +128,7 @@ class AppModule {
     getIt.registerFactory<ContactDataSource>(() => getIt<ContactDataSourceImpl>());
     getIt.registerFactory<SharedSpaceMemberDataSource>(() => getIt<SharedSpaceMemberDataSourceImpl>());
     getIt.registerFactory<SharedSpaceActivitiesDataSource>(() => getIt<SharedSpaceActivitiesDataSourceImpl>());
+    getIt.registerFactory<BiometricDataSource>(() => getIt<BiometricDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -139,6 +146,7 @@ class AppModule {
     getIt.registerFactory(() => ContactRepositoryImpl(getIt<ContactDataSource>()));
     getIt.registerFactory(() => SharedSpaceMemberRepositoryImpl(getIt<SharedSpaceMemberDataSource>()));
     getIt.registerFactory(() => SharedSpaceActivitiesRepositoryImpl(getIt<SharedSpaceActivitiesDataSource>()));
+    getIt.registerFactory(() => BiometricRepositoryImpl(getIt<BiometricDataSource>()));
   }
 
   void _provideRepository() {
@@ -156,6 +164,7 @@ class AppModule {
     getIt.registerFactory<ContactRepository>(() => getIt<ContactRepositoryImpl>());
     getIt.registerFactory<SharedSpaceMemberRepository>(() => getIt<SharedSpaceMemberRepositoryImpl>());
     getIt.registerFactory<SharedSpaceActivitiesRepository>(() => getIt<SharedSpaceActivitiesRepositoryImpl>());
+    getIt.registerFactory<BiometricRepository>(() => getIt<BiometricRepositoryImpl>());
   }
 
   void _provideInteractor() {
@@ -258,6 +267,7 @@ class AppModule {
     getIt.registerFactory(() => DeleteSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => GetDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => GetSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
+    getIt.registerFactory(() => IsAvailableBiometricInteractor(getIt<BiometricRepository>()));
   }
 
   void _provideSharePreference() {
@@ -304,5 +314,14 @@ class AppModule {
 
   void _provideNetworkStateComponent() {
     getIt.registerLazySingleton(() => Connectivity());
+  }
+
+  void _provideLocalAuthentication() {
+    getIt.registerLazySingleton(() => LocalAuthentication());
+  }
+
+  void _provideBiometric() {
+    getIt.registerSingleton<BiometricExceptionThrower>(BiometricExceptionThrower());
+    getIt.registerLazySingleton(() => LocalAuthenticationService(getIt<LocalAuthentication>()));
   }
 }

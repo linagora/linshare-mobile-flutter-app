@@ -108,6 +108,9 @@ dependencies:
   # pin_code
   pin_code_fields: 6.1.0
 
+  # local_auth
+  local_auth: ^0.6.3+4
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
