@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -48,8 +49,10 @@ import 'package:linshare_flutter_app/presentation/view/background_widgets/backgr
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/shared_space_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
+import 'package:redux/redux.dart';
 
 class SharedSpaceWidget extends StatefulWidget {
   @override
@@ -63,7 +66,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   @override
   void initState() {
     super.initState();
-    sharedSpaceViewModel.getAllSharedSpaces();
+    sharedSpaceViewModel.getAllSharedSpaces(needToGetOldSorter: true);
   }
 
   @override
@@ -115,11 +118,12 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                     : SizedBox.shrink();
               },
             ),
-            StoreConnector<AppState, SharedSpaceState>(
-                converter: (store) => store.state.sharedSpaceState,
+            _buildMenuSorter(),
+            StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                converter: (store) => store.state.sharedSpaceState.viewState,
                 distinct: true,
-                builder: (context, state) {
-                  return state.viewState.fold(
+                builder: (context, viewState) {
+                  return viewState.fold(
                       (failure) => SizedBox.shrink(),
                       (success) => (success is LoadingState)
                           ? Padding(
@@ -243,7 +247,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     return state.viewState.fold(
       (failure) =>
         RefreshIndicator(
-          onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(),
+          onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(needToGetOldSorter: false),
           child: failure is SharedSpacesFailure ? 
             BackgroundWidgetBuilder()
                 .key(Key('shared_space_error_background'))
@@ -258,7 +262,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       (success) => success is LoadingState ?
         _buildSharedSpacesListView(state.sharedSpacesList) :
         RefreshIndicator(
-          onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(),
+          onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(needToGetOldSorter: false),
           child: _buildSharedSpacesListView(state.sharedSpacesList)
         )
     );
@@ -394,5 +398,18 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         sharedSpaces)
         .onActionClick((documents) => sharedSpaceViewModel.removeSharedSpaces(context, documents, itemSelectionType: ItemSelectionType.multiple))
         .build();
+  }
+
+  Widget _buildMenuSorter() {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (context, appState) {
+        return !appState.uiState.isInSearchState()
+            ? OrderByButtonBuilder(context, appState.sharedSpaceState.sorter)
+                .onOpenOrderMenuAction((currentSorter) => sharedSpaceViewModel.openPopupMenuSorter(context, currentSorter))
+                .build()
+            : SizedBox.shrink();
+      },
+    );
   }
 }

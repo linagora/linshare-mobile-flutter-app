@@ -173,7 +173,10 @@ class WidgetModule {
       getIt<SearchSharedSpaceNodeNestedInteractor>(),
       getIt.get<RemoveMultipleSharedSpacesInteractor>(),
       getIt.get<CreateWorkGroupInteractor>(),
-      getIt.get<VerifyNameInteractor>()
+      getIt.get<VerifyNameInteractor>(),
+      getIt<SortInteractor>(),
+      getIt<GetSorterInteractor>(),
+      getIt<SaveSorterInteractor>(),
     ));
   }
 
