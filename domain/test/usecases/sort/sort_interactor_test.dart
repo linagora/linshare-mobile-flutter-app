@@ -36,6 +36,7 @@ import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
+import '../../fixture/test_fixture.dart';
 import '../../mock/repository/mock_sort_repository.dart';
 
 void main() {
@@ -76,6 +77,16 @@ void main() {
       final receivedShares = result.map((success) => (success as GetAllReceivedShareSuccess).receivedShares).getOrElse(() => []);
 
       expect(receivedShares, [receivedShare2, receivedShare1]);
+    });
+
+    test('sortFiles should return success with Shared Space has been sorted by modificationDate', () async {
+      when(sortRepository.sortFiles([sharedSpace1, sharedSpace3], sharedSpaceModificationDateSorter)).thenAnswer((_) async => [sharedSpace3, sharedSpace1]);
+
+      final result = await sortInteractor.execute([sharedSpace1, sharedSpace3], sharedSpaceModificationDateSorter);
+
+      final sharedSpaces = result.map((success) => (success as SharedSpacesViewState).sharedSpacesList).getOrElse(() => []);
+
+      expect(sharedSpaces, [sharedSpace3, sharedSpace1]);
     });
   });
 }
