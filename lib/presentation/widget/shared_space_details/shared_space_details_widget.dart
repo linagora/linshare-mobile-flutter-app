@@ -204,7 +204,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                         color: AppColor.workGroupDetailsName)),
                 Padding(
                     padding: EdgeInsets.only(top: 18),
-                    child: Text('tes tes teste stse',
+                    child: Text(AppLocalizations.of(context).no_description,
                         style: TextStyle(
                             color: AppColor.searchResultsCountTextColor,
                             fontStyle: FontStyle.italic,
