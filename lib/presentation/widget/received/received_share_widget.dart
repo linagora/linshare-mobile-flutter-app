@@ -55,6 +55,7 @@ import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/re
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 
 class ReceivedShareWidget extends StatefulWidget {
   @override
@@ -194,27 +195,55 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
           SvgPicture.asset(receivedShareItem.element.mediaType.getFileTypeImagePath(imagePath),
               width: 20, height: 24, fit: BoxFit.fill)
         ]),
-        title: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: _buildFileName(receivedShareItem.element.name),
+        title: ResponsiveWidget(
+          smallScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: _buildFileName(receivedShareItem.element.name),
+          ),
+          mediumScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Transform(
+                    transform: Matrix4.translationValues(0.0, -14.0, 0.0),
+                    child:  _buildFileName(receivedShareItem.element.name),
+                  ),
+                  flex: 2,
+                ),
+                Expanded(
+                  child: _buildSenderName(receivedShareItem.element.sender.fullName()),
+                  flex: 1,
+                ),
+                Expanded(
+                  child: _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
+                      receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
+                  flex: 1,
+                )
+              ],
+            )
+          ),
         ),
-        subtitle: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        subtitle: ResponsiveWidget.isSmallScreen(context)
+            ? Transform(
+                transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                child: Row(
                   children: [
-                    _buildSenderName(receivedShareItem.element.sender.fullName()),
-                    _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
-                        receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSenderName(receivedShareItem.element.sender.fullName()),
+                          _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
+                              receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               )
-            ],
-          ),
-        ),
+            : null,
         trailing: StoreConnector<AppState, SelectMode>(
             converter: (store) => store.state.receivedShareState.selectMode,
             builder: (context, selectMode) {
