@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -41,7 +42,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
-
+import 'package:redux/redux.dart';
 import 'account_details_viewmodel.dart';
 
 class AccountDetailsWidget extends StatefulWidget {
@@ -53,6 +54,12 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
   final accountDetailsViewModel = getIt<AccountDetailsViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final appNavigation = getIt<AppNavigation>();
+
+  @override
+  void initState() {
+    super.initState();
+    accountDetailsViewModel.getSupportBiometricState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +84,8 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
               children: [
                 _buildAccountDetailsTile(AppLocalizations.of(context).first_name, state.user != null ? state.user.firstName : ''),
                 _buildAccountDetailsTile(AppLocalizations.of(context).last_name, state.user != null ? state.user.lastName : ''),
+                Divider(),
+                _buildBiometricAuthentication(),
                 Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,6 +134,33 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
           )
         ]
       )
+    );
+  }
+
+  Widget _buildBiometricAuthentication() {
+    return StoreConnector<AppState, AccountState>(
+      converter: (Store<AppState> store) => store.state.account,
+      builder: (context, accountState) {
+        return accountState.supportBiometricState == SupportBiometricState.available
+          ? GestureDetector(
+              onTap: () => {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context).biometric_authentication,
+                    style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)),
+                  IconButton(
+                    padding: EdgeInsets.only(left: 24),
+                    icon: SvgPicture.asset(
+                      imagePath.icExpandMore,
+                      fit: BoxFit.none,
+                      color: AppColor.documentNameItemTextColor),
+                    onPressed: () => {},
+                  )
+                ]))
+          : SizedBox.shrink();
+        }
     );
   }
 }

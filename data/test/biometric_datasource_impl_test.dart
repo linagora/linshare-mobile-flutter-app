@@ -28,38 +28,49 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
+import 'package:data/src/datasource_impl/biometric_datasource_impl.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
-@immutable
-class StartAccountLoadingAction extends ActionOnline {}
+import 'fixture/mock/mock_fixtures.dart';
 
-@immutable
-class AccountAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  AccountAction(this.viewState);
+void main() {
+  isAvailable();
 }
 
-@immutable
-class SetAccountInformationsAction extends ActionOnline {
-  final User newUser;
+void isAvailable() {
+  group('biometric_data_source_impl isAvailable test', () {
+    BiometricDataSourceImpl _biometricDataSourceImpl;
+    MockLocalAuthenticationService _localAuthenticationService;
+    MockBiometricExceptionThrower _biometricExceptionThrower;
 
-  SetAccountInformationsAction(this.newUser);
-}
+    setUp(() {
+      _localAuthenticationService = MockLocalAuthenticationService();
+      _biometricExceptionThrower = MockBiometricExceptionThrower();
+      _biometricDataSourceImpl = BiometricDataSourceImpl(_localAuthenticationService, _biometricExceptionThrower);
+    });
 
-@immutable
-class CleanAccountStateAction extends ActionOffline {
-  CleanAccountStateAction();
-}
+    test('isAvailable should return success with valid data', () async {
+      when(_localAuthenticationService.isAvailable()).thenAnswer((_) async => true);
 
-@immutable
-class SetSupportBiometricStateAction extends ActionOffline {
-  final SupportBiometricState supportBiometricState;
+      final isAvailable = await _biometricDataSourceImpl.isAvailable();
 
-  SetSupportBiometricStateAction(this.supportBiometricState);
+      expect(isAvailable, true);
+    });
+
+    test('isAvailable should throw PlatformException when _localAuthenticationService response error', () async {
+      final error = PlatformException(
+          code: 'NotAvailable',
+          message: 'NotAvailable'
+      );
+
+      when(_localAuthenticationService.isAvailable()).thenThrow(error);
+
+      await _biometricDataSourceImpl.isAvailable()
+          .catchError((error) => expect(error, isA<BiometricNotAvailable>()));
+    });
+  });
 }
