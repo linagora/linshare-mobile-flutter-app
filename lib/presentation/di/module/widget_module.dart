@@ -42,6 +42,8 @@ import 'package:linshare_flutter_app/presentation/widget/account_details/account
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_viewmodel.dart';
@@ -93,9 +95,6 @@ class WidgetModule {
     _provideAccountDetailsComponent();
     _provideReceivedShareWidgetComponent();
     _provideSharedSpaceDetailsWidgetComponent();
-    _provideAuthenticationWidgetComponent();
-    _provideEnterOTPWidgetComponent();
-    _provide2FAWidgetComponent();
     _provideAddSharedSpaceMemberComponent();
     _provideDocumentDetailsComponent();
     _provideSharedSpaceNodeDetailsComponent();
@@ -330,5 +329,18 @@ class WidgetModule {
         getIt.get<AppNavigation>(),
         getIt.get<GetSharedSpaceNodeInteractor>()
     ));
+  }
+
+  void _provideBiometricAuthenticationComponent() {
+    getIt.registerFactory(() => BiometricAuthenticationWidget());
+    getIt.registerFactory(() =>
+        BiometricAuthenticationViewModel(
+            getIt.get<Store<AppState>>(),
+            getIt.get<AppNavigation>(),
+            getIt.get<AuthenticationBiometricInteractor>(),
+            getIt.get<EnableBiometricInteractor>(),
+            getIt.get<GetAvailableBiometricInteractor>(),
+            getIt.get<GetBiometricSettingInteractor>()
+        ));
   }
 }

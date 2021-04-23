@@ -1471,6 +1471,42 @@ class AppLocalizations {
     return Intl.message('Biometric authentication',
         name: 'biometric_authentication');
   }
+
+  String get face_id {
+    return Intl.message('Face ID',
+        name: 'face_id');
+  }
+
+  String get fingerprint {
+    return Intl.message('Fingerprint',
+        name: 'fingerprint');
+  }
+
+  String biometric_authentication_message(String biometricKind) {
+    return Intl.message(
+        'Allow $biometricKind to secure access to this app',
+        name: 'biometric_authentication_message',
+        args: [biometricKind]
+    );
+  }
+
+  String biometric_authentication_not_enrolled(String biometricKind) {
+    return Intl.message(
+        '$biometricKind must be enabled to turn on biometric authentication',
+        name: 'biometric_authentication_not_enrolled',
+        args: [biometricKind]
+    );
+  }
+
+  String get biometric_authentication_localized_reason_enable {
+    return Intl.message('Please authenticate to enable biometric authentication for application',
+        name: 'biometric_authentication_localized_reason_enable');
+  }
+
+  String get biometric_authentication_localized_reason_disable {
+    return Intl.message('Please authenticate to disable biometric authentication for application',
+        name: 'biometric_authentication_localized_reason_disable');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -36,4 +36,5 @@ class Constant {
   static const accept = 'accept';
   static const linShareAuthErrorCode = 'X-Linshare-Auth-Error-Code';
   static const linShare2FAPin = 'x-linShare-2fa-pin';
+  static const biometricSettingState = 'biometric_setting_state';
 }
