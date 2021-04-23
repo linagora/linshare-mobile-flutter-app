@@ -33,14 +33,14 @@
 import 'package:data/src/datasource/biometric_datasource.dart';
 import 'package:data/src/exception/biometric_exception_thrower.dart';
 import 'package:data/src/util/constant.dart';
-import 'package:data/src/util/local_authentication_service.dart';
+import 'package:data/src/util/local_biometric_service.dart';
 import 'package:domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:data/src/extensions/biometric_type_extension.dart';
 
 class BiometricDataSourceImpl implements BiometricDataSource {
 
-  final LocalAuthenticationService _localAuthenticationService;
+  final LocalBiometricService _localAuthenticationService;
   final BiometricExceptionThrower _biometricExceptionThrower;
   final SharedPreferences _sharedPreferences;
 
@@ -74,8 +74,7 @@ class BiometricDataSourceImpl implements BiometricDataSource {
   @override
   Future<List<BiometricKind>> getAvailableBiometrics() {
     return Future.sync(() async {
-      final biometricTypeList = await _localAuthenticationService.getAvailableBiometrics();
-      return biometricTypeList.map((biometricType) => biometricType.getBiometricKind()).toList();
+      return await _localAuthenticationService.getAvailableBiometrics();
     }).catchError((error) {
       _biometricExceptionThrower.throwBiometricException(error);
     });
@@ -89,6 +88,13 @@ class BiometricDataSourceImpl implements BiometricDataSource {
         return biometricState == BiometricState.disabled.value ? BiometricState.disabled : BiometricState.enabled;
       }
       return BiometricState.disabled;
+    });
+  }
+
+  @override
+  Future resetBiometricSetting() {
+    return Future.sync(() async {
+      return await _sharedPreferences.remove(Constant.biometricSettingState);
     });
   }
 }
