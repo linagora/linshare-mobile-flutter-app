@@ -126,6 +126,15 @@ void sortFilesTest() {
 
       expect(result, [receivedShare2, receivedShare1]);
     });
+
+    test('sortFiles should return success with list shared space workgroup has been sorted modification date', () async {
+      await _initDataSource();
+
+      final result = await _sortDataSourceImpl.sortFiles(
+          [sharedSpace1, sharedSpace3],
+          Sorter.fromOrderScreen(OrderScreen.workGroup));
+      expect(result, [sharedSpace3, sharedSpace1]);
+    });
   });
 }
 
