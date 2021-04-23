@@ -48,4 +48,5 @@ class RoutePaths {
   static const String addSharedSpaceMember = 'add_shared_space_member';
   static const String documentDetails = 'document_details';
   static const String sharedSpaceNodeDetails = 'shared_space_node_details';
+  static const String biometricAuthentication = 'biometric_authentication';
 }
