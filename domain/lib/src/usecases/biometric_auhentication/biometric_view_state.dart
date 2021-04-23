@@ -119,3 +119,20 @@ class GetBiometricSettingFailure extends Failure {
   @override
   List<Object> get props => [exception];
 }
+
+class DisableBiometricViewState extends ViewState {
+
+  DisableBiometricViewState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class DisableBiometricFailure extends Failure {
+  final exception;
+
+  DisableBiometricFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

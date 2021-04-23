@@ -41,4 +41,6 @@ abstract class BiometricRepository {
   Future<List<BiometricKind>> getAvailableBiometrics();
 
   Future<BiometricState> getBiometricSetting();
+
+  Future resetBiometricSetting();
 }
