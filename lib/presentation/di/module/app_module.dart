@@ -106,7 +106,7 @@ class AppModule {
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
     getIt.registerFactory(() => BiometricDataSourceImpl(
-        getIt<LocalAuthenticationService>(),
+        getIt<LocalBiometricService>(),
         getIt<BiometricExceptionThrower>(),
         getIt<SharedPreferences>()));
   }
@@ -273,6 +273,7 @@ class AppModule {
     getIt.registerFactory(() => EnableBiometricInteractor(getIt<BiometricRepository>()));
     getIt.registerFactory(() => GetAvailableBiometricInteractor(getIt<BiometricRepository>()));
     getIt.registerFactory(() => GetBiometricSettingInteractor(getIt<BiometricRepository>()));
+    getIt.registerFactory(() => DisableBiometricInteractor(getIt<BiometricRepository>()));
   }
 
   void _provideSharePreference() {
@@ -327,6 +328,6 @@ class AppModule {
 
   void _provideBiometric() {
     getIt.registerSingleton<BiometricExceptionThrower>(BiometricExceptionThrower());
-    getIt.registerLazySingleton(() => LocalAuthenticationService(getIt<LocalAuthentication>()));
+    getIt.registerLazySingleton(() => LocalBiometricService(getIt<LocalAuthentication>()));
   }
 }

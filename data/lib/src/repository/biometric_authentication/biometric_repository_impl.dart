@@ -60,4 +60,9 @@ class BiometricRepositoryImpl extends BiometricRepository {
   Future<BiometricState> getBiometricSetting() {
     return _biometricDataSource.getBiometricSetting();
   }
+
+  @override
+  Future resetBiometricSetting() {
+    return _biometricDataSource.resetBiometricSetting();
+  }
 }

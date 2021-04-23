@@ -65,13 +65,6 @@ class SetBiometricStateAction extends ActionOffline {
 }
 
 @immutable
-class SetBiometricAvailableListAction extends ActionOffline {
-  final List<BiometricKind> biometricKinds;
-
-  SetBiometricAvailableListAction(this.biometricKinds);
-}
-
-@immutable
 class SetAuthenticationBiometricStateAction extends ActionOffline {
   final AuthenticationBiometricState authenticationBiometricState;
 

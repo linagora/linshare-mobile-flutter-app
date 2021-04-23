@@ -14,6 +14,6 @@ class MockDioClient extends Mock implements DioClient {}
 
 class MockLinShareDownloadManager extends Mock implements LinShareDownloadManager {}
 
-class MockLocalAuthenticationService extends Mock implements LocalAuthenticationService {}
+class MockLocalBiometricService extends Mock implements LocalBiometricService {}
 
 class MockBiometricExceptionThrower extends Mock implements BiometricExceptionThrower {}
