@@ -35,8 +35,9 @@ import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart'
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_setting_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
@@ -84,6 +85,8 @@ AppState appStateReducer(AppState state, action) {
         deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action));
         updateSharedSpaceMembersState: updateSharedSpaceMembersReducer(state.updateSharedSpaceMembersState, action),
         deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action),
+        sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action),
+        biometricAuthenticationSettingState: biometricAuthenticationSettingReducer(state.biometricAuthenticationSettingState, action),
         biometricAuthenticationState: biometricAuthenticationReducer(state.biometricAuthenticationState, action));
   }
 
@@ -115,6 +118,8 @@ AppState appStateReducer(AppState state, action) {
       deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState);
       updateSharedSpaceMembersState: state.updateSharedSpaceMembersState,
       deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState,
+      sharedSpaceNodeDetailsState: state.sharedSpaceNodeDetailsState,
+      biometricAuthenticationSettingState: state.biometricAuthenticationSettingState,
       biometricAuthenticationState: state.biometricAuthenticationState);
 }
 

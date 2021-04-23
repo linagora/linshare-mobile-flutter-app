@@ -29,48 +29,54 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:domain/src/state/failure.dart';
-import 'package:domain/src/state/success.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:flutter/material.dart';
 
-@immutable
-class BiometricAuthenticationState extends LinShareState {
-  final List<BiometricKind> biometricKindList;
-  final AuthenticationBiometricState authenticationBiometricState;
+/// A builder which builds a reusable slogan widget.
+/// This contains the LinShare logo and the slogan text.
+/// The elements are arranged in a column.
+class LinShareSloganBuilder {
+  Key _key;
+  String _text;
+  TextStyle _textStyle;
+  TextAlign _textAlign;
+  String _logo;
 
-  BiometricAuthenticationState(
-    Either<Failure, Success> viewState,
-    this.biometricKindList,
-    this.authenticationBiometricState
-  ) : super(viewState);
-
-  factory BiometricAuthenticationState.initial() {
-    return BiometricAuthenticationState(Right(IdleState()), [], AuthenticationBiometricState.unAuthenticated);
+  LinShareSloganBuilder key(Key key) {
+    _key = key;
+    return this;
   }
 
-  @override
-  BiometricAuthenticationState clearViewState() {
-    return BiometricAuthenticationState(Right(IdleState()), biometricKindList, authenticationBiometricState);
+  LinShareSloganBuilder setSloganText(String text) {
+    _text = text;
+    return this;
   }
 
-  @override
-  BiometricAuthenticationState sendViewState({Either<Failure, Success> viewState}) {
-    return BiometricAuthenticationState(viewState, biometricKindList, authenticationBiometricState);
+  LinShareSloganBuilder setSloganTextStyle(TextStyle textStyle) {
+    _textStyle = textStyle;
+    return this;
   }
 
-  BiometricAuthenticationState setBiometricState(List<BiometricKind> newBiometricKindList) {
-    return BiometricAuthenticationState(viewState, newBiometricKindList, authenticationBiometricState);
+  LinShareSloganBuilder setSloganTextAlign(TextAlign textAlign) {
+    _textAlign = textAlign;
+    return this;
   }
 
-  BiometricAuthenticationState setBiometricAuthenticationState(AuthenticationBiometricState newAuthenticationBiometricState) {
-    return BiometricAuthenticationState(viewState, biometricKindList, newAuthenticationBiometricState);
+  LinShareSloganBuilder setLogo(String logo) {
+    _logo = logo;
+    return this;
   }
 
-  @override
-  BiometricAuthenticationState startLoadingState() {
-    return BiometricAuthenticationState(Right(LoadingState()), biometricKindList, authenticationBiometricState);
+  Widget build() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image(image: AssetImage(_logo), alignment: Alignment.center),
+        Padding(
+          padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+          child:
+          Text(_text, key: _key, style: _textStyle, textAlign: _textAlign),
+        ),
+      ],
+    );
   }
 }

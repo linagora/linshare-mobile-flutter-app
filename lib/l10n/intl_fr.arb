@@ -1106,8 +1106,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication": "Biometric authentication",
-  "@biometric_authentication": {
+  "face": "Face",
+  "@face": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "fingerprint": "Fingerprint",
+  "@fingerprint": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "touch_id": "TouchID",
+  "@touch_id": {
     "type": "text",
     "placeholders": {}
   },
@@ -1116,8 +1126,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "fingerprint": "Fingerprint",
-  "@fingerprint": {
+  "biometric_authentication": "Biometric authentication",
+  "@biometric_authentication": {
     "type": "text",
     "placeholders": {}
   },
@@ -1135,13 +1145,39 @@
       "biometricKind": {}
     }
   },
-  "biometric_authentication_localized_reason_enable": "Please authenticate to enable biometric authentication for application",
-  "@biometric_authentication_localized_reason_enable": {
+  "biometric_authentication_localized_reason": "Scan your {biometricKind} to authentication",
+  "@biometric_authentication_localized_reason": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "biometric_disabled_in_setting_app": "Please enable {biometricKind} in the Settings app on your phone to use biometric authentication",
+  "@biometric_disabled_in_setting_app": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "open_with_biometric": "Open with {biometricKind}",
+  "@open_with_biometric": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "or": "Or",
+  "@or": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_localized_reason_disable": "Please authenticate to disable biometric authentication for application",
-  "@biometric_authentication_localized_reason_disable": {
+  "go_to_sign_in": "Go to Sign-In",
+  "@go_to_sign_in": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_is_locked": "Biometric authentication is locked due to exceeded number of attempts.",
+  "@biometric_authentication_is_locked": {
     "type": "text",
     "placeholders": {}
   }

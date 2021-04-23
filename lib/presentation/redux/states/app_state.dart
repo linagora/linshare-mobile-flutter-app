@@ -36,6 +36,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/authentication_st
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/document_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
@@ -73,6 +75,7 @@ class AppState with EquatableMixin {
   final DeleteSharedSpaceMembersState deleteSharedSpaceMembersState;
   final DocumentDetailsState documentDetailsState;
   final SharedSpaceNodeDetailsState sharedSpaceNodeDetailsState;
+  final BiometricAuthenticationSettingState biometricAuthenticationSettingState;
   final BiometricAuthenticationState biometricAuthenticationState;
 
   AppState(
@@ -101,6 +104,8 @@ class AppState with EquatableMixin {
       @required this.deleteSharedSpaceMembersState});
       @required this.updateSharedSpaceMembersState,
       @required this.deleteSharedSpaceMembersState,
+      @required this.sharedSpaceNodeDetailsState,
+      @required this.biometricAuthenticationSettingState,
       @required this.biometricAuthenticationState});
 
   factory AppState.initial() {
@@ -130,6 +135,8 @@ class AppState with EquatableMixin {
         deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial());
         updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
         deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial(),
+        sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
+        biometricAuthenticationSettingState: BiometricAuthenticationSettingState.initial(),
         biometricAuthenticationState: BiometricAuthenticationState.initial());
   }
 
@@ -160,5 +167,8 @@ class AppState with EquatableMixin {
         addSharedSpaceMembersState,
         deleteSharedSpaceMembersState,
         biometricAuthenticationState
+        sharedSpaceNodeDetailsState,
+        biometricAuthenticationSettingState,
+        biometricAuthenticationState,
       ];
 }

@@ -49,24 +49,16 @@ class CleanBiometricAuthenticationStateAction extends ActionOffline {
   CleanBiometricAuthenticationStateAction();
 }
 
+
 @immutable
-class SetBiometricAuthenticationAction extends ActionOffline {
-  final BiometricState biometricState;
+class SetBiometricStateForBiometricAuthenticationAction extends ActionOffline {
   final List<BiometricKind> biometricKinds;
 
-  SetBiometricAuthenticationAction(this.biometricState, this.biometricKinds);
+  SetBiometricStateForBiometricAuthenticationAction(this.biometricKinds);
 }
-
 @immutable
-class SetBiometricStateAction extends ActionOffline {
-  final BiometricState biometricState;
-
-  SetBiometricStateAction(this.biometricState);
-}
-
-@immutable
-class SetAuthenticationBiometricStateAction extends ActionOffline {
+class SetAuthenticationBiometricStateForBiometricAuthenticationAction extends ActionOffline {
   final AuthenticationBiometricState authenticationBiometricState;
 
-  SetAuthenticationBiometricStateAction(this.authenticationBiometricState);
+  SetAuthenticationBiometricStateForBiometricAuthenticationAction(this.authenticationBiometricState);
 }

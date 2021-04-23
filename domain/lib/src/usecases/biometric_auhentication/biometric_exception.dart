@@ -32,9 +32,10 @@
 import 'package:equatable/equatable.dart';
 
 abstract class BiometricException extends Equatable implements Exception {
-  static final notAvailable = 'Biometrics not available';
+  static final notAvailable = 'Biometrics not available on this device';
   static final notEnrolled = 'No Biometrics enrolled on this device';
   static final lockedOut = 'Biometrics is locked out due to too many attempts';
+  static final rejected = 'User has denied the use of biometry for this app';
 
   final String message;
 

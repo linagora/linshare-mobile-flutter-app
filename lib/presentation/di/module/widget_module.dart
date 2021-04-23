@@ -39,6 +39,8 @@ import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_setting_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_setting_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_viewmodel.dart';
@@ -91,6 +93,7 @@ class WidgetModule {
     _provideAddSharedSpaceMemberComponent();
     _provideDocumentDetailsComponent();
     _provideSharedSpaceNodeDetailsComponent();
+    _provideBiometricAuthenticationSettingComponent();
     _provideBiometricAuthenticationComponent();
   }
 
@@ -158,6 +161,8 @@ class WidgetModule {
       getIt.get<RetryAuthenticationInterceptors>(),
       getIt.get<UploadFileManager>(),
       getIt<Connectivity>(),
+      getIt<GetBiometricSettingInteractor>(),
+      getIt<DisableBiometricInteractor>(),
     ));
   }
 
@@ -313,8 +318,10 @@ class WidgetModule {
 
   void _provideBiometricAuthenticationComponent() {
     getIt.registerFactory(() => BiometricAuthenticationWidget());
+  void _provideBiometricAuthenticationSettingComponent() {
+    getIt.registerFactory(() => BiometricAuthenticationSettingWidget());
     getIt.registerFactory(() =>
-      BiometricAuthenticationViewModel(
+      BiometricAuthenticationSettingViewModel(
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
         getIt.get<AuthenticationBiometricInteractor>(),
@@ -323,5 +330,18 @@ class WidgetModule {
         getIt.get<GetBiometricSettingInteractor>(),
         getIt.get<DisableBiometricInteractor>()
       ));
+  }
+
+  void _provideBiometricAuthenticationComponent() {
+    getIt.registerFactory(() => BiometricAuthenticationWidget());
+    getIt.registerFactory(() =>
+        BiometricAuthenticationViewModel(
+            getIt.get<Store<AppState>>(),
+            getIt.get<AppNavigation>(),
+            getIt.get<AuthenticationBiometricInteractor>(),
+            getIt.get<DisableBiometricInteractor>(),
+            getIt.get<DeletePermanentTokenInteractor>(),
+            getIt.get<GetAvailableBiometricInteractor>(),
+        ));
   }
 }

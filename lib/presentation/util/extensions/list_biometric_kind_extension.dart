@@ -29,48 +29,46 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
+import 'dart:io';
+
 import 'package:domain/domain.dart';
-import 'package:domain/src/state/failure.dart';
-import 'package:domain/src/state/success.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 
-@immutable
-class BiometricAuthenticationState extends LinShareState {
-  final List<BiometricKind> biometricKindList;
-  final AuthenticationBiometricState authenticationBiometricState;
+extension ListBiometricKindExtension on List<BiometricKind> {
 
-  BiometricAuthenticationState(
-    Either<Failure, Success> viewState,
-    this.biometricKindList,
-    this.authenticationBiometricState
-  ) : super(viewState);
-
-  factory BiometricAuthenticationState.initial() {
-    return BiometricAuthenticationState(Right(IdleState()), [], AuthenticationBiometricState.unAuthenticated);
+  String getBiometricKind(BuildContext context) {
+    if (contains(BiometricKind.faceId) && contains(BiometricKind.fingerprint)) {
+      return Platform.isIOS
+          ? '${AppLocalizations.of(context).touch_id} (${AppLocalizations.of(context).or.toLowerCase()} ${AppLocalizations.of(context).face_id})'
+          : '${AppLocalizations.of(context).fingerprint} (${AppLocalizations.of(context).or.toLowerCase()} ${AppLocalizations.of(context).face})';
+    } else if (contains(BiometricKind.faceId)) {
+      return Platform.isIOS ? AppLocalizations.of(context).face_id : AppLocalizations.of(context).face;
+    } else if (contains(BiometricKind.fingerprint)) {
+      return Platform.isIOS ? AppLocalizations.of(context).touch_id : AppLocalizations.of(context).fingerprint;
+    } else {
+      return Platform.isIOS
+          ? '${AppLocalizations.of(context).touch_id} (${AppLocalizations.of(context).or.toLowerCase()} ${AppLocalizations.of(context).face_id})'
+          : '${AppLocalizations.of(context).fingerprint} (${AppLocalizations.of(context).or.toLowerCase()} ${AppLocalizations.of(context).face})';
+    }
   }
 
-  @override
-  BiometricAuthenticationState clearViewState() {
-    return BiometricAuthenticationState(Right(IdleState()), biometricKindList, authenticationBiometricState);
+  String getBiometricIcon(AppImagePaths imagePaths) {
+    if (contains(BiometricKind.faceId) && contains(BiometricKind.fingerprint)) {
+      return imagePaths.icBiometric;
+    } else if (contains(BiometricKind.faceId)) {
+      return imagePaths.icFaceId;
+    }else if (contains(BiometricKind.fingerprint)) {
+      return imagePaths.icFingerprint;
+    }
+    return imagePaths.icBiometric;
   }
 
-  @override
-  BiometricAuthenticationState sendViewState({Either<Failure, Success> viewState}) {
-    return BiometricAuthenticationState(viewState, biometricKindList, authenticationBiometricState);
-  }
-
-  BiometricAuthenticationState setBiometricState(List<BiometricKind> newBiometricKindList) {
-    return BiometricAuthenticationState(viewState, newBiometricKindList, authenticationBiometricState);
-  }
-
-  BiometricAuthenticationState setBiometricAuthenticationState(AuthenticationBiometricState newAuthenticationBiometricState) {
-    return BiometricAuthenticationState(viewState, biometricKindList, newAuthenticationBiometricState);
-  }
-
-  @override
-  BiometricAuthenticationState startLoadingState() {
-    return BiometricAuthenticationState(Right(LoadingState()), biometricKindList, authenticationBiometricState);
+  double getBiometricIconSize() {
+    if (contains(BiometricKind.faceId) && !contains(BiometricKind.fingerprint)) {
+      return 64;
+    }
+    return 110;
   }
 }

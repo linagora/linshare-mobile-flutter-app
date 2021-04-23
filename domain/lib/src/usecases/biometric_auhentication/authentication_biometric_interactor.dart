@@ -45,6 +45,10 @@ class AuthenticationBiometricInteractor {
     } catch (exception) {
       if (exception is BiometricNotEnrolled) {
         return Right<Failure, Success>(AuthenticationBiometricViewState(AuthenticationBiometricState.unEnrolled));
+      } else if (exception is BiometricLockedOut) {
+        return Right<Failure, Success>(AuthenticationBiometricViewState(AuthenticationBiometricState.locked));
+      } else if (exception is BiometricNotAvailable) {
+        return Right<Failure, Success>(AuthenticationBiometricViewState(AuthenticationBiometricState.rejected));
       } else {
         return Left<Failure, Success>(AuthenticationBiometricFailure(exception));
       }

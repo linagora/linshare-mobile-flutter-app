@@ -1403,9 +1403,19 @@ class AppLocalizations {
     );
   }
 
-  String get biometric_authentication {
-    return Intl.message('Biometric authentication',
-        name: 'biometric_authentication');
+  String get face {
+    return Intl.message('Face',
+        name: 'face');
+  }
+
+  String get fingerprint {
+    return Intl.message('Fingerprint',
+        name: 'fingerprint');
+  }
+
+  String get touch_id {
+    return Intl.message('TouchID',
+        name: 'touch_id');
   }
 
   String get face_id {
@@ -1413,9 +1423,9 @@ class AppLocalizations {
         name: 'face_id');
   }
 
-  String get fingerprint {
-    return Intl.message('Fingerprint',
-        name: 'fingerprint');
+  String get biometric_authentication {
+    return Intl.message('Biometric authentication',
+        name: 'biometric_authentication');
   }
 
   String biometric_authentication_message(String biometricKind) {
@@ -1434,14 +1444,43 @@ class AppLocalizations {
     );
   }
 
-  String get biometric_authentication_localized_reason_enable {
-    return Intl.message('Please authenticate to enable biometric authentication for application',
-        name: 'biometric_authentication_localized_reason_enable');
+  String biometric_authentication_localized_reason(String biometricKind) {
+    return Intl.message(
+        'Scan your $biometricKind to authentication',
+        name: 'biometric_authentication_localized_reason',
+        args: [biometricKind]
+    );
   }
 
-  String get biometric_authentication_localized_reason_disable {
-    return Intl.message('Please authenticate to disable biometric authentication for application',
-        name: 'biometric_authentication_localized_reason_disable');
+  String biometric_disabled_in_setting_app(String biometricKind) {
+    return Intl.message(
+        'Please enable $biometricKind in the Settings app on your phone to use biometric authentication',
+        name: 'biometric_disabled_in_setting_app',
+        args: [biometricKind]
+    );
+  }
+
+  String open_with_biometric(String biometricKind) {
+    return Intl.message(
+        'Open with $biometricKind',
+        name: 'open_with_biometric',
+        args: [biometricKind]
+    );
+  }
+
+  String get or {
+    return Intl.message('Or',
+        name: 'or');
+  }
+
+  String get go_to_sign_in {
+    return Intl.message('Go to Sign-In',
+        name: 'go_to_sign_in');
+  }
+
+  String get biometric_authentication_is_locked {
+    return Intl.message('Biometric authentication is locked due to exceeded number of attempts.',
+        name: 'biometric_authentication_is_locked');
   }
 }
 

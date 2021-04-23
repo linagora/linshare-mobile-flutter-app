@@ -33,6 +33,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_setting_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_widget.dart';
@@ -64,6 +65,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<DocumentDetailsWidget>(), settings: settings.arguments);
     case RoutePaths.sharedSpaceNodeDetails:
       return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeDetailsWidget>(), settings: settings.arguments);
+    case RoutePaths.biometricAuthenticationSetting:
+      return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationSettingWidget>(), settings: settings.arguments);
     case RoutePaths.biometricAuthentication:
       return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationWidget>(), settings: settings.arguments);
     default:

@@ -29,8 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -40,9 +38,11 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/authentication_biometric_state_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-
-import 'biometric_authentication_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/list_biometric_kind_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/text/linshare_slogan_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_viewmodel.dart';
 
 class BiometricAuthenticationWidget extends StatefulWidget {
   @override
@@ -56,100 +56,124 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    _biometricAuthenticationViewModel.getBiometricSetting();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _biometricAuthenticationViewModel.getAvailableBiometric(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
-      onWillPop: () async {
-        _biometricAuthenticationViewModel.backToAccountDetail();
-        return false;
-      },
-      child: StoreConnector<AppState, BiometricAuthenticationState>(
-        converter: (store) => store.state.biometricAuthenticationState,
-        builder: (context, biometricState) => Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              key: Key('biometric_authentication_arrow_back_button'),
-              icon: Image.asset(_imagePath.icArrowBack),
-              onPressed: () => _biometricAuthenticationViewModel.backToAccountDetail()),
-            centerTitle: true,
-            title: Text(
-              AppLocalizations.of(context).biometric_authentication,
-              key: Key('biometric_authentication_title'),
-              style: TextStyle(fontSize: 24, color: Colors.white)),
-            backgroundColor: AppColor.primaryColor),
-          body: Container(
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context).biometric_authentication,
-                      style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor)),
-                    GestureDetector(
-                      onTap: () => biometricState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled
-                        ? {}
-                        : _biometricAuthenticationViewModel.toggleBiometricState(context),
-                      child: SvgPicture.asset(
-                        _getIconBiometricAuthenticationState(biometricState),
-                        width: 52,
-                        height: 32,
-                        fit: BoxFit.fill))
-                  ]
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 14),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      AppLocalizations.of(context).biometric_authentication_message(AppLocalizations.of(context).fingerprint),
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: AppColor.documentModifiedDateItemTextColor))
-                  )),
-                biometricState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled
-                  ? Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          AppLocalizations.of(context).biometric_authentication_not_enrolled(AppLocalizations.of(context).fingerprint),
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 16, color: AppColor.statusUploadFailedSubTitleColor))))
-                  : SizedBox.shrink()
-              ])
-          )
-        )
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, biometricState) => Scaffold(
+        backgroundColor: AppColor.primaryColor,
+        body: _buildBody(context)
       )
     );
   }
 
-  String _getIconBiometricAuthenticationState(BiometricAuthenticationState biometricState) {
-    if (biometricState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled) {
-      return _imagePath.icSwitchDisabled;
-    } else {
-      return biometricState.biometricState == BiometricState.enabled ? _imagePath.icSwitchOn : _imagePath.icSwitchOff;
-    }
+  Widget _buildBody(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(top: 100),
+              child: Column(
+                children: [
+                  LinShareSloganBuilder()
+                      .setSloganText(AppLocalizations.of(context).login_text_slogan)
+                      .setSloganTextAlign(TextAlign.center)
+                      .setSloganTextStyle(TextStyle(color: Colors.white, fontSize: 16))
+                      .setLogo(_imagePath.icLoginLogo)
+                      .build(),
+                  SizedBox(height: 80),
+                  _buildSetupBiometric(context)
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
+  Widget _buildSetupBiometric(BuildContext context) {
+    return StoreConnector<AppState, BiometricAuthenticationState>(
+      converter: (store) => store.state.biometricAuthenticationState,
+      builder: (context, biometricState) => Expanded(
+        child: Container(
+          width: double.infinity,
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 36.0, left: 65, right: 65, bottom: 20),
+                child: Text(
+                  biometricState.authenticationBiometricState.getBiometricStatusName(context, biometricState.biometricKindList),
+                  textAlign: TextAlign.center,
+                  style:
+                  TextStyle(color: _getColorTextBiometric(biometricState), fontSize: 16),
+                ),
+              ),
+              GestureDetector(
+                  onTap: () => _onBiometricClickAction(biometricState),
+                  child: SvgPicture.asset(
+                    biometricState.biometricKindList.getBiometricIcon(_imagePath),
+                    width: biometricState.biometricKindList.getBiometricIconSize(),
+                    height: biometricState.biometricKindList.getBiometricIconSize(),
+                    color: _getColorIconBiometric(biometricState),
+                  )
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 25),
+                child: Text(
+                  AppLocalizations.of(context).or,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppColor.documentNameItemTextColor, fontSize: 16),
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 70),
+                  child: GestureDetector(
+                      onTap: () => _biometricAuthenticationViewModel.gotoSignIn(),
+                      child: Text(
+                        AppLocalizations.of(context).go_to_sign_in,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: AppColor.toastBackgroundColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400
+                        ),
+                      )
+                  )
+              )
+            ])
+        ),
+      )
+    );
+  }
 
-    if (state == AppLifecycleState.resumed) {
-      _biometricAuthenticationViewModel.checkBiometricState(context);
-    }
+  void _onBiometricClickAction(BiometricAuthenticationState biometricState) {
+    return biometricState.authenticationBiometricState.isAuthenticateReady()
+        ? _biometricAuthenticationViewModel.authenticationBiometric(context)
+        : {};
+  }
+
+  Color _getColorIconBiometric(BiometricAuthenticationState biometricState) {
+    return biometricState.authenticationBiometricState.isAuthenticateReady()
+      ? AppColor.defaultLabelAvatarBackgroundColor
+      : AppColor.uploadButtonDisableBackgroundColor;
+  }
+
+  Color _getColorTextBiometric(BiometricAuthenticationState biometricState) {
+    return biometricState.authenticationBiometricState.isAuthenticateReady()
+      ? AppColor.loginTextFieldTextColor
+      : AppColor.toastErrorBackgroundColor;
   }
 }

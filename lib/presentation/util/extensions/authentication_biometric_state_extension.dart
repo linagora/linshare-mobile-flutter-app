@@ -30,60 +30,28 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/list_biometric_kind_extension.dart';
 
-class AccountDetailsViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
-  final IsAvailableBiometricInteractor _isAvailableBiometricInteractor;
+extension AuthenticationBiometricStateExtension on AuthenticationBiometricState {
 
-  AccountDetailsViewModel(
-    Store<AppState> store,
-    this.deletePermanentTokenInteractor,
-    this._appNavigation,
-    this._isAvailableBiometricInteractor
-  ) : super(store);
-
-  void logout() {
-    store.dispatch(logoutAction());
-    _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
-    store.dispatch(ClearCurrentView());
+  String getBiometricStatusName(BuildContext context, List<BiometricKind> biometricKindList) {
+    switch(this) {
+      case AuthenticationBiometricState.locked:
+        return AppLocalizations.of(context).biometric_authentication_is_locked;
+      case AuthenticationBiometricState.unEnrolled:
+      case AuthenticationBiometricState.rejected:
+        return AppLocalizations.of(context).biometric_disabled_in_setting_app(biometricKindList.getBiometricKind(context));
+      default:
+        return AppLocalizations.of(context).open_with_biometric(biometricKindList.getBiometricKind(context));
+    }
   }
 
-  ThunkAction<AppState> logoutAction() {
-    return (Store<AppState> store) async {
-      await deletePermanentTokenInteractor.execute();
-    };
-  }
-
-  void getSupportBiometricState() {
-    store.dispatch((Store<AppState> store) async {
-      await _isAvailableBiometricInteractor.execute()
-        .then((result) => result.fold(
-          (failure) {
-            store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          },
-          (success) {success is IsAvailableBiometricViewState
-              ? store.dispatch(SetSupportBiometricStateAction(success.supportBiometricState))
-              : store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          })
-        );
-    });
-  }
-
-  void goBiometricAuthentication() {
-    _appNavigation.push(RoutePaths.biometricAuthenticationSetting);
-  }
-
-  @override
-  void onDisposed() {
-    super.onDisposed();
+  bool isAuthenticateReady() {
+    if (this != AuthenticationBiometricState.locked && this != AuthenticationBiometricState.unEnrolled && this != AuthenticationBiometricState.rejected) {
+      return true;
+    }
+    return false;
   }
 }
