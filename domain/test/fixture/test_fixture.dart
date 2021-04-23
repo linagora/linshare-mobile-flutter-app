@@ -91,3 +91,9 @@ final accountQuota1 = AccountQuota(
   maxFileSize: QuotaSize(30),
   maintenance: true
 );
+
+final sharedSpaceSorter1 = Sorter(OrderScreen.workGroup, OrderBy.modificationDate, OrderType.descending);
+final sharedSpaceFileSizeSorter = Sorter(OrderScreen.workGroup, OrderBy.fileSize, OrderType.descending);
+final sharedSpaceSharedSorter = Sorter(OrderScreen.workGroup, OrderBy.shared, OrderType.descending);
+final sharedSpaceSenderSorter = Sorter(OrderScreen.workGroup, OrderBy.sender, OrderType.descending);
+final sharedSpaceModificationDateSorter = Sorter(OrderScreen.workGroup, OrderBy.modificationDate, OrderType.descending);

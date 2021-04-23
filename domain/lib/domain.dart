@@ -15,6 +15,7 @@ export 'src/extension/audit_log_entry_type.dart';
 export 'src/extension/name_validator_string_extension.dart';
 export 'src/extension/list_validator_extension.dart';
 export 'src/extension/list_received_share_extension.dart';
+export 'src/extension/list_work_group_extension.dart';
 
 // viewState
 export 'src/state/failure.dart';
