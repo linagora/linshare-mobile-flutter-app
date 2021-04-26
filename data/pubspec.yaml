@@ -5,7 +5,7 @@ author:
 homepage: 'https://www.linshare.org'
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
@@ -21,36 +21,36 @@ dependencies:
     path: ../testshared
 
   # Http client
-  dio: ^3.0.10
-  json_annotation: ^3.1.0
+  dio: 4.0.0
+  json_annotation: 4.0.1
 
   # device_info
-  device_info: ^0.4.2+8
+  device_info: 2.0.0
 
   # shared_preferences
-  shared_preferences: ^0.5.12
+  shared_preferences: 2.0.5
 
   # flutter_uploader
-  flutter_uploader: ^1.2.1
+  flutter_uploader: 3.0.0-beta.1
 
   # flutter_downloader
-  flutter_downloader: ^1.5.2
+  flutter_downloader: 1.6.0
 
   # path_provider
-  path_provider: ^1.6.24
+  path_provider: 2.0.1
 
   # rxdart
-  rxdart: ^0.24.1
+  rxdart: 0.26.0
 
   # dartz
-  dartz: ^0.9.2
+  dartz: 0.10.0-nullsafety.1
 
-  equatable: ^1.2.3
+  equatable: 2.0.0
 
   ext_storage: 1.0.3
 
   # local_auth
-  local_auth: 0.6.3+4
+  local_auth: 1.1.5
 
   contacts_service:
     git:
@@ -60,10 +60,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^1.10.2
-  json_serializable: ^3.5.0
-  test: ^1.16.0-nullsafety.5
-  mockito: ^4.1.3
+  build_runner: 2.0.1
+  json_serializable: 4.1.1
+  test: 1.16.5
+  mockito: 5.0.6
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
