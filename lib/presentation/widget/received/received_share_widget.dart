@@ -57,6 +57,7 @@ import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/mu
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/received_share_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -260,37 +261,35 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                     ),
                     flex: 2,
                   ),
+                  SizedBox(width: 10),
                   Expanded(
                     child: _buildSenderName(receivedShareItem.element.sender.fullName()),
-                    flex: 1,
                   ),
-                  Expanded(
-                    child: _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
-                        receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
-                    flex: 1,
-                  )
+                  SizedBox(width: 10),
+                  _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
+                      receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
                 ],
               )
           ),
         ),
         subtitle: ResponsiveWidget.isSmallScreen(context)
             ? Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                child: Row(
                   children: [
-                    _buildSenderName(receivedShareItem.element.sender.fullName()),
-                    _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
-                        receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSenderName(receivedShareItem.element.sender.fullName()),
+                          _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
+                              receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               )
-            ],
-          ),
-        )
             : null,
         trailing: StoreConnector<AppState, SelectMode>(
             converter: (store) => store.state.receivedShareState.selectMode,
@@ -324,10 +323,16 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   Widget _buildFileName(String fileName) {
     return Padding(
       padding: const EdgeInsets.only(top: 28.0),
-      child: Text(
-        fileName,
-        maxLines: 1,
-        style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+      child: CustomPaint(
+        size: Size(double.infinity, 14),
+        painter: EllipsisTextPainter(
+          text: TextSpan(text: fileName, style: TextStyle(
+              fontSize: 14,
+              color: AppColor.documentNameItemTextColor),
+          ),
+          ellipsis: fileName.toMiddleEllipsis(),
+          maxLines: 1,
+        ),
       ),
     );
   }
@@ -344,6 +349,8 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
       child: Text(
         sender,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
       ),
     );

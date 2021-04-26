@@ -63,6 +63,6 @@ class GenericUser with EquatableMixin {
 
 extension GenericUserExtension on GenericUser {
   String fullName() {
-    return '${firstName.getOrElse(() => '')} ${lastName.getOrElse(() => '')}';
+    return '${firstName.getOrElse(() => '')} ${lastName.getOrElse(() => '').toUpperCase()}';
   }
 }
