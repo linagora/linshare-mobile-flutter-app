@@ -36,13 +36,13 @@ import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 
 class GetSharedSpaceNodeInteractor {
-  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+  final SharedSpaceDocumentRepository? _sharedSpaceDocumentRepository;
 
   GetSharedSpaceNodeInteractor(this._sharedSpaceDocumentRepository);
 
   Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId) async {
     try {
-      final workGroupNode = await _sharedSpaceDocumentRepository.getWorkGroupNode(sharedSpaceId, workGroupNodeId);
+      final workGroupNode = await _sharedSpaceDocumentRepository!.getWorkGroupNode(sharedSpaceId, workGroupNodeId);
       return Right<Failure, Success>(SharedSpaceNodeViewState(workGroupNode));
     } catch (exception) {
       return Left<Failure, Success>(SharedSpaceNodeFailure(exception));

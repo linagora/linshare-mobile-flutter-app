@@ -37,8 +37,8 @@ import '../../mock/repository/biometric_authentication/mock_biometric_repository
 
 void main() {
   group('is_available_biometric_interactor_test', () {
-    MockBiometricRepository biometricRepository;
-    IsAvailableBiometricInteractor isAvailableBiometricInteractor;
+    MockBiometricRepository? biometricRepository;
+    late IsAvailableBiometricInteractor isAvailableBiometricInteractor;
 
     setUp(() {
       biometricRepository = MockBiometricRepository();
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('isAvailable should return success with data valid', () async {
-      when(biometricRepository.isAvailable()).thenAnswer((_) async => true);
+      when(biometricRepository!.isAvailable()).thenAnswer((_) async => true);
 
       final result = await isAvailableBiometricInteractor.execute();
 

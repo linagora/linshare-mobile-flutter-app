@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('get_shared_space_interactor', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    GetSharedSpaceInteractor getSharedSpaceInteractor;
+    MockSharedSpaceRepository? sharedSpaceRepository;
+    late GetSharedSpaceInteractor getSharedSpaceInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -49,20 +49,20 @@ void main() {
     });
 
     test('get shared space interactor should return success with shared space', () async {
-      when(sharedSpaceRepository.getSharedSpace(sharedSpaceId1))
+      when(sharedSpaceRepository!.getSharedSpace(sharedSpaceId1))
           .thenAnswer((_) async => sharedSpace1);
 
       final result = await getSharedSpaceInteractor.execute(sharedSpaceId1);
 
-      final sharedSpace = result
+      final SharedSpaceNodeNested? sharedSpace = result
           .map((success) => (success as SharedSpaceDetailViewState).sharedSpace)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as SharedSpaceNodeNested Function());
 
       expect(sharedSpace, sharedSpace1);
     });
 
     test('get shared space interactor should return success with complete data', () async {
-      when(sharedSpaceRepository.getSharedSpace(
+      when(sharedSpaceRepository!.getSharedSpace(
         sharedSpaceId1,
         membersParameter: MembersParameter.withoutMembers,
         rolesParameter: RolesParameter.withoutRole
@@ -74,16 +74,16 @@ void main() {
         rolesParameter: RolesParameter.withoutRole
       );
 
-      final sharedSpace = result
+      final SharedSpaceNodeNested? sharedSpace = result
           .map((success) => (success as SharedSpaceDetailViewState).sharedSpace)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as SharedSpaceNodeNested Function());
 
       expect(sharedSpace, sharedSpace1);
     });
 
     test('get shared space interactor should fail when getSharedSpace fail', () async {
       final exception = Exception();
-      when(sharedSpaceRepository.getSharedSpace(sharedSpaceId1)).thenThrow(exception);
+      when(sharedSpaceRepository!.getSharedSpace(sharedSpaceId1)).thenThrow(exception);
 
       final result = await getSharedSpaceInteractor.execute(sharedSpaceId1);
 

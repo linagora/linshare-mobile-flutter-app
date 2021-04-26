@@ -45,10 +45,10 @@ class CopyMultipleFilesToSharedSpaceInteractor {
 
   CopyMultipleFilesToSharedSpaceInteractor(this._copyDocumentsToSharedSpaceInteractor);
 
-  Future<Either<Failure, Success>> execute(
-      {@required List<CopyRequest> copyRequests,
-      @required SharedSpaceId destinationSharedSpaceId,
-      WorkGroupNodeId destinationParentNodeId}) async {
+  Future<Either<Failure, Success?>> execute(
+      {required List<CopyRequest> copyRequests,
+      required SharedSpaceId destinationSharedSpaceId,
+      WorkGroupNodeId? destinationParentNodeId}) async {
     final listResult = await Future.wait(copyRequests.map((request) =>
         _copyDocumentsToSharedSpaceInteractor.execute(
             request,

@@ -41,8 +41,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('create_shared_space_folder_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    CreateSharedSpaceFolderInteractor createSharedSpaceFolderInteractor;
+    MockSharedSpaceDocumentRepository? sharedSpaceDocumentRepository;
+    late CreateSharedSpaceFolderInteractor createSharedSpaceFolderInteractor;
     final request = CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId);
 
     setUp(() {
@@ -51,7 +51,7 @@ void main() {
     });
 
     test('Create Shared Space Folder should return success with valid data', () async {
-      when(sharedSpaceDocumentRepository.createSharedSpaceFolder(
+      when(sharedSpaceDocumentRepository!.createSharedSpaceFolder(
         sharedSpaceFolder1.sharedSpaceId,
         request
       )).thenAnswer((_) async => workGroupFolder1);
@@ -61,16 +61,16 @@ void main() {
         request
       );
 
-      final folder = result
+      final WorkGroupFolder? folder = result
           .map((success) => (success as CreateSharedSpaceFolderViewState).workGroupFolder)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as WorkGroupFolder Function());
       expect(folder, workGroupFolder1);
     });
 
     test('Create Shared Space Folder should return success with valid data no parent id', () async {
       final requestNoParentId = CreateSharedSpaceNodeFolderRequest('Dat is good');
 
-      when(sharedSpaceDocumentRepository.createSharedSpaceFolder(
+      when(sharedSpaceDocumentRepository!.createSharedSpaceFolder(
         sharedSpaceFolder1.sharedSpaceId,
         requestNoParentId
       )).thenAnswer((_) async => workGroupFolder1);
@@ -80,15 +80,15 @@ void main() {
         requestNoParentId
       );
 
-      final workGroups = result
+      final WorkGroupFolder? workGroups = result
           .map((success) => (success as CreateSharedSpaceFolderViewState).workGroupFolder)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as WorkGroupFolder Function());
       expect(workGroups, workGroupFolder1);
     });
 
     test('Create Shared Space Folder interactor should fail when createSharedSpaceFolder fail', () async {
       final exception = Exception();
-      when(sharedSpaceDocumentRepository.createSharedSpaceFolder(
+      when(sharedSpaceDocumentRepository!.createSharedSpaceFolder(
         sharedSpaceFolder1.sharedSpaceId,
         request
       )).thenThrow(exception);

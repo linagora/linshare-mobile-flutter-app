@@ -39,7 +39,7 @@ class ReceivedShareIdDtoConverter implements JsonConverter<ReceivedShareIdDto, S
   const ReceivedShareIdDtoConverter();
 
   @override
-  ReceivedShareIdDto fromJson(String json) => ReceivedShareIdDto(json);
+  ReceivedShareIdDto fromJson(String? json) => ReceivedShareIdDto(json);
 
   @override
   String toJson(ReceivedShareIdDto object) => jsonEncode(object.uuid);

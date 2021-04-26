@@ -42,8 +42,8 @@ class FunctionalityLanguageDto extends FunctionalityDto with EquatableMixin {
 
   FunctionalityLanguageDto(
       FunctionalityIdentifier identifier,
-      bool enable,
-      bool canOverride)
+      bool? enable,
+      bool? canOverride)
       : super(identifier, enable, canOverride);
 
   factory FunctionalityLanguageDto.fromJson(Map<String, dynamic> json) => _$FunctionalityLanguageDtoFromJson(json);
@@ -51,10 +51,10 @@ class FunctionalityLanguageDto extends FunctionalityDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$FunctionalityLanguageDtoToJson(this);
 
   @override
-  List<Object> get props => [...super.props];
+  List<Object?> get props => [...super.props];
 }
 
 extension FunctionalityLanguageDtoExtension on FunctionalityLanguageDto {
   FunctionalityLanguage toFunctionalityLanguage() =>
-      FunctionalityLanguage(identifier, enable, canOverride);
+      FunctionalityLanguage(identifier, enable!, canOverride!);
 }

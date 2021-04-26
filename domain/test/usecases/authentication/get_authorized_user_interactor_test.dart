@@ -41,8 +41,8 @@ import '../../mock/repository/authentication/mock_authentication_repository.dart
 void main() {
 
   group('get_authorized_user_interactor_test', () {
-    GetAuthorizedInteractor getAuthorizedInteractor;
-    MockAuthenticationRepository authenticationRepository;
+    late GetAuthorizedInteractor getAuthorizedInteractor;
+    late MockAuthenticationRepository authenticationRepository;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();

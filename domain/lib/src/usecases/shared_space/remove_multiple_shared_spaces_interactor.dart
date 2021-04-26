@@ -38,7 +38,7 @@ class RemoveMultipleSharedSpacesInteractor {
 
   RemoveMultipleSharedSpacesInteractor(this._removeSharedSpaceInteractor);
 
-  Future<Either<Failure, Success>> execute(List<SharedSpaceId> sharedSpaceIds) async {
+  Future<Either<Failure, Success?>> execute(List<SharedSpaceId> sharedSpaceIds) async {
     final listResult = await Future.wait(sharedSpaceIds.map((sharedSpaceId) =>
       _removeSharedSpaceInteractor.execute(sharedSpaceId)));
 

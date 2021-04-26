@@ -39,7 +39,7 @@ class CopyMultipleFilesFromReceivedSharesToMySpaceInteractor {
 
   CopyMultipleFilesFromReceivedSharesToMySpaceInteractor(this._copyToMySpaceInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<ReceivedShare> shares}) async {
+  Future<Either<Failure, Success>> execute({required List<ReceivedShare> shares}) async {
     final copyRequestsList = shares.map((share) =>
         CopyRequest(share.shareId.uuid, SpaceType.RECEIVED_SHARE)).toList();
     final listResult = await Future.wait(copyRequestsList.map((element) =>

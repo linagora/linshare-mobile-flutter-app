@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('get_shared_space_roles_interactor', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
+    MockSharedSpaceRepository? sharedSpaceRepository;
+    late GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('getAllSharedSpaceRolesInteractor should return success with roles list', () async {
-      when(sharedSpaceRepository.getSharedSpacesRoles()).thenAnswer((_) async => [sharedSpaceRole1, sharedSpaceRole2, sharedSpaceRole3, sharedSpaceRole4]);
+      when(sharedSpaceRepository!.getSharedSpacesRoles()).thenAnswer((_) async => [sharedSpaceRole1, sharedSpaceRole2, sharedSpaceRole3, sharedSpaceRole4]);
 
       final result = await _getAllSharedSpaceRolesInteractor.execute();
 
@@ -62,7 +62,7 @@ void main() {
 
     test('getAllSharedSpaceRolesInteractor should fail when getSharedSpaceRoles fail', () async {
       final exception = Exception();
-      when(sharedSpaceRepository.getSharedSpacesRoles()).thenThrow(exception);
+      when(sharedSpaceRepository!.getSharedSpacesRoles()).thenThrow(exception);
 
       final result = await _getAllSharedSpaceRolesInteractor.execute();
 

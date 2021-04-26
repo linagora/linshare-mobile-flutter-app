@@ -37,8 +37,8 @@
 import 'package:equatable/equatable.dart';
 
 class ShareId with EquatableMixin {
-  String _uuid;
-  String get uuid => _uuid;
+  String? _uuid;
+  String? get uuid => _uuid;
 
   ShareId(String uuid) {
     assert(uuid != null && uuid.isNotEmpty, 'invalid shareId');
@@ -46,7 +46,7 @@ class ShareId with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [_uuid];
+  List<Object?> get props => [_uuid];
 
   @override
   bool get stringify => true;

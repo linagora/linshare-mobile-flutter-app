@@ -34,10 +34,10 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class AccountQuota with EquatableMixin {
-  final QuotaSize quota;
-  final QuotaSize usedSpace;
-  final QuotaSize maxFileSize;
-  final bool maintenance;
+  final QuotaSize? quota;
+  final QuotaSize? usedSpace;
+  final QuotaSize? maxFileSize;
+  final bool? maintenance;
 
   AccountQuota(
     {this.quota,
@@ -56,7 +56,7 @@ class AccountQuota with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     quota,
     usedSpace,
     maxFileSize,

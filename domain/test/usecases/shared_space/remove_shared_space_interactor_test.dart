@@ -39,8 +39,8 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('remove_shared_space_interactor test', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
+    MockSharedSpaceRepository? sharedSpaceRepository;
+    late RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -48,7 +48,7 @@ void main() {
     });
 
     test('remove shared space interactor should return success with one valid data', () async {
-      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace1.sharedSpaceId))
+      when(sharedSpaceRepository!.deleteSharedSpace(sharedSpace1.sharedSpaceId))
       .thenAnswer((_) async => sharedSpace1);
 
       final result = await removeSharedSpaceInteractor.execute(sharedSpace1.sharedSpaceId);
@@ -58,7 +58,7 @@ void main() {
     test('remove shared space interactor should fail when remove shared Space fail', () async {
       final exception = Exception();
 
-      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace1.sharedSpaceId))
+      when(sharedSpaceRepository!.deleteSharedSpace(sharedSpace1.sharedSpaceId))
         .thenThrow(exception);
 
       final result = await removeSharedSpaceInteractor.execute(sharedSpace1.sharedSpaceId);

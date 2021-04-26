@@ -41,8 +41,8 @@ import '../../mock/repository/quota/mock_quota_repository.dart';
 
 void main() {
   group('get_quota_interactor_test', () {
-    MockQuotaRepository quotaRepository;
-    GetQuotaInteractor quotaInteractor;
+    late MockQuotaRepository quotaRepository;
+    late GetQuotaInteractor quotaInteractor;
 
     setUp(() {
       quotaRepository = MockQuotaRepository();

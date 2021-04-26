@@ -39,8 +39,8 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('rename_document_interactor_test', () {
-    RenameDocumentInteractor renameDocumentInteractor;
-    DocumentRepository documentRepository;
+    late RenameDocumentInteractor renameDocumentInteractor;
+    DocumentRepository? documentRepository;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -48,7 +48,7 @@ void main() {
     });
 
     test('rename document should return success with valid data', () async {
-      when(documentRepository.rename(document1.documentId, RenameDocumentRequest(document1.name)))
+      when(documentRepository!.rename(document1.documentId, RenameDocumentRequest(document1.name)))
           .thenAnswer((_) async => document1);
       final result = await renameDocumentInteractor.execute(document1.documentId, RenameDocumentRequest(document1.name));
       result.fold(
@@ -60,7 +60,7 @@ void main() {
     });
 
     test('rename document should return failure', () async {
-      when(documentRepository.rename(document1.documentId, RenameDocumentRequest(document1.name)))
+      when(documentRepository!.rename(document1.documentId, RenameDocumentRequest(document1.name)))
           .thenThrow(Exception());
       final result = await renameDocumentInteractor.execute(document1.documentId, RenameDocumentRequest(document1.name));
       result.fold(

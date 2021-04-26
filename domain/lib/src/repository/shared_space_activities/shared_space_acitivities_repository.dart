@@ -32,5 +32,5 @@
 import 'package:domain/domain.dart';
 
 abstract class SharedSpaceActivitiesRepository {
-  Future<List<AuditLogEntryUser>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId);
+  Future<List<AuditLogEntryUser?>>  getSharedSpaceActivities(SharedSpaceId sharedSpaceId);
 }

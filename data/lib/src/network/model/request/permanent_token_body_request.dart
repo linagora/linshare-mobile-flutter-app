@@ -38,12 +38,12 @@ part 'permanent_token_body_request.g.dart';
 class PermanentTokenBodyRequest extends Equatable {
   PermanentTokenBodyRequest(this.label);
 
-  final String label;
+  final String? label;
 
   factory PermanentTokenBodyRequest.fromJson(Map<String, dynamic> json) => _$PermanentTokenBodyRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$PermanentTokenBodyRequestToJson(this);
 
   @override
-  List<Object> get props => [label];
+  List<Object?> get props => [label];
 }

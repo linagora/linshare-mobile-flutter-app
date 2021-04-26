@@ -39,8 +39,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('copy_multile_files_to_shared_space_interactor tests', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    CopyMultipleFilesToSharedSpaceInteractor copyMultipleFilesToSharedSpaceInteractor;
+    MockSharedSpaceDocumentRepository? sharedSpaceDocumentRepository;
+    late CopyMultipleFilesToSharedSpaceInteractor copyMultipleFilesToSharedSpaceInteractor;
     CopyDocumentsToSharedSpaceInteractor copyDocumentsToSharedSpaceInteractor;
 
     setUp(() {
@@ -50,11 +50,11 @@ void main() {
     });
 
     test('copy to shared space interactor should return success with valid data', () async {
-      when(sharedSpaceDocumentRepository.copyToSharedSpace(
+      when(sharedSpaceDocumentRepository!.copyToSharedSpace(
           CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenAnswer((_) async => [workGroupDocument1]);
-      when(sharedSpaceDocumentRepository.copyToSharedSpace(
+      when(sharedSpaceDocumentRepository!.copyToSharedSpace(
           CopyRequest(document2.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenAnswer((_) async => [workGroupDocument2]);
@@ -62,24 +62,24 @@ void main() {
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
           copyRequests: [document1, document2].map((document) => document.toCopyRequest()).toList(),
           destinationSharedSpaceId: sharedSpace1.sharedSpaceId);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<CopyMultipleFilesToSharedSpaceAllSuccessViewState>());
 
       (state as CopyMultipleFilesToSharedSpaceAllSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as CopyToSharedSpaceViewState).workGroupNode, [workGroupDocument1]));
 
-      (state as CopyMultipleFilesToSharedSpaceAllSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
           (failure) => {},
           (success) => expect((success as CopyToSharedSpaceViewState).workGroupNode, [workGroupDocument2]));
     });
 
     test('copy to shared space interactor should return success with some file failed to copy', () async {
-      when(sharedSpaceDocumentRepository.copyToSharedSpace(
+      when(sharedSpaceDocumentRepository!.copyToSharedSpace(
           CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
           .thenAnswer((_) async => [workGroupDocument1]);
-      when(sharedSpaceDocumentRepository.copyToSharedSpace(
+      when(sharedSpaceDocumentRepository!.copyToSharedSpace(
           CopyRequest(document2.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenThrow(Exception());
@@ -88,7 +88,7 @@ void main() {
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
           copyRequests: [document1, document2].map((document) => document.toCopyRequest()).toList(),
           destinationSharedSpaceId: sharedSpace1.sharedSpaceId);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState>());
 
       (state as CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState).resultList.forEach((element) {
@@ -99,11 +99,11 @@ void main() {
     });
 
     test('copy to shared space interactor should return failure with all file failed to copy', () async {
-      when(sharedSpaceDocumentRepository.copyToSharedSpace(
+      when(sharedSpaceDocumentRepository!.copyToSharedSpace(
           CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
           .thenThrow(Exception());
-      when(sharedSpaceDocumentRepository.copyToSharedSpace(
+      when(sharedSpaceDocumentRepository!.copyToSharedSpace(
           CopyRequest(document2.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenThrow(Exception());

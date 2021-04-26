@@ -41,16 +41,16 @@ class DownloadNodeIOSInteractor {
 
   DownloadNodeIOSInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<Either<Failure, Success>> execute(WorkGroupNode workgroupNode, CancelToken cancelToken) async {
+  Future<Either<Failure, Success?>> execute(WorkGroupNode workgroupNode, CancelToken cancelToken) async {
     try {
       var filePath;
       await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
           .then((List responses) async {
         filePath = await _sharedSpaceDocumentRepository.downloadNodeIOS(workgroupNode, responses[0], responses[1], cancelToken);
       });
-      return Right<Failure, Success>(DownloadNodeIOSViewState(filePath));
+      return Right<Failure, Success?>(DownloadNodeIOSViewState(filePath));
     } catch (exception) {
-      return Left<Failure, Success>(DownloadNodeIOSFailure(exception));
+      return Left<Failure, Success?>(DownloadNodeIOSFailure(exception));
     }
   }
 }

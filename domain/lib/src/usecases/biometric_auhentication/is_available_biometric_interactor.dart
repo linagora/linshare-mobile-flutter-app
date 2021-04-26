@@ -34,13 +34,13 @@ import 'package:domain/domain.dart';
 
 class IsAvailableBiometricInteractor {
 
-  final BiometricRepository _biometricRepository;
+  final BiometricRepository? _biometricRepository;
 
   IsAvailableBiometricInteractor(this._biometricRepository);
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final isAvailable = await _biometricRepository.isAvailable();
+      final isAvailable = await _biometricRepository!.isAvailable();
       return Right<Failure, Success>(IsAvailableBiometricViewState(isAvailable
           ? SupportBiometricState.available
           : SupportBiometricState.unavailable));

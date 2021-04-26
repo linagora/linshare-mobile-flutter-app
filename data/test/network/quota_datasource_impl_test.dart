@@ -42,9 +42,9 @@ import 'package:data/src/network/model/response/account_quota_response.dart';
 
 void main() {
   group('quota_datasource_impl_test', () {
-    MockLinShareHttpClient _linShareHttpClient;
+    late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    QuotaDataSourceImpl _quotaDataSourceImpl;
+    late QuotaDataSourceImpl _quotaDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
@@ -65,14 +65,17 @@ void main() {
 
     test('findQuota should throw QuotaNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-        type: DioErrorType.RESPONSE,
-        response: Response(statusCode: 404)
+        type: DioErrorType.response,
+        response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')),
+          requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.findQuota(quotaId1))
         .thenThrow(error);
 
       await _quotaDataSourceImpl.findQuota(quotaId1)
-        .catchError((error) => expect(error, isA<QuotaNotFound>()));
+        .catchError((error) {
+          expect(error, isA<QuotaNotFound>());
+        });
     });
 
     test('findQuota should throw UnknownError when linShareHttpClient throw exception', () async {
@@ -80,7 +83,9 @@ void main() {
         .thenThrow(Exception());
 
       await _quotaDataSourceImpl.findQuota(quotaId1)
-        .catchError((error) => expect(error, isA<UnknownError>()));
+        .catchError((error) {
+          expect(error, isA<UnknownError>());
+        });
     });
   });
 }

@@ -49,8 +49,8 @@ void main() {
 
 void isAvailable() {
   group('biometric_data_source_impl isAvailable test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
-    MockLocalBiometricService _localBiometricService;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
+    MockLocalBiometricService? _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 
@@ -66,7 +66,7 @@ void isAvailable() {
     test('isAvailable should return success with valid data', () async {
       await _initDataSource();
 
-      when(_localBiometricService.isAvailable()).thenAnswer((_) async => true);
+      when(_localBiometricService!.isAvailable()).thenAnswer((_) async => true);
 
       final isAvailable = await _biometricDataSourceImpl.isAvailable();
 
@@ -81,7 +81,7 @@ void isAvailable() {
           message: 'NotAvailable'
       );
 
-      when(_localBiometricService.isAvailable()).thenThrow(error);
+      when(_localBiometricService!.isAvailable()).thenThrow(error);
 
       await _biometricDataSourceImpl.isAvailable()
           .catchError((error) => expect(error, isA<BiometricNotAvailable>()));
@@ -91,8 +91,8 @@ void isAvailable() {
 
 void getAvailableBiometric() {
   group('biometric_data_source_impl getAvailableBiometrics test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
-    MockLocalBiometricService _localBiometricService;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
+    MockLocalBiometricService? _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 
@@ -108,7 +108,7 @@ void getAvailableBiometric() {
     test('getAvailableBiometrics should return success with valid data', () async {
       await _initDataSource();
 
-      when(_localBiometricService.getAvailableBiometrics()).thenAnswer((_) async => [BiometricKind.faceId, BiometricKind.fingerprint]);
+      when(_localBiometricService!.getAvailableBiometrics()).thenAnswer((_) async => [BiometricKind.faceId, BiometricKind.fingerprint]);
 
       final biometricKinds = await _biometricDataSourceImpl.getAvailableBiometrics();
 
@@ -123,7 +123,7 @@ void getAvailableBiometric() {
           message: 'NotEnrolled'
       );
 
-      when(_localBiometricService.getAvailableBiometrics()).thenThrow(error);
+      when(_localBiometricService!.getAvailableBiometrics()).thenThrow(error);
 
       await _biometricDataSourceImpl.getAvailableBiometrics()
           .catchError((error) => expect(error, isA<BiometricNotEnrolled>()));
@@ -133,10 +133,10 @@ void getAvailableBiometric() {
 
 void getBiometricSetting() {
   group('biometric_data_source_impl getBiometricSetting test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
     MockLocalBiometricService _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
-    SharedPreferences _sharedPreferences;
+    SharedPreferences? _sharedPreferences;
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({
@@ -154,17 +154,17 @@ void getBiometricSetting() {
 
       final biometricState = await _biometricDataSourceImpl.getBiometricSetting();
 
-      expect(biometricState.value, _sharedPreferences.getString(Constant.biometricSettingState));
+      expect(biometricState.value, _sharedPreferences!.getString(Constant.biometricSettingState));
     });
   });
 }
 
 void saveBiometricSetting() {
   group('biometric_data_source_impl saveBiometricSetting test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
     MockLocalBiometricService _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
-    SharedPreferences _sharedPreferences;
+    SharedPreferences? _sharedPreferences;
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({});
@@ -178,19 +178,19 @@ void saveBiometricSetting() {
     test('saveBiometricSetting return success with BiometricState is saved', () async {
       await _initDataSource();
 
-      await _sharedPreferences.setString(Constant.biometricSettingState, BiometricState.enabled.value);
+      await _sharedPreferences!.setString(Constant.biometricSettingState, BiometricState.enabled.value);
       
       await _biometricDataSourceImpl.saveBiometricSetting(BiometricState.enabled);
 
-      expect(BiometricState.enabled.value, _sharedPreferences.getString(Constant.biometricSettingState));
+      expect(BiometricState.enabled.value, _sharedPreferences!.getString(Constant.biometricSettingState));
     });
   });
 }
 
 void authenticate() {
   group('biometric_data_source_impl authenticate test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
-    MockLocalBiometricService _localBiometricService;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
+    MockLocalBiometricService? _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 
@@ -206,7 +206,7 @@ void authenticate() {
     test('authenticate should return success with valid data', () async {
       await _initDataSource();
 
-      when(_localBiometricService.authenticate('Please authenticate to open app')).thenAnswer((_) async => true);
+      when(_localBiometricService!.authenticate('Please authenticate to open app')).thenAnswer((_) async => true);
 
       final isAvailable = await _biometricDataSourceImpl.authenticate('Please authenticate to open app');
 
@@ -221,7 +221,7 @@ void authenticate() {
           message: 'NotEnrolled'
       );
 
-      when(_localBiometricService.authenticate('Please authenticate to open app')).thenThrow(error);
+      when(_localBiometricService!.authenticate('Please authenticate to open app')).thenThrow(error);
 
       await _biometricDataSourceImpl.authenticate('Please authenticate to open app')
           .catchError((error) => expect(error, isA<BiometricNotEnrolled>()));

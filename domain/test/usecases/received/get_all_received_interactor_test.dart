@@ -42,8 +42,8 @@ import '../../mock/repository/received/mock_received_share_repository.dart';
 
 void main() {
   group('get_all_received_interactor', () {
-    MockReceivedShareRepository receivedShareRepository;
-    GetAllReceivedSharesInteractor getAllReceivedSharesInteractor;
+    MockReceivedShareRepository? receivedShareRepository;
+    late GetAllReceivedSharesInteractor getAllReceivedSharesInteractor;
 
     setUp(() {
       receivedShareRepository = MockReceivedShareRepository();
@@ -51,7 +51,7 @@ void main() {
     });
 
     test('get all receives interactor should return success with receive list', () async {
-      when(receivedShareRepository.getAllReceivedShares()).thenAnswer((_) async => [receivedShare1, receivedShare2]);
+      when(receivedShareRepository!.getAllReceivedShares()).thenAnswer((_) async => [receivedShare1, receivedShare2]);
 
       final result = await getAllReceivedSharesInteractor.execute();
 
@@ -64,7 +64,7 @@ void main() {
 
     test('get all received interactor should fail when getAllReceived fail', () async {
       final exception = Exception();
-      when(receivedShareRepository.getAllReceivedShares()).thenThrow(exception);
+      when(receivedShareRepository!.getAllReceivedShares()).thenThrow(exception);
 
       final result = await getAllReceivedSharesInteractor.execute();
 

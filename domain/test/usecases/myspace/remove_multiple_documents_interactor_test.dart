@@ -39,9 +39,9 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('remove_multiple_documents_interactor tests', () {
-    MockDocumentRepository documentRepository;
+    late MockDocumentRepository documentRepository;
     RemoveDocumentInteractor removeDocumentInteractor;
-    RemoveMultipleDocumentsInteractor removeMultipleDocumentsInteractor;
+    late RemoveMultipleDocumentsInteractor removeMultipleDocumentsInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -56,14 +56,14 @@ void main() {
           .thenAnswer((_) async => document2);
 
       final result = await removeMultipleDocumentsInteractor.execute(documentIds: [document1.documentId, document2.documentId]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<RemoveMultipleDocumentsAllSuccessViewState>());
 
       (state as RemoveMultipleDocumentsAllSuccessViewState).resultList[0].fold(
               (failure) => {},
               (success) => expect((success as RemoveDocumentViewState).document, document1));
 
-      (state as RemoveMultipleDocumentsAllSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
               (failure) => {},
               (success) => expect((success as RemoveDocumentViewState).document, document2));
     });
@@ -75,7 +75,7 @@ void main() {
           .thenThrow(Exception());
 
       final result = await removeMultipleDocumentsInteractor.execute(documentIds: [document1.documentId, document2.documentId]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<RemoveMultipleDocumentsHasSomeFilesFailedViewState>());
 
       (state as RemoveMultipleDocumentsHasSomeFilesFailedViewState).resultList.forEach((element) {

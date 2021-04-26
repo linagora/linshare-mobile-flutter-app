@@ -41,10 +41,10 @@ import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
   group('test shared spaces documents', () {
-    MockLinShareHttpClient _linShareHttpClient;
+    MockLinShareHttpClient? _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    SharedSpaceDocumentDataSourceImpl _sharedSpaceDataSourceImpl;
-    MockLinShareDownloadManager _linShareDownloadManager;
+    late SharedSpaceDocumentDataSourceImpl _sharedSpaceDataSourceImpl;
+    MockLinShareDownloadManager? _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
@@ -57,7 +57,7 @@ void main() {
     });
 
     test('getAllChildNodes should return success with valid data', () async {
-      when(_linShareHttpClient.getWorkGroupChildNodes(sharedSpaceId1))
+      when(_linShareHttpClient!.getWorkGroupChildNodes(sharedSpaceId1))
           .thenAnswer((_) async => [sharedSpaceFolder1, sharedSpaceFolder2]);
 
       final result = await _sharedSpaceDataSourceImpl.getAllChildNodes(sharedSpaceId1);
@@ -65,9 +65,9 @@ void main() {
     });
 
     test('getAllChildNodes should return 1 data, when httpClient return 2 data (1 data is undefined)', () async {
-      final WorkGroupNodeDto undefinedWorkGroupNode = null; // seems it is null
-      when(_linShareHttpClient.getWorkGroupChildNodes(sharedSpaceId1))
-          .thenAnswer((_) async => [sharedSpaceFolder1, undefinedWorkGroupNode]);
+      final WorkGroupNodeDto? undefinedWorkGroupNode = null; // seems it is null
+      when(_linShareHttpClient!.getWorkGroupChildNodes(sharedSpaceId1))
+          .thenAnswer(((_) async => [sharedSpaceFolder1, undefinedWorkGroupNode!]) as Future<List<WorkGroupNodeDto>> Function(Invocation));
 
       final result = await _sharedSpaceDataSourceImpl.getAllChildNodes(sharedSpaceId1);
       expect(result, [sharedSpaceFolder1.toWorkGroupFolder()]);
@@ -75,19 +75,21 @@ void main() {
 
     test('getAllChildNodes should throw GetChildNodesNotFoundException when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
-      when(_linShareHttpClient.getWorkGroupChildNodes(sharedSpaceId1))
+      when(_linShareHttpClient!.getWorkGroupChildNodes(sharedSpaceId1))
           .thenThrow(error);
 
       await _sharedSpaceDataSourceImpl.getAllChildNodes(sharedSpaceId1)
-          .catchError((error) => expect(error, isA<GetChildNodesNotFoundException>()));;
+          .catchError((error) {
+            expect(error, isA<GetChildNodesNotFoundException>());
+          });;
 
     });
 
     test('Copy To SharedSpace Should Return Success Copied Document', () async {
-      when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
+      when(_linShareHttpClient!.copyWorkGroupNodeToSharedSpaceDestination(
         CopyBodyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
         sharedSpaceId1,
         destinationParentNodeId: workGroupDocument1.workGroupNodeId
@@ -101,7 +103,7 @@ void main() {
     });
 
     test('Copy To SharedSpace Should Return Success Copied Document Without Destination Parent NodeId', () async {
-      when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
+      when(_linShareHttpClient!.copyWorkGroupNodeToSharedSpaceDestination(
         CopyBodyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
         sharedSpaceId1
       )).thenAnswer((_) async => [sharedSpaceFolder1]);
@@ -114,10 +116,10 @@ void main() {
 
     test('Copy To SharedSpace Should Throw Exception When Copy Failed', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
-      when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
+      when(_linShareHttpClient!.copyWorkGroupNodeToSharedSpaceDestination(
         CopyBodyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
           sharedSpaceId1,
       )).thenThrow(error);
@@ -125,11 +127,13 @@ void main() {
       await _sharedSpaceDataSourceImpl.copyToSharedSpace(
           CopyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
           sharedSpaceId1
-      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));;
+      ).catchError((error) {
+        expect(error, isA<WorkGroupNodeNotFoundException>());
+      });;
     });
 
     test('Remove Shared Space Node Should Return Success Deleted Node', () async {
-      when(_linShareHttpClient.removeSharedSpaceNode(
+      when(_linShareHttpClient!.removeSharedSpaceNode(
         sharedSpaceFolder1.sharedSpaceId,
         sharedSpaceFolder1.workGroupNodeId
       )).thenAnswer((_) async => sharedSpaceFolder1);
@@ -144,11 +148,11 @@ void main() {
 
     test('Remove Shared Space Node Should Throw Exception When Remove Failed', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
-      when(_linShareHttpClient.removeSharedSpaceNode(
+      when(_linShareHttpClient!.removeSharedSpaceNode(
         sharedSpaceFolder1.sharedSpaceId,
         sharedSpaceFolder1.workGroupNodeId
       )).thenThrow(error);
@@ -156,7 +160,9 @@ void main() {
       await _sharedSpaceDataSourceImpl.removeSharedSpaceNode(
         sharedSpaceFolder1.sharedSpaceId,
         sharedSpaceFolder1.workGroupNodeId
-      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+      ).catchError((error) {
+        expect(error, isA<WorkGroupNodeNotFoundException>());
+      });
     });
 
     test('Create Folder Should Return Success Created Folder', () async {
@@ -174,7 +180,7 @@ void main() {
 
       final request = CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId);
 
-      when(_linShareHttpClient.createSharedSpaceNodeFolder(
+      when(_linShareHttpClient!.createSharedSpaceNodeFolder(
         sharedSpaceFolder1.sharedSpaceId,
         request
       )).thenAnswer((_) async => createdFolder);
@@ -202,7 +208,7 @@ void main() {
 
       final request = CreateSharedSpaceNodeFolderRequest('Dat is good');
 
-      when(_linShareHttpClient.createSharedSpaceNodeFolder(
+      when(_linShareHttpClient!.createSharedSpaceNodeFolder(
         sharedSpaceFolder1.sharedSpaceId,
         request
       )).thenAnswer((_) async => createdFolder);
@@ -216,8 +222,8 @@ void main() {
     });
 
     test('Created Folder Should Throw Exception When Fail', () async {
-      final error = DioError(type: DioErrorType.RESPONSE, response: Response(statusCode: 404));
-      when(_linShareHttpClient.createSharedSpaceNodeFolder(
+      final error = DioError(type: DioErrorType.response, response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: ''));
+      when(_linShareHttpClient!.createSharedSpaceNodeFolder(
         sharedSpaceFolder1.sharedSpaceId,
         CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId)
       )).thenThrow(error);
@@ -226,11 +232,13 @@ void main() {
           .createSharedSpaceFolder(
             sharedSpaceFolder1.sharedSpaceId,
             CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId)
-          ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+          ).catchError((error) {
+            expect(error, isA<WorkGroupNodeNotFoundException>());
+          });
     });
 
     test('Rename Shared Space Node Should Return Success Renamed Node', () async {
-      when(_linShareHttpClient.renameSharedSpaceNode(
+      when(_linShareHttpClient!.renameSharedSpaceNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
           RenameWorkGroupNodeBodyRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
@@ -239,7 +247,7 @@ void main() {
       final result = await _sharedSpaceDataSourceImpl.renameSharedSpaceNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
-          RenameWorkGroupNodeRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
+          RenameWorkGroupNodeRequest(workGroupDocumentDto.name!, WorkGroupNodeType.DOCUMENT)
       );
 
       expect(result, workGroupDocumentDto.toWorkGroupDocument());
@@ -247,11 +255,11 @@ void main() {
 
     test('Rename Shared Space Node Should Throw Exception When Renamed Failed', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
-      when(_linShareHttpClient.renameSharedSpaceNode(
+      when(_linShareHttpClient!.renameSharedSpaceNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
           RenameWorkGroupNodeBodyRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
@@ -260,12 +268,14 @@ void main() {
       await _sharedSpaceDataSourceImpl.renameSharedSpaceNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
-          RenameWorkGroupNodeRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
-      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+          RenameWorkGroupNodeRequest(workGroupDocumentDto.name!, WorkGroupNodeType.DOCUMENT)
+      ).catchError((error) {
+        expect(error, isA<WorkGroupNodeNotFoundException>());
+      });
     });
 
     test('Get Shared Space Node Should Return Success Node', () async {
-      when(_linShareHttpClient.getWorkGroupNode(
+      when(_linShareHttpClient!.getWorkGroupNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
       )).thenAnswer((_) async => workGroupDocumentDto);
@@ -280,11 +290,11 @@ void main() {
 
     test('Get Shared Space Node Should Throw Exception When Get Failed', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
-      when(_linShareHttpClient.getWorkGroupNode(
+      when(_linShareHttpClient!.getWorkGroupNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
       )).thenThrow(error);

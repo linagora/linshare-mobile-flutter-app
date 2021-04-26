@@ -36,7 +36,7 @@ import 'package:domain/domain.dart';
 import 'package:data/data.dart';
 
 class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
-  final LinShareHttpClient _linShareHttpClient;
+  final LinShareHttpClient? _linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
 
   SharedSpaceMemberDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
@@ -44,15 +44,15 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
   @override
   Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId) {
     return Future.sync(() async {
-        return (await _linShareHttpClient.getSharedSpaceMembers(sharedSpaceId)).map((memberDto) => memberDto.toSharedSpaceMember()).toList();
+        return (await _linShareHttpClient!.getSharedSpaceMembers(sharedSpaceId)).map((memberDto) => memberDto.toSharedSpaceMember()).toList();
       }).catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          if (error.response.statusCode == 404) {
+          if (error.response!.statusCode == 404) {
             throw SharedSpaceNotFound();
-          } else if (error.response.statusCode == 403) {
+          } else if (error.response!.statusCode == 403) {
             throw NotAuthorized();
           } else {
-            throw UnknownError(error.response.statusMessage);
+            throw UnknownError(error.response!.statusMessage!);
           }
         });
       });
@@ -61,16 +61,16 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
   @override
   Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request) {
     return Future.sync(() async {
-      final sharedSpaceMember = await _linShareHttpClient.addSharedSpaceMember(sharedSpaceId, request);
+      final sharedSpaceMember = await _linShareHttpClient!.addSharedSpaceMember(sharedSpaceId, request);
       return sharedSpaceMember.toSharedSpaceMember();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response!.statusCode == 404) {
           throw SharedSpaceNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response!.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response!.statusMessage!);
         }
       });
     });
@@ -79,16 +79,16 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
   @override
   Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request) {
     return Future.sync(() async {
-      final sharedSpaceMember = await _linShareHttpClient.updateRoleSharedSpaceMember(sharedSpaceId, request);
+      final sharedSpaceMember = await _linShareHttpClient!.updateRoleSharedSpaceMember(sharedSpaceId, request);
       return sharedSpaceMember.toSharedSpaceMember();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response!.statusCode == 404) {
           throw SharedSpaceNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response!.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response!.statusMessage!);
         }
       });
     });
@@ -97,19 +97,19 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
   @override
   Future<SharedSpaceMember> deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) {
     return Future.sync(() async {
-      final sharedSpaceMember = await _linShareHttpClient.deleteSharedSpaceMember(
+      final sharedSpaceMember = await _linShareHttpClient!.deleteSharedSpaceMember(
           sharedSpaceId,
           sharedSpaceMemberId);
       return sharedSpaceMember.toSharedSpaceMember();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error,
           handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response!.statusCode == 404) {
           throw SharedSpaceMemberNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response!.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response!.statusMessage!);
         }
       });
     });

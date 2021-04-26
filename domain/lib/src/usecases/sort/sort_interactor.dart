@@ -56,13 +56,13 @@ class SortInteractor {
     } catch (exception) {
       switch (sorter.orderScreen) {
         case OrderScreen.mySpace:
-          return Left<Failure, Success>(MySpaceFailure(exception));
+          return Left<Failure, Success>(MySpaceFailure(exception as Exception));
         case OrderScreen.workGroup:
-          return Left<Failure, Success>(SharedSpacesFailure(exception));
+          return Left<Failure, Success>(SharedSpacesFailure(exception as Exception));
         case OrderScreen.sharedSpaceDocument:
           return Left<Failure, Success>(GetChildNodesFailure(exception));
         case OrderScreen.receivedShares:
-          return Left<Failure, Success>(GetAllReceivedShareFailure(exception));
+          return Left<Failure, Success>(GetAllReceivedShareFailure(exception as Exception));
         default:
           return Left<Failure, Success>(SortFileFailure(exception));
       }

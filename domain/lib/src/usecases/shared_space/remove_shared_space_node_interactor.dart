@@ -34,19 +34,19 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class RemoveSharedSpaceNodeInteractor {
-  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+  final SharedSpaceDocumentRepository? _sharedSpaceDocumentRepository;
 
   RemoveSharedSpaceNodeInteractor(this._sharedSpaceDocumentRepository);
 
-  Future<Either<Failure, Success>> execute(
+  Future<Either<Failure, Success?>> execute(
     SharedSpaceId sharedSpaceId,
     WorkGroupNodeId workGroupNodeId
   ) async {
     try {
-      final workGroupNode = await _sharedSpaceDocumentRepository.removeSharedSpaceNode(sharedSpaceId, workGroupNodeId);
-      return Right<Failure, Success>(RemoveSharedSpaceNodeViewState(workGroupNode));
+      final workGroupNode = await _sharedSpaceDocumentRepository!.removeSharedSpaceNode(sharedSpaceId, workGroupNodeId);
+      return Right<Failure, Success?>(RemoveSharedSpaceNodeViewState(workGroupNode));
     } catch (exception) {
-      return Left<Failure, Success>(RemoveSharedSpaceNodeFailure(exception));
+      return Left<Failure, Success?>(RemoveSharedSpaceNodeFailure(exception));
     }
   }
 }

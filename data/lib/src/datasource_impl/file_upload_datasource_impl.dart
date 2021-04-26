@@ -49,16 +49,16 @@ import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 class FileUploadDataSourceImpl implements FileUploadDataSource {
   final FlutterUploader _uploader;
 
-  Stream<Either<Failure, Success>> _uploadingFileStream;
+  Stream<Either<Failure, Success>>? _uploadingFileStream;
 
   @override
-  Stream<Either<Failure, Success>> get uploadingFileStream => _uploadingFileStream;
+  Stream<Either<Failure, Success>>? get uploadingFileStream => _uploadingFileStream;
 
   FileUploadDataSourceImpl(this._uploader) {
     _uploadingFileStream = Rx.merge([_uploader.result, _uploader.progress]).map<Either<Failure, Success>>((event) {
       if (event is UploadTaskResponse) {
         if (event.statusCode == 200) {
-          final jsonMap = json.decode(event.response);
+          final jsonMap = json.decode(event.response!);
           final workgroupDocument = jsonMap['workGroup'] != null;
 
           return workgroupDocument
@@ -67,7 +67,7 @@ class FileUploadDataSourceImpl implements FileUploadDataSource {
         }
         return Left(FileUploadFailure(UploadTaskId(event.taskId), Exception('Response code failed: ${event.response}')));
       } else if (event is UploadTaskProgress) {
-        return Right(UploadingProgress(UploadTaskId(event.taskId), event.progress));
+        return Right(UploadingProgress(UploadTaskId(event.taskId), event.progress!));
       } else {
         return Left(FileUploadFailure(UploadTaskId.undefined(), Exception('Something wrong with response: ${event.toString()}')));
       }
@@ -78,9 +78,10 @@ class FileUploadDataSourceImpl implements FileUploadDataSource {
   Future<UploadTaskId> upload(FileInfo fileInfo, Token token, String url) async {
     final file = File(fileInfo.filePath + fileInfo.fileName);
     final taskId = await _uploader.enqueue(
+      MultipartFormDataUpload(
         url: url,
         files: [
-          FileItem(savedDir: fileInfo.filePath, filename: fileInfo.fileName)
+          FileItem(path: file.path, field: fileInfo.fileName)
         ],
         headers: {
           Constant.authorization: 'Bearer ${token.token}',
@@ -88,8 +89,8 @@ class FileUploadDataSourceImpl implements FileUploadDataSource {
         },
         data: {
           Constant.fileSizeDataForm: (await file.length()).toString()
-        });
-
+        }
+      ));
     return UploadTaskId(taskId);
   }
 

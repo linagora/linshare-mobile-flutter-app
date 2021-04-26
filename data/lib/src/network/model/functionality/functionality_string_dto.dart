@@ -39,12 +39,12 @@ part 'functionality_string_dto.g.dart';
 
 @JsonSerializable()
 class FunctionalityStringDto extends FunctionalityDto with EquatableMixin {
-  final String value;
+  final String? value;
 
   FunctionalityStringDto(
       FunctionalityIdentifier identifier,
-      bool enable,
-      bool canOverride,
+      bool? enable,
+      bool? canOverride,
       this.value)
       : super(identifier, enable, canOverride);
 
@@ -53,10 +53,10 @@ class FunctionalityStringDto extends FunctionalityDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$FunctionalityStringDtoToJson(this);
 
   @override
-  List<Object> get props => [...super.props, value];
+  List<Object?> get props => [...super.props, value];
 }
 
 extension FunctionalityStringDtoExtension on FunctionalityStringDto {
   FunctionalityString toFunctionalityString() =>
-      FunctionalityString(identifier, enable, canOverride, value);
+      FunctionalityString(identifier, enable!, canOverride!, value!);
 }

@@ -35,17 +35,17 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 abstract class SharedSpaceDocumentDataSource {
-  Future<List<WorkGroupNode>> getAllChildNodes(
+  Future<List<WorkGroupNode?>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+      {WorkGroupNodeId? parentNodeId});
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
+  Future<List<WorkGroupNode?>> copyToSharedSpace(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
+    {WorkGroupNodeId? destinationParentNodeId}
   );
 
-  Future<WorkGroupNode> removeSharedSpaceNode(
+  Future<WorkGroupNode?> removeSharedSpaceNode(
     SharedSpaceId sharedSpaceId,
     WorkGroupNodeId sharedSpaceNodeId,
   );
@@ -75,7 +75,7 @@ abstract class SharedSpaceDocumentDataSource {
     CancelToken cancelToken
   );
 
-  Future<WorkGroupNode> renameSharedSpaceNode(
+  Future<WorkGroupNode?> renameSharedSpaceNode(
     SharedSpaceId sharedSpaceId,
     WorkGroupNodeId sharedSpaceNodeId,
     RenameWorkGroupNodeRequest renameRequest

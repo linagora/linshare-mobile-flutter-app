@@ -45,7 +45,7 @@ class ContactDataSourceImpl extends ContactDataSource {
 
   List<DeviceContact> _toDeviceContact(contact_service.Contact contact) {
     if (contact.emails != null) {
-      return contact.emails.map((email) => DeviceContact(contact.displayName, email.value)).toList();
+      return contact.emails!.map((email) => DeviceContact(contact.displayName ?? '', email.value ?? '')).toList();
     }
     return <DeviceContact>[];
   }

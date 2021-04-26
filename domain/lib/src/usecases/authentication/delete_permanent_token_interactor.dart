@@ -58,7 +58,7 @@ class DeletePermanentTokenInteractor {
         });
       return Right(LogoutViewState());
     } catch (exception) {
-      return Left(LogoutFailure(exception));
+      return Left(LogoutFailure(exception as RemoteException));
     }
   }
 }

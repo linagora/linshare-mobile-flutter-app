@@ -35,13 +35,13 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
 class GetAllSharedSpaceRolesInteractor {
-  final SharedSpaceRepository _sharedSpaceRepository;
+  final SharedSpaceRepository? _sharedSpaceRepository;
 
   GetAllSharedSpaceRolesInteractor(this._sharedSpaceRepository);
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final roles = await _sharedSpaceRepository.getSharedSpacesRoles();
+      final roles = await _sharedSpaceRepository!.getSharedSpacesRoles();
       return Right<Failure, Success>(SharedSpaceRolesViewState(roles));
     } catch (exception) {
       return Left<Failure, Success>(SharedSpaceRolesFailure(exception));

@@ -34,17 +34,17 @@ import 'package:domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SortDataSourceImpl implements SortDataSource {
-  final SharedPreferences _sharedPreferences;
+  final SharedPreferences? _sharedPreferences;
 
   SortDataSourceImpl(this._sharedPreferences);
 
   @override
   Future<Sorter> getSorter(OrderScreen orderScreen) {
     return Future.sync(() async {
-      final orderByStr = _sharedPreferences
+      final orderByStr = _sharedPreferences!
           .getString('sort_file_order_by_${orderScreen.toString()}') ??
           OrderBy.modificationDate.toString();
-      final orderTypeStr = _sharedPreferences
+      final orderTypeStr = _sharedPreferences!
           .getString('sort_file_order_type_${orderScreen.toString()}') ??
           OrderType.descending.toString();
       final orderBy = OrderBy.modificationDate.getOrderBy(orderByStr);
@@ -89,10 +89,10 @@ class SortDataSourceImpl implements SortDataSource {
   @override
   Future<Sorter> saveSorter(Sorter sorter) async {
     return Future.wait([
-      _sharedPreferences.setString(
+      _sharedPreferences!.setString(
           'sort_file_order_by_${sorter.orderScreen.toString()}',
           sorter.orderBy.toString()),
-      _sharedPreferences.setString(
+      _sharedPreferences!.setString(
           'sort_file_order_type_${sorter.orderScreen.toString()}',
           sorter.orderType.toString())
     ]).then((value) => sorter);

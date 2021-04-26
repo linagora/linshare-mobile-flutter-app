@@ -36,13 +36,13 @@ import 'package:domain/src/model/sharedspace/shared_space_id.dart';
 import 'package:domain/src/state/success.dart';
 
 class DeleteSharedSpaceMemberInteractor {
-  final SharedSpaceMemberRepository _sharedSpaceMemberRepository;
+  final SharedSpaceMemberRepository? _sharedSpaceMemberRepository;
 
   DeleteSharedSpaceMemberInteractor(this._sharedSpaceMemberRepository);
 
   Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) async {
     try {
-      await _sharedSpaceMemberRepository.deleteMember(sharedSpaceId, sharedSpaceMemberId);
+      await _sharedSpaceMemberRepository!.deleteMember(sharedSpaceId, sharedSpaceMemberId);
       return Right<Failure, Success>(DeleteSharedSpaceMemberViewState());
     } catch (exception) {
       return Left<Failure, Success>(DeleteSharedSpaceMemberFailure(exception));

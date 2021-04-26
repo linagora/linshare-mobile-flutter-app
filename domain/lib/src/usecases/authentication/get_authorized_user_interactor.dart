@@ -43,7 +43,7 @@ class GetAuthorizedInteractor {
       final user = await authenticationRepository.getAuthorizedUser();
       return Right(GetAuthorizedUserViewState(user));
     } catch (exception) {
-      return Left(GetAuthorizedUserFailure(exception));
+      return Left(GetAuthorizedUserFailure(exception as RemoteException));
     }
   }
 }

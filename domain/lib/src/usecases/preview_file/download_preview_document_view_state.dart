@@ -32,12 +32,12 @@
 import '../../../domain.dart';
 
 class DownloadPreviewDocumentViewState extends ViewState {
-  final Uri filePath;
+  final Uri? filePath;
 
   DownloadPreviewDocumentViewState(this.filePath);
 
   @override
-  List<Object> get props => [filePath];
+  List<Object?> get props => [filePath];
 }
 
 class DownloadPreviewDocumentFailure extends FeatureFailure {

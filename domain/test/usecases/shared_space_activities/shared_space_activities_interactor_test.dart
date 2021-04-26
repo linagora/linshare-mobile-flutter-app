@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space_activities/mock_shared_space_activiti
 
 void main() {
   group('test shared space activities interactor', () {
-    MockSharedSpaceActivitiesRepository _sharedSpaceActivitiesRepository;
-    SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
+    MockSharedSpaceActivitiesRepository? _sharedSpaceActivitiesRepository;
+    late SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
 
     setUp(() {
       _sharedSpaceActivitiesRepository = MockSharedSpaceActivitiesRepository();
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('SharedSpaceActivitiesInteractor should return success with valid data', () async {
-      when(_sharedSpaceActivitiesRepository.getSharedSpaceActivities(sharedSpaceIdForAuditLog))
+      when(_sharedSpaceActivitiesRepository!.getSharedSpaceActivities(sharedSpaceIdForAuditLog))
           .thenAnswer((_) async => [documentAuditLog, folderAuditLog]);
 
       final result = await _sharedSpaceActivitiesInteractor.execute(sharedSpaceIdForAuditLog);
@@ -61,7 +61,7 @@ void main() {
 
     test('SharedSpaceActivitiesInteractor should fail when getSharedSpaceActivities fail', () async {
       final exception = Exception();
-      when(_sharedSpaceActivitiesRepository.getSharedSpaceActivities(sharedSpaceIdForAuditLog))
+      when(_sharedSpaceActivitiesRepository!.getSharedSpaceActivities(sharedSpaceIdForAuditLog))
           .thenThrow(exception);
 
       final result = await _sharedSpaceActivitiesInteractor.execute(sharedSpaceIdForAuditLog);

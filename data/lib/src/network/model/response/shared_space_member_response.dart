@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/network/model/account/account_dto.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_member_id_converter.dart';
 import 'package:data/src/network/model/response/shared_space_member_node_dto.dart';
 import 'package:data/src/network/model/sharedspace/shared_space_role_dto.dart';
@@ -42,14 +42,14 @@ import 'package:json_annotation/json_annotation.dart';
 part 'shared_space_member_response.g.dart';
 
 @JsonSerializable()
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @SharedSpaceMemberIdConverter()
 class SharedSpaceMemberResponse with EquatableMixin {
-  final AccountDto account;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final SharedSpaceMemberNodeDto node;
-  final SharedSpaceRoleDto role;
+  final AccountDto? account;
+  final DateTime? creationDate;
+  final DateTime? modificationDate;
+  final SharedSpaceMemberNodeDto? node;
+  final SharedSpaceRoleDto? role;
 
   @JsonKey(name: Attribute.uuid)
   final SharedSpaceMemberId sharedSpaceMemberId;
@@ -67,7 +67,7 @@ class SharedSpaceMemberResponse with EquatableMixin {
   Map<String, dynamic> toJson() => _$SharedSpaceMemberResponseToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     account,
     node,
     role,
@@ -81,11 +81,11 @@ extension SharedSpaceMemberResponseExtension on SharedSpaceMemberResponse {
   SharedSpaceMember toSharedSpaceMember() {
     return SharedSpaceMember(
       sharedSpaceMemberId,
-      account != null ? account.toAccount() : null,
-      creationDate,
-      modificationDate,
-      node != null ? node.toSharedSpaceMemberNode() : null,
-      role != null ? role.toSharedSpaceRole() : null,
+      account != null ? account!.toAccount() : Account('', '', AccountId(''), AccountType.INTERNAL, '', ''),
+      creationDate ?? DateTime.now(),
+      modificationDate ?? DateTime.now(),
+      node!.toSharedSpaceMemberNode(),
+      role!.toSharedSpaceRole(),
     );
   }
 }

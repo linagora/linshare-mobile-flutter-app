@@ -40,12 +40,10 @@ class DatetimeConverter implements JsonConverter<DateTime, int> {
     try {
       return DateTime.fromMillisecondsSinceEpoch(json);
     } catch (_) {
-      return null;
+      return DateTime.now();
     }
   }
 
   @override
-  int toJson(DateTime object) {
-    return object.millisecondsSinceEpoch;
-  }
+  int toJson(DateTime object) => object.millisecondsSinceEpoch;
 }

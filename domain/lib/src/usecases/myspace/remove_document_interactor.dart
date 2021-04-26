@@ -38,12 +38,12 @@ class RemoveDocumentInteractor {
 
   RemoveDocumentInteractor(this._documentRepository);
 
-  Future<Either<Failure, Success>> execute(DocumentId documentId) async {
+  Future<Either<Failure, Success?>> execute(DocumentId documentId) async {
     try {
       final document = await _documentRepository.remove(documentId);
-      return Right<Failure, Success>(RemoveDocumentViewState(document));
+      return Right<Failure, Success?>(RemoveDocumentViewState(document));
     } catch (exception) {
-      return Left<Failure, Success>(RemoveDocumentFailure(exception));
+      return Left<Failure, Success?>(RemoveDocumentFailure(exception as Exception));
     }
   }
 }

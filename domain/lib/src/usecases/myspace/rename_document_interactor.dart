@@ -34,13 +34,13 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class RenameDocumentInteractor {
-  final DocumentRepository _documentRepository;
+  final DocumentRepository? _documentRepository;
 
   RenameDocumentInteractor(this._documentRepository);
 
   Future<Either<Failure, Success>> execute(DocumentId documentId, RenameDocumentRequest renameDocumentRequest) async {
     try {
-      final document = await _documentRepository.rename(documentId, renameDocumentRequest);
+      final document = await _documentRepository!.rename(documentId, renameDocumentRequest);
       return Right<Failure, Success>(RenameDocumentViewState(document));
     } catch (exception) {
       return Left<Failure, Success>(RenameDocumentFailure(exception));

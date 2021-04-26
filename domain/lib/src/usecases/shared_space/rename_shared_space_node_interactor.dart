@@ -34,7 +34,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class RenameSharedSpaceNodeInteractor {
-  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+  final SharedSpaceDocumentRepository? _sharedSpaceDocumentRepository;
 
   RenameSharedSpaceNodeInteractor(this._sharedSpaceDocumentRepository);
 
@@ -44,7 +44,7 @@ class RenameSharedSpaceNodeInteractor {
     RenameWorkGroupNodeRequest renameWorkGroupNodeRequest,
   ) async {
     try {
-      final workGroupNode = await _sharedSpaceDocumentRepository.renameSharedSpaceNode(sharedSpaceId, workGroupNodeId, renameWorkGroupNodeRequest);
+      final workGroupNode = await _sharedSpaceDocumentRepository!.renameSharedSpaceNode(sharedSpaceId, workGroupNodeId, renameWorkGroupNodeRequest);
       return Right<Failure, Success>(RenameSharedSpaceNodeViewState(workGroupNode));
     } catch (exception) {
       return Left<Failure, Success>(RenameSharedSpaceNodeFailure(exception));

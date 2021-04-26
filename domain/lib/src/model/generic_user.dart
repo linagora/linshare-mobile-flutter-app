@@ -38,24 +38,23 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 class GenericUser with EquatableMixin {
-  String _mail;
+  late String _mail;
   String get mail => _mail;
 
-  Option<String> _lastName = none();
-  Option<String> get lastName => _lastName;
+  Option<String>? _lastName = none();
+  Option<String>? get lastName => _lastName;
 
-  Option<String> _firstName = none();
-  Option<String> get firstName => _firstName;
+  Option<String>? _firstName = none();
+  Option<String>? get firstName => _firstName;
 
-  GenericUser(String mail, {Option<String> lastName, Option<String> firstName}) {
-    assert(mail != null, 'invalid mail');
+  GenericUser(String mail, {Option<String>? lastName, Option<String>? firstName}) {
     _mail = mail;
     _lastName = lastName;
     _firstName = firstName;
   }
 
   @override
-  List<Object> get props => [_mail, _lastName, _firstName];
+  List<Object?> get props => [_mail, _lastName, _firstName];
 
   @override
   bool get stringify => true;
@@ -63,6 +62,6 @@ class GenericUser with EquatableMixin {
 
 extension GenericUserExtension on GenericUser {
   String fullName() {
-    return '${firstName.getOrElse(() => '')} ${lastName.getOrElse(() => '')}';
+    return '${firstName!.getOrElse(() => '')} ${lastName!.getOrElse(() => '')}';
   }
 }

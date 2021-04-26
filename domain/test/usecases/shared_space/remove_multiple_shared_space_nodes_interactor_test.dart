@@ -39,9 +39,9 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('remove_multiple_shared_space_nodes_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    MockSharedSpaceDocumentRepository? sharedSpaceDocumentRepository;
     RemoveSharedSpaceNodeInteractor removeSharedSpaceNodeInteractor;
-    RemoveMultipleSharedSpaceNodesInteractor removeMultipleSharedSpaceNodesInteractor;
+    late RemoveMultipleSharedSpaceNodesInteractor removeMultipleSharedSpaceNodesInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -50,57 +50,57 @@ void main() {
     });
 
     test('remove multiple shared space nodes interactor should return success with valid data', () async {
-      when(sharedSpaceDocumentRepository.removeSharedSpaceNode(
+      when(sharedSpaceDocumentRepository!.removeSharedSpaceNode(
         workGroupDocument1.sharedSpaceId,
         workGroupDocument1.workGroupNodeId))
       .thenAnswer((_) async => workGroupDocument1);
-      when(sharedSpaceDocumentRepository.removeSharedSpaceNode(
+      when(sharedSpaceDocumentRepository!.removeSharedSpaceNode(
         workGroupDocument2.sharedSpaceId,
         workGroupDocument2.workGroupNodeId))
       .thenAnswer((_) async => workGroupDocument2);
 
       final result = await removeMultipleSharedSpaceNodesInteractor.execute([workGroupDocument1, workGroupDocument2]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<RemoveAllSharedSpaceNodesSuccessViewState>());
 
       (state as RemoveAllSharedSpaceNodesSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceNodeViewState).workGroupNode, workGroupDocument1));
 
-      (state as RemoveAllSharedSpaceNodesSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceNodeViewState).workGroupNode, workGroupDocument2));
     });
 
     test('remove multiple shared space nodes interactor should return success with some file failed to copy', () async {
-      when(sharedSpaceDocumentRepository.removeSharedSpaceNode(
+      when(sharedSpaceDocumentRepository!.removeSharedSpaceNode(
         workGroupDocument1.sharedSpaceId,
         workGroupDocument1.workGroupNodeId))
       .thenAnswer((_) async => workGroupDocument1);
-      when(sharedSpaceDocumentRepository.removeSharedSpaceNode(
+      when(sharedSpaceDocumentRepository!.removeSharedSpaceNode(
         workGroupDocument2.sharedSpaceId,
         workGroupDocument2.workGroupNodeId))
       .thenThrow(Exception());
 
       final result = await removeMultipleSharedSpaceNodesInteractor.execute([workGroupDocument1, workGroupDocument2]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<RemoveSomeSharedSpaceNodesSuccessViewState>());
 
       (state as RemoveSomeSharedSpaceNodesSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceNodeViewState).workGroupNode, workGroupDocument1));
 
-      (state as RemoveSomeSharedSpaceNodesSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceNodeFailure).exception, isA<Exception>()));
     });
 
     test('remove multiple shared space nodes interactor should return failure with all file failed to delete', () async {
-      when(sharedSpaceDocumentRepository.removeSharedSpaceNode(
+      when(sharedSpaceDocumentRepository!.removeSharedSpaceNode(
         workGroupDocument1.sharedSpaceId,
         workGroupDocument1.workGroupNodeId))
       .thenThrow(Exception());
-      when(sharedSpaceDocumentRepository.removeSharedSpaceNode(
+      when(sharedSpaceDocumentRepository!.removeSharedSpaceNode(
         workGroupDocument2.sharedSpaceId,
         workGroupDocument2.workGroupNodeId))
       .thenThrow(Exception());

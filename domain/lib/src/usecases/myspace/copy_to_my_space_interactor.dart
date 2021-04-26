@@ -38,16 +38,16 @@ import 'package:domain/src/state/success.dart';
 import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
 class CopyToMySpaceInteractor {
-  final DocumentRepository _documentRepository;
+  final DocumentRepository? _documentRepository;
 
   CopyToMySpaceInteractor(this._documentRepository);
 
   Future<Either<Failure, Success>> execute(CopyRequest copyRequest) async {
     try {
-      final result = _documentRepository.copyToMySpace(copyRequest);
+      final result = _documentRepository!.copyToMySpace(copyRequest);
       return Right<Failure, Success>(CopyToMySpaceViewState(await result));
     } catch (exception) {
-      return Left<Failure, Success>(CopyToMySpaceFailure(exception));
+      return Left<Failure, Success>(CopyToMySpaceFailure(exception as Exception));
     }
   }
 }

@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/converter/received_share_id_dto_converter.dart';
 import 'package:data/src/network/model/generic_user_dto.dart';
 import 'package:data/src/network/model/share/received_share_id_dto.dart';
@@ -42,17 +42,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'document_details_received_share_dto.g.dart';
 
 @JsonSerializable()
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @ReceivedShareIdDtoConverter()
 class DocumentDetailsReceivedShareDto {
   @JsonKey(name: Attribute.uuid)
   final ReceivedShareIdDto shareId;
-  final String name;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime expirationDate;
-  final int downloaded;
-  final String description;
+  final String? name;
+  final DateTime? creationDate;
+  final DateTime? modificationDate;
+  final DateTime? expirationDate;
+  final int? downloaded;
+  final String? description;
   final GenericUserDto recipient;
 
   DocumentDetailsReceivedShareDto(
@@ -74,14 +74,14 @@ class DocumentDetailsReceivedShareDto {
 extension DocumentDetailsReceivedShareDtoExtension on DocumentDetailsReceivedShareDto {
   DocumentDetailsReceivedShare toDocumentDetailsReceivedShare() {
     return DocumentDetailsReceivedShare(
-      ShareId(shareId.uuid),
-      name,
-      creationDate,
-      modificationDate,
-      expirationDate,
-      description,
-      recipient != null ? recipient.toGenericUser() : null,
-      downloaded,
+      ShareId(shareId.uuid!),
+      name ?? '',
+      creationDate ?? DateTime.now(),
+      modificationDate ?? DateTime.now(),
+      expirationDate ?? DateTime.now(),
+      description ?? '',
+      recipient.toGenericUser(),
+      downloaded ?? 0,
     );
   }
 }

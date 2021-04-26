@@ -51,7 +51,7 @@ class UploadMySpaceDocumentInteractor {
 
       return Right(FileUploadState(uploadTaskId));
     } catch (exception) {
-      return Left(FileUploadFailure(UploadTaskId.undefined(), exception));
+      return Left(FileUploadFailure(UploadTaskId.undefined(), exception as Exception));
     }
   }
 }

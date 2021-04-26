@@ -35,16 +35,16 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
 class GetAllSharedSpacesInteractor {
-  final SharedSpaceRepository _sharedSpaceRepository;
+  final SharedSpaceRepository? _sharedSpaceRepository;
 
   GetAllSharedSpacesInteractor(this._sharedSpaceRepository);
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final sharedSpaces = await _sharedSpaceRepository.getSharedSpaces();
+      final sharedSpaces = await _sharedSpaceRepository!.getSharedSpaces();
       return Right<Failure, Success>(SharedSpacesViewState(sharedSpaces));
     } catch (exception) {
-      return Left<Failure, Success>(SharedSpacesFailure(exception));
+      return Left<Failure, Success>(SharedSpacesFailure(exception as Exception));
     }
   }
 }

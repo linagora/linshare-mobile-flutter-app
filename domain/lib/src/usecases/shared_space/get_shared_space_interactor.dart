@@ -35,7 +35,7 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
 class GetSharedSpaceInteractor {
-  final SharedSpaceRepository _sharedSpaceRepository;
+  final SharedSpaceRepository? _sharedSpaceRepository;
 
   GetSharedSpaceInteractor(this._sharedSpaceRepository);
 
@@ -47,7 +47,7 @@ class GetSharedSpaceInteractor {
     }
   ) async {
     try {
-      final sharedspace = await _sharedSpaceRepository.getSharedSpace(
+      final sharedspace = await _sharedSpaceRepository!.getSharedSpace(
         sharedSpaceId,
         membersParameter: membersParameter,
         rolesParameter: rolesParameter

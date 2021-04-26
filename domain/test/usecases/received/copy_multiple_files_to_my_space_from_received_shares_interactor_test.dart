@@ -40,9 +40,9 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('copy_multiples_files_to_my_space_from_received_shares_interactor tests', () {
-    MockDocumentRepository documentRepository;
+    MockDocumentRepository? documentRepository;
     CopyToMySpaceInteractor copyToMySpaceInteractor;
-    CopyMultipleFilesFromReceivedSharesToMySpaceInteractor _copyMultipleFilesFromReceivedSharesToMySpaceInteractor;
+    late CopyMultipleFilesFromReceivedSharesToMySpaceInteractor _copyMultipleFilesFromReceivedSharesToMySpaceInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -51,11 +51,11 @@ void main() {
     });
 
     test('copy multiples files to my space from received shares interactor should return success with valid data', () async {
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document1]);
 
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document2]);
 
@@ -68,11 +68,11 @@ void main() {
 
     test('copy multiples files to my space from received shares interactor should return success with some failures', () async {
       final exception = DocumentNotFound();
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenThrow(exception);
 
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document2]);
 
@@ -84,7 +84,7 @@ void main() {
     });
 
     test('copy multiples files to my space from received shares interactor should return success with one document', () async {
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document1]);
 
@@ -97,11 +97,11 @@ void main() {
 
     test('copy multiples files to my space from received shares interactor should fail with only failures', () async {
       final exception = DocumentNotFound();
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenThrow(exception);
 
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenThrow(exception);
 

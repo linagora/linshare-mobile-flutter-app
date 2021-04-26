@@ -220,7 +220,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                 action is NegativeDestinationPickerAction
                     ? action.actionClick(null)
                     : action.actionClick(
-                    _destinationPickerViewModel.currentNodeObservable.value);
+                    _destinationPickerViewModel.currentNodeObservable.valueWrapper.value);
               }
             },
             child: action.actionWidget));

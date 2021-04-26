@@ -34,21 +34,21 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class RemoveSharedSpaceInteractor {
-  final SharedSpaceRepository _sharedSpaceRepository;
+  final SharedSpaceRepository? _sharedSpaceRepository;
 
   RemoveSharedSpaceInteractor(this._sharedSpaceRepository);
 
-  Future<Either<Failure, Success>> execute(
+  Future<Either<Failure, Success?>> execute(
     SharedSpaceId sharedSpaceId,
   ) async {
     try {
-      final sharedSpace = await _sharedSpaceRepository.deleteSharedSpace(sharedSpaceId);
-      return Right<Failure, Success>(RemoveSharedSpaceViewState(sharedSpace));
+      final sharedSpace = await _sharedSpaceRepository!.deleteSharedSpace(sharedSpaceId);
+      return Right<Failure, Success?>(RemoveSharedSpaceViewState(sharedSpace));
     } catch (exception) {
       if (exception is SharedSpaceNotFound) {
-        return Left<Failure, Success>(RemoveSharedSpaceNotFoundFailure());
+        return Left<Failure, Success?>(RemoveSharedSpaceNotFoundFailure());
       } else {
-        return Left<Failure, Success>(RemoveSharedSpaceFailure(exception));
+        return Left<Failure, Success?>(RemoveSharedSpaceFailure(exception));
       }
     }
   }

@@ -28,26 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'dart:core';
+import 'package:json_annotation/json_annotation.dart';
 
-class CreatePermanentTokenInteractor {
-  final AuthenticationRepository authenticationRepository;
-  final TokenRepository tokenRepository;
-  final CredentialRepository credentialRepository;
+class DatetimeNullableConverter implements JsonConverter<DateTime?, int> {
+  const DatetimeNullableConverter();
 
-  CreatePermanentTokenInteractor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
-
-  Future<Either<Failure, Success>> execute(Uri baseUrl, UserName userName, Password password) async {
+  @override
+  DateTime? fromJson(int json) {
     try {
-      final token = await authenticationRepository.createPermanentToken(baseUrl, userName, password);
-      await tokenRepository.persistToken(token);
-      await credentialRepository.saveBaseUrl(baseUrl);
-      return Right(AuthenticationViewState(token));
-    } catch (e) {
-      return Left(AuthenticationFailure(e as RemoteException));
+      return DateTime.fromMillisecondsSinceEpoch(json);
+    } catch (_) {
+      return null;
     }
   }
+
+  @override
+  int toJson(DateTime? object) => object!.millisecondsSinceEpoch;
 }

@@ -49,16 +49,16 @@ class DownloadFileIOSInteractor {
 
   DownloadFileIOSInteractor(this._documentRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<Either<Failure, Success>> execute(Document document, CancelToken cancelToken) async {
+  Future<Either<Failure, Success?>> execute(Document document, CancelToken cancelToken) async {
     try {
       var filePath;
       await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
           .then((List responses) async {
             filePath = await _documentRepository.downloadDocumentIOS(document, responses[0], responses[1], cancelToken);
       });
-      return Right<Failure, Success>(DownloadFileIOSViewState(filePath));
+      return Right<Failure, Success?>(DownloadFileIOSViewState(filePath));
     } catch (exception) {
-      return Left<Failure, Success>(DownloadFileIOSFailure(exception));
+      return Left<Failure, Success?>(DownloadFileIOSFailure(exception as Exception));
     }
   }
 }

@@ -41,8 +41,8 @@ import '../../mock/repository/mock_sort_repository.dart';
 
 void main() {
   group('save_sort_interactor_test', () {
-    MockSortRepository sortRepository;
-    SaveSorterInteractor saveSorterInteractor;
+    late MockSortRepository sortRepository;
+    late SaveSorterInteractor saveSorterInteractor;
 
     setUp(() {
       sortRepository = MockSortRepository();

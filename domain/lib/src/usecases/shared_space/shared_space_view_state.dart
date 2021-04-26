@@ -51,7 +51,7 @@ class SharedSpacesFailure extends FeatureFailure {
 }
 
 class CopyToSharedSpaceViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNode;
+  final List<WorkGroupNode?> workGroupNode;
 
   CopyToSharedSpaceViewState(this.workGroupNode);
 
@@ -69,7 +69,7 @@ class CopyToSharedSpaceFailure extends FeatureFailure {
 }
 
 class CopyMultipleFilesToSharedSpaceAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   CopyMultipleFilesToSharedSpaceAllSuccessViewState(this.resultList);
 
@@ -78,7 +78,7 @@ class CopyMultipleFilesToSharedSpaceAllSuccessViewState extends ViewState {
 }
 
 class CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState(this.resultList);
 
@@ -87,7 +87,7 @@ class CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState extends ViewStat
 }
 
 class CopyMultipleFilesToSharedSpaceAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   CopyMultipleFilesToSharedSpaceAllFailureViewState(this.resultList);
 
@@ -96,12 +96,12 @@ class CopyMultipleFilesToSharedSpaceAllFailureViewState extends FeatureFailure {
 }
 
 class RemoveSharedSpaceNodeViewState extends ViewState {
-  final WorkGroupNode workGroupNode;
+  final WorkGroupNode? workGroupNode;
 
   RemoveSharedSpaceNodeViewState(this.workGroupNode);
 
   @override
-  List<Object> get props => [workGroupNode];
+  List<Object> get props => [workGroupNode!];
 }
 
 class RemoveSharedSpaceNodeFailure extends FeatureFailure {
@@ -114,7 +114,7 @@ class RemoveSharedSpaceNodeFailure extends FeatureFailure {
 }
 
 class RemoveAllSharedSpaceNodesSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveAllSharedSpaceNodesSuccessViewState(this.resultList);
 
@@ -123,7 +123,7 @@ class RemoveAllSharedSpaceNodesSuccessViewState extends ViewState {
 }
 
 class RemoveSomeSharedSpaceNodesSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveSomeSharedSpaceNodesSuccessViewState(this.resultList);
 
@@ -132,7 +132,7 @@ class RemoveSomeSharedSpaceNodesSuccessViewState extends ViewState {
 }
 
 class RemoveAllSharedSpaceNodesFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveAllSharedSpaceNodesFailureViewState(this.resultList);
 
@@ -168,11 +168,11 @@ class DownloadNodesFailure extends FeatureFailure {
 }
 
 class DownloadNodeIOSViewState extends ViewState {
-  final Uri filePath;
+  final Uri? filePath;
   DownloadNodeIOSViewState(this.filePath);
 
   @override
-  List<Object> get props => [filePath];
+  List<Object?> get props => [filePath];
 }
 
 class DownloadNodeIOSFailure extends FeatureFailure {
@@ -185,7 +185,7 @@ class DownloadNodeIOSFailure extends FeatureFailure {
 }
 
 class DownloadNodeIOSAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   DownloadNodeIOSAllSuccessViewState(this.resultList);
 
@@ -194,7 +194,7 @@ class DownloadNodeIOSAllSuccessViewState extends ViewState {
 }
 
 class DownloadNodeIOSHasSomeFilesFailureViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   DownloadNodeIOSHasSomeFilesFailureViewState(this.resultList);
 
@@ -203,7 +203,7 @@ class DownloadNodeIOSHasSomeFilesFailureViewState extends ViewState {
 }
 
 class DownloadNodeIOSAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   DownloadNodeIOSAllFailureViewState(this.resultList);
 
@@ -253,7 +253,7 @@ class SharedSpaceContextMenuItemViewState extends ViewState {
 }
 
 class RemoveAllSharedSpacesSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveAllSharedSpacesSuccessViewState(this.resultList);
 
@@ -262,7 +262,7 @@ class RemoveAllSharedSpacesSuccessViewState extends ViewState {
 }
 
 class RemoveSomeSharedSpacesSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveSomeSharedSpacesSuccessViewState(this.resultList);
 
@@ -271,7 +271,7 @@ class RemoveSomeSharedSpacesSuccessViewState extends ViewState {
 }
 
 class RemoveAllSharedSpacesFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveAllSharedSpacesFailureViewState(this.resultList);
 
@@ -352,12 +352,12 @@ class CreateWorkGroupFailure extends FeatureFailure {
 }
 
 class RenameSharedSpaceNodeViewState extends ViewState {
-  final WorkGroupNode workGroupNode;
+  final WorkGroupNode? workGroupNode;
 
   RenameSharedSpaceNodeViewState(this.workGroupNode);
 
   @override
-  List<Object> get props => [workGroupNode];
+  List<Object> get props => [workGroupNode!];
 }
 
 class RenameSharedSpaceNodeFailure extends FeatureFailure {

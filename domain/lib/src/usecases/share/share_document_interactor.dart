@@ -52,7 +52,7 @@ class ShareDocumentInteractor {
       final share = await _documentRepository.share(documentIds, mailingListIds, genericUsers);
       return Right<Failure, Success>(ShareDocumentViewState(share));
     } catch (exception) {
-      return Left<Failure, Success>(ShareDocumentFailure(exception));
+      return Left<Failure, Success>(ShareDocumentFailure(exception as Exception));
     }
   }
 }

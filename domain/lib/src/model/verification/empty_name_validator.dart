@@ -36,7 +36,7 @@ class EmptyNameValidator extends Validator<NewNameRequest> {
 
   @override
   Either<Failure, Success> validate(NewNameRequest newNameRequest) {
-    if (newNameRequest.value == null || newNameRequest.value.isEmpty) {
+    if (newNameRequest.value == null || newNameRequest.value!.isEmpty) {
       return Left<Failure, Success>(VerifyNameFailure(EmptyNameException()));
     }
     return Right<Failure, Success>(VerifyNameViewState());

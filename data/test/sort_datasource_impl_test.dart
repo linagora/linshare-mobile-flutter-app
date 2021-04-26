@@ -43,8 +43,8 @@ void main() {
 
 void getSorterTest() {
   group('sort_data_source_impl getSorter test', () {
-    SortDataSourceImpl _sortDataSourceImpl;
-    SharedPreferences _sharedPreferences;
+    late SortDataSourceImpl _sortDataSourceImpl;
+    SharedPreferences? _sharedPreferences;
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({
@@ -64,11 +64,11 @@ void getSorterTest() {
       final result = await _sortDataSourceImpl.getSorter(sorter.orderScreen);
 
       expect(
-          _sharedPreferences
+          _sharedPreferences!
               .getString('sort_file_order_by_${sorter.orderScreen.toString()}'),
           result.orderBy.toString());
       expect(
-          _sharedPreferences.getString(
+          _sharedPreferences!.getString(
               'sort_file_order_type_${sorter.orderScreen.toString()}'),
           result.orderType.toString());
     });
@@ -79,11 +79,11 @@ void getSorterTest() {
       final result = await _sortDataSourceImpl.getSorter(sorter1.orderScreen);
 
       expect(
-          _sharedPreferences.getString(
+          _sharedPreferences!.getString(
               'sort_file_order_by_${sorter1.orderScreen.toString()}'),
           result.orderBy.toString());
       expect(
-          _sharedPreferences.getString(
+          _sharedPreferences!.getString(
               'sort_file_order_type_${sorter1.orderScreen.toString()}'),
           result.orderType.toString());
     });
@@ -92,7 +92,7 @@ void getSorterTest() {
 
 void sortFilesTest() {
   group('sort_data_source_impl sort files test', () {
-    SortDataSourceImpl _sortDataSourceImpl;
+    late SortDataSourceImpl _sortDataSourceImpl;
     SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
@@ -140,8 +140,8 @@ void sortFilesTest() {
 
 void saveSorterTest() {
   group('sort_data_source_impl saveSorter test', () {
-    SortDataSourceImpl _sortDataSourceImpl;
-    SharedPreferences _sharedPreferences;
+    late SortDataSourceImpl _sortDataSourceImpl;
+    SharedPreferences? _sharedPreferences;
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({});
@@ -152,21 +152,21 @@ void saveSorterTest() {
     test('saveSorter should return success with order_by is modificationDate & order_type is descending saved', () async {
       await _initDataSource();
 
-      await _sharedPreferences.setString(
+      await _sharedPreferences!.setString(
           'sort_file_order_by_${sorter.orderScreen.toString()}',
           OrderBy.modificationDate.toString());
-      await _sharedPreferences.setString(
+      await _sharedPreferences!.setString(
           'sort_file_order_type_${sorter.orderScreen.toString()}',
           OrderType.descending.toString());
 
       final result = await _sortDataSourceImpl.saveSorter(sorter);
 
       expect(
-          _sharedPreferences
+          _sharedPreferences!
               .getString('sort_file_order_by_${sorter.orderScreen.toString()}'),
           result.orderBy.toString());
       expect(
-          _sharedPreferences.getString(
+          _sharedPreferences!.getString(
               'sort_file_order_type_${sorter.orderScreen.toString()}'),
           result.orderType.toString());
     });
@@ -174,21 +174,21 @@ void saveSorterTest() {
     test('saveSorter should return success with order_by is creationDate & order_type is descending saved', () async {
       await _initDataSource();
 
-      await _sharedPreferences.setString(
+      await _sharedPreferences!.setString(
           'sort_file_order_by_${sorter1.orderScreen.toString()}',
           OrderBy.creationDate.toString());
-      await _sharedPreferences.setString(
+      await _sharedPreferences!.setString(
           'sort_file_order_type_${sorter1.orderScreen.toString()}',
           OrderType.descending.toString());
 
       final result = await _sortDataSourceImpl.saveSorter(sorter1);
 
       expect(
-          _sharedPreferences.getString(
+          _sharedPreferences!.getString(
               'sort_file_order_by_${sorter1.orderScreen.toString()}'),
           result.orderBy.toString());
       expect(
-          _sharedPreferences.getString(
+          _sharedPreferences!.getString(
               'sort_file_order_type_${sorter1.orderScreen.toString()}'),
           result.orderType.toString());
     });

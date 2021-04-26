@@ -34,13 +34,13 @@ import 'package:domain/domain.dart';
 
 class AuthenticationBiometricInteractor {
 
-  final BiometricRepository _biometricRepository;
+  final BiometricRepository? _biometricRepository;
 
   AuthenticationBiometricInteractor(this._biometricRepository);
 
-  Future<Either<Failure, Success>> execute(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument}) async {
+  Future<Either<Failure, Success>> execute(String localizedReason, {AndroidSettingArgument? androidSettingArgument, IOSSettingArgument? iosSettingArgument}) async {
     try {
-      final isAuthenticated = await _biometricRepository.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
+      final isAuthenticated = await _biometricRepository!.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
       return Right<Failure, Success>(AuthenticationBiometricViewState(isAuthenticated ? AuthenticationBiometricState.authenticated : AuthenticationBiometricState.unauthenticated));
     } catch (exception) {
       if (exception is BiometricNotEnrolled) {

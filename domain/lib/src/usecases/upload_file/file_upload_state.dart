@@ -53,13 +53,13 @@ class UploadingProgress extends Success {
 
 class FileUploadSuccess extends Success {
   final UploadTaskId uploadTaskId;
-  final Document uploadedDocument;
-  final WorkGroupDocument uploadedWorkGroupDocument;
+  final Document? uploadedDocument;
+  final WorkGroupDocument? uploadedWorkGroupDocument;
 
   FileUploadSuccess(this.uploadTaskId, {this.uploadedDocument, this.uploadedWorkGroupDocument});
 
   @override
-  List<Object> get props => [uploadTaskId, uploadedDocument];
+  List<Object?> get props => [uploadTaskId, uploadedDocument];
 }
 
 class FileUploadFailure extends Failure {

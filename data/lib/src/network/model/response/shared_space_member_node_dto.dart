@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
@@ -40,17 +40,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'shared_space_member_node_dto.g.dart';
 
 @JsonSerializable()
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @SharedSpaceIdConverter()
 class SharedSpaceMemberNodeDto with EquatableMixin {
-  final String name;
+  final String? name;
 
   @JsonKey(name: Attribute.uuid)
   final SharedSpaceId sharedSpaceId;
 
   final LinShareNodeType nodeType;
-  final DateTime creationDate;
-  final DateTime modificationDate;
+  final DateTime? creationDate;
+  final DateTime? modificationDate;
 
   factory SharedSpaceMemberNodeDto.fromJson(Map<String, dynamic> json) => _$SharedSpaceMemberNodeDtoFromJson(json);
   Map<String, dynamic> toJson() => _$SharedSpaceMemberNodeDtoToJson(this);
@@ -64,7 +64,7 @@ class SharedSpaceMemberNodeDto with EquatableMixin {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     sharedSpaceId,
     name,
     nodeType,
@@ -77,10 +77,10 @@ extension SharedSpaceMemberNodeExtension on SharedSpaceMemberNodeDto {
   SharedSpaceMemberNode toSharedSpaceMemberNode() {
     return SharedSpaceMemberNode(
       sharedSpaceId,
-      name,
+      name!,
       nodeType,
-      creationDate,
-      modificationDate
+      creationDate ?? DateTime.now(),
+      modificationDate ?? DateTime.now()
     );
   }
 }

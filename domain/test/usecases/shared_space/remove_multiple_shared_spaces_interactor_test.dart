@@ -38,9 +38,9 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('remove_multiple_shared_spaces_interactor test', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
+    MockSharedSpaceRepository? sharedSpaceRepository;
     RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
-    RemoveMultipleSharedSpacesInteractor removeMultipleSharedSpacesInteractor;
+    late RemoveMultipleSharedSpacesInteractor removeMultipleSharedSpacesInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -49,47 +49,47 @@ void main() {
     });
 
     test('remove multiple shared space interactor should return success with valid data', () async {
-      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace1.sharedSpaceId))
+      when(sharedSpaceRepository!.deleteSharedSpace(sharedSpace1.sharedSpaceId))
         .thenAnswer((_) async => sharedSpace1);
-      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace2.sharedSpaceId))
+      when(sharedSpaceRepository!.deleteSharedSpace(sharedSpace2.sharedSpaceId))
         .thenAnswer((_) async => sharedSpace2);
 
       final result = await removeMultipleSharedSpacesInteractor.execute([sharedSpace1.sharedSpaceId, sharedSpace2.sharedSpaceId]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<RemoveAllSharedSpacesSuccessViewState>());
 
       (state as RemoveAllSharedSpacesSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceViewState).sharedSpaceNodeNested, sharedSpace1));
 
-      (state as RemoveAllSharedSpacesSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceViewState).sharedSpaceNodeNested, sharedSpace2));
     });
 
     test('remove multiple shared space interactor should return success with some failed to copy', () async {
-      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace1.sharedSpaceId))
+      when(sharedSpaceRepository!.deleteSharedSpace(sharedSpace1.sharedSpaceId))
         .thenAnswer((_) async => sharedSpace1);
-      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace2.sharedSpaceId))
+      when(sharedSpaceRepository!.deleteSharedSpace(sharedSpace2.sharedSpaceId))
         .thenThrow(Exception());
 
       final result = await removeMultipleSharedSpacesInteractor.execute([sharedSpace1.sharedSpaceId, sharedSpace2.sharedSpaceId]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<RemoveSomeSharedSpacesSuccessViewState>());
 
       (state as RemoveSomeSharedSpacesSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceViewState).sharedSpaceNodeNested, sharedSpace1));
 
-      (state as RemoveSomeSharedSpacesSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceFailure).exception, isA<Exception>()));
     });
 
     test('remove multiple shared spaces interactor should return failure with all failed to delete', () async {
-      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace1.sharedSpaceId))
+      when(sharedSpaceRepository!.deleteSharedSpace(sharedSpace1.sharedSpaceId))
         .thenThrow(Exception());
-      when(sharedSpaceRepository.deleteSharedSpace(sharedSpace2.sharedSpaceId))
+      when(sharedSpaceRepository!.deleteSharedSpace(sharedSpace2.sharedSpaceId))
         .thenThrow(Exception());
 
       final result = await removeMultipleSharedSpacesInteractor.execute([sharedSpace1.sharedSpaceId, sharedSpace2.sharedSpaceId]);

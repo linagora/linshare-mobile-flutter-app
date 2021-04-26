@@ -39,7 +39,7 @@ class RemoveMultipleDocumentsInteractor {
 
   RemoveMultipleDocumentsInteractor(this._removeDocumentInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<DocumentId> documentIds}) async {
+  Future<Either<Failure, Success?>> execute({required List<DocumentId> documentIds}) async {
     final listResult = await Future.wait(documentIds.map((element) =>
         _removeDocumentInteractor.execute(element)));
     if (listResult.length == 1) {

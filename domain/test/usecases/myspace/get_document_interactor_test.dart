@@ -39,8 +39,8 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('get_document_interactor_test', () {
-    GetDocumentInteractor getDocumentInteractor;
-    DocumentRepository documentRepository;
+    late GetDocumentInteractor getDocumentInteractor;
+    DocumentRepository? documentRepository;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -48,7 +48,7 @@ void main() {
     });
 
     test('get document should return success with valid data', () async {
-      when(documentRepository.getDocument(documentDetails1.documentId))
+      when(documentRepository!.getDocument(documentDetails1.documentId))
           .thenAnswer((_) async => documentDetails1);
       final result = await getDocumentInteractor.execute(documentDetails1.documentId);
       result.fold(
@@ -60,7 +60,7 @@ void main() {
     });
 
     test('get document should return failure', () async {
-      when(documentRepository.getDocument(documentDetails1.documentId))
+      when(documentRepository!.getDocument(documentDetails1.documentId))
           .thenThrow(Exception());
       final result = await getDocumentInteractor.execute(documentDetails1.documentId);
       result.fold(

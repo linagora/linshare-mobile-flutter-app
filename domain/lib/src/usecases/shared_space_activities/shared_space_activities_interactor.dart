@@ -33,13 +33,13 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class SharedSpaceActivitiesInteractor {
-  final SharedSpaceActivitiesRepository _sharedSpaceActivitiesRepository;
+  final SharedSpaceActivitiesRepository? _sharedSpaceActivitiesRepository;
 
   SharedSpaceActivitiesInteractor(this._sharedSpaceActivitiesRepository);
 
   Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId) async {
     try {
-      final activities = await _sharedSpaceActivitiesRepository.getSharedSpaceActivities(sharedSpaceId);
+      final activities = await _sharedSpaceActivitiesRepository!.getSharedSpaceActivities(sharedSpaceId);
       return Right<Failure, Success>(SharedSpacesActivitiesViewState(activities));
     } catch (exception) {
       return Left<Failure, Success>(SharedSpacesActivitiesFailure(exception));

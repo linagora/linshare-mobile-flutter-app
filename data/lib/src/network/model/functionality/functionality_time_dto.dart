@@ -39,14 +39,14 @@ part 'functionality_time_dto.g.dart';
 
 @JsonSerializable()
 class FunctionalityTimeDto extends FunctionalityDto with EquatableMixin {
-  final int value;
-  final String unit;
+  final int? value;
+  final String? unit;
   final List<String> units;
 
   FunctionalityTimeDto(
       FunctionalityIdentifier identifier,
-      bool enable,
-      bool canOverride,
+      bool? enable,
+      bool? canOverride,
       this.value,
       this.unit,
       this.units)
@@ -57,10 +57,10 @@ class FunctionalityTimeDto extends FunctionalityDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$FunctionalityTimeDtoToJson(this);
 
   @override
-  List<Object> get props => [...super.props, value, unit, units];
+  List<Object?> get props => [...super.props, value, unit, units];
 }
 
 extension FunctionalityTimeDtoExtension on FunctionalityTimeDto {
   FunctionalityTime toFunctionalityTime() =>
-      FunctionalityTime(identifier, enable, canOverride, value, unit, units);
+      FunctionalityTime(identifier, enable!, canOverride!, value!, unit!, units);
 }

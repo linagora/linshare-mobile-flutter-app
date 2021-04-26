@@ -46,16 +46,15 @@ class LocalBiometricService extends BiometricService {
   }
 
   @override
-  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument}) async {
+  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument? androidSettingArgument, IOSSettingArgument? iosSettingArgument}) async {
     return await _localAuthentication.authenticateWithBiometrics(
       localizedReason: localizedReason,
       useErrorDialogs: false,
       stickyAuth: true,
       androidAuthStrings: AndroidAuthMessages(
-        fingerprintHint: '',
-        cancelButton: androidSettingArgument.cancelButton,
+        cancelButton: androidSettingArgument!.cancelButton,
         signInTitle: androidSettingArgument.titleSetting),
-      iOSAuthStrings: IOSAuthMessages(cancelButton: iosSettingArgument.cancelButton)
+      iOSAuthStrings: IOSAuthMessages(cancelButton: iosSettingArgument!.cancelButton)
     );
   }
 

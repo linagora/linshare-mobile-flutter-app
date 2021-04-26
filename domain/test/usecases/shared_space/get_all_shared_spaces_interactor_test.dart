@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('get_all_shared_spaces_interactor', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    GetAllSharedSpacesInteractor getAllSharedSpacesInteractor;
+    MockSharedSpaceRepository? sharedSpaceRepository;
+    late GetAllSharedSpacesInteractor getAllSharedSpacesInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('get all shared spaces interactor should return success with shared spaces list', () async {
-      when(sharedSpaceRepository.getSharedSpaces()).thenAnswer((_) async => [sharedSpace1, sharedSpace2]);
+      when(sharedSpaceRepository!.getSharedSpaces()).thenAnswer((_) async => [sharedSpace1, sharedSpace2]);
 
       final result = await getAllSharedSpacesInteractor.execute();
 
@@ -62,7 +62,7 @@ void main() {
 
     test('get all shared spaces interactor should fail when getAllSharedSpaces fail', () async {
       final exception = Exception();
-      when(sharedSpaceRepository.getSharedSpaces()).thenThrow(exception);
+      when(sharedSpaceRepository!.getSharedSpaces()).thenThrow(exception);
 
       final result = await getAllSharedSpacesInteractor.execute();
 

@@ -42,8 +42,8 @@ class FunctionalitySimpleDto extends FunctionalityDto with EquatableMixin {
 
   FunctionalitySimpleDto(
       FunctionalityIdentifier identifier,
-      bool enable,
-      bool canOverride)
+      bool? enable,
+      bool? canOverride)
       : super(identifier, enable, canOverride);
 
   factory FunctionalitySimpleDto.fromJson(Map<String, dynamic> json) => _$FunctionalitySimpleDtoFromJson(json);
@@ -51,10 +51,10 @@ class FunctionalitySimpleDto extends FunctionalityDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$FunctionalitySimpleDtoToJson(this);
 
   @override
-  List<Object> get props => [...super.props];
+  List<Object?> get props => [...super.props];
 }
 
 extension FunctionalitySimpleDtoExtension on FunctionalitySimpleDto {
   FunctionalitySimple toFunctionalitySimple() =>
-      FunctionalitySimple(identifier, enable, canOverride);
+      FunctionalitySimple(identifier, enable!, canOverride!);
 }

@@ -39,12 +39,12 @@ part 'functionality_boolean_dto.g.dart';
 
 @JsonSerializable()
 class FunctionalityBooleanDto extends FunctionalityDto with EquatableMixin {
-  final bool value;
+  final bool? value;
 
   FunctionalityBooleanDto(
       FunctionalityIdentifier identifier,
-      bool enable,
-      bool canOverride,
+      bool? enable,
+      bool? canOverride,
       this.value)
       : super(identifier, enable, canOverride);
 
@@ -53,10 +53,10 @@ class FunctionalityBooleanDto extends FunctionalityDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$FunctionalityBooleanDtoToJson(this);
 
   @override
-  List<Object> get props => [...super.props, value];
+  List<Object?> get props => [...super.props, value];
 }
 
 extension FunctionalityBooleanDtoExtension on FunctionalityBooleanDto {
   FunctionalityBoolean toFunctionalityBoolean() =>
-      FunctionalityBoolean(identifier, enable, canOverride, value);
+      FunctionalityBoolean(identifier, enable!, canOverride!, value!);
 }

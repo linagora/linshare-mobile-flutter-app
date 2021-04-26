@@ -31,7 +31,8 @@
 //
 
 import 'package:data/src/network/model/account/account_dto.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/data_from_json_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
@@ -41,7 +42,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'work_group_folder_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @WorkGroupNodeIdConverter()
 @SharedSpaceIdConverter()
 class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
@@ -50,10 +51,10 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
     WorkGroupNodeId parentWorkGroupNodeId,
     WorkGroupNodeType type,
     SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String description,
-    String name,
+    DateTime? creationDate,
+    DateTime? modificationDate,
+    String? description,
+    String? name,
     AccountDto lastAuthor,
   ) : super(
           workGroupNodeId,
@@ -73,7 +74,7 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
   Map<String, dynamic> toJson() => _$WorkGroupNodeFolderDtoToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         workGroupNodeId,
         parentWorkGroupNodeId,
         type,
@@ -92,10 +93,10 @@ extension WorkGroupNodeFolderDtoExtension on WorkGroupNodeFolderDto {
         parentWorkGroupNodeId,
         type,
         sharedSpaceId,
-        creationDate,
-        modificationDate,
-        description,
-        name,
-        lastAuthor != null ? lastAuthor.toAccount() : null
+        creationDate ?? DateTime.now(),
+        modificationDate ?? DateTime.now(),
+        description ?? '',
+        name ?? '',
+        lastAuthor.toAccount()
       );
 }

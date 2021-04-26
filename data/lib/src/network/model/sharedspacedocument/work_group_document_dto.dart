@@ -32,7 +32,7 @@
 
 import 'package:data/src/network/model/account/account_dto.dart';
 import 'package:data/src/network/model/converter/data_from_json_converter.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
@@ -44,28 +44,28 @@ import 'package:http_parser/http_parser.dart';
 part 'work_group_document_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @WorkGroupNodeIdConverter()
 @SharedSpaceIdConverter()
 class WorkGroupDocumentDto extends WorkGroupNodeDto {
   @JsonKey(name: Attribute.mimeType, fromJson: mediaTypeFromJson, toJson: mediaTypeToJson)
   final MediaType mediaType;
 
-  final int size;
-  final bool hasThumbnail;
-  final DateTime uploadDate;
-  final bool hasRevision;
-  final String sha256sum;
+  final int? size;
+  final bool? hasThumbnail;
+  final DateTime? uploadDate;
+  final bool? hasRevision;
+  final String? sha256sum;
 
   WorkGroupDocumentDto(
     WorkGroupNodeId workGroupNodeId,
     WorkGroupNodeId parentWorkGroupNodeId,
     WorkGroupNodeType type,
     SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String description,
-    String name,
+    DateTime? creationDate,
+    DateTime? modificationDate,
+    String? description,
+    String? name,
     AccountDto lastAuthor,
     this.size,
     this.mediaType,
@@ -88,7 +88,7 @@ class WorkGroupDocumentDto extends WorkGroupNodeDto {
   Map<String, dynamic> toJson() => _$WorkGroupDocumentDtoToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     size,
     hasThumbnail,
@@ -104,15 +104,15 @@ extension WorkGroupDocumentDtoExtension on WorkGroupDocumentDto {
       parentWorkGroupNodeId,
       type,
       sharedSpaceId,
-      creationDate,
-      modificationDate,
-      description,
-      name,
-      lastAuthor != null ? lastAuthor.toAccount() : null,
-      size,
+      creationDate ?? DateTime.now(),
+      modificationDate ?? DateTime.now(),
+      description ?? '',
+      name ?? '',
+      lastAuthor.toAccount(),
+      size ?? 0,
       mediaType,
-      hasThumbnail,
-      uploadDate,
-      hasRevision,
-      sha256sum,);
+      hasThumbnail ?? false,
+      uploadDate ?? DateTime.now(),
+      hasRevision ?? false,
+      sha256sum ?? '');
 }

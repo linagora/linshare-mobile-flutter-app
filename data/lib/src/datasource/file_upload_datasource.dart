@@ -33,7 +33,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 abstract class FileUploadDataSource {
-  Stream<Either<Failure, Success>> get uploadingFileStream;
+  Stream<Either<Failure, Success>>? get uploadingFileStream;
 
   Future<UploadTaskId> upload(FileInfo fileInfo, Token token, String url);
 }

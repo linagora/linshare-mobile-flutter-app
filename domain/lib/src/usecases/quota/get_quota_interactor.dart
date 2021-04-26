@@ -43,7 +43,7 @@ class GetQuotaInteractor {
       final accountQuota = await quotaRepository.findQuota(quotaUuid);
       return Right(AccountQuotaViewState(accountQuota));
     } catch (exception) {
-      return Left(AccountQuotaFailure(exception));
+      return Left(AccountQuotaFailure(exception as Exception));
     }
   }
 }

@@ -29,7 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/converter/quota_id_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/sharedspace/shared_space_role_dto.dart';
@@ -41,7 +41,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'shared_space_node_nested_response.g.dart';
 
 @JsonSerializable()
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @QuotaIdConverter()
 @SharedSpaceIdConverter()
 class SharedSpaceNodeNestedResponse extends Equatable {
@@ -59,9 +59,9 @@ class SharedSpaceNodeNestedResponse extends Equatable {
   final SharedSpaceId sharedSpaceId;
 
   final SharedSpaceRoleDto role;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final String name;
+  final DateTime? creationDate;
+  final DateTime? modificationDate;
+  final String? name;
   final LinShareNodeType nodeType;
 
   @JsonKey(name: Attribute.quotaUuid)
@@ -71,7 +71,7 @@ class SharedSpaceNodeNestedResponse extends Equatable {
   Map<String, dynamic> toJson() => _$SharedSpaceNodeNestedResponseToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     sharedSpaceId,
     role,
     creationDate,
@@ -86,12 +86,12 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
   SharedSpaceNodeNested toSharedSpaceNodeNested() {
     return SharedSpaceNodeNested(
       sharedSpaceId,
-      role != null ? role.toSharedSpaceRole() : SharedSpaceRole.initial(),
-      creationDate,
-      modificationDate,
-      name,
+      role.toSharedSpaceRole(),
+      creationDate ?? DateTime.now(),
+      modificationDate ?? DateTime.now(),
+      name ?? '',
       nodeType,
-      quotaId ?? QuotaId.initial()
+      quotaId
     );
   }
 }

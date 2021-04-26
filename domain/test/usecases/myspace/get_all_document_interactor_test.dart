@@ -42,8 +42,8 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('get_all_document_interactor_test', () {
-    MockDocumentRepository documentRepository;
-    GetAllDocumentInteractor getAllDocumentInteractor;
+    late MockDocumentRepository documentRepository;
+    late GetAllDocumentInteractor getAllDocumentInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();

@@ -40,8 +40,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('get_shared_space_node_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    GetSharedSpaceNodeInteractor getSharedSpaceNodeInteractor;
+    MockSharedSpaceDocumentRepository? sharedSpaceDocumentRepository;
+    late GetSharedSpaceNodeInteractor getSharedSpaceNodeInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('get shared space node interactor should return success with one valid data', () async {
-      when(sharedSpaceDocumentRepository.getWorkGroupNode(
+      when(sharedSpaceDocumentRepository!.getWorkGroupNode(
         workGroupDocument1.sharedSpaceId,
         workGroupDocument1.workGroupNodeId))
       .thenAnswer((_) async => workGroupDocument1);
@@ -58,9 +58,9 @@ void main() {
           workGroupDocument1.sharedSpaceId,
           workGroupDocument1.workGroupNodeId);
 
-      final workGroups = result
+      final WorkGroupNode? workGroups = result
           .map((success) => (success as SharedSpaceNodeViewState).workGroupNode)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as WorkGroupNode Function());
 
       expect(workGroups, workGroupDocument1);
     });
@@ -68,7 +68,7 @@ void main() {
     test('get shared space node interactor should fail when getWorkGroupNode fail', () async {
       final exception = Exception();
 
-      when(sharedSpaceDocumentRepository.getWorkGroupNode(
+      when(sharedSpaceDocumentRepository!.getWorkGroupNode(
          workGroupDocument1.sharedSpaceId,
          workGroupDocument1.workGroupNodeId))
       .thenThrow(exception);

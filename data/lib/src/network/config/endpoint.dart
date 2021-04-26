@@ -73,8 +73,8 @@ extension ServicePathExtension on ServicePath {
         .map((query) => '${query.queryName}=${query.queryValue}').join('&')}');
   }
 
-  ServicePath withPathParameter([String pathParameter]) {
-    if (pathParameter.isEmpty) {
+  ServicePath withPathParameter([String? pathParameter]) {
+    if (pathParameter!.isEmpty) {
       return this;
     }
 
@@ -89,7 +89,7 @@ extension ServicePathExtension on ServicePath {
     return baseUrl.origin + generateEndpointPath();
   }
 
-  ServicePath downloadServicePath(String resourceId) {
+  ServicePath downloadServicePath(String? resourceId) {
     return ServicePath('$path/$resourceId${Endpoint.download}');
   }
 

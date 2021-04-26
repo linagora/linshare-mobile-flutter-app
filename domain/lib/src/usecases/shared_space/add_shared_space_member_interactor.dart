@@ -36,13 +36,13 @@ import 'package:domain/src/model/sharedspace/shared_space_id.dart';
 import 'package:domain/src/state/success.dart';
 
 class AddSharedSpaceMemberInteractor {
-  final SharedSpaceMemberRepository _sharedSpaceMemberRepository;
+  final SharedSpaceMemberRepository? _sharedSpaceMemberRepository;
 
   AddSharedSpaceMemberInteractor(this._sharedSpaceMemberRepository);
 
   Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request) async {
     try {
-      final result = await _sharedSpaceMemberRepository.addMember(sharedSpaceId, request);
+      final result = await _sharedSpaceMemberRepository!.addMember(sharedSpaceId, request);
       return Right<Failure, Success>(AddSharedSpaceMemberViewState(result));
     } catch (exception) {
       return Left<Failure, Success>(AddSharedSpaceMemberFailure(exception));

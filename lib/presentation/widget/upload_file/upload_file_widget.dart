@@ -481,7 +481,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                   return await uploadFileViewModel
                       .getAutoCompleteSharing(pattern);
                 }
-                return null;
+                return <AutoCompleteResult>[];
               },
               itemBuilder: (context, AutoCompleteResult autoCompleteResult) {
                 return ListTile(

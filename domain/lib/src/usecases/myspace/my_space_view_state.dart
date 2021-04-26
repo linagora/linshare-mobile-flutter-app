@@ -84,11 +84,11 @@ class ContextMenuItemViewState extends ViewState {
 }
 
 class DownloadFileIOSViewState extends ViewState {
-  final Uri filePath;
+  final Uri? filePath;
   DownloadFileIOSViewState(this.filePath);
 
   @override
-  List<Object> get props => [filePath];
+  List<Object?> get props => [filePath];
 }
 
 class DownloadFileIOSFailure extends FeatureFailure {
@@ -101,7 +101,7 @@ class DownloadFileIOSFailure extends FeatureFailure {
 }
 
 class DownloadFileIOSAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   DownloadFileIOSAllSuccessViewState(this.resultList);
 
@@ -110,7 +110,7 @@ class DownloadFileIOSAllSuccessViewState extends ViewState {
 }
 
 class DownloadFileIOSHasSomeFilesFailureViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   DownloadFileIOSHasSomeFilesFailureViewState(this.resultList);
 
@@ -119,7 +119,7 @@ class DownloadFileIOSHasSomeFilesFailureViewState extends ViewState {
 }
 
 class DownloadFileIOSAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   DownloadFileIOSAllFailureViewState(this.resultList);
 
@@ -146,7 +146,7 @@ class RemoveDocumentFailure extends FeatureFailure {
 }
 
 class RemoveMultipleDocumentsAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveMultipleDocumentsAllSuccessViewState(this.resultList);
 
@@ -155,7 +155,7 @@ class RemoveMultipleDocumentsAllSuccessViewState extends ViewState {
 }
 
 class RemoveMultipleDocumentsHasSomeFilesFailedViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveMultipleDocumentsHasSomeFilesFailedViewState(this.resultList);
 
@@ -164,7 +164,7 @@ class RemoveMultipleDocumentsHasSomeFilesFailedViewState extends ViewState {
 }
 
 class RemoveMultipleDocumentsAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
+  final List<Either<Failure, Success?>> resultList;
 
   RemoveMultipleDocumentsAllFailureViewState(this.resultList);
 

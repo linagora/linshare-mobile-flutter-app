@@ -38,13 +38,13 @@ import 'package:domain/src/state/success.dart';
 import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
 class GetDocumentInteractor {
-  final DocumentRepository _documentRepository;
+  final DocumentRepository? _documentRepository;
 
   GetDocumentInteractor(this._documentRepository);
 
   Future<Either<Failure, Success>> execute(DocumentId documentId) async {
     try {
-      final document = await _documentRepository.getDocument(documentId);
+      final document = await _documentRepository!.getDocument(documentId);
       return Right<Failure, Success>(GetDocumentViewState(document));
     } catch (exception) {
       return Left<Failure, Success>(GetDocumentFailure(exception));

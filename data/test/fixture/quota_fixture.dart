@@ -36,10 +36,10 @@ import 'package:domain/domain.dart';
 final quotaId1 = QuotaId('q1');
 
 final accountQuotaResponse1 = AccountQuotaResponse(
-  quota: QuotaSize(10),
-  usedSpace: QuotaSize(20),
-  maxFileSize: QuotaSize(30),
-  maintenance: true
+    QuotaSize(10),
+    QuotaSize(20),
+    QuotaSize(30),
+    true
 );
 
 final accountQuota1 = AccountQuota(

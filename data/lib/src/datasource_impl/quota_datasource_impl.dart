@@ -51,10 +51,10 @@ class QuotaDataSourceImpl implements QuotaDataSource {
       return quotaResponse.toAccountQuota();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response!.statusCode == 404) {
           throw QuotaNotFound();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response!.statusMessage!);
         }
       });
     });

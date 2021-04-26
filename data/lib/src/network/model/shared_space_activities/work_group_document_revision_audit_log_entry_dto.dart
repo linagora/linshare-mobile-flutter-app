@@ -31,7 +31,7 @@
 import 'package:data/data.dart';
 import 'package:data/src/network/model/converter/audit_log_entry_id_converter.dart';
 import 'package:data/src/network/model/converter/audit_log_resource_id_converter.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/shared_space_activities/audit_log_entry_user_dto.dart';
 import 'package:data/src/network/model/shared_space_activities/work_group_copy_dto.dart';
 import 'package:data/src/network/model/shared_space_activities/work_group_light_dto.dart';
@@ -41,7 +41,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'work_group_document_revision_audit_log_entry_dto.g.dart';
 
 @JsonSerializable()
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @AuditLogEntryIdConverter()
 @AuditLogResourceIdConverter()
 class WorkGroupDocumentRevisionAuditLogEntryDto extends AuditLogEntryUserDto {
@@ -56,7 +56,7 @@ class WorkGroupDocumentRevisionAuditLogEntryDto extends AuditLogEntryUserDto {
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
-      DateTime creationDate,
+      DateTime? creationDate,
       AccountDto authUser,
       AuditLogEntryType type,
       LogAction action,
@@ -70,7 +70,7 @@ class WorkGroupDocumentRevisionAuditLogEntryDto extends AuditLogEntryUserDto {
       ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     workGroup,
     resource,
@@ -88,16 +88,16 @@ extension WorkGroupDocumentRevisionAuditLogEntryDtoExtension on WorkGroupDocumen
       auditLogEntryId,
       resourceId,
       fromResourceId,
-      creationDate,
-      authUser != null ? authUser.toAccount() : null,
+      creationDate ?? DateTime.now(),
+      authUser.toAccount(),
       type,
       action,
       cause,
-      actor != null ? actor.toAccount() : null,
-      workGroup != null ? workGroup.toWorkGroupLight() : null,
-      resource != null ? resource.toWorkGroupDocument() : null,
-      resourceUpdated != null ? resourceUpdated.toWorkGroupDocument() : null,
-      copiedTo != null ? copiedTo.toWorkGroupCopy() : null,
-      copiedFrom != null ? copiedFrom.toWorkGroupCopy() : null
+      actor.toAccount(),
+      workGroup.toWorkGroupLight(),
+      resource.toWorkGroupDocument(),
+      resourceUpdated.toWorkGroupDocument(),
+      copiedTo.toWorkGroupCopy(),
+      copiedFrom.toWorkGroupCopy()
   );
 }

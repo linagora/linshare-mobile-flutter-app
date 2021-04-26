@@ -40,9 +40,9 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('copy_multiples_files_to_my_space_interactor tests', () {
-    MockDocumentRepository documentRepository;
+    MockDocumentRepository? documentRepository;
     CopyToMySpaceInteractor copyToMySpaceInteractor;
-    CopyMultipleFilesToMySpaceInteractor _copyMultiplesFilesToMySpaceInteractor;
+    late CopyMultipleFilesToMySpaceInteractor _copyMultiplesFilesToMySpaceInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -51,11 +51,11 @@ void main() {
     });
 
     test('copy multiples files to my space interactor should return success with valid data', () async {
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
 
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document2]);
 
@@ -68,11 +68,11 @@ void main() {
 
     test('copy multiples files to my space interactor should return success with some failures', () async {
       final exception = DocumentNotFound();
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenThrow(exception);
 
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document2]);
 
@@ -84,7 +84,7 @@ void main() {
     });
 
     test('copy multiples files to my space interactor should return success with one document', () async {
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
 
@@ -96,11 +96,11 @@ void main() {
     });
 
     test('copy multiples files to my space interactor should fail with folder and document', () async {
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
 
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document2]);
 
@@ -110,11 +110,11 @@ void main() {
     });
 
     test('copy multiples files to my space interactor should fail with only folders', () async {
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
 
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document2]);
 
@@ -124,11 +124,11 @@ void main() {
 
     test('copy multiples files to my space interactor should fail with only failures', () async {
       final exception = DocumentNotFound();
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenThrow(exception);
 
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenThrow(exception);
 

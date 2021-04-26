@@ -39,7 +39,7 @@ part 'permanent_token.g.dart';
 class PermanentToken {
   PermanentToken(this.token, this.tokenId);
 
-  String token;
+  String? token;
 
   @JsonKey(name: Attribute.uuid, fromJson: _uuidFromJson, toJson: _uuidToJson)
   TokenId tokenId;
@@ -55,7 +55,7 @@ TokenId _uuidFromJson(dynamic json) => TokenId(json.toString());
 
 extension PermanentTokenExtension on PermanentToken {
   Token toToken() {
-    return Token(token, tokenId);
+    return Token(token!, tokenId);
   }
 }
 

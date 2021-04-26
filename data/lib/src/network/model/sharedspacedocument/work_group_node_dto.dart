@@ -31,26 +31,27 @@
 //
 
 import 'package:data/src/network/model/account/account_dto.dart';
+import 'package:data/src/network/model/converter/data_from_json_converter.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 abstract class WorkGroupNodeDto with EquatableMixin {
-  @JsonKey(name: Attribute.uuid)
+  @JsonKey(name: Attribute.uuid, fromJson: workGroupNodeIdFromJson, toJson: workGroupNodeIdToJson)
   final WorkGroupNodeId workGroupNodeId;
 
-  @JsonKey(name: Attribute.parent)
+  @JsonKey(name: Attribute.parent, fromJson: workGroupNodeIdFromJson, toJson: workGroupNodeIdToJson)
   final WorkGroupNodeId parentWorkGroupNodeId;
 
   @JsonKey(name: Attribute.workGroup)
   final SharedSpaceId sharedSpaceId;
 
   final WorkGroupNodeType type;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final String description;
-  final String name;
+  final DateTime? creationDate;
+  final DateTime? modificationDate;
+  final String? description;
+  final String? name;
   final AccountDto lastAuthor;
 
   WorkGroupNodeDto(
@@ -65,7 +66,7 @@ abstract class WorkGroupNodeDto with EquatableMixin {
       this.lastAuthor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     workGroupNodeId,
     parentWorkGroupNodeId,
     type,

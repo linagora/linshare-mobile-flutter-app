@@ -52,7 +52,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
       Token token,
       Uri baseUrl,
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}) {
+      {WorkGroupNodeId? parentNodeId}) {
     final queryParameters = parentNodeId == null
         ? <QueryParameter>[]
         : [StringQueryParameter('parent', parentNodeId.uuid)];
@@ -64,23 +64,23 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<List<WorkGroupNode>> getAllChildNodes(
+  Future<List<WorkGroupNode?>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}
+      {WorkGroupNodeId? parentNodeId}
   ) {
     return _sharedSpaceDocumentDataSource.getAllChildNodes(sharedSpaceId, parentNodeId: parentNodeId);
   }
 
   @override
-  Future<List<WorkGroupNode>> copyToSharedSpace(
+  Future<List<WorkGroupNode?>> copyToSharedSpace(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}) {
+    {WorkGroupNodeId? destinationParentNodeId}) {
       return _sharedSpaceDocumentDataSource.copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
   }
 
   @override
-  Future<WorkGroupNode> removeSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId) {
+  Future<WorkGroupNode?> removeSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId) {
     return _sharedSpaceDocumentDataSource.removeSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId);
   }
 
@@ -114,7 +114,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<WorkGroupNode> renameSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId, RenameWorkGroupNodeRequest renameWorkGroupNodeRequest) {
+  Future<WorkGroupNode?> renameSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId, RenameWorkGroupNodeRequest renameWorkGroupNodeRequest) {
     return _sharedSpaceDocumentDataSource.renameSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId, renameWorkGroupNodeRequest);
   }
 

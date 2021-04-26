@@ -40,8 +40,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('rename_shared_space_node_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    RenameSharedSpaceNodeInteractor renameSharedSpaceNodeInteractor;
+    MockSharedSpaceDocumentRepository? sharedSpaceDocumentRepository;
+    late RenameSharedSpaceNodeInteractor renameSharedSpaceNodeInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('rename shared space node interactor should return success with one valid data', () async {
-      when(sharedSpaceDocumentRepository.renameSharedSpaceNode(
+      when(sharedSpaceDocumentRepository!.renameSharedSpaceNode(
         workGroupDocument1.sharedSpaceId,
         workGroupDocument1.workGroupNodeId,
         RenameWorkGroupNodeRequest(workGroupDocument1.name, WorkGroupNodeType.DOCUMENT)))
@@ -60,9 +60,9 @@ void main() {
           workGroupDocument1.workGroupNodeId,
           RenameWorkGroupNodeRequest(workGroupDocument1.name, WorkGroupNodeType.DOCUMENT));
 
-      final workGroups = result
+      final WorkGroupNode? workGroups = result
           .map((success) => (success as RenameSharedSpaceNodeViewState).workGroupNode)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as WorkGroupNode Function());
 
       expect(workGroups, workGroupDocument1);
     });
@@ -70,7 +70,7 @@ void main() {
     test('rename shared space node interactor should fail when renameSharedSpaceNode fail', () async {
       final exception = Exception();
 
-      when(sharedSpaceDocumentRepository.renameSharedSpaceNode(
+      when(sharedSpaceDocumentRepository!.renameSharedSpaceNode(
          workGroupDocument1.sharedSpaceId,
          workGroupDocument1.workGroupNodeId,
          RenameWorkGroupNodeRequest(workGroupDocument1.name, WorkGroupNodeType.DOCUMENT)))

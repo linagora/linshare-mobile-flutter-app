@@ -70,15 +70,15 @@ class FunctionalityDataSourceImpl implements FunctionalityDataSource {
         } else if (data is FunctionalityTimeDto) {
           return data.toFunctionalityTime();
         }
-        return FunctionalitySimple(data.identifier, data.enable, data.canOverride);
+        return FunctionalitySimple(data.identifier, data.enable!, data.canOverride!);
       }).toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error,
           handler: (DioError error) {
-        if (error.response.statusCode == 403) {
+        if (error.response!.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response!.statusMessage!);
         }
       });
     });

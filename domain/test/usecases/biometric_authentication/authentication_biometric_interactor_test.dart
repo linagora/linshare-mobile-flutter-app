@@ -37,8 +37,8 @@ import '../../mock/repository/biometric_authentication/mock_biometric_repository
 
 void main() {
   group('authentication_biometric_interactor_test', () {
-    MockBiometricRepository biometricRepository;
-    AuthenticationBiometricInteractor authenticationBiometricInteractor;
+    MockBiometricRepository? biometricRepository;
+    late AuthenticationBiometricInteractor authenticationBiometricInteractor;
 
     setUp(() {
       biometricRepository = MockBiometricRepository();
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('authenticate should return success with data valid', () async {
-      when(biometricRepository.authenticate('Please authenticate to open app')).thenAnswer((_) async => true);
+      when(biometricRepository!.authenticate('Please authenticate to open app')).thenAnswer((_) async => true);
 
       final result = await authenticationBiometricInteractor.execute('Please authenticate to open app');
 

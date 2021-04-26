@@ -35,10 +35,10 @@ import 'dart:convert';
 import 'package:domain/domain.dart';
 
 class UserAutoCompleteResultDto extends AutoCompleteResult {
-  final String firstName;
-  final String lastName;
-  final String domain;
-  final String mail;
+  final String? firstName;
+  final String? lastName;
+  final String? domain;
+  final String? mail;
 
   UserAutoCompleteResultDto(String identifier,
       String display,
@@ -52,10 +52,10 @@ class UserAutoCompleteResultDto extends AutoCompleteResult {
     return UserAutoCompleteResultDto(
         json['identifier'] as String,
         json['display'] as String,
-        json['firstName'] as String,
-        json['lastName'] as String,
-        json['domain'] as String,
-        json['mail'] as String);
+        json['firstName'] as String?,
+        json['lastName'] as String?,
+        json['domain'] as String?,
+        json['mail'] as String?);
   }
 
   Map<String, dynamic> toJson() => {
@@ -68,7 +68,7 @@ class UserAutoCompleteResultDto extends AutoCompleteResult {
   };
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     identifier,
     display,
     firstName,
@@ -83,8 +83,8 @@ extension UserAutoCompleteResultDtoExtension on UserAutoCompleteResultDto {
       UserAutoCompleteResult(
           identifier,
           display,
-          firstName,
-          lastName,
-          domain,
-          mail);
+          firstName ?? '',
+          lastName ?? '',
+          domain ?? '',
+          mail ?? '');
 }

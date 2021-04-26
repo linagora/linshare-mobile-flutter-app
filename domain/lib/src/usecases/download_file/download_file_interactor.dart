@@ -50,7 +50,7 @@ class DownloadFileInteractor {
 
       return Right<Failure, Success>(DownloadFileViewState(taskIds));
     } catch (exception) {
-      return Left<Failure, Success>(DownloadFileFailure(exception));
+      return Left<Failure, Success>(DownloadFileFailure(exception as Exception));
     }
   }
 }

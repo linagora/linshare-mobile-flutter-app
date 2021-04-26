@@ -38,7 +38,7 @@ class RemoveMultipleSharedSpaceNodesInteractor {
 
   RemoveMultipleSharedSpaceNodesInteractor(this._removeSharedSpaceNodeInteractor);
 
-  Future<Either<Failure, Success>> execute(List<WorkGroupNode> workGroupNodes) async {
+  Future<Either<Failure, Success?>> execute(List<WorkGroupNode> workGroupNodes) async {
     final listResult = await Future.wait(workGroupNodes.map((workGroupNode) =>
       _removeSharedSpaceNodeInteractor.execute(workGroupNode.sharedSpaceId, workGroupNode.workGroupNodeId)));
 
