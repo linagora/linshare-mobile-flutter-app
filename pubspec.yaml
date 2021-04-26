@@ -18,7 +18,19 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
+
+dependency_overrides:
+  # intl
+  intl: 0.17.0
+
+  # build_runner dependencies
+  crypto: 3.0.0
+  args: 2.0.0
+  dart_style: 2.0.0
+  analyzer: 1.4.0
+  convert: 3.0.0
+  petitparser: 4.1.0
 
 dependencies:
   flutter:
@@ -33,75 +45,75 @@ dependencies:
     path: domain
 
   # Http client
-  dio: ^3.0.10
-  json_annotation: ^3.1.0
+  dio: 4.0.0
+  json_annotation: 4.0.1
 
   #get_it
-  get_it: ^5.0.1
+  get_it: 6.1.1
 
   #  redux
-  flutter_redux: ^0.6.0
+  flutter_redux: 0.8.2
 
   # redux_thunk
-  redux_thunk: ^0.3.0
+  redux_thunk: 0.4.0
 
   #  either
-  dartz: ^0.9.1
+  dartz: 0.10.0-nullsafety.1
 
   # shared_preferences
-  shared_preferences: ^0.5.12
+  shared_preferences: 2.0.5
 
   #rxdart
-  rxdart: ^0.24.1
+  rxdart: 0.26.0
 
   # device_info
-  device_info: ^0.4.2+8
+  device_info: 2.0.0
 
   # file_picker
-  file_picker: 2.1.5+1
+  file_picker: 3.0.1
 
   # flutter_uploader
-  flutter_uploader: ^1.2.1
+  flutter_uploader: 3.0.0-beta.1
 
   # flutter toast
-  fluttertoast: ^7.1.1
+  fluttertoast: 8.0.6
 
   # redux_logging
-  redux_logging: ^0.4.0
+  redux_logging: 0.5.0
 
   # receive_sharing_intent
-  receive_sharing_intent: 1.4.1
+  receive_sharing_intent: 1.4.5
 
   # intl
-  intl: ^0.16.1
+  intl: 0.17.0
   intl_translation: 0.17.10+1
 
   # flutter_svg
-  flutter_svg: ^0.19.1
+  flutter_svg: 0.22.0
 
   # flutter_downloader
-  flutter_downloader: ^1.5.2
+  flutter_downloader: 1.6.0
 
   #filesize
-  filesize: ^1.0.4
+  filesize: 1.0.4
 
   # share
-  share: 0.6.5+4
+  share: 2.0.1
 
   # flutter_tags
-  flutter_tags: 0.4.9+1
+  flutter_tags: 1.0.0-nullsafety.1
 
   # flutter_typeahead
-  flutter_typeahead: 1.9.1
+  flutter_typeahead: 3.1.1
 
   # Mime type
-  mime: 0.9.7
+  mime: 1.0.0
 
   # connectivity
-  connectivity: 2.0.2
+  connectivity: 3.0.3
 
   # open_file
-  open_file: 3.0.3
+  open_file: 3.2.0
   # url_launcher
   url_launcher: 5.7.10
 
@@ -109,26 +121,23 @@ dependencies:
   pin_code_fields: 6.1.0
 
   # local_auth
-  local_auth: 0.6.3+4
-
-  # local_auth
-  local_auth: 0.6.3+4
+  local_auth: 1.1.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
-  pedantic: ^1.9.2
-  permission_handler: 5.1.0+2
+  cupertino_icons: 1.0.2
+  pedantic: 1.11.0
+  permission_handler: 7.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_driver:
     sdk: flutter
-  build_runner: ^1.10.2
-  json_serializable: ^3.5.0
-  test: ^1.16.0-nullsafety.5
-  mockito: ^4.1.3
+  build_runner: 2.0.1
+  json_serializable: 4.1.1
+  test: 1.16.5
+  mockito: 5.0.6
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
