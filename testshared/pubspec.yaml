@@ -5,7 +5,7 @@ author:
 homepage: 'https://www.linshare.org'
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
@@ -19,9 +19,9 @@ dependencies:
     path: ../domain
 
   #rxdart
-  rxdart: 0.24.1
+  rxdart: 0.26.0
 
-  dartz: 0.9.2
+  dartz: 0.10.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:
