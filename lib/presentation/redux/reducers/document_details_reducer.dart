@@ -42,7 +42,7 @@ final documentDetailsReducer = combineReducers<DocumentDetailsState>([
       state.setDocument(
           newDocument: action.getDocumentViewState.fold(
                   (failure) => null,
-                  (success) => (success is GetDocumentViewState) ? success.document : []),
+                  (success) => (success is GetDocumentViewState) ? success.document : null),
           viewState: action.getDocumentViewState)),
   TypedReducer<DocumentDetailsState, CleanDocumentDetailsStateAction>((DocumentDetailsState state, _) => state.clearViewState()),
 ]);
