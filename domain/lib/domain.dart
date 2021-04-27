@@ -228,6 +228,7 @@ export 'src/usecases/myspace/rename_document_interactor.dart';
 export 'src/usecases/search_received_shares/search_received_shares_interactor.dart';
 export 'src/usecases/shared_space/delete_shared_space_member_interactor.dart';
 export 'src/usecases/myspace/get_document_interactor.dart';
+export 'src/usecases/shared_space/get_shared_space_node_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
