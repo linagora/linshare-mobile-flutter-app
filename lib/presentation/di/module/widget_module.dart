@@ -69,6 +69,8 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/ad
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
@@ -95,6 +97,8 @@ class WidgetModule {
     _provideEnterOTPWidgetComponent();
     _provide2FAWidgetComponent();
     _provideAddSharedSpaceMemberComponent();
+    _provideDocumentDetailsComponent();
+    _provideSharedSpaceNodeDetailsComponent();
   }
 
   void _provideLoginComponent() {
@@ -316,5 +320,14 @@ class WidgetModule {
     getIt.registerFactory(() => SecondFactorAuthenticationViewModel(
       getIt<Store<AppState>>(),
       getIt<AppNavigation>(),));
+  }
+
+  void _provideSharedSpaceNodeDetailsComponent() {
+    getIt.registerFactory(() => SharedSpaceNodeDetailsWidget());
+    getIt.registerFactory(() => SharedSpaceNodeDetailsViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetSharedSpaceNodeInteractor>()
+    ));
   }
 }
