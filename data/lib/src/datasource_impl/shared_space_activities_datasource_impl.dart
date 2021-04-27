@@ -41,10 +41,10 @@ class SharedSpaceActivitiesDataSourceImpl implements SharedSpaceActivitiesDataSo
   SharedSpaceActivitiesDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
 
   @override
-  Future<List<AuditLogEntryUser>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) {
+  Future<List<AuditLogEntryUser?>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) {
     return Future.sync(() async {
       return (await _linShareHttpClient.getSharedSpaceActivities(sharedSpaceId))
-          .map<AuditLogEntryUser>((auditLogEntryUserDto) {
+          .map<AuditLogEntryUser?>((auditLogEntryUserDto) {
             if (auditLogEntryUserDto is SharedSpaceNodeAuditLogEntryDto) {
               return auditLogEntryUserDto.toSharedSpaceNodeAuditLogEntry();
             } else if (auditLogEntryUserDto is SharedSpaceMemberAuditLogEntryDto) {
@@ -61,12 +61,12 @@ class SharedSpaceActivitiesDataSourceImpl implements SharedSpaceActivitiesDataSo
           .toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw SharedSpaceActivitiesNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });

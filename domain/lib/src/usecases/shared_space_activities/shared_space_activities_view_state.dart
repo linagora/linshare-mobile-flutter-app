@@ -32,7 +32,7 @@
 import 'package:domain/domain.dart';
 
 class SharedSpacesActivitiesViewState extends ViewState {
-  final List<AuditLogEntryUser> auditLogEntryUserList;
+  final List<AuditLogEntryUser?> auditLogEntryUserList;
 
   SharedSpacesActivitiesViewState(this.auditLogEntryUserList);
 

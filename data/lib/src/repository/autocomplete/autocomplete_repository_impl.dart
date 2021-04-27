@@ -43,7 +43,7 @@ class AutoCompleteRepositoryImpl implements AutoCompleteRepository {
       AutoCompletePattern autoCompletePattern,
       AutoCompleteType autoCompleteType,
       {
-        ThreadId threadId
+        ThreadId? threadId
       }
   ) async {
     return _autoCompleteDataSource.getAutoComplete(autoCompletePattern, autoCompleteType, threadId: threadId);

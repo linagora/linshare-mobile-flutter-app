@@ -49,7 +49,7 @@ import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 class FileUploadDataSourceImpl implements FileUploadDataSource {
   final FlutterUploader _uploader;
 
-  Stream<Either<Failure, Success>> _uploadingFileStream;
+  late Stream<Either<Failure, Success>> _uploadingFileStream;
 
   @override
   Stream<Either<Failure, Success>> get uploadingFileStream => _uploadingFileStream;

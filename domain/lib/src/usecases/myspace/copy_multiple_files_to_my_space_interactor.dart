@@ -39,7 +39,7 @@ class CopyMultipleFilesToMySpaceInteractor {
 
   CopyMultipleFilesToMySpaceInteractor(this._copyToMySpaceInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<WorkGroupNode> workGroupNodes}) async {
+  Future<Either<Failure, Success>> execute({required List<WorkGroupNode> workGroupNodes}) async {
     if (workGroupNodes.any((element) => element is WorkGroupFolder)) {
       return Left(CopyMultipleContainsFoldersToMySpaceFailure());
     }

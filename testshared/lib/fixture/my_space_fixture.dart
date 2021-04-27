@@ -30,10 +30,10 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:dartz/dartz.dart';
 
 final document1 = Document(
     DocumentId('3e57d240-47a1-4a7e-b1a7-25e29870af31'),

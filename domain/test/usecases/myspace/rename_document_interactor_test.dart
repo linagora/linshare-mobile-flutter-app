@@ -39,8 +39,8 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('rename_document_interactor_test', () {
-    RenameDocumentInteractor renameDocumentInteractor;
-    DocumentRepository documentRepository;
+    late RenameDocumentInteractor renameDocumentInteractor;
+    late DocumentRepository documentRepository;
 
     setUp(() {
       documentRepository = MockDocumentRepository();

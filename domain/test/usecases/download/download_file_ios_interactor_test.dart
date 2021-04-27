@@ -44,12 +44,12 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 
 void main() {
   group('download_file_ios_interactor_test', () {
-    MockDocumentRepository documentRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
-    DownloadFileIOSInteractor downloadFileIOSInteractor;
-    CancelToken cancelToken;
-    String validFilePath;
+    late MockDocumentRepository documentRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
+    late DownloadFileIOSInteractor downloadFileIOSInteractor;
+    late CancelToken cancelToken;
+    late String validFilePath;
 
     setUp(() {
       documentRepository = MockDocumentRepository();

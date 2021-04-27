@@ -43,7 +43,7 @@ class DuplicateNameValidator extends Validator<NewNameRequest> {
         newNameRequest.value != null &&
         _listName
           .map((nameItem) => nameItem.toLowerCase())
-          .contains(newNameRequest.value.toLowerCase())
+          .contains(newNameRequest.value!.toLowerCase())
     ) {
       return Left<Failure, Success>(VerifyNameFailure(DuplicatedNameException()));
     }

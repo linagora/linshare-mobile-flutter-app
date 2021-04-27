@@ -37,13 +37,10 @@
 import 'package:equatable/equatable.dart';
 
 class MailingListId with EquatableMixin {
-  String _uuid;
+  final String _uuid;
   String get uuid => _uuid;
 
-  MailingListId(String uuid) {
-    assert(uuid != null, 'invalid mailingListId');
-    _uuid = uuid;
-  }
+  MailingListId(this._uuid);
 
   @override
   List<Object> get props => [uuid];

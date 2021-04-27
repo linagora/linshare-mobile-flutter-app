@@ -45,11 +45,11 @@ part 'shared_space_member_response.g.dart';
 @DatetimeConverter()
 @SharedSpaceMemberIdConverter()
 class SharedSpaceMemberResponse with EquatableMixin {
-  final AccountDto account;
+  final AccountDto? account;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final SharedSpaceMemberNodeDto node;
-  final SharedSpaceRoleDto role;
+  final SharedSpaceMemberNodeDto? node;
+  final SharedSpaceRoleDto? role;
 
   @JsonKey(name: Attribute.uuid)
   final SharedSpaceMemberId sharedSpaceMemberId;
@@ -67,7 +67,7 @@ class SharedSpaceMemberResponse with EquatableMixin {
   Map<String, dynamic> toJson() => _$SharedSpaceMemberResponseToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     account,
     node,
     role,
@@ -81,11 +81,11 @@ extension SharedSpaceMemberResponseExtension on SharedSpaceMemberResponse {
   SharedSpaceMember toSharedSpaceMember() {
     return SharedSpaceMember(
       sharedSpaceMemberId,
-      account != null ? account.toAccount() : null,
+      account?.toAccount(),
       creationDate,
       modificationDate,
-      node != null ? node.toSharedSpaceMemberNode() : null,
-      role != null ? role.toSharedSpaceRole() : null,
+      node?.toSharedSpaceMemberNode(),
+      role?.toSharedSpaceRole(),
     );
   }
 }

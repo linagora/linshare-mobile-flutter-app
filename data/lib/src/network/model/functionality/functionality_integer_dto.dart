@@ -39,12 +39,12 @@ part 'functionality_integer_dto.g.dart';
 
 @JsonSerializable()
 class FunctionalityIntegerDto extends FunctionalityDto with EquatableMixin {
-  final int value;
+  final int? value;
 
   FunctionalityIntegerDto(
       FunctionalityIdentifier identifier,
-      bool enable,
-      bool canOverride,
+      bool? enable,
+      bool? canOverride,
       this.value)
       : super(identifier, enable, canOverride);
 
@@ -53,10 +53,10 @@ class FunctionalityIntegerDto extends FunctionalityDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$FunctionalityIntegerDtoToJson(this);
 
   @override
-  List<Object> get props => [...super.props, value];
+  List<Object?> get props => [...super.props, value];
 }
 
 extension FunctionalityIntegerDtoExtension on FunctionalityIntegerDto {
   FunctionalityInteger toFunctionalityInteger() =>
-      FunctionalityInteger(identifier, enable, canOverride, value);
+      FunctionalityInteger(identifier, enable ?? false, canOverride ?? false, value ?? 0);
 }

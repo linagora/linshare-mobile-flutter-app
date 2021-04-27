@@ -34,7 +34,7 @@ import 'package:domain/src/model/functionality/functionality.dart';
 import 'package:domain/src/model/functionality/functionality_identifier.dart';
 import 'package:equatable/equatable.dart';
 
-class FunctionalitySize extends Functionality with EquatableMixin {
+class FunctionalitySize extends Functionality implements EquatableMixin {
   final int value;
   final String unit;
   final List<String> units;

@@ -34,7 +34,7 @@ import 'package:domain/src/model/functionality/functionality.dart';
 import 'package:domain/src/model/functionality/functionality_identifier.dart';
 import 'package:equatable/equatable.dart';
 
-class FunctionalitySimple extends Functionality with EquatableMixin {
+class FunctionalitySimple extends Functionality implements EquatableMixin {
 
   FunctionalitySimple(
       FunctionalityIdentifier identifier,

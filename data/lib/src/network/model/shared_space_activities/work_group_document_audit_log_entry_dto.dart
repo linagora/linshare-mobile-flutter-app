@@ -46,22 +46,22 @@ part 'work_group_document_audit_log_entry_dto.g.dart';
 @AuditLogResourceIdConverter()
 class WorkGroupDocumentAuditLogEntryDto extends AuditLogEntryUserDto {
 
-  final WorkGroupLightDto workGroup;
-  final WorkGroupDocumentDto resource;
-  final WorkGroupDocumentDto resourceUpdated;
-  final WorkGroupCopyDto copiedTo;
-  final WorkGroupCopyDto copiedFrom;
+  final WorkGroupLightDto? workGroup;
+  final WorkGroupDocumentDto? resource;
+  final WorkGroupDocumentDto? resourceUpdated;
+  final WorkGroupCopyDto? copiedTo;
+  final WorkGroupCopyDto? copiedFrom;
 
   WorkGroupDocumentAuditLogEntryDto(
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
       DateTime creationDate,
-      AccountDto authUser,
+      AccountDto? authUser,
       AuditLogEntryType type,
       LogAction action,
-      LogActionCause cause,
-      AccountDto actor,
+      LogActionCause? cause,
+      AccountDto? actor,
       this.workGroup,
       this.resource,
       this.resourceUpdated,
@@ -70,7 +70,7 @@ class WorkGroupDocumentAuditLogEntryDto extends AuditLogEntryUserDto {
       ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     workGroup,
     resource,
@@ -89,15 +89,15 @@ extension WorkGroupDocumentAuditLogEntryDtoExtension on WorkGroupDocumentAuditLo
       resourceId,
       fromResourceId,
       creationDate,
-      authUser != null ? authUser.toAccount() : null,
+      authUser?.toAccount(),
       type,
       action,
-      cause,
-      actor != null ? actor.toAccount() : null,
-      workGroup != null ? workGroup.toWorkGroupLight() : null,
-      resource != null ? resource.toWorkGroupDocument() : null,
-      resourceUpdated != null ? resourceUpdated.toWorkGroupDocument() : null,
-      copiedTo != null ? copiedTo.toWorkGroupCopy() : null,
-      copiedFrom != null ? copiedFrom.toWorkGroupCopy() : null
+      cause ?? LogActionCause.UNDEFINED,
+      actor?.toAccount(),
+      workGroup?.toWorkGroupLight(),
+      resource?.toWorkGroupDocument(),
+      resourceUpdated?.toWorkGroupDocument(),
+      copiedTo?.toWorkGroupCopy(),
+      copiedFrom?.toWorkGroupCopy()
   );
 }

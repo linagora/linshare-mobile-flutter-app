@@ -43,10 +43,10 @@ import '../../mock/repository/received/mock_received_share_repository.dart';
 
 void main() {
   group('download_received_share_interactor_test', () {
-    MockReceivedShareRepository receivedShareRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
-    DownloadReceivedSharesInteractor downloadReceivedSharesInteractor;
+    late MockReceivedShareRepository receivedShareRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
+    late DownloadReceivedSharesInteractor downloadReceivedSharesInteractor;
 
     setUp(() {
       receivedShareRepository = MockReceivedShareRepository();
