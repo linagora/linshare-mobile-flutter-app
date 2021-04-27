@@ -80,4 +80,8 @@ abstract class SharedSpaceDocumentDataSource {
     WorkGroupNodeId sharedSpaceNodeId,
     RenameWorkGroupNodeRequest renameRequest
   );
+
+  Future<WorkGroupNode> getWorkGroupNode(
+    SharedSpaceId sharedSpaceId,
+    WorkGroupNodeId workGroupNodeId);
 }
