@@ -30,69 +30,54 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/copy/copy_request.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
-import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-abstract class SharedSpaceDocumentRepository {
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+import '../../mock/repository/mock_shared_space_document_repository.dart';
 
-  Future<List<WorkGroupNode>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+void main() {
+  group('get_shared_space_node_interactor test', () {
+    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    GetSharedSpaceNodeInteractor getSharedSpaceNodeInteractor;
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
-  );
+    setUp(() {
+      sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
+      getSharedSpaceNodeInteractor = GetSharedSpaceNodeInteractor(sharedSpaceDocumentRepository);
+    });
 
-  Future<WorkGroupNode> removeSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId);
+    test('get shared space node interactor should return success with one valid data', () async {
+      when(sharedSpaceDocumentRepository.getWorkGroupNode(
+        workGroupDocument1.sharedSpaceId,
+        workGroupDocument1.workGroupNodeId))
+      .thenAnswer((_) async => workGroupDocument1);
 
-  Future<List<DownloadTaskId>> downloadNodes(
-    List<WorkGroupNode> workgroupNodes,
-    Token token,
-    Uri baseUrl
-  );
+      final result = await getSharedSpaceNodeInteractor.execute(
+          workGroupDocument1.sharedSpaceId,
+          workGroupDocument1.workGroupNodeId);
 
-  Future<Uri> downloadNodeIOS(
-    WorkGroupNode workgroupNode,
-    Token token,
-    Uri baseUrl,
-    CancelToken cancelToken
-  );
+      final workGroups = result
+          .map((success) => (success as SharedSpaceNodeViewState).workGroupNode)
+          .getOrElse(() => null);
 
-  Future<WorkGroupFolder> createSharedSpaceFolder(
-    SharedSpaceId sharedSpaceId,
-    CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
-  );
+      expect(workGroups, workGroupDocument1);
+    });
 
-  Future<Uri> downloadPreviewWorkGroupDocument(
-    WorkGroupDocument workGroupDocument,
-    DownloadPreviewType downloadPreviewType,
-    Token token,
-    Uri baseUrl,
-    CancelToken cancelToken
-  );
+    test('get shared space node interactor should fail when getWorkGroupNode fail', () async {
+      final exception = Exception();
 
-  Future<WorkGroupNode> renameSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId,
-    RenameWorkGroupNodeRequest renameWorkGroupNodeRequest
-  );
+      when(sharedSpaceDocumentRepository.getWorkGroupNode(
+         workGroupDocument1.sharedSpaceId,
+         workGroupDocument1.workGroupNodeId))
+      .thenThrow(exception);
 
-  Future<WorkGroupNode> getWorkGroupNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId workGroupNodeId);
+      final result = await getSharedSpaceNodeInteractor.execute(
+        workGroupDocument1.sharedSpaceId,
+        workGroupDocument1.workGroupNodeId);
+
+      expect(result, Left<Failure, Success>(SharedSpaceNodeFailure(exception)));
+    });
+  });
 }
