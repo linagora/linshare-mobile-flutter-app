@@ -35,6 +35,7 @@ import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:data/src/network/model/share/document_details_received_share_dto.dart';
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'document_response.dart';
 
@@ -44,18 +45,18 @@ part 'document_details_response.g.dart';
 @DatetimeConverter()
 class DocumentDetailsResponse extends DocumentResponse {
   DocumentDetailsResponse(
-    documentId,
-    description,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    ciphered,
-    name,
-    size,
-    sha256sum,
-    hasThumbnail,
-    shared,
-    mediaType,
+    DocumentId documentId,
+    String description,
+    DateTime creationDate,
+    DateTime modificationDate,
+    DateTime expirationDate,
+    bool ciphered,
+    String name,
+    int size,
+    String sha256sum,
+    bool hasThumbnail,
+    int shared,
+    MediaType mediaType,
     this.shares
   ) : super(
     documentId,
