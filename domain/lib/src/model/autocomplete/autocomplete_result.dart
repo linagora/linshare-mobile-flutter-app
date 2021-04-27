@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:domain/src/model/autocomplete/subtype/shared_space_member_autocomplete_result.dart';
 import 'package:equatable/equatable.dart';
 import 'subtype/simple_autocomplete_result.dart';
 import 'subtype/user_autocomplete_result.dart';
@@ -63,6 +64,14 @@ extension AutoCompleteResultExtension on AutoCompleteResult {
           ? autoCompleteResult.fullName()
           : autoCompleteResult.display;
     }
+
+    if (this is SharedSpaceMemberAutoCompleteResult) {
+      final autoCompleteResult = this as SharedSpaceMemberAutoCompleteResult;
+      return autoCompleteResult.fullName().isNotEmpty
+          ? autoCompleteResult.fullName()
+          : autoCompleteResult.display;
+    }
+
     return display;
   }
 }
