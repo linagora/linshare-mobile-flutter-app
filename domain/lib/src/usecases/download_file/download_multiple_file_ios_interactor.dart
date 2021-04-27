@@ -33,14 +33,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
 
 class DownloadMultipleFileIOSInteractor {
   final DownloadFileIOSInteractor _downloadFileIOSInteractor;
 
   DownloadMultipleFileIOSInteractor(this._downloadFileIOSInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<Document> documents, @required CancelToken cancelToken}) async {
+  Future<Either<Failure, Success>> execute({required List<Document> documents, required CancelToken cancelToken}) async {
     final listResult = await Future.wait(documents.map((element) =>
         _downloadFileIOSInteractor.execute(element, cancelToken)));
     if (listResult.length == 1) {

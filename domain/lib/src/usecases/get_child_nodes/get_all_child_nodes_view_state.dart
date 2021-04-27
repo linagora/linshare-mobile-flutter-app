@@ -32,7 +32,7 @@
 import 'package:domain/domain.dart';
 
 class GetChildNodesViewState extends ViewState {
-  final List<WorkGroupNode> workGroupNodes;
+  final List<WorkGroupNode?> workGroupNodes;
 
   GetChildNodesViewState(this.workGroupNodes);
 

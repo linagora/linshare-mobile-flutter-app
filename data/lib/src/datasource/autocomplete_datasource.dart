@@ -37,7 +37,7 @@ abstract class AutoCompleteDataSource {
     AutoCompletePattern autoCompletePattern,
     AutoCompleteType autoCompleteType,
     {
-      ThreadId threadId
+      ThreadId? threadId
     }
   );
 }

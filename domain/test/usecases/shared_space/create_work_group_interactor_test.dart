@@ -31,18 +31,18 @@
 //
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:data/data.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('create_work_group_interactor test', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    CreateWorkGroupInteractor createWorkGroupInteractor;
+    late MockSharedSpaceRepository sharedSpaceRepository;
+    late CreateWorkGroupInteractor createWorkGroupInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -55,9 +55,9 @@ void main() {
 
       final result = await createWorkGroupInteractor.execute(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
 
-      final sharedSpace = result
+      final SharedSpaceNodeNested? sharedSpace = result
           .map((success) => (success as CreateWorkGroupViewState).sharedSpaceNodeNested)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as SharedSpaceNodeNested Function());
       expect(sharedSpace, sharedSpaceResponse1.toSharedSpaceNodeNested());
     });
 

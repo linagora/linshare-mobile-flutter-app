@@ -39,8 +39,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('copy_multile_files_to_shared_space_interactor tests', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    CopyMultipleFilesToSharedSpaceInteractor copyMultipleFilesToSharedSpaceInteractor;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late CopyMultipleFilesToSharedSpaceInteractor copyMultipleFilesToSharedSpaceInteractor;
     CopyDocumentsToSharedSpaceInteractor copyDocumentsToSharedSpaceInteractor;
 
     setUp(() {
@@ -60,16 +60,18 @@ void main() {
       .thenAnswer((_) async => [workGroupDocument2]);
 
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
-          copyRequests: [document1, document2].map((document) => document.toCopyRequest()).toList(),
-          destinationSharedSpaceId: sharedSpace1.sharedSpaceId);
-      final state = result.getOrElse(() => null);
+          [document1, document2]
+              .map((document) => document.toCopyRequest())
+              .toList(),
+          sharedSpace1.sharedSpaceId);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<CopyMultipleFilesToSharedSpaceAllSuccessViewState>());
 
       (state as CopyMultipleFilesToSharedSpaceAllSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as CopyToSharedSpaceViewState).workGroupNode, [workGroupDocument1]));
 
-      (state as CopyMultipleFilesToSharedSpaceAllSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
           (failure) => {},
           (success) => expect((success as CopyToSharedSpaceViewState).workGroupNode, [workGroupDocument2]));
     });
@@ -86,9 +88,9 @@ void main() {
 
 
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
-          copyRequests: [document1, document2].map((document) => document.toCopyRequest()).toList(),
-          destinationSharedSpaceId: sharedSpace1.sharedSpaceId);
-      final state = result.getOrElse(() => null);
+          [document1, document2].map((document) => document.toCopyRequest()).toList(),
+          sharedSpace1.sharedSpaceId);
+      final state = result.getOrElse(() => null)!;
       expect(state, isA<CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState>());
 
       (state as CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState).resultList.forEach((element) {
@@ -109,8 +111,10 @@ void main() {
       .thenThrow(Exception());
 
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
-          copyRequests: [document1, document2].map((document) => document.toCopyRequest()).toList(),
-          destinationSharedSpaceId: sharedSpace1.sharedSpaceId);
+          [document1, document2]
+              .map((document) => document.toCopyRequest())
+              .toList(),
+          sharedSpace1.sharedSpaceId);
       result.fold(
           (failure) {
             expect(failure, isA<CopyMultipleFilesToSharedSpaceAllFailureViewState>());

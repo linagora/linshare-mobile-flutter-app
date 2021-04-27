@@ -29,11 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/extensions/biometric_type_extension.dart';
 import 'package:data/src/util/biometric_service.dart';
 import 'package:domain/domain.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:data/src/extensions/biometric_type_extension.dart';
 
 class LocalBiometricService extends BiometricService {
   final LocalAuthentication _localAuthentication;
@@ -46,16 +46,15 @@ class LocalBiometricService extends BiometricService {
   }
 
   @override
-  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument}) async {
+  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument? androidSettingArgument, IOSSettingArgument? iosSettingArgument}) async {
     return await _localAuthentication.authenticateWithBiometrics(
       localizedReason: localizedReason,
       useErrorDialogs: false,
       stickyAuth: true,
       androidAuthStrings: AndroidAuthMessages(
-        fingerprintHint: '',
-        cancelButton: androidSettingArgument.cancelButton,
+        cancelButton: androidSettingArgument!.cancelButton,
         signInTitle: androidSettingArgument.titleSetting),
-      iOSAuthStrings: IOSAuthMessages(cancelButton: iosSettingArgument.cancelButton)
+      iOSAuthStrings: IOSAuthMessages(cancelButton: iosSettingArgument!.cancelButton)
     );
   }
 

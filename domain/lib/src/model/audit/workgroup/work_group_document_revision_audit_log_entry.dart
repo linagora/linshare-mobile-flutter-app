@@ -32,22 +32,22 @@
 import 'package:domain/domain.dart';
 
 class WorkGroupDocumentRevisionAuditLogEntry extends AuditLogEntryUser {
-  final WorkGroupLight workGroup;
-  final WorkGroupNode resource;
-  final WorkGroupNode resourceUpdated;
-  final WorkGroupCopy copiedTo;
-  final WorkGroupCopy copiedFrom;
+  final WorkGroupLight? workGroup;
+  final WorkGroupNode? resource;
+  final WorkGroupNode? resourceUpdated;
+  final WorkGroupCopy? copiedTo;
+  final WorkGroupCopy? copiedFrom;
 
   WorkGroupDocumentRevisionAuditLogEntry(
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
       DateTime creationDate,
-      Account authUser,
-      AuditLogEntryType type,
-      LogAction action,
-      LogActionCause cause,
-      Account actor,
+      Account? authUser,
+      AuditLogEntryType? type,
+      LogAction? action,
+      LogActionCause? cause,
+      Account? actor,
       this.workGroup,
       this.resource,
       this.resourceUpdated,
@@ -56,7 +56,7 @@ class WorkGroupDocumentRevisionAuditLogEntry extends AuditLogEntryUser {
   ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
      ...super.props,
     workGroup,
     resource,
@@ -68,14 +68,14 @@ class WorkGroupDocumentRevisionAuditLogEntry extends AuditLogEntryUser {
   @override
   Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
     return {
-      AuditLogActionMessageParam.authorName : actor != null ? actor.name : '',
-      AuditLogActionMessageParam.resourceName : resource != null ? resource.name : '',
-      AuditLogActionMessageParam.nameVarious : workGroup != null ? workGroup.name : ''
+      AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
+      AuditLogActionMessageParam.resourceName : resource != null ? resource?.name : '',
+      AuditLogActionMessageParam.nameVarious : workGroup != null ? workGroup?.name : ''
     };
   }
 
   @override
   String getResourceName() {
-    return resource.name;
+    return resource?.name ?? '';
   }
 }

@@ -88,7 +88,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           key: Key('upload_file_arrow_back_button'),
@@ -484,7 +484,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                   return await uploadFileViewModel
                       .getAutoCompleteSharing(pattern);
                 }
-                return null;
+                return <AutoCompleteResult>[];
               },
               itemBuilder: (context, AutoCompleteResult autoCompleteResult) {
                 return ListTile(

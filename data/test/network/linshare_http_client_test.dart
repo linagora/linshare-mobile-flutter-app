@@ -40,8 +40,8 @@ import '../fixture/mock/mock_fixtures.dart';
 
 void main() {
   group('linshare_http_client_test', () {
-    MockDioClient dioClient;
-    LinShareHttpClient linShareHttpClient;
+    late MockDioClient dioClient;
+    late LinShareHttpClient linShareHttpClient;
 
     setUp(() {
       dioClient = MockDioClient();
@@ -61,7 +61,9 @@ void main() {
       when(dioClient.get(Endpoint.documents.generateEndpointPath()))
           .thenThrow(Exception());
 
-      await linShareHttpClient.getAllDocument().catchError((error) => expect(error, isA<Exception>()));
+      await linShareHttpClient.getAllDocument().catchError((error) {
+        expect(error, isA<Exception>());
+      });
     });
   });
 }

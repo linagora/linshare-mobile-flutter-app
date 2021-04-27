@@ -32,8 +32,8 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
 import '../../mock/repository/authentication/mock_authentication_repository.dart';
@@ -41,8 +41,8 @@ import '../../mock/repository/authentication/mock_authentication_repository.dart
 void main() {
 
   group('get_authorized_user_interactor_test', () {
-    GetAuthorizedInteractor getAuthorizedInteractor;
-    MockAuthenticationRepository authenticationRepository;
+    late GetAuthorizedInteractor getAuthorizedInteractor;
+    late MockAuthenticationRepository authenticationRepository;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();

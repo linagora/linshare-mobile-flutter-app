@@ -32,22 +32,22 @@
 import 'package:domain/domain.dart';
 
 abstract class AuditLogEntryUser extends AuditLogEntry {
-  final Account actor;
+  final Account? actor;
 
   AuditLogEntryUser(
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
       DateTime creationDate,
-      Account authUser,
-      AuditLogEntryType type,
-      LogAction action,
-      LogActionCause cause,
+      Account? authUser,
+      AuditLogEntryType? type,
+      LogAction? action,
+      LogActionCause? cause,
       this.actor
   ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     actor
   ];

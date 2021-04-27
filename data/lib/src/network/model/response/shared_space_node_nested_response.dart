@@ -60,22 +60,22 @@ class SharedSpaceNodeNestedResponse extends Equatable {
   @JsonKey(name: Attribute.uuid)
   final SharedSpaceId sharedSpaceId;
 
-  final SharedSpaceRoleDto role;
+  final SharedSpaceRoleDto? role;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final String name;
-  final LinShareNodeType nodeType;
+  final String? name;
+  final LinShareNodeType? nodeType;
 
   @JsonKey(name: Attribute.quotaUuid)
   final QuotaId quotaId;
 
-  final VersioningParameterDto versioningParameters;
+  final VersioningParameterDto? versioningParameters;
 
   factory SharedSpaceNodeNestedResponse.fromJson(Map<String, dynamic> json) => _$SharedSpaceNodeNestedResponseFromJson(json);
   Map<String, dynamic> toJson() => _$SharedSpaceNodeNestedResponseToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     sharedSpaceId,
     role,
     creationDate,
@@ -91,13 +91,13 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
   SharedSpaceNodeNested toSharedSpaceNodeNested() {
     return SharedSpaceNodeNested(
       sharedSpaceId,
-      role != null ? role.toSharedSpaceRole() : SharedSpaceRole.initial(),
+      role?.toSharedSpaceRole(),
       creationDate,
       modificationDate,
-      name,
+      name ?? '',
       nodeType,
-      quotaId ?? QuotaId.initial(),
-      versioningParameters != null ? versioningParameters.toVersioningParameter() : VersioningParameter.initial()
+      quotaId,
+      versioningParameters != null ? versioningParameters!.toVersioningParameter() : VersioningParameter.initial()
     );
   }
 }

@@ -49,10 +49,10 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/dialog/loading_dialog.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
@@ -73,7 +73,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
-import 'package:linshare_flutter_app/presentation/util/extensions/uri_extension.dart';
 
 import 'document_details/document_details_arguments.dart';
 
@@ -257,8 +256,8 @@ class MySpaceViewModel extends BaseViewModel {
           ? sharedSpaceDocumentArguments.workGroupFolder.workGroupNodeId
           : null;
       await _copyMultipleFilesToSharedSpaceInteractor.execute(
-          copyRequests: documents.map((document) => document.toCopyRequest()).toList(),
-          destinationSharedSpaceId: sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
+          documents.map((document) => document.toCopyRequest()).toList(),
+          sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
           destinationParentNodeId: parentNodeId)
       .then((result) => result.fold(
               (failure) => store.dispatch(MySpaceAction(Left(failure))),

@@ -29,8 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('string_extension_is_number_test', () {
@@ -43,10 +43,6 @@ void main() {
 
     test('isNumber should return false when input string is not a number format', () {
       expect(false, 'abc'.isIntegerNumber());
-    });
-
-    test('isNumber should return false when input string is null', () {
-      expect(false, null.isIntegerNumber());
     });
 
     test('isNumber should return false when input string is empty string', () {

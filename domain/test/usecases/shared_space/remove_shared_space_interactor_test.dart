@@ -35,12 +35,13 @@ import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
+
 import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('remove_shared_space_interactor test', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
+    late MockSharedSpaceRepository sharedSpaceRepository;
+    late RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();

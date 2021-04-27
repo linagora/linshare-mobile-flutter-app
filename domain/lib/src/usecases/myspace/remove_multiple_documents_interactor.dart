@@ -32,14 +32,13 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
 
 class RemoveMultipleDocumentsInteractor {
   final RemoveDocumentInteractor _removeDocumentInteractor;
 
   RemoveMultipleDocumentsInteractor(this._removeDocumentInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<DocumentId> documentIds}) async {
+  Future<Either<Failure, Success>> execute({required List<DocumentId> documentIds}) async {
     final listResult = await Future.wait(documentIds.map((element) =>
         _removeDocumentInteractor.execute(element)));
     if (listResult.length == 1) {

@@ -32,7 +32,7 @@
 import 'package:domain/domain.dart';
 
 abstract class AuthenticationRepository {
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode otpCode});
+  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode});
 
   Future<bool> deletePermanentToken(Token token);
 

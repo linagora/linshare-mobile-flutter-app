@@ -39,10 +39,10 @@ class DynamicUrlInterceptors extends InterceptorsWrapper {
   }
 
   @override
-  Future onRequest(RequestOptions options) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (_baseUrl.isNotEmpty) {
       options.baseUrl = _baseUrl;
     }
-    return super.onRequest(options);
+    super.onRequest(options, handler);
   }
 }

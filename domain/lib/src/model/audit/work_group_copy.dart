@@ -34,16 +34,16 @@ import 'package:equatable/equatable.dart';
 
 class WorkGroupCopy with EquatableMixin {
 
-  final WorkGroupNodeId workGroupNodeId;
-  final CopyContextId contextId;
-  final String name;
-  final SpaceType kind;
-  final WorkGroupNodeType nodeType;
+  final WorkGroupNodeId? workGroupNodeId;
+  final CopyContextId? contextId;
+  final String? name;
+  final SpaceType? kind;
+  final WorkGroupNodeType? nodeType;
 
   WorkGroupCopy(this.workGroupNodeId, this.contextId, this.name, this.kind, this.nodeType);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     workGroupNodeId,
     contextId,
     name,
