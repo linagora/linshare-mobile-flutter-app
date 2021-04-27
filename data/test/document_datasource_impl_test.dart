@@ -75,56 +75,66 @@ void getAllDocumentTest() {
 
     test('getAllDocument should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 400)
+          type: DioErrorType.response,
+          response: Response(statusCode: 400, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
       await _documentDataSourceImpl.getAll()
-          .catchError((error) => expect(error, isA<MissingRequiredFields>()));
+          .catchError((error) {
+            expect(error, isA<MissingRequiredFields>());
+          });
     });
 
     test('getAllDocument should throw DataNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
       await _documentDataSourceImpl.getAll()
-          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+          .catchError((error) {
+            expect(error, isA<DocumentNotFound>());
+          });
     });
 
     test('getAllDocument should throw InternalServerError when linShareHttpClient response error with 500', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 500)
+          type: DioErrorType.response,
+          response: Response(statusCode: 500, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
       await _documentDataSourceImpl.getAll()
-          .catchError((error) => expect(error, isA<InternalServerError>()));
+          .catchError((error) {
+            expect(error, isA<InternalServerError>());
+          });
     });
 
     test('getAllDocument should throw ServerNotFound when linShareHttpClient response server not found', () async {
-      final error = DioError(type: DioErrorType.DEFAULT);
+      final error = DioError(type: DioErrorType.other, requestOptions: null);
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
       await _documentDataSourceImpl.getAll()
-          .catchError((error) => expect(error, isA<ServerNotFound>()));
+          .catchError((error) {
+            expect(error, isA<ServerNotFound>());
+          });
     });
 
     test('getAllDocument should throw ConnectError when linShareHttpClient response connect timeout', () async {
-      final error = DioError(type: DioErrorType.CONNECT_TIMEOUT);
+      final error = DioError(type: DioErrorType.connectTimeout, requestOptions: null);
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
       await _documentDataSourceImpl.getAll()
-          .catchError((error) => expect(error, isA<ConnectError>()));
+          .catchError((error) {
+            expect(error, isA<ConnectError>());
+          });
     });
 
     test('getAllDocument should throw UnknownError when linShareHttpClient throw exception', () async {
@@ -132,7 +142,9 @@ void getAllDocumentTest() {
           .thenThrow(Exception());
 
       await _documentDataSourceImpl.getAll()
-          .catchError((error) => expect(error, isA<UnknownError>()));
+          .catchError((error) {
+            expect(error, isA<UnknownError>());
+          });
     });
   });
 }
@@ -163,68 +175,80 @@ void shareDocumentTest() {
 
     test('shareDocument should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 400)
+          type: DioErrorType.response,
+          response: Response(statusCode: 400, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.shareDocument(argThat(isA<ShareDocumentBodyRequest>())))
           .thenThrow(error);
 
       await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1])
-          .catchError((error) => expect(error, isA<MissingRequiredFields>()));
+          .catchError((error) {
+            expect(error, isA<MissingRequiredFields>());
+          });
     });
 
     test('shareDocument should throw DataNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.shareDocument(argThat(isA<ShareDocumentBodyRequest>())))
           .thenThrow(error);
 
       await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1])
-          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+          .catchError((error) {
+            expect(error, isA<DocumentNotFound>());
+          });
     });
 
     test('shareDocument should throw ShareDocumentNoPermissionException when linShareHttpClient response error with 403', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 403)
+          type: DioErrorType.response,
+          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.shareDocument(argThat(isA<ShareDocumentBodyRequest>())))
           .thenThrow(error);
 
       await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1])
-          .catchError((error) => expect(error, isA<ShareDocumentNoPermissionException>()));
+          .catchError((error) {
+            expect(error, isA<ShareDocumentNoPermissionException>());
+          });
     });
 
     test('shareDocument should throw InternalServerError when linShareHttpClient response error with 500', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 500)
+          type: DioErrorType.response,
+          response: Response(statusCode: 500, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.shareDocument(argThat(isA<ShareDocumentBodyRequest>())))
           .thenThrow(error);
 
       await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1])
-          .catchError((error) => expect(error, isA<InternalServerError>()));
+          .catchError((error) {
+            expect(error, isA<InternalServerError>());
+          });
     });
 
     test('shareDocument should throw ServerNotFound when linShareHttpClient response server not found', () async {
-      final error = DioError(type: DioErrorType.DEFAULT);
+      final error = DioError(type: DioErrorType.other, requestOptions: null);
       when(_linShareHttpClient.shareDocument(argThat(isA<ShareDocumentBodyRequest>())))
           .thenThrow(error);
 
       await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1])
-          .catchError((error) => expect(error, isA<ServerNotFound>()));
+          .catchError((error) {
+            expect(error, isA<ServerNotFound>());
+          });
     });
 
     test('shareDocument should throw ConnectError when linShareHttpClient response connect timeout', () async {
-      final error = DioError(type: DioErrorType.CONNECT_TIMEOUT);
+      final error = DioError(type: DioErrorType.connectTimeout, requestOptions: null);
       when(_linShareHttpClient.shareDocument(argThat(isA<ShareDocumentBodyRequest>())))
           .thenThrow(error);
 
       await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1])
-          .catchError((error) => expect(error, isA<ConnectError>()));
+          .catchError((error) {
+            expect(error, isA<ConnectError>());
+          });
     });
 
     test('shareDocument should throw UnknownError when linShareHttpClient throw exception', () async {
@@ -232,7 +256,9 @@ void shareDocumentTest() {
           .thenThrow(Exception());
 
       await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1])
-          .catchError((error) => expect(error, isA<UnknownError>()));
+          .catchError((error) {
+            expect(error, isA<UnknownError>());
+          });
     });
   });
 }
@@ -263,14 +289,16 @@ void removeDocumentTest() {
 
     test('remove document should throw DataNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.removeDocument(document1.documentId))
           .thenThrow(error);
 
       await _documentDataSourceImpl.remove(document1.documentId)
-          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+          .catchError((error) {
+            expect(error, isA<DocumentNotFound>());
+          });
     });
 
     test('copy to my space should return success with valid data', () async {
@@ -284,15 +312,17 @@ void removeDocumentTest() {
 
     test('copy to my sapce throw no document found when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       final copyRequest = CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid);
       when(_linShareHttpClient.copyToMySpace(copyRequest.toCopyBodyRequest()))
           .thenThrow(error);
 
       await _documentDataSourceImpl.copyToMySpace(copyRequest)
-          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+          .catchError((error) {
+            expect(error, isA<DocumentNotFound>());
+          });
     });
   });
 }
@@ -323,14 +353,16 @@ void renameDocumentTest() {
 
     test('rename document should throw DataNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.renameDocument(document1.documentId, RenameDocumentRequest(document1.name)))
           .thenThrow(error);
 
       await _documentDataSourceImpl.rename(document1.documentId, RenameDocumentRequest(document1.name))
-          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+          .catchError((error) {
+            expect(error, isA<DocumentNotFound>());
+          });
     });
   });
 }

@@ -58,7 +58,7 @@ class LinShareDownloadManager {
         directoryToSave])
       .then((values) {
         final fileStream = (values[0] as ResponseBody).stream;
-        final tempFilePath = '${(values[1] as Directory).absolute.path}/${filename}';
+        final tempFilePath = '${(values[1] as Directory).absolute.path}/$filename';
 
         final file = File(tempFilePath);
         file.createSync(recursive: true);

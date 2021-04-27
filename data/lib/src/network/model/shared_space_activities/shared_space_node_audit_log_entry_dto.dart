@@ -33,7 +33,6 @@ import 'package:data/src/network/model/converter/audit_log_entry_id_converter.da
 import 'package:data/src/network/model/converter/audit_log_resource_id_converter.dart';
 import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:data/src/network/model/shared_space_activities/audit_log_entry_user_dto.dart';
-import 'package:data/src/network/model/shared_space_activities/work_group_light_dto.dart';
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 

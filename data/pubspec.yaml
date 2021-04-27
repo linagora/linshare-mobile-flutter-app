@@ -55,7 +55,7 @@ dependencies:
   contacts_service:
     git:
       url: git://github.com/linagora/flutter_contacts.git
-      ref: search_by_name_and_email
+      ref: master
 
 dev_dependencies:
   flutter_test:

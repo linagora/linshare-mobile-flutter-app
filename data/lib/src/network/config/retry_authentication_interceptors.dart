@@ -31,6 +31,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:data/src/extensions/dio_extension.dart';
 
 class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   static const int _max_retry_count = 3;
@@ -45,18 +46,18 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   }
 
   @override
-  Future onError(DioError dioError) {
+  void onError(DioError dioError, ErrorInterceptorHandler handler) {
     if (_isAuthenticationError(dioError)) {
       _retryCount++;
-      final requestOptions = dioError.response.request;
+      final requestOptions = dioError.response.requestOptions;
       requestOptions.headers.addAll({'Authorization': _getTokenAsBearerHeader(_permanentToken.token)});
-      return _dio.request(requestOptions.path, options: requestOptions);
+      _dio.request(requestOptions.path, options: requestOptions.toOptions());
     }
-    return super.onError(dioError);
+    super.onError(dioError, handler);
   }
 
   bool _isAuthenticationError(DioError dioError) {
-    if (dioError.type == DioErrorType.RESPONSE &&
+    if (dioError.type == DioErrorType.response &&
         dioError.response.statusCode == 401 &&
         _permanentToken != null &&
         _retryCount < _max_retry_count) {

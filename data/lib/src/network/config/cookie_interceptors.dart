@@ -37,15 +37,15 @@ class CookieInterceptors extends InterceptorsWrapper {
   var _jSessionId = '';
 
   @override
-  Future onRequest(RequestOptions options) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.headers['Cookie'] = '${Constant.jSessionId}=$_jSessionId';
-    return super.onRequest(options);
+    super.onRequest(options, handler);
   }
 
   @override
-  Future onResponse(Response response) {
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
     _extractSessionIdFromHeader(response.headers);
-    return super.onResponse(response);
+    super.onResponse(response, handler);
   }
 
   void _extractSessionIdFromHeader(Headers headers) {

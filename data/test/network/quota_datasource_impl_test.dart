@@ -65,14 +65,16 @@ void main() {
 
     test('findQuota should throw QuotaNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-        type: DioErrorType.RESPONSE,
-        response: Response(statusCode: 404)
+        type: DioErrorType.response,
+        response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.findQuota(quotaId1))
         .thenThrow(error);
 
       await _quotaDataSourceImpl.findQuota(quotaId1)
-        .catchError((error) => expect(error, isA<QuotaNotFound>()));
+        .catchError((error) {
+          expect(error, isA<QuotaNotFound>());
+        });
     });
 
     test('findQuota should throw UnknownError when linShareHttpClient throw exception', () async {
@@ -80,7 +82,9 @@ void main() {
         .thenThrow(Exception());
 
       await _quotaDataSourceImpl.findQuota(quotaId1)
-        .catchError((error) => expect(error, isA<UnknownError>()));
+        .catchError((error) {
+          expect(error, isA<UnknownError>());
+        });
     });
   });
 }

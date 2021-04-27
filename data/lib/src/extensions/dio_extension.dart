@@ -28,42 +28,9 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:data/src/network/config/endpoint.dart';
-import 'package:data/src/network/linshare_http_client.dart';
-import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
-import 'package:testshared/testshared.dart';
+import 'package:dio/dio.dart';
 
-import '../fixture/mock/mock_fixtures.dart';
-
-void main() {
-  group('linshare_http_client_test', () {
-    MockDioClient dioClient;
-    LinShareHttpClient linShareHttpClient;
-
-    setUp(() {
-      dioClient = MockDioClient();
-      linShareHttpClient = LinShareHttpClient(dioClient);
-    });
-
-    test('getAllDocument should return success with valid data', () async {
-      when(dioClient.get(Endpoint.documents.generateEndpointPath()))
-          .thenAnswer((_) async => [responseJsonDocument1, responseJsonDocument2, responseJsonDocument3]);
-
-      final result = await linShareHttpClient.getAllDocument();
-
-      expect(result, containsAllInOrder([documentResponse1, documentResponse2, documentResponse3]));
-    });
-
-    test('getAllDocument should fail when response error', () async {
-      when(dioClient.get(Endpoint.documents.generateEndpointPath()))
-          .thenThrow(Exception());
-
-      await linShareHttpClient.getAllDocument().catchError((error) {
-        expect(error, isA<Exception>());
-      });
-    });
-  });
+extension DioRequestOptionsExtension on RequestOptions {
+  Options toOptions() => Options(headers: headers, responseType: responseType);
 }

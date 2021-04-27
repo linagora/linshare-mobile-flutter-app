@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/network/model/converter/copy_context_id_converter.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';

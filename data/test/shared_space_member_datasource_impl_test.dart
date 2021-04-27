@@ -63,14 +63,16 @@ void main() {
 
     test('getAllSharedSpaceMembers should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.getSharedSpaceMembers(sharedSpaceId1))
           .thenThrow(error);
 
       await _sharedSpaceMemberDataSourceImpl.getMembers(sharedSpaceId1)
-          .catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
+          .catchError((error) {
+            expect(error, isA<SharedSpaceNotFound>());
+          });
     });
 
     test('addMember should return success with valid data', () async {
@@ -89,8 +91,8 @@ void main() {
 
     test('addMember should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
 
       final request = AddSharedSpaceMemberRequest(
@@ -103,7 +105,9 @@ void main() {
           .thenThrow(error);
 
       await _sharedSpaceMemberDataSourceImpl.addMember(sharedSpaceId1, request)
-          .catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
+          .catchError((error) {
+            expect(error, isA<SharedSpaceNotFound>());
+          });
     });
 
     test('updateRoleSharedSpaceMember should return success with valid data', () async {
@@ -122,8 +126,8 @@ void main() {
 
     test('updateRoleSharedSpaceMember should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
 
       final request = UpdateSharedSpaceMemberRequest(
@@ -136,13 +140,15 @@ void main() {
           .thenThrow(error);
 
       await _sharedSpaceMemberDataSourceImpl.updateMemberRole(sharedSpaceId1, request)
-          .catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
+          .catchError((error) {
+            expect(error, isA<SharedSpaceNotFound>());
+          });
     });
 
     test('updateRoleSharedSpaceMember should throw NotAuthorized when linShareHttpClient response error with 403', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 403)
+          type: DioErrorType.response,
+          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
       );
 
       final request = UpdateSharedSpaceMemberRequest(
@@ -155,7 +161,9 @@ void main() {
           .thenThrow(error);
 
       await _sharedSpaceMemberDataSourceImpl.updateMemberRole(sharedSpaceId1, request)
-          .catchError((error) => expect(error, isA<NotAuthorized>()));
+          .catchError((error) {
+            expect(error, isA<NotAuthorized>());
+          });
     });
 
     test('deleteSharedSpaceMember should return success with valid data', () async {
@@ -168,28 +176,32 @@ void main() {
 
     test('deleteSharedSpaceMember should throw SharedSpaceMemberNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
 
       when(_linShareHttpClient.deleteSharedSpaceMember(sharedSpaceId1, sharedMemberId1))
           .thenThrow(error);
 
       await _sharedSpaceMemberDataSourceImpl.deleteMember(sharedSpaceId1, sharedMemberId1)
-          .catchError((error) => expect(error, isA<SharedSpaceMemberNotFound>()));
+          .catchError((error) {
+            expect(error, isA<SharedSpaceMemberNotFound>());
+          });
     });
 
     test('deleteSharedSpaceMember should throw NotAuthorized when linShareHttpClient response error with 403', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 403)
+          type: DioErrorType.response,
+          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
       );
 
       when(_linShareHttpClient.deleteSharedSpaceMember(sharedSpaceId1, sharedMemberId1))
           .thenThrow(error);
 
       await _sharedSpaceMemberDataSourceImpl.deleteMember(sharedSpaceId1, sharedMemberId1)
-          .catchError((error) => expect(error, isA<NotAuthorized>()));
+          .catchError((error) {
+            expect(error, isA<NotAuthorized>());
+          });
     });
 
   });

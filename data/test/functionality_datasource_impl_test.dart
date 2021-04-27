@@ -60,12 +60,15 @@ void main() {
 
   test('get all functionality data source should throw NotAuthorized when linShareHttpClient response error with 403', () async {
     final error = DioError(
-        type: DioErrorType.RESPONSE,
-        response: Response(statusCode: 403)
+      type: DioErrorType.response,
+      response: Response(statusCode: 403, requestOptions: null),
+      requestOptions: null
     );
     when(linShareHttpClient.getAllFunctionality()).thenThrow(error);
 
     await functionalityDataSourceImpl.getAll()
-        .catchError((error) => expect(error, isA<NotAuthorized>()));
+      .catchError((error) {
+        expect(error, isA<NotAuthorized>());
+      });
   });
 }

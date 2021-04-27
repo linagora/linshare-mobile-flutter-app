@@ -67,7 +67,7 @@ class AuthenticationDataSource {
 
   Future<bool> deletePermanentToken(Token token) async {
     return Future.sync(() async => await linShareHttpClient.deletePermanentToken(token.toPermanentToken()))
-      .catchError((error) =>
+      .catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
           if (error.response.statusCode == 404) {
             throw RequestedTokenNotFound();
@@ -76,8 +76,8 @@ class AuthenticationDataSource {
           } else {
             throw UnknownError(error.response.statusMessage);
           }
-        })
-      );
+        });
+      });
   }
 
   Future<User> getAuthorizedUser() async {
@@ -87,11 +87,10 @@ class AuthenticationDataSource {
         throw NotAuthorizedUser();
       }
       return result;
-    })
-      .catchError((error) => 
-        _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          throw UnknownError(error.response.statusMessage);
-        })
-    );
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        throw UnknownError(error.response.statusMessage);
+      });
+    });
   }
 }

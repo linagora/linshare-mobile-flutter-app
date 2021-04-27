@@ -90,13 +90,16 @@ void main() {
           Uri.parse('http://linshare.test'),
           UserName('user1@linshare.org'),
           Password('123456'))
-        .catchError((error) => expect(error, isA<UnknownError>()));
+        .catchError((error) {
+          expect(error, isA<UnknownError>());
+        });
     });
 
     test('createPermanentToken should throw BadCredential when linShareHttpClient response error with 401', () async {
       var error = DioError(
-        type: DioErrorType.RESPONSE,
-        response: Response(statusCode: 401)
+        type: DioErrorType.response,
+        response: Response(statusCode: 401, requestOptions: null),
+        requestOptions: null
       );
       when(_deviceManager.getDeviceUUID())
           .thenAnswer((_) async => Future.value('12345-bde44'));
@@ -113,7 +116,9 @@ void main() {
           Uri.parse('http://linshare.test'),
           UserName('user1@linsahre.org'),
           Password('123456'))
-        .catchError((error) => expect(error, isA<BadCredentials>()));
+        .catchError((error) {
+          expect(error, isA<BadCredentials>());
+        });
     });
 
     test('deletePermanentToken should success', () async {
@@ -127,26 +132,32 @@ void main() {
 
     test('deletePermanentToken should throw MissingRequiredFields when linShareHttpClient response error is 400', () async {
       var error = DioError(
-        type: DioErrorType.RESPONSE,
-        response: Response(statusCode: 400)
+        type: DioErrorType.response,
+        response: Response(statusCode: 400, requestOptions: null),
+        requestOptions: null
       );
       when(_linShareHttpClient.deletePermanentToken(null))
           .thenThrow(error);
 
       await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')))
-          .catchError((error) => expect(error, isA<MissingRequiredFields>()));
+          .catchError((error) {
+            expect(error, isA<MissingRequiredFields>());
+          });
     });
 
     test('deletePermanentToken should throw RequestedTokenNotFound when linShareHttpClient response is 404', () async {
       var error = DioError(
-        type: DioErrorType.RESPONSE,
-        response: Response(statusCode: 404)
+        type: DioErrorType.response,
+        response: Response(statusCode: 404, requestOptions: null),
+        requestOptions: null
       );
       when(_linShareHttpClient.deletePermanentToken(argThat(isA<PermanentToken>())))
         .thenThrow(error);
 
       await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')))
-        .catchError((error) => expect(error, isA<RequestedTokenNotFound>()));
+        .catchError((error) {
+          expect(error, isA<RequestedTokenNotFound>());
+        });
     });
 
     test('getAuthorizedUser should success', () async {
@@ -163,7 +174,9 @@ void main() {
         .thenAnswer((_) async => null);
 
       await _authenticationDataSource.getAuthorizedUser()
-        .catchError((error) => expect(error, isA<NotAuthorizedUser>()));
+        .catchError((error) {
+          expect(error, isA<NotAuthorizedUser>());
+        });
     });
   });
 }

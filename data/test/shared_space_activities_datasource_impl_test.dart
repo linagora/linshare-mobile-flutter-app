@@ -63,26 +63,30 @@ void main() {
 
     test('getSharedSpaceActivities should throw SharedSpaceActivitiesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.getSharedSpaces())
           .thenThrow(error);
 
       await _sharedSpaceActivitiesDataSourceImpl.getSharedSpaceActivities(sharedSpaceIdForAuditLog)
-          .catchError((error) => expect(error, isA<SharedSpaceActivitiesNotFound>()));
+          .catchError((error) {
+            expect(error, isA<SharedSpaceActivitiesNotFound>());
+          });
     });
 
     test('getSharedSpaceActivities should throw SharedSpaceActivitiesNotFound when linShareHttpClient response error with 403', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 403)
+          type: DioErrorType.response,
+          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.getSharedSpaces())
           .thenThrow(error);
 
       await _sharedSpaceActivitiesDataSourceImpl.getSharedSpaceActivities(sharedSpaceIdForAuditLog)
-          .catchError((error) => expect(error, isA<NotAuthorized>()));
+          .catchError((error) {
+            expect(error, isA<NotAuthorized>());
+          });
     });
   });
 }
