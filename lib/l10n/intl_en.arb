@@ -1327,11 +1327,6 @@
       "nbContacts": {}
     }
   },
-  "modified_by": "Modified by",
-  "@modified_by": {
-    "type": "text",
-    "placeholders": {}
-  },
   "biometric_authentication": "Biometric authentication",
   "@biometric_authentication": {
     "type": "text",
@@ -1461,6 +1456,11 @@
   },
   "restore": "Restore",
   "@restore": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "modified_by": "Modified by",
+  "@modified_by": {
     "type": "text",
     "placeholders": {}
   }

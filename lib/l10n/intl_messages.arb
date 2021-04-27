@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-26T13:55:23.035454",
+  "@@last_modified": "2021-05-04T15:15:53.555241",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -1044,21 +1044,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_name_not_empty": "Workgroup name cannot be blank",
-  "@workgroup_name_not_empty": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "workgroup_name_already_exists": "Workgroup name already exists",
-  "@workgroup_name_already_exists": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "workgroup_name_contain_special_character": "Workgroup name cannot contain special characters",
-  "@workgroup_name_contain_special_character": {
-    "type": "text",
-    "placeholders": {}
-  },
   "rename_node": "Rename {nodeName}",
   "@rename_node": {
     "type": "text",
@@ -1170,5 +1155,10 @@
     "placeholders": {
       "nbContacts": {}
     }
+  },
+  "modified_by": "Modified by",
+  "@modified_by": {
+    "type": "text",
+    "placeholders": {}
   }
 }
