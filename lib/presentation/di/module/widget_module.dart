@@ -62,6 +62,8 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/ad
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
@@ -86,6 +88,7 @@ class WidgetModule {
     _provideSharedSpaceDetailsWidgetComponent();
     _provideAddSharedSpaceMemberComponent();
     _provideDocumentDetailsComponent();
+    _provideSharedSpaceNodeDetailsComponent();
   }
 
   void _provideLoginComponent() {
@@ -262,14 +265,14 @@ class WidgetModule {
   void _provideAddSharedSpaceMemberComponent() {
     getIt.registerFactory(() => AddSharedSpaceMemberWidget());
     getIt.registerFactory(() => AddSharedSpaceMemberViewModel(
-          getIt.get<Store<AppState>>(),
-          getIt.get<AppNavigation>(),
-          getIt.get<GetAutoCompleteSharingInteractor>(),
-          getIt.get<AddSharedSpaceMemberInteractor>(),
-          getIt.get<UpdateSharedSpaceMemberInteractor>(),
-          getIt.get<GetAllSharedSpaceMembersInteractor>(),
-          getIt.get<DeleteSharedSpaceMemberInteractor>(),
-        ));
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAutoCompleteSharingInteractor>(),
+        getIt.get<AddSharedSpaceMemberInteractor>(),
+        getIt.get<UpdateSharedSpaceMemberInteractor>(),
+        getIt.get<GetAllSharedSpaceMembersInteractor>(),
+        getIt.get<DeleteSharedSpaceMemberInteractor>(),
+      ));
   }
 
   void _provideDocumentDetailsComponent() {
@@ -278,6 +281,15 @@ class WidgetModule {
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
         getIt.get<GetDocumentInteractor>(),
+    ));
+  }
+
+  void _provideSharedSpaceNodeDetailsComponent() {
+    getIt.registerFactory(() => SharedSpaceNodeDetailsWidget());
+    getIt.registerFactory(() => SharedSpaceNodeDetailsViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetSharedSpaceNodeInteractor>()
     ));
   }
 }

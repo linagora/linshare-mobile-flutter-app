@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.d
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/update_shared_space_members_reducer.dart';
@@ -74,8 +75,10 @@ AppState appStateReducer(AppState state, action) {
         addSharedSpaceMembersState: addSharedSpaceMembersReducer(state.addSharedSpaceMembersState, action),
         updateSharedSpaceMembersState: updateSharedSpaceMembersReducer(state.updateSharedSpaceMembersState, action),
         deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action),
-        documentDetailsState: documentDetailsReducer(state.documentDetailsState, action));
+        documentDetailsState: documentDetailsReducer(state.documentDetailsState, action),
+        sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action));
   }
+
   return AppState(
       uiState: state.uiState,
       authenticationState: state.authenticationState,
@@ -96,7 +99,8 @@ AppState appStateReducer(AppState state, action) {
       addSharedSpaceMembersState: state.addSharedSpaceMembersState,
       updateSharedSpaceMembersState: state.updateSharedSpaceMembersState,
       deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState,
-      documentDetailsState: state.documentDetailsState);
+      documentDetailsState: state.documentDetailsState,
+      sharedSpaceNodeDetailsState: state.sharedSpaceNodeDetailsState);
 }
 
 bool canExecuteAction(AppState state, action) {

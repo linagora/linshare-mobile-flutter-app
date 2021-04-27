@@ -601,7 +601,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
 
   List<Widget> _contextMenuFolderActionTiles(BuildContext context, WorkGroupFolder workGroupFolder) {
     return [
-      _renameWorkGroupNodeAction(workGroupFolder)
+      _renameWorkGroupNodeAction(workGroupFolder),
+      _detailsAction(context, workGroupFolder)
     ];
   }
 
@@ -611,8 +612,18 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       if (Platform.isAndroid) _downloadFilesAction([workGroupDocument]),
       _previewWorkGroupDocumentAction(workGroupDocument),
       _copyToAction(context, [workGroupDocument]),
-      _renameWorkGroupNodeAction(workGroupDocument)
+      _renameWorkGroupNodeAction(workGroupDocument),
+      _detailsAction(context, workGroupDocument)
     ];
+  }
+
+  Widget _detailsAction(BuildContext context, WorkGroupNode workGroupNode) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('work_group_details_context_menu_action'),
+          SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).details, workGroupNode)
+      .onActionClick((data) => sharedSpaceDocumentViewModel.goToWorkGroupNodeDetails(data))
+      .build();
   }
 
   Widget _copyToAction(BuildContext context, List<WorkGroupNode> nodes,

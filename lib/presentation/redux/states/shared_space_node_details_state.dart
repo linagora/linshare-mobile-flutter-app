@@ -28,21 +28,42 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
-  static const String currentUploads = 'current_uploads';
-  static const String destinationPicker = 'destination_picker';
-  static const String account_details = 'account_details';
-  static const String received_shares = 'received_shares';
-  static const String sharedSpaceDetails = 'shared_space_details';
-  static const String addSharedSpaceMember = 'add_shared_space_member';
-  static const String documentDetails = 'document_details';
-  static const String sharedSpaceNodeDetails = 'shared_space_node_details';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
+
+@immutable
+class SharedSpaceNodeDetailsState extends LinShareState with EquatableMixin {
+  final WorkGroupNode workgroupNode;
+
+  SharedSpaceNodeDetailsState(Either<Failure, Success> viewState, this.workgroupNode) : super(viewState);
+
+  factory SharedSpaceNodeDetailsState.initial() {
+    return SharedSpaceNodeDetailsState(Right(IdleState()), null);
+  }
+
+  @override
+  SharedSpaceNodeDetailsState clearViewState() {
+    return SharedSpaceNodeDetailsState(Right(IdleState()), workgroupNode);
+  }
+
+  @override
+  SharedSpaceNodeDetailsState sendViewState({Either<Failure, Success> viewState}) {
+    return SharedSpaceNodeDetailsState(viewState, workgroupNode);
+  }
+
+  @override
+  SharedSpaceNodeDetailsState startLoadingState() {
+    return SharedSpaceNodeDetailsState(Right(LoadingState()), workgroupNode);
+  }
+
+  SharedSpaceNodeDetailsState setWorkGroupNode({Either<Failure, Success> viewState, WorkGroupNode newWorkGroupNode}) {
+    return SharedSpaceNodeDetailsState(viewState, newWorkGroupNode);
+  }
 }
