@@ -46,7 +46,7 @@ class AuthenticationDataSource {
 
   AuthenticationDataSource(this.linShareHttpClient, this.deviceManager, this._remoteExceptionThrower);
 
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode otpCode}) async {
+  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
     return Future.sync(() async {
       final deviceUUID = await deviceManager.getDeviceUUID();
       final permanentToken = await linShareHttpClient.createPermanentToken(
@@ -58,8 +58,9 @@ class AuthenticationDataSource {
       return permanentToken.toToken();
     }).catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          if (error.response.statusCode == 401) {
-            final authErrorCode = LinShareErrorCode(int.tryParse(error.response.headers.value(Constant.linShareAuthErrorCode)) ?? 1);
+          if (error.response?.statusCode == 401) {
+            final errorCode = error.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
+            final authErrorCode = LinShareErrorCode(int.tryParse(errorCode) ?? 1);
             if (isAuthenticateWithOTPError(authErrorCode)) {
               throw NeedAuthenticateWithOTP();
             } else if (isAuthenticateErrorUserLocked(authErrorCode)) {
@@ -67,7 +68,7 @@ class AuthenticationDataSource {
             }
             throw BadCredentials();
           } else {
-            throw UnknownError(error.response.statusMessage);
+            throw UnknownError(error.response?.statusMessage!);
           }
         });
     });
@@ -81,31 +82,30 @@ class AuthenticationDataSource {
 
   Future<bool> deletePermanentToken(Token token) async {
     return Future.sync(() async => await linShareHttpClient.deletePermanentToken(token.toPermanentToken()))
-      .catchError((error) =>
+      .catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
             throw RequestedTokenNotFound();
-          } else if (error.response.statusCode == 400) {
+          } else if (error.response?.statusCode == 400) {
             throw MissingRequiredFields();
           } else {
-            throw UnknownError(error.response.statusMessage);
+            throw UnknownError(error.response?.statusMessage!);
           }
-        })
-      );
+        });
+      });
   }
 
   Future<User> getAuthorizedUser() async {
     return Future.sync(() async {
-      var result = (await linShareHttpClient.getAuthorizedUser()).toUser();
-      if (result == null) {
+      final userRes = await linShareHttpClient.getAuthorizedUser();
+      if (userRes == null) {
         throw NotAuthorizedUser();
       }
-      return result;
-    })
-      .catchError((error) => 
-        _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          throw UnknownError(error.response.statusMessage);
-        })
-    );
+      return userRes.toUser();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        throw UnknownError(error.response?.statusMessage!);
+      });
+    });
   }
 }

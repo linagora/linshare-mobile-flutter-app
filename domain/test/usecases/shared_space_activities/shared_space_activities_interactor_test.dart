@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space_activities/mock_shared_space_activiti
 
 void main() {
   group('test shared space activities interactor', () {
-    MockSharedSpaceActivitiesRepository _sharedSpaceActivitiesRepository;
-    SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
+    late MockSharedSpaceActivitiesRepository _sharedSpaceActivitiesRepository;
+    late SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
 
     setUp(() {
       _sharedSpaceActivitiesRepository = MockSharedSpaceActivitiesRepository();

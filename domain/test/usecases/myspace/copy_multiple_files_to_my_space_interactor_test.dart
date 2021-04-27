@@ -40,9 +40,9 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('copy_multiple_files_to_my_space_interactor tests', () {
-    MockDocumentRepository documentRepository;
-    CopyToMySpaceInteractor copyToMySpaceInteractor;
-    CopyMultipleFilesToMySpaceInteractor _copyMultipleFilesToMySpaceInteractor;
+    late MockDocumentRepository documentRepository;
+    late CopyToMySpaceInteractor copyToMySpaceInteractor;
+    late CopyMultipleFilesToMySpaceInteractor _copyMultipleFilesToMySpaceInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();

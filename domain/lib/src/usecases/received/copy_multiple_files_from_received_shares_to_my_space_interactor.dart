@@ -32,14 +32,13 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
 
 class CopyMultipleFilesFromReceivedSharesToMySpaceInteractor {
   final CopyToMySpaceInteractor _copyToMySpaceInteractor;
 
   CopyMultipleFilesFromReceivedSharesToMySpaceInteractor(this._copyToMySpaceInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<ReceivedShare> shares}) async {
+  Future<Either<Failure, Success>> execute(List<ReceivedShare> shares) async {
     final copyRequestsList = shares.map((share) =>
         CopyRequest(share.shareId.uuid, SpaceType.RECEIVED_SHARE)).toList();
     final listResult = await Future.wait(copyRequestsList.map((element) =>

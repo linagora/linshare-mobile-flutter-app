@@ -45,11 +45,11 @@ class AuditLogEntryUserDto with EquatableMixin {
   final AuditLogResourceId fromResourceId;
 
   final DateTime creationDate;
-  final AccountDto actor;
-  final AccountDto authUser;
-  final AuditLogEntryType type;
-  final LogAction action;
-  final LogActionCause cause;
+  final AccountDto? actor;
+  final AccountDto? authUser;
+  final AuditLogEntryType? type;
+  final LogAction? action;
+  final LogActionCause? cause;
 
   AuditLogEntryUserDto(
       this.auditLogEntryId,
@@ -64,7 +64,7 @@ class AuditLogEntryUserDto with EquatableMixin {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     auditLogEntryId,
     resourceId,
     fromResourceId,

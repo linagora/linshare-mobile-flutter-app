@@ -44,13 +44,13 @@ class WorkGroupDocument extends WorkGroupNode {
   WorkGroupDocument(
     WorkGroupNodeId workGroupNodeId,
     WorkGroupNodeId parentWorkGroupNodeId,
-    WorkGroupNodeType type,
+    WorkGroupNodeType? type,
     SharedSpaceId sharedSpaceId,
     DateTime creationDate,
     DateTime modificationDate,
     String description,
     String name,
-    Account lastAuthor,
+    Account? lastAuthor,
     this.size,
     this.mediaType,
     this.hasThumbnail,
@@ -68,7 +68,7 @@ class WorkGroupDocument extends WorkGroupNode {
       lastAuthor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     size,
     hasThumbnail,

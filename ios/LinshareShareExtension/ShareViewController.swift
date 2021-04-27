@@ -1,3 +1,10 @@
+//
+//  ShareViewController.swift
+//  LinshareShareExtension
+//
+//  Created by DucNM on 07/05/2021.
+//
+
 import UIKit
 import Social
 import MobileCoreServices

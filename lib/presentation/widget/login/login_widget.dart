@@ -69,7 +69,6 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
       backgroundColor: AppColor.primaryColor,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),

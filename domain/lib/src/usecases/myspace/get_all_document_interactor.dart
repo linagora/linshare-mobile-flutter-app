@@ -43,10 +43,11 @@ class GetAllDocumentInteractor {
   GetAllDocumentInteractor(this._documentRepository);
 
   Future<Either<Failure, Success>> execute() async {
-    final resultState = await catching(() => _documentRepository.getAll())
-        .fold(
-          (exception) => Left<Failure, Success>(MySpaceFailure(exception)),
-          (documents) async => Right<Failure, Success>(MySpaceViewState(await documents)));
-    return resultState;
+      try {
+        final result = await _documentRepository.getAll();
+        return Right<Failure, Success>(MySpaceViewState(result));
+      } catch (exception) {
+        return Left<Failure, Success>(MySpaceFailure(exception));
+      }
   }
 }

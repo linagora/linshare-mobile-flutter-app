@@ -38,7 +38,7 @@ abstract class RemoteException extends Equatable implements Exception {
   static final connectError = 'Connect error';
   static final notAuthorized = 'Current logged in account does not have the rights';
 
-  final String message;
+  final String? message;
 
   RemoteException(this.message);
 }
@@ -79,7 +79,7 @@ class NotAuthorized extends RemoteException {
 }
 
 class UnknownError extends RemoteException {
-  UnknownError(String message) : super(message);
+  UnknownError(String? message) : super(message);
 
   @override
   List<Object> get props => [];

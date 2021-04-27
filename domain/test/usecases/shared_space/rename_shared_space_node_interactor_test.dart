@@ -40,8 +40,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('rename_shared_space_node_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    RenameSharedSpaceNodeInteractor renameSharedSpaceNodeInteractor;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late RenameSharedSpaceNodeInteractor renameSharedSpaceNodeInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -60,11 +60,12 @@ void main() {
           workGroupDocument1.workGroupNodeId,
           RenameWorkGroupNodeRequest(workGroupDocument1.name, WorkGroupNodeType.DOCUMENT));
 
-      final workGroups = result
-          .map((success) => (success as RenameSharedSpaceNodeViewState).workGroupNode)
-          .getOrElse(() => null);
+      result.fold((left) {
+        expect(left, isA<RenameSharedSpaceNodeFailure>());
+      }, (right) {
+        expect((right as RenameSharedSpaceNodeViewState).workGroupNode, workGroupDocument1);
+      });
 
-      expect(workGroups, workGroupDocument1);
     });
 
     test('rename shared space node interactor should fail when renameSharedSpaceNode fail', () async {

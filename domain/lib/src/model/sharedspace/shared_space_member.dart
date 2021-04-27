@@ -34,11 +34,11 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class SharedSpaceMember extends Equatable {
-  final Account account;
+  final Account? account;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final SharedSpaceMemberNode node;
-  final SharedSpaceRole role;
+  final SharedSpaceMemberNode? node;
+  final SharedSpaceRole? role;
   final SharedSpaceMemberId sharedSpaceMemberId;
 
   SharedSpaceMember(
@@ -51,7 +51,7 @@ class SharedSpaceMember extends Equatable {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     sharedSpaceMemberId,
     account,
     creationDate,
