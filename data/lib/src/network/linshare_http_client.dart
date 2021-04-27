@@ -196,7 +196,7 @@ class LinShareHttpClient {
       {WorkGroupNodeId parentId}
   ) async {
     final endpointPath = Endpoint.sharedSpaces
-        .withPathParameter('/${sharedSpaceId.uuid}')
+        .withPathParameter(sharedSpaceId.uuid)
         .withPathParameter(Endpoint.nodes)
         .generateEndpointPath();
 
@@ -464,5 +464,22 @@ class LinShareHttpClient {
         .withQueryParameters([BooleanQueryParameter('withShares', true)]).generateEndpointPath());
 
     return DocumentDetailsResponse.fromJson(resultJson);
+  }
+
+  Future<WorkGroupNodeDto> getWorkGroupNode(
+      SharedSpaceId sharedSpaceId,
+      WorkGroupNodeId workGroupNodeId
+  ) async {
+    final endpointPath = Endpoint.sharedSpaces
+        .withPathParameter(sharedSpaceId.uuid)
+        .withPathParameter(Endpoint.nodes)
+        .withPathParameter(workGroupNodeId.uuid)
+        .generateEndpointPath();
+
+    final nodeJsonResult = await _dioClient.get(
+      endpointPath,
+    );
+
+    return _convertToWorkGroupNodeChild(nodeJsonResult);
   }
 }
