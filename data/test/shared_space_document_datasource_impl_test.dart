@@ -263,5 +263,36 @@ void main() {
           RenameWorkGroupNodeRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
       ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
     });
+
+    test('Get Shared Space Node Should Return Success Node', () async {
+      when(_linShareHttpClient.getWorkGroupNode(
+          workGroupDocumentDto.sharedSpaceId,
+          workGroupDocumentDto.workGroupNodeId,
+      )).thenAnswer((_) async => workGroupDocumentDto);
+
+      final result = await _sharedSpaceDataSourceImpl.getWorkGroupNode(
+          workGroupDocumentDto.sharedSpaceId,
+          workGroupDocumentDto.workGroupNodeId,
+      );
+
+      expect(result, workGroupDocumentDto.toWorkGroupDocument());
+    });
+
+    test('Get Shared Space Node Should Throw Exception When Get Failed', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+
+      when(_linShareHttpClient.getWorkGroupNode(
+          workGroupDocumentDto.sharedSpaceId,
+          workGroupDocumentDto.workGroupNodeId,
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.getWorkGroupNode(
+          workGroupDocumentDto.sharedSpaceId,
+          workGroupDocumentDto.workGroupNodeId,
+      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+    });
   });
 }
