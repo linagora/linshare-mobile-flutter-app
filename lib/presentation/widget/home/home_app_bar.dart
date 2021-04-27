@@ -103,12 +103,17 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             if (_onNewSearchQuery != null) {
               _onNewSearchQuery(pattern);
             }
-            return null;
+            return [];
           },
           itemBuilder: (BuildContext context, itemData) {
             return null;
           },
           onSuggestionSelected: (suggestion) {},
+          noItemsFoundBuilder: (context) => SizedBox(),
+          hideOnEmpty: true,
+          hideOnError: true,
+          hideOnLoading: true,
+          hideSuggestionsOnKeyboardHide: true,
         ),
       ),
       centerTitle: true,

@@ -42,8 +42,8 @@ import '../../mock/repository/received/mock_received_share_repository.dart';
 
 void main() {
   group('get_all_received_interactor', () {
-    MockReceivedShareRepository receivedShareRepository;
-    GetAllReceivedSharesInteractor getAllReceivedSharesInteractor;
+    late MockReceivedShareRepository receivedShareRepository;
+    late GetAllReceivedSharesInteractor getAllReceivedSharesInteractor;
 
     setUp(() {
       receivedShareRepository = MockReceivedShareRepository();

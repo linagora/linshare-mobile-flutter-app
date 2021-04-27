@@ -39,13 +39,13 @@ import 'package:equatable/equatable.dart';
 abstract class WorkGroupNode with EquatableMixin {
   final WorkGroupNodeId workGroupNodeId;
   final WorkGroupNodeId parentWorkGroupNodeId;
-  final WorkGroupNodeType type;
+  final WorkGroupNodeType? type;
   final SharedSpaceId sharedSpaceId;
   final DateTime creationDate;
   final DateTime modificationDate;
   final String description;
   final String name;
-  final Account lastAuthor;
+  final Account? lastAuthor;
 
   WorkGroupNode(
       this.workGroupNodeId,
@@ -59,7 +59,7 @@ abstract class WorkGroupNode with EquatableMixin {
       this.lastAuthor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     workGroupNodeId,
     parentWorkGroupNodeId,
     type,

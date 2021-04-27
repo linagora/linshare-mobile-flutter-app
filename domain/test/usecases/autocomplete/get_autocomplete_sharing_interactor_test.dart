@@ -40,8 +40,8 @@ import '../../mock/repository/mock_autocomplete_repository.dart';
 
 void main() {
   group('get_autocomplete_sharing_interactor_test', () {
-    AutoCompleteRepository autoCompleteRepository;
-    GetAutoCompleteSharingInteractor getAutoCompleteSharingInteractor;
+    late AutoCompleteRepository autoCompleteRepository;
+    late GetAutoCompleteSharingInteractor getAutoCompleteSharingInteractor;
 
     setUp(() {
       autoCompleteRepository = MockAutoCompleteRepository();

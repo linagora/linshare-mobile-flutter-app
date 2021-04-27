@@ -35,11 +35,11 @@ import 'package:equatable/equatable.dart';
 
 class SharedSpaceNodeNested extends Equatable {
   final SharedSpaceId sharedSpaceId;
-  final SharedSpaceRole sharedSpaceRole;
+  final SharedSpaceRole? sharedSpaceRole;
   final DateTime creationDate;
   final DateTime modificationDate;
   final String name;
-  final LinShareNodeType nodeType;
+  final LinShareNodeType? nodeType;
   final QuotaId quotaId;
   final VersioningParameter versioningParameters;
 
@@ -55,7 +55,7 @@ class SharedSpaceNodeNested extends Equatable {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     sharedSpaceId,
     sharedSpaceRole,
     creationDate,

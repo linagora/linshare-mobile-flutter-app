@@ -42,11 +42,11 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 
 void main() {
   group('upload_file_interactor_test', () {
-    MockDocumentRepository documentRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
-    UploadMySpaceDocumentInteractor uploadFileInteractor;
-    UploadTaskId uploadTaskId;
+    late MockDocumentRepository documentRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
+    late UploadMySpaceDocumentInteractor uploadFileInteractor;
+    late UploadTaskId uploadTaskId;
 
     setUp(() {
       documentRepository = MockDocumentRepository();

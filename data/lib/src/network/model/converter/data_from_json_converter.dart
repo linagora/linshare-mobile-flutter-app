@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -39,3 +41,7 @@ DocumentId documentIdFromJson(dynamic json) => DocumentId(json.toString());
 String mediaTypeToJson(MediaType mediaType) => mediaType.mimeType;
 
 MediaType mediaTypeFromJson(dynamic json) => MediaType.parse(json.toString());
+
+WorkGroupNodeId workGroupNodeIdFromJson(String json) => WorkGroupNodeId(json);
+
+String workGroupNodeIdToJson(WorkGroupNodeId object) => jsonEncode(object.uuid);

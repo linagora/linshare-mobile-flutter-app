@@ -43,7 +43,7 @@ class GetAutoCompleteSharingInteractor {
       AutoCompletePattern autoCompletePattern,
       AutoCompleteType autoCompleteType,
       {
-        ThreadId threadId
+        ThreadId? threadId
       }
   ) async {
     try {

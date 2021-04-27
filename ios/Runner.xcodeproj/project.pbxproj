@@ -14,18 +14,18 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		CF01787E2645240900B50B97 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF01787D2645240900B50B97 /* ShareViewController.swift */; };
+		CF0178812645240900B50B97 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF01787F2645240900B50B97 /* MainInterface.storyboard */; };
+		CF0178852645240900B50B97 /* LinshareShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CF01787B2645240900B50B97 /* LinshareShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CF02DF86256283DB005EDE4A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CF02DF85256283CA005EDE4A /* libsqlite3.tbd */; };
-		CF0E3E6C2542EC0200DE0A66 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0E3E6B2542EC0200DE0A66 /* ShareViewController.swift */; };
-		CF0E3E6F2542EC0200DE0A66 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF0E3E6D2542EC0200DE0A66 /* MainInterface.storyboard */; };
-		CF0E3E732542EC0200DE0A66 /* LinshareShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CF0E3E692542EC0200DE0A66 /* LinshareShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		CF0E3E712542EC0200DE0A66 /* PBXContainerItemProxy */ = {
+		CF0178832645240900B50B97 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = CF0E3E682542EC0200DE0A66;
+			remoteGlobalIDString = CF01787A2645240900B50B97;
 			remoteInfo = LinshareShareExtension;
 		};
 /* End PBXContainerItemProxy section */
@@ -47,7 +47,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				CF0E3E732542EC0200DE0A66 /* LinshareShareExtension.appex in Embed App Extensions */,
+				CF0178852645240900B50B97 /* LinshareShareExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,12 +70,12 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF01787B2645240900B50B97 /* LinshareShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LinshareShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF01787D2645240900B50B97 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		CF0178802645240900B50B97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		CF0178822645240900B50B97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF0178A82645246C00B50B97 /* LinshareShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LinshareShareExtension.entitlements; sourceTree = "<group>"; };
 		CF02DF85256283CA005EDE4A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		CF0E3E692542EC0200DE0A66 /* LinshareShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LinshareShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		CF0E3E6B2542EC0200DE0A66 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		CF0E3E6E2542EC0200DE0A66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		CF0E3E702542EC0200DE0A66 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CF0E3E792542EC2400DE0A66 /* LinshareShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LinshareShareExtension.entitlements; sourceTree = "<group>"; };
 		CF0E3E7A2542EC5400DE0A66 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		EDCB544E7565A823BFD8276F /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		F99627AED8910E249D28E96C /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,7 +91,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CF0E3E662542EC0200DE0A66 /* Frameworks */ = {
+		CF0178782645240900B50B97 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -136,7 +136,7 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				CF0E3E6A2542EC0200DE0A66 /* LinshareShareExtension */,
+				CF01787C2645240900B50B97 /* LinshareShareExtension */,
 				97C146EF1CF9000F007C117D /* Products */,
 				222F37E4B3D0DFE12A8E61E2 /* Pods */,
 				9068E0C77FF800C12F420678 /* Frameworks */,
@@ -147,7 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* LinShare.app */,
-				CF0E3E692542EC0200DE0A66 /* LinshareShareExtension.appex */,
+				CF01787B2645240900B50B97 /* LinshareShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -168,13 +168,13 @@
 			path = Runner;
 			sourceTree = "<group>";
 		};
-		CF0E3E6A2542EC0200DE0A66 /* LinshareShareExtension */ = {
+		CF01787C2645240900B50B97 /* LinshareShareExtension */ = {
 			isa = PBXGroup;
 			children = (
-				CF0E3E792542EC2400DE0A66 /* LinshareShareExtension.entitlements */,
-				CF0E3E6B2542EC0200DE0A66 /* ShareViewController.swift */,
-				CF0E3E6D2542EC0200DE0A66 /* MainInterface.storyboard */,
-				CF0E3E702542EC0200DE0A66 /* Info.plist */,
+				CF0178A82645246C00B50B97 /* LinshareShareExtension.entitlements */,
+				CF01787D2645240900B50B97 /* ShareViewController.swift */,
+				CF01787F2645240900B50B97 /* MainInterface.storyboard */,
+				CF0178822645240900B50B97 /* Info.plist */,
 			);
 			path = LinshareShareExtension;
 			sourceTree = "<group>";
@@ -193,26 +193,26 @@
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
-				EDE1E624E7DBDC093A4D01BE /* [CP] Embed Pods Frameworks */,
 				CF0E3E742542EC0200DE0A66 /* Embed App Extensions */,
+				D344A64724A827A41CCF321C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CF0E3E722542EC0200DE0A66 /* PBXTargetDependency */,
+				CF0178842645240900B50B97 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* LinShare.app */;
 			productType = "com.apple.product-type.application";
 		};
-		CF0E3E682542EC0200DE0A66 /* LinshareShareExtension */ = {
+		CF01787A2645240900B50B97 /* LinshareShareExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CF0E3E782542EC0200DE0A66 /* Build configuration list for PBXNativeTarget "LinshareShareExtension" */;
+			buildConfigurationList = CF0178862645240900B50B97 /* Build configuration list for PBXNativeTarget "LinshareShareExtension" */;
 			buildPhases = (
-				CF0E3E652542EC0200DE0A66 /* Sources */,
-				CF0E3E662542EC0200DE0A66 /* Frameworks */,
-				CF0E3E672542EC0200DE0A66 /* Resources */,
+				CF0178772645240900B50B97 /* Sources */,
+				CF0178782645240900B50B97 /* Frameworks */,
+				CF0178792645240900B50B97 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -220,7 +220,7 @@
 			);
 			name = LinshareShareExtension;
 			productName = LinshareShareExtension;
-			productReference = CF0E3E692542EC0200DE0A66 /* LinshareShareExtension.appex */;
+			productReference = CF01787B2645240900B50B97 /* LinshareShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -229,7 +229,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1170;
+				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -237,8 +237,8 @@
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
 					};
-					CF0E3E682542EC0200DE0A66 = {
-						CreatedOnToolsVersion = 11.7;
+					CF01787A2645240900B50B97 = {
+						CreatedOnToolsVersion = 12.4;
 					};
 				};
 			};
@@ -256,7 +256,7 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
-				CF0E3E682542EC0200DE0A66 /* LinshareShareExtension */,
+				CF01787A2645240900B50B97 /* LinshareShareExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -273,11 +273,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CF0E3E672542EC0200DE0A66 /* Resources */ = {
+		CF0178792645240900B50B97 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF0E3E6F2542EC0200DE0A66 /* MainInterface.storyboard in Resources */,
+				CF0178812645240900B50B97 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,7 +334,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EDE1E624E7DBDC093A4D01BE /* [CP] Embed Pods Frameworks */ = {
+		D344A64724A827A41CCF321C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -363,21 +363,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CF0E3E652542EC0200DE0A66 /* Sources */ = {
+		CF0178772645240900B50B97 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF0E3E6C2542EC0200DE0A66 /* ShareViewController.swift in Sources */,
+				CF01787E2645240900B50B97 /* ShareViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		CF0E3E722542EC0200DE0A66 /* PBXTargetDependency */ = {
+		CF0178842645240900B50B97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = CF0E3E682542EC0200DE0A66 /* LinshareShareExtension */;
-			targetProxy = CF0E3E712542EC0200DE0A66 /* PBXContainerItemProxy */;
+			target = CF01787A2645240900B50B97 /* LinshareShareExtension */;
+			targetProxy = CF0178832645240900B50B97 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -398,10 +398,10 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		CF0E3E6D2542EC0200DE0A66 /* MainInterface.storyboard */ = {
+		CF01787F2645240900B50B97 /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CF0E3E6E2542EC0200DE0A66 /* Base */,
+				CF0178802645240900B50B97 /* Base */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -451,7 +451,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -478,6 +478,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,7 +545,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -594,7 +595,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -623,6 +624,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -660,6 +662,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -678,14 +681,14 @@
 			};
 			name = Release;
 		};
-		CF0E3E752542EC0200DE0A66 /* Debug */ = {
+		CF0178872645240900B50B97 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = LinshareShareExtension/LinshareShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -693,13 +696,13 @@
 				DEVELOPMENT_TEAM = 6Z27TKCGWF;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LinshareShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linagora.ios.linshare.extension;
@@ -713,13 +716,14 @@
 			};
 			name = Debug;
 		};
-		CF0E3E762542EC0200DE0A66 /* Release */ = {
+		CF0178882645240900B50B97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = LinshareShareExtension/LinshareShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -727,13 +731,13 @@
 				DEVELOPMENT_TEAM = 6Z27TKCGWF;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LinshareShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linagora.ios.linshare.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -744,13 +748,14 @@
 			};
 			name = Release;
 		};
-		CF0E3E772542EC0200DE0A66 /* Profile */ = {
+		CF0178892645240900B50B97 /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = LinshareShareExtension/LinshareShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -758,13 +763,13 @@
 				DEVELOPMENT_TEAM = 6Z27TKCGWF;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LinshareShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linagora.ios.linshare.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -798,12 +803,12 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CF0E3E782542EC0200DE0A66 /* Build configuration list for PBXNativeTarget "LinshareShareExtension" */ = {
+		CF0178862645240900B50B97 /* Build configuration list for PBXNativeTarget "LinshareShareExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CF0E3E752542EC0200DE0A66 /* Debug */,
-				CF0E3E762542EC0200DE0A66 /* Release */,
-				CF0E3E772542EC0200DE0A66 /* Profile */,
+				CF0178872645240900B50B97 /* Debug */,
+				CF0178882645240900B50B97 /* Release */,
+				CF0178892645240900B50B97 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -38,11 +38,11 @@ abstract class FunctionalityDto with EquatableMixin {
 
   @JsonKey(unknownEnumValue: FunctionalityIdentifier.UNKNOWN_IDENTIFIER)
   final FunctionalityIdentifier identifier;
-  final bool enable;
-  final bool canOverride;
+  final bool? enable;
+  final bool? canOverride;
 
   FunctionalityDto(this.identifier, this.enable, this.canOverride);
 
   @override
-  List<Object> get props => [identifier, enable, canOverride];
+  List<Object?> get props => [identifier, enable, canOverride];
 }

@@ -36,7 +36,6 @@ import 'package:data/src/network/model/generic_user_dto.dart';
 import 'package:data/src/network/model/share/received_share_id_dto.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'document_details_received_share_dto.g.dart';
@@ -51,8 +50,8 @@ class DocumentDetailsReceivedShareDto {
   final DateTime creationDate;
   final DateTime modificationDate;
   final DateTime expirationDate;
-  final int downloaded;
-  final String description;
+  final int? downloaded;
+  final String? description;
   final GenericUserDto recipient;
 
   DocumentDetailsReceivedShareDto(
@@ -79,9 +78,9 @@ extension DocumentDetailsReceivedShareDtoExtension on DocumentDetailsReceivedSha
       creationDate,
       modificationDate,
       expirationDate,
-      description,
-      recipient != null ? recipient.toGenericUser() : null,
-      downloaded,
+      description ?? '',
+      recipient.toGenericUser(),
+      downloaded ?? 0,
     );
   }
 }

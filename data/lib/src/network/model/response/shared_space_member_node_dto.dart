@@ -48,7 +48,7 @@ class SharedSpaceMemberNodeDto with EquatableMixin {
   @JsonKey(name: Attribute.uuid)
   final SharedSpaceId sharedSpaceId;
 
-  final LinShareNodeType nodeType;
+  final LinShareNodeType? nodeType;
   final DateTime creationDate;
   final DateTime modificationDate;
 
@@ -64,7 +64,7 @@ class SharedSpaceMemberNodeDto with EquatableMixin {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     sharedSpaceId,
     name,
     nodeType,

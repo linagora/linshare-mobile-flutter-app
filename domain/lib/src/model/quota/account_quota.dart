@@ -40,20 +40,11 @@ class AccountQuota with EquatableMixin {
   final bool maintenance;
 
   AccountQuota(
-    {this.quota,
+    this.quota,
     this.usedSpace,
     this.maxFileSize,
-    this.maintenance}
+    this.maintenance
   );
-
-  factory AccountQuota.initial() {
-    return AccountQuota(
-      quota: QuotaSize.initial(),
-      usedSpace: QuotaSize.initial(),
-      maxFileSize: QuotaSize.initial(),
-      maintenance: false
-    );
-  }
 
   @override
   List<Object> get props => [

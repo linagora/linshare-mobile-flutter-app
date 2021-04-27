@@ -39,8 +39,8 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('remove_document_interactor_test', () {
-    RemoveDocumentInteractor removeDocumentInteractor;
-    DocumentRepository documentRepository;
+    late RemoveDocumentInteractor removeDocumentInteractor;
+    late DocumentRepository documentRepository;
 
     setUp(() {
       documentRepository = MockDocumentRepository();

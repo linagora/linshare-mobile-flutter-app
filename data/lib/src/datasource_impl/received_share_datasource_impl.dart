@@ -62,10 +62,10 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
       return await _linShareHttpClient.getReceivedShares();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 403) {
+        if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -92,7 +92,10 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
             showNotification: true,
             openFileFromNotification: true)));
 
-    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
+    return taskIds
+        .where((taskId) => taskId != null)
+        .map((taskId) => DownloadTaskId(taskId!))
+        .toList();
   }
 
   @override

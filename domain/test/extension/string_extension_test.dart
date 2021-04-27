@@ -45,10 +45,6 @@ void main() {
       expect(false, 'abc'.isIntegerNumber());
     });
 
-    test('isNumber should return false when input string is null', () {
-      expect(false, null.isIntegerNumber());
-    });
-
     test('isNumber should return false when input string is empty string', () {
       expect(false, ''.isIntegerNumber());
     });

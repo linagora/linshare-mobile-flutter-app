@@ -61,14 +61,14 @@ class UserResponse with EquatableMixin  {
   @JsonKey(name: Attribute.uuid)
   final UserId userId;
 
-  final String locale;
-  final String externalMailLocale;
-  final String domain;
-  final String firstName;
-  final String lastName;
-  final String mail;
-  final bool canUpload;
-  final bool canCreateGuest;
+  final String? locale;
+  final String? externalMailLocale;
+  final String? domain;
+  final String? firstName;
+  final String? lastName;
+  final String? mail;
+  final bool? canUpload;
+  final bool? canCreateGuest;
   final AccountType accountType;
   final bool secondFAEnabled;
   final bool secondFARequired;
@@ -81,7 +81,7 @@ class UserResponse with EquatableMixin  {
   Map<String, dynamic> toJson() => _$UserResponseToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     userId,
     locale,
     externalMailLocale,
@@ -102,14 +102,14 @@ extension UserResponseExtension on UserResponse {
   User toUser() {
     return User(
       userId,
-      locale,
-      externalMailLocale,
-      domain,
-      firstName,
-      lastName,
-      mail,
-      canUpload,
-      canCreateGuest,
+      locale ?? '',
+      externalMailLocale ?? '',
+      domain ?? '',
+      firstName ?? '',
+      lastName ?? '',
+      mail ?? '',
+      canUpload ?? false,
+      canCreateGuest ?? false,
       accountType,
       quotaUuid,
       secondFAEnabled,

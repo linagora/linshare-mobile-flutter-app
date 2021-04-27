@@ -41,8 +41,8 @@ import '../../mock/repository/mock_sort_repository.dart';
 
 void main() {
   group('sort_interactor_test', () {
-    MockSortRepository sortRepository;
-    SortInteractor sortInteractor;
+    late MockSortRepository sortRepository;
+    late SortInteractor sortInteractor;
 
     setUp(() {
       sortRepository = MockSortRepository();
