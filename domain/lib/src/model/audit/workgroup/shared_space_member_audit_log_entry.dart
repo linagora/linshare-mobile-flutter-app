@@ -32,27 +32,27 @@
 import 'package:domain/domain.dart';
 
 class SharedSpaceMemberAuditLogEntry extends AuditLogEntryUser {
-  final WorkGroupLight workGroup;
-  final SharedSpaceMember resource;
-  final SharedSpaceMember resourceUpdated;
+  final WorkGroupLight? workGroup;
+  final SharedSpaceMember? resource;
+  final SharedSpaceMember? resourceUpdated;
 
   SharedSpaceMemberAuditLogEntry(
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
       DateTime creationDate,
-      Account authUser,
-      AuditLogEntryType type,
-      LogAction action,
-      LogActionCause cause,
-      Account actor,
+      Account? authUser,
+      AuditLogEntryType? type,
+      LogAction? action,
+      LogActionCause? cause,
+      Account? actor,
       this.workGroup,
       this.resource,
       this.resourceUpdated
   ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
      ...super.props,
     workGroup,
     resource,
@@ -62,15 +62,14 @@ class SharedSpaceMemberAuditLogEntry extends AuditLogEntryUser {
   @override
   Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
     return {
-      AuditLogActionMessageParam.authorName : actor != null ? actor.name : '',
-      AuditLogActionMessageParam.resourceName : resource.account != null ? (resource.account != null ? resource.account
-          .name : '') : '',
-      AuditLogActionMessageParam.nameVarious : workGroup != null ? workGroup.name : ''
+      AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
+      AuditLogActionMessageParam.resourceName : resource?.account != null ? (resource?.account != null ? resource?.account?.name : '') : '',
+      AuditLogActionMessageParam.nameVarious : workGroup != null ? workGroup?.name : ''
     };
   }
 
   @override
   String getResourceName() {
-    return resource.account.name;
+    return resource?.account?.name ?? '';
   }
 }

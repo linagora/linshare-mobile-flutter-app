@@ -40,11 +40,11 @@ import '../../mock/repository/mock_contact_repository.dart';
 
 void main() {
   group('get_autocomplete_sharing_with_device_contact_interactor_test', () {
-    AutoCompleteRepository autoCompleteRepository;
-    ContactRepository contactRepository;
+    late AutoCompleteRepository autoCompleteRepository;
+    late ContactRepository contactRepository;
     GetAutoCompleteSharingInteractor getAutoCompleteSharingInteractor;
     GetDeviceContactSuggestionsInteractor getDeviceContactSuggestionsInteractor;
-    GetAutoCompleteSharingWithDeviceContactInteractor getAutoCompleteSharingWithDeviceContactInteractor;
+    late GetAutoCompleteSharingWithDeviceContactInteractor getAutoCompleteSharingWithDeviceContactInteractor;
 
     setUp(() {
       autoCompleteRepository = MockAutoCompleteRepository();

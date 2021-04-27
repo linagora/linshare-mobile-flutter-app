@@ -44,7 +44,7 @@ class GetAllReceivedShareSuccess extends ViewState {
 }
 
 class GetAllReceivedShareFailure extends FeatureFailure {
-  final Exception exception;
+  final exception;
 
   GetAllReceivedShareFailure(this.exception);
 

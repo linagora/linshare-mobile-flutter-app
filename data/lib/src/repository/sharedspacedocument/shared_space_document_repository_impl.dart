@@ -52,7 +52,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
       Token token,
       Uri baseUrl,
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}) {
+      {WorkGroupNodeId? parentNodeId}) {
     final queryParameters = parentNodeId == null
         ? <QueryParameter>[]
         : [StringQueryParameter('parent', parentNodeId.uuid)];
@@ -64,9 +64,9 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<List<WorkGroupNode>> getAllChildNodes(
+  Future<List<WorkGroupNode?>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}
+      {WorkGroupNodeId? parentNodeId}
   ) {
     return _sharedSpaceDocumentDataSource.getAllChildNodes(sharedSpaceId, parentNodeId: parentNodeId);
   }
@@ -75,7 +75,8 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   Future<List<WorkGroupNode>> copyToSharedSpace(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}) {
+    {WorkGroupNodeId? destinationParentNodeId}
+  ) {
       return _sharedSpaceDocumentDataSource.copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
   }
 

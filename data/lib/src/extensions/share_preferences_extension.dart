@@ -39,6 +39,6 @@ extension SharePreferencesExtension on SharedPreferences {
   }
 
   dynamic getObject(String key) async {
-    return json.decode(getString(key));
+    return json.decode(getString(key)!);
   }
 }

@@ -41,7 +41,7 @@ class CopyDocumentsToSharedSpaceInteractor {
   Future<Either<Failure, Success>> execute(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
+    {WorkGroupNodeId? destinationParentNodeId}
   ) async {
     try {
       final workgroupNodes = await _sharedSpaceDocumentRepository

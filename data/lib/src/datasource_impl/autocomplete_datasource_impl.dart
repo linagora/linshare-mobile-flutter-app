@@ -54,7 +54,7 @@ class AutoCompleteDataSourceImpl implements AutoCompleteDataSource {
       AutoCompletePattern autoCompletePattern,
       AutoCompleteType autoCompleteType,
       {
-        ThreadId threadId
+        ThreadId? threadId
       }
   ) {
     return Future.sync(() async {
@@ -77,17 +77,17 @@ class AutoCompleteDataSourceImpl implements AutoCompleteDataSource {
   }
 
   void _handleGetAutoCompleteException(DioError error) {
-    if (error.response.statusCode == 500) {
-      final errorCode = _remoteExceptionThrower.getErrorCodeFromErrorResponse(error.response.data);
+    if (error.response?.statusCode == 500) {
+      final errorCode = _remoteExceptionThrower.getErrorCodeFromErrorResponse(error.response?.data);
       if (errorCode == BusinessErrorCode.invalidPatternMinimumCharactersLength) {
         throw InvalidPatternMinimumCharactersLengthException();
       } else {
-        throw UnknownError(error.response.statusMessage);
+        throw UnknownError(error.response?.statusMessage!);
       }
-    } else if (error.response.statusCode == 404) {
+    } else if (error.response?.statusCode == 404) {
       throw DocumentNotFound();
     } else {
-      throw UnknownError(error.response.statusMessage);
+      throw UnknownError(error.response?.statusMessage!);
     }
   }
 }

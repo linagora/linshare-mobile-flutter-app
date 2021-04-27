@@ -5,7 +5,7 @@ author:
 homepage: 'https://www.linshare.org'
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
@@ -31,7 +31,7 @@ dependencies:
   shared_preferences: 2.0.5
 
   # flutter_uploader
-  flutter_uploader: 3.0.0-beta.1
+  flutter_uploader: 1.2.1
 
   # flutter_downloader
   flutter_downloader: 1.6.0
@@ -55,7 +55,7 @@ dependencies:
   contacts_service:
     git:
       url: git://github.com/linagora/flutter_contacts.git
-      ref: search_by_name_and_email
+      ref: master
 
 dev_dependencies:
   flutter_test:

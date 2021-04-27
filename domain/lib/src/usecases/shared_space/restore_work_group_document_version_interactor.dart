@@ -41,7 +41,7 @@ class RestoreWorkGroupDocumentVersionInteractor {
   Future<Either<Failure, Success>> execute(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId parentId}
+    {WorkGroupNodeId? parentId}
   ) async {
     try {
       final workgroupNodes = await _sharedSpaceDocumentRepository

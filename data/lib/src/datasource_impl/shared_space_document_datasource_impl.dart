@@ -61,13 +61,13 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   );
 
   @override
-  Future<List<WorkGroupNode>> getAllChildNodes(
+  Future<List<WorkGroupNode?>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}
+      {WorkGroupNodeId? parentNodeId}
   ) {
     return Future.sync(() async {
       return (await _linShareHttpClient.getWorkGroupChildNodes(sharedSpaceId, parentId: parentNodeId))
-          .map<WorkGroupNode>((workgroupNode) {
+          .map<WorkGroupNode?>((workgroupNode) {
             if (workgroupNode is WorkGroupDocumentDto) return workgroupNode.toWorkGroupDocument();
 
             if (workgroupNode is WorkGroupNodeFolderDto) return workgroupNode.toWorkGroupFolder();
@@ -78,43 +78,43 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
           .toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw GetChildNodesNotFoundException();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
   }
 
   @override
-  Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId destinationParentNodeId}) {
+  Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId? destinationParentNodeId}) {
     return Future.sync(() async {
       return (await _linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
             copyRequest.toCopyBodyRequest(),
             destinationSharedSpaceId,
             destinationParentNodeId: destinationParentNodeId))
-          .map<WorkGroupNode>((workgroupNode) {
+          .map((workgroupNode) {
             if (workgroupNode is WorkGroupDocumentDto) {
               return workgroupNode.toWorkGroupDocument();
             }
             if (workgroupNode is WorkGroupNodeFolderDto) {
               return workgroupNode.toWorkGroupFolder();
             }
-            return null;
-          })
+            return null;})
           .where((node) => node != null)
+          .map((node) => node!)
           .toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw WorkGroupNodeNotFoundException();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -128,15 +128,15 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
       if (workGroupNode is WorkGroupDocumentDto) return workGroupNode.toWorkGroupDocument();
       if (workGroupNode is WorkGroupNodeFolderDto) return workGroupNode.toWorkGroupFolder();
 
-      return null;
+      return workGroupNode as WorkGroupNode;
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw WorkGroupNodeNotFoundException();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -153,20 +153,22 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         throw DeviceNotSupportedException();
     }
 
-    final taskIds = await Future.wait(workgroupNodes.map((node) async {
-      await FlutterDownloader.enqueue(
-          url: Endpoint.sharedSpaces
-              .withPathParameter(node.sharedSpaceId.uuid)
-              .withPathParameter('nodes')
-              .downloadServicePath(node.workGroupNodeId.uuid)
-              .generateDownloadUrl(baseUrl),
-          savedDir: externalStorageDirPath,
-          headers: {Constant.authorization: 'Bearer ${token.token}'},
-          showNotification: true,
-          openFileFromNotification: true);
-        }));
+    final taskIds = await Future.wait(
+        workgroupNodes.map((node) async => await FlutterDownloader.enqueue(
+            url: Endpoint.sharedSpaces
+                .withPathParameter(node.sharedSpaceId.uuid)
+                .withPathParameter('nodes')
+                .downloadServicePath(node.workGroupNodeId.uuid)
+                .generateDownloadUrl(baseUrl),
+            savedDir: externalStorageDirPath,
+            headers: {Constant.authorization: 'Bearer ${token.token}'},
+            showNotification: true,
+            openFileFromNotification: true)));
 
-    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
+      return taskIds
+          .where((id) => id != null)
+          .map((taskId) => DownloadTaskId(taskId!))
+          .toList();
   }
 
   @override
@@ -193,12 +195,12 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
       return workGroupNode.toWorkGroupFolder();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw SharedSpaceNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -241,15 +243,15 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
       if (workGroupNode is WorkGroupDocumentDto) return workGroupNode.toWorkGroupDocument();
       if (workGroupNode is WorkGroupNodeFolderDto) return workGroupNode.toWorkGroupFolder();
 
-      return null;
+      return workGroupNode as WorkGroupNode;
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw WorkGroupNodeNotFoundException();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -271,12 +273,12 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
       return workGroupNode as WorkGroupNode;
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw WorkGroupNodeNotFoundException();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
