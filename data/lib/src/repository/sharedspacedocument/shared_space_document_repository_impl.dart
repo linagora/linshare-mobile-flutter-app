@@ -117,4 +117,9 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   Future<WorkGroupNode> renameSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId, RenameWorkGroupNodeRequest renameWorkGroupNodeRequest) {
     return _sharedSpaceDocumentDataSource.renameSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId, renameWorkGroupNodeRequest);
   }
+
+  @override
+  Future<WorkGroupNode> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId) {
+    return _sharedSpaceDocumentDataSource.getWorkGroupNode(sharedSpaceId, workGroupNodeId);
+  }
 }
