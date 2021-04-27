@@ -117,6 +117,7 @@ workflows:
         inputs:
         - itunescon_user: $APPLEID
         - password: $APPLEID_PASSWORD
+        - connection: 'off'
         - app_password: $APPLE_SPECIFIC_PASSWORD
 app:
   envs:
