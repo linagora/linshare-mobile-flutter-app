@@ -70,3 +70,9 @@ class SharedSpaceMemberAutoCompleteResult extends AutoCompleteResult {
     userUuid
   ];
 }
+
+extension SharedSpaceMemberAutoCompleteResultExtension on SharedSpaceMemberAutoCompleteResult {
+  String fullName() {
+    return '${firstName.isEmpty ? '' : firstName} ${lastName.isEmpty ? '' : lastName}';
+  }
+}
