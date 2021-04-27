@@ -33,12 +33,12 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 class RemoteExceptionThrower {
-  void throwRemoteException(dynamic exception, {Function(DioError) handler}) {
+  void throwRemoteException(dynamic exception, {Function(DioError)? handler}) {
     if (exception is DioError) {
       switch (exception.type) {
-        case DioErrorType.DEFAULT:
+        case DioErrorType.other:
           throw ServerNotFound();
-        case DioErrorType.CONNECT_TIMEOUT:
+        case DioErrorType.connectTimeout:
           throw ConnectError();
         default:
           handler != null ? handler(exception) : throw UnknownError(exception.message);

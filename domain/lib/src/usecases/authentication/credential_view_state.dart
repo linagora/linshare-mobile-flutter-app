@@ -31,7 +31,6 @@
 
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/usecases/remote_exception.dart';
 
 class CredentialViewState extends ViewState {
   final Token token;
@@ -44,7 +43,7 @@ class CredentialViewState extends ViewState {
 }
 
 class CredentialFailure extends FeatureFailure {
-  final RemoteException authenticationException;
+  final authenticationException;
 
   CredentialFailure(this.authenticationException);
 

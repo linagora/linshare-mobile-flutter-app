@@ -32,6 +32,6 @@
 
 import 'package:data/src/network/model/query/query_parameter.dart';
 
-extension ListQueryParameterExtension on List<QueryParameter> {
+extension ListQueryParameterExtension on List<QueryParameter?> {
   Map<String, dynamic> toMap() => { for (var data in this) if (data != null) data.queryName : data.queryValue };
 }

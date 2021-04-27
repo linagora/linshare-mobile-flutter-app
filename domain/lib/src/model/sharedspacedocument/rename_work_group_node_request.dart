@@ -33,11 +33,11 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class RenameWorkGroupNodeRequest with EquatableMixin {
-  final String name;
+  final String? name;
   final WorkGroupNodeType nodeType;
 
   RenameWorkGroupNodeRequest(this.name, this.nodeType);
 
   @override
-  List<Object> get props => [name, nodeType];
+  List<Object?> get props => [name, nodeType];
 }

@@ -39,7 +39,7 @@ class SharedSpaceActivitiesRepositoryImpl implements SharedSpaceActivitiesReposi
   SharedSpaceActivitiesRepositoryImpl(this._sharedSpaceActivitiesDataSource);
 
   @override
-  Future<List<AuditLogEntryUser>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) {
+  Future<List<AuditLogEntryUser?>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) {
     return _sharedSpaceActivitiesDataSource.getSharedSpaceActivities(sharedSpaceId);
   }
 }

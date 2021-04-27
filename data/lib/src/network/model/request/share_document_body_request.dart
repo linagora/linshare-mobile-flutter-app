@@ -46,8 +46,8 @@ class ShareDocumentBodyRequest {
   ShareDocumentBodyRequest(this.documents, this.mailingListUuid, this.recipients);
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        jsonEncode('documents'): documents.map(const ShareIdDtoConverter().toJson)?.toList(),
-        jsonEncode('mailingListUuid'): mailingListUuid.map(const MailingListIdDtoConverter().toJson)?.toList(),
-        jsonEncode('recipients'): recipients?.map((data) => data?.toJson())?.toList(),
+        jsonEncode('documents'): documents.map(const ShareIdDtoConverter().toJson).toList(),
+        jsonEncode('mailingListUuid'): mailingListUuid.map(const MailingListIdDtoConverter().toJson).toList(),
+        jsonEncode('recipients'): recipients.map((data) => data.toJson()).toList(),
       };
 }

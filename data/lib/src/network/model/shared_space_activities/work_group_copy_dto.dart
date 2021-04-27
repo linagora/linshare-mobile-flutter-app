@@ -30,8 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/network/model/converter/copy_context_id_converter.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
+import 'package:data/src/network/model/converter/work_group_node_id_nullable_converter.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
@@ -40,23 +39,23 @@ import 'package:json_annotation/json_annotation.dart';
 part 'work_group_copy_dto.g.dart';
 
 @JsonSerializable()
-@WorkGroupNodeIdConverter()
+@WorkGroupNodeIdNullableConverter()
 @CopyContextIdConverter()
 class WorkGroupCopyDto with EquatableMixin {
   @JsonKey(name: Attribute.uuid)
-  final WorkGroupNodeId workGroupNodeId;
+  final WorkGroupNodeId? workGroupNodeId;
 
   @JsonKey(name: Attribute.contextUuid)
   final CopyContextId contextId;
 
-  final String name;
+  final String? name;
   final SpaceType kind;
-  final WorkGroupNodeType nodeType;
+  final WorkGroupNodeType? nodeType;
 
   WorkGroupCopyDto(this.workGroupNodeId, this.contextId, this.name, this.kind, this.nodeType);
 
   @override
-  List<Object> get props => [workGroupNodeId, contextId, name, kind, nodeType];
+  List<Object?> get props => [workGroupNodeId, contextId, name, kind, nodeType];
 
   factory WorkGroupCopyDto.fromJson(Map<String, dynamic> json) => _$WorkGroupCopyDtoFromJson(json);
   Map<String, dynamic> toJson() => _$WorkGroupCopyDtoToJson(this);

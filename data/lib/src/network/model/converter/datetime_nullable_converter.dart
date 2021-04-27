@@ -28,29 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:domain/domain.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class CredentialRepositoryImpl extends CredentialRepository {
-  final SharedPreferences sharedPreferences;
-
-  final keyBaseUrl = 'KEY_BASE_URL';
-
-  CredentialRepositoryImpl(this.sharedPreferences);
+class DatetimeNullableConverter implements JsonConverter<DateTime?, int> {
+  const DatetimeNullableConverter();
 
   @override
-  Future<Uri> getBaseUrl() async {
-    return Uri.parse(sharedPreferences.getString(keyBaseUrl) ?? '');
+  DateTime? fromJson(int json) {
+    try {
+      return DateTime.fromMillisecondsSinceEpoch(json);
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
-  Future saveBaseUrl(Uri baseUrl) async {
-    await sharedPreferences.setString(keyBaseUrl, baseUrl.origin);
-  }
-
-  @override
-  Future removeBaseUrl() async {
-    await sharedPreferences.remove(keyBaseUrl);
-  }
+  int toJson(DateTime? object) => object!.millisecondsSinceEpoch;
 }

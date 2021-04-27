@@ -42,9 +42,9 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 void main() {
 
   group('get_credential_interactor_test', () {
-    GetCredentialInteractor getCredentialInteractor;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
+    late GetCredentialInteractor getCredentialInteractor;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
 
     setUp(() {
       tokenRepository = MockTokenRepository();

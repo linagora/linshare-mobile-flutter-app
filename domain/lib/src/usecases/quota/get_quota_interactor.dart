@@ -29,9 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:core';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
 
 class GetQuotaInteractor {
   final QuotaRepository quotaRepository;
@@ -43,7 +44,7 @@ class GetQuotaInteractor {
       final accountQuota = await quotaRepository.findQuota(quotaUuid);
       return Right(AccountQuotaViewState(accountQuota));
     } catch (exception) {
-      return Left(AccountQuotaFailure(exception));
+      return Left(AccountQuotaFailure(exception as Exception));
     }
   }
 }

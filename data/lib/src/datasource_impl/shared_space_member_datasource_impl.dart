@@ -29,11 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:data/data.dart';
 
 class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -47,12 +47,12 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
         return (await _linShareHttpClient.getSharedSpaceMembers(sharedSpaceId)).map((memberDto) => memberDto.toSharedSpaceMember()).toList();
       }).catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          if (error.response.statusCode == 404) {
+          if (error.response?.statusCode == 404) {
             throw SharedSpaceNotFound();
-          } else if (error.response.statusCode == 403) {
+          } else if (error.response?.statusCode == 403) {
             throw NotAuthorized();
           } else {
-            throw UnknownError(error.response.statusMessage);
+            throw UnknownError(error.response?.statusMessage!);
           }
         });
       });
@@ -65,12 +65,12 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
       return sharedSpaceMember.toSharedSpaceMember();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw SharedSpaceNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -83,12 +83,12 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
       return sharedSpaceMember.toSharedSpaceMember();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw SharedSpaceNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -104,12 +104,12 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error,
           handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw SharedSpaceMemberNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });

@@ -40,9 +40,9 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('copy_multiples_files_to_my_space_from_received_shares_interactor tests', () {
-    MockDocumentRepository documentRepository;
-    CopyToMySpaceInteractor copyToMySpaceInteractor;
-    CopyMultipleFilesFromReceivedSharesToMySpaceInteractor _copyMultipleFilesFromReceivedSharesToMySpaceInteractor;
+    late MockDocumentRepository documentRepository;
+    late CopyToMySpaceInteractor copyToMySpaceInteractor;
+    late CopyMultipleFilesFromReceivedSharesToMySpaceInteractor _copyMultipleFilesFromReceivedSharesToMySpaceInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -59,7 +59,7 @@ void main() {
           CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document2]);
 
-      final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: [receivedShare1, receivedShare2]);
+      final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute([receivedShare1, receivedShare2]);
       final resultsList = result
           .map((success) => (success as CopyMultipleToMySpaceFromReceivedSharesAllSuccessViewState).resultList)
           .getOrElse(() => []);
@@ -76,7 +76,7 @@ void main() {
           CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document2]);
 
-      final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: [receivedShare1, receivedShare2]);
+      final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute([receivedShare1, receivedShare2]);
       final resultsList = result
           .map((success) => (success as CopyMultipleToMySpaceFromReceivedSharesHasSomeFilesViewState).resultList)
           .getOrElse(() => []);
@@ -88,7 +88,7 @@ void main() {
           CopyRequest(receivedShare1.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenAnswer((_) async => [document1]);
 
-      final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: [receivedShare1]);
+      final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute([receivedShare1]);
       final documentsList = result
           .map((success) => (success as CopyToMySpaceViewState).documentsList)
           .getOrElse(() => []);
@@ -105,7 +105,7 @@ void main() {
           CopyRequest(receivedShare2.shareId.uuid, SpaceType.RECEIVED_SHARE)))
       .thenThrow(exception);
 
-      final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: [receivedShare1, receivedShare2]);
+      final result = await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute([receivedShare1, receivedShare2]);
       expect(result, Left<Failure, Success>(CopyMultipleToMySpaceFromReceivedSharesAllFailure([Left<Failure, Success>(CopyToMySpaceFailure(exception)), Left<Failure, Success>(CopyToMySpaceFailure(exception))])));
     });
   });

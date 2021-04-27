@@ -39,8 +39,8 @@ import '../../mock/repository/mock_functionality_repository.dart';
 
 void main() {
   group('get all functionality test', () {
-    FunctionalityRepository functionalityRepository;
-    GetAllFunctionalityInteractor getAllFunctionalityInteractor;
+    late FunctionalityRepository functionalityRepository;
+    late GetAllFunctionalityInteractor getAllFunctionalityInteractor;
 
     setUp(() {
       functionalityRepository = MockFunctionalityRepository();
