@@ -32,16 +32,16 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../mock/repository/mock_autocomplete_repository.dart';
 
 void main() {
   group('get_autocomplete_sharing_interactor_test', () {
-    AutoCompleteRepository autoCompleteRepository;
-    GetAutoCompleteSharingInteractor getAutoCompleteSharingInteractor;
+    late AutoCompleteRepository autoCompleteRepository;
+    late GetAutoCompleteSharingInteractor getAutoCompleteSharingInteractor;
 
     setUp(() {
       autoCompleteRepository = MockAutoCompleteRepository();

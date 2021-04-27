@@ -36,7 +36,7 @@ import 'package:testshared/fixture/my_space_fixture.dart';
 
 void main() {
   group('search_document_interactor_test', () {
-    SearchDocumentInteractor searchDocumentInteractor;
+    late SearchDocumentInteractor searchDocumentInteractor;
 
     setUp(() {
       searchDocumentInteractor = SearchDocumentInteractor();
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('search document should return failure', () async {
-      final state = await searchDocumentInteractor.execute(null, SearchQuery('not found query'));
+      final state = await searchDocumentInteractor.execute([], SearchQuery('not found query'));
       state.fold(
               (failure) => expect(failure, isA<SearchDocumentFailure>()),
               (success) => null);

@@ -44,7 +44,7 @@ extension ListReceivedShare on List<ReceivedShare> {
         case OrderBy.name:
           return file2.name.compareToSort(file1.name, orderType);
         case OrderBy.sender:
-          return file2.sender.lastName.getOrElse(() => '').compareToSort(file1.sender.lastName.getOrElse(() => ''), orderType);
+          return file2.sender.lastName!.getOrElse(() => '').compareToSort(file1.sender.lastName!.getOrElse(() => ''), orderType);
         default:
           return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
       }

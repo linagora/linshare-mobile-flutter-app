@@ -36,20 +36,20 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
+import 'package:data/src/datasource/file_upload_datasource.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:data/src/datasource/file_upload_datasource.dart';
 import 'package:domain/src/model/authentication/token.dart';
 import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:rxdart/rxdart.dart';
 
 class FileUploadDataSourceImpl implements FileUploadDataSource {
   final FlutterUploader _uploader;
 
-  Stream<Either<Failure, Success>> _uploadingFileStream;
+  late Stream<Either<Failure, Success>> _uploadingFileStream;
 
   @override
   Stream<Either<Failure, Success>> get uploadingFileStream => _uploadingFileStream;

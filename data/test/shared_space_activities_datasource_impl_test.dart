@@ -40,9 +40,9 @@ import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
   group('test shared spaces activities dataSource', () {
-    MockLinShareHttpClient _linShareHttpClient;
+    late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    SharedSpaceActivitiesDataSourceImpl _sharedSpaceActivitiesDataSourceImpl;
+    late SharedSpaceActivitiesDataSourceImpl _sharedSpaceActivitiesDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
@@ -63,26 +63,30 @@ void main() {
 
     test('getSharedSpaceActivities should throw SharedSpaceActivitiesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.getSharedSpaces())
           .thenThrow(error);
 
       await _sharedSpaceActivitiesDataSourceImpl.getSharedSpaceActivities(sharedSpaceIdForAuditLog)
-          .catchError((error) => expect(error, isA<SharedSpaceActivitiesNotFound>()));
+          .catchError((error) {
+            expect(error, isA<SharedSpaceActivitiesNotFound>());
+          });
     });
 
     test('getSharedSpaceActivities should throw SharedSpaceActivitiesNotFound when linShareHttpClient response error with 403', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 403)
+          type: DioErrorType.response,
+          response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.getSharedSpaces())
           .thenThrow(error);
 
       await _sharedSpaceActivitiesDataSourceImpl.getSharedSpaceActivities(sharedSpaceIdForAuditLog)
-          .catchError((error) => expect(error, isA<NotAuthorized>()));
+          .catchError((error) {
+            expect(error, isA<NotAuthorized>());
+          });
     });
   });
 }

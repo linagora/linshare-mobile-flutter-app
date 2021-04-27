@@ -38,8 +38,8 @@ import 'package:data/src/network/model/converter/work_group_node_id_converter.da
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'work_group_document_dto.g.dart';
 
@@ -51,22 +51,22 @@ class WorkGroupDocumentDto extends WorkGroupNodeDto {
   @JsonKey(name: Attribute.mimeType, fromJson: mediaTypeFromJson, toJson: mediaTypeToJson)
   final MediaType mediaType;
 
-  final int size;
-  final bool hasThumbnail;
+  final int? size;
+  final bool? hasThumbnail;
   final DateTime uploadDate;
-  final bool hasRevision;
-  final String sha256sum;
+  final bool? hasRevision;
+  final String? sha256sum;
 
   WorkGroupDocumentDto(
     WorkGroupNodeId workGroupNodeId,
     WorkGroupNodeId parentWorkGroupNodeId,
-    WorkGroupNodeType type,
+    WorkGroupNodeType? type,
     SharedSpaceId sharedSpaceId,
     DateTime creationDate,
     DateTime modificationDate,
-    String description,
-    String name,
-    AccountDto lastAuthor,
+    String? description,
+    String? name,
+    AccountDto? lastAuthor,
     this.size,
     this.mediaType,
     this.hasThumbnail,
@@ -88,7 +88,7 @@ class WorkGroupDocumentDto extends WorkGroupNodeDto {
   Map<String, dynamic> toJson() => _$WorkGroupDocumentDtoToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     size,
     hasThumbnail,
@@ -102,17 +102,17 @@ extension WorkGroupDocumentDtoExtension on WorkGroupDocumentDto {
   WorkGroupDocument toWorkGroupDocument() => WorkGroupDocument(
       workGroupNodeId,
       parentWorkGroupNodeId,
-      type,
+      type ?? WorkGroupNodeType.DOCUMENT,
       sharedSpaceId,
-      creationDate,
+      creationDate ,
       modificationDate,
-      description,
-      name,
-      lastAuthor != null ? lastAuthor.toAccount() : null,
-      size,
+      description ?? '',
+      name ?? '',
+      lastAuthor?.toAccount(),
+      size ?? 0,
       mediaType,
-      hasThumbnail,
+      hasThumbnail ?? false,
       uploadDate,
-      hasRevision,
-      sha256sum,);
+      hasRevision ?? false,
+      sha256sum ?? '');
 }

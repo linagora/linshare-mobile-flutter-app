@@ -36,7 +36,6 @@ import 'package:domain/src/model/sharedspace/shared_space_id.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
-import 'package:flutter/widgets.dart';
 
 import 'copy_to_shared_space_interactor.dart';
 
@@ -45,10 +44,11 @@ class CopyMultipleFilesToSharedSpaceInteractor {
 
   CopyMultipleFilesToSharedSpaceInteractor(this._copyDocumentsToSharedSpaceInteractor);
 
-  Future<Either<Failure, Success>> execute(
-      {@required List<CopyRequest> copyRequests,
-      @required SharedSpaceId destinationSharedSpaceId,
-      WorkGroupNodeId destinationParentNodeId}) async {
+  Future<Either<Failure, Success?>> execute(
+      List<CopyRequest> copyRequests,
+      SharedSpaceId destinationSharedSpaceId,
+      {WorkGroupNodeId? destinationParentNodeId}
+  ) async {
     final listResult = await Future.wait(copyRequests.map((request) =>
         _copyDocumentsToSharedSpaceInteractor.execute(
             request,

@@ -34,9 +34,10 @@ import 'package:domain/domain.dart';
 
 class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   static const int _max_retry_count = 3;
-  Token _permanentToken;
-  int _retryCount = 0;
+  static const String RETRY_KEY = 'Retry';
+  static const String AUTHORIZATION_KEY = 'Authorization';
   final Dio _dio;
+  Token? _permanentToken;
 
   RetryAuthenticationInterceptors(this._dio);
 
@@ -45,25 +46,34 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   }
 
   @override
-  Future onError(DioError dioError) {
-    if (_isAuthenticationError(dioError)) {
-      _retryCount++;
-      final requestOptions = dioError.response.request;
-      requestOptions.headers.addAll({'Authorization': _getTokenAsBearerHeader(_permanentToken.token)});
-      return _dio.request(requestOptions.path, options: requestOptions);
+  void onError(DioError dioError, ErrorInterceptorHandler handler) async {
+    final requestOptions = dioError.requestOptions;
+    final extraInRequest = requestOptions.extra;
+    var retries = extraInRequest[RETRY_KEY] ?? 0;
+    if (_isAuthenticationError(dioError, retries)) {
+      retries++;
+
+      requestOptions.headers.addAll({
+        AUTHORIZATION_KEY: _getTokenAsBearerHeader(_permanentToken?.token),
+        RETRY_KEY: retries});
+
+      final response = await _dio.fetch(requestOptions);
+      return handler.resolve(response);
+
+    } else {
+      super.onError(dioError, handler);
     }
-    return super.onError(dioError);
   }
 
-  bool _isAuthenticationError(DioError dioError) {
-    if (dioError.type == DioErrorType.RESPONSE &&
-        dioError.response.statusCode == 401 &&
+  bool _isAuthenticationError(DioError dioError, int retryCount) {
+    if (dioError.type == DioErrorType.response &&
+        dioError.response?.statusCode == 401 &&
         _permanentToken != null &&
-        _retryCount < _max_retry_count) {
+        retryCount < _max_retry_count) {
       return true;
     }
     return false;
   }
 
-  String _getTokenAsBearerHeader(String token) => 'Bearer $token';
+  String _getTokenAsBearerHeader(String? token) => 'Bearer $token';
 }

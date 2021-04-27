@@ -32,14 +32,13 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
 
 class CopyMultipleFilesToMySpaceInteractor {
   final CopyToMySpaceInteractor _copyToMySpaceInteractor;
 
   CopyMultipleFilesToMySpaceInteractor(this._copyToMySpaceInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<WorkGroupNode> workGroupNodes}) async {
+  Future<Either<Failure, Success>> execute({required List<WorkGroupNode> workGroupNodes}) async {
     if (workGroupNodes.any((element) => element is WorkGroupFolder)) {
       return Left(CopyMultipleContainsFoldersToMySpaceFailure());
     }

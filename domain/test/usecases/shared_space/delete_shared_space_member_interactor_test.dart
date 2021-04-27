@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_member_repository.d
 
 void main() {
   group('delete_shared_space_member_interactor test', () {
-    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
-    DeleteSharedSpaceMemberInteractor deleteSharedSpaceMemberInteractor;
+    late MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
+    late DeleteSharedSpaceMemberInteractor deleteSharedSpaceMemberInteractor;
 
     setUp(() {
       sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();

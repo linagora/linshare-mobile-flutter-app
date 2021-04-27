@@ -33,7 +33,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
 
 import 'download_node_ios_interactor.dart';
 
@@ -42,7 +41,10 @@ class DownloadMultipleNodeIOSInteractor {
 
   DownloadMultipleNodeIOSInteractor(this._downloadNodeIOSInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<WorkGroupNode> workGroupNodes, @required CancelToken cancelToken}) async {
+  Future<Either<Failure, Success>> execute(
+    List<WorkGroupNode> workGroupNodes,
+    CancelToken cancelToken
+  ) async {
     final listResult = await Future.wait(workGroupNodes.map((element) =>
         _downloadNodeIOSInteractor.execute(element, cancelToken)));
     if (listResult.length == 1) {

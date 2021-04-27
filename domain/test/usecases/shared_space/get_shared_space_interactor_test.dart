@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('get_shared_space_interactor', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    GetSharedSpaceInteractor getSharedSpaceInteractor;
+    late MockSharedSpaceRepository sharedSpaceRepository;
+    late GetSharedSpaceInteractor getSharedSpaceInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -54,11 +54,12 @@ void main() {
 
       final result = await getSharedSpaceInteractor.execute(sharedSpaceId1);
 
-      final sharedSpace = result
-          .map((success) => (success as SharedSpaceDetailViewState).sharedSpace)
-          .getOrElse(() => null);
+      result.fold((left) {
+        expect(left, isA<SharedSpaceDetailFailure>());
+      }, (right) {
+        expect((right as SharedSpaceDetailViewState).sharedSpace, sharedSpace1);
+      });
 
-      expect(sharedSpace, sharedSpace1);
     });
 
     test('get shared space interactor should return success with complete data', () async {
@@ -74,11 +75,12 @@ void main() {
         rolesParameter: RolesParameter.withoutRole
       );
 
-      final sharedSpace = result
-          .map((success) => (success as SharedSpaceDetailViewState).sharedSpace)
-          .getOrElse(() => null);
+      result.fold((left) {
+        expect(left, isA<SharedSpaceDetailFailure>());
+      }, (right) {
+        expect((right as SharedSpaceDetailViewState).sharedSpace, sharedSpace1);
+      });
 
-      expect(sharedSpace, sharedSpace1);
     });
 
     test('get shared space interactor should fail when getSharedSpace fail', () async {

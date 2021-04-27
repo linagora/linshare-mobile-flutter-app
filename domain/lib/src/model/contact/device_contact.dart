@@ -32,7 +32,7 @@
 import 'package:domain/src/model/contact/contact.dart';
 import 'package:equatable/equatable.dart';
 
-class DeviceContact extends Contact with EquatableMixin {
+class DeviceContact extends Contact implements EquatableMixin {
   DeviceContact(String displayName, String email) : super(displayName, email);
 
   @override

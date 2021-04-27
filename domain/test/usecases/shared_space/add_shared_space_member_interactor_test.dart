@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_member_repository.d
 
 void main() {
   group('add_shared_space_member_interactor test', () {
-    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
-    AddSharedSpaceMemberInteractor addSharedSpaceMemberInteractor;
+    late MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
+    late AddSharedSpaceMemberInteractor addSharedSpaceMemberInteractor;
 
     setUp(() {
       sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();
@@ -63,7 +63,7 @@ void main() {
       final result = await addSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
       final sharedSpaceMember = result
           .map((success) => (success as AddSharedSpaceMemberViewState).member)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as SharedSpaceMember Function());
       expect(sharedSpaceMember, sharedSpaceMember1);
     });
 

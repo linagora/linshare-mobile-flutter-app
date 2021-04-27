@@ -32,18 +32,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/pin_code_validation_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/selectors/authentication_selector.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/selectors/authentication_selector.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/styles.dart';
-import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_argument.dart';
-import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/view/pin_code/pin_code_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/text/linshare_slogan_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/toolbar/toolbar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/toolbar/toolbar_builder.dart' as toolbar;
+import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_argument.dart';
+
 import 'enter_otp_viewmodel.dart';
 
 final _titleTextStyle = CommonTextStyle.textStyleNormal.copyWith(color: AppColor.pinCodeTitleColor, fontSize: 16);
@@ -65,7 +66,6 @@ class EnterOTPWidget extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
       backgroundColor: AppColor.primaryColor,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -117,7 +117,7 @@ class EnterOTPWidget extends StatelessWidget {
                 ),
               ),
             ),
-            ToolbarBuilder(
+            toolbar.ToolbarBuilder(
                 Key('enter_otp_arrow_back_button'),
                 contentPadding: EdgeInsets.only(left: 10),
                 actionIcon: imagePath.icArrowBack,

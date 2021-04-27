@@ -47,7 +47,7 @@ class ReceivedShare extends Equatable {
   final DateTime expirationDate;
   final String description;
   final int downloaded;
-  final GenericUser recipient;
+  final GenericUser? recipient;
   final MediaType mediaType;
   final GenericUser sender;
   final int size;
@@ -69,13 +69,14 @@ class ReceivedShare extends Equatable {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     shareId,
     name,
     creationDate,
     modificationDate,
     expirationDate,
     description,
+    recipient,
     sender,
     downloaded,
     size,

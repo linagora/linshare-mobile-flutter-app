@@ -32,17 +32,16 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/usecases/sort/sort_interactor.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../mock/repository/mock_sort_repository.dart';
 
 void main() {
   group('get_sort_interactor_test', () {
-    MockSortRepository sortRepository;
-    GetSorterInteractor getSorterInteractor;
+    late MockSortRepository sortRepository;
+    late GetSorterInteractor getSorterInteractor;
 
     setUp(() {
       sortRepository = MockSortRepository();

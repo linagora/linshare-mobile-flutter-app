@@ -32,8 +32,8 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
@@ -42,11 +42,11 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('upload_work_group_document_interactor_test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
-    UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
-    UploadTaskId uploadTaskId;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
+    late UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
+    late UploadTaskId uploadTaskId;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();

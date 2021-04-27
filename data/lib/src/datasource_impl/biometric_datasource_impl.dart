@@ -55,7 +55,7 @@ class BiometricDataSourceImpl implements BiometricDataSource {
   }
 
   @override
-  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument}) async {
+  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument? androidSettingArgument, IOSSettingArgument? iosSettingArgument}) async {
     return Future.sync(() async {
       return await _localBiometricService.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
     }).catchError((error) {

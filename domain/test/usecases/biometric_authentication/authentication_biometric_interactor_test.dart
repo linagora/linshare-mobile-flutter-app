@@ -30,15 +30,15 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 import '../../mock/repository/biometric_authentication/mock_biometric_repository.dart';
 
 void main() {
   group('authentication_biometric_interactor_test', () {
-    MockBiometricRepository biometricRepository;
-    AuthenticationBiometricInteractor authenticationBiometricInteractor;
+    late MockBiometricRepository biometricRepository;
+    late AuthenticationBiometricInteractor authenticationBiometricInteractor;
 
     setUp(() {
       biometricRepository = MockBiometricRepository();

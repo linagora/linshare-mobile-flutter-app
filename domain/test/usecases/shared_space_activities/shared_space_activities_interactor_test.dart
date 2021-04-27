@@ -32,16 +32,16 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../mock/repository/shared_space_activities/mock_shared_space_activities_repository.dart';
 
 void main() {
   group('test shared space activities interactor', () {
-    MockSharedSpaceActivitiesRepository _sharedSpaceActivitiesRepository;
-    SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
+    late MockSharedSpaceActivitiesRepository _sharedSpaceActivitiesRepository;
+    late SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
 
     setUp(() {
       _sharedSpaceActivitiesRepository = MockSharedSpaceActivitiesRepository();

@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:connectivity/connectivity.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
@@ -44,7 +45,6 @@ import 'package:linshare_flutter_app/presentation/widget/biometric_authenticatio
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:connectivity/connectivity.dart';
 
 class InitializeViewModel extends BaseViewModel {
   final GetCredentialInteractor _getCredentialInteractor;
@@ -67,11 +67,18 @@ class InitializeViewModel extends BaseViewModel {
     this._getBiometricSettingInteractor,
     this._disableBiometricInteractor,
   ) : super(store) {
-    FlutterDownloader.initialize(debug: kDebugMode);
+    _initFlutterDownloader();
     _getNetworkConnectivityState();
     store.dispatch(_getCredentialAction());
     registerReceivingSharingIntent();
   }
+
+  void _initFlutterDownloader() {
+    FlutterDownloader.initialize(debug: kDebugMode)
+      .then((_) => FlutterDownloader.registerCallback(downloadCallback));
+  }
+
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {}
 
   void _getNetworkConnectivityState() async {
     store.dispatch(SetNetworkConnectivityStateAction(await _connectivity.checkConnectivity()));

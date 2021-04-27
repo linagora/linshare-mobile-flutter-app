@@ -31,8 +31,8 @@
 //
 
 import 'package:data/src/network/model/converter/account_id_converter.dart';
-import 'package:domain/domain.dart';
 import 'package:data/src/network/model/converter/thread_id_converter.dart';
+import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'shared_space_member_autocomplete_result_dto.g.dart';
@@ -41,15 +41,15 @@ part 'shared_space_member_autocomplete_result_dto.g.dart';
 @ThreadIdConverter()
 @AccountIdConverter()
 class SharedSpaceMemberAutoCompleteResultDto extends AutoCompleteResult {
-  final String firstName;
-  final String lastName;
-  final String domain;
-  final String mail;
-  final bool member;
+  final String? firstName;
+  final String? lastName;
+  final String? domain;
+  final String? mail;
+  final bool? member;
 
   @JsonKey(name: 'threadUuid')
   final ThreadId threadId;
-  final String type;
+  final String? type;
 
   @JsonKey(name: 'userUuid')
   final AccountId accountId;
@@ -72,7 +72,7 @@ class SharedSpaceMemberAutoCompleteResultDto extends AutoCompleteResult {
   Map<String, dynamic> toJson() => _$SharedSpaceMemberAutoCompleteResultDtoToJson(this);
 
   @override
-  List<Object> get props => [identifier, display, firstName, lastName, domain, mail];
+  List<Object?> get props => [identifier, display, firstName, lastName, domain, mail];
 }
 
 extension UserAutoCompleteResultDtoExtension on SharedSpaceMemberAutoCompleteResultDto {
@@ -80,13 +80,13 @@ extension UserAutoCompleteResultDtoExtension on SharedSpaceMemberAutoCompleteRes
       SharedSpaceMemberAutoCompleteResult(
         identifier,
         display,
-        firstName,
-        lastName,
-        domain,
-        mail,
-        member,
+        firstName ?? '',
+        lastName ?? '',
+        domain ?? '',
+        mail ?? '',
+        member ?? false,
         threadId,
-        type,
+        type ?? '',
         accountId
       );
 }

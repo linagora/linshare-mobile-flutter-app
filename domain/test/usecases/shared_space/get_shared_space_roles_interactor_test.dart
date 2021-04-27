@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('get_shared_space_roles_interactor', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
+    late MockSharedSpaceRepository sharedSpaceRepository;
+    late GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();

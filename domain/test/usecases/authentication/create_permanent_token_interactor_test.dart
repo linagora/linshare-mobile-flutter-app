@@ -32,8 +32,8 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
 import '../../mock/repository/authentication/mock_authentication_repository.dart';
@@ -43,8 +43,8 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 void main() {
 
   group('create_permanent_token_interactor_test', () {
-    CreatePermanentTokenInteractor createPermanentTokenInteractor;
-    MockAuthenticationRepository authenticationRepository;
+    late CreatePermanentTokenInteractor createPermanentTokenInteractor;
+    late MockAuthenticationRepository authenticationRepository;
     MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
 
