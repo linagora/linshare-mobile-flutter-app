@@ -250,6 +250,7 @@ export 'src/usecases/shared_space/download_workgroup_node_interactor.dart';
 export 'src/usecases/shared_space/get_all_shared_space_members_interactor.dart';
 export 'src/usecases/shared_space/get_all_shared_spaces_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_interactor.dart';
+export 'src/usecases/shared_space/get_shared_space_node_interactor.dart';
 export 'src/usecases/shared_space/get_shared_space_roles_interactor.dart';
 export 'src/usecases/shared_space/remove_multiple_shared_space_nodes_interactor.dart';
 export 'src/usecases/shared_space/remove_multiple_shared_spaces_interactor.dart';

@@ -29,23 +29,43 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
-  static const String currentUploads = 'current_uploads';
-  static const String destinationPicker = 'destination_picker';
-  static const String account_details = 'account_details';
-  static const String received_shares = 'received_shares';
-  static const String sharedSpaceDetails = 'shared_space_details';
-  static const String authentication = 'authentication';
-  static const String enter_otp = 'enter_otp';
-  static const String second_factor_authentication = 'second_factor_authentication';
-  static const String addSharedSpaceMember = 'add_shared_space_member';
-  static const String documentDetails = 'document_details';
-  static const String sharedSpaceNodeDetails = 'shared_space_node_details';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_arguments.dart';
+import 'package:redux/redux.dart';
+
+class SharedSpaceNodeDetailsViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
+  final GetSharedSpaceNodeInteractor _getSharedSpaceNodeInteractor;
+
+
+  SharedSpaceNodeDetailsViewModel(
+    Store<AppState> store,
+    this._appNavigation,
+    this._getSharedSpaceNodeInteractor
+  ) : super(store);
+
+  void initState(SharedSpaceNodeDetailsArguments arguments) {
+    store.dispatch(_getSharedSpaceNodeAction(arguments.workGroupNode));
+  }
+
+  void backToMySpace() {
+    _appNavigation.popBack();
+  }
+
+  OnlineThunkAction _getSharedSpaceNodeAction(WorkGroupNode workGroupNode) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(SharedSpaceNodeDetailsSetWorkGroupNodeAction(await _getSharedSpaceNodeInteractor.execute(workGroupNode.sharedSpaceId, workGroupNode.workGroupNodeId)));
+    });
+  }
+
+  @override
+  void onDisposed() {
+    store.dispatch(CleanSharedSpaceNodeDetailsStateAction());
+    super.onDisposed();
+  }
 }
