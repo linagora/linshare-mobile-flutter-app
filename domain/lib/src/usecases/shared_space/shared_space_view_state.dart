@@ -438,3 +438,21 @@ class SharedSpaceRolesFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class SharedSpaceNodeViewState extends ViewState {
+  final WorkGroupNode workGroupNode;
+
+  SharedSpaceNodeViewState(this.workGroupNode);
+
+  @override
+  List<Object> get props => [workGroupNode];
+}
+
+class SharedSpaceNodeFailure extends FeatureFailure {
+  final exception;
+
+  SharedSpaceNodeFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
