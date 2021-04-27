@@ -1395,6 +1395,13 @@ class AppLocalizations {
       args: [nbContacts],
     );
   }
+
+  String get modified_by {
+    return Intl.message(
+      'Modified by',
+      name: 'modified_by',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

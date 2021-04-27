@@ -73,6 +73,7 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_ui_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:open_file/open_file.dart' as open_file;
@@ -833,6 +834,14 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         .addTiles(actionTiles)
         .addFooter(footerAction)
         .build();
+  }
+
+  void goToWorkGroupNodeDetails(WorkGroupNode workGroupNode) {
+    _appNavigation.popBack();
+    _appNavigation.push(
+      RoutePaths.sharedSpaceNodeDetails,
+      arguments: SharedSpaceNodeDetailsArguments(workGroupNode),
+    );
   }
 
   @override

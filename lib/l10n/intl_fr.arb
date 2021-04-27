@@ -1100,5 +1100,10 @@
     "placeholders": {
       "nbContacts": {}
     }
+  },
+  "modified_by": "Modified by",
+  "@modified_by": {
+    "type": "text",
+    "placeholders": {}
   }
 }
