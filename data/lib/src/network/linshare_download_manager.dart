@@ -49,7 +49,7 @@ class LinShareDownloadManager {
       Future<Directory> directoryToSave,
       String filename,
       Token permanentToken,
-      {CancelToken cancelToken}) async {
+      {CancelToken? cancelToken}) async {
     final streamController = StreamController<String>();
 
     try {
@@ -58,12 +58,12 @@ class LinShareDownloadManager {
         directoryToSave])
       .then((values) {
         final fileStream = (values[0] as ResponseBody).stream;
-        final tempFilePath = '${(values[1] as Directory).absolute.path}/${filename}';
+        final tempFilePath = '${(values[1] as Directory).absolute.path}/$filename';
 
         final file = File(tempFilePath);
         file.createSync(recursive: true);
         var randomAccessFile = file.openSync(mode: FileMode.write);
-        StreamSubscription subscription;
+        late StreamSubscription subscription;
 
         subscription = fileStream
             .takeWhile((_) => cancelToken == null || !cancelToken.isCancelled)
@@ -80,7 +80,7 @@ class LinShareDownloadManager {
         }, onDone: () async {
           await randomAccessFile.close();
           if (cancelToken != null && cancelToken.isCancelled) {
-            streamController.sink.addError(CancelDownloadFileException(cancelToken.cancelError.message));
+            streamController.sink.addError(CancelDownloadFileException(cancelToken.cancelError?.message));
           } else {
             streamController.sink.add(tempFilePath);
           }
@@ -94,10 +94,10 @@ class LinShareDownloadManager {
       });
     } catch(exception) {
       _remoteExceptionThrower.throwRemoteException(exception, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     }

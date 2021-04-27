@@ -40,8 +40,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('remove_shared_space_node_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    RemoveSharedSpaceNodeInteractor removeSharedSpaceNodeInteractor;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late RemoveSharedSpaceNodeInteractor removeSharedSpaceNodeInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -55,10 +55,13 @@ void main() {
       .thenAnswer((_) async => workGroupDocument1);
 
       final result = await removeSharedSpaceNodeInteractor.execute(workGroupDocument1.sharedSpaceId, workGroupDocument1.workGroupNodeId);
-      final workGroups = result
-          .map((success) => (success as RemoveSharedSpaceNodeViewState).workGroupNode)
-          .getOrElse(() => null);
-      expect(workGroups, workGroupDocument1);
+
+      result.fold((left) {
+        expect(left, isA<RemoveSharedSpaceNodeFailure>());
+      }, (right) {
+        expect((right as RemoveSharedSpaceNodeViewState).workGroupNode, workGroupDocument1);
+      });
+
     });
 
     test('remove shared space node interactor should fail when removeSharedSpaceNode fail', () async {

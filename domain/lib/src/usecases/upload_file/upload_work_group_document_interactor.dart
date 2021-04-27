@@ -40,7 +40,7 @@ class UploadWorkGroupDocumentInteractor {
 
   UploadWorkGroupDocumentInteractor(this.sharedSpaceDocumentRepository, this.tokenRepository, this.credentialRepository);
 
-  Future<Either<Failure, Success>> execute(FileInfo fileInfo, SharedSpaceId sharedSpaceId, {WorkGroupNodeId parentNodeId}) async {
+  Future<Either<Failure, Success>> execute(FileInfo fileInfo, SharedSpaceId sharedSpaceId, {WorkGroupNodeId? parentNodeId}) async {
     try {
       final token = await tokenRepository.getToken();
       final baseUrl = await credentialRepository.getBaseUrl();

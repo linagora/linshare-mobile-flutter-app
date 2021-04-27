@@ -36,13 +36,13 @@ class WorkGroupFolder extends WorkGroupNode {
   WorkGroupFolder(
     WorkGroupNodeId workGroupNodeId,
     WorkGroupNodeId parentWorkGroupNodeId,
-    WorkGroupNodeType type,
+    WorkGroupNodeType? type,
     SharedSpaceId sharedSpaceId,
     DateTime creationDate,
     DateTime modificationDate,
     String description,
     String name,
-    Account lastAuthor,
+    Account? lastAuthor,
   ) : super(
     workGroupNodeId,
     parentWorkGroupNodeId,

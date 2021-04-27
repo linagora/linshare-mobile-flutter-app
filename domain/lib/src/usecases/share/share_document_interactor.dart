@@ -43,7 +43,11 @@ class ShareDocumentInteractor {
 
   ShareDocumentInteractor(this._documentRepository);
 
-  Future<Either<Failure, Success>> execute(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> genericUsers) async {
+  Future<Either<Failure, Success>> execute(
+      List<DocumentId> documentIds,
+      List<MailingListId> mailingListIds,
+      List<GenericUser> genericUsers
+  ) async {
     try {
       if (documentIds.isEmpty) throw ShareDocumentEmpty();
 

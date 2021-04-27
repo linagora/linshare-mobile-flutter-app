@@ -34,7 +34,7 @@ import 'package:domain/domain.dart';
 abstract class BiometricService {
   Future<bool> isAvailable();
 
-  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument});
+  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument? androidSettingArgument, IOSSettingArgument? iosSettingArgument});
 
   Future<List<BiometricKind>> getAvailableBiometrics();
 }

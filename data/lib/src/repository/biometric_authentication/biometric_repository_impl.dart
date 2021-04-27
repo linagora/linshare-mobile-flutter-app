@@ -45,8 +45,8 @@ class BiometricRepositoryImpl extends BiometricRepository {
   @override
   Future<bool> authenticate(
     String localizedReason,
-    {AndroidSettingArgument androidSettingArgument,
-     IOSSettingArgument iosSettingArgument}
+    {AndroidSettingArgument? androidSettingArgument,
+     IOSSettingArgument? iosSettingArgument}
  ) {
     return _biometricDataSource.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
   }

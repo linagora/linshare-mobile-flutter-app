@@ -45,27 +45,27 @@ part 'shared_space_member_audit_log_entry_dto.g.dart';
 @AuditLogResourceIdConverter()
 class SharedSpaceMemberAuditLogEntryDto extends AuditLogEntryUserDto {
 
-  final WorkGroupLightDto workGroup;
-  final SharedSpaceMemberResponse resource;
-  final SharedSpaceMemberResponse resourceUpdated;
+  final WorkGroupLightDto? workGroup;
+  final SharedSpaceMemberResponse? resource;
+  final SharedSpaceMemberResponse? resourceUpdated;
 
   SharedSpaceMemberAuditLogEntryDto(
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
       DateTime creationDate,
-      AccountDto authUser,
-      AuditLogEntryType type,
-      LogAction action,
-      LogActionCause cause,
-      AccountDto actor,
+      AccountDto? authUser,
+      AuditLogEntryType? type,
+      LogAction? action,
+      LogActionCause? cause,
+      AccountDto? actor,
       this.workGroup,
       this.resource,
       this.resourceUpdated
-  ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
+  ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause ?? LogActionCause.UNDEFINED, actor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     workGroup,
     resource,
@@ -82,13 +82,13 @@ extension SharedSpaceMemberAuditLogEntryDtoExtension on SharedSpaceMemberAuditLo
     resourceId,
     fromResourceId,
     creationDate,
-    authUser != null ? authUser.toAccount() : null,
+    authUser?.toAccount(),
     type,
     action,
-    cause,
-    actor != null ? actor.toAccount() : null,
-    workGroup != null ? workGroup.toWorkGroupLight() : null,
-    resource != null ? resource.toSharedSpaceMember() : null,
-    resourceUpdated != null ? resourceUpdated.toSharedSpaceMember() : null
+    cause ?? LogActionCause.UNDEFINED,
+    actor?.toAccount(),
+    workGroup?.toWorkGroupLight(),
+    resource?.toSharedSpaceMember(),
+    resourceUpdated?.toSharedSpaceMember()
   );
 }

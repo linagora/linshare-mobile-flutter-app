@@ -49,8 +49,8 @@ void main() {
 
 void isAvailable() {
   group('biometric_data_source_impl isAvailable test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
-    MockLocalBiometricService _localBiometricService;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
+    late MockLocalBiometricService _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 
@@ -91,8 +91,8 @@ void isAvailable() {
 
 void getAvailableBiometric() {
   group('biometric_data_source_impl getAvailableBiometrics test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
-    MockLocalBiometricService _localBiometricService;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
+    late MockLocalBiometricService _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 
@@ -133,10 +133,10 @@ void getAvailableBiometric() {
 
 void getBiometricSetting() {
   group('biometric_data_source_impl getBiometricSetting test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
     MockLocalBiometricService _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
-    SharedPreferences _sharedPreferences;
+    late SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({
@@ -161,10 +161,10 @@ void getBiometricSetting() {
 
 void saveBiometricSetting() {
   group('biometric_data_source_impl saveBiometricSetting test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
     MockLocalBiometricService _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
-    SharedPreferences _sharedPreferences;
+    late SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({});
@@ -189,8 +189,8 @@ void saveBiometricSetting() {
 
 void authenticate() {
   group('biometric_data_source_impl authenticate test', () {
-    BiometricDataSourceImpl _biometricDataSourceImpl;
-    MockLocalBiometricService _localBiometricService;
+    late BiometricDataSourceImpl _biometricDataSourceImpl;
+    late MockLocalBiometricService _localBiometricService;
     MockBiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 

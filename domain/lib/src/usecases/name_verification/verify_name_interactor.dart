@@ -34,7 +34,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class VerifyNameInteractor {
-  Either<Failure, Success> execute(String newName, List<Validator> listValidator) {
+  Either<Failure, Success> execute(String? newName, List<Validator> listValidator) {
     try {
       return CompositeNameValidator(listValidator).validate(NewNameRequest(newName));
     } catch (exception) {

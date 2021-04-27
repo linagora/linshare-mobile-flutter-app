@@ -40,8 +40,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('get_shared_space_node_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    GetSharedSpaceNodeInteractor getSharedSpaceNodeInteractor;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late GetSharedSpaceNodeInteractor getSharedSpaceNodeInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -58,11 +58,11 @@ void main() {
           workGroupDocument1.sharedSpaceId,
           workGroupDocument1.workGroupNodeId);
 
-      final workGroups = result
-          .map((success) => (success as SharedSpaceNodeViewState).workGroupNode)
-          .getOrElse(() => null);
-
-      expect(workGroups, workGroupDocument1);
+      result.fold((left) {
+        expect((left as SharedSpaceNodeFailure).exception, Exception());
+      }, (right) {
+        expect((right as SharedSpaceNodeViewState).workGroupNode, workGroupDocument1);
+      });
     });
 
     test('get shared space node interactor should fail when getWorkGroupNode fail', () async {

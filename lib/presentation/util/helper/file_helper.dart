@@ -41,7 +41,7 @@ class FileHelper {
       try {
         await file.delete();
       } catch (exception) {
-        print('error when delete file: ${fileInfo.fileName} ' + exception);
+        print('error when delete file: ${fileInfo.fileName} ' + exception.toString());
       }
     }
   }

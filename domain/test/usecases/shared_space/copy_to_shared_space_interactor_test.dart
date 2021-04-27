@@ -40,8 +40,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('copy_to_shared_space_interactor tests', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    CopyDocumentsToSharedSpaceInteractor copyDocumentsToSharedSpaceInteractor;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late CopyDocumentsToSharedSpaceInteractor copyDocumentsToSharedSpaceInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();

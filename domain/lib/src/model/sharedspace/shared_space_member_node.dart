@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class SharedSpaceMemberNode extends Equatable {
   final String name;
   final SharedSpaceId sharedSpaceId;
-  final LinShareNodeType nodeType;
+  final LinShareNodeType? nodeType;
   final DateTime creationDate;
   final DateTime modificationDate;
 
@@ -17,7 +17,7 @@ class SharedSpaceMemberNode extends Equatable {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     sharedSpaceId,
     name,
     nodeType,

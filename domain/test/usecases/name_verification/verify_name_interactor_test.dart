@@ -36,7 +36,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('verify_name_interactor_test', () {
-    VerifyNameInteractor _verifyNameInteractor;
+    late VerifyNameInteractor _verifyNameInteractor;
     final namesListFixture = ['Dat', 'Dat', 'Duc', 'Huy', 'Julian'];
 
     setUp(() {

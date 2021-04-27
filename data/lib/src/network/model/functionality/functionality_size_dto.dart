@@ -39,14 +39,14 @@ part 'functionality_size_dto.g.dart';
 
 @JsonSerializable()
 class FunctionalitySizeDto extends FunctionalityDto with EquatableMixin {
-  final int value;
-  final String unit;
+  final int? value;
+  final String? unit;
   final List<String> units;
 
   FunctionalitySizeDto(
       FunctionalityIdentifier identifier,
-      bool enable,
-      bool canOverride,
+      bool? enable,
+      bool? canOverride,
       this.value,
       this.unit,
       this.units)
@@ -57,10 +57,10 @@ class FunctionalitySizeDto extends FunctionalityDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$FunctionalitySizeDtoToJson(this);
 
   @override
-  List<Object> get props => [...super.props, value, unit, units];
+  List<Object?> get props => [...super.props, value, unit, units];
 }
 
 extension FunctionalitySizeDtoExtension on FunctionalitySizeDto {
   FunctionalitySize toFunctionalitySize() =>
-      FunctionalitySize(identifier, enable, canOverride, value, unit, units);
+      FunctionalitySize(identifier, enable ?? false, canOverride ?? false, value ?? 0, unit ?? '', units);
 }

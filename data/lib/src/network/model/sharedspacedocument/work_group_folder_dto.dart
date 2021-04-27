@@ -48,13 +48,13 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
   WorkGroupNodeFolderDto(
     WorkGroupNodeId workGroupNodeId,
     WorkGroupNodeId parentWorkGroupNodeId,
-    WorkGroupNodeType type,
+    WorkGroupNodeType? type,
     SharedSpaceId sharedSpaceId,
     DateTime creationDate,
     DateTime modificationDate,
-    String description,
-    String name,
-    AccountDto lastAuthor,
+    String? description,
+    String? name,
+    AccountDto? lastAuthor,
   ) : super(
           workGroupNodeId,
           parentWorkGroupNodeId,
@@ -73,7 +73,7 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
   Map<String, dynamic> toJson() => _$WorkGroupNodeFolderDtoToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         workGroupNodeId,
         parentWorkGroupNodeId,
         type,
@@ -90,12 +90,12 @@ extension WorkGroupNodeFolderDtoExtension on WorkGroupNodeFolderDto {
   WorkGroupFolder toWorkGroupFolder() => WorkGroupFolder(
         workGroupNodeId,
         parentWorkGroupNodeId,
-        type,
+        type ?? WorkGroupNodeType.FOLDER,
         sharedSpaceId,
-        creationDate,
+        creationDate ,
         modificationDate,
-        description,
-        name,
-        lastAuthor != null ? lastAuthor.toAccount() : null
+        description ?? '',
+        name ?? '',
+        lastAuthor?.toAccount()
       );
 }

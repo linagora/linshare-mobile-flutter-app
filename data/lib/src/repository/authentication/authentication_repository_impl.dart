@@ -38,7 +38,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   AuthenticationRepositoryImpl(this.authenticationDataSource);
 
   @override
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode otpCode}) async {
+  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
     return authenticationDataSource.createPermanentToken(baseUrl, userName, password, otpCode: otpCode);
   }
 

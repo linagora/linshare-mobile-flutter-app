@@ -34,12 +34,15 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class SearchSharedSpaceNodeNestedInteractor {
-  Future<Either<Failure, Success>> execute(List<SharedSpaceNodeNested> sharedSpaceNodes, SearchQuery searchQuery) async {
+  Future<Either<Failure, Success>> execute(
+      List<SharedSpaceNodeNested> sharedSpaceNodes,
+      SearchQuery searchQuery
+  ) async {
     try {
       final resultList = sharedSpaceNodes
           .where((element) => element.name
-          .toLowerCase()
-          .contains(searchQuery.value.toLowerCase()))
+              .toLowerCase()
+              .contains(searchQuery.value.toLowerCase()))
           .toList();
       return Right<Failure, Success>(SearchSharedSpaceNodeNestedSuccess(resultList));
     } catch (exception) {
