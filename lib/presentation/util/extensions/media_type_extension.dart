@@ -29,11 +29,9 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:mime/mime.dart';
-import 'package:domain/src/model/preview/supported_preview_file_types.dart';
 
 extension MediaTypeExtension on MediaType {
   String getFileTypeImagePath(AppImagePaths appImagePaths) {
