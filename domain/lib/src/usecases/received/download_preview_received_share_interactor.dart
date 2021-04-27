@@ -40,8 +40,11 @@ class DownloadPreviewReceivedShareInteractor {
 
   DownloadPreviewReceivedShareInteractor(this._receivedShareRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<Either<Failure, Success>> execute(ReceivedShare receivedShare,
-      DownloadPreviewType downloadPreviewType, CancelToken cancelToken) async {
+  Future<Either<Failure, Success>> execute(
+      ReceivedShare receivedShare,
+      DownloadPreviewType downloadPreviewType,
+      CancelToken cancelToken
+  ) async {
     try {
       var filePath;
       await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)

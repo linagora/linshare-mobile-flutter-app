@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -64,15 +65,15 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 import 'model/autocomplete/shared_space_member_autocomplete_result_dto.dart';
+import 'model/request/add_shared_space_member_body_request.dart';
 import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
+import 'model/request/update_shared_space_member_body_request.dart';
 import 'model/response/document_details_response.dart';
 import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
-import 'model/request/add_shared_space_member_body_request.dart';
-import 'model/request/update_shared_space_member_body_request.dart';
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -110,7 +111,7 @@ class LinShareHttpClient {
     return deletedToken != null;
   }
 
-  Future<UserResponse> getAuthorizedUser() async {
+  Future<UserResponse?> getAuthorizedUser() async {
     final resultJson = await _dioClient.get(Endpoint.authorizedUser.generateEndpointPath());
     return UserResponse.fromJson(resultJson);
   }
@@ -129,8 +130,9 @@ class LinShareHttpClient {
 
   Future<ResponseBody> downloadFile(
       String url,
-      CancelToken cancelToken,
-      Token permanentToken) async {
+      CancelToken? cancelToken,
+      Token permanentToken
+  ) async {
     final headerParam = _dioClient.getHeaders();
     headerParam[HttpHeaders.authorizationHeader] = 'Bearer ${permanentToken.token}';
     final responseBody = await _dioClient.get(
@@ -148,7 +150,7 @@ class LinShareHttpClient {
     return resultJson.map((data) => SharedSpaceNodeNestedResponse.fromJson(data)).toList();
   }
 
-  Future<List<AuditLogEntryUserDto>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) async {
+  Future<List<AuditLogEntryUserDto?>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) async {
     final List membersJson = await _dioClient.get(
         Endpoint.sharedSpaces
                 .withPathParameter(sharedSpaceId.uuid)
@@ -159,7 +161,7 @@ class LinShareHttpClient {
         .toList();
   }
 
-  AuditLogEntryUserDto _convertToAuditLogEntryNodeChild(Map<String, dynamic> nodeChildJson) {
+  AuditLogEntryUserDto? _convertToAuditLogEntryNodeChild(Map<String, dynamic> nodeChildJson) {
     if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP.value) {
       return SharedSpaceNodeAuditLogEntryDto.fromJson(nodeChildJson);
     } else if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP_MEMBER.value) {
@@ -178,7 +180,7 @@ class LinShareHttpClient {
   Future<List<AutoCompleteResult>> getSharingAutoComplete(
       AutoCompletePattern autoCompletePattern,
       AutoCompleteType autoCompleteType,
-      { ThreadId threadId }
+      { ThreadId? threadId }
   ) async {
     final List resultJson = await _dioClient.get(
         Endpoint.autocomplete
@@ -193,7 +195,7 @@ class LinShareHttpClient {
 
   Future<List<WorkGroupNodeDto>> getWorkGroupChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentId}
+      {WorkGroupNodeId? parentId}
   ) async {
     final endpointPath = Endpoint.sharedSpaces
         .withPathParameter(sharedSpaceId.uuid)
@@ -226,7 +228,7 @@ class LinShareHttpClient {
   }
 
   AutoCompleteResult _getDynamicAutoCompleteResult(Map<String, dynamic> map) {
-    final type = map['type'] as String;
+    final type = map['type'] as String?;
     if (type == AutoCompleteResultType.simple.value) {
       return SimpleAutoCompleteResultDto.fromJson(map);
     } else if (type == AutoCompleteResultType.user.value) {
@@ -249,7 +251,7 @@ class LinShareHttpClient {
   Future<List<WorkGroupNodeDto>> copyWorkGroupNodeToSharedSpaceDestination(
     CopyBodyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}) async {
+    {WorkGroupNodeId? destinationParentNodeId}) async {
       final copyEndpointPath = Endpoint.sharedSpaces
         .withPathParameter(destinationSharedSpaceId.uuid)
         .withPathParameter('nodes')
@@ -304,12 +306,14 @@ class LinShareHttpClient {
   }
 
   Future<AccountQuotaResponse> findQuota(QuotaId quotaUuid) async {
-    final resultJson = await _dioClient.get(Endpoint.quota.withPathParameter(quotaUuid.uuid).generateEndpointPath());
+    final resultJson = await _dioClient.get(Endpoint.quota.withPathParameter(quotaUuid.uuid)
+        .generateEndpointPath());
     return AccountQuotaResponse.fromJson(resultJson);
   }
 
   Future<List<DocumentResponse>> copyToMySpace(
-    CopyBodyRequest copyRequest) async {
+    CopyBodyRequest copyRequest
+  ) async {
       final copyEndpointPath = Endpoint.documents
         .withPathParameter('copy')
         .generateEndpointPath();
@@ -328,7 +332,7 @@ class LinShareHttpClient {
   }
 
   FunctionalityDto _convertToActualFunctionality(Map<String, dynamic> jsonData) {
-    String type = jsonData['type'];
+    String? type = jsonData['type'];
     switch (type) {
       case 'boolean': return FunctionalityBooleanDto.fromJson(jsonData);
       case 'integer': return FunctionalityIntegerDto.fromJson(jsonData);

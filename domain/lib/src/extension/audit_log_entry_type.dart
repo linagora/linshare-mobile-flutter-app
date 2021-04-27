@@ -90,7 +90,7 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
   ClientLogAction getClientLogActionForCopyDocumentAction(AuditLogEntry auditLogEntry) {
       if (auditLogEntry is WorkGroupDocumentAuditLogEntry) {
         if (auditLogEntry.copiedFrom != null) {
-          switch(auditLogEntry.copiedFrom.kind) {
+          switch(auditLogEntry.copiedFrom!.kind!) {
             case SpaceType.PERSONAL_SPACE:
               return ClientLogAction.COPY_FROM_PERSONAL_SPACE;
             case SpaceType.RECEIVED_SHARE:
@@ -101,14 +101,14 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
         }
 
         if (auditLogEntry.copiedTo != null) {
-            if (auditLogEntry.copiedTo.kind == SpaceType.SHARED_SPACE) {
+            if (auditLogEntry.copiedTo!.kind == SpaceType.SHARED_SPACE) {
               return ClientLogAction.COPY_TO_SHARED_SPACE;
             } else {
               return ClientLogAction.COPY_TO_PERSONAL_SPACE;
             }
         }
       } else if (auditLogEntry is WorkGroupDocumentRevisionAuditLogEntry) {
-        if (auditLogEntry.copiedFrom != null && auditLogEntry.copiedFrom.kind == SpaceType.SHARED_SPACE) {
+        if (auditLogEntry.copiedFrom != null && auditLogEntry.copiedFrom!.kind == SpaceType.SHARED_SPACE) {
           return ClientLogAction.RESTORE_REVISION;
         }
       }
@@ -116,7 +116,7 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
       return mappingClientLogAction(auditLogEntry.action);
   }
 
-  ClientLogAction mappingClientLogAction(LogAction logAction) {
+  ClientLogAction mappingClientLogAction(LogAction? logAction) {
     switch(logAction) {
       case LogAction.CREATE:
         if (this == AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION) {

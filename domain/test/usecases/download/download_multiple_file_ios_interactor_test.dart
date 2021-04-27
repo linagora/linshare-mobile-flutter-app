@@ -43,14 +43,14 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 
 void main() {
   group('download_multiple_file_ios_interactor_test', () {
-    MockDocumentRepository documentRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
+    late MockDocumentRepository documentRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
     DownloadFileIOSInteractor downloadFileIOSInteractor;
-    DownloadMultipleFileIOSInteractor downloadMultipleFileIOSInteractor;
-    CancelToken cancelToken;
-    String validFilePath1;
-    String validFilePath2;
+    late DownloadMultipleFileIOSInteractor downloadMultipleFileIOSInteractor;
+    late CancelToken cancelToken;
+    late String validFilePath1;
+    late String validFilePath2;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -72,14 +72,14 @@ void main() {
           .thenAnswer((_) async => validFilePath2);
 
       final result = await downloadMultipleFileIOSInteractor.execute(documents: [document1, document2], cancelToken: cancelToken);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => IdleState());
 
       expect(state, isA<DownloadFileIOSAllSuccessViewState>());
 
       (state as DownloadFileIOSAllSuccessViewState).resultList[0].fold(
               (failure) => {},
               (success) => expect((success as DownloadFileIOSViewState).filePath, validFilePath1));
-      (state as DownloadFileIOSAllSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
               (failure) => {},
               (success) => expect((success as DownloadFileIOSViewState).filePath, validFilePath2));
     });
@@ -93,14 +93,14 @@ void main() {
           .thenThrow(Exception());
 
       final result = await downloadMultipleFileIOSInteractor.execute(documents: [document1, document2], cancelToken: cancelToken);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => IdleState());
 
       expect(state, isA<DownloadFileIOSHasSomeFilesFailureViewState>());
 
       (state as DownloadFileIOSHasSomeFilesFailureViewState).resultList[0].fold(
               (failure) => {},
               (success) => expect((success as DownloadFileIOSViewState).filePath, validFilePath1));
-      (state as DownloadFileIOSHasSomeFilesFailureViewState).resultList[1].fold(
+      state.resultList[1].fold(
               (failure) => expect(failure, isA<DownloadFileIOSFailure>()),
               (success) => null);
     });

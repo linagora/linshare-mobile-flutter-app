@@ -30,13 +30,13 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/authentication/token.dart';
 import 'package:domain/src/model/copy/copy_request.dart';
 import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
-import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
 
 abstract class SharedSpaceDocumentRepository {
   Future<UploadTaskId> uploadSharedSpaceDocument(
@@ -44,16 +44,16 @@ abstract class SharedSpaceDocumentRepository {
       Token token,
       Uri baseUrl,
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+      {WorkGroupNodeId? parentNodeId});
 
-  Future<List<WorkGroupNode>> getAllChildNodes(
+  Future<List<WorkGroupNode?>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId});
+      {WorkGroupNodeId? parentNodeId});
 
   Future<List<WorkGroupNode>> copyToSharedSpace(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}
+    {WorkGroupNodeId? destinationParentNodeId}
   );
 
   Future<WorkGroupNode> removeSharedSpaceNode(

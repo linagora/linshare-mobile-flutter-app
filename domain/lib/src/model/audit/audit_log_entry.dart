@@ -37,10 +37,10 @@ abstract class AuditLogEntry with EquatableMixin {
   final AuditLogResourceId resourceId;
   final AuditLogResourceId fromResourceId;
   final DateTime creationDate;
-  final Account authUser;
-  final AuditLogEntryType type;
-  final LogAction action;
-  final LogActionCause cause;
+  final Account? authUser;
+  final AuditLogEntryType? type;
+  final LogAction? action;
+  final LogActionCause? cause;
 
   AuditLogEntry(
     this.auditLogEntryId,
@@ -54,7 +54,7 @@ abstract class AuditLogEntry with EquatableMixin {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     auditLogEntryId,
     resourceId,
     fromResourceId,

@@ -42,7 +42,7 @@ class ShareDocumentViewState extends ViewState {
 }
 
 class ShareDocumentFailure extends FeatureFailure {
-  final Exception exception;
+  final exception;
 
   ShareDocumentFailure(this.exception);
 

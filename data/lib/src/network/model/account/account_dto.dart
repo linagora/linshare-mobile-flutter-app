@@ -41,13 +41,13 @@ part 'account_dto.g.dart';
 @JsonSerializable()
 @AccountIdConverter()
 class AccountDto with EquatableMixin {
-  final String name;
-  final String mail;
-  final String firstName;
-  final String lastName;
+  final String? name;
+  final String? mail;
+  final String? firstName;
+  final String? lastName;
   @JsonKey(name: Attribute.uuid)
   final AccountId accountId;
-  final AccountType accountType;
+  final AccountType? accountType;
 
   AccountDto(this.name, this.mail, this.accountId, this.accountType, this.firstName, this.lastName);
 
@@ -56,9 +56,15 @@ class AccountDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$AccountDtoToJson(this);
 
   @override
-  List<Object> get props => [name, mail, firstName, lastName, accountId, accountType];
+  List<Object?> get props => [name, mail, firstName, lastName, accountId, accountType];
 }
 
 extension AccountDtoExtension on AccountDto {
-  Account toAccount() => Account(name, mail, accountId, accountType, firstName, lastName);
+  Account toAccount() => Account(
+      name ?? '',
+      mail ?? '',
+      accountId,
+      accountType ?? AccountType.INTERNAL,
+      firstName ?? '',
+      lastName ?? '');
 }

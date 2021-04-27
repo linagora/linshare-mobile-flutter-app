@@ -35,11 +35,8 @@
 // the Additional Terms applicable to LinShare software.
 
 class ReceivedShareIdDto {
-  String _uuid;
+  final String _uuid;
     String get uuid => _uuid;
 
-  ReceivedShareIdDto(String uuid) {
-    assert(uuid != null && uuid.isNotEmpty, 'invalid shareId');
-    _uuid = uuid;
-  }
+  ReceivedShareIdDto(this._uuid);
 }

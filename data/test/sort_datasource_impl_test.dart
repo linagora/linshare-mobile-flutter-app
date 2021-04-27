@@ -43,8 +43,8 @@ void main() {
 
 void getSorterTest() {
   group('sort_data_source_impl getSorter test', () {
-    SortDataSourceImpl _sortDataSourceImpl;
-    SharedPreferences _sharedPreferences;
+    late SortDataSourceImpl _sortDataSourceImpl;
+    late SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({
@@ -92,7 +92,7 @@ void getSorterTest() {
 
 void sortFilesTest() {
   group('sort_data_source_impl sort files test', () {
-    SortDataSourceImpl _sortDataSourceImpl;
+    late SortDataSourceImpl _sortDataSourceImpl;
     SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
@@ -140,8 +140,8 @@ void sortFilesTest() {
 
 void saveSorterTest() {
   group('sort_data_source_impl saveSorter test', () {
-    SortDataSourceImpl _sortDataSourceImpl;
-    SharedPreferences _sharedPreferences;
+    late SortDataSourceImpl _sortDataSourceImpl;
+    late SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({});

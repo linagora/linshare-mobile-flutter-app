@@ -40,8 +40,8 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class GenericUserDto {
-  String _mail;
-    String get mail => _mail;
+  String? _mail;
+    String? get mail => _mail;
 
   Option<String> _lastName = none();
     Option<String> get lastName => _lastName;
@@ -49,7 +49,7 @@ class GenericUserDto {
   Option<String> _firstName = none();
     Option<String> get firstName => _firstName;
 
-  GenericUserDto(String mail, {Option<String> lastName, Option<String> firstName}) {
+  GenericUserDto(String mail, {Option<String>? lastName, Option<String>? firstName}) {
     assert(mail != null, 'invalid mail');
     _mail = mail;
     _lastName = lastName ?? none();
@@ -59,8 +59,8 @@ class GenericUserDto {
   factory GenericUserDto.fromJson(Map<String, dynamic> json) {
     return GenericUserDto(
       json['mail'] as String,
-      lastName: optionOf(json['lastName'] as String),
-      firstName: optionOf(json['firstName'] as String)
+      lastName: optionOf(json['lastName'] as String?),
+      firstName: optionOf(json['firstName'] as String?)
     );
   }
 
@@ -74,6 +74,6 @@ class GenericUserDto {
 
 extension GenericUserDtoExtension on GenericUserDto {
   GenericUser toGenericUser() {
-    return GenericUser(_mail, firstName: _firstName, lastName: _lastName);
+    return GenericUser(_mail ?? '', firstName: _firstName, lastName: _lastName);
   }
 }

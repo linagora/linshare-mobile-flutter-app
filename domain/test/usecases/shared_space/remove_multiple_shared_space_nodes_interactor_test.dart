@@ -39,9 +39,9 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('remove_multiple_shared_space_nodes_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
     RemoveSharedSpaceNodeInteractor removeSharedSpaceNodeInteractor;
-    RemoveMultipleSharedSpaceNodesInteractor removeMultipleSharedSpaceNodesInteractor;
+    late RemoveMultipleSharedSpaceNodesInteractor removeMultipleSharedSpaceNodesInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -60,14 +60,14 @@ void main() {
       .thenAnswer((_) async => workGroupDocument2);
 
       final result = await removeMultipleSharedSpaceNodesInteractor.execute([workGroupDocument1, workGroupDocument2]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => IdleState());
       expect(state, isA<RemoveAllSharedSpaceNodesSuccessViewState>());
 
       (state as RemoveAllSharedSpaceNodesSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceNodeViewState).workGroupNode, workGroupDocument1));
 
-      (state as RemoveAllSharedSpaceNodesSuccessViewState).resultList[1].fold(
+      (state).resultList[1].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceNodeViewState).workGroupNode, workGroupDocument2));
     });
@@ -83,14 +83,14 @@ void main() {
       .thenThrow(Exception());
 
       final result = await removeMultipleSharedSpaceNodesInteractor.execute([workGroupDocument1, workGroupDocument2]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => IdleState());
       expect(state, isA<RemoveSomeSharedSpaceNodesSuccessViewState>());
 
       (state as RemoveSomeSharedSpaceNodesSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceNodeViewState).workGroupNode, workGroupDocument1));
 
-      (state as RemoveSomeSharedSpaceNodesSuccessViewState).resultList[1].fold(
+      (state).resultList[1].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceNodeFailure).exception, isA<Exception>()));
     });

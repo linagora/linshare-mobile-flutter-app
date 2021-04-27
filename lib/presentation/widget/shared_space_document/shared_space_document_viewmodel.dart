@@ -444,7 +444,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   OnlineThunkAction _exportFileAction(List<WorkGroupNode> workGroupNodes, CancelToken cancelToken) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _downloadMultipleNodeIOSInteractor
-          .execute(workGroupNodes: workGroupNodes, cancelToken: cancelToken)
+          .execute(workGroupNodes, cancelToken)
           .then((result) => result.fold(
               (failure) => store.dispatch(_exportFileFailureAction(failure)),
               (success) => store.dispatch(_exportFileSuccessAction(success))));
@@ -581,8 +581,8 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
 
       await _copyMultipleFilesToSharedSpaceInteractor
           .execute(
-              copyRequests: nodes.map((node) => node.toCopyRequest()).toList(),
-              destinationSharedSpaceId: sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
+              nodes.map((node) => node.toCopyRequest()).toList(),
+              sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
               destinationParentNodeId: parentNodeId)
           .then((result) => result.fold(
               (failure) => store.dispatch(SharedSpaceDocumentAction(Left(failure))),

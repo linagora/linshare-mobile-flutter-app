@@ -38,9 +38,9 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('remove_multiple_shared_spaces_interactor test', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
+    late MockSharedSpaceRepository sharedSpaceRepository;
     RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
-    RemoveMultipleSharedSpacesInteractor removeMultipleSharedSpacesInteractor;
+    late RemoveMultipleSharedSpacesInteractor removeMultipleSharedSpacesInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -55,14 +55,14 @@ void main() {
         .thenAnswer((_) async => sharedSpace2);
 
       final result = await removeMultipleSharedSpacesInteractor.execute([sharedSpace1.sharedSpaceId, sharedSpace2.sharedSpaceId]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => IdleState());
       expect(state, isA<RemoveAllSharedSpacesSuccessViewState>());
 
       (state as RemoveAllSharedSpacesSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceViewState).sharedSpaceNodeNested, sharedSpace1));
 
-      (state as RemoveAllSharedSpacesSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceViewState).sharedSpaceNodeNested, sharedSpace2));
     });
@@ -74,14 +74,14 @@ void main() {
         .thenThrow(Exception());
 
       final result = await removeMultipleSharedSpacesInteractor.execute([sharedSpace1.sharedSpaceId, sharedSpace2.sharedSpaceId]);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => IdleState());
       expect(state, isA<RemoveSomeSharedSpacesSuccessViewState>());
 
       (state as RemoveSomeSharedSpacesSuccessViewState).resultList[0].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceViewState).sharedSpaceNodeNested, sharedSpace1));
 
-      (state as RemoveSomeSharedSpacesSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
           (failure) => {},
           (success) => expect((success as RemoveSharedSpaceFailure).exception, isA<Exception>()));
     });

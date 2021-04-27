@@ -31,8 +31,8 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
 import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
+import 'package:domain/domain.dart';
 
 class CreateSharedSpaceFolderInteractor {
   final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;

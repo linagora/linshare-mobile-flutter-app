@@ -31,18 +31,18 @@
 //
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/shared_space_document_fixture.dart';
-import 'package:data/data.dart';
 
 import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('create_shared_space_folder_interactor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    CreateSharedSpaceFolderInteractor createSharedSpaceFolderInteractor;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late CreateSharedSpaceFolderInteractor createSharedSpaceFolderInteractor;
     final request = CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId);
 
     setUp(() {
@@ -61,9 +61,9 @@ void main() {
         request
       );
 
-      final folder = result
+      final WorkGroupFolder? folder = result
           .map((success) => (success as CreateSharedSpaceFolderViewState).workGroupFolder)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as WorkGroupFolder Function());
       expect(folder, workGroupFolder1);
     });
 
@@ -82,7 +82,7 @@ void main() {
 
       final workGroups = result
           .map((success) => (success as CreateSharedSpaceFolderViewState).workGroupFolder)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as WorkGroupFolder Function());
       expect(workGroups, workGroupFolder1);
     });
 

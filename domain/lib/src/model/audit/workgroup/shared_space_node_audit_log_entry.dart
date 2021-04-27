@@ -32,25 +32,25 @@
 import 'package:domain/domain.dart';
 
 class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
-  final SharedSpaceNodeNested resource;
-  final SharedSpaceNodeNested resourceUpdated;
+  final SharedSpaceNodeNested? resource;
+  final SharedSpaceNodeNested? resourceUpdated;
 
   SharedSpaceNodeAuditLogEntry(
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
       DateTime creationDate,
-      Account authUser,
-      AuditLogEntryType type,
-      LogAction action,
-      LogActionCause cause,
-      Account actor,
+      Account? authUser,
+      AuditLogEntryType? type,
+      LogAction? action,
+      LogActionCause? cause,
+      Account? actor,
       this.resource,
       this.resourceUpdated
   ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
      ...super.props,
     resource,
     resourceUpdated
@@ -59,14 +59,14 @@ class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
   @override
   Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
     return {
-      AuditLogActionMessageParam.authorName : actor != null ? actor.name : '',
-      AuditLogActionMessageParam.resourceName : resource != null ? resource.name : '',
-      AuditLogActionMessageParam.nameVarious : resource != null ? resource.name : ''
+      AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
+      AuditLogActionMessageParam.resourceName : resource != null ? resource?.name : '',
+      AuditLogActionMessageParam.nameVarious : resource != null ? resource?.name : ''
     };
   }
 
   @override
   String getResourceName() {
-    return resource.name;
+    return resource?.name ?? '';
   }
 }
