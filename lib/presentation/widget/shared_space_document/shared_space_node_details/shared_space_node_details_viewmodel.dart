@@ -53,7 +53,7 @@ class SharedSpaceNodeDetailsViewModel extends BaseViewModel {
     store.dispatch(_getSharedSpaceNodeAction(arguments.workGroupNode));
   }
 
-  void backToMySpace() {
+  void backToMyWorkGroupNodesList() {
     _appNavigation.popBack();
   }
 

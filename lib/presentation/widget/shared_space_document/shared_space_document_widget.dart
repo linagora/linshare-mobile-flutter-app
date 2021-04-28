@@ -613,7 +613,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       _previewWorkGroupDocumentAction(workGroupDocument),
       _copyToAction(context, [workGroupDocument]),
       _renameWorkGroupNodeAction(workGroupDocument),
-      _detailsAction(context, workGroupDocument)
+      _detailsAction(context, workGroupDocument),
+      _manageVersionsAction(context, workGroupDocument),
     ];
   }
 
@@ -623,6 +624,15 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
           SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
           AppLocalizations.of(context).details, workGroupNode)
       .onActionClick((data) => sharedSpaceDocumentViewModel.goToWorkGroupNodeDetails(data))
+      .build();
+  }
+
+  Widget _manageVersionsAction(BuildContext context, WorkGroupNode workGroupNode) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('work_group_document_versions_context_menu_action'),
+          SvgPicture.asset(imagePath.icHistory, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).manage_version, workGroupNode)
+      .onActionClick((data) => sharedSpaceDocumentViewModel.goToWorkGroupNodeVersions(data))
       .build();
   }
 

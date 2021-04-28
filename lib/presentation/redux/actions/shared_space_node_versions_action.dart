@@ -30,19 +30,29 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_details_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-final sharedSpaceNodeDetailsReducer = combineReducers<SharedSpaceNodeDetailsState>([
-  TypedReducer<SharedSpaceNodeDetailsState, StartSharedSpaceNodeDetailsLoadingAction>((SharedSpaceNodeDetailsState state, _) => state.startLoadingState()),
-  TypedReducer<SharedSpaceNodeDetailsState, SharedSpaceNodeDetailsAction>((SharedSpaceNodeDetailsState state, SharedSpaceNodeDetailsAction action) => state.sendViewState(viewState: action.viewState)),
-  TypedReducer<SharedSpaceNodeDetailsState, CleanSharedSpaceNodeDetailsStateAction>((SharedSpaceNodeDetailsState state, _) => state.clearViewState()),
-  TypedReducer<SharedSpaceNodeDetailsState, SharedSpaceNodeDetailsSetWorkGroupNodeAction>((SharedSpaceNodeDetailsState state, SharedSpaceNodeDetailsSetWorkGroupNodeAction action) =>
-    state.setWorkGroupNode(
-      viewState: action.workGroupNodeViewState,
-      newWorkGroupNode: action.workGroupNodeViewState.fold(
-        (failure) => null,
-        (success) => (success is SharedSpaceNodeViewState) ? success.workGroupNode : null))),
-]);
+@immutable
+class StartSharedSpaceNodeVersionsLoadingAction extends ActionOnline {}
+
+@immutable
+class SharedSpaceNodeVersionsAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+
+  SharedSpaceNodeVersionsAction(this.viewState);
+}
+
+@immutable
+class SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction extends ActionOnline {
+  final Either<Failure, Success> workGroupNodeVersionsViewState;
+
+  SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction(this.workGroupNodeVersionsViewState);
+}
+
+@immutable
+class CleanSharedSpaceNodeVersionsStateAction extends ActionOffline {
+  CleanSharedSpaceNodeVersionsStateAction();
+}

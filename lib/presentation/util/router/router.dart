@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/widget/myspace/document_detail
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -75,6 +76,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeDetailsWidget>(), settings: settings.arguments);
     case RoutePaths.biometricAuthentication:
       return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationWidget>(), settings: settings.arguments);
+    case RoutePaths.sharedSpaceNodeVersions:
+      return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeVersionsWidget>(), settings: settings.arguments);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(
