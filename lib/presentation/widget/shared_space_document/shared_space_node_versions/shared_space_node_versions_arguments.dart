@@ -31,18 +31,12 @@
 //
 
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_details_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
-import 'package:redux/redux.dart';
+import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
-final sharedSpaceNodeDetailsReducer = combineReducers<SharedSpaceNodeDetailsState>([
-  TypedReducer<SharedSpaceNodeDetailsState, StartSharedSpaceNodeDetailsLoadingAction>((SharedSpaceNodeDetailsState state, _) => state.startLoadingState()),
-  TypedReducer<SharedSpaceNodeDetailsState, SharedSpaceNodeDetailsAction>((SharedSpaceNodeDetailsState state, SharedSpaceNodeDetailsAction action) => state.sendViewState(viewState: action.viewState)),
-  TypedReducer<SharedSpaceNodeDetailsState, CleanSharedSpaceNodeDetailsStateAction>((SharedSpaceNodeDetailsState state, _) => state.clearViewState()),
-  TypedReducer<SharedSpaceNodeDetailsState, SharedSpaceNodeDetailsSetWorkGroupNodeAction>((SharedSpaceNodeDetailsState state, SharedSpaceNodeDetailsSetWorkGroupNodeAction action) =>
-    state.setWorkGroupNode(
-      viewState: action.workGroupNodeViewState,
-      newWorkGroupNode: action.workGroupNodeViewState.fold(
-        (failure) => null,
-        (success) => (success is SharedSpaceNodeViewState) ? success.workGroupNode : null))),
-]);
+class SharedSpaceNodeVersionsArguments extends RouterArguments {
+  final WorkGroupNode workGroupNode;
+
+  SharedSpaceNodeVersionsArguments(
+    this.workGroupNode,
+  );
+}
