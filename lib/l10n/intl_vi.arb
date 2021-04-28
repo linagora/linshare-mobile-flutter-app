@@ -1174,5 +1174,17 @@
   "@biometric_authentication_localized_reason_disable": {
     "type": "text",
     "placeholders": {}
+  },
+  "manage_version": "Manage version",
+  "@manage_version": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "version": "Version {version}",
+  "@version": {
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
   }
 }

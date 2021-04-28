@@ -1507,6 +1507,21 @@ class AppLocalizations {
     return Intl.message('Please authenticate to disable biometric authentication for application',
         name: 'biometric_authentication_localized_reason_disable');
   }
+
+  String get manage_version {
+    return Intl.message(
+      'Manage version',
+      name: 'manage_version',
+    );
+  }
+
+  String version(int version) {
+    return Intl.message(
+      'Version ${version}',
+      name: 'version',
+      args: [version],
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
