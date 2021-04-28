@@ -238,10 +238,13 @@ class LinShareHttpClient {
     }
   }
 
-  WorkGroupNodeDto _convertToWorkGroupNodeChild(Map<String, dynamic> nodeChildJson) =>
-      nodeChildJson['type'] == WorkGroupNodeType.DOCUMENT.value
-          ? WorkGroupDocumentDto.fromJson(nodeChildJson)
-          : WorkGroupNodeFolderDto.fromJson(nodeChildJson);
+  WorkGroupNodeDto _convertToWorkGroupNodeChild(Map<String, dynamic> nodeChildJson) {
+    if (nodeChildJson['type'] == WorkGroupNodeType.FOLDER.value) {
+      return WorkGroupNodeFolderDto.fromJson(nodeChildJson);
+    }
+
+    return WorkGroupDocumentDto.fromJson(nodeChildJson);
+  }
 
   Future<List<WorkGroupNodeDto>> copyWorkGroupNodeToSharedSpaceDestination(
     CopyBodyRequest copyRequest,
