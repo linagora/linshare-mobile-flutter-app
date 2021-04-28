@@ -71,7 +71,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Transform(
-        transform: Matrix4.translationValues(-5, -5.0, 0.0),
+        transform: Matrix4.translationValues(-5, 0.0, 0.0),
         child: TypeAheadFormField(
           textFieldConfiguration: TextFieldConfiguration(
               controller: _typeAheadController,
@@ -117,7 +117,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         Center(
           child: Padding(
             padding:
-            const EdgeInsets.only(left: 8.0, right: 16.0, bottom: 5.0),
+            const EdgeInsets.only(left: 8.0, right: 16.0),
             child: GestureDetector(
                 onTap: () {
                   if (_onCancelSearchPressed != null) {
