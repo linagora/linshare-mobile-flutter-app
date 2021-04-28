@@ -984,51 +984,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
-  "@second_factor_authentication_is_required_for_your_account": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "please_enable_second_factor_authentication_to_continue": "Please enable Second factor Authentication to continue",
-  "@please_enable_second_factor_authentication_to_continue": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "go_to_setup": "Go to Setup",
-  "@go_to_setup": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "second_factor_authentication": "SECOND FACTOR AUTHENTICATION",
-  "@second_factor_authentication": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "input_6_digit_from_free_otp": "Input the 6-digit code in your FreeOTP app",
-  "@input_6_digit_from_free_otp": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "submit": "Submit",
-  "@submit": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "please_fill_up_all_numbers": "Please fill up all numbers",
-  "@please_fill_up_all_numbers": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "invalid_otp": "Invalid OTP",
-  "@invalid_otp": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "user_locked_message": "Sorry! Your account is locked\nPlease contact the support to unlock!",
-  "@user_locked_message": {
-    "type": "text",
-    "placeholders": {}
-  },
   "create_new_workgroup": "Create new workgroup",
   "@create_new_workgroup": {
     "type": "text",
@@ -1199,5 +1154,17 @@
   "@biometric_authentication_localized_reason_disable": {
     "type": "text",
     "placeholders": {}
+  },
+  "manage_version": "Manage version",
+  "@manage_version": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "version": "Version {version}",
+  "@version": {
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
   }
 }
