@@ -43,10 +43,18 @@ class GetAllChildNodesInteractor {
       {WorkGroupNodeId parentId}
   ) async {
     try {
-      final childNodes = await _sharedSpaceDocumentRepository.getAllChildNodes(sharedSpaceId, parentNodeId: parentId,)
-        ..sort((node1, node2) {
+      final childNodes = await _sharedSpaceDocumentRepository.getAllChildNodes(sharedSpaceId, parentNodeId: parentId);
+
+      if (childNodes.every((element) => element.type == WorkGroupNodeType.DOCUMENT_REVISION)) {
+        childNodes.sort((node1, node2) {
+          return node2.creationDate.compareTo(node1.creationDate);
+        });
+      } else {
+        childNodes.sort((node1, node2) {
           return node2.modificationDate.compareTo(node1.modificationDate);
         });
+      }
+
       return Right(GetChildNodesViewState(childNodes));
     } catch (exception) {
       return Left(GetChildNodesFailure(exception));
