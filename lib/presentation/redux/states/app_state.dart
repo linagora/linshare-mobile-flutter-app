@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_deta
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
@@ -74,6 +75,7 @@ class AppState with EquatableMixin {
   final DocumentDetailsState documentDetailsState;
   final SharedSpaceNodeDetailsState sharedSpaceNodeDetailsState;
   final BiometricAuthenticationState biometricAuthenticationState;
+  final SharedSpaceNodeVersionsState sharedSpaceNodeVersionsState;
 
   AppState(
       {@required this.uiState,
@@ -95,7 +97,8 @@ class AppState with EquatableMixin {
       @required this.deleteSharedSpaceMembersState,
       @required this.documentDetailsState,
       @required this.sharedSpaceNodeDetailsState,
-      @required this.biometricAuthenticationState});
+      @required this.biometricAuthenticationState,
+      @required this.sharedSpaceNodeVersionsState});
 
   factory AppState.initial() {
     return AppState(
@@ -118,7 +121,8 @@ class AppState with EquatableMixin {
         deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial(),
         documentDetailsState: DocumentDetailsState.initial(),
         sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
-        biometricAuthenticationState: BiometricAuthenticationState.initial());
+        biometricAuthenticationState: BiometricAuthenticationState.initial(),
+        sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial());
   }
 
   @override
@@ -141,6 +145,7 @@ class AppState with EquatableMixin {
         deleteSharedSpaceMembersState,
         documentDetailsState,
         sharedSpaceNodeDetailsState,
-        biometricAuthenticationState
+        biometricAuthenticationState,
+        sharedSpaceNodeVersionsState
       ];
 }

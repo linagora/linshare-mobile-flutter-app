@@ -47,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_de
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_details_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_versions_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/update_shared_space_members_reducer.dart';
@@ -78,7 +79,8 @@ AppState appStateReducer(AppState state, action) {
         deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action),
         documentDetailsState: documentDetailsReducer(state.documentDetailsState, action),
         sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action),
-        biometricAuthenticationState: biometricAuthenticationReducer(state.biometricAuthenticationState, action));
+        biometricAuthenticationState: biometricAuthenticationReducer(state.biometricAuthenticationState, action),
+        sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action));
   }
 
   return AppState(
@@ -103,7 +105,8 @@ AppState appStateReducer(AppState state, action) {
       deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState,
       documentDetailsState: state.documentDetailsState,
       sharedSpaceNodeDetailsState: state.sharedSpaceNodeDetailsState,
-      biometricAuthenticationState: state.biometricAuthenticationState);
+      biometricAuthenticationState: state.biometricAuthenticationState,
+      sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState);
 }
 
 bool canExecuteAction(AppState state, action) {

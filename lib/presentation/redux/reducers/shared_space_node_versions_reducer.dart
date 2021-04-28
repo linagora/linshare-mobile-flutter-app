@@ -31,18 +31,18 @@
 //
 
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_details_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:redux/redux.dart';
 
-final sharedSpaceNodeDetailsReducer = combineReducers<SharedSpaceNodeDetailsState>([
-  TypedReducer<SharedSpaceNodeDetailsState, StartSharedSpaceNodeDetailsLoadingAction>((SharedSpaceNodeDetailsState state, _) => state.startLoadingState()),
-  TypedReducer<SharedSpaceNodeDetailsState, SharedSpaceNodeDetailsAction>((SharedSpaceNodeDetailsState state, SharedSpaceNodeDetailsAction action) => state.sendViewState(viewState: action.viewState)),
-  TypedReducer<SharedSpaceNodeDetailsState, CleanSharedSpaceNodeDetailsStateAction>((SharedSpaceNodeDetailsState state, _) => state.clearViewState()),
-  TypedReducer<SharedSpaceNodeDetailsState, SharedSpaceNodeDetailsSetWorkGroupNodeAction>((SharedSpaceNodeDetailsState state, SharedSpaceNodeDetailsSetWorkGroupNodeAction action) =>
-    state.setWorkGroupNode(
-      viewState: action.workGroupNodeViewState,
-      newWorkGroupNode: action.workGroupNodeViewState.fold(
-        (failure) => null,
-        (success) => (success is SharedSpaceNodeViewState) ? success.workGroupNode : null))),
+final sharedSpaceNodeVersionsReducer = combineReducers<SharedSpaceNodeVersionsState>([
+  TypedReducer<SharedSpaceNodeVersionsState, StartSharedSpaceNodeVersionsLoadingAction>((SharedSpaceNodeVersionsState state, _) => state.startLoadingState()),
+  TypedReducer<SharedSpaceNodeVersionsState, SharedSpaceNodeVersionsAction>((SharedSpaceNodeVersionsState state, SharedSpaceNodeVersionsAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<SharedSpaceNodeVersionsState, CleanSharedSpaceNodeVersionsStateAction>((SharedSpaceNodeVersionsState state, _) => state.clearViewState()),
+  TypedReducer<SharedSpaceNodeVersionsState, SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction>((SharedSpaceNodeVersionsState state, SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction action) =>
+    state.setWorkGroupNodeVersions(
+      viewState: action.workGroupNodeVersionsViewState,
+      newWorkGroupNodeVersions: action.workGroupNodeVersionsViewState.fold(
+        (failure) => [],
+        (success) => (success is GetChildNodesViewState) ? success.workGroupNodes : []))),
 ]);
