@@ -81,7 +81,7 @@ class _SharedSpaceNodeDetailsWidgetState extends State<SharedSpaceNodeDetailsWid
           leading: IconButton(
             key: Key('shared_space_node_details_arrow_back_button'),
             icon: Image.asset(imagePath.icArrowBack),
-            onPressed: () => _model.backToMySpace(),
+            onPressed: () => _model.backToMyWorkGroupNodesList(),
           ),
           centerTitle: true,
           title: Text(arguments.workGroupNode.name,

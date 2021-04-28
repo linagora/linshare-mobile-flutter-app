@@ -66,6 +66,8 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/sh
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
@@ -92,6 +94,7 @@ class WidgetModule {
     _provideDocumentDetailsComponent();
     _provideSharedSpaceNodeDetailsComponent();
     _provideBiometricAuthenticationComponent();
+    _provideSharedSpaceNodeVersionsComponent();
   }
 
   void _provideLoginComponent() {
@@ -309,5 +312,14 @@ class WidgetModule {
         getIt.get<GetBiometricSettingInteractor>(),
         getIt.get<DisableBiometricInteractor>()
       ));
+  }
+
+  void _provideSharedSpaceNodeVersionsComponent() {
+    getIt.registerFactory(() => SharedSpaceNodeVersionsWidget());
+    getIt.registerFactory(() => SharedSpaceNodeVersionsViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAllChildNodesInteractor>()
+    ));
   }
 }
