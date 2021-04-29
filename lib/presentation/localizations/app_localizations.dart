@@ -160,9 +160,14 @@ class AppLocalizations {
         name: 'add_people');
   }
 
-  String get file_is_successfully_shared {
-    return Intl.message('The file is successfully shared',
-        name: 'file_is_successfully_shared');
+  String file_has_been_successfully_shared(int sharesNumber) {
+    return Intl.message(
+      '''${Intl.plural(sharesNumber,
+          one: 'The file has been successfully shared',
+          other: 'The files have been successfully shared')}''',
+      name: 'file_has_been_successfully_shared',
+      args: [sharesNumber],
+    );
   }
 
   String get file_could_not_be_share {
