@@ -54,7 +54,7 @@ export 'src/usecases/download_file/download_file_exception.dart';
 export 'src/usecases/share/share_document_exception.dart';
 export 'src/usecases/autocomplete/autocomplete_exception.dart';
 export 'src/usecases/shared_space/shared_space_exception.dart';
-export 'src/usecases/get_child_nodes/get_chil_nodes_exception.dart';
+export 'src/usecases/get_child_nodes/get_child_nodes_exception.dart';
 export 'src/usecases/copy/copy_exception.dart';
 export 'src/usecases/authentication/user_exception.dart';
 export 'src/usecases/quota/quota_exception.dart';
