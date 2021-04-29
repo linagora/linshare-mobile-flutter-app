@@ -36,29 +36,28 @@ import 'package:data/src/util/constant.dart';
 import 'package:data/src/util/local_biometric_service.dart';
 import 'package:domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:data/src/extensions/biometric_type_extension.dart';
 
 class BiometricDataSourceImpl implements BiometricDataSource {
 
-  final LocalBiometricService _localAuthenticationService;
+  final LocalBiometricService _localBiometricService;
   final BiometricExceptionThrower _biometricExceptionThrower;
   final SharedPreferences _sharedPreferences;
 
-  BiometricDataSourceImpl(this._localAuthenticationService, this._biometricExceptionThrower, this._sharedPreferences);
+  BiometricDataSourceImpl(this._localBiometricService, this._biometricExceptionThrower, this._sharedPreferences);
 
   @override
   Future<bool> isAvailable() {
     return Future.sync(() async {
-      return await _localAuthenticationService.isAvailable();
+      return await _localBiometricService.isAvailable();
     }).catchError((error) {
       _biometricExceptionThrower.throwBiometricException(error);
     });
   }
 
   @override
-  Future<bool> authenticate(String localizedReason) async {
+  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument}) async {
     return Future.sync(() async {
-      return await _localAuthenticationService.authenticate(localizedReason);
+      return await _localBiometricService.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
     }).catchError((error) {
       _biometricExceptionThrower.throwBiometricException(error);
     });
@@ -74,7 +73,7 @@ class BiometricDataSourceImpl implements BiometricDataSource {
   @override
   Future<List<BiometricKind>> getAvailableBiometrics() {
     return Future.sync(() async {
-      return await _localAuthenticationService.getAvailableBiometrics();
+      return await _localBiometricService.getAvailableBiometrics();
     }).catchError((error) {
       _biometricExceptionThrower.throwBiometricException(error);
     });
