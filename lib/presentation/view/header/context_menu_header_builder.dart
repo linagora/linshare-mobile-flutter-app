@@ -32,6 +32,8 @@
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/file/shared_space_node_nested_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/file/work_group_folder_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 class ContextMenuHeaderBuilder {
@@ -40,18 +42,22 @@ class ContextMenuHeaderBuilder {
 
   ContextMenuHeaderBuilder(this._key, this._file);
 
-  ListTile build() {
-    return ListTile(
-      key: _key,
-      leading: _file.fileIcon(),
-      title: Transform(
-        transform: Matrix4.translationValues(-16, -2, 0.0),
-        child: Text(
-          _file.fileName(),
-          maxLines: 1,
-          style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+  Transform build() {
+    return Transform.translate(
+        offset: Offset(0,3.5),
+        child: ListTile(
+          key: _key,
+          leading: Transform.translate(
+              offset: ((_file is SharedSpaceNodeNestedPresentationFile) || (_file is WorkGroupFolderPresentationFile)) ? Offset(0,0) : Offset(0,2),
+              child: _file.fileIcon()
           ),
-        ),
-      trailing: _file.fileSize() == 0 ? null : Text(filesize(_file.fileSize()), style: TextStyle(fontSize: 14, color: AppColor.documentModifiedDateItemTextColor)));
+          title: Text(
+            _file.fileName(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+          ),
+          trailing: _file.fileSize() == 0 ? null : Text(filesize(_file.fileSize()), style: TextStyle(fontSize: 14, color: AppColor.documentModifiedDateItemTextColor))),
+    );
   }
 }
