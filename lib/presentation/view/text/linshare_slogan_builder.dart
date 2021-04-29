@@ -29,44 +29,54 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/biometric_datasource.dart';
-import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
 
-class BiometricRepositoryImpl extends BiometricRepository {
-  final BiometricDataSource _biometricDataSource;
+/// A builder which builds a reusable slogan widget.
+/// This contains the LinShare logo and the slogan text.
+/// The elements are arranged in a column.
+class LinShareSloganBuilder {
+  Key _key;
+  String _text;
+  TextStyle _textStyle;
+  TextAlign _textAlign;
+  String _logo;
 
-  BiometricRepositoryImpl(this._biometricDataSource);
-
-  @override
-  Future<bool> isAvailable() {
-    return _biometricDataSource.isAvailable();
+  LinShareSloganBuilder key(Key key) {
+    _key = key;
+    return this;
   }
 
-  @override
-  Future<bool> authenticate(
-    String localizedReason,
-    {AndroidSettingArgument androidSettingArgument,
-     IOSSettingArgument iosSettingArgument}
- ) {
-    return _biometricDataSource.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
+  LinShareSloganBuilder setSloganText(String text) {
+    _text = text;
+    return this;
   }
 
-  @override
-  Future saveBiometricSetting(BiometricState state) {
-    return _biometricDataSource.saveBiometricSetting(state);
+  LinShareSloganBuilder setSloganTextStyle(TextStyle textStyle) {
+    _textStyle = textStyle;
+    return this;
   }
 
-  @override
-  Future<List<BiometricKind>> getAvailableBiometrics() {
-    return _biometricDataSource.getAvailableBiometrics();
-  }
-  @override
-  Future<BiometricState> getBiometricSetting() {
-    return _biometricDataSource.getBiometricSetting();
+  LinShareSloganBuilder setSloganTextAlign(TextAlign textAlign) {
+    _textAlign = textAlign;
+    return this;
   }
 
-  @override
-  Future resetBiometricSetting() {
-    return _biometricDataSource.resetBiometricSetting();
+  LinShareSloganBuilder setLogo(String logo) {
+    _logo = logo;
+    return this;
+  }
+
+  Widget build() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image(image: AssetImage(_logo), alignment: Alignment.center),
+        Padding(
+          padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+          child:
+          Text(_text, key: _key, style: _textStyle, textAlign: _textAlign),
+        ),
+      ],
+    );
   }
 }
