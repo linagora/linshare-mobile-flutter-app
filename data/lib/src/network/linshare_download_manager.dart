@@ -74,7 +74,7 @@ class LinShareDownloadManager {
                 subscription.resume();
               }).catchError((error) async {
                 await subscription.cancel();
-                streamController.sink.addError(DownloadFileException(error.toString()));
+                streamController.sink.addError(CommonDownloadFileException(error.toString()));
                 await streamController.close();
               });
         }, onDone: () async {
@@ -88,7 +88,7 @@ class LinShareDownloadManager {
         }, onError: (error) async {
           await randomAccessFile.close();
           await file.delete();
-          streamController.sink.addError(DownloadFileException(error.toString()));
+          streamController.sink.addError(CommonDownloadFileException(error.toString()));
           await streamController.close();
         });
       });
