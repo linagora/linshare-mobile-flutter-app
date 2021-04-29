@@ -150,7 +150,7 @@ class ToastMessageHandler {
       }
     }, (success) {
       if (success is ShareDocumentViewState) {
-        appToast.showToast(AppLocalizations.of(context).file_is_successfully_shared);
+        appToast.showToast(AppLocalizations.of(context).file_has_been_successfully_shared(success.sharedRecipients.length));
         _cleanShareViewState();
       } else if (success is ShareAfterUploadSuccess) {
         appToast.showToast(_buildSharingMessage(context, success.recipients));
