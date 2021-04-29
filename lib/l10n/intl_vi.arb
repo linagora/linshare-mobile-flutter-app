@@ -1180,5 +1180,13 @@
   "@biometric_authentication_is_locked": {
     "type": "text",
     "placeholders": {}
+  },
+  "touch_id_or_face_id": "{touchID} or {faceID}",
+  "@touch_id_or_face_id": {
+    "type": "text",
+    "placeholders": {
+      "touchID": {},
+      "faceID": {}
+    }
   }
 }

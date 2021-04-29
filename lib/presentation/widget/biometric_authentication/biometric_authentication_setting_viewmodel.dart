@@ -55,7 +55,7 @@ class BiometricAuthenticationSettingViewModel extends BaseViewModel {
     this._getAvailableBiometricInteractor,
     this._getBiometricSettingInteractor,
     this._disableBiometricInteractor
-    ) : super(store);
+  ) : super(store);
 
   void getBiometricSetting() {
     store.dispatch((Store<AppState> store) async {
@@ -103,7 +103,11 @@ class BiometricAuthenticationSettingViewModel extends BaseViewModel {
     store.dispatch((Store<AppState> store) async {
       final localizedReason = AppLocalizations.of(context).biometric_authentication_localized_reason(
           store.state.biometricAuthenticationSettingState.biometricKindList.getBiometricKind(context));
-      await _authenticationBiometricInteractor.execute(localizedReason)
+
+      final androidSetting = AndroidSettingArgument(AppLocalizations.of(context).cancel, AppLocalizations.of(context).biometric_authentication);
+      final iosSetting = IOSSettingArgument(AppLocalizations.of(context).cancel);
+
+      await _authenticationBiometricInteractor.execute(localizedReason, androidSettingArgument: androidSetting, iosSettingArgument: iosSetting)
           .then((result) => result.fold(
             (failure) => store.dispatch(SetAuthenticationBiometricStateAction(AuthenticationBiometricState.unAuthenticated)),
             (success) {

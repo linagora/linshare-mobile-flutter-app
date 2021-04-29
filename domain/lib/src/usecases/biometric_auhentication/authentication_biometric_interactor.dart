@@ -38,9 +38,9 @@ class AuthenticationBiometricInteractor {
 
   AuthenticationBiometricInteractor(this._biometricRepository);
 
-  Future<Either<Failure, Success>> execute(String localizedReason) async {
+  Future<Either<Failure, Success>> execute(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument}) async {
     try {
-      final isAuthenticated = await _biometricRepository.authenticate(localizedReason);
+      final isAuthenticated = await _biometricRepository.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
       return Right<Failure, Success>(AuthenticationBiometricViewState(isAuthenticated ? AuthenticationBiometricState.authenticated : AuthenticationBiometricState.unAuthenticated));
     } catch (exception) {
       if (exception is BiometricNotEnrolled) {

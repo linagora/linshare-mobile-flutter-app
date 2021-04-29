@@ -51,20 +51,9 @@ class BiometricAuthenticationViewModel extends BaseViewModel {
     Store<AppState> store,
     this._appNavigation,
     this._authenticationBiometricInteractor,
-    this._enableBiometricInteractor,
     this._getAvailableBiometricInteractor,
-    this._getBiometricSettingInteractor,
+    this.deletePermanentTokenInteractor,
     this._disableBiometricInteractor
-    this._getBiometricSettingInteractor
-    this._getBiometricSettingInteractor,
-    this._disableBiometricInteractor
-    ) : super(store);
-      Store<AppState> store,
-      this._appNavigation,
-      this._authenticationBiometricInteractor,
-      this._disableBiometricInteractor,
-      this.deletePermanentTokenInteractor,
-      this._getAvailableBiometricInteractor,
   ) : super(store);
 
   void gotoSignIn() {
@@ -92,54 +81,24 @@ class BiometricAuthenticationViewModel extends BaseViewModel {
   void authenticationBiometric(BuildContext context) {
     store.dispatch((Store<AppState> store) async {
       final localizedReason = AppLocalizations.of(context).biometric_authentication_localized_reason(
-          store.state.biometricAuthenticationState.biometricKindList.getBiometricKind(context));
+        store.state.biometricAuthenticationState.biometricKindList.getBiometricKind(context));
 
-      await _authenticationBiometricInteractor.execute(localizedReason)
-          .then((result) => result.fold(
-            (failure) => store.dispatch(SetAuthenticationBiometricStateForBiometricAuthenticationAction(AuthenticationBiometricState.unAuthenticated)),
-            (success) {
-              if (success is AuthenticationBiometricViewState) {
-                store.dispatch(SetAuthenticationBiometricStateForBiometricAuthenticationAction(success.authenticationState));
-                if (success.authenticationState == AuthenticationBiometricState.authenticated) {
-                  final newBiometricState = biometricState == BiometricState.disabled ? BiometricState.enabled : BiometricState.disabled;
+      final androidSetting = AndroidSettingArgument(AppLocalizations.of(context).cancel, AppLocalizations.of(context).biometric_authentication);
+      final iosSetting = IOSSettingArgument(AppLocalizations.of(context).cancel);
 
-                  newBiometricState == BiometricState.enabled
-                      ? _enableBiometricAuthentication(newBiometricState)
-                      : _disableBiometricAuthentication();
-
-                  store.dispatch(SetBiometricStateAction(newBiometricState));
-                  _enableBiometricAuthentication(newBiometricState);
-
-                  newBiometricState == BiometricState.enabled
-                      ? _enableBiometricAuthentication(newBiometricState)
-                      : _disableBiometricAuthentication();
-
-                  store.dispatch(SetBiometricStateAction(newBiometricState));
-                  _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
-                }
-              } else {
-                store.dispatch(SetAuthenticationBiometricStateForBiometricAuthenticationAction(AuthenticationBiometricState.unAuthenticated));
+      await _authenticationBiometricInteractor.execute(localizedReason, androidSettingArgument: androidSetting, iosSettingArgument: iosSetting)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SetAuthenticationBiometricStateForBiometricAuthenticationAction(AuthenticationBiometricState.unAuthenticated)),
+          (success) {
+            if (success is AuthenticationBiometricViewState) {
+              store.dispatch(SetAuthenticationBiometricStateForBiometricAuthenticationAction(success.authenticationState));
+              if (success.authenticationState == AuthenticationBiometricState.authenticated) {
+                _appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
               }
-            }));
-    });
-  }
-
-  void _enableBiometricAuthentication(BiometricState biometricState) {
-    store.dispatch((Store<AppState> store) async {
-      await _enableBiometricInteractor.execute(biometricState);
-    });
-  }
-
-  void _disableBiometricAuthentication() {
-    store.dispatch((Store<AppState> store) async {
-      await _disableBiometricInteractor.execute();
-      store.dispatch(SetBiometricStateAction(biometricState));
-    });
-  }
-
-  void _disableBiometricAuthentication() {
-    store.dispatch((Store<AppState> store) async {
-      await _disableBiometricInteractor.execute();
+            } else {
+              store.dispatch(SetAuthenticationBiometricStateForBiometricAuthenticationAction(AuthenticationBiometricState.unAuthenticated));
+            }
+          }));
     });
   }
 }

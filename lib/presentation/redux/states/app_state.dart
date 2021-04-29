@@ -98,13 +98,6 @@ class AppState with EquatableMixin {
       @required this.deleteSharedSpaceMembersState,
       @required this.documentDetailsState,
       @required this.sharedSpaceNodeDetailsState,
-      @required this.biometricAuthenticationState});
-      @required this.sharedSpaceNodeDetailsState});
-      @required this.documentDetailsState});
-      @required this.deleteSharedSpaceMembersState});
-      @required this.updateSharedSpaceMembersState,
-      @required this.deleteSharedSpaceMembersState,
-      @required this.sharedSpaceNodeDetailsState,
       @required this.biometricAuthenticationSettingState,
       @required this.biometricAuthenticationState});
 
@@ -129,13 +122,6 @@ class AppState with EquatableMixin {
         deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial(),
         documentDetailsState: DocumentDetailsState.initial(),
         sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
-        biometricAuthenticationState: BiometricAuthenticationState.initial());
-        sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial());
-        documentDetailsState: DocumentDetailsState.initial());
-        deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial());
-        updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
-        deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial(),
-        sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
         biometricAuthenticationSettingState: BiometricAuthenticationSettingState.initial(),
         biometricAuthenticationState: BiometricAuthenticationState.initial());
   }
@@ -159,14 +145,6 @@ class AppState with EquatableMixin {
         addSharedSpaceMembersState,
         deleteSharedSpaceMembersState,
         documentDetailsState,
-        sharedSpaceNodeDetailsState,
-        biometricAuthenticationState
-        sharedSpaceNodeDetailsState
-        documentDetailsState
-        deleteSharedSpaceMembersState
-        addSharedSpaceMembersState,
-        deleteSharedSpaceMembersState,
-        biometricAuthenticationState
         sharedSpaceNodeDetailsState,
         biometricAuthenticationSettingState,
         biometricAuthenticationState,

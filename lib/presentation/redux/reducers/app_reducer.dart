@@ -79,13 +79,6 @@ AppState appStateReducer(AppState state, action) {
         deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action),
         documentDetailsState: documentDetailsReducer(state.documentDetailsState, action),
         sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action),
-        biometricAuthenticationState: biometricAuthenticationReducer(state.biometricAuthenticationState, action));
-        sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action));
-        documentDetailsState: documentDetailsReducer(state.documentDetailsState, action));
-        deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action));
-        updateSharedSpaceMembersState: updateSharedSpaceMembersReducer(state.updateSharedSpaceMembersState, action),
-        deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action),
-        sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action),
         biometricAuthenticationSettingState: biometricAuthenticationSettingReducer(state.biometricAuthenticationSettingState, action),
         biometricAuthenticationState: biometricAuthenticationReducer(state.biometricAuthenticationState, action));
   }
@@ -111,13 +104,6 @@ AppState appStateReducer(AppState state, action) {
       updateSharedSpaceMembersState: state.updateSharedSpaceMembersState,
       deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState,
       documentDetailsState: state.documentDetailsState,
-      sharedSpaceNodeDetailsState: state.sharedSpaceNodeDetailsState,
-      biometricAuthenticationState: state.biometricAuthenticationState);
-      sharedSpaceNodeDetailsState: state.sharedSpaceNodeDetailsState);
-      documentDetailsState: state.documentDetailsState);
-      deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState);
-      updateSharedSpaceMembersState: state.updateSharedSpaceMembersState,
-      deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState,
       sharedSpaceNodeDetailsState: state.sharedSpaceNodeDetailsState,
       biometricAuthenticationSettingState: state.biometricAuthenticationSettingState,
       biometricAuthenticationState: state.biometricAuthenticationState);

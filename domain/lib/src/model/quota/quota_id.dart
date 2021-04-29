@@ -44,16 +44,4 @@ class QuotaId extends Equatable {
   List<Object> get props => [
     uuid
   ];
-
-  Future<bool> authenticate(String localizedReason) async {
-    return await _localAuthentication.authenticateWithBiometrics(
-      localizedReason: localizedReason,
-      useErrorDialogs: false,
-      stickyAuth: true,
-    );
-  }
-
-  Future<List<BiometricType>> getAvailableBiometrics() async {
-    return await _localAuthentication.getAvailableBiometrics();
-  }
 }

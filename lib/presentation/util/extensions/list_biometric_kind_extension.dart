@@ -40,35 +40,28 @@ extension ListBiometricKindExtension on List<BiometricKind> {
 
   String getBiometricKind(BuildContext context) {
     if (contains(BiometricKind.faceId) && contains(BiometricKind.fingerprint)) {
-      return Platform.isIOS
-          ? '${AppLocalizations.of(context).touch_id} (${AppLocalizations.of(context).or.toLowerCase()} ${AppLocalizations.of(context).face_id})'
-          : '${AppLocalizations.of(context).fingerprint} (${AppLocalizations.of(context).or.toLowerCase()} ${AppLocalizations.of(context).face})';
+      return AppLocalizations.of(context).touch_id_or_face_id(
+        Platform.isIOS ? AppLocalizations.of(context).touch_id : AppLocalizations.of(context).fingerprint,
+        Platform.isIOS ?  AppLocalizations.of(context).face_id : AppLocalizations.of(context).face);
     } else if (contains(BiometricKind.faceId)) {
       return Platform.isIOS ? AppLocalizations.of(context).face_id : AppLocalizations.of(context).face;
     } else if (contains(BiometricKind.fingerprint)) {
       return Platform.isIOS ? AppLocalizations.of(context).touch_id : AppLocalizations.of(context).fingerprint;
     } else {
-      return Platform.isIOS
-          ? '${AppLocalizations.of(context).touch_id} (${AppLocalizations.of(context).or.toLowerCase()} ${AppLocalizations.of(context).face_id})'
-          : '${AppLocalizations.of(context).fingerprint} (${AppLocalizations.of(context).or.toLowerCase()} ${AppLocalizations.of(context).face})';
+      return AppLocalizations.of(context).touch_id_or_face_id(
+        Platform.isIOS ? AppLocalizations.of(context).touch_id : AppLocalizations.of(context).fingerprint,
+        Platform.isIOS ?  AppLocalizations.of(context).face_id : AppLocalizations.of(context).face);
     }
   }
 
   String getBiometricIcon(AppImagePaths imagePaths) {
     if (contains(BiometricKind.faceId) && contains(BiometricKind.fingerprint)) {
-      return imagePaths.icBiometric;
+      return Platform.isIOS ? imagePaths.icFaceId : imagePaths.icTouchID;
     } else if (contains(BiometricKind.faceId)) {
       return imagePaths.icFaceId;
-    }else if (contains(BiometricKind.fingerprint)) {
-      return imagePaths.icFingerprint;
+    } else if (contains(BiometricKind.fingerprint)) {
+      return imagePaths.icTouchID;
     }
-    return imagePaths.icBiometric;
-  }
-
-  double getBiometricIconSize() {
-    if (contains(BiometricKind.faceId) && !contains(BiometricKind.fingerprint)) {
-      return 64;
-    }
-    return 110;
+    return imagePaths.icTouchID;
   }
 }

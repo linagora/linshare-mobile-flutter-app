@@ -89,8 +89,7 @@ class AppImagePaths {
   String get icSwitchOn => _getImagePath('ic_switch_on.svg');
   String get icSwitchOff => _getImagePath('ic_switch_off.svg');
   String get icFaceId => _getImagePath('ic_face_id.svg');
-  String get icFingerprint => _getImagePath('ic_fingerprint.svg');
-  String get icBiometric => _getImagePath('ic_biometric.svg');
+  String get icTouchID => _getImagePath('ic_touch_id.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

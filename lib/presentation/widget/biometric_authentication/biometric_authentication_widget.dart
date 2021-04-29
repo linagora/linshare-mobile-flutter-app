@@ -125,8 +125,8 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
                   onTap: () => _onBiometricClickAction(biometricState),
                   child: SvgPicture.asset(
                     biometricState.biometricKindList.getBiometricIcon(_imagePath),
-                    width: biometricState.biometricKindList.getBiometricIconSize(),
-                    height: biometricState.biometricKindList.getBiometricIconSize(),
+                    width: 64,
+                    height: 64,
                     color: _getColorIconBiometric(biometricState),
                   )
               ),
@@ -143,12 +143,12 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
                   child: GestureDetector(
                       onTap: () => _biometricAuthenticationViewModel.gotoSignIn(),
                       child: Text(
-                        AppLocalizations.of(context).go_to_sign_in,
+                        AppLocalizations.of(context).go_to_sign_in.toUpperCase(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: AppColor.toastBackgroundColor,
                             fontSize: 16,
-                            fontWeight: FontWeight.w400
+                            fontWeight: FontWeight.bold
                         ),
                       )
                   )
@@ -161,14 +161,17 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
 
   void _onBiometricClickAction(BiometricAuthenticationState biometricState) {
     return biometricState.authenticationBiometricState.isAuthenticateReady()
-        ? _biometricAuthenticationViewModel.authenticationBiometric(context)
-        : {};
+      ? _biometricAuthenticationViewModel.authenticationBiometric(context)
+      : {};
   }
 
   Color _getColorIconBiometric(BiometricAuthenticationState biometricState) {
-    return biometricState.authenticationBiometricState.isAuthenticateReady()
-      ? AppColor.defaultLabelAvatarBackgroundColor
-      : AppColor.uploadButtonDisableBackgroundColor;
+    if (biometricState.authenticationBiometricState.isAuthenticateReady()) {
+      return biometricState.biometricKindList.getBiometricIcon(_imagePath) == _imagePath.icFaceId
+        ? AppColor.defaultLabelAvatarBackgroundColor
+        : AppColor.touchIDIconColor;
+    }
+    return AppColor.uploadButtonDisableBackgroundColor;
   }
 
   Color _getColorTextBiometric(BiometricAuthenticationState biometricState) {

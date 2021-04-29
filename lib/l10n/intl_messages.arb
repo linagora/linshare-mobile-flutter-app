@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-28T16:11:41.980940",
+  "@@last_modified": "2021-04-29T09:19:11.022066",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -1190,5 +1190,13 @@
   "@biometric_authentication_is_locked": {
     "type": "text",
     "placeholders": {}
+  },
+  "touch_id_or_face_id": "{touchID} or {faceID}",
+  "@touch_id_or_face_id": {
+    "type": "text",
+    "placeholders": {
+      "touchID": {},
+      "faceID": {}
+    }
   }
 }

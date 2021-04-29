@@ -48,10 +48,5 @@ extension AuthenticationBiometricStateExtension on AuthenticationBiometricState 
     }
   }
 
-  bool isAuthenticateReady() {
-    if (this != AuthenticationBiometricState.locked && this != AuthenticationBiometricState.unEnrolled && this != AuthenticationBiometricState.rejected) {
-      return true;
-    }
-    return false;
-  }
+  bool isAuthenticateReady() => this != AuthenticationBiometricState.locked && this != AuthenticationBiometricState.unEnrolled && this != AuthenticationBiometricState.rejected;
 }

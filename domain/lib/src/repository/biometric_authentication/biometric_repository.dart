@@ -34,17 +34,7 @@ import 'package:domain/domain.dart';
 abstract class BiometricRepository {
   Future<bool> isAvailable();
 
-  Future<bool> authenticate(String localizedReason);
-
-  Future saveBiometricSetting(BiometricState state);
-
-  Future<List<BiometricKind>> getAvailableBiometrics();
-
-  Future<BiometricState> getBiometricSetting();
-
-  Future resetBiometricSetting();
-
-  Future<bool> authenticate(String localizedReason);
+  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument});
 
   Future saveBiometricSetting(BiometricState state);
 

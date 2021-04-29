@@ -36,12 +36,6 @@ import 'package:data/src/util/constant.dart';
 import 'package:data/src/util/local_biometric_service.dart';
 import 'package:domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:data/src/extensions/biometric_type_extension.dart';
-import 'package:data/src/util/constant.dart';
-import 'package:data/src/util/local_authentication_service.dart';
-import 'package:domain/domain.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:data/src/extensions/biometric_type_extension.dart';
 
 class BiometricDataSourceImpl implements BiometricDataSource {
 
@@ -61,9 +55,9 @@ class BiometricDataSourceImpl implements BiometricDataSource {
   }
 
   @override
-  Future<bool> authenticate(String localizedReason) async {
+  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument}) async {
     return Future.sync(() async {
-      return await _localAuthenticationService.authenticate(localizedReason);
+      return await _localAuthenticationService.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
     }).catchError((error) {
       _biometricExceptionThrower.throwBiometricException(error);
     });
@@ -80,50 +74,6 @@ class BiometricDataSourceImpl implements BiometricDataSource {
   Future<List<BiometricKind>> getAvailableBiometrics() {
     return Future.sync(() async {
       return await _localAuthenticationService.getAvailableBiometrics();
-    }).catchError((error) {
-      _biometricExceptionThrower.throwBiometricException(error);
-    });
-  }
-
-  @override
-  Future<BiometricState> getBiometricSetting() {
-    return Future.sync(() async {
-      if (_sharedPreferences.containsKey(Constant.biometricSettingState)) {
-        final biometricState = _sharedPreferences.getString(Constant.biometricSettingState) ?? BiometricState.disabled.value;
-        return biometricState == BiometricState.disabled.value ? BiometricState.disabled : BiometricState.enabled;
-      }
-      return BiometricState.disabled;
-    });
-  }
-
-  @override
-  Future resetBiometricSetting() {
-    return Future.sync(() async {
-      return await _sharedPreferences.remove(Constant.biometricSettingState);
-    });
-  }
-
-  @override
-  Future<bool> authenticate(String localizedReason) async {
-    return Future.sync(() async {
-      return await _localAuthenticationService.authenticate(localizedReason);
-    }).catchError((error) {
-      _biometricExceptionThrower.throwBiometricException(error);
-    });
-  }
-
-  @override
-  Future saveBiometricSetting(BiometricState state) {
-    return Future.sync(() async {
-      return await _sharedPreferences.setString(Constant.biometricSettingState, state.value);
-    });
-  }
-
-  @override
-  Future<List<BiometricKind>> getAvailableBiometrics() {
-    return Future.sync(() async {
-      final biometricTypeList = await _localAuthenticationService.getAvailableBiometrics();
-      return biometricTypeList.map((biometricType) => biometricType.getBiometricKind()).toList();
     }).catchError((error) {
       _biometricExceptionThrower.throwBiometricException(error);
     });

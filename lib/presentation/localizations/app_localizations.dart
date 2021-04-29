@@ -1482,6 +1482,14 @@ class AppLocalizations {
     return Intl.message('Biometric authentication is locked due to exceeded number of attempts.',
         name: 'biometric_authentication_is_locked');
   }
+
+  String touch_id_or_face_id(String touchID, String faceID) {
+    return Intl.message(
+        '$touchID or $faceID',
+        name: 'touch_id_or_face_id',
+        args: [touchID, faceID]
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

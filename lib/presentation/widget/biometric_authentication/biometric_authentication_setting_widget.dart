@@ -71,7 +71,7 @@ class _BiometricAuthenticationSettingState extends State<BiometricAuthentication
 
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         _model.backToAccountDetail();
         return false;
@@ -145,9 +145,11 @@ class _BiometricAuthenticationSettingState extends State<BiometricAuthentication
   }
 
   String _getIconBiometricAuthenticationState(BiometricAuthenticationSettingState biometricState) {
-    return !biometricState.authenticationBiometricState.isAuthenticateReady()
-      ? _imagePath.icSwitchDisabled
-      : biometricState.biometricState == BiometricState.enabled ? _imagePath.icSwitchOn : _imagePath.icSwitchOff;
+    if (biometricState.authenticationBiometricState.isAuthenticateReady()) {
+      return biometricState.biometricState == BiometricState.enabled ? _imagePath.icSwitchOn : _imagePath.icSwitchOff;
+    } else {
+      return _imagePath.icSwitchDisabled;
+    }
   }
 
   String _getTextBiometricAuthenticationNotEnrolled(BiometricAuthenticationSettingState biometricState) {
