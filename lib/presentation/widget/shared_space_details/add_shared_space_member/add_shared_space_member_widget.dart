@@ -152,7 +152,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
                               return await _model.getAutoCompleteSharing(
                                   pattern, sharedSpace, members);
                             }
-                            return null;
+                            return <AutoCompleteResult>[];
                           },
                           itemBuilder: (context, AutoCompleteResult autoCompleteResult) {
                             return ListTile(

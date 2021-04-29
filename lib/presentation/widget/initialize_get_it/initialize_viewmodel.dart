@@ -65,11 +65,18 @@ class InitializeViewModel extends BaseViewModel {
     this._getBiometricSettingInteractor,
     this._disableBiometricInteractor,
   ) : super(store) {
-    FlutterDownloader.initialize(debug: kDebugMode);
+    _initFlutterDownloader();
     _getNetworkConnectivityState();
     store.dispatch(_getCredentialAction());
     registerReceivingSharingIntent();
   }
+
+  void _initFlutterDownloader() {
+    FlutterDownloader.initialize(debug: kDebugMode)
+      .then((_) => FlutterDownloader.registerCallback(downloadCallback));
+  }
+
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {}
 
   void _getNetworkConnectivityState() async {
     store.dispatch(SetNetworkConnectivityStateAction(await _connectivity.checkConnectivity()));
