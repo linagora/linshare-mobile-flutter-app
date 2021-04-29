@@ -73,7 +73,7 @@ void main() {
     });
 
     test('download node should return failure with invalid token', () async {
-      final downloadException = DownloadFileException('download exception');
+      final downloadException = CommonDownloadFileException('download exception');
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       when(sharedSpaceDocumentRepository.downloadNodeIOS(workGroupDocument1, wrongToken, linShareBaseUrl, cancelToken))
