@@ -408,6 +408,7 @@ class MySpaceViewModel extends BaseViewModel {
           .execute(document, downloadPreviewType, cancelToken)
           .then((result) => result.fold(
               (failure) {
+                _appNavigation.popBack();
                 if (failure is DownloadPreviewDocumentFailure && !(failure.downloadPreviewException is CancelDownloadFileException)) {
                   store.dispatch(MySpaceAction(Left(NoDocumentPreviewAvailable())));
                 }
