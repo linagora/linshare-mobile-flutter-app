@@ -61,8 +61,20 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.ADMIN,
   ];
 
-  static const deleteNodeInSharedSpace = [
+  static const deleteNodeSharedSpaceRoles = [
     SharedSpaceRoleName.ADMIN,
     SharedSpaceRoleName.WRITER
+  ];
+
+  static const duplicateNodeSharedSpaceRoles = [
+    SharedSpaceRoleName.ADMIN,
+    SharedSpaceRoleName.WRITER,
+    SharedSpaceRoleName.CONTRIBUTOR
+  ];
+
+  static const renameNodeSharedSpaceRoles = [
+    SharedSpaceRoleName.ADMIN,
+    SharedSpaceRoleName.WRITER,
+    SharedSpaceRoleName.CONTRIBUTOR
   ];
 }
