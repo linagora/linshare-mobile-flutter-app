@@ -29,18 +29,34 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class DeviceNotSupportedException implements Exception {
-  String notSupported = 'This device is not supported, please try on Android or iOS';
-}
+import 'package:equatable/equatable.dart';
 
-class DownloadFileException implements Exception {
+abstract class DownloadFileException extends Equatable implements Exception {
   final String message;
 
   DownloadFileException(this.message);
+
+  @override
+  String toString() => message;
+
+  @override
+  List<Object> get props => [message];
 }
 
-class CancelDownloadFileException implements Exception {
-  final String message;
+class CommonDownloadFileException extends DownloadFileException {
+  CommonDownloadFileException(message) : super(message);
 
-  CancelDownloadFileException(this.message);
+  @override
+  List<Object> get props => [message];
+}
+
+class CancelDownloadFileException extends DownloadFileException {
+  CancelDownloadFileException(cancelMessage) : super(cancelMessage);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class DeviceNotSupportedException extends DownloadFileException {
+  DeviceNotSupportedException() : super('This device is not supported, please try on Android or iOS');
 }

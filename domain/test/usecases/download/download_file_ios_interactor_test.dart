@@ -72,7 +72,7 @@ void main() {
     });
 
     test('download file should return failure with invalid token', () async {
-      final downloadException = DownloadFileException('download exception');
+      final downloadException = CommonDownloadFileException('download exception');
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       when(documentRepository.downloadDocumentIOS(document1, wrongToken, linShareBaseUrl, cancelToken))
