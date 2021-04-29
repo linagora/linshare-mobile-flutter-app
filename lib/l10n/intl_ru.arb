@@ -149,10 +149,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "file_is_successfully_shared" :"Вы успешно поделились файлом",
-  "@file_is_successfully_shared": {
+  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{Вы успешно поделились файлом}other{The files have been successfully shared}}",
+  "@file_has_been_successfully_shared": {
     "type": "text",
-    "placeholders": {}
+    "placeholders": {
+      "sharesNumber": {}
+    }
   },
   "file_could_not_be_share" :"Не удалось поделиться файлом",
   "@file_could_not_be_share": {
