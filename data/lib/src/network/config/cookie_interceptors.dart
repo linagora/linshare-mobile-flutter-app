@@ -48,6 +48,12 @@ class CookieInterceptors extends InterceptorsWrapper {
     super.onResponse(response, handler);
   }
 
+  @override
+  void onError(DioError dioError, ErrorInterceptorHandler handler) {
+    _extractSessionIdFromHeader(dioError.response.headers);
+    super.onError(dioError, handler);
+  }
+
   void _extractSessionIdFromHeader(Headers headers) {
     final cookieHeader = headers.value('set-cookie');
     if (cookieHeader != null) {

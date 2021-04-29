@@ -31,13 +31,13 @@
 
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:data/src/extensions/dio_extension.dart';
 
 class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   static const int _max_retry_count = 3;
-  Token _permanentToken;
-  int _retryCount = 0;
+  static const String RETRY_KEY = 'Retry';
+  static const String AUTHORIZATION_KEY = 'Authorization';
   final Dio _dio;
+  Token _permanentToken;
 
   RetryAuthenticationInterceptors(this._dio);
 
@@ -46,21 +46,30 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   }
 
   @override
-  void onError(DioError dioError, ErrorInterceptorHandler handler) {
-    if (_isAuthenticationError(dioError)) {
-      _retryCount++;
-      final requestOptions = dioError.response.requestOptions;
-      requestOptions.headers.addAll({'Authorization': _getTokenAsBearerHeader(_permanentToken.token)});
-      _dio.request(requestOptions.path, options: requestOptions.toOptions());
+  void onError(DioError dioError, ErrorInterceptorHandler handler) async {
+    final requestOptions = dioError.requestOptions;
+    final extraInRequest = requestOptions.extra ?? {};
+    var retries = extraInRequest[RETRY_KEY] ?? 0;
+    if (_isAuthenticationError(dioError, retries)) {
+      retries++;
+
+      requestOptions.headers.addAll({
+        AUTHORIZATION_KEY: _getTokenAsBearerHeader(_permanentToken.token),
+        RETRY_KEY: retries});
+
+      final response = await _dio.fetch(requestOptions);
+      return handler.resolve(response);
+
+    } else {
+      super.onError(dioError, handler);
     }
-    super.onError(dioError, handler);
   }
 
-  bool _isAuthenticationError(DioError dioError) {
+  bool _isAuthenticationError(DioError dioError, int retryCount) {
     if (dioError.type == DioErrorType.response &&
         dioError.response.statusCode == 401 &&
         _permanentToken != null &&
-        _retryCount < _max_retry_count) {
+        retryCount < _max_retry_count) {
       return true;
     }
     return false;
