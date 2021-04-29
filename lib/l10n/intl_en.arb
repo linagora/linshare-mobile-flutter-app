@@ -1560,5 +1560,10 @@
     "placeholders": {
       "version": {}
     }
+  },
+  "duplicate": "Duplicate",
+  "@duplicate": {
+    "type": "text",
+    "placeholders": {}
   }
 }
