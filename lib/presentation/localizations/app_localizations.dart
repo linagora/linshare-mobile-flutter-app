@@ -1521,6 +1521,11 @@ class AppLocalizations {
     return Intl.message('Biometric authentication is locked due to exceeded number of attempts.',
         name: 'biometric_authentication_is_locked');
   }
+
+  String get duplicate {
+    return Intl.message('Duplicate',
+        name: 'duplicate');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

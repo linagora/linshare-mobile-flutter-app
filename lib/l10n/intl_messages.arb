@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-04-29T16:19:01.964808",
+  "@@last_modified": "2021-04-29T16:20:33.917014",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -1212,5 +1212,10 @@
     "placeholders": {
       "version": {}
     }
+  },
+  "duplicate": "Duplicate",
+  "@duplicate": {
+    "type": "text",
+    "placeholders": {}
   }
 }

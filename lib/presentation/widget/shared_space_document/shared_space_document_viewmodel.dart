@@ -853,6 +853,16 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     );
   }
 
+  void duplicateFiles(List<WorkGroupNode> workGroupNodes, SharedSpaceDocumentArguments sharedSpaceDocumentArguments,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    store.dispatch(_copyToWorkgroupAction(workGroupNodes, sharedSpaceDocumentArguments));
+  }
+
   @override
   void onDisposed() {
     clearWorkGroupNodeListAction();
