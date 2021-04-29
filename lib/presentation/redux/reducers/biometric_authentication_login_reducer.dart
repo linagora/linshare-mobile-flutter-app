@@ -29,44 +29,19 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/biometric_datasource.dart';
-import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/biometric_authentication_login_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_login_state.dart';
+import 'package:redux/redux.dart';
 
-class BiometricRepositoryImpl extends BiometricRepository {
-  final BiometricDataSource _biometricDataSource;
-
-  BiometricRepositoryImpl(this._biometricDataSource);
-
-  @override
-  Future<bool> isAvailable() {
-    return _biometricDataSource.isAvailable();
-  }
-
-  @override
-  Future<bool> authenticate(
-    String localizedReason,
-    {AndroidSettingArgument androidSettingArgument,
-     IOSSettingArgument iosSettingArgument}
- ) {
-    return _biometricDataSource.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
-  }
-
-  @override
-  Future saveBiometricSetting(BiometricState state) {
-    return _biometricDataSource.saveBiometricSetting(state);
-  }
-
-  @override
-  Future<List<BiometricKind>> getAvailableBiometrics() {
-    return _biometricDataSource.getAvailableBiometrics();
-  }
-  @override
-  Future<BiometricState> getBiometricSetting() {
-    return _biometricDataSource.getBiometricSetting();
-  }
-
-  @override
-  Future resetBiometricSetting() {
-    return _biometricDataSource.resetBiometricSetting();
-  }
-}
+final biometricAuthenticationLoginReducer = combineReducers<BiometricAuthenticationLoginState>([
+  TypedReducer<BiometricAuthenticationLoginState, StartBiometricAuthenticationLoadingAction>(
+          (BiometricAuthenticationLoginState state, _) => state.startLoadingState()),
+  TypedReducer<BiometricAuthenticationLoginState, BiometricAuthenticationAction>(
+          (BiometricAuthenticationLoginState state, BiometricAuthenticationAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<BiometricAuthenticationLoginState, CleanBiometricAuthenticationStateAction>(
+          (BiometricAuthenticationLoginState state, _) => state.clearViewState()),
+  TypedReducer<BiometricAuthenticationLoginState, SetBiometricAuthenticationAction>(
+          (BiometricAuthenticationLoginState state, SetBiometricAuthenticationAction action) => state.setBiometricState(action.biometricKinds)),
+  TypedReducer<BiometricAuthenticationLoginState, SetAuthenticationBiometricStateAction>(
+          (BiometricAuthenticationLoginState state, SetAuthenticationBiometricStateAction action) => state.setBiometricAuthenticationState(action.authenticationBiometricState)),
+]);

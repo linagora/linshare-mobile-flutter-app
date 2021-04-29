@@ -50,7 +50,7 @@ class BiometricAuthenticationSettingState extends LinShareState {
     ) : super(viewState);
 
   factory BiometricAuthenticationSettingState.initial() {
-    return BiometricAuthenticationSettingState(Right(IdleState()), BiometricState.disabled, [], AuthenticationBiometricState.unAuthenticated);
+    return BiometricAuthenticationSettingState(Right(IdleState()), BiometricState.disabled, [], AuthenticationBiometricState.unauthenticated);
   }
 
   @override

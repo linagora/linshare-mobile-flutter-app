@@ -48,4 +48,5 @@ class RoutePaths {
   static const String biometricAuthentication = 'biometric_authentication';
   static const String sharedSpaceNodeVersions = 'shared_space_node_versions';
   static const String biometricAuthenticationSetting = 'biometric_authentication_setting';
+  static const String biometricAuthenticationLogin = 'biometric_authentication_login';
 }

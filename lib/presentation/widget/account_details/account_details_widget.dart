@@ -145,7 +145,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
             children: [
               Divider(),
               GestureDetector(
-                onTap: () => accountDetailsViewModel.goBiometricAuthentication(),
+                onTap: () => accountDetailsViewModel.goToBiometricAuthentication(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -158,7 +158,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
                         imagePath.icExpandMore,
                         fit: BoxFit.none,
                         color: AppColor.documentNameItemTextColor),
-                      onPressed: () => accountDetailsViewModel.goBiometricAuthentication(),
+                      onPressed: () => accountDetailsViewModel.goToBiometricAuthentication(),
                     )
                   ]
                 )

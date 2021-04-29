@@ -1469,11 +1469,17 @@ class AppLocalizations {
         name: 'touch_id');
   }
 
-  String touch_id_or_face_id(String touchID, String faceID) {
+  String get touch_id_or_face_id {
     return Intl.message(
-        '$touchID or $faceID',
-        name: 'touch_id_or_face_id',
-        args: [touchID, faceID]
+        'TouchID or FaceID',
+        name: 'touch_id_or_face_id'
+    );
+  }
+
+  String get fingerprint_or_face {
+    return Intl.message(
+        'Fingerprint or Face',
+        name: 'fingerprint_or_face'
     );
   }
 

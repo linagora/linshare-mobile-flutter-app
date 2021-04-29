@@ -51,6 +51,8 @@ class InitializeViewModel extends BaseViewModel {
   final RetryAuthenticationInterceptors _retryInterceptors;
   final UploadFileManager _uploadFileManager;
   final Connectivity _connectivity;
+  final GetBiometricSettingInteractor _getBiometricSettingInteractor;
+  final DisableBiometricInteractor _disableBiometricInteractor;
 
   InitializeViewModel(
     Store<AppState> store,
@@ -59,7 +61,9 @@ class InitializeViewModel extends BaseViewModel {
     this._dynamicUrlInterceptors,
     this._retryInterceptors,
     this._uploadFileManager,
-    this._connectivity
+    this._connectivity,
+    this._getBiometricSettingInteractor,
+    this._disableBiometricInteractor,
   ) : super(store) {
     FlutterDownloader.initialize(debug: kDebugMode);
     _getNetworkConnectivityState();
@@ -93,14 +97,39 @@ class InitializeViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _retryInterceptors.setPermanentToken(success.token);
-      store.dispatch(initializeHomeView(_appNavigation));
+      store.dispatch(_getBiometricSetting());
     };
   }
 
   ThunkAction<AppState> _getCredentialFailureAction(CredentialFailure failure) {
     return (Store<AppState> store) async {
+      store.dispatch(_resetBiometricSetting());
       store.dispatch(SetCurrentView(RoutePaths.loginRoute));
       await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+    };
+  }
+
+  ThunkAction<AppState> _getBiometricSetting() {
+    return (Store<AppState> store) async {
+      await _getBiometricSettingInteractor.execute().then((result) => result.fold(
+        (left) {
+          store.dispatch(_resetBiometricSetting());
+          store.dispatch(initializeHomeView(_appNavigation));
+        },
+        (right) {
+          if (right is GetBiometricSettingViewState && right.biometricState == BiometricState.enabled) {
+            _appNavigation.pushAndRemoveAll(RoutePaths.biometricAuthenticationLogin);
+          } else {
+            store.dispatch(_resetBiometricSetting());
+            store.dispatch(initializeHomeView(_appNavigation));
+          }
+        }));
+    };
+  }
+
+  ThunkAction<AppState> _resetBiometricSetting() {
+    return (Store<AppState> store) async {
+      await _disableBiometricInteractor.execute();
     };
   }
 
