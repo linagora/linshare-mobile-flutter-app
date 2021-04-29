@@ -59,11 +59,11 @@ import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/mu
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/workgroupnode_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_ui_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 
 class SharedSpaceDocumentWidget extends StatefulWidget {
@@ -386,7 +386,9 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               context,
               workGroupNodes,
               _moreActionList(context, documents),
-              _removeWorkGroupNodeAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple)))
+              SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)
+                ? _removeWorkGroupNodeAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple)
+                : SizedBox.shrink()))
           .build();
   }
 
@@ -394,7 +396,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
     return [
       if (Platform.isIOS) _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadFilesAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
-      _copyToAction(context, workGroupNodes, itemSelectionType: ItemSelectionType.multiple)
+      _copyToAction(context, workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
+      if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)) _duplicateMultipleSelection(workGroupNodes),
     ];
   }
 
@@ -403,7 +406,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       converter: (store) => store.state,
       builder: (context, appState) => (appState.uiState.isInSearchState())
         ? _buildSearchResultWorkGroupList(appState.sharedSpaceDocumentState)
-        : _buildSharedSpaceDocumentList()
+        : _buildSharedSpaceDocumentList() 
     );
   }
 
@@ -550,7 +553,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                     context,
                     node.element,
                     _contextMenuDocumentActionTiles(context, node.element),
-                    footerAction: _removeWorkGroupNodeAction([node.element]))),
+                    footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name) ? _removeWorkGroupNodeAction([node.element]) : SizedBox.shrink())),
       onTap: () {
         if (currentSelectMode == SelectMode.ACTIVE) {
           sharedSpaceDocumentViewModel.selectItem(node);
@@ -601,7 +604,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
 
   List<Widget> _contextMenuFolderActionTiles(BuildContext context, WorkGroupFolder workGroupFolder) {
     return [
-      _renameWorkGroupNodeAction(workGroupFolder),
+      if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)) _renameWorkGroupNodeAction(workGroupFolder),
       _detailsAction(context, workGroupFolder)
     ];
   }
@@ -612,9 +615,10 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       if (Platform.isAndroid) _downloadFilesAction([workGroupDocument]),
       _previewWorkGroupDocumentAction(workGroupDocument),
       _copyToAction(context, [workGroupDocument]),
-      _renameWorkGroupNodeAction(workGroupDocument),
       _detailsAction(context, workGroupDocument),
       _manageVersionsAction(context, workGroupDocument),
+      if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)) _renameWorkGroupNodeAction(workGroupDocument),
+      if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)) _duplicateAction(context, [workGroupDocument])
     ];
   }
 
@@ -766,5 +770,28 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   void _goToWorkGroupFolder(WorkGroupNode workGroupNode) {
     sharedSpaceDocumentViewModel.clearWorkGroupNodeListAction();
     widget.nodeClickedCallback(workGroupNode);
+  }
+
+  Widget _duplicateAction(BuildContext context, List<WorkGroupNode> workGroupNodes) {
+    return SimpleContextMenuActionBuilder(
+              Key('duplicate_file_context_menu_action'),
+              SvgPicture.asset(imagePath.icDuplicate, width: 24, height: 24, fit: BoxFit.fill),
+              AppLocalizations.of(context).duplicate)
+          .onActionClick((_) => sharedSpaceDocumentViewModel.duplicateFiles(workGroupNodes, _arguments))
+          .build();
+  }
+
+  Widget _duplicateMultipleSelection(List<WorkGroupNode> workGroupNodes) {
+    return workGroupNodes.any((element) => element is WorkGroupFolder)
+        ? SizedBox.shrink()
+        : WorkGroupNodeContextMenuTileBuilder(
+                Key('duplicate_file_context_menu_action'),
+                SvgPicture.asset(imagePath.icDuplicate, width: 24, height: 24, fit: BoxFit.fill),
+                AppLocalizations.of(context).duplicate,
+                workGroupNodes[0])
+            .onActionClick((data) => sharedSpaceDocumentViewModel.duplicateFiles(
+                workGroupNodes, _arguments,
+                itemSelectionType: ItemSelectionType.multiple))
+            .build();
   }
 }
