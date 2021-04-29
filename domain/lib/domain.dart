@@ -173,6 +173,8 @@ export 'src/model/biometric_authentication/support_biometric_state.dart';
 export 'src/model/biometric_authentication/biometric_state.dart';
 export 'src/model/biometric_authentication/biometric_kind.dart';
 export 'src/model/biometric_authentication/authentication_biometric_state.dart';
+export 'src/model/biometric_authentication/android_setting_arguments.dart';
+export 'src/model/biometric_authentication/ios_setting_arguments.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
