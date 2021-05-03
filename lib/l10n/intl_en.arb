@@ -1137,6 +1137,28 @@
       "biometricKind": {}
     }
   },
+  "biometric_authentication_localized_reason_enable": "Please authenticate to enable biometric authentication for application",
+  "@biometric_authentication_localized_reason_enable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason_disable": "Please authenticate to disable biometric authentication for application",
+  "@biometric_authentication_localized_reason_disable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "manage_version": "Manage version",
+  "@manage_version": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "version": "Version {version}",
+  "@version": {
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
+  },
   "face": "Face",
   "@face": {
     "type": "text",
@@ -1193,6 +1215,57 @@
     "type": "text",
     "placeholders": {}
   },
+  "duplicate": "Duplicate",
+  "@duplicate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_have_been_successfully_duplicated": "Files have been successfully duplicated",
+  "@files_have_been_successfully_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_could_not_be_duplicated": "The files could not be duplicated",
+  "@files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_files_could_not_be_duplicated": "Some files could not be duplicated",
+  "@some_files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "biometric_disabled_in_setting_app": "Please enable {biometricKind} in the Settings app on your phone to use biometric authentication",
+  "@biometric_disabled_in_setting_app": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "open_with_biometric": "Open with {biometricKind}",
+  "@open_with_biometric": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "or": "Or",
+  "@or": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_sign_in": "Go to Sign-In",
+  "@go_to_sign_in": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_is_locked": "Biometric authentication is locked due to exceeded number of attempts.",
+  "@biometric_authentication_is_locked": {
+    "type": "text",
+    "placeholders": {}
+  },
   "manage_version": "Manage version",
   "@manage_version": {
     "type": "text",
@@ -1207,6 +1280,11 @@
   },
   "duplicate": "Duplicate",
   "@duplicate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "restore": "Restore",
+  "@restore": {
     "type": "text",
     "placeholders": {}
   }

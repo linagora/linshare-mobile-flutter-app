@@ -29,37 +29,83 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_arguments.dart';
 import 'package:redux/redux.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 
 class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
-
+  final RestoreWorkGroupDocumentVersionInteractor _restoreWorkGroupDocumentVersionInteractor;
 
   SharedSpaceNodeVersionsViewModel(
     Store<AppState> store,
     this._appNavigation,
-    this._getAllChildNodesInteractor
+    this._getAllChildNodesInteractor,
+    this._restoreWorkGroupDocumentVersionInteractor
   ) : super(store);
 
   void initState(SharedSpaceNodeVersionsArguments arguments) {
-    store.dispatch(_getSharedSpaceNodeVersionsAction(arguments.workGroupNode));
+    getAllVersions(arguments.workGroupNode);
   }
 
   void backToMyWorkGroupNodesList() {
     _appNavigation.popBack();
   }
 
+  void getAllVersions(WorkGroupNode workGroupNode) {
+    store.dispatch(_getSharedSpaceNodeVersionsAction(workGroupNode));
+  }
+
   OnlineThunkAction _getSharedSpaceNodeVersionsAction(WorkGroupNode workGroupNode) {
     return OnlineThunkAction((Store<AppState> store) async {
-      store.dispatch(SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction(await _getAllChildNodesInteractor.execute(workGroupNode.sharedSpaceId, parentId: workGroupNode.workGroupNodeId)));
+      store.dispatch(SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction(
+          await _getAllChildNodesInteractor.execute(
+            workGroupNode.sharedSpaceId,
+            parentId: workGroupNode.workGroupNodeId)));
+    });
+  }
+
+  void openContextMenu(
+    BuildContext context,
+    WorkGroupDocument document,
+    List<Widget> actionTiles,
+    {Widget footerAction}
+  ) {
+    ContextMenuBuilder(context)
+        .addHeader(ContextMenuHeaderBuilder(Key('context_menu_header'),
+                WorkGroupDocumentPresentationFile.fromWorkGroupDocument(document))
+            .build())
+        .addTiles(actionTiles)
+        .addFooter(footerAction)
+        .build();
+  }
+
+  void restoreAction(WorkGroupDocument document, WorkGroupNode parentNode) {
+    store.dispatch(_restoreDocumentAction(document, parentNode));
+    _appNavigation.popBack();
+  }
+
+  OnlineThunkAction _restoreDocumentAction(WorkGroupDocument document, WorkGroupNode parentNode) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _restoreWorkGroupDocumentVersionInteractor
+          .execute(document.toCopyRequest(), document.sharedSpaceId, parentId: document.parentWorkGroupNodeId)
+          .then((result) => result.fold((failure) {
+                store.dispatch(SharedSpaceNodeVersionsAction(Left(failure)));
+              }, (success) {
+                store.dispatch(SharedSpaceNodeVersionsAction(Right(success)));
+              }));
+      store.dispatch(_getSharedSpaceNodeVersionsAction(parentNode));
     });
   }
 
