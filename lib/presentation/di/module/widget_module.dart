@@ -40,12 +40,12 @@ import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_login_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_login_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_setting_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_setting_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_viewmodel.dart';
@@ -73,8 +73,8 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/ad
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
@@ -363,7 +363,8 @@ class WidgetModule {
     getIt.registerFactory(() => SharedSpaceNodeVersionsViewModel(
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
-        getIt.get<GetAllChildNodesInteractor>()
+        getIt.get<GetAllChildNodesInteractor>(),
+        getIt.get<RestoreWorkGroupDocumentVersionInteractor>(),
     ));
   }
 
