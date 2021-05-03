@@ -1616,6 +1616,13 @@ class AppLocalizations {
       name: 'some_files_could_not_be_duplicated',
     );
   }
+
+  String get restore {
+    return Intl.message(
+      'Restore',
+      name: 'restore',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
