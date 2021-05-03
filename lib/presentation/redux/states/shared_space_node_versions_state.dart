@@ -45,7 +45,7 @@ class SharedSpaceNodeVersionsState extends LinShareState with EquatableMixin {
   SharedSpaceNodeVersionsState(Either<Failure, Success> viewState, this.workgroupNodeVersions) : super(viewState);
 
   factory SharedSpaceNodeVersionsState.initial() {
-    return SharedSpaceNodeVersionsState(Right(IdleState()), null);
+    return SharedSpaceNodeVersionsState(Right(IdleState()), []);
   }
 
   @override

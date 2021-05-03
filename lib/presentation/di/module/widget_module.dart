@@ -325,7 +325,8 @@ class WidgetModule {
     getIt.registerFactory(() => SharedSpaceNodeVersionsViewModel(
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
-        getIt.get<GetAllChildNodesInteractor>()
+        getIt.get<GetAllChildNodesInteractor>(),
+        getIt.get<RestoreWorkGroupDocumentVersionInteractor>(),
     ));
   }
 

@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_node_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
@@ -94,12 +95,14 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
       ),
       body: StoreConnector<AppState, SharedSpaceNodeVersionsState>(
         converter: (store) => store.state.sharedSpaceNodeVersionsState,
-        builder: (_, state) => _versionsListWidget(state.workgroupNodeVersions),
+        builder: (_, state) => RefreshIndicator(
+          child: _versionsListWidget(state.workgroupNodeVersions, arguments.workGroupNode),
+          onRefresh: () async => _model.getAllVersions(arguments.workGroupNode)),
       ),
     );
   }
 
-  ListView _versionsListWidget(List<WorkGroupDocument> versionsList) {
+  ListView _versionsListWidget(List<WorkGroupDocument> versionsList, WorkGroupNode parentNode) {
     return ListView.builder(
         itemCount: versionsList.length,
         itemBuilder: (context, index) => ListTile(
@@ -122,7 +125,22 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
               trailing: IconButton(
                   icon: SvgPicture.asset(imagePath.icContextMenu,
                       width: 24, height: 24, fit: BoxFit.fill),
-                  onPressed: () => null),
+                  onPressed: () => _model.openContextMenu(context, versionsList[index],
+                      _contextMenuActionTiles(context, versionsList[index], parentNode, index == 0))),
             ));
+  }
+
+  List<Widget> _contextMenuActionTiles(BuildContext context, WorkGroupDocument document, WorkGroupNode parentNode, bool isLatestVersion) {
+    return [if (!isLatestVersion) _restoreAction(context, document, parentNode)];
+  }
+
+  Widget _restoreAction(BuildContext context, WorkGroupDocument document, WorkGroupNode parentNode) {
+    return WorkGroupNodeContextMenuTileBuilder(
+            Key('restore_context_menu_action'),
+            SvgPicture.asset(imagePath.icHistory, width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).restore,
+            document)
+        .onActionClick((data) => _model.restoreAction(document, parentNode))
+        .build();
   }
 }
