@@ -456,3 +456,21 @@ class SharedSpaceNodeFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class RestoreWorkGroupDocumentViewState extends ViewState {
+  final List<WorkGroupNode> workGroupNodes;
+
+  RestoreWorkGroupDocumentViewState(this.workGroupNodes);
+
+  @override
+  List<Object> get props => [workGroupNodes];
+}
+
+class RestoreWorkGroupDocumentFailure extends FeatureFailure {
+  final exception;
+
+  RestoreWorkGroupDocumentFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

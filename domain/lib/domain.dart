@@ -272,6 +272,7 @@ export 'src/usecases/shared_space/remove_multiple_shared_spaces_interactor.dart'
 export 'src/usecases/shared_space/remove_shared_space_interactor.dart';
 export 'src/usecases/shared_space/remove_shared_space_node_interactor.dart';
 export 'src/usecases/shared_space/rename_shared_space_node_interactor.dart';
+export 'src/usecases/shared_space/restore_work_group_document_version_interactor.dart';
 export 'src/usecases/shared_space/shared_space_exception.dart';
 export 'src/usecases/shared_space/shared_space_member_exception.dart';
 export 'src/usecases/shared_space/shared_space_view_state.dart';
