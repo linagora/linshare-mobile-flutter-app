@@ -91,6 +91,12 @@ class ToastMessageHandler {
         _cleanMySpaceViewState();
       } else if (failure is RenameDocumentFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_renamed);
+      } else if (failure is CopyToMySpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
+        _cleanMySpaceViewState();
+      } else if (failure is DuplicateMultipleToMySpaceAllFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_duplicated);
+        _cleanMySpaceViewState();
       }
     }, (success) {
       if (success is CopyToSharedSpaceViewState || success is CopyMultipleFilesToSharedSpaceAllSuccessViewState) {
@@ -110,6 +116,15 @@ class ToastMessageHandler {
         _cleanMySpaceViewState();
       } else if (success is RenameDocumentViewState) {
         appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_renamed);
+      } else if (success is CopyToMySpaceViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
+        _cleanMySpaceViewState();
+      } else if (success is DuplicateMultipleToMySpaceAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).files_have_been_successfully_duplicated);
+        _cleanMySpaceViewState();
+      } else if (success is DuplicateMultipleToMySpaceHasSomeFilesViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_files_could_not_be_duplicated);
+        _cleanMySpaceViewState();
       }
     });
   }
