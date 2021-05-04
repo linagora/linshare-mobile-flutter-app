@@ -274,6 +274,7 @@ class AppModule {
     getIt.registerFactory(() => GetAvailableBiometricInteractor(getIt<BiometricRepository>()));
     getIt.registerFactory(() => GetBiometricSettingInteractor(getIt<BiometricRepository>()));
     getIt.registerFactory(() => DisableBiometricInteractor(getIt<BiometricRepository>()));
+    getIt.registerFactory(() => DuplicateMultipleFilesInMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
   }
 
   void _provideSharePreference() {

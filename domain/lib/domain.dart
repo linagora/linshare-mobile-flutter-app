@@ -211,6 +211,7 @@ export 'src/usecases/get_child_nodes/get_all_child_nodes_view_state.dart';
 export 'src/usecases/get_child_nodes/get_child_nodes_exception.dart';
 export 'src/usecases/myspace/copy_multiple_files_to_my_space_interactor.dart';
 export 'src/usecases/myspace/copy_to_my_space_interactor.dart';
+export 'src/usecases/myspace/duplicate_multiple_files_in_my_space_interactor.dart';
 export 'src/usecases/myspace/get_all_document_interactor.dart';
 export 'src/usecases/myspace/get_document_interactor.dart';
 export 'src/usecases/myspace/my_space_exception.dart';

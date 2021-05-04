@@ -259,3 +259,30 @@ class GetDocumentFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class DuplicateMultipleToMySpaceAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  DuplicateMultipleToMySpaceAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class DuplicateMultipleToMySpaceHasSomeFilesViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  DuplicateMultipleToMySpaceHasSomeFilesViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class DuplicateMultipleToMySpaceAllFailure extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  DuplicateMultipleToMySpaceAllFailure(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
