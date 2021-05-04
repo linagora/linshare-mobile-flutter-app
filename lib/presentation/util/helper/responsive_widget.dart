@@ -36,8 +36,10 @@ class ResponsiveWidget extends StatelessWidget {
   final Widget mediumScreen;
   final Widget smallScreen;
 
-  static final int minLargeWidth = 960;
-  static final int minMediumWidth = 640;
+  static final int minLargeWidth = 950;
+  static final int minMediumWidth = 600;
+
+  static final double horizontalPaddingLargeWidth = 132.0;
 
   const ResponsiveWidget({
     Key key,
@@ -71,5 +73,9 @@ class ResponsiveWidget extends StatelessWidget {
   static bool isMediumScreen(BuildContext context) {
     return MediaQuery.of(context).size.width >= minMediumWidth
       && MediaQuery.of(context).size.width < minLargeWidth;
+  }
+
+  static EdgeInsets getPaddingForScreen(BuildContext context) {
+    return isLargeScreen(context) ? EdgeInsets.symmetric(horizontal: horizontalPaddingLargeWidth) : EdgeInsets.zero;
   }
 }

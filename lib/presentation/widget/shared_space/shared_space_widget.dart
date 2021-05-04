@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
@@ -274,7 +275,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     } else {
       return ListView.builder(
         key: Key('shared_spaces_list'),
-        padding: EdgeInsets.zero,
+        padding: ResponsiveWidget.getPaddingForScreen(context),
         itemCount: sharedSpacesList.length,
         itemBuilder: (context, index) {
           return _buildSharedSpaceListItem(context, sharedSpacesList[index]);
@@ -300,19 +301,46 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           SvgPicture.asset(imagePath.icSharedSpace, width: 20, height: 24, fit: BoxFit.fill)
         ]),
-        title: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: _buildSharedSpaceName(sharedSpace.element.name),
-        ),
-        subtitle: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: Row(
-            children: [
-              _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
-                  sharedSpace.element.modificationDate.getMMMddyyyyFormatString()))
-            ],
+        title: ResponsiveWidget(
+          smallScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: _buildSharedSpaceName(sharedSpace.element.name),
+          ),
+          mediumScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildSharedSpaceName(sharedSpace.element.name),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
+                      sharedSpace.element.modificationDate.getMMMddyyyyFormatString())))
+              ]),
+          ),
+          largeScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildSharedSpaceName(sharedSpace.element.name),
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
+                        sharedSpace.element.modificationDate.getMMMddyyyyFormatString())))
+              ]),
           ),
         ),
+        subtitle: ResponsiveWidget.isSmallScreen(context)
+          ? Transform(
+              transform: Matrix4.translationValues(-16, 0.0, 0.0),
+              child: Row(
+                children: [
+                  _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
+                      sharedSpace.element.modificationDate.getMMMddyyyyFormatString()))
+                ],
+              ))
+          : null,
         onTap: () {
           sharedSpaceViewModel.openSharedSpace(sharedSpace.element);
         },
