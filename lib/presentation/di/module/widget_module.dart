@@ -139,7 +139,8 @@ class WidgetModule {
       getIt<GetSorterInteractor>(),
       getIt<SaveSorterInteractor>(),
       getIt<RenameDocumentInteractor>(),
-      getIt<VerifyNameInteractor>()
+      getIt<VerifyNameInteractor>(),
+      getIt<DuplicateMultipleFilesInMySpaceInteractor>()
     ));
   }
 
