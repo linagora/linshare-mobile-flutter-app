@@ -243,6 +243,7 @@ export 'src/usecases/biometric_auhentication/enable_biometric_interactor.dart';
 export 'src/usecases/biometric_auhentication/get_available_biometric_interactor.dart';
 export 'src/usecases/biometric_auhentication/get_biometric_setting_interactor.dart';
 export 'src/usecases/biometric_auhentication/disable_biometric_interactor.dart';
+export 'src/usecases/myspace/duplicate_multiple_files_in_my_space_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
