@@ -410,7 +410,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       _copyToWorkGroupAction(context, [document]),
       _previewDocumentAction(document),
       _renameDocumentAction(context, document),
-      _detailsAction(context, document)
+      _detailsAction(context, document),
+      _duplicateAction(context, [document])
     ];
   }
 
@@ -420,6 +421,15 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
           AppLocalizations.of(context).details, document)
       .onActionClick((data) => mySpaceViewModel.goToDocumentDetails(data))
+      .build();
+  }
+
+  Widget _duplicateAction(BuildContext context, List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return DocumentContextMenuTileBuilder(
+          Key('duplicate_context_menu_action'),
+          SvgPicture.asset(imagePath.icDuplicate, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).duplicate, documents.first)
+      .onActionClick((data) => mySpaceViewModel.duplicateDocuments(documents, itemSelectionType: itemSelectionType))
       .build();
   }
 
@@ -587,6 +597,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       if (Platform.isAndroid) _downloadMultiFilesAction(context, documents),
       if (Platform.isIOS) _exportMultiFilesAction(context, documents),
       _copyToWorkGroupAction(context, documents, itemSelectionType: ItemSelectionType.multiple),
+      _duplicateAction(context, documents, itemSelectionType: ItemSelectionType.multiple)
     ];
   }
 
