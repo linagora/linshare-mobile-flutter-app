@@ -39,18 +39,18 @@ import 'package:testshared/testshared.dart';
 import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
-  group('copy_multiples_files_to_my_space_interactor tests', () {
+  group('copy_multiple_files_to_my_space_interactor tests', () {
     MockDocumentRepository documentRepository;
     CopyToMySpaceInteractor copyToMySpaceInteractor;
-    CopyMultipleFilesToMySpaceInteractor _copyMultiplesFilesToMySpaceInteractor;
+    CopyMultipleFilesToMySpaceInteractor _copyMultipleFilesToMySpaceInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
       copyToMySpaceInteractor = CopyToMySpaceInteractor(documentRepository);
-      _copyMultiplesFilesToMySpaceInteractor = CopyMultipleFilesToMySpaceInteractor(copyToMySpaceInteractor);
+      _copyMultipleFilesToMySpaceInteractor = CopyMultipleFilesToMySpaceInteractor(copyToMySpaceInteractor);
     });
 
-    test('copy multiples files to my space interactor should return success with valid data', () async {
+    test('copy multiple files to my space interactor should return success with valid data', () async {
       when(documentRepository.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
@@ -59,14 +59,14 @@ void main() {
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document2]);
 
-      final result = await _copyMultiplesFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupDocument1, workGroupDocument2]);
+      final result = await _copyMultipleFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupDocument1, workGroupDocument2]);
       final resultsList = result
           .map((success) => (success as CopyMultipleToMySpaceAllSuccessViewState).resultList)
           .getOrElse(() => []);
       expect(resultsList, [Right<Failure, Success>(CopyToMySpaceViewState([document1])), Right<Failure, Success>(CopyToMySpaceViewState([document2]))]);
     });
 
-    test('copy multiples files to my space interactor should return success with some failures', () async {
+    test('copy multiple files to my space interactor should return success with some failures', () async {
       final exception = DocumentNotFound();
       when(documentRepository.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
@@ -76,26 +76,26 @@ void main() {
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document2]);
 
-      final result = await _copyMultiplesFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupDocument1, workGroupDocument2]);
+      final result = await _copyMultipleFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupDocument1, workGroupDocument2]);
       final resultsList = result
           .map((success) => (success as CopyMultipleToMySpaceHasSomeFilesViewState).resultList)
           .getOrElse(() => []);
       expect(resultsList, [Left<Failure, Success>(CopyToMySpaceFailure(exception)), Right<Failure, Success>(CopyToMySpaceViewState([document2]))]);
     });
 
-    test('copy multiples files to my space interactor should return success with one document', () async {
+    test('copy multiple files to my space interactor should return success with one document', () async {
       when(documentRepository.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
 
-      final result = await _copyMultiplesFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupDocument1]);
+      final result = await _copyMultipleFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupDocument1]);
       final documentsList = result
           .map((success) => (success as CopyToMySpaceViewState).documentsList)
           .getOrElse(() => []);
       expect(documentsList, [document1]);
     });
 
-    test('copy multiples files to my space interactor should fail with folder and document', () async {
+    test('copy multiple files to my space interactor should fail with folder and document', () async {
       when(documentRepository.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
@@ -105,11 +105,11 @@ void main() {
       .thenAnswer((_) async => [document2]);
 
 
-      final result = await _copyMultiplesFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupFolder1, workGroupDocument1, workGroupDocument2]);
+      final result = await _copyMultipleFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupFolder1, workGroupDocument1, workGroupDocument2]);
       expect(result, Left<Failure, Success>(CopyMultipleContainsFoldersToMySpaceFailure()));
     });
 
-    test('copy multiples files to my space interactor should fail with only folders', () async {
+    test('copy multiple files to my space interactor should fail with only folders', () async {
       when(documentRepository.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
@@ -118,11 +118,11 @@ void main() {
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document2]);
 
-      final result = await _copyMultiplesFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupFolder1]);
+      final result = await _copyMultipleFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupFolder1]);
       expect(result, Left<Failure, Success>(CopyMultipleContainsFoldersToMySpaceFailure()));
     });
 
-    test('copy multiples files to my space interactor should fail with only failures', () async {
+    test('copy multiple files to my space interactor should fail with only failures', () async {
       final exception = DocumentNotFound();
       when(documentRepository.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
@@ -132,7 +132,7 @@ void main() {
           CopyRequest(workGroupDocument2.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument2.sharedSpaceId.uuid)))
       .thenThrow(exception);
 
-      final result = await _copyMultiplesFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupDocument1, workGroupDocument2]);
+      final result = await _copyMultipleFilesToMySpaceInteractor.execute(workGroupNodes: [workGroupDocument1, workGroupDocument2]);
       expect(result, Left<Failure, Success>(CopyMultipleToMySpaceAllFailure([Left<Failure, Success>(CopyToMySpaceFailure(exception)), Left<Failure, Success>(CopyToMySpaceFailure(exception))])));
     });
   });
