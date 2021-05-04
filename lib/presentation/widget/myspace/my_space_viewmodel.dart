@@ -90,6 +90,7 @@ class MySpaceViewModel extends BaseViewModel {
   final SaveSorterInteractor _saveSorterInteractor;
   final DownloadPreviewDocumentInteractor _downloadPreviewDocumentInteractor;
   final RenameDocumentInteractor _renameDocumentInteractor;
+  final DuplicateMultipleFilesInMySpaceInteractor _duplicateMultipleFilesInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
   StreamSubscription _storeStreamSubscription;
   List<Document> _documentList = [];
@@ -111,7 +112,8 @@ class MySpaceViewModel extends BaseViewModel {
       this._getSorterInteractor,
       this._saveSorterInteractor,
       this._renameDocumentInteractor,
-      this._verifyNameInteractor
+      this._verifyNameInteractor,
+      this._duplicateMultipleFilesInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.mySpaceState.viewState.fold(
@@ -328,15 +330,36 @@ class MySpaceViewModel extends BaseViewModel {
     );
   }
 
+  void duplicateDocuments(List<Document> documents, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    store.dispatch(_duplicateAction(documents));
+  }
+
+  OnlineThunkAction _duplicateAction(List<Document> documents) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _duplicateMultipleFilesInteractor
+        .execute(documents: documents)
+        .then((result) => result.fold(
+            (failure) => store.dispatch(MySpaceAction(Left(failure))),
+            (success) => store.dispatch(MySpaceAction(Right(success)))));
+
+      getAllDocument();
+    });
+  }
+
   OnlineThunkAction _renameWorkGroupNodeAction(BuildContext context, String newName, Document document) {
     _appNavigation.popBack();
 
     return OnlineThunkAction((Store<AppState> store) async {
       await _renameDocumentInteractor
-          .execute(document.documentId, RenameDocumentRequest(newName))
-          .then((result) => result.fold(
-              (failure) => store.dispatch(MySpaceAction(Left(failure))),
-              (success) => store.dispatch(MySpaceAction(Right(success)))));
+        .execute(document.documentId, RenameDocumentRequest(newName))
+        .then((result) => result.fold(
+            (failure) => store.dispatch(MySpaceAction(Left(failure))),
+            (success) => store.dispatch(MySpaceAction(Right(success)))));
 
       getAllDocument();
     });
