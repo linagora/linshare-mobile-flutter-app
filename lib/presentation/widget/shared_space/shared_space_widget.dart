@@ -311,7 +311,9 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildSharedSpaceName(sharedSpace.element.name),
+                Expanded(
+                    flex: 1,
+                    child: _buildSharedSpaceName(sharedSpace.element.name)),
                 Align(
                   alignment: Alignment.centerRight,
                   child: _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
@@ -323,7 +325,9 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildSharedSpaceName(sharedSpace.element.name),
+                Expanded(
+                    flex: 1,
+                    child: _buildSharedSpaceName(sharedSpace.element.name)),
                 Align(
                     alignment: Alignment.centerRight,
                     child: _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
@@ -397,6 +401,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     return Text(
       sharedSpaceName,
       maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
     );
   }

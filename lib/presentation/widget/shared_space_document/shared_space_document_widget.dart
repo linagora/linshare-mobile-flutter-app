@@ -468,9 +468,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   Widget _buildSharedSpaceDocumentListView(List<SelectableElement<WorkGroupNode>> workGroupNodes, SelectMode selectMode) {
     return workGroupNodes.isNotEmpty
         ? ListView.builder(
-            padding: ResponsiveWidget.isLargeScreen(context)
-                ? EdgeInsets.symmetric(horizontal: 132.0)
-                : EdgeInsets.zero,
+            padding: ResponsiveWidget.getPaddingForScreen(context),
             key: Key('shared_space_document_list'),
             itemCount: workGroupNodes.length,
             itemBuilder: (context, index) => _buildSharedSpaceDocumentListItem(context, workGroupNodes[index], selectMode))
@@ -517,22 +515,63 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
           )
         ]
       ),
-      title: Transform(
-        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-        child: Text(
-          node.element.name,
-          maxLines: 1,
-          style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor)
-        )
+      title: ResponsiveWidget(
+        smallScreen: Transform(
+          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+          child: Text(
+            node.element.name,
+            maxLines: 1,
+            style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+        mediumScreen: Transform(
+          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                  flex: 1,
+                child: Text(
+                  node.element.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
+                ))
+            ])),
+        largeScreen: Transform(
+          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Text(
+                  node.element.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
+                ))
+            ])),
       ),
-      subtitle: Transform(
-        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-        child: Text(
-          AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
-          maxLines: 1,
-          style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
-        )
-      ),
+      subtitle: ResponsiveWidget.isSmallScreen(context)
+        ? Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: Text(
+              AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
+              maxLines: 1,
+              style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
+            ))
+        : null,
       trailing: currentSelectMode == SelectMode.ACTIVE
         ? Checkbox(
             value: node.selectMode == SelectMode.ACTIVE,
