@@ -50,7 +50,7 @@ class ResponsiveWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var widthDevice = MediaQuery.of(context).size.width;
+    var widthDevice = MediaQuery.of(context).size.shortestSide;
     return LayoutBuilder(builder: (context, constraints) {
       if (widthDevice >= minLargeWidth) {
         return largeScreen ?? mediumScreen;
