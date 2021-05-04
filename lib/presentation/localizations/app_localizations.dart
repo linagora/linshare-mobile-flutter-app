@@ -1526,6 +1526,27 @@ class AppLocalizations {
     return Intl.message('Duplicate',
         name: 'duplicate');
   }
+
+  String get files_have_been_successfully_duplicated {
+    return Intl.message(
+      'Files have been successfully duplicated',
+      name: 'files_have_been_successfully_duplicated',
+    );
+  }
+
+  String get files_could_not_be_duplicated {
+    return Intl.message(
+      'The files could not be duplicated',
+      name: 'files_could_not_be_duplicated',
+    );
+  }
+
+  String get some_files_could_not_be_duplicated {
+    return Intl.message(
+      'Some files could not be duplicated',
+      name: 'some_files_could_not_be_duplicated',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
