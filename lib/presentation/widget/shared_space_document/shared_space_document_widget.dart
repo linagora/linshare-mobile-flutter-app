@@ -183,12 +183,18 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
           ),
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: GestureDetector(
-                  onTap: widget.onBackSharedSpaceClickedCallback,
-                  child: SvgPicture.asset(imagePath.icBackBlue, width: 24, height: 24),
-                )
+              GestureDetector(
+                onTap: widget.onBackSharedSpaceClickedCallback,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  child: Align(
+                    alignment: Alignment.center,
+                    heightFactor: 24,
+                    widthFactor: 24,
+                    child: SvgPicture.asset(imagePath.icBackBlue, width: 24, height: 24),
+                  ),
+                ),
               ),
               _buildTitleTopBar()
             ]
@@ -201,12 +207,20 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
     return StoreConnector<AppState, SharedSpaceDocumentState>(
       converter: (store) => store.state.sharedSpaceDocumentState,
       builder: (context, documentState) => documentState.documentType == SharedSpaceDocumentType.root
-        ? Text(
-            AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
-            style: TextStyle(
-              fontSize: 18,
-              color: AppColor.workgroupNodesSurfingBackTitleColor,
-              fontWeight: FontWeight.w400
+        ? GestureDetector(
+            onTap: widget.onBackSharedSpaceClickedCallback,
+            child: Container(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                    AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: AppColor.workgroupNodesSurfingBackTitleColor,
+                        fontWeight: FontWeight.w400
+                    )
+                ),
+              ),
             )
           )
         : Expanded(
