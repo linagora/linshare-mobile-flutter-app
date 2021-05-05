@@ -29,44 +29,35 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/biometric_datasource.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-class BiometricRepositoryImpl extends BiometricRepository {
-  final BiometricDataSource _biometricDataSource;
+@immutable
+class StartBiometricAuthenticationLoadingAction extends ActionOffline {}
 
-  BiometricRepositoryImpl(this._biometricDataSource);
+@immutable
+class BiometricAuthenticationAction extends ActionOffline {
+  final Either<Failure, Success> viewState;
 
-  @override
-  Future<bool> isAvailable() {
-    return _biometricDataSource.isAvailable();
-  }
+  BiometricAuthenticationAction(this.viewState);
+}
 
-  @override
-  Future<bool> authenticate(
-    String localizedReason,
-    {AndroidSettingArgument androidSettingArgument,
-     IOSSettingArgument iosSettingArgument}
- ) {
-    return _biometricDataSource.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
-  }
+@immutable
+class CleanBiometricAuthenticationStateAction extends ActionOffline {
+  CleanBiometricAuthenticationStateAction();
+}
 
-  @override
-  Future saveBiometricSetting(BiometricState state) {
-    return _biometricDataSource.saveBiometricSetting(state);
-  }
+@immutable
+class SetBiometricAuthenticationAction extends ActionOffline {
+  final List<BiometricKind> biometricKinds;
 
-  @override
-  Future<List<BiometricKind>> getAvailableBiometrics() {
-    return _biometricDataSource.getAvailableBiometrics();
-  }
-  @override
-  Future<BiometricState> getBiometricSetting() {
-    return _biometricDataSource.getBiometricSetting();
-  }
+  SetBiometricAuthenticationAction(this.biometricKinds);
+}
+@immutable
+class SetAuthenticationBiometricStateAction extends ActionOffline {
+  final AuthenticationBiometricState authenticationBiometricState;
 
-  @override
-  Future resetBiometricSetting() {
-    return _biometricDataSource.resetBiometricSetting();
-  }
+  SetAuthenticationBiometricStateAction(this.authenticationBiometricState);
 }

@@ -33,6 +33,7 @@ import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_login_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/document_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
@@ -76,6 +77,7 @@ class AppState with EquatableMixin {
   final SharedSpaceNodeDetailsState sharedSpaceNodeDetailsState;
   final BiometricAuthenticationSettingState biometricAuthenticationSettingState;
   final SharedSpaceNodeVersionsState sharedSpaceNodeVersionsState;
+  final BiometricAuthenticationLoginState biometricAuthenticationLoginState;
 
   AppState(
       {@required this.uiState,
@@ -98,6 +100,7 @@ class AppState with EquatableMixin {
       @required this.documentDetailsState,
       @required this.sharedSpaceNodeDetailsState,
       @required this.biometricAuthenticationSettingState,
+      @required this.biometricAuthenticationLoginState,
       @required this.sharedSpaceNodeVersionsState});
 
   factory AppState.initial() {
@@ -122,6 +125,7 @@ class AppState with EquatableMixin {
         documentDetailsState: DocumentDetailsState.initial(),
         sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
         biometricAuthenticationSettingState: BiometricAuthenticationSettingState.initial(),
+        biometricAuthenticationLoginState: BiometricAuthenticationLoginState.initial(),
         sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial());
   }
 
@@ -146,6 +150,7 @@ class AppState with EquatableMixin {
         documentDetailsState,
         sharedSpaceNodeDetailsState,
         biometricAuthenticationSettingState,
+        biometricAuthenticationLoginState,
         sharedSpaceNodeVersionsState
       ];
 }

@@ -51,7 +51,7 @@ void main() {
       final result = await authenticationBiometricInteractor.execute('Please authenticate to open app');
 
       final authenticationState = result.map((success) => (success as AuthenticationBiometricViewState).authenticationState)
-          .getOrElse(() => AuthenticationBiometricState.unAuthenticated);
+          .getOrElse(() => AuthenticationBiometricState.unauthenticated);
 
       expect(authenticationState, AuthenticationBiometricState.authenticated);
     });
