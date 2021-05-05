@@ -84,7 +84,6 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
               children: [
                 _buildAccountDetailsTile(AppLocalizations.of(context).first_name, state.user != null ? state.user.firstName : ''),
                 _buildAccountDetailsTile(AppLocalizations.of(context).last_name, state.user != null ? state.user.lastName : ''),
-                Divider(),
                 _buildBiometricAuthentication(),
                 Divider(),
                 Row(
@@ -142,23 +141,29 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
       converter: (Store<AppState> store) => store.state.account,
       builder: (context, accountState) {
         return accountState.supportBiometricState == SupportBiometricState.available
-          ? GestureDetector(
-              onTap: () => accountDetailsViewModel.goBiometricAuthentication(),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppLocalizations.of(context).biometric_authentication,
-                    style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)),
-                  IconButton(
-                    padding: EdgeInsets.only(left: 24),
-                    icon: SvgPicture.asset(
-                      imagePath.icExpandMore,
-                      fit: BoxFit.none,
-                      color: AppColor.documentNameItemTextColor),
-                    onPressed: () => accountDetailsViewModel.goBiometricAuthentication(),
-                  )
-                ]))
+          ? Column(
+            children: [
+              Divider(),
+              GestureDetector(
+                onTap: () => accountDetailsViewModel.goBiometricAuthentication(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).biometric_authentication,
+                      style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)),
+                    IconButton(
+                      padding: EdgeInsets.only(left: 24),
+                      icon: SvgPicture.asset(
+                        imagePath.icExpandMore,
+                        fit: BoxFit.none,
+                        color: AppColor.documentNameItemTextColor),
+                      onPressed: () => accountDetailsViewModel.goBiometricAuthentication(),
+                    )
+                  ]
+                )
+              )
+            ])
           : SizedBox.shrink();
         }
     );
