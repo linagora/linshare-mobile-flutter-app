@@ -1522,6 +1522,63 @@ class AppLocalizations {
       args: [version],
     );
   }
+
+  String get face {
+    return Intl.message('Face',
+        name: 'face');
+  }
+
+  String get touch_id {
+    return Intl.message('TouchID',
+        name: 'touch_id');
+  }
+
+  String touch_id_or_face_id(String touchID, String faceID) {
+    return Intl.message(
+        '$touchID or $faceID',
+        name: 'touch_id_or_face_id',
+        args: [touchID, faceID]
+    );
+  }
+
+  String biometric_authentication_localized_reason(String biometricKind) {
+    return Intl.message(
+        'Scan your $biometricKind to authentication',
+        name: 'biometric_authentication_localized_reason',
+        args: [biometricKind]
+    );
+  }
+
+  String biometric_disabled_in_setting_app(String biometricKind) {
+    return Intl.message(
+        'Please enable $biometricKind in the Settings app on your phone to use biometric authentication',
+        name: 'biometric_disabled_in_setting_app',
+        args: [biometricKind]
+    );
+  }
+
+  String open_with_biometric(String biometricKind) {
+    return Intl.message(
+        'Open with $biometricKind',
+        name: 'open_with_biometric',
+        args: [biometricKind]
+    );
+  }
+
+  String get or {
+    return Intl.message('Or',
+        name: 'or');
+  }
+
+  String get go_to_sign_in {
+    return Intl.message('Go to Sign-In',
+        name: 'go_to_sign_in');
+  }
+
+  String get biometric_authentication_is_locked {
+    return Intl.message('Biometric authentication is locked due to exceeded number of attempts.',
+        name: 'biometric_authentication_is_locked');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

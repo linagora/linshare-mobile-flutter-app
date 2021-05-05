@@ -34,10 +34,8 @@ import 'package:data/src/util/constant.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:data/src/extensions/biometric_type_extension.dart';
 
 import 'fixture/mock/mock_fixtures.dart';
 

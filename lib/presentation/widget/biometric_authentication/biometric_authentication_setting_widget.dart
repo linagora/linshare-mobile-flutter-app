@@ -38,26 +38,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/list_biometric_kind_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/authentication_biometric_state_extension.dart';
 
-import 'biometric_authentication_viewmodel.dart';
+import 'biometric_authentication_setting_viewmodel.dart';
 
-class BiometricAuthenticationWidget extends StatefulWidget {
+class BiometricAuthenticationSettingWidget extends StatefulWidget {
   @override
-  _BiometricAuthenticationState createState() => _BiometricAuthenticationState();
+  _BiometricAuthenticationSettingState createState() => _BiometricAuthenticationSettingState();
 }
 
-class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>  with WidgetsBindingObserver {
-  final _biometricAuthenticationViewModel = getIt<BiometricAuthenticationViewModel>();
+class _BiometricAuthenticationSettingState extends State<BiometricAuthenticationSettingWidget>  with WidgetsBindingObserver {
+  final _biometricAuthenticationSettingViewModel = getIt<BiometricAuthenticationSettingViewModel>();
   final _imagePath = getIt<AppImagePaths>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _biometricAuthenticationViewModel.getBiometricSetting();
+    _biometricAuthenticationSettingViewModel.getBiometricSetting();
   }
 
   @override
@@ -68,19 +70,19 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
 
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
-        _biometricAuthenticationViewModel.backToAccountDetail();
+        _biometricAuthenticationSettingViewModel.backToAccountDetail();
         return false;
       },
-      child: StoreConnector<AppState, BiometricAuthenticationState>(
-        converter: (store) => store.state.biometricAuthenticationState,
+      child: StoreConnector<AppState, BiometricAuthenticationSettingState>(
+        converter: (store) => store.state.biometricAuthenticationSettingState,
         builder: (context, biometricState) => Scaffold(
           appBar: AppBar(
             leading: IconButton(
               key: Key('biometric_authentication_arrow_back_button'),
               icon: Image.asset(_imagePath.icArrowBack),
-              onPressed: () => _biometricAuthenticationViewModel.backToAccountDetail()),
+              onPressed: () => _biometricAuthenticationSettingViewModel.backToAccountDetail()),
             centerTitle: true,
             title: Text(
               AppLocalizations.of(context).biometric_authentication,
@@ -98,9 +100,7 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
                       AppLocalizations.of(context).biometric_authentication,
                       style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor)),
                     GestureDetector(
-                      onTap: () => biometricState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled
-                        ? {}
-                        : _biometricAuthenticationViewModel.toggleBiometricState(context),
+                      onTap: () => _onToggleBiometricStateAction(biometricState),
                       child: SvgPicture.asset(
                         _getIconBiometricAuthenticationState(biometricState),
                         width: 52,
@@ -113,19 +113,20 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      AppLocalizations.of(context).biometric_authentication_message(AppLocalizations.of(context).fingerprint),
+                      _getTextBiometricAuthenticationMessage(biometricState),
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontSize: 16,
                           color: AppColor.documentModifiedDateItemTextColor))
                   )),
-                biometricState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled
+                (biometricState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled
+                    || biometricState.authenticationBiometricState == AuthenticationBiometricState.rejected)
                   ? Padding(
                       padding: EdgeInsets.only(top: 16),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          AppLocalizations.of(context).biometric_authentication_not_enrolled(AppLocalizations.of(context).fingerprint),
+                          _getTextBiometricAuthenticationNotEnrolled(biometricState),
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 16, color: AppColor.statusUploadFailedSubTitleColor))))
                   : SizedBox.shrink()
@@ -136,12 +137,26 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
     );
   }
 
-  String _getIconBiometricAuthenticationState(BiometricAuthenticationState biometricState) {
-    if (biometricState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled) {
-      return _imagePath.icSwitchDisabled;
-    } else {
-      return biometricState.biometricState == BiometricState.enabled ? _imagePath.icSwitchOn : _imagePath.icSwitchOff;
+  void _onToggleBiometricStateAction(BiometricAuthenticationSettingState biometricAuthenticationSettingState) {
+    if (biometricAuthenticationSettingState.authenticationBiometricState.isAuthenticateReady()) {
+      _biometricAuthenticationSettingViewModel.toggleBiometricState(context);
     }
+  }
+
+  String _getIconBiometricAuthenticationState(BiometricAuthenticationSettingState biometricAuthenticationSettingState) {
+    if (biometricAuthenticationSettingState.authenticationBiometricState.isAuthenticateReady()) {
+      return biometricAuthenticationSettingState.biometricState == BiometricState.enabled ? _imagePath.icSwitchOn : _imagePath.icSwitchOff;
+    } else {
+      return _imagePath.icSwitchDisabled;
+    }
+  }
+
+  String _getTextBiometricAuthenticationMessage(BiometricAuthenticationSettingState biometricState) {
+    return AppLocalizations.of(context).biometric_authentication_message(biometricState.biometricKindList.getBiometricKind(context));
+  }
+
+  String _getTextBiometricAuthenticationNotEnrolled(BiometricAuthenticationSettingState biometricState) {
+    return AppLocalizations.of(context).biometric_authentication_not_enrolled(biometricState.biometricKindList.getBiometricKind(context));
   }
 
   @override
@@ -149,7 +164,7 @@ class _BiometricAuthenticationState extends State<BiometricAuthenticationWidget>
     super.didChangeAppLifecycleState(state);
 
     if (state == AppLifecycleState.resumed) {
-      _biometricAuthenticationViewModel.checkBiometricState(context);
+      _biometricAuthenticationSettingViewModel.checkBiometricState(context);
     }
   }
 }
