@@ -29,44 +29,48 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/biometric_datasource.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-class BiometricRepositoryImpl extends BiometricRepository {
-  final BiometricDataSource _biometricDataSource;
+@immutable
+class BiometricAuthenticationLoginState extends LinShareState {
+  final List<BiometricKind> biometricKindList;
+  final AuthenticationBiometricState authenticationBiometricState;
 
-  BiometricRepositoryImpl(this._biometricDataSource);
+  BiometricAuthenticationLoginState(
+    Either<Failure, Success> viewState,
+    this.biometricKindList,
+    this.authenticationBiometricState
+  ) : super(viewState);
 
-  @override
-  Future<bool> isAvailable() {
-    return _biometricDataSource.isAvailable();
+  factory BiometricAuthenticationLoginState.initial() {
+    return BiometricAuthenticationLoginState(Right(IdleState()), [], AuthenticationBiometricState.unauthenticated);
   }
 
   @override
-  Future<bool> authenticate(
-    String localizedReason,
-    {AndroidSettingArgument androidSettingArgument,
-     IOSSettingArgument iosSettingArgument}
- ) {
-    return _biometricDataSource.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
+  BiometricAuthenticationLoginState clearViewState() {
+    return BiometricAuthenticationLoginState(Right(IdleState()), biometricKindList, authenticationBiometricState);
   }
 
   @override
-  Future saveBiometricSetting(BiometricState state) {
-    return _biometricDataSource.saveBiometricSetting(state);
+  BiometricAuthenticationLoginState sendViewState({Either<Failure, Success> viewState}) {
+    return BiometricAuthenticationLoginState(viewState, biometricKindList, authenticationBiometricState);
+  }
+
+  BiometricAuthenticationLoginState setBiometricState(List<BiometricKind> newBiometricKindList) {
+    return BiometricAuthenticationLoginState(viewState, newBiometricKindList, authenticationBiometricState);
+  }
+
+  BiometricAuthenticationLoginState setBiometricAuthenticationState(AuthenticationBiometricState newAuthenticationBiometricState) {
+    return BiometricAuthenticationLoginState(viewState, biometricKindList, newAuthenticationBiometricState);
   }
 
   @override
-  Future<List<BiometricKind>> getAvailableBiometrics() {
-    return _biometricDataSource.getAvailableBiometrics();
-  }
-  @override
-  Future<BiometricState> getBiometricSetting() {
-    return _biometricDataSource.getBiometricSetting();
-  }
-
-  @override
-  Future resetBiometricSetting() {
-    return _biometricDataSource.resetBiometricSetting();
+  BiometricAuthenticationLoginState startLoadingState() {
+    return BiometricAuthenticationLoginState(Right(LoadingState()), biometricKindList, authenticationBiometricState);
   }
 }
