@@ -29,21 +29,44 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:linshare_flutter_app/presentation/redux/actions/biometric_authentication_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_state.dart';
-import 'package:redux/redux.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-final biometricAuthenticationReducer = combineReducers<BiometricAuthenticationState>([
-  TypedReducer<BiometricAuthenticationState, StartBiometricAuthenticationLoadingAction>(
-    (BiometricAuthenticationState state, _) => state.startLoadingState()),
-  TypedReducer<BiometricAuthenticationState, BiometricAuthenticationAction>(
-    (BiometricAuthenticationState state, BiometricAuthenticationAction action) => state.sendViewState(viewState: action.viewState)),
-  TypedReducer<BiometricAuthenticationState, CleanBiometricAuthenticationStateAction>(
-    (BiometricAuthenticationState state, _) => state.clearViewState()),
-  TypedReducer<BiometricAuthenticationState, SetBiometricStateAction>(
-    (BiometricAuthenticationState state, SetBiometricStateAction action) => state.setBiometricState(action.biometricState)),
-  TypedReducer<BiometricAuthenticationState, SetAuthenticationBiometricStateAction>(
-    (BiometricAuthenticationState state, SetAuthenticationBiometricStateAction action) => state.setAuthenticationState(action.authenticationBiometricState)),
-  TypedReducer<BiometricAuthenticationState, SetBiometricAuthenticationAction>(
-    (BiometricAuthenticationState state, SetBiometricAuthenticationAction action) => state.setBiometricAuthenticationSetting(newBiometricState : action.biometricState, newBiometricKindList: action.biometricKinds))
-]);
+@immutable
+class StartBiometricAuthenticationSettingLoadingAction extends ActionOffline {}
+
+@immutable
+class BiometricAuthenticationSettingAction extends ActionOffline {
+  final Either<Failure, Success> viewState;
+
+  BiometricAuthenticationSettingAction(this.viewState);
+}
+
+@immutable
+class CleanBiometricAuthenticationStateSettingAction extends ActionOffline {
+  CleanBiometricAuthenticationStateSettingAction();
+}
+
+@immutable
+class SetBiometricAuthenticationSettingAction extends ActionOffline {
+  final BiometricState biometricState;
+  final List<BiometricKind> biometricKinds;
+
+  SetBiometricAuthenticationSettingAction(this.biometricState, this.biometricKinds);
+}
+
+@immutable
+class SetBiometricStateForBiometricSettingAction extends ActionOffline {
+  final BiometricState biometricState;
+
+  SetBiometricStateForBiometricSettingAction(this.biometricState);
+}
+
+@immutable
+class SetAuthenticationBiometricStateForBiometricSettingAction extends ActionOffline {
+  final AuthenticationBiometricState authenticationBiometricState;
+
+  SetAuthenticationBiometricStateForBiometricSettingAction(this.authenticationBiometricState);
+}

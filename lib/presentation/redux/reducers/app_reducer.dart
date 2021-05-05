@@ -36,7 +36,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_setting_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
@@ -79,8 +79,9 @@ AppState appStateReducer(AppState state, action) {
         deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action),
         documentDetailsState: documentDetailsReducer(state.documentDetailsState, action),
         sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action),
-        biometricAuthenticationState: biometricAuthenticationReducer(state.biometricAuthenticationState, action),
+        biometricAuthenticationSettingState: biometricAuthenticationSettingReducer(state.biometricAuthenticationSettingState, action),
         sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action));
+        biometricAuthenticationSettingState: biometricAuthenticationSettingReducer(state.biometricAuthenticationSettingState, action));
   }
 
   return AppState(
@@ -105,8 +106,9 @@ AppState appStateReducer(AppState state, action) {
       deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState,
       documentDetailsState: state.documentDetailsState,
       sharedSpaceNodeDetailsState: state.sharedSpaceNodeDetailsState,
-      biometricAuthenticationState: state.biometricAuthenticationState,
+      biometricAuthenticationSettingState: state.biometricAuthenticationSettingState,
       sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState);
+      biometricAuthenticationSettingState: state.biometricAuthenticationSettingState);
 }
 
 bool canExecuteAction(AppState state, action) {
