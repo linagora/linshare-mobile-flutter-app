@@ -29,4 +29,4 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-enum AuthenticationBiometricState { authenticated, unAuthenticated, unEnrolled, locked, rejected, none }
+enum AuthenticationBiometricState { authenticated, unauthenticated, unEnrolled, locked, rejected, none }

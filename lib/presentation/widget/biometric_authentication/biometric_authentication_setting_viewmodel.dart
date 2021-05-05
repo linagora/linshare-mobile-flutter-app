@@ -84,7 +84,7 @@ class BiometricAuthenticationSettingViewModel extends BaseViewModel {
   void backToAccountDetail() {
     _appNavigation.popBack();
     if (store.state.biometricAuthenticationSettingState.authenticationBiometricState == AuthenticationBiometricState.unEnrolled) {
-      store.dispatch(SetAuthenticationBiometricStateForBiometricSettingAction(AuthenticationBiometricState.unAuthenticated));
+      store.dispatch(SetAuthenticationBiometricStateForBiometricSettingAction(AuthenticationBiometricState.unauthenticated));
     }
   }
 
@@ -110,7 +110,7 @@ class BiometricAuthenticationSettingViewModel extends BaseViewModel {
     store.dispatch((Store<AppState> store) async {
       await _authenticationBiometricInteractor.execute(localizedReason, androidSettingArgument: androidSetting, iosSettingArgument: iosSetting)
           .then((result) => result.fold(
-            (failure) => store.dispatch(SetAuthenticationBiometricStateForBiometricSettingAction(AuthenticationBiometricState.unAuthenticated)),
+            (failure) => store.dispatch(SetAuthenticationBiometricStateForBiometricSettingAction(AuthenticationBiometricState.unauthenticated)),
             (success) {
               if (success is AuthenticationBiometricViewState) {
                 if (success.authenticationState == AuthenticationBiometricState.authenticated) {
@@ -124,7 +124,7 @@ class BiometricAuthenticationSettingViewModel extends BaseViewModel {
                 }
                 store.dispatch(SetAuthenticationBiometricStateForBiometricSettingAction(success.authenticationState));
               } else {
-                store.dispatch(SetAuthenticationBiometricStateForBiometricSettingAction(AuthenticationBiometricState.unAuthenticated));
+                store.dispatch(SetAuthenticationBiometricStateForBiometricSettingAction(AuthenticationBiometricState.unauthenticated));
               }
           }));
     });
