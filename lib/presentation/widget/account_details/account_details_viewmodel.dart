@@ -67,10 +67,9 @@ class AccountDetailsViewModel extends BaseViewModel {
     store.dispatch((Store<AppState> store) async {
       await _isAvailableBiometricInteractor.execute()
         .then((result) => result.fold(
-          (failure) {
-            store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
-          },
-          (success) {success is IsAvailableBiometricViewState
+          (failure) => store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable)),
+          (success) {
+            success is IsAvailableBiometricViewState
               ? store.dispatch(SetSupportBiometricStateAction(success.supportBiometricState))
               : store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
           })
@@ -79,7 +78,7 @@ class AccountDetailsViewModel extends BaseViewModel {
   }
 
   void goBiometricAuthentication() {
-    _appNavigation.push(RoutePaths.biometricAuthentication);
+    _appNavigation.push(RoutePaths.biometricAuthenticationSetting);
   }
 
   @override
