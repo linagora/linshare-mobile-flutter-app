@@ -29,39 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/util/biometric_service.dart';
-import 'package:domain/domain.dart';
-import 'package:local_auth/auth_strings.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:data/src/extensions/biometric_type_extension.dart';
+import 'package:domain/src/model/biometric_authentication/platform_setting_arguments.dart';
 
-class LocalBiometricService extends BiometricService {
-  final LocalAuthentication _localAuthentication;
+class IOSSettingArgument extends PlatformSettingArguments {
+  final String cancelButton;
 
-  LocalBiometricService(this._localAuthentication);
-
-  @override
-  Future<bool> isAvailable() async {
-    return await _localAuthentication.canCheckBiometrics;
-  }
-
-  @override
-  Future<bool> authenticate(String localizedReason, {AndroidSettingArgument androidSettingArgument, IOSSettingArgument iosSettingArgument}) async {
-    return await _localAuthentication.authenticateWithBiometrics(
-      localizedReason: localizedReason,
-      useErrorDialogs: false,
-      stickyAuth: true,
-      androidAuthStrings: AndroidAuthMessages(
-        fingerprintHint: '',
-        cancelButton: androidSettingArgument.cancelButton,
-        signInTitle: androidSettingArgument.titleSetting),
-      iOSAuthStrings: IOSAuthMessages(cancelButton: iosSettingArgument.cancelButton)
-    );
-  }
-
-  @override
-  Future<List<BiometricKind>> getAvailableBiometrics() async {
-    final biometricTypes = await _localAuthentication.getAvailableBiometrics();
-    return biometricTypes.map((type) => type.getBiometricKind()).toList();
-  }
+  IOSSettingArgument(this.cancelButton);
 }
