@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -52,6 +53,8 @@ class InitializeViewModel extends BaseViewModel {
   final RetryAuthenticationInterceptors _retryInterceptors;
   final UploadFileManager _uploadFileManager;
   final Connectivity _connectivity;
+  final GetBiometricSettingInteractor _getBiometricSettingInteractor;
+  final DisableBiometricInteractor _disableBiometricInteractor;
 
   InitializeViewModel(
     Store<AppState> store,
@@ -60,7 +63,9 @@ class InitializeViewModel extends BaseViewModel {
     this._dynamicUrlInterceptors,
     this._retryInterceptors,
     this._uploadFileManager,
-    this._connectivity
+    this._connectivity,
+    this._getBiometricSettingInteractor,
+    this._disableBiometricInteractor,
   ) : super(store) {
     FlutterDownloader.initialize(debug: kDebugMode);
     _getNetworkConnectivityState();
@@ -94,14 +99,39 @@ class InitializeViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _retryInterceptors.setPermanentToken(success.token);
-      await _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(success.baseUrl));
+      store.dispatch(_getBiometricSetting(success.baseUrl));
     };
   }
 
   ThunkAction<AppState> _getCredentialFailureAction(CredentialFailure failure) {
     return (Store<AppState> store) async {
+      store.dispatch(_resetBiometricSetting());
       store.dispatch(SetCurrentView(RoutePaths.loginRoute));
       await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+    };
+  }
+
+  ThunkAction<AppState> _getBiometricSetting(Uri baseUrl) {
+    return (Store<AppState> store) async {
+      await _getBiometricSettingInteractor.execute().then((result) => result.fold(
+        (left) {
+          store.dispatch(_resetBiometricSetting());
+          _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(baseUrl));
+        },
+        (right) {
+          if (right is GetBiometricSettingViewState && right.biometricState == BiometricState.enabled) {
+            _appNavigation.pushAndRemoveAll(RoutePaths.biometricAuthenticationLogin, arguments: BiometricAuthenticationArguments(baseUrl));
+          } else {
+            store.dispatch(_resetBiometricSetting());
+            _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(baseUrl));
+          }
+        }));
+    };
+  }
+
+  ThunkAction<AppState> _resetBiometricSetting() {
+    return (Store<AppState> store) async {
+      await _disableBiometricInteractor.execute();
     };
   }
 

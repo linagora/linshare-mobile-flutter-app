@@ -40,17 +40,13 @@ extension ListBiometricKindExtension on List<BiometricKind> {
 
   String getBiometricKind(BuildContext context) {
     if (contains(BiometricKind.faceId) && contains(BiometricKind.fingerprint)) {
-      return AppLocalizations.of(context).touch_id_or_face_id(
-        Platform.isIOS ? AppLocalizations.of(context).touch_id : AppLocalizations.of(context).fingerprint,
-        Platform.isIOS ?  AppLocalizations.of(context).face_id : AppLocalizations.of(context).face);
+      return Platform.isIOS ? AppLocalizations.of(context).touch_id_or_face_id : AppLocalizations.of(context).fingerprint_or_face;
     } else if (contains(BiometricKind.faceId)) {
       return Platform.isIOS ? AppLocalizations.of(context).face_id : AppLocalizations.of(context).face;
     } else if (contains(BiometricKind.fingerprint)) {
       return Platform.isIOS ? AppLocalizations.of(context).touch_id : AppLocalizations.of(context).fingerprint;
     } else {
-      return AppLocalizations.of(context).touch_id_or_face_id(
-        Platform.isIOS ? AppLocalizations.of(context).touch_id : AppLocalizations.of(context).fingerprint,
-        Platform.isIOS ?  AppLocalizations.of(context).face_id : AppLocalizations.of(context).face);
+      return Platform.isIOS ? AppLocalizations.of(context).touch_id_or_face_id : AppLocalizations.of(context).fingerprint_or_face;
     }
   }
 

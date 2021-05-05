@@ -77,7 +77,7 @@ class AccountDetailsViewModel extends BaseViewModel {
     });
   }
 
-  void goBiometricAuthentication() {
+  void goToBiometricAuthentication() {
     _appNavigation.push(RoutePaths.biometricAuthenticationSetting);
   }
 
