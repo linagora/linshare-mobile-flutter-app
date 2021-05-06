@@ -46,6 +46,7 @@ import 'package:redux/redux.dart';
 import '../../domain/test/fixture/test_fixture.dart';
 
 import '../../domain/test/mock/repository/quota/mock_quota_repository.dart';
+import '../../domain/test/mock/repository/authentication/mock_authentication_repository.dart';
 import '../fixtures/test_redux_module.dart';
 
 void main() {
@@ -56,13 +57,17 @@ void main() {
     Store<AppState> _store;
     QuotaRepository _quotaRepository;
     GetQuotaInteractor _getQuotaInteractor;
+    AuthenticationRepository _authenticationRepository;
+    GetAuthorizedInteractor _getAuthorizedInteractor;
     VerifyQuotaManager _verifyQuotaManager;
 
     setUp(() {
       _store = getIt.get<Store<AppState>>();
       _quotaRepository = MockQuotaRepository();
+      _authenticationRepository = MockAuthenticationRepository();
       _getQuotaInteractor = GetQuotaInteractor(_quotaRepository);
-      _verifyQuotaManager = VerifyQuotaManager(_store, _getQuotaInteractor);
+      _getAuthorizedInteractor = GetAuthorizedInteractor(_authenticationRepository);
+      _verifyQuotaManager = VerifyQuotaManager(_store, _getQuotaInteractor, _getAuthorizedInteractor);
     });
 
     test(
