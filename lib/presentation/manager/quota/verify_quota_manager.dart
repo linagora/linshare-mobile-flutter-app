@@ -36,6 +36,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:redux/redux.dart';
@@ -43,11 +44,28 @@ import 'package:redux/redux.dart';
 class VerifyQuotaManager {
   final Store<AppState> _store;
   final GetQuotaInteractor _getQuotaInteractor;
+  final GetAuthorizedInteractor _getAuthorizedInteractor;
 
-  VerifyQuotaManager(this._store, this._getQuotaInteractor);
+  VerifyQuotaManager(this._store, this._getQuotaInteractor, this._getAuthorizedInteractor);
 
   Future<bool> hasEnoughQuotaAndMaxFileSize({List<FileInfo> filesInfos}) async {
-    final quotaUuid = _store.state.account.user.quotaUuid;
+    var quotaUuid = QuotaId('');
+
+    if (_store.state.account.user != null) {
+      quotaUuid = _store.state.account.user.quotaUuid;
+    } else {
+      await _getAuthorizedInteractor.execute()
+          .then((result) => result.fold(
+            (left) => null,
+            (right) {
+              if (right is GetAuthorizedUserViewState) {
+                quotaUuid = right.user.quotaUuid;
+                _store.dispatch(SetAccountInformationsAction(right.user));
+              }
+            }
+          ));
+    }
+
     final accountQuotaResult = (await _getQuotaInteractor.execute(quotaUuid));
 
     if (accountQuotaResult.isLeft()) {
