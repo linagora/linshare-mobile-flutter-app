@@ -13,6 +13,7 @@ import '../../domain/test/fixture/test_fixture.dart';
 import '../../domain/test/mock/repository/authentication/mock_credential_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_document_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_token_repository.dart';
+import '../../domain/test/mock/repository/authentication/mock_authentication_repository.dart';
 import '../../domain/test/mock/repository/quota/mock_quota_repository.dart';
 import '../fixtures/test_redux_module.dart';
 
@@ -32,6 +33,8 @@ void main() {
     FileHelper fileHelper;
     QuotaRepository quotaRepository;
     GetQuotaInteractor getQuotaInteractor;
+    AuthenticationRepository authenticationRepository;
+    GetAuthorizedInteractor getAuthorizedInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -47,6 +50,8 @@ void main() {
       fileHelper = FileHelper();
       quotaRepository = MockQuotaRepository();
       getQuotaInteractor = GetQuotaInteractor(quotaRepository);
+      authenticationRepository = MockAuthenticationRepository();
+      getAuthorizedInteractor = GetAuthorizedInteractor(authenticationRepository);
       uploadShareFileManager = UploadShareFileManager(
         getIt.get<Store<AppState>>(),
         Stream.fromIterable([]),
@@ -54,7 +59,8 @@ void main() {
         shareDocumentInteractor,
         uploadWorkGroupDocumentInteractor,
         fileHelper,
-        getQuotaInteractor
+        getQuotaInteractor,
+        getAuthorizedInteractor
       );
     });
 
