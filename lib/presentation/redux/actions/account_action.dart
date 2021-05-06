@@ -46,6 +46,13 @@ class AccountAction extends ActionOnline {
 }
 
 @immutable
+class GetAccountInformationAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+
+  GetAccountInformationAction(this.viewState);
+}
+
+@immutable
 class SetAccountInformationsAction extends ActionOnline {
   final User newUser;
 

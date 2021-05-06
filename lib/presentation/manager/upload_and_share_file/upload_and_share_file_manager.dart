@@ -55,10 +55,9 @@ class UploadShareFileManager {
     this._shareDocumentInteractor,
     this._uploadWorkGroupDocumentInteractor,
     this._fileHelper,
-    this._getQuotaInteractor,
-    this._getAuthorizedInteractor
+    this._getQuotaInteractor
   ) {
-    _verifyQuotaManager = VerifyQuotaManager(_store, _getQuotaInteractor, _getAuthorizedInteractor);
+    _verifyQuotaManager = VerifyQuotaManager(_store, _getQuotaInteractor);
     _handleUploadingFileStream(_uploadingFileStream);
   }
 
@@ -75,7 +74,6 @@ class UploadShareFileManager {
   final FileHelper _fileHelper;
 
   final GetQuotaInteractor _getQuotaInteractor;
-  final GetAuthorizedInteractor _getAuthorizedInteractor;
   VerifyQuotaManager _verifyQuotaManager;
 
   void justUploadFiles(List<FileInfo> uploadFiles) async {

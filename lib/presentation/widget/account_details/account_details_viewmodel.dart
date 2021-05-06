@@ -29,9 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -43,12 +45,14 @@ class AccountDetailsViewModel extends BaseViewModel {
   final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
   final AppNavigation _appNavigation;
   final IsAvailableBiometricInteractor _isAvailableBiometricInteractor;
+  final GetAuthorizedInteractor _getAuthorizedInteractor;
 
   AccountDetailsViewModel(
     Store<AppState> store,
     this.deletePermanentTokenInteractor,
     this._appNavigation,
-    this._isAvailableBiometricInteractor
+    this._isAvailableBiometricInteractor,
+    this._getAuthorizedInteractor
   ) : super(store);
 
   void logout() {
@@ -74,6 +78,22 @@ class AccountDetailsViewModel extends BaseViewModel {
               : store.dispatch(SetSupportBiometricStateAction(SupportBiometricState.unavailable));
           })
         );
+    });
+  }
+
+  void checkUserExists() {
+    store.state.account.user ?? store.dispatch(_getAuthorizedUserAction());
+  }
+
+  OnlineThunkAction _getAuthorizedUserAction() {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartAccountLoadingAction());
+
+      await _getAuthorizedInteractor.execute()
+        .then((result) => result.fold(
+          (left) => store.dispatch(GetAccountInformationAction(Left(left))),
+          (right) => store.dispatch(GetAccountInformationAction(Right(right)))
+        ));
     });
   }
 
