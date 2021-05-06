@@ -186,7 +186,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               GestureDetector(
                 onTap: widget.onBackSharedSpaceClickedCallback,
                 child: Container(
-                  width: 48,
+                  width: 56,
                   height: 48,
                   child: Align(
                     alignment: Alignment.center,
