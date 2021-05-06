@@ -123,6 +123,9 @@ class HomeViewModel extends BaseViewModel {
     store.dispatch(SetNetworkConnectivityStateAction(await _connectivity.checkConnectivity()));
     _connectivityStreamSubscription = _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       store.dispatch(SetNetworkConnectivityStateAction(result));
+      if (store.state.account.user == null && result != ConnectivityResult.none) {
+        _getAuthorizedUser();
+      }
     });
   }
 

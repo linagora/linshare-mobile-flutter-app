@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -58,6 +59,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
   @override
   void initState() {
     super.initState();
+    accountDetailsViewModel.checkUserExists();
     accountDetailsViewModel.getSupportBiometricState();
   }
 
@@ -67,6 +69,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
       converter: (store) => store.state.account,
       builder: (context, state) => Column(
         children: [
+          _buildLoadingView(),
           ListTile(
             leading: CircleAvatar(backgroundColor: Colors.blueGrey[900], child: Text(state.user != null ? state.user.firstName[0] : '')),
             isThreeLine: true,
@@ -114,6 +117,24 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
           ),
         ]
       )
+    );
+  }
+
+  Widget _buildLoadingView() {
+    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
+      converter: (store) => store.state.account.viewState,
+      builder: (context, viewState) {
+        return viewState.fold(
+          (failure) => SizedBox.shrink(),
+          (success) => (success is LoadingState)
+            ? Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor))))
+            : SizedBox.shrink());
+      }
     );
   }
 
