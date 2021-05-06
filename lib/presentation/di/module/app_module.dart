@@ -308,8 +308,7 @@ class AppModule {
         getIt.get<ShareDocumentInteractor>(),
         getIt.get<UploadWorkGroupDocumentInteractor>(),
         getIt.get<FileHelper>(),
-        getIt.get<GetQuotaInteractor>(),
-        getIt.get<GetAuthorizedInteractor>()));
+        getIt.get<GetQuotaInteractor>()));
   }
 
   void _provideFileUploader() {

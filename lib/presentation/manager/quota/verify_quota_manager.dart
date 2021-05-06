@@ -44,28 +44,15 @@ import 'package:redux/redux.dart';
 class VerifyQuotaManager {
   final Store<AppState> _store;
   final GetQuotaInteractor _getQuotaInteractor;
-  final GetAuthorizedInteractor _getAuthorizedInteractor;
 
-  VerifyQuotaManager(this._store, this._getQuotaInteractor, this._getAuthorizedInteractor);
+  VerifyQuotaManager(this._store, this._getQuotaInteractor);
 
   Future<bool> hasEnoughQuotaAndMaxFileSize({List<FileInfo> filesInfos}) async {
-    var quotaUuid = QuotaId('');
-
-    if (_store.state.account.user != null) {
-      quotaUuid = _store.state.account.user.quotaUuid;
-    } else {
-      await _getAuthorizedInteractor.execute()
-          .then((result) => result.fold(
-            (left) => null,
-            (right) {
-              if (right is GetAuthorizedUserViewState) {
-                quotaUuid = right.user.quotaUuid;
-                _store.dispatch(SetAccountInformationsAction(right.user));
-              }
-            }
-          ));
+    if (_store.state.account.user == null) {
+      return true;
     }
 
+    final quotaUuid = _store.state.account.user.quotaUuid;
     final accountQuotaResult = (await _getQuotaInteractor.execute(quotaUuid));
 
     if (accountQuotaResult.isLeft()) {
