@@ -201,16 +201,13 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
     return StoreConnector<AppState, SharedSpaceDocumentState>(
       converter: (store) => store.state.sharedSpaceDocumentState,
       builder: (context, documentState) => documentState.documentType == SharedSpaceDocumentType.root
-        ? GestureDetector(
-            onTap: widget.onBackSharedSpaceClickedCallback,
-            child: Text(
-                AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
-                style: TextStyle(
-                    fontSize: 18,
-                    color: AppColor.workgroupNodesSurfingBackTitleColor,
-                    fontWeight: FontWeight.w400
-                )
-            ),
+        ? Text(
+            AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
+            style: TextStyle(
+              fontSize: 18,
+              color: AppColor.workgroupNodesSurfingBackTitleColor,
+              fontWeight: FontWeight.w400
+            )
           )
         : Expanded(
             child: Padding(
