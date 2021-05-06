@@ -57,17 +57,13 @@ void main() {
     Store<AppState> _store;
     QuotaRepository _quotaRepository;
     GetQuotaInteractor _getQuotaInteractor;
-    AuthenticationRepository _authenticationRepository;
-    GetAuthorizedInteractor _getAuthorizedInteractor;
     VerifyQuotaManager _verifyQuotaManager;
 
     setUp(() {
       _store = getIt.get<Store<AppState>>();
       _quotaRepository = MockQuotaRepository();
-      _authenticationRepository = MockAuthenticationRepository();
       _getQuotaInteractor = GetQuotaInteractor(_quotaRepository);
-      _getAuthorizedInteractor = GetAuthorizedInteractor(_authenticationRepository);
-      _verifyQuotaManager = VerifyQuotaManager(_store, _getQuotaInteractor, _getAuthorizedInteractor);
+      _verifyQuotaManager = VerifyQuotaManager(_store, _getQuotaInteractor);
     });
 
     test(

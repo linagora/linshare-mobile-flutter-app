@@ -250,7 +250,8 @@ class WidgetModule {
       getIt.get<Store<AppState>>(),
       getIt.get<DeletePermanentTokenInteractor>(),
       getIt.get<AppNavigation>(),
-      getIt.get<IsAvailableBiometricInteractor>()
+      getIt.get<IsAvailableBiometricInteractor>(),
+      getIt.get<GetAuthorizedInteractor>()
     ));
   }
 
