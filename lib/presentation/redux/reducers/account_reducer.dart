@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
 import 'package:redux/redux.dart';
@@ -38,6 +39,12 @@ final accountReducer = combineReducers<AccountState>([
       (AccountState state, _) => state.startLoadingState()),
   TypedReducer<AccountState, AccountAction>(
       (AccountState state, AccountAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<AccountState, GetAccountInformationAction>((AccountState state, GetAccountInformationAction action) =>
+    state.setAccountInformation(
+      newViewState: action.viewState,
+      newUser: action.viewState
+        .map((result) => result is GetAuthorizedUserViewState ? result.user : null)
+        .getOrElse(() => null))),
   TypedReducer<AccountState, CleanAccountStateAction>(
       (AccountState state, _) => state.clearViewState()),
   TypedReducer<AccountState, SetAccountInformationsAction>(

@@ -33,8 +33,6 @@ void main() {
     FileHelper fileHelper;
     QuotaRepository quotaRepository;
     GetQuotaInteractor getQuotaInteractor;
-    AuthenticationRepository authenticationRepository;
-    GetAuthorizedInteractor getAuthorizedInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -50,8 +48,6 @@ void main() {
       fileHelper = FileHelper();
       quotaRepository = MockQuotaRepository();
       getQuotaInteractor = GetQuotaInteractor(quotaRepository);
-      authenticationRepository = MockAuthenticationRepository();
-      getAuthorizedInteractor = GetAuthorizedInteractor(authenticationRepository);
       uploadShareFileManager = UploadShareFileManager(
         getIt.get<Store<AppState>>(),
         Stream.fromIterable([]),
@@ -59,8 +55,7 @@ void main() {
         shareDocumentInteractor,
         uploadWorkGroupDocumentInteractor,
         fileHelper,
-        getQuotaInteractor,
-        getAuthorizedInteractor
+        getQuotaInteractor
       );
     });
 
