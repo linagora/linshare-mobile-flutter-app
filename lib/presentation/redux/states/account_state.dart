@@ -62,6 +62,11 @@ class AccountState extends LinShareState {
     return AccountState(viewState, user, supportBiometricState);
   }
 
+  @override
+  AccountState setAccountInformation({Either<Failure, Success> newViewState, User newUser}) {
+    return AccountState(newViewState ?? viewState, newUser ?? user, supportBiometricState);
+  }
+
   AccountState setCurrentUserInfo(User newUser) {
     return AccountState(viewState, newUser, supportBiometricState);
   }
