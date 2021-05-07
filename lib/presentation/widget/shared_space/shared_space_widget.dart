@@ -48,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/datetime_exten
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/shared_space_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
@@ -373,6 +374,8 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
 
   List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
     return [
+      if (SharedSpaceOperationRole.renameWorkGroupSharedSpaceRoles.contains(sharedSpace.element.sharedSpaceRole.name))
+        _renameWorkgroupAction(context, sharedSpace.element),
       _sharedSpaceDetailsAction(sharedSpace.element)
     ];
   }
@@ -386,6 +389,15 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             .onActionClick((data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
             .build()
         : SizedBox.shrink();
+  }
+
+  Widget _renameWorkgroupAction(BuildContext context, SharedSpaceNodeNested sharedSpace) {
+    return WorkgroupContextMenuTileBuilder(
+        Key('rename_workgroup_context_menu_action'),
+        SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).rename, sharedSpace)
+      .onActionClick((sharedSpace) => sharedSpaceViewModel.openRenameWorkGroupModal(context, sharedSpace))
+      .build();
   }
 
   Widget _sharedSpaceDetailsAction(SharedSpaceNodeNested sharedSpace) {

@@ -202,6 +202,7 @@ class WidgetModule {
       getIt<SortInteractor>(),
       getIt<GetSorterInteractor>(),
       getIt<SaveSorterInteractor>(),
+      getIt<RenameWorkGroupInteractor>(),
     ));
   }
 
