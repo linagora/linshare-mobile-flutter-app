@@ -101,6 +101,12 @@ class EditTextModalSheetBuilder {
     return this;
   }
 
+  EditTextModalSheetBuilder setTextSelection(TextSelection textSelection, {String value}) {
+    _textController = TextEditingController.fromValue(
+      TextEditingValue(text: value, selection: textSelection));
+    return this;
+  }
+
   EditTextModalSheetBuilder setErrorString(SetErrorString setErrorString) {
     _setErrorString = setErrorString;
     return this;
