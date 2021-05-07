@@ -64,9 +64,9 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<List<WorkGroupNode>> getAllChildNodes(
+  Future<List<WorkGroupNode?>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}
+      {WorkGroupNodeId? parentNodeId}
   ) {
     return _sharedSpaceDocumentDataSource.getAllChildNodes(sharedSpaceId, parentNodeId: parentNodeId);
   }

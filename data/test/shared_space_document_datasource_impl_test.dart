@@ -41,14 +41,15 @@ import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
   group('test shared spaces documents', () {
-    MockLinShareHttpClient _linShareHttpClient;
+    late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    SharedSpaceDocumentDataSourceImpl _sharedSpaceDataSourceImpl;
+    late SharedSpaceDocumentDataSourceImpl _sharedSpaceDataSourceImpl;
     MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _linShareDownloadManager = MockLinShareDownloadManager();
       _sharedSpaceDataSourceImpl = SharedSpaceDocumentDataSourceImpl(
           _linShareHttpClient,
           _remoteExceptionThrower,
@@ -64,19 +65,10 @@ void main() {
       expect(result, [sharedSpaceFolder1.toWorkGroupFolder(), sharedSpaceFolder2.toWorkGroupFolder()]);
     });
 
-    test('getAllChildNodes should return 1 data, when httpClient return 2 data (1 data is undefined)', () async {
-      final WorkGroupNodeDto undefinedWorkGroupNode = null; // seems it is null
-      when(_linShareHttpClient.getWorkGroupChildNodes(sharedSpaceId1))
-          .thenAnswer((_) async => [sharedSpaceFolder1, undefinedWorkGroupNode]);
-
-      final result = await _sharedSpaceDataSourceImpl.getAllChildNodes(sharedSpaceId1);
-      expect(result, [sharedSpaceFolder1.toWorkGroupFolder()]);
-    });
-
     test('getAllChildNodes should throw GetChildNodesNotFoundException when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.getWorkGroupChildNodes(sharedSpaceId1))
           .thenThrow(error);

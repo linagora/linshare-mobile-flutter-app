@@ -61,13 +61,13 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   );
 
   @override
-  Future<List<WorkGroupNode>> getAllChildNodes(
+  Future<List<WorkGroupNode?>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}
+      {WorkGroupNodeId? parentNodeId}
   ) {
     return Future.sync(() async {
       return (await _linShareHttpClient.getWorkGroupChildNodes(sharedSpaceId, parentId: parentNodeId))
-          .map<WorkGroupNode>((workgroupNode) {
+          .map<WorkGroupNode?>((workgroupNode) {
             if (workgroupNode is WorkGroupDocumentDto) return workgroupNode.toWorkGroupDocument();
 
             if (workgroupNode is WorkGroupNodeFolderDto) return workgroupNode.toWorkGroupFolder();
@@ -78,12 +78,12 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
           .toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw GetChildNodesNotFoundException();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });

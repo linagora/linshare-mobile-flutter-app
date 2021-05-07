@@ -189,7 +189,7 @@ class LinShareHttpClient {
 
   Future<List<WorkGroupNodeDto>> getWorkGroupChildNodes(
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentId}
+      {WorkGroupNodeId? parentId}
   ) async {
     final endpointPath = Endpoint.sharedSpaces
         .withPathParameter(sharedSpaceId.uuid)
