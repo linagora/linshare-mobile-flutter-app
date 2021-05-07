@@ -49,7 +49,7 @@ void main() {
     });
 
     test('copy to my space interactor should return success with valid data', () async {
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenAnswer((_) async => [document1]);
 
@@ -63,7 +63,7 @@ void main() {
 
     test('copy to my space interactor should fail success with invalid data', () async {
       final exception = DocumentNotFound();
-      when(documentRepository.copyToMySpace(
+      when(documentRepository!.copyToMySpace(
           CopyRequest(workGroupDocument1.workGroupNodeId.uuid, SpaceType.SHARED_SPACE, contextUuid: workGroupDocument1.sharedSpaceId.uuid)))
       .thenThrow(exception);
 

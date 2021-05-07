@@ -186,7 +186,7 @@ class ReceivedShareViewModel extends BaseViewModel {
 
   OnlineThunkAction _copyToMySpaceAction(List<ReceivedShare> shares) {
     return OnlineThunkAction((Store<AppState> store) async {
-      await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares: shares)
+      await _copyMultipleFilesFromReceivedSharesToMySpaceInteractor.execute(shares)
         .then((result) => result.fold(
           (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
           (success) => store.dispatch(ReceivedShareAction(Right(success)))));
