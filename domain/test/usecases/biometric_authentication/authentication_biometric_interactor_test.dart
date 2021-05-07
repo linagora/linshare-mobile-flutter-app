@@ -37,8 +37,8 @@ import '../../mock/repository/biometric_authentication/mock_biometric_repository
 
 void main() {
   group('authentication_biometric_interactor_test', () {
-    MockBiometricRepository biometricRepository;
-    AuthenticationBiometricInteractor authenticationBiometricInteractor;
+    late MockBiometricRepository biometricRepository;
+    late AuthenticationBiometricInteractor authenticationBiometricInteractor;
 
     setUp(() {
       biometricRepository = MockBiometricRepository();
