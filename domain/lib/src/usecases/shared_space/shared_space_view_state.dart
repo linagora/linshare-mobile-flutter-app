@@ -474,3 +474,21 @@ class RestoreWorkGroupDocumentFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class RenameWorkGroupViewState extends ViewState {
+  final SharedSpaceNodeNested sharedSpaceNodeNested;
+
+  RenameWorkGroupViewState(this.sharedSpaceNodeNested);
+
+  @override
+  List<Object> get props => [sharedSpaceNodeNested];
+}
+
+class RenameWorkGroupFailure extends FeatureFailure {
+  final exception;
+
+  RenameWorkGroupFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
