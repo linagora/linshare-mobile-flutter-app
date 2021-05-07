@@ -41,9 +41,9 @@ import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
   group('autocomplete_datasource_impl_test', () {
-    LinShareHttpClient linShareHttpClient;
+    late LinShareHttpClient linShareHttpClient;
     RemoteExceptionThrower remoteExceptionThrower;
-    AutoCompleteDataSourceImpl autoCompleteDataSourceImpl;
+    late AutoCompleteDataSourceImpl autoCompleteDataSourceImpl;
 
     setUp(() {
       linShareHttpClient = MockLinShareHttpClient();
@@ -62,7 +62,7 @@ void main() {
     test('getAutoComplete should throw DocumentNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('user'), AutoCompleteType.SHARING))
           .thenThrow(error);
@@ -76,7 +76,7 @@ void main() {
     test('getAutoComplete should throw DocumentNotFound when linShareHttpClient response error with 500 with errCode 1000', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 500, data: {'errCode': 1000}, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 500, data: {'errCode': 1000}, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(error);

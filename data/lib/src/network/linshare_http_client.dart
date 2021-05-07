@@ -174,7 +174,7 @@ class LinShareHttpClient {
   Future<List<AutoCompleteResult>> getSharingAutoComplete(
       AutoCompletePattern autoCompletePattern,
       AutoCompleteType autoCompleteType,
-      { ThreadId threadId }
+      { ThreadId? threadId }
   ) async {
     final List resultJson = await _dioClient.get(
         Endpoint.autocomplete
@@ -222,7 +222,7 @@ class LinShareHttpClient {
   }
 
   AutoCompleteResult _getDynamicAutoCompleteResult(Map<String, dynamic> map) {
-    final type = map['type'] as String;
+    final type = map['type'] as String?;
     if (type == AutoCompleteResultType.simple.value) {
       return SimpleAutoCompleteResultDto.fromJson(map);
     } else if (type == AutoCompleteResultType.user.value) {

@@ -35,10 +35,10 @@ import 'dart:convert';
 import 'package:domain/domain.dart';
 
 class MailingListAutoCompleteResultDto extends AutoCompleteResult {
-  final String ownerLastName;
-  final String ownerFirstName;
-  final String ownerMail;
-  final String listName;
+  final String? ownerLastName;
+  final String? ownerFirstName;
+  final String? ownerMail;
+  final String? listName;
 
   MailingListAutoCompleteResultDto(
       String identifier,
@@ -53,10 +53,10 @@ class MailingListAutoCompleteResultDto extends AutoCompleteResult {
     return MailingListAutoCompleteResultDto(
         json['identifier'] as String,
         json['display'] as String,
-        json['ownerLastName'] as String,
-        json['ownerFirstName'] as String,
-        json['ownerMail'] as String,
-        json['listName'] as String);
+        json['ownerLastName'] as String?,
+        json['ownerFirstName'] as String?,
+        json['ownerMail'] as String?,
+        json['listName'] as String?);
   }
 
   Map<String, dynamic> toJson() => {
@@ -69,7 +69,7 @@ class MailingListAutoCompleteResultDto extends AutoCompleteResult {
   };
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     identifier,
     display,
     ownerLastName,
@@ -84,8 +84,9 @@ extension MailingListAutoCompleteResultDtoExtension on MailingListAutoCompleteRe
       MailingListAutoCompleteResult(
           identifier,
           display,
-          ownerLastName,
-          ownerFirstName,
-          ownerMail,
-          listName);
+          ownerLastName ?? '',
+          ownerFirstName ?? '',
+          ownerMail ?? '',
+          listName ?? ''
+      );
 }
