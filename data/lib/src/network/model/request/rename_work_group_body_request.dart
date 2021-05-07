@@ -29,24 +29,27 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
+import 'package:data/src/network/model/sharedspace/versioning_parameter_dto.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class SharedSpaceDataSource {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+class RenameWorkGroupBodyRequest with EquatableMixin {
+  final String name;
+  final VersioningParameterDto versioningParameters;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+  RenameWorkGroupBodyRequest(this.name, this.versioningParameters);
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId sharedSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
-  );
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('name'): jsonEncode(name),
+    jsonEncode('versioningParameters'): jsonEncode(versioningParameters.toJson())
+  };
 
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
+  @override
+  List<Object> get props => [name, versioningParameters];
+}
 
-  Future<List<SharedSpaceRole>> getSharedSpaceRoles();
-
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
+extension RenameWorkGroupRequestExtension on RenameWorkGroupRequest {
+  RenameWorkGroupBodyRequest toRenameWorkGroupBodyRequest() => RenameWorkGroupBodyRequest(name, VersioningParameterDto(versioningParameters.enable));
 }
