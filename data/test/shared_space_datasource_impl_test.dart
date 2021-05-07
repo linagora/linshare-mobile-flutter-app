@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/data.dart';
+import 'package:data/src/network/model/sharedspace/versioning_parameter_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -196,6 +197,37 @@ void main() {
 
       await _sharedSpaceDataSourceImpl.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))
           .catchError((error) => expect(error, isA<NotAuthorized>()));
+    });
+
+    test('Rename WorkGroup Should Return Success Renamed', () async {
+      when(_linShareHttpClient.renameWorkGroup(
+        sharedSpace1.sharedSpaceId,
+        RenameWorkGroupBodyRequest(sharedSpace1.name, VersioningParameterDto(sharedSpace1.versioningParameters.enable))
+      )).thenAnswer((_) async => sharedSpaceResponse1);
+
+      final result = await _sharedSpaceDataSourceImpl.renameWorkGroup(
+        sharedSpace1.sharedSpaceId,
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters)
+      );
+
+      expect(result, sharedSpaceResponse1.toSharedSpaceNodeNested());
+    });
+
+    test('Rename WorkGroup Should Throw Exception When Renamed Failed', () async {
+      final error = DioError(
+        type: DioErrorType.RESPONSE,
+        response: Response(statusCode: 404)
+      );
+
+      when(_linShareHttpClient.renameWorkGroup(
+        sharedSpace1.sharedSpaceId,
+        RenameWorkGroupBodyRequest(sharedSpace1.name, VersioningParameterDto(sharedSpace1.versioningParameters.enable))
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.renameWorkGroup(
+        sharedSpace1.sharedSpaceId,
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters)
+      ).catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
     });
   });
 }

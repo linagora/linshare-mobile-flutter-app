@@ -67,4 +67,9 @@ class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
   Future<List<SharedSpaceRole>> getSharedSpacesRoles() {
     return _sharedSpaceDataSource.getSharedSpaceRoles();
   }
+
+  @override
+  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest) {
+    return _sharedSpaceDataSource.renameWorkGroup(sharedSpaceId, renameRequest);
+  }
 }
