@@ -41,7 +41,7 @@ import 'fixture/mock/mock_fixtures.dart';
 void main() {
   group('test shared spaces member dataSource', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    late MockRemoteExceptionThrower _remoteExceptionThrower;
     late SharedSpaceMemberDataSourceImpl _sharedSpaceMemberDataSourceImpl;
 
     setUp(() {
@@ -64,7 +64,7 @@ void main() {
     test('getAllSharedSpaceMembers should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.getSharedSpaceMembers(sharedSpaceId1))
           .thenThrow(error);
@@ -92,7 +92,7 @@ void main() {
     test('addMember should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       final request = AddSharedSpaceMemberRequest(
@@ -177,7 +177,7 @@ void main() {
     test('deleteSharedSpaceMember should throw SharedSpaceMemberNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       when(_linShareHttpClient.deleteSharedSpaceMember(sharedSpaceId1, sharedMemberId1))
@@ -192,7 +192,7 @@ void main() {
     test('deleteSharedSpaceMember should throw NotAuthorized when linShareHttpClient response error with 403', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       when(_linShareHttpClient.deleteSharedSpaceMember(sharedSpaceId1, sharedMemberId1))

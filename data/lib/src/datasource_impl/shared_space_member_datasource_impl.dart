@@ -65,12 +65,12 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
       return sharedSpaceMember.toSharedSpaceMember();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw SharedSpaceNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
