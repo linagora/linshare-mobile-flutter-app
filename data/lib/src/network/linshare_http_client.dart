@@ -126,7 +126,8 @@ class LinShareHttpClient {
   Future<ResponseBody> downloadFile(
       String url,
       CancelToken? cancelToken,
-      Token permanentToken) async {
+      Token permanentToken
+  ) async {
     final headerParam = _dioClient.getHeaders();
     headerParam[HttpHeaders.authorizationHeader] = 'Bearer ${permanentToken.token}';
     final responseBody = await _dioClient.get(
@@ -300,7 +301,8 @@ class LinShareHttpClient {
   }
 
   Future<AccountQuotaResponse> findQuota(QuotaId quotaUuid) async {
-    final resultJson = await _dioClient.get(Endpoint.quota.withPathParameter(quotaUuid.uuid).generateEndpointPath());
+    final resultJson = await _dioClient.get(Endpoint.quota.withPathParameter(quotaUuid.uuid)
+        .generateEndpointPath());
     return AccountQuotaResponse.fromJson(resultJson);
   }
 

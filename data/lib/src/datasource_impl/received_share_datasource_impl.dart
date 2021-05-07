@@ -92,12 +92,20 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
             showNotification: true,
             openFileFromNotification: true)));
 
-    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
+    return taskIds
+        .where((taskId) => taskId != null)
+        .map((taskId) => DownloadTaskId(taskId!))
+        .toList();
   }
 
   @override
-  Future<Uri> downloadPreviewReceivedShare(ReceivedShare receivedShare,
-      DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
+  Future<Uri> downloadPreviewReceivedShare(
+      ReceivedShare receivedShare,
+      DownloadPreviewType downloadPreviewType,
+      Token permanentToken,
+      Uri baseUrl,
+      CancelToken cancelToken
+  ) {
     var downloadUrl;
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.receivedShares
