@@ -125,7 +125,7 @@ class LinShareHttpClient {
 
   Future<ResponseBody> downloadFile(
       String url,
-      CancelToken cancelToken,
+      CancelToken? cancelToken,
       Token permanentToken) async {
     final headerParam = _dioClient.getHeaders();
     headerParam[HttpHeaders.authorizationHeader] = 'Bearer ${permanentToken.token}';
