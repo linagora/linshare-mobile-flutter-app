@@ -137,4 +137,21 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
       });
     });
   }
+
+  @override
+  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.renameWorkGroup(sharedSpaceId, renameRequest.toRenameWorkGroupBodyRequest())).toSharedSpaceNodeNested();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw SharedSpaceNotFound();
+        } else if (error.response.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }

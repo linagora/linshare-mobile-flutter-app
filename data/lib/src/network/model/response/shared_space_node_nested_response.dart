@@ -33,6 +33,7 @@ import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:data/src/network/model/converter/quota_id_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/sharedspace/shared_space_role_dto.dart';
+import 'package:data/src/network/model/sharedspace/versioning_parameter_dto.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
@@ -52,7 +53,8 @@ class SharedSpaceNodeNestedResponse extends Equatable {
     this.modificationDate,
     this.name,
     this.nodeType,
-    this.quotaId
+    this.quotaId,
+    this.versioningParameters
   );
 
   @JsonKey(name: Attribute.uuid)
@@ -67,6 +69,8 @@ class SharedSpaceNodeNestedResponse extends Equatable {
   @JsonKey(name: Attribute.quotaUuid)
   final QuotaId quotaId;
 
+  final VersioningParameterDto versioningParameters;
+
   factory SharedSpaceNodeNestedResponse.fromJson(Map<String, dynamic> json) => _$SharedSpaceNodeNestedResponseFromJson(json);
   Map<String, dynamic> toJson() => _$SharedSpaceNodeNestedResponseToJson(this);
 
@@ -78,7 +82,8 @@ class SharedSpaceNodeNestedResponse extends Equatable {
     modificationDate,
     name,
     nodeType,
-    quotaId
+    quotaId,
+    versioningParameters
   ];
 }
 
@@ -91,7 +96,8 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
       modificationDate,
       name,
       nodeType,
-      quotaId ?? QuotaId.initial()
+      quotaId ?? QuotaId.initial(),
+      versioningParameters != null ? versioningParameters.toVersioningParameter() : VersioningParameter.initial()
     );
   }
 }
