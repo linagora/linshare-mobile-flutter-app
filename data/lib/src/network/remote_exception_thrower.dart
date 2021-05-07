@@ -33,7 +33,7 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 class RemoteExceptionThrower {
-  void throwRemoteException(dynamic exception, {Function(DioError) handler}) {
+  void throwRemoteException(dynamic exception, {Function(DioError)? handler}) {
     if (exception is DioError) {
       switch (exception.type) {
         case DioErrorType.other:

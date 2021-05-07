@@ -32,15 +32,15 @@
 
 import 'dart:convert';
 
-import 'package:data/src/network/model/share/share_id_dto.dart';
+import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class ShareIdDtoConverter implements JsonConverter<ShareIdDto, String> {
-  const ShareIdDtoConverter();
+class WorkGroupNodeIdNullableConverter implements JsonConverter<WorkGroupNodeId?, String> {
+  const WorkGroupNodeIdNullableConverter();
 
   @override
-  ShareIdDto fromJson(String? json) => ShareIdDto(json);
+  WorkGroupNodeId? fromJson(String json) => WorkGroupNodeId(json);
 
   @override
-  String toJson(ShareIdDto object) => jsonEncode(object.uuid);
+  String toJson(WorkGroupNodeId? object) => jsonEncode(object!.uuid);
 }

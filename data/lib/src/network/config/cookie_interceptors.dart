@@ -50,7 +50,9 @@ class CookieInterceptors extends InterceptorsWrapper {
 
   @override
   void onError(DioError dioError, ErrorInterceptorHandler handler) {
-    _extractSessionIdFromHeader(dioError.response.headers);
+    if(dioError.response != null) {
+      _extractSessionIdFromHeader(dioError.response!.headers);
+    }
     super.onError(dioError, handler);
   }
 

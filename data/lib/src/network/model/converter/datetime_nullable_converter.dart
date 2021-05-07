@@ -30,17 +30,20 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'dart:convert';
-
-import 'package:data/src/network/model/share/share_id_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class ShareIdDtoConverter implements JsonConverter<ShareIdDto, String> {
-  const ShareIdDtoConverter();
+class DatetimeNullableConverter implements JsonConverter<DateTime?, int> {
+  const DatetimeNullableConverter();
 
   @override
-  ShareIdDto fromJson(String? json) => ShareIdDto(json);
+  DateTime? fromJson(int json) {
+    try {
+      return DateTime.fromMillisecondsSinceEpoch(json);
+    } catch (_) {
+      return null;
+    }
+  }
 
   @override
-  String toJson(ShareIdDto object) => jsonEncode(object.uuid);
+  int toJson(DateTime? object) => object!.millisecondsSinceEpoch;
 }

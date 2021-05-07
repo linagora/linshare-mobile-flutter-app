@@ -73,7 +73,7 @@ dependencies:
   file_picker: 3.0.1
 
   # flutter_uploader
-  flutter_uploader: 3.0.0-beta.1
+  flutter_uploader: 1.2.1
 
   # flutter toast
   fluttertoast: 8.0.6
@@ -82,7 +82,7 @@ dependencies:
   redux_logging: 0.5.0
 
   # receive_sharing_intent
-  receive_sharing_intent: 1.4.5
+  receive_sharing_intent: 1.4.1
 
   # intl
   intl: 0.17.0
