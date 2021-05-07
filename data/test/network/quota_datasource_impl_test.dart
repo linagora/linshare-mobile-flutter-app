@@ -31,20 +31,20 @@
 //
 
 import 'package:data/src/datasource_impl/quota_datasource_impl.dart';
+import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import '../fixture/mock/mock_fixtures.dart';
 import '../fixture/quota_fixture.dart';
-import 'package:data/src/network/model/response/account_quota_response.dart';
 
 void main() {
   group('quota_datasource_impl_test', () {
-    MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
-    QuotaDataSourceImpl _quotaDataSourceImpl;
+    late MockLinShareHttpClient _linShareHttpClient;
+    late MockRemoteExceptionThrower _remoteExceptionThrower;
+    late QuotaDataSourceImpl _quotaDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
@@ -66,7 +66,8 @@ void main() {
     test('findQuota should throw QuotaNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
         type: DioErrorType.response,
-        response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+        response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')),
+          requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.findQuota(quotaId1))
         .thenThrow(error);

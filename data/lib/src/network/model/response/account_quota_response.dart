@@ -40,10 +40,10 @@ part 'account_quota_response.g.dart';
 @JsonSerializable()
 class AccountQuotaResponse with EquatableMixin  {
   AccountQuotaResponse(
-    {this.quota,
+    this.quota,
     this.usedSpace,
     this.maxFileSize,
-    this.maintenance}
+    this.maintenance
   );
 
   final QuotaSize quota;
@@ -67,10 +67,10 @@ class AccountQuotaResponse with EquatableMixin  {
 extension AccountQuotaResponseExtension on AccountQuotaResponse {
   AccountQuota toAccountQuota() {
     return AccountQuota(
-      quota: quota,
-      usedSpace: usedSpace,
-      maxFileSize: maxFileSize,
-      maintenance: maintenance,
+      quota,
+      usedSpace,
+      maxFileSize,
+      maintenance,
     );
   }
 }

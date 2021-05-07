@@ -86,10 +86,10 @@ final user1 = User(
 final quotaId1 = QuotaId('q1');
 
 final accountQuota1 = AccountQuota(
-  quota: QuotaSize(100),
-  usedSpace: QuotaSize(20),
-  maxFileSize: QuotaSize(30),
-  maintenance: true
+  QuotaSize(100),
+  QuotaSize(20),
+  QuotaSize(30),
+  true
 );
 
 final sharedSpaceSorter1 = Sorter(OrderScreen.workGroup, OrderBy.modificationDate, OrderType.descending);

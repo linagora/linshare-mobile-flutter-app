@@ -33,10 +33,10 @@ import 'dart:async';
 
 import 'package:data/src/datasource/quota_datasource.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:data/src/network/model/response/account_quota_response.dart';
 
 class QuotaDataSourceImpl implements QuotaDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -51,10 +51,10 @@ class QuotaDataSourceImpl implements QuotaDataSource {
       return quotaResponse.toAccountQuota();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw QuotaNotFound();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });

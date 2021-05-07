@@ -41,10 +41,10 @@ import 'package:linshare_flutter_app/presentation/manager/quota/verify_quota_man
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:redux/redux.dart';
-import '../../domain/test/fixture/test_fixture.dart';
+import 'package:test/test.dart';
 
+import '../../domain/test/fixture/test_fixture.dart';
 import '../../domain/test/mock/repository/quota/mock_quota_repository.dart';
 import '../fixtures/test_redux_module.dart';
 
@@ -69,10 +69,10 @@ void main() {
       'verify quota should fail and returns fail action if getQuotaInteractor fails',
       () async {
         final accountQuota = AccountQuota(
-          quota: QuotaSize(2000),
-          usedSpace: QuotaSize(1),
-          maxFileSize: QuotaSize(10000),
-          maintenance: false
+          QuotaSize(2000),
+          QuotaSize(1),
+          QuotaSize(10000),
+          false
         );
         _store.dispatch(SetAccountInformationsAction(user1));
 
@@ -88,10 +88,10 @@ void main() {
       'verify quota should fail if list infos is empty',
       () async {
         final accountQuota = AccountQuota(
-          quota: QuotaSize(2000),
-          usedSpace: QuotaSize(1),
-          maxFileSize: QuotaSize(10000),
-          maintenance: false
+          QuotaSize(2000),
+          QuotaSize(1),
+          QuotaSize(10000),
+          false
         );
         _store.dispatch(SetAccountInformationsAction(user1));
 
@@ -107,10 +107,10 @@ void main() {
       'verify quota should fail and returns fail action if totalFilesSize exceeds quota left',
       () async {
         final accountQuota = AccountQuota(
-          quota: QuotaSize(1),
-          usedSpace: QuotaSize(1),
-          maxFileSize: QuotaSize(10000),
-          maintenance: false
+          QuotaSize(1),
+          QuotaSize(1),
+          QuotaSize(10000),
+          false
         );
         _store.dispatch(SetAccountInformationsAction(user1));
 
@@ -128,10 +128,10 @@ void main() {
       'verify quota should fail and returns fail action if one or many files sizes exceeds max file size',
       () async {
         final accountQuota = AccountQuota(
-          quota: QuotaSize(10000),
-          usedSpace: QuotaSize(1),
-          maxFileSize: QuotaSize(1),
-          maintenance: false
+          QuotaSize(10000),
+          QuotaSize(1),
+          QuotaSize(1),
+          false
         );
         _store.dispatch(SetAccountInformationsAction(user1));
 
