@@ -75,7 +75,8 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   Future<List<WorkGroupNode?>> copyToSharedSpace(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId? destinationParentNodeId}) {
+    {WorkGroupNodeId? destinationParentNodeId}
+  ) {
       return _sharedSpaceDocumentDataSource.copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
   }
 
