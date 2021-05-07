@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,57 +28,16 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class SharedSpaceOperationRole {
-  static const copyToSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.CONTRIBUTOR,
-    SharedSpaceRoleName.WRITER
-  ];
+class RenameWorkGroupRequest with EquatableMixin {
+  final String name;
+  final VersioningParameter versioningParameters;
 
-  static const uploadToSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.CONTRIBUTOR,
-    SharedSpaceRoleName.WRITER
-  ];
+  RenameWorkGroupRequest(this.name, this.versioningParameters);
 
-  static const deleteSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
-
-  static const addMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
-
-  static const editMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
-
-  static const deleteMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
-
-  static const deleteNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER
-  ];
-
-  static const duplicateNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER,
-    SharedSpaceRoleName.CONTRIBUTOR
-  ];
-
-  static const renameNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER,
-    SharedSpaceRoleName.CONTRIBUTOR
-  ];
-
-  static const renameWorkGroupSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN
-  ];
+  @override
+  List<Object> get props => [name, versioningParameters];
 }
