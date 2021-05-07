@@ -44,7 +44,7 @@ class AuditLogEntryUserDto with EquatableMixin {
   @JsonKey(name: Attribute.fromResourceUuid)
   final AuditLogResourceId fromResourceId;
 
-  final DateTime creationDate;
+  final DateTime? creationDate;
   final AccountDto actor;
   final AccountDto authUser;
   final AuditLogEntryType type;
@@ -64,7 +64,7 @@ class AuditLogEntryUserDto with EquatableMixin {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     auditLogEntryId,
     resourceId,
     fromResourceId,

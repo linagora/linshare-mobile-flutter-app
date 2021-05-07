@@ -51,7 +51,7 @@ class SharedSpaceNodeAuditLogEntryDto extends AuditLogEntryUserDto {
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
-      DateTime creationDate,
+      DateTime? creationDate,
       AccountDto authUser,
       AuditLogEntryType type,
       LogAction action,
@@ -62,7 +62,7 @@ class SharedSpaceNodeAuditLogEntryDto extends AuditLogEntryUserDto {
       ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     resource,
     resourceUpdated
@@ -77,13 +77,13 @@ extension SharedSpaceNodeAuditLogEntryDtoExtension on SharedSpaceNodeAuditLogEnt
       auditLogEntryId,
       resourceId,
       fromResourceId,
-      creationDate,
-      authUser != null ? authUser.toAccount() : null,
+      creationDate ?? DateTime.now(),
+      authUser.toAccount(),
       type,
       action,
       cause,
-      actor != null ? actor.toAccount() : null,
-      resource != null ? resource.toSharedSpaceNodeNested() : null,
-      resourceUpdated != null ? resourceUpdated.toSharedSpaceNodeNested() : null
+      actor.toAccount(),
+      resource.toSharedSpaceNodeNested(),
+      resourceUpdated.toSharedSpaceNodeNested()
   );
 }

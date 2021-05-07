@@ -144,7 +144,7 @@ class LinShareHttpClient {
     return resultJson.map((data) => SharedSpaceNodeNestedResponse.fromJson(data)).toList();
   }
 
-  Future<List<AuditLogEntryUserDto>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) async {
+  Future<List<AuditLogEntryUserDto?>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) async {
     final List membersJson = await _dioClient.get(
         Endpoint.workGroups
                 .withPathParameter(sharedSpaceId.uuid)
@@ -155,7 +155,7 @@ class LinShareHttpClient {
         .toList();
   }
 
-  AuditLogEntryUserDto _convertToAuditLogEntryNodeChild(Map<String, dynamic> nodeChildJson) {
+  AuditLogEntryUserDto? _convertToAuditLogEntryNodeChild(Map<String, dynamic> nodeChildJson) {
     if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP.value) {
       return SharedSpaceNodeAuditLogEntryDto.fromJson(nodeChildJson);
     } else if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP_MEMBER.value) {

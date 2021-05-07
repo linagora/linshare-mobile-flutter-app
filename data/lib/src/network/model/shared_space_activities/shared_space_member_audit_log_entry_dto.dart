@@ -31,7 +31,7 @@
 import 'package:data/data.dart';
 import 'package:data/src/network/model/converter/audit_log_entry_id_converter.dart';
 import 'package:data/src/network/model/converter/audit_log_resource_id_converter.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/shared_space_activities/audit_log_entry_user_dto.dart';
 import 'package:data/src/network/model/shared_space_activities/work_group_light_dto.dart';
 import 'package:domain/domain.dart';
@@ -40,7 +40,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'shared_space_member_audit_log_entry_dto.g.dart';
 
 @JsonSerializable()
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @AuditLogEntryIdConverter()
 @AuditLogResourceIdConverter()
 class SharedSpaceMemberAuditLogEntryDto extends AuditLogEntryUserDto {
@@ -53,7 +53,7 @@ class SharedSpaceMemberAuditLogEntryDto extends AuditLogEntryUserDto {
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
-      DateTime creationDate,
+      DateTime? creationDate,
       AccountDto authUser,
       AuditLogEntryType type,
       LogAction action,
@@ -65,7 +65,7 @@ class SharedSpaceMemberAuditLogEntryDto extends AuditLogEntryUserDto {
   ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     workGroup,
     resource,
@@ -81,14 +81,14 @@ extension SharedSpaceMemberAuditLogEntryDtoExtension on SharedSpaceMemberAuditLo
     auditLogEntryId,
     resourceId,
     fromResourceId,
-    creationDate,
-    authUser != null ? authUser.toAccount() : null,
+    creationDate ?? DateTime.now(),
+    authUser.toAccount(),
     type,
     action,
     cause,
-    actor != null ? actor.toAccount() : null,
-    workGroup != null ? workGroup.toWorkGroupLight() : null,
-    resource != null ? resource.toSharedSpaceMember() : null,
-    resourceUpdated != null ? resourceUpdated.toSharedSpaceMember() : null
+    actor.toAccount(),
+    workGroup.toWorkGroupLight(),
+    resource.toSharedSpaceMember(),
+    resourceUpdated.toSharedSpaceMember()
   );
 }
