@@ -41,9 +41,9 @@ import 'fixture/functionality_fixture.dart';
 import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
-  LinShareHttpClient linShareHttpClient;
+  late LinShareHttpClient linShareHttpClient;
   RemoteExceptionThrower remoteExceptionThrower;
-  FunctionalityDataSourceImpl functionalityDataSourceImpl;
+  late FunctionalityDataSourceImpl functionalityDataSourceImpl;
 
   setUp(() {
     linShareHttpClient = MockLinShareHttpClient();
@@ -61,8 +61,8 @@ void main() {
   test('get all functionality data source should throw NotAuthorized when linShareHttpClient response error with 403', () async {
     final error = DioError(
       type: DioErrorType.response,
-      response: Response(statusCode: 403, requestOptions: null),
-      requestOptions: null
+      response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')),
+      requestOptions: RequestOptions(path: '')
     );
     when(linShareHttpClient.getAllFunctionality()).thenThrow(error);
 

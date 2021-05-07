@@ -324,7 +324,7 @@ class LinShareHttpClient {
   }
 
   FunctionalityDto _convertToActualFunctionality(Map<String, dynamic> jsonData) {
-    String type = jsonData['type'];
+    String? type = jsonData['type'];
     switch (type) {
       case 'boolean': return FunctionalityBooleanDto.fromJson(jsonData);
       case 'integer': return FunctionalityIntegerDto.fromJson(jsonData);
