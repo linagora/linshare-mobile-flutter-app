@@ -70,6 +70,8 @@ export 'src/network/model/response/document_details_response.dart';
 export 'src/network/model/share/document_details_received_share_dto.dart';
 export 'src/network/model/share/received_share_id_dto.dart';
 export 'src/network/model/generic_user_dto.dart';
+export 'src/network/model/request/rename_work_group_body_request.dart';
+export 'src/network/model/sharedspace/versioning_parameter_dto.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
