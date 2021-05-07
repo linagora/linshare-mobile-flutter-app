@@ -37,7 +37,7 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   static const String RETRY_KEY = 'Retry';
   static const String AUTHORIZATION_KEY = 'Authorization';
   final Dio _dio;
-  Token _permanentToken;
+  Token? _permanentToken;
 
   RetryAuthenticationInterceptors(this._dio);
 
@@ -48,13 +48,13 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   @override
   void onError(DioError dioError, ErrorInterceptorHandler handler) async {
     final requestOptions = dioError.requestOptions;
-    final extraInRequest = requestOptions.extra ?? {};
+    final extraInRequest = requestOptions.extra;
     var retries = extraInRequest[RETRY_KEY] ?? 0;
     if (_isAuthenticationError(dioError, retries)) {
       retries++;
 
       requestOptions.headers.addAll({
-        AUTHORIZATION_KEY: _getTokenAsBearerHeader(_permanentToken.token),
+        AUTHORIZATION_KEY: _getTokenAsBearerHeader(_permanentToken?.token),
         RETRY_KEY: retries});
 
       final response = await _dio.fetch(requestOptions);
@@ -67,7 +67,7 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
 
   bool _isAuthenticationError(DioError dioError, int retryCount) {
     if (dioError.type == DioErrorType.response &&
-        dioError.response.statusCode == 401 &&
+        dioError.response?.statusCode == 401 &&
         _permanentToken != null &&
         retryCount < _max_retry_count) {
       return true;
@@ -75,5 +75,5 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     return false;
   }
 
-  String _getTokenAsBearerHeader(String token) => 'Bearer $token';
+  String _getTokenAsBearerHeader(String? token) => 'Bearer $token';
 }

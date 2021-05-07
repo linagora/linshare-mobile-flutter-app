@@ -45,9 +45,9 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 void main() {
 
   group('delete_permanent_token_interactor_test', () {
-    DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-    MockAuthenticationRepository authenticationRepository;
-    MockTokenRepository tokenRepository;
+    late DeletePermanentTokenInteractor deletePermanentTokenInteractor;
+    late MockAuthenticationRepository authenticationRepository;
+    late MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
 
     setUp(() {

@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -105,7 +106,7 @@ class LinShareHttpClient {
     return deletedToken != null;
   }
 
-  Future<UserResponse> getAuthorizedUser() async {
+  Future<UserResponse?> getAuthorizedUser() async {
     final resultJson = await _dioClient.get(Endpoint.authorizedUser.generateEndpointPath());
     return UserResponse.fromJson(resultJson);
   }

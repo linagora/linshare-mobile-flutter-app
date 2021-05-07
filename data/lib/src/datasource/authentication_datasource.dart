@@ -56,10 +56,10 @@ class AuthenticationDataSource {
       return permanentToken.toToken();
     }).catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          if (error.response.statusCode == 401) {
+          if (error.response?.statusCode == 401) {
             throw BadCredentials();
           } else {
-            throw UnknownError(error.response.statusMessage);
+            throw UnknownError(error.response?.statusMessage!);
           }
         });
     });
@@ -69,12 +69,12 @@ class AuthenticationDataSource {
     return Future.sync(() async => await linShareHttpClient.deletePermanentToken(token.toPermanentToken()))
       .catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
             throw RequestedTokenNotFound();
-          } else if (error.response.statusCode == 400) {
+          } else if (error.response?.statusCode == 400) {
             throw MissingRequiredFields();
           } else {
-            throw UnknownError(error.response.statusMessage);
+            throw UnknownError(error.response?.statusMessage!);
           }
         });
       });
@@ -82,14 +82,14 @@ class AuthenticationDataSource {
 
   Future<User> getAuthorizedUser() async {
     return Future.sync(() async {
-      var result = (await linShareHttpClient.getAuthorizedUser()).toUser();
-      if (result == null) {
+      final userRes = await linShareHttpClient.getAuthorizedUser();
+      if (userRes == null) {
         throw NotAuthorizedUser();
       }
-      return result;
+      return userRes.toUser();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        throw UnknownError(error.response.statusMessage);
+        throw UnknownError(error.response?.statusMessage!);
       });
     });
   }

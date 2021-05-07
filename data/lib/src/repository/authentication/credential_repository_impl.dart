@@ -41,7 +41,7 @@ class CredentialRepositoryImpl extends CredentialRepository {
 
   @override
   Future<Uri> getBaseUrl() async {
-    return Uri.parse(sharedPreferences.getString(keyBaseUrl));
+    return Uri.parse(sharedPreferences.getString(keyBaseUrl) ?? '');
   }
 
   @override
