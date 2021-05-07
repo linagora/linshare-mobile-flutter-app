@@ -48,7 +48,7 @@ class MySpaceViewState extends ViewState {
 }
 
 class MySpaceFailure extends FeatureFailure {
-  final Exception exception;
+  final exception;
 
   MySpaceFailure(this.exception);
 
@@ -66,7 +66,7 @@ class DownloadFileViewState extends ViewState {
 }
 
 class DownloadFileFailure extends FeatureFailure {
-  final Exception downloadFileException;
+  final downloadFileException;
 
   DownloadFileFailure(this.downloadFileException);
 
@@ -88,11 +88,11 @@ class DownloadFileIOSViewState extends ViewState {
   DownloadFileIOSViewState(this.filePath);
 
   @override
-  List<Object> get props => [filePath];
+  List<Object?> get props => [filePath];
 }
 
 class DownloadFileIOSFailure extends FeatureFailure {
-  final Exception downloadFileException;
+  final downloadFileException;
 
   DownloadFileIOSFailure(this.downloadFileException);
 
@@ -137,7 +137,7 @@ class RemoveDocumentViewState extends ViewState {
 }
 
 class RemoveDocumentFailure extends FeatureFailure {
-  final Exception removeDocumentFailure;
+  final removeDocumentFailure;
 
   RemoveDocumentFailure(this.removeDocumentFailure);
 
@@ -182,7 +182,7 @@ class CopyToMySpaceViewState extends ViewState {
 }
 
 class CopyToMySpaceFailure extends FeatureFailure {
-  final Exception exception;
+  final exception;
 
   CopyToMySpaceFailure(this.exception);
 

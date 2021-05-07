@@ -66,10 +66,10 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       return documentResponseList.map((documentResponse) => documentResponse.toDocument()).toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -96,7 +96,10 @@ class DocumentDataSourceImpl implements DocumentDataSource {
             showNotification: true,
             openFileFromNotification: true)));
 
-    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
+    return taskIds
+        .where((taskId) => taskId != null)
+        .map((taskId) => DownloadTaskId(taskId!))
+        .toList();
   }
 
   @override
@@ -104,7 +107,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     return Future.sync(() async {
       final shareDocumentBodyRequest = ShareDocumentBodyRequest(
           documentIds.map((data) => ShareIdDto(data.uuid)).toList(),
-          mailingListIds.map((data) => MailingListIdDto(data.uuid)).toList(),
+          mailingListIds.map((data) => MailingListIdDto(data.uuid!)).toList(),
           recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName)).toList());
       final shareList = await _linShareHttpClient.shareDocument(shareDocumentBodyRequest);
       return shareList.map((data) => data.toShare()).toList();
@@ -115,12 +118,12 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   void _handleShareException(DioError error) {
-    if (error.response.statusCode == 404) {
+    if (error.response?.statusCode == 404) {
       throw DocumentNotFound();
-    } else if (error.response.statusCode == 403) {
+    } else if (error.response?.statusCode == 403) {
       throw ShareDocumentNoPermissionException();
     } else {
-      throw UnknownError(error.response.statusMessage);
+      throw UnknownError(error.response?.statusMessage!);
     }
   }
 
@@ -143,10 +146,10 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       return documentResponse.toDocument();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -159,12 +162,12 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       return documentsResponse.map((response) => response.toDocument()).toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
-        } if (error.response.statusCode == 403) {
+        } if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -199,10 +202,10 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       return documentResponse.toDocument();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -214,10 +217,10 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       return (await _linShareHttpClient.getDocument(documentId)).toDocumentDetails();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
