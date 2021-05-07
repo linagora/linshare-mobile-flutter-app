@@ -41,6 +41,7 @@ class SharedSpaceNodeNested extends Equatable {
   final String name;
   final LinShareNodeType nodeType;
   final QuotaId quotaId;
+  final VersioningParameter versioningParameters;
 
   SharedSpaceNodeNested(
     this.sharedSpaceId,
@@ -49,7 +50,8 @@ class SharedSpaceNodeNested extends Equatable {
     this.modificationDate,
     this.name,
     this.nodeType,
-    this.quotaId
+    this.quotaId,
+    this.versioningParameters
   );
 
   @override
@@ -60,6 +62,7 @@ class SharedSpaceNodeNested extends Equatable {
     modificationDate,
     name,
     nodeType,
-    quotaId
+    quotaId,
+    versioningParameters
   ];
 }

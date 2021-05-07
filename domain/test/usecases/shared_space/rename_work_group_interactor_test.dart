@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,55 +30,50 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class SharedSpaceOperationRole {
-  static const copyToSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.CONTRIBUTOR,
-    SharedSpaceRoleName.WRITER
-  ];
+import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
-  static const uploadToSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.CONTRIBUTOR,
-    SharedSpaceRoleName.WRITER
-  ];
+void main() {
+  group('rename_work_group_interactor test', () {
+    MockSharedSpaceRepository sharedSpaceRepository;
+    RenameWorkGroupInteractor renameWorkGroupInteractor;
 
-  static const deleteSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
+    setUp(() {
+      sharedSpaceRepository = MockSharedSpaceRepository();
+      renameWorkGroupInteractor = RenameWorkGroupInteractor(sharedSpaceRepository);
+    });
 
-  static const addMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
+    test('rename workgroup interactor should return success with one valid data', () async {
+      when(sharedSpaceRepository.renameWorkGroup(
+        sharedSpace1.sharedSpaceId,
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters)))
+      .thenAnswer((_) async => sharedSpace1);
 
-  static const editMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
+      final result = await renameWorkGroupInteractor.execute(
+        sharedSpace1.sharedSpaceId,
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters));
 
-  static const deleteMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
+      expect(result, Right<Failure, Success>(RenameWorkGroupViewState(sharedSpace1)));
+    });
 
-  static const deleteNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER
-  ];
+    test('rename workgroup interactor should fail when renameWorkGroup fail', () async {
+      final exception = Exception();
 
-  static const duplicateNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER,
-    SharedSpaceRoleName.CONTRIBUTOR
-  ];
+      when(sharedSpaceRepository.renameWorkGroup(
+         sharedSpace1.sharedSpaceId,
+         RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters)))
+      .thenThrow(exception);
 
-  static const renameNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER,
-    SharedSpaceRoleName.CONTRIBUTOR
-  ];
+      final result = await renameWorkGroupInteractor.execute(
+        sharedSpace1.sharedSpaceId,
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters));
 
-  static const renameWorkGroupSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN
-  ];
+      expect(result, Left<Failure, Success>(RenameWorkGroupFailure(exception)));
+    });
+  });
 }

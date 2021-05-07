@@ -175,6 +175,8 @@ export 'src/model/biometric_authentication/biometric_kind.dart';
 export 'src/model/biometric_authentication/authentication_biometric_state.dart';
 export 'src/model/biometric_authentication/android_setting_arguments.dart';
 export 'src/model/biometric_authentication/ios_setting_arguments.dart';
+export 'src/model/sharedspace/versioning_parameter.dart';
+export 'src/model/sharedspace/rename_work_group_request.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -245,6 +247,7 @@ export 'src/usecases/biometric_auhentication/get_biometric_setting_interactor.da
 export 'src/usecases/biometric_auhentication/disable_biometric_interactor.dart';
 export 'src/usecases/myspace/duplicate_multiple_files_in_my_space_interactor.dart';
 export 'src/usecases/shared_space/restore_work_group_document_version_interactor.dart';
+export 'src/usecases/shared_space/rename_work_group_interactor.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
