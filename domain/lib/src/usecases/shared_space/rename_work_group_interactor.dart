@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,55 +30,20 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class SharedSpaceOperationRole {
-  static const copyToSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.CONTRIBUTOR,
-    SharedSpaceRoleName.WRITER
-  ];
+class RenameWorkGroupInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  static const uploadToSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.CONTRIBUTOR,
-    SharedSpaceRoleName.WRITER
-  ];
+  RenameWorkGroupInteractor(this._sharedSpaceRepository);
 
-  static const deleteSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
-
-  static const addMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
-
-  static const editMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
-
-  static const deleteMemberSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-  ];
-
-  static const deleteNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER
-  ];
-
-  static const duplicateNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER,
-    SharedSpaceRoleName.CONTRIBUTOR
-  ];
-
-  static const renameNodeSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN,
-    SharedSpaceRoleName.WRITER,
-    SharedSpaceRoleName.CONTRIBUTOR
-  ];
-
-  static const renameWorkGroupSharedSpaceRoles = [
-    SharedSpaceRoleName.ADMIN
-  ];
+  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameWorkGroupRequest) async {
+    try {
+      final workGroup = await _sharedSpaceRepository.renameWorkGroup(sharedSpaceId, renameWorkGroupRequest);
+      return Right<Failure, Success>(RenameWorkGroupViewState(workGroup));
+    } catch (exception) {
+      return Left<Failure, Success>(RenameWorkGroupFailure(exception));
+    }
+  }
 }
