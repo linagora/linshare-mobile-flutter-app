@@ -69,6 +69,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   final SortInteractor _sortInteractor;
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
+  final RenameWorkGroupInteractor _renameWorkGroupInteractor;
   StreamSubscription _storeStreamSubscription;
   List<SharedSpaceNodeNested> _sharedSpaceNodes;
 
@@ -86,6 +87,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._sortInteractor,
     this._getSorterInteractor,
     this._saveSorterInteractor,
+    this._renameWorkGroupInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -387,6 +389,33 @@ class SharedSpaceViewModel extends BaseViewModel {
           .then((result) => result.fold(
               (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
               (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+    });
+  }
+
+  void openRenameWorkGroupModal(BuildContext context, SharedSpaceNodeNested sharedSpace) {
+    _appNavigation.popBack();
+
+    EditTextModalSheetBuilder()
+      .key(Key('rename_work_group_modal'))
+      .title(AppLocalizations.of(context).rename_node(AppLocalizations.of(context).workgroup.toLowerCase()))
+      .cancelText(AppLocalizations.of(context).cancel)
+      .onConfirmAction(AppLocalizations.of(context).rename,
+        (value) => store.dispatch(_renameWorkGroupAction(context, value, sharedSpace)))
+      .setErrorString(
+        (value) => getErrorString(context, value))
+      .setTextSelection(
+        TextSelection(baseOffset: 0, extentOffset: sharedSpace.name.length),
+        value: sharedSpace.name)
+      .show(context);
+  }
+
+  OnlineThunkAction _renameWorkGroupAction(BuildContext context, String newName, SharedSpaceNodeNested sharedSpaceNodeNested) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _renameWorkGroupInteractor
+        .execute(
+          sharedSpaceNodeNested.sharedSpaceId,
+          RenameWorkGroupRequest(newName, sharedSpaceNodeNested.versioningParameters))
+        .then((result) => getAllSharedSpaces(needToGetOldSorter: true));
     });
   }
 
