@@ -28,25 +28,28 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-abstract class SharedSpaceDataSource {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+part 'versioning_parameter_dto.g.dart';
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+@JsonSerializable()
+class VersioningParameterDto with EquatableMixin {
+  final bool enable;
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId sharedSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
-  );
+  VersioningParameterDto(this.enable);
 
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
+  factory VersioningParameterDto.fromJson(Map<String, dynamic> json) => _$VersioningParameterDtoFromJson(json);
 
-  Future<List<SharedSpaceRole>> getSharedSpaceRoles();
+  Map<String, dynamic> toJson() => _$VersioningParameterDtoToJson(this);
 
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
+  @override
+  List<Object> get props => [enable];
+}
+
+extension VersioningParameterDtoExtension on VersioningParameterDto {
+  VersioningParameter toVersioningParameter() => VersioningParameter(enable);
 }
