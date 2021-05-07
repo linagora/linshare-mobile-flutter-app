@@ -64,15 +64,15 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 import 'model/autocomplete/shared_space_member_autocomplete_result_dto.dart';
+import 'model/request/add_shared_space_member_body_request.dart';
 import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
+import 'model/request/update_shared_space_member_body_request.dart';
 import 'model/response/document_details_response.dart';
 import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
-import 'model/request/add_shared_space_member_body_request.dart';
-import 'model/request/update_shared_space_member_body_request.dart';
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -307,7 +307,8 @@ class LinShareHttpClient {
   }
 
   Future<List<DocumentResponse>> copyToMySpace(
-    CopyBodyRequest copyRequest) async {
+    CopyBodyRequest copyRequest
+  ) async {
       final copyEndpointPath = Endpoint.documents
         .withPathParameter('copy')
         .generateEndpointPath();
