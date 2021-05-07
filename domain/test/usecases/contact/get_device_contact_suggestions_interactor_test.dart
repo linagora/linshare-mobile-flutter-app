@@ -41,8 +41,8 @@ import '../../mock/repository/mock_contact_repository.dart';
 
 void main() {
   group('get_device_contact_suggestions_interactor_test', () {
-    ContactRepository contactRepository;
-    GetDeviceContactSuggestionsInteractor getDeviceContactSuggestionsInteractor;
+    late ContactRepository contactRepository;
+    late GetDeviceContactSuggestionsInteractor getDeviceContactSuggestionsInteractor;
 
     setUp(() {
       contactRepository = MockContactRepository();
