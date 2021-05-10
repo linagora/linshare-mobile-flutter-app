@@ -33,6 +33,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/transparent_page_route.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_login_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_setting_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
@@ -57,7 +58,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case RoutePaths.currentUploads:
       return MaterialPageRoute(builder: (context) => getIt<CurrentUploadsWidget>(), settings: settings.arguments);
     case RoutePaths.destinationPicker:
-      return MaterialPageRoute(builder: (context) => getIt<DestinationPickerWidget>(), settings: settings.arguments);
+      return TransparentPageRoute(builder: (context) => getIt<DestinationPickerWidget>(), settings: settings.arguments);
     case RoutePaths.sharedSpaceDetails:
       return MaterialPageRoute(builder: (context) => getIt<SharedSpaceDetailsWidget>(), settings: settings.arguments);
     case RoutePaths.addSharedSpaceMember:
