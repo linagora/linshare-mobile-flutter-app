@@ -81,4 +81,11 @@ class SharedSpaceOperationRole {
   static const renameWorkGroupSharedSpaceRoles = [
     SharedSpaceRoleName.ADMIN
   ];
+
+  static const previewVersionDocumentSharedSpaceRoles = [
+    SharedSpaceRoleName.ADMIN,
+    SharedSpaceRoleName.WRITER,
+    SharedSpaceRoleName.CONTRIBUTOR,
+    SharedSpaceRoleName.READER
+  ];
 }
