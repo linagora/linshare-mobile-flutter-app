@@ -50,6 +50,7 @@ import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
@@ -70,6 +71,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   final mySpaceViewModel = getIt<MySpaceViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final appToast = getIt<AppToast>();
+  final _responsiveUtils = getIt<ResponsiveUtils>();
 
   @override
   void initState() {
@@ -286,7 +288,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           converter: (store) => store.state.mySpaceState.selectMode,
           builder: (context, selectMode) {
             return ListView.builder(
-                padding: ResponsiveWidget.isLargeScreen(context)
+                padding: _responsiveUtils.isLargeScreen(context)
                     ? EdgeInsets.symmetric(horizontal: 132.0)
                     : EdgeInsets.zero,
                 key: Key('my_space_documents_list'),
@@ -328,10 +330,10 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           ),
           smallScreen: Transform(
             transform: Matrix4.translationValues(-16, 0.0, 0.0),
-            child: _buildDocumentName(document.element.name),
-          ),
+            child: _buildDocumentName(document.element.name)),
+          responsiveUtil: _responsiveUtils,
         ),
-        subtitle: ResponsiveWidget.isSmallScreen(context)
+        subtitle: _responsiveUtils.isSmallScreen(context)
             ? Transform(
                 transform: Matrix4.translationValues(-16, 0.0, 0.0),
                 child: Row(

@@ -38,12 +38,14 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/order_by_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/order_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 
 typedef OnOpenOrderMenuActionClick = void Function(Sorter currentSorter);
 
 class OrderByButtonBuilder {
   final imagePath = getIt<AppImagePaths>();
+  final _responsiveUtils = getIt<ResponsiveUtils>();
 
   final BuildContext _context;
   final Sorter _currentSorter;
@@ -61,7 +63,7 @@ class OrderByButtonBuilder {
 
   Widget build() {
     return ListTile(
-      contentPadding: ResponsiveWidget.isLargeScreen(_context)
+      contentPadding: _responsiveUtils.isLargeScreen(_context)
           ? EdgeInsets.symmetric(horizontal: 155)
           : EdgeInsets.symmetric(horizontal: 16) ,
       leading: Column(
