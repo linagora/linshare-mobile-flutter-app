@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
@@ -64,6 +65,7 @@ class SharedSpaceWidget extends StatefulWidget {
 class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   final sharedSpaceViewModel = getIt<SharedSpaceViewModel>();
   final imagePath = getIt<AppImagePaths>();
+  final _responsiveUtils = getIt<ResponsiveUtils>();
 
   @override
   void initState() {
@@ -276,7 +278,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     } else {
       return ListView.builder(
         key: Key('shared_spaces_list'),
-        padding: ResponsiveWidget.getPaddingForScreen(context),
+        padding: _responsiveUtils.getPaddingListItemForScreen(context),
         itemCount: sharedSpacesList.length,
         itemBuilder: (context, index) {
           return _buildSharedSpaceListItem(context, sharedSpacesList[index]);
@@ -335,8 +337,9 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                         sharedSpace.element.modificationDate.getMMMddyyyyFormatString())))
               ]),
           ),
+          responsiveUtil: _responsiveUtils,
         ),
-        subtitle: ResponsiveWidget.isSmallScreen(context)
+        subtitle: _responsiveUtils.isSmallScreen(context)
           ? Transform(
               transform: Matrix4.translationValues(-16, 0.0, 0.0),
               child: Row(
