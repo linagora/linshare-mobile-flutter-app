@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -93,12 +94,35 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
               child: SvgPicture.asset(imagePath.icInfo, width: 28, height: 28, color: Colors.white))
         ],
       ),
-      body: StoreConnector<AppState, SharedSpaceNodeVersionsState>(
-        converter: (store) => store.state.sharedSpaceNodeVersionsState,
-        builder: (_, state) => RefreshIndicator(
-          child: _versionsListWidget(state.workgroupNodeVersions, arguments.workGroupNode),
-          onRefresh: () async => _model.getAllVersions(arguments.workGroupNode)),
-      ),
+      body: Column(
+        children: [
+          _buildLoadingLayout(),
+          Expanded(child: StoreConnector<AppState, SharedSpaceNodeVersionsState>(
+            converter: (store) => store.state.sharedSpaceNodeVersionsState,
+            builder: (_, state) => RefreshIndicator(
+              child: _versionsListWidget(state.workgroupNodeVersions, arguments.workGroupNode),
+              onRefresh: () async => _model.getAllVersions(arguments.workGroupNode)),
+          ))
+        ]
+      )
+    );
+  }
+
+  Widget _buildLoadingLayout() {
+    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
+      converter: (store) => store.state.sharedSpaceNodeVersionsState.viewState,
+      builder: (context, viewState) => viewState.fold(
+        (failure) => SizedBox.shrink(),
+        (success) => (success is LoadingState)
+          ? Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor)))))
+          : SizedBox.shrink())
     );
   }
 
