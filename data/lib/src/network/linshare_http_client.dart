@@ -497,4 +497,17 @@ class LinShareHttpClient {
 
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
+
+  Future<DocumentResponse> editDescriptionDocument(DocumentId documentId, EditDescriptionDocumentRequest request) async {
+    final resultJson = await _dioClient.put(
+        Endpoint.documents
+            .withPathParameter(documentId.uuid)
+            .generateEndpointPath(),
+        data: request.toJson().toString(),
+        options: Options(headers: {
+          'Content-Type': 'application/json'
+        })
+    );
+    return DocumentResponse.fromJson(resultJson);
+  }
 }

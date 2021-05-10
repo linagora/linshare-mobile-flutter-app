@@ -52,4 +52,6 @@ abstract class DocumentDataSource {
   Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
 
   Future<DocumentDetails> getDocument(DocumentId documentId);
+
+  Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request);
 }
