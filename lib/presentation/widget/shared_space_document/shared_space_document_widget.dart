@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
@@ -85,6 +86,7 @@ class SharedSpaceDocumentWidget extends StatefulWidget {
 }
 
 class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
+  final _responsiveUtils = getIt<ResponsiveUtils>();
   final appNavigation = getIt<AppNavigation>();
   final imagePath = getIt<AppImagePaths>();
   final sharedSpaceDocumentViewModel = getIt<SharedSpaceDocumentNodeViewModel>();
@@ -484,7 +486,9 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   Widget _buildSharedSpaceDocumentListView(List<SelectableElement<WorkGroupNode>> workGroupNodes, SelectMode selectMode) {
     return workGroupNodes.isNotEmpty
         ? ListView.builder(
-            padding: ResponsiveWidget.getPaddingForScreen(context),
+            padding: widget.sharedSpaceDocumentUIType != SharedSpaceDocumentUIType.destinationPicker
+              ? _responsiveUtils.getPaddingListItemForScreen(context)
+              : EdgeInsets.zero,
             key: Key('shared_space_document_list'),
             itemCount: workGroupNodes.length,
             itemBuilder: (context, index) => _buildSharedSpaceDocumentListItem(context, workGroupNodes[index], selectMode))
@@ -531,55 +535,62 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
           )
         ]
       ),
-      title: ResponsiveWidget(
-        smallScreen: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: Text(
-            node.element.name,
-            maxLines: 1,
-            style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
-        mediumScreen: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                  flex: 1,
-                child: Text(
-                  node.element.name,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
-                ))
-            ])),
-        largeScreen: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Text(
-                  node.element.name,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
-                ))
-            ])),
-      ),
-      subtitle: ResponsiveWidget.isSmallScreen(context)
+      title: widget.sharedSpaceDocumentUIType == SharedSpaceDocumentUIType.destinationPicker
+        ? Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: Text(
+              node.element.name,
+              maxLines: 1,
+              style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor)))
+        : ResponsiveWidget(
+            smallScreen: Transform(
+              transform: Matrix4.translationValues(-16, 0.0, 0.0),
+              child: Text(
+                node.element.name,
+                maxLines: 1,
+                style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+            mediumScreen: Transform(
+              transform: Matrix4.translationValues(-16, 0.0, 0.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      flex: 1,
+                    child: Text(
+                      node.element.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
+                    ))
+                ])),
+            largeScreen: Transform(
+              transform: Matrix4.translationValues(-16, 0.0, 0.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      node.element.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
+                    ))
+                ])),
+            responsiveUtil: _responsiveUtils),
+      subtitle: (_responsiveUtils.isSmallScreen(context) || widget.sharedSpaceDocumentUIType == SharedSpaceDocumentUIType.destinationPicker)
         ? Transform(
             transform: Matrix4.translationValues(-16, 0.0, 0.0),
             child: Text(
