@@ -82,6 +82,8 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
 
   OnlineThunkAction _getSharedSpaceNodeVersionsAction(WorkGroupNode workGroupNode) {
     return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartSharedSpaceNodeVersionsLoadingAction());
+
       store.dispatch(SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction(
           await _getAllChildNodesInteractor.execute(
             workGroupNode.sharedSpaceId,
