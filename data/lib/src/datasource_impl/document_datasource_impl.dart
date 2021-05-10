@@ -222,4 +222,20 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       });
     });
   }
+
+  @override
+  Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request) {
+    return Future.sync(() async {
+      final documentResponse = await _linShareHttpClient.editDescriptionDocument(documentId, request);
+      return documentResponse.toDocument();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response.statusCode == 404) {
+          throw DocumentNotFound();
+        } else {
+          throw UnknownError(error.response.statusMessage);
+        }
+      });
+    });
+  }
 }
