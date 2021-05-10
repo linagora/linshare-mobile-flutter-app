@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/received_share_a
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
@@ -53,6 +54,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/network_connectiv
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
@@ -73,6 +75,7 @@ class ToastMessageHandler {
       _handleNetworkStateToastMessage(context, event.networkConnectivityState);
       _handleReceivedShareToastMessage(context, event.receivedShareState);
       _handleDeleteSharedSpaceMembersToastMessage(context, event.deleteSharedSpaceMembersState);
+      _handleSharedSpaceNodeVersionsToastMessage(context, event.sharedSpaceNodeVersionsState);
     });
   }
 
@@ -312,6 +315,16 @@ class ToastMessageHandler {
     });
   }
 
+  void _handleSharedSpaceNodeVersionsToastMessage(BuildContext context, SharedSpaceNodeVersionsState sharedSpaceNodeVersionsState) {
+    sharedSpaceNodeVersionsState.viewState.fold(
+      (failure) {
+        if (failure is NoWorkGroupDocumentPreviewAvailable) {
+          appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
+          _cleanSharedSpaceNodeVersionsViewState();
+        }},
+      (success) => {});
+  }
+
   void _cleanMySpaceViewState() {
     _store.dispatch(CleanMySpaceStateAction());
   }
@@ -330,6 +343,10 @@ class ToastMessageHandler {
 
   void _cleanSharedSpaceDocumentViewState() {
     _store.dispatch(CleanSharedSpaceDocumentStateAction());
+  }
+
+  void _cleanSharedSpaceNodeVersionsViewState() {
+    _store.dispatch(CleanSharedSpaceNodeVersionsStateAction());
   }
 
   void _cleanNetworkConnectivityViewState() {

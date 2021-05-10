@@ -368,6 +368,7 @@ class WidgetModule {
         getIt.get<AppNavigation>(),
         getIt.get<GetAllChildNodesInteractor>(),
         getIt.get<RestoreWorkGroupDocumentVersionInteractor>(),
+        getIt.get<DownloadPreviewWorkGroupDocumentInteractor>(),
     ));
   }
 

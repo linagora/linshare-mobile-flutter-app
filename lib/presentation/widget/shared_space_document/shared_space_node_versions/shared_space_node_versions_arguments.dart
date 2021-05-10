@@ -35,8 +35,10 @@ import 'package:linshare_flutter_app/presentation/util/data_structure/router_arg
 
 class SharedSpaceNodeVersionsArguments extends RouterArguments {
   final WorkGroupNode workGroupNode;
+  final SharedSpaceRole sharedSpaceRole;
 
   SharedSpaceNodeVersionsArguments(
     this.workGroupNode,
+    this.sharedSpaceRole,
   );
 }
