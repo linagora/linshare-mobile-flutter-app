@@ -29,33 +29,46 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_arguments.dart';
+import 'package:open_file/open_file.dart' as open_file;
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
   final RestoreWorkGroupDocumentVersionInteractor _restoreWorkGroupDocumentVersionInteractor;
+  final DownloadPreviewWorkGroupDocumentInteractor _downloadPreviewWorkGroupDocumentInteractor;
+
+  SharedSpaceRole sharedSpaceRole;
 
   SharedSpaceNodeVersionsViewModel(
     Store<AppState> store,
     this._appNavigation,
     this._getAllChildNodesInteractor,
-    this._restoreWorkGroupDocumentVersionInteractor
+    this._restoreWorkGroupDocumentVersionInteractor,
+    this._downloadPreviewWorkGroupDocumentInteractor,
   ) : super(store);
 
   void initState(SharedSpaceNodeVersionsArguments arguments) {
+    sharedSpaceRole = arguments.sharedSpaceRole;
     getAllVersions(arguments.workGroupNode);
   }
 
@@ -107,6 +120,73 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
               }));
       store.dispatch(_getSharedSpaceNodeVersionsAction(parentNode));
     });
+  }
+
+  void closeDialogMenuContext() {
+    _appNavigation.popBack();
+  }
+
+  void previewAction(BuildContext context, WorkGroupDocument document) {
+    final canPreviewDocument = Platform.isIOS
+      ? document.mediaType.isIOSSupportedPreview()
+      : document.mediaType.isAndroidSupportedPreview();
+
+    if (canPreviewDocument || document.hasThumbnail) {
+      final cancelToken = CancelToken();
+      store.dispatch(_showPrepareToPreviewFileDialog(context, document, cancelToken));
+
+      var downloadPreviewType = DownloadPreviewType.original;
+      if (document.mediaType.isImageFile()) {
+        downloadPreviewType = DownloadPreviewType.image;
+      } else if (!canPreviewDocument) {
+        downloadPreviewType = DownloadPreviewType.thumbnail;
+      }
+
+      store.dispatch(_handleDownloadPreviewDocument(document, downloadPreviewType, cancelToken));
+    }
+  }
+
+  ThunkAction<AppState> _showPrepareToPreviewFileDialog(BuildContext context, WorkGroupDocument document, CancelToken cancelToken) {
+    return (Store<AppState> store) async {
+      await showCupertinoDialog(
+        context: context,
+        builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+          .key(Key('prepare_to_preview_file_dialog'))
+          .title(AppLocalizations.of(context).preparing_to_preview_file)
+          .content(AppLocalizations.of(context).downloading_file(document.name))
+          .actionText(AppLocalizations.of(context).cancel)
+          .build());
+    };
+  }
+
+  OnlineThunkAction _handleDownloadPreviewDocument(WorkGroupDocument document, DownloadPreviewType downloadPreviewType, CancelToken cancelToken) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadPreviewWorkGroupDocumentInteractor
+        .execute(document, downloadPreviewType, cancelToken)
+        .then((result) => result.fold(
+          (failure) {
+            if (failure is DownloadPreviewWorkGroupDocumentFailure && !(failure.downloadPreviewException is CancelDownloadFileException)) {
+              store.dispatch(SharedSpaceNodeVersionsAction(Left(NoWorkGroupDocumentPreviewAvailable())));
+            }},
+          (success) {
+            if (success is DownloadPreviewWorkGroupDocumentViewState) {
+              _openDownloadedPreviewDocument(document, success);
+            }
+          }));
+    });
+  }
+
+  void _openDownloadedPreviewDocument(WorkGroupDocument document, DownloadPreviewWorkGroupDocumentViewState viewState) async {
+    _appNavigation.popBack();
+
+    final openResult = await open_file.OpenFile.open(
+      Uri.decodeFull(viewState.filePath.path),
+      type: Platform.isAndroid ? document.mediaType.mimeType : null,
+      uti: Platform.isIOS ? document.mediaType.getDocumentUti().value : null);
+
+    if (openResult.type != open_file.ResultType.done) {
+      store.dispatch(SharedSpaceNodeVersionsAction(Left(NoWorkGroupDocumentPreviewAvailable())));
+    }
   }
 
   @override
