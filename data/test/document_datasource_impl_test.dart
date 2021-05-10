@@ -47,6 +47,7 @@ void main() {
   removeDocumentTest();
   renameDocumentTest();
   getDocumentTest();
+  editDescriptionDocumentTest();
 }
 
 void getAllDocumentTest() {
@@ -368,6 +369,45 @@ void getDocumentTest() {
           .thenThrow(error);
 
       await _documentDataSourceImpl.getDocument(documentDetailsResponse1.documentId)
+          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+    });
+  });
+}
+
+void editDescriptionDocumentTest() {
+  group('edit description document test', () {
+    MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    DocumentDataSourceImpl _documentDataSourceImpl;
+    MockLinShareDownloadManager _linShareDownloadManager;
+
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _documentDataSourceImpl = DocumentDataSourceImpl(
+          _linShareHttpClient,
+          _remoteExceptionThrower,
+          _linShareDownloadManager);
+    });
+
+    test('edit description document should return success with valid data', () async {
+      when(_linShareHttpClient.editDescriptionDocument(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description')))
+        .thenAnswer((_) async => documentResponse1);
+
+      final result = await _documentDataSourceImpl.editDescription(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description'));
+      expect(result, document1);
+    });
+
+    test('edit description document should throw DataNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.RESPONSE,
+          response: Response(statusCode: 404)
+      );
+
+      when(_linShareHttpClient.editDescriptionDocument(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description')))
+          .thenThrow(error);
+
+      await _documentDataSourceImpl.editDescription(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description'))
           .catchError((error) => expect(error, isA<DocumentNotFound>()));
     });
   });

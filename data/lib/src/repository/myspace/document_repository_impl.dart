@@ -96,4 +96,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
   Future<DocumentDetails> getDocument(DocumentId documentId) {
     return _documentDataSource.getDocument(documentId);
   }
+
+  @override
+  Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request) {
+    return _documentDataSource.editDescription(documentId, request);
+  }
 }
