@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,41 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'dart:core';
-
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 
-abstract class DocumentRepository {
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl);
+class EditDescriptionDocumentInteractor {
+  final DocumentRepository _documentRepository;
 
-  Future<List<Document>> getAll();
+  EditDescriptionDocumentInteractor(this._documentRepository);
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
-
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
-
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<Document> remove(DocumentId documentId);
-
-  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest);
-
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
-
-  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<DocumentDetails> getDocument(DocumentId documentId);
-
-  Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request);
+  Future<Either<Failure, Success>> execute(DocumentId documentId, EditDescriptionDocumentRequest request) async {
+    try {
+      final document = await _documentRepository.editDescription(documentId, request);
+      return Right<Failure, Success>(EditDescriptionDocumentViewState(document));
+    } catch (exception) {
+      return Left<Failure, Success>(EditDescriptionDocumentFailure(exception));
+    }
+  }
 }

@@ -286,3 +286,21 @@ class DuplicateMultipleToMySpaceAllFailure extends FeatureFailure {
   @override
   List<Object> get props => [resultList];
 }
+
+class EditDescriptionDocumentViewState extends ViewState {
+  final Document document;
+
+  EditDescriptionDocumentViewState(this.document);
+
+  @override
+  List<Object> get props => [document];
+}
+
+class EditDescriptionDocumentFailure extends FeatureFailure {
+  final exception;
+
+  EditDescriptionDocumentFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
