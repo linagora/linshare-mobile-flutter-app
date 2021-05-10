@@ -42,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/file_path_util.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
@@ -63,6 +64,7 @@ class AppModule {
     _provideAppImagePaths();
     _provideFileManager();
     _provideFileUploader();
+    _provideResponsiveManager();
     _provideAppToast();
     _provideNetworkStateComponent();
     _provideLocalAuthentication();
@@ -314,6 +316,10 @@ class AppModule {
 
   void _provideFileUploader() {
     getIt.registerLazySingleton(() => FlutterUploader());
+  }
+
+  void _provideResponsiveManager() {
+    getIt.registerFactory(() => ResponsiveUtils());
   }
 
   void _provideAppToast() {

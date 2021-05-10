@@ -29,34 +29,40 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
+import 'package:flutter/widgets.dart';
 
-class ResponsiveWidget extends StatelessWidget {
-  final Widget largeScreen;
-  final Widget mediumScreen;
-  final Widget smallScreen;
+class TransparentPageRoute extends PageRoute<void> {
+  TransparentPageRoute({
+    @required this.builder,
+    RouteSettings settings,
+  }) : assert(builder != null), super(settings: settings, fullscreenDialog: false);
 
-  final ResponsiveUtils responsiveUtil;
-
-  const ResponsiveWidget({
-    Key key,
-    this.largeScreen,
-    @required this.mediumScreen,
-    @required this.smallScreen,
-    @required this.responsiveUtil,
-  }) : super(key: key);
+  final WidgetBuilder builder;
 
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      if (responsiveUtil.isLargeScreen(context)) {
-        return largeScreen ?? mediumScreen;
-      } else if (responsiveUtil.isMediumScreen(context)) {
-        return mediumScreen;
-      } else {
-        return smallScreen ?? mediumScreen;
-      }
-    });
+  bool get opaque => false;
+
+  @override
+  Color get barrierColor => null;
+
+  @override
+  String get barrierLabel => null;
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Duration get transitionDuration => Duration(milliseconds: 300);
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    return FadeTransition(
+      opacity: Tween<double>(begin: 0, end: 1).animate(animation),
+      child: Semantics(
+        scopesRoute: true,
+        explicitChildNodes: true,
+        child: builder(context),
+      ),
+    );
   }
 }
