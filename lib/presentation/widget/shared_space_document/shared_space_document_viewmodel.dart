@@ -846,11 +846,11 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     );
   }
 
-  void goToWorkGroupNodeVersions(WorkGroupNode workGroupNode) {
+  void goToWorkGroupNodeVersions(WorkGroupNode workGroupNode, SharedSpaceRole sharedSpaceRole) {
     _appNavigation.popBack();
     _appNavigation.push(
       RoutePaths.sharedSpaceNodeVersions,
-      arguments: SharedSpaceNodeVersionsArguments(workGroupNode),
+      arguments: SharedSpaceNodeVersionsArguments(workGroupNode, sharedSpaceRole),
     );
   }
 
