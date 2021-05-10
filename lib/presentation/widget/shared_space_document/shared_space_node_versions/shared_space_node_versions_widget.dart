@@ -127,11 +127,18 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
                       width: 24, height: 24, fit: BoxFit.fill),
                   onPressed: () => _model.openContextMenu(context, versionsList[index],
                       _contextMenuActionTiles(context, versionsList[index], parentNode, index == 0))),
-            ));
+              onTap: () => SharedSpaceOperationRole.previewVersionDocumentSharedSpaceRoles.contains(_model.sharedSpaceRole.name)
+                ? _model.previewAction(context, versionsList[index])
+                : {}
+        ));
   }
 
   List<Widget> _contextMenuActionTiles(BuildContext context, WorkGroupDocument document, WorkGroupNode parentNode, bool isLatestVersion) {
-    return [if (!isLatestVersion) _restoreAction(context, document, parentNode)];
+    return [
+      if (SharedSpaceOperationRole.previewVersionDocumentSharedSpaceRoles.contains(_model.sharedSpaceRole.name))
+        _previewAction(context, document),
+      if (!isLatestVersion) _restoreAction(context, document, parentNode)
+    ];
   }
 
   Widget _restoreAction(BuildContext context, WorkGroupDocument document, WorkGroupNode parentNode) {
@@ -142,5 +149,18 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
             document)
         .onActionClick((data) => _model.restoreAction(document, parentNode))
         .build();
+  }
+
+  Widget _previewAction(BuildContext context, WorkGroupDocument document) {
+    return WorkGroupNodeContextMenuTileBuilder(
+        Key('preview_context_menu_action'),
+        SvgPicture.asset(imagePath.icPreview, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).preview,
+        document)
+      .onActionClick((data) {
+        _model.closeDialogMenuContext();
+        _model.previewAction(context, document);
+      })
+      .build();
   }
 }

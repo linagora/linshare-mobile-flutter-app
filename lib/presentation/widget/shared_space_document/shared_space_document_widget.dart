@@ -68,6 +68,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/destination
 
 class SharedSpaceDocumentWidget extends StatefulWidget {
 
+  final SharedSpaceRole sharedSpaceRole;
   final SharedSpaceDocumentUIType sharedSpaceDocumentUIType;
   final OnBackSharedSpaceClickedCallback onBackSharedSpaceClickedCallback;
   final OnNodeClickedCallback nodeClickedCallback;
@@ -75,6 +76,7 @@ class SharedSpaceDocumentWidget extends StatefulWidget {
   SharedSpaceDocumentWidget(
     this.onBackSharedSpaceClickedCallback,
     this.nodeClickedCallback,
+    this.sharedSpaceRole,
     {this.sharedSpaceDocumentUIType = SharedSpaceDocumentUIType.sharedSpace}
   );
 
@@ -689,7 +691,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
           Key('work_group_document_versions_context_menu_action'),
           SvgPicture.asset(imagePath.icHistory, width: 24, height: 24, fit: BoxFit.fill),
           AppLocalizations.of(context).manage_version, workGroupNode)
-      .onActionClick((data) => sharedSpaceDocumentViewModel.goToWorkGroupNodeVersions(data))
+      .onActionClick((data) => sharedSpaceDocumentViewModel.goToWorkGroupNodeVersions(data, widget.sharedSpaceRole))
       .build();
   }
 
