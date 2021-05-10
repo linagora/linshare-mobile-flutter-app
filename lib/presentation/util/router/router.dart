@@ -66,7 +66,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<DocumentDetailsWidget>(), settings: settings.arguments);
     case RoutePaths.sharedSpaceNodeDetails:
       return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeDetailsWidget>(), settings: settings.arguments);
-    case RoutePaths.biometricAuthentication:
+    case RoutePaths.biometricAuthenticationSetting:
       return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationSettingWidget>(), settings: settings.arguments);
     case RoutePaths.sharedSpaceNodeVersions:
       return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeVersionsWidget>(), settings: settings.arguments);
