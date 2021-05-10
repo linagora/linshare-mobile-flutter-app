@@ -104,6 +104,7 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
       pageBuilder: (context, _, __) => SharedSpaceDocumentWidget(
         () => wantToBack(),
         (workGroupNode) => _onClickWorkGroupFolder(context, workGroupNode),
+        widget.sharedSpaceNodeNested.sharedSpaceRole,
         sharedSpaceDocumentUIType: widget.sharedSpaceDocumentUIType
       ),
       settings: RouteSettings(arguments: args),
