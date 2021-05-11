@@ -53,6 +53,11 @@ class DocumentDetailsGetDocumentAction extends ActionOnline {
 }
 
 @immutable
+class DocumentDetailsToggleDescriptionEditing extends ActionOffline {
+  DocumentDetailsToggleDescriptionEditing();
+}
+
+@immutable
 class CleanDocumentDetailsStateAction extends ActionOffline {
   CleanDocumentDetailsStateAction();
 }
