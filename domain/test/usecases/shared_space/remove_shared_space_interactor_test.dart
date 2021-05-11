@@ -39,8 +39,8 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('remove_shared_space_interactor test', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
+    late MockSharedSpaceRepository sharedSpaceRepository;
+    late RemoveSharedSpaceInteractor removeSharedSpaceInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();

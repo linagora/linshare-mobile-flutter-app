@@ -40,9 +40,9 @@ import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
   group('test shared spaces dataSource', () {
-    MockLinShareHttpClient _linShareHttpClient;
+    late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    SharedSpaceDataSourceImpl _sharedSpaceDataSourceImpl;
+    late SharedSpaceDataSourceImpl _sharedSpaceDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
@@ -100,7 +100,7 @@ void main() {
     test('delete shared space should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.deleteSharedSpace(sharedSpace1.sharedSpaceId))
           .thenThrow(error);
@@ -114,7 +114,7 @@ void main() {
     test('delete shared space should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.deleteSharedSpace(sharedSpace1.sharedSpaceId))
           .thenThrow(error);
