@@ -141,7 +141,7 @@ void main() {
     test('Remove Shared Space Node Should Throw Exception When Remove Failed', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       when(_linShareHttpClient.removeSharedSpaceNode(
