@@ -32,12 +32,12 @@
 import 'package:domain/domain.dart';
 
 class DownloadPreviewWorkGroupDocumentViewState extends ViewState {
-  final Uri filePath;
+  final Uri? filePath;
 
   DownloadPreviewWorkGroupDocumentViewState(this.filePath);
 
   @override
-  List<Object> get props => [filePath];
+  List<Object?> get props => [filePath];
 }
 
 class DownloadPreviewWorkGroupDocumentFailure extends FeatureFailure {

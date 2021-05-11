@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_member_repository.d
 
 void main() {
   group('add_shared_space_member_interactor test', () {
-    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
-    AddSharedSpaceMemberInteractor addSharedSpaceMemberInteractor;
+    MockSharedSpaceMemberRepository? sharedSpaceMemberRepository;
+    late AddSharedSpaceMemberInteractor addSharedSpaceMemberInteractor;
 
     setUp(() {
       sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();
@@ -55,15 +55,15 @@ void main() {
         SharedSpaceRoleId('A Role')
       );
 
-      when(sharedSpaceMemberRepository.addMember(
+      when(sharedSpaceMemberRepository!.addMember(
           sharedSpaceId1,
           request
       )).thenAnswer((_) async => sharedSpaceMember1);
 
       final result = await addSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
-      final sharedSpaceMember = result
+      final SharedSpaceMember? sharedSpaceMember = result
           .map((success) => (success as AddSharedSpaceMemberViewState).member)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as SharedSpaceMember Function());
       expect(sharedSpaceMember, sharedSpaceMember1);
     });
 
@@ -75,7 +75,7 @@ void main() {
         SharedSpaceRoleId('A Role')
       );
 
-      when(sharedSpaceMemberRepository.addMember(
+      when(sharedSpaceMemberRepository!.addMember(
           sharedSpaceId1,
           request
       )).thenThrow(exception);

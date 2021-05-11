@@ -31,7 +31,7 @@
 //
 
 import 'package:data/src/network/model/converter/data_from_json_converter.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/network/model/converter/received_share_id_dto_converter.dart';
 import 'package:data/src/network/model/generic_user_dto.dart';
 import 'package:data/src/network/model/share/received_share_id_dto.dart';
@@ -44,20 +44,20 @@ import 'package:json_annotation/json_annotation.dart';
 part 'received_share_dto.g.dart';
 
 @JsonSerializable()
-@DatetimeConverter()
+@DatetimeNullableConverter()
 @ReceivedShareIdDtoConverter()
 class ReceivedShareDto {
   @JsonKey(name: Attribute.uuid)
   final ReceivedShareIdDto shareId;
-  final String name;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime expirationDate;
-  final int downloaded;
-  final String description;
+  final String? name;
+  final DateTime? creationDate;
+  final DateTime? modificationDate;
+  final DateTime? expirationDate;
+  final int? downloaded;
+  final String? description;
   final GenericUserDto recipient;
-  final int size;
-  final bool hasThumbnail;
+  final int? size;
+  final bool? hasThumbnail;
 
   @JsonKey(name: Attribute.type, fromJson: mediaTypeFromJson, toJson: mediaTypeToJson)
   final MediaType mediaType;
@@ -87,17 +87,18 @@ class ReceivedShareDto {
 extension ReceivedShareDtoExtension on ReceivedShareDto {
   ReceivedShare toReceivedShare() {
     return ReceivedShare(
-      ShareId(shareId.uuid),
-      name, creationDate,
-      modificationDate,
-      expirationDate,
-      description,
-      recipient != null ? recipient.toGenericUser() : null,
+      ShareId(shareId.uuid ?? ''),
+      name ?? '',
+      creationDate ?? DateTime.now(),
+      modificationDate ?? DateTime.now(),
+      expirationDate ?? DateTime.now(),
+      description ?? '',
+      recipient.toGenericUser(),
       mediaType,
-      sender != null ? sender.toGenericUser() : null,
-      downloaded,
-      size,
-      hasThumbnail
+      sender.toGenericUser(),
+      downloaded ?? 0,
+      size ?? 0,
+      hasThumbnail ?? false
     );
   }
 }

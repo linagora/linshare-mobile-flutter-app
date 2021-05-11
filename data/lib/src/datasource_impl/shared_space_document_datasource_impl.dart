@@ -90,13 +90,13 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId destinationParentNodeId}) {
+  Future<List<WorkGroupNode?>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId? destinationParentNodeId}) {
     return Future.sync(() async {
       return (await _linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
             copyRequest.toCopyBodyRequest(),
             destinationSharedSpaceId,
             destinationParentNodeId: destinationParentNodeId))
-          .map<WorkGroupNode>((workgroupNode) {
+          .map<WorkGroupNode?>((workgroupNode) {
             if (workgroupNode is WorkGroupDocumentDto) {
               return workgroupNode.toWorkGroupDocument();
             }
@@ -109,12 +109,12 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
           .toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw WorkGroupNodeNotFoundException();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -166,13 +166,14 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
           openFileFromNotification: true);
         }));
 
-    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
+    return taskIds.map((taskId) => DownloadTaskId(taskId.toString())).toList();
+
   }
 
   @override
   Future<Uri> downloadNodeIOS(
       WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) async {
-    return _linShareDownloadManager.downloadFile(
+    return _linShareDownloadManager!.downloadFile(
         Endpoint.sharedSpaces
             .withPathParameter(workgroupNode.sharedSpaceId.uuid)
             .withPathParameter('nodes')
@@ -193,12 +194,12 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
       return workGroupNode.toWorkGroupFolder();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw SharedSpaceNotFound();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
@@ -224,7 +225,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
               downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
           .generateEndpointPath();
     }
-    return _linShareDownloadManager.downloadFile(
+    return _linShareDownloadManager!.downloadFile(
         downloadUrl,
         getTemporaryDirectory(),
         workGroupDocument.name +

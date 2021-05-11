@@ -35,10 +35,10 @@
 // the Additional Terms applicable to LinShare software.
 
 class ShareIdDto {
-  String _uuid;
-    String get uuid => _uuid;
+  String? _uuid;
+    String? get uuid => _uuid;
 
-  ShareIdDto(String uuid) {
+  ShareIdDto(String? uuid) {
     assert(uuid != null && uuid.isNotEmpty, 'invalid shareId');
     _uuid = uuid;
   }

@@ -34,21 +34,21 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class CopyDocumentsToSharedSpaceInteractor {
-  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+  final SharedSpaceDocumentRepository? _sharedSpaceDocumentRepository;
 
   CopyDocumentsToSharedSpaceInteractor(this._sharedSpaceDocumentRepository);
 
-  Future<Either<Failure, Success>> execute(
+  Future<Either<Failure, Success?>> execute(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
     {WorkGroupNodeId? destinationParentNodeId}
   ) async {
     try {
-      final workgroupNodes = await _sharedSpaceDocumentRepository
+      final workgroupNodes = await _sharedSpaceDocumentRepository!
         .copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
-      return Right<Failure, Success>(CopyToSharedSpaceViewState(workgroupNodes));
+      return Right<Failure, Success?>(CopyToSharedSpaceViewState(workgroupNodes));
     } catch (exception) {
-      return Left<Failure, Success>(CopyToSharedSpaceFailure(exception));
+      return Left<Failure, Success?>(CopyToSharedSpaceFailure(exception));
     }
   }
 }

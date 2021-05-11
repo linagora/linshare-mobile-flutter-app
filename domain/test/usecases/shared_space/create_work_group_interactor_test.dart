@@ -41,8 +41,8 @@ import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('create_work_group_interactor test', () {
-    MockSharedSpaceRepository sharedSpaceRepository;
-    CreateWorkGroupInteractor createWorkGroupInteractor;
+    MockSharedSpaceRepository? sharedSpaceRepository;
+    late CreateWorkGroupInteractor createWorkGroupInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -50,20 +50,20 @@ void main() {
     });
 
     test('Create Work Group interactor should return success with valid data', () async {
-      when(sharedSpaceRepository.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
+      when(sharedSpaceRepository!.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
           .thenAnswer((_) async => sharedSpace1);
 
       final result = await createWorkGroupInteractor.execute(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
 
-      final sharedSpace = result
+      final SharedSpaceNodeNested? sharedSpace = result
           .map((success) => (success as CreateWorkGroupViewState).sharedSpaceNodeNested)
-          .getOrElse(() => null);
+          .getOrElse((() => null) as SharedSpaceNodeNested Function());
       expect(sharedSpace, sharedSpaceResponse1.toSharedSpaceNodeNested());
     });
 
     test('Create Work Group interactor should fail when createSharedSpaceWorkGroup fail', () async {
       final exception = Exception();
-      when(sharedSpaceRepository.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))).thenThrow(exception);
+      when(sharedSpaceRepository!.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))).thenThrow(exception);
 
       final result = await createWorkGroupInteractor.execute(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
 

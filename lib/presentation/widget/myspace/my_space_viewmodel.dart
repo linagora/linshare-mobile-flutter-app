@@ -254,8 +254,8 @@ class MySpaceViewModel extends BaseViewModel {
           ? sharedSpaceDocumentArguments.workGroupFolder.workGroupNodeId
           : null;
       await _copyMultipleFilesToSharedSpaceInteractor.execute(
-          copyRequests: documents.map((document) => document.toCopyRequest()).toList(),
-          destinationSharedSpaceId: sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
+          documents.map((document) => document.toCopyRequest()).toList(),
+          sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
           destinationParentNodeId: parentNodeId)
       .then((result) => result.fold(
               (failure) => store.dispatch(MySpaceAction(Left(failure))),

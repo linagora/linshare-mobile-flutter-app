@@ -35,8 +35,8 @@
 // the Additional Terms applicable to LinShare software.
 
 class MailingListIdDto {
-  String _uuid;
-  String get uuid => _uuid;
+  String? _uuid;
+  String? get uuid => _uuid;
 
   MailingListIdDto(String uuid) {
     assert(uuid != null, 'invalid mailingListId');

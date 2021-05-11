@@ -45,14 +45,14 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('download_multiple_node_ios_interactor_test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
     DownloadNodeIOSInteractor downloadNodeIOSInteractor;
-    DownloadMultipleNodeIOSInteractor downloadMultipleNodeIOSInteractor;
-    CancelToken cancelToken;
-    Uri validFilePath1;
-    Uri validFilePath2;
+    late DownloadMultipleNodeIOSInteractor downloadMultipleNodeIOSInteractor;
+    late CancelToken cancelToken;
+    late Uri validFilePath1;
+    late Uri validFilePath2;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -74,14 +74,14 @@ void main() {
           .thenAnswer((_) async => validFilePath2);
 
       final result = await downloadMultipleNodeIOSInteractor.execute(workGroupNodes: [workGroupDocument1, workGroupDocument2], cancelToken: cancelToken);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => IdleState());
 
       expect(state, isA<DownloadNodeIOSAllSuccessViewState>());
 
       (state as DownloadNodeIOSAllSuccessViewState).resultList[0].fold(
               (failure) => {},
               (success) => expect((success as DownloadNodeIOSViewState).filePath, validFilePath1));
-      (state as DownloadNodeIOSAllSuccessViewState).resultList[1].fold(
+      state.resultList[1].fold(
               (failure) => {},
               (success) => expect((success as DownloadNodeIOSViewState).filePath, validFilePath2));
     });
@@ -95,14 +95,14 @@ void main() {
           .thenThrow(Exception());
 
       final result = await downloadMultipleNodeIOSInteractor.execute(workGroupNodes: [workGroupDocument1, workGroupDocument2], cancelToken: cancelToken);
-      final state = result.getOrElse(() => null);
+      final state = result.getOrElse(() => IdleState());
 
       expect(state, isA<DownloadNodeIOSHasSomeFilesFailureViewState>());
 
       (state as DownloadNodeIOSHasSomeFilesFailureViewState).resultList[0].fold(
               (failure) => {},
               (success) => expect((success as DownloadNodeIOSViewState).filePath, validFilePath1));
-      (state as DownloadNodeIOSHasSomeFilesFailureViewState).resultList[1].fold(
+      state.resultList[1].fold(
               (failure) => expect(failure, isA<DownloadNodeIOSFailure>()),
               (success) => null);
     });

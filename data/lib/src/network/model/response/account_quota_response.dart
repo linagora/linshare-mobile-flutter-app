@@ -56,7 +56,7 @@ class AccountQuotaResponse with EquatableMixin  {
   Map<String, dynamic> toJson() => _$AccountQuotaResponseToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     quota,
     usedSpace,
     maxFileSize,
