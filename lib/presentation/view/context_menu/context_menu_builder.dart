@@ -33,9 +33,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 
 class ContextMenuBuilder {
   final imagePath = getIt<AppImagePaths>();
+  final responsiveUtils = getIt<ResponsiveUtils>();
 
   final BuildContext _context;
   final List<Widget> _actionTiles = [];
@@ -71,14 +73,31 @@ class ContextMenuBuilder {
     );
   }
 
+  BoxDecoration _decoration(BuildContext context) {
+    return !responsiveUtils.isSmallScreen(context)
+      ? BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: const Radius.circular(20.0),
+          topRight: const Radius.circular(20.0)))
+      : null;
+  }
+
+  Color _backgroundColor(BuildContext context) {
+    return responsiveUtils.isSmallScreen(context) ? Colors.white : Colors.transparent;
+  }
+
   void build() {
     showModalBottomSheet(
       useRootNavigator: true,
       shape: _shape(),
       isScrollControlled: true,
+      backgroundColor: _backgroundColor(_context),
       context: _context,
       builder: (BuildContext buildContext) {
         return Container(
+          margin: responsiveUtils.getMarginContextMenuForScreen(buildContext),
+          decoration: _decoration(buildContext),
           child: Wrap(
             children: <Widget>[
               _header ?? SizedBox.shrink(),
