@@ -40,9 +40,9 @@ import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
   group('test shared spaces member dataSource', () {
-    MockLinShareHttpClient _linShareHttpClient;
+    late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    SharedSpaceMemberDataSourceImpl _sharedSpaceMemberDataSourceImpl;
+    late SharedSpaceMemberDataSourceImpl _sharedSpaceMemberDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
@@ -127,7 +127,7 @@ void main() {
     test('updateRoleSharedSpaceMember should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       final request = UpdateSharedSpaceMemberRequest(
@@ -148,7 +148,7 @@ void main() {
     test('updateRoleSharedSpaceMember should throw NotAuthorized when linShareHttpClient response error with 403', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       final request = UpdateSharedSpaceMemberRequest(

@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_member_repository.d
 
 void main() {
   group('update_shared_space_member_interactor test', () {
-    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
-    UpdateSharedSpaceMemberInteractor updateSharedSpaceMemberInteractor;
+    late MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
+    late UpdateSharedSpaceMemberInteractor updateSharedSpaceMemberInteractor;
 
     setUp(() {
       sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();
