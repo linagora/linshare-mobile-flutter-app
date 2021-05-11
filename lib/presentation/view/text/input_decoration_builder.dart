@@ -39,10 +39,28 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 abstract class InputDecorationBuilder {
+  String _prefixText;
+  String _labelText;
+  TextStyle _labelStyle;
   String _hintText;
   TextStyle _hintStyle;
   EdgeInsets _contentPadding;
   OutlineInputBorder _enabledBorder;
+
+  InputDecorationBuilder prefixText(String prefixText) {
+    _prefixText = prefixText;
+    return this;
+  }
+
+  InputDecorationBuilder labelText(String labelText) {
+    _labelText = labelText;
+    return this;
+  }
+
+  InputDecorationBuilder labelStyle(TextStyle labelStyle) {
+    _labelStyle = labelStyle;
+    return this;
+  }
 
   InputDecorationBuilder hintText(String hintText) {
     _hintText = hintText;
@@ -66,8 +84,9 @@ abstract class InputDecorationBuilder {
 
   InputDecoration build() {
     return InputDecoration(
-        hintText: _hintText,
-        hintStyle: _hintStyle,
+        prefixText: _prefixText,
+        labelText: _labelText,
+        labelStyle: _labelStyle,
         contentPadding: _contentPadding,
         enabledBorder: _enabledBorder
     );
@@ -84,11 +103,15 @@ class LoginInputDecorationBuilder extends InputDecorationBuilder {
             borderSide: BorderSide(width: 1, color: Colors.white)),
         focusedBorder: _enabledBorder ?? OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(6)),
-            borderSide: BorderSide(width: 1, color: Colors.white)),
+            borderSide: BorderSide(width: 2, color: AppColor.loginTextFieldFocusedBorder)),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(6)),
             borderSide: BorderSide(
                 width: 1, color: AppColor.loginTextFieldErrorBorder)),
+        prefixText: _prefixText,
+        labelText: _labelText,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        labelStyle: _labelStyle ?? TextStyle(color: AppColor.loginTextFieldLabelColor, fontSize: 16),
         hintText: _hintText,
         hintStyle: _hintStyle ?? TextStyle(color: AppColor.loginTextFieldHintColor, fontSize: 16),
         contentPadding: _contentPadding ?? EdgeInsets.all(10),
