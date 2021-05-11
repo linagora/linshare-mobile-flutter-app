@@ -55,6 +55,7 @@ class DocumentDetailsWidget extends StatefulWidget {
 class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
   final _model = getIt<DocumentDetailsViewModel>();
   final imagePath = getIt<AppImagePaths>();
+  final _editDescriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -87,10 +88,11 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
               style: TextStyle(fontSize: 24, color: Colors.white)),
           backgroundColor: AppColor.primaryColor,
         ),
-        body: StoreConnector<AppState, DocumentDetailsState>(
+        body: SingleChildScrollView(
+            child: StoreConnector<AppState, DocumentDetailsState>(
           converter: (store) => store.state.documentDetailsState,
           builder: (_, state) => _detailsTabWidget(state),
-        ));
+        )));
   }
 
   Widget _detailsTabWidget(DocumentDetailsState state) {
@@ -133,79 +135,99 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
 
   ListTile _documentDetailsTitleTileWidget(DocumentDetailsState state) {
     return ListTile(
-        leading: Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: SvgPicture.asset(state.document.mediaType.getFileTypeImagePath(imagePath),
-                width: 20, height: 24, fit: BoxFit.fill)),
-        title: Text(state.document.name,
-            style: TextStyle(
-                color: AppColor.workGroupDetailsName,
-                fontWeight: FontWeight.normal,
-                fontSize: 14.0)),
-        trailing: Text(
-          filesize(state.document.size),
+      leading: Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: SvgPicture.asset(state.document.mediaType.getFileTypeImagePath(imagePath),
+              width: 20, height: 24, fit: BoxFit.fill)),
+      title: Text(state.document.name,
           style: TextStyle(
-            fontSize: 14,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.normal,
-            color: AppColor.uploadFileFileSizeTextColor,
-          ),
+              color: AppColor.workGroupDetailsName, fontWeight: FontWeight.normal, fontSize: 14.0)),
+      trailing: Text(
+        filesize(state.document.size),
+        style: TextStyle(
+          fontSize: 14,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.normal,
+          color: AppColor.uploadFileFileSizeTextColor,
         ),
-      );
+      ),
+    );
   }
 
-  Expanded _sharedWidget(DocumentDetailsState state) {
-    return Expanded(
-        child: Container(
-            margin: EdgeInsets.only(top: 14),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 16),
-                height: 56,
-                color: AppColor.topBarBackgroundColor,
-                child: Text(AppLocalizations.of(context).shared_with(state.document.shares.length),
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                        fontStyle: FontStyle.normal,
-                        color: AppColor.documentDetailsSharedTitleColor)),
-              ),
-              Expanded(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.document.shares.length,
-                      itemBuilder: (context, index) {
-                        var recipient = state.document.shares[index].recipient;
-                        return DocumentRecipientListTileBuilder(
-                                recipient.fullName(), recipient.mail)
-                            .build();
-                      }))
-            ])));
+  Widget _sharedWidget(DocumentDetailsState state) {
+    return Container(
+        margin: EdgeInsets.only(top: 14),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: 16),
+            height: 56,
+            color: AppColor.topBarBackgroundColor,
+            child: Text(AppLocalizations.of(context).shared_with(state.document.shares.length),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: AppColor.documentDetailsSharedTitleColor)),
+          ),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: state.document.shares.length,
+              itemBuilder: (context, index) {
+                var recipient = state.document.shares[index].recipient;
+                return DocumentRecipientListTileBuilder(recipient.fullName(), recipient.mail)
+                    .build();
+              })
+        ]));
   }
 
   Container _descriptionWidget(DocumentDetailsState state) {
+    if (_editDescriptionController.text.isEmpty) {
+      _editDescriptionController.text = state.document.description;
+    }
+
     return Container(
-        margin: EdgeInsets.only(left: 16, top: 10),
+        margin: EdgeInsets.only(left: 16, top: 10, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(AppLocalizations.of(context).description,
-                style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 16,
-                    color: AppColor.workGroupDetailsName)),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(AppLocalizations.of(context).description,
+                  style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                      color: AppColor.workGroupDetailsName)),
+              IconButton(
+                icon: state.isEditingDescription ? Icon(Icons.check) : Icon(Icons.edit),
+                onPressed: () => {
+                  if (state.isEditingDescription) {
+                      _model.editDescription(context, state.document, _editDescriptionController.text)
+                  } else {
+                    _model.toggleDescriptionEditing()
+                  }
+                },
+              )
+            ]),
             Padding(
                 padding: EdgeInsets.only(top: 18),
-                child: Text(
-                    state.document.description.isEmpty
-                        ? AppLocalizations.of(context).no_description
-                        : state.document.description,
-                    style: TextStyle(
-                        color: AppColor.searchResultsCountTextColor,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16.0)))
+                child: state.isEditingDescription
+                    ? TextField(
+                        autofocus: true,
+                        style: TextStyle(fontSize: 16),
+                        scrollPadding: EdgeInsets.only(bottom: 65),
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context).no_description,
+                            hintStyle: TextStyle(fontStyle: FontStyle.italic)),
+                        controller: _editDescriptionController,
+                        onSubmitted: (value) => _model.editDescription(context, state.document, value))
+                    : Padding(
+                        padding: EdgeInsets.only(top: 14.5),
+                        child: Text(
+                            state.document.description.isEmpty
+                                ? AppLocalizations.of(context).no_description
+                                : state.document.description,
+                            style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic)))),
           ],
         ));
   }
