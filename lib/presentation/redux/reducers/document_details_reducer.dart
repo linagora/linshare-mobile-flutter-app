@@ -44,5 +44,6 @@ final documentDetailsReducer = combineReducers<DocumentDetailsState>([
                   (failure) => null,
                   (success) => (success is GetDocumentViewState) ? success.document : null),
           viewState: action.getDocumentViewState)),
+  TypedReducer<DocumentDetailsState, DocumentDetailsToggleDescriptionEditing>((DocumentDetailsState state, DocumentDetailsToggleDescriptionEditing action) => state.toggleDescriptionEditing()),
   TypedReducer<DocumentDetailsState, CleanDocumentDetailsStateAction>((DocumentDetailsState state, _) => state.clearViewState()),
 ]);
