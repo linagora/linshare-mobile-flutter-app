@@ -296,6 +296,7 @@ class WidgetModule {
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
         getIt.get<GetDocumentInteractor>(),
+        getIt.get<EditDescriptionDocumentInteractor>()
     ));
   }
 

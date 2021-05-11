@@ -41,29 +41,39 @@ import 'package:equatable/equatable.dart';
 @immutable
 class DocumentDetailsState extends LinShareState with EquatableMixin {
   final DocumentDetails document;
+  final bool isEditingDescription;
 
-  DocumentDetailsState(Either<Failure, Success> viewState, this.document) : super(viewState);
+
+  DocumentDetailsState(
+    Either<Failure, Success> viewState,
+    this.document,
+    this.isEditingDescription
+  ) : super(viewState);
 
   factory DocumentDetailsState.initial() {
-    return DocumentDetailsState(Right(IdleState()), null);
+    return DocumentDetailsState(Right(IdleState()), null, false);
   }
 
   @override
   DocumentDetailsState clearViewState() {
-    return DocumentDetailsState(Right(IdleState()), document);
+    return DocumentDetailsState.initial();
   }
 
   @override
   DocumentDetailsState sendViewState({Either<Failure, Success> viewState}) {
-    return DocumentDetailsState(viewState, document);
+    return DocumentDetailsState(viewState, document, isEditingDescription);
   }
 
   @override
   DocumentDetailsState startLoadingState() {
-    return DocumentDetailsState(Right(LoadingState()), document);
+    return DocumentDetailsState(Right(LoadingState()), document, isEditingDescription);
   }
 
   DocumentDetailsState setDocument({Either<Failure, Success> viewState, DocumentDetails newDocument}) {
-    return DocumentDetailsState(viewState, newDocument);
+    return DocumentDetailsState(viewState, newDocument, false);
+  }
+
+  DocumentDetailsState toggleDescriptionEditing() {
+    return DocumentDetailsState(viewState, document, !isEditingDescription);
   }
 }
