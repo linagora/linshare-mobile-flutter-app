@@ -52,7 +52,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
       Token token,
       Uri baseUrl,
       SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId parentNodeId}) {
+      {WorkGroupNodeId? parentNodeId}) {
     final queryParameters = parentNodeId == null
         ? <QueryParameter>[]
         : [StringQueryParameter('parent', parentNodeId.uuid)];

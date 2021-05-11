@@ -49,7 +49,7 @@ import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 class FileUploadDataSourceImpl implements FileUploadDataSource {
   final FlutterUploader _uploader;
 
-  Stream<Either<Failure, Success>> _uploadingFileStream;
+  late Stream<Either<Failure, Success>> _uploadingFileStream;
 
   @override
   Stream<Either<Failure, Success>> get uploadingFileStream => _uploadingFileStream;
@@ -78,10 +78,9 @@ class FileUploadDataSourceImpl implements FileUploadDataSource {
   Future<UploadTaskId> upload(FileInfo fileInfo, Token token, String url) async {
     final file = File(fileInfo.filePath + fileInfo.fileName);
     final taskId = await _uploader.enqueue(
-      MultipartFormDataUpload(
         url: url,
         files: [
-          FileItem(path: file.path, field: fileInfo.fileName)
+          FileItem(savedDir: fileInfo.filePath, filename: fileInfo.fileName)
         ],
         headers: {
           Constant.authorization: 'Bearer ${token.token}',
@@ -89,8 +88,8 @@ class FileUploadDataSourceImpl implements FileUploadDataSource {
         },
         data: {
           Constant.fileSizeDataForm: (await file.length()).toString()
-        }
-      ));
+        });
+
     return UploadTaskId(taskId);
   }
 

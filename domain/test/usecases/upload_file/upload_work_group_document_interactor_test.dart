@@ -42,11 +42,11 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('upload_work_group_document_interactor_test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
-    UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
-    UploadTaskId uploadTaskId;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
+    late UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
+    late UploadTaskId uploadTaskId;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
