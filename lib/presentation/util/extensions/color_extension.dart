@@ -35,9 +35,11 @@ import 'package:flutter/material.dart';
 
 extension AppColor on Color {
   static const primaryColor = Color(0xff4AC6FF);
-  static const loginTextFieldHintColor = Color(0xffAFAFAF);
+  static const loginTextFieldLabelColor = Color(0xff7B7B7B);
+  static const loginTextFieldHintColor = Color(0xff7B7B7B);
   static const loginTextFieldTextColor = Color(0xff7B7B7B);
   static const loginTextFieldErrorBorder = Color(0xffFF5858);
+  static const loginTextFieldFocusedBorder = Color(0xff1B7EC7);
   static const loginButtonColor = Color(0xff1B7EC7);
   static const uploadFileFileNameTextColor = Color(0xff7B7B7B);
   static const uploadFileFileSizeTextColor = Color(0xffACACAC);
