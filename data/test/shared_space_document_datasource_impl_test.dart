@@ -282,8 +282,8 @@ void main() {
 
     test('Get Shared Space Node Should Throw Exception When Get Failed', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       when(_linShareHttpClient.getWorkGroupNode(
