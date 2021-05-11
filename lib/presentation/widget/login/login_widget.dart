@@ -133,6 +133,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       .textDecoration(
                                       _buildCredentialInputDecoration(
                                           viewState,
+                                          AppLocalizations.of(context).email,
                                           AppLocalizations.of(context).email))
                                       .build();
                                 }
@@ -154,6 +155,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       .textDecoration(
                                       _buildCredentialInputDecoration(
                                           viewState,
+                                          AppLocalizations.of(context).password,
                                           AppLocalizations.of(context).password))
                                       .build();
                                 }
@@ -214,15 +216,20 @@ class _LoginWidgetState extends State<LoginWidget> {
         (failure) {
           if (_checkUrlError(failure)) {
               return LoginInputDecorationBuilder()
-                  .hintText(AppLocalizations.of(context).https)
+                  .labelText(AppLocalizations.of(context).https)
+                  .prefixText(AppLocalizations.of(context).https)
                   .enabledBorder(OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(6)),
                       borderSide: BorderSide(
                       width: 1, color: AppColor.loginTextFieldErrorBorder)));
           }
-          return LoginInputDecorationBuilder().hintText(AppLocalizations.of(context).https);
+          return LoginInputDecorationBuilder()
+              .labelText(AppLocalizations.of(context).https)
+              .prefixText(AppLocalizations.of(context).https);
         },
-        (success) => LoginInputDecorationBuilder().hintText(AppLocalizations.of(context).https));
+        (success) => LoginInputDecorationBuilder()
+            .labelText(AppLocalizations.of(context).https)
+            .prefixText(AppLocalizations.of(context).https));
     return loginInputDecorationBuilder.build();
   }
 
@@ -237,21 +244,23 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   InputDecoration _buildCredentialInputDecoration(
       dartz.Either<Failure, Success> viewState,
+      String labelText,
       String hintText
   ) {
     final loginInputDecorationBuilder = viewState.fold(
         (failure) {
           if (_checkCredentialError(failure)) {
             return LoginInputDecorationBuilder()
+                .labelText(labelText)
                 .hintText(hintText)
                 .enabledBorder(OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(6)),
                     borderSide: BorderSide(
                     width: 1, color: AppColor.loginTextFieldErrorBorder)));
           }
-          return LoginInputDecorationBuilder().hintText(hintText);
+          return LoginInputDecorationBuilder().labelText(labelText).hintText(hintText);
         },
-        (success) => LoginInputDecorationBuilder().hintText(hintText));
+        (success) => LoginInputDecorationBuilder().labelText(labelText).hintText(hintText));
     return loginInputDecorationBuilder.build();
   }
 
