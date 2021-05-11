@@ -64,7 +64,7 @@ void main() {
     test('getAllSharedSpaces should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.getSharedSpaces())
           .thenThrow(error);
@@ -78,7 +78,7 @@ void main() {
     test('getAllSharedSpaces should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.getSharedSpaces())
           .thenThrow(error);
