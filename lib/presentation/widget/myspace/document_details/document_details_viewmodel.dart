@@ -29,7 +29,9 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/document_details_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -42,11 +44,13 @@ import 'document_details_arguments.dart';
 class DocumentDetailsViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final GetDocumentInteractor _getDocumentInteractor;
+  final EditDescriptionDocumentInteractor _editDescriptionDocumentInteractor;
 
   DocumentDetailsViewModel(
       Store<AppState> store,
       this._appNavigation,
-      this._getDocumentInteractor
+      this._getDocumentInteractor,
+      this._editDescriptionDocumentInteractor
   ) : super(store);
 
   void initState(DocumentDetailsArguments arguments) {
@@ -57,10 +61,35 @@ class DocumentDetailsViewModel extends BaseViewModel {
     _appNavigation.popBack();
   }
 
+  void editDescription(BuildContext context, Document document, String newDescription) {
+    FocusScope.of(context).unfocus();
+    toggleDescriptionEditing();
+
+    if (document.description == newDescription) {
+      return;
+    }
+
+    store.dispatch(_editDescriptionAction(document, newDescription));
+  }
+
+  OnlineThunkAction _editDescriptionAction(Document document, String newDescription) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      (await _editDescriptionDocumentInteractor.execute(
+              document.documentId, EditDescriptionDocumentRequest(document.name, newDescription)))
+          .fold((failure) => store.dispatch(DocumentDetailsAction(Left(failure))),
+              (success) => store.dispatch(Right(success)));
+      store.dispatch(_getDocumentAction(document.documentId));
+    });
+  }
+
   OnlineThunkAction _getDocumentAction(DocumentId documentId) {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(DocumentDetailsGetDocumentAction(await _getDocumentInteractor.execute(documentId)));
     });
+  }
+
+  void toggleDescriptionEditing() {
+    store.dispatch(DocumentDetailsToggleDescriptionEditing());
   }
 
   @override
