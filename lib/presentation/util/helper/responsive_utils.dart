@@ -46,6 +46,8 @@ class ResponsiveUtils {
   static const double _orderByButtonHorizontalPaddingLargeWidth = 155.0;
   static const double _orderByButtonHorizontalPaddingDefault = 16.0;
 
+  static const double _contextMenuHorizontalMargin = 144.0;
+
   double getSizeWidthScreen(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
@@ -89,5 +91,11 @@ class ResponsiveUtils {
     } else {
       return EdgeInsets.zero;
     }
+  }
+
+  EdgeInsets getMarginContextMenuForScreen(BuildContext context) {
+    return isSmallScreen(context)
+        ? EdgeInsets.zero
+        : EdgeInsets.symmetric(horizontal: _contextMenuHorizontalMargin);
   }
 }
