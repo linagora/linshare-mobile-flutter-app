@@ -31,8 +31,7 @@
 //
 
 import 'package:data/src/network/model/account/account_dto.dart';
-import 'package:data/src/network/model/converter/data_from_json_converter.dart';
-import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
@@ -42,7 +41,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'work_group_folder_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@DatetimeNullableConverter()
+@DatetimeConverter()
 @WorkGroupNodeIdConverter()
 @SharedSpaceIdConverter()
 class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
@@ -51,8 +50,8 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
     WorkGroupNodeId parentWorkGroupNodeId,
     WorkGroupNodeType type,
     SharedSpaceId sharedSpaceId,
-    DateTime? creationDate,
-    DateTime? modificationDate,
+    DateTime creationDate,
+    DateTime modificationDate,
     String? description,
     String? name,
     AccountDto lastAuthor,
@@ -93,8 +92,8 @@ extension WorkGroupNodeFolderDtoExtension on WorkGroupNodeFolderDto {
         parentWorkGroupNodeId,
         type,
         sharedSpaceId,
-        creationDate ?? DateTime.now(),
-        modificationDate ?? DateTime.now(),
+        creationDate ,
+        modificationDate,
         description ?? '',
         name ?? '',
         lastAuthor.toAccount()

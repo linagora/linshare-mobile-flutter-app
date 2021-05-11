@@ -248,7 +248,7 @@ void main() {
     test('Rename Shared Space Node Should Throw Exception When Renamed Failed', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       when(_linShareHttpClient.renameSharedSpaceNode(
@@ -260,7 +260,7 @@ void main() {
       await _sharedSpaceDataSourceImpl.renameSharedSpaceNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
-          RenameWorkGroupNodeRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
+          RenameWorkGroupNodeRequest(workGroupDocumentDto.name!, WorkGroupNodeType.DOCUMENT)
       ).catchError((error) {
         expect(error, isA<WorkGroupNodeNotFoundException>());
       });

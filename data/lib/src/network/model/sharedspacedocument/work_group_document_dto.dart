@@ -32,7 +32,7 @@
 
 import 'package:data/src/network/model/account/account_dto.dart';
 import 'package:data/src/network/model/converter/data_from_json_converter.dart';
-import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
@@ -44,7 +44,7 @@ import 'package:http_parser/http_parser.dart';
 part 'work_group_document_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@DatetimeNullableConverter()
+@DatetimeConverter()
 @WorkGroupNodeIdConverter()
 @SharedSpaceIdConverter()
 class WorkGroupDocumentDto extends WorkGroupNodeDto {
@@ -53,7 +53,7 @@ class WorkGroupDocumentDto extends WorkGroupNodeDto {
 
   final int? size;
   final bool? hasThumbnail;
-  final DateTime? uploadDate;
+  final DateTime uploadDate;
   final bool? hasRevision;
   final String? sha256sum;
 
@@ -62,8 +62,8 @@ class WorkGroupDocumentDto extends WorkGroupNodeDto {
     WorkGroupNodeId parentWorkGroupNodeId,
     WorkGroupNodeType type,
     SharedSpaceId sharedSpaceId,
-    DateTime? creationDate,
-    DateTime? modificationDate,
+    DateTime creationDate,
+    DateTime modificationDate,
     String? description,
     String? name,
     AccountDto lastAuthor,
@@ -104,15 +104,15 @@ extension WorkGroupDocumentDtoExtension on WorkGroupDocumentDto {
       parentWorkGroupNodeId,
       type,
       sharedSpaceId,
-      creationDate ?? DateTime.now(),
-      modificationDate ?? DateTime.now(),
+      creationDate ,
+      modificationDate,
       description ?? '',
       name ?? '',
       lastAuthor.toAccount(),
       size ?? 0,
       mediaType,
       hasThumbnail ?? false,
-      uploadDate ?? DateTime.now(),
+      uploadDate,
       hasRevision ?? false,
       sha256sum ?? '');
 }
