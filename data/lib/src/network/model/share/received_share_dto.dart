@@ -52,11 +52,11 @@ class ReceivedShareDto {
   final DateTime creationDate;
   final DateTime modificationDate;
   final DateTime expirationDate;
-  final int downloaded;
-  final String description;
+  final int? downloaded;
+  final String? description;
   final GenericUserDto recipient;
   final int size;
-  final bool hasThumbnail;
+  final bool? hasThumbnail;
 
   @JsonKey(name: Attribute.type, fromJson: mediaTypeFromJson, toJson: mediaTypeToJson)
   final MediaType mediaType;
@@ -87,16 +87,17 @@ extension ReceivedShareDtoExtension on ReceivedShareDto {
   ReceivedShare toReceivedShare() {
     return ReceivedShare(
       ShareId(shareId.uuid),
-      name, creationDate,
+      name,
+      creationDate,
       modificationDate,
       expirationDate,
-      description,
-      recipient != null ? recipient.toGenericUser() : null,
+      description ?? '',
+      recipient.toGenericUser(),
       mediaType,
-      sender != null ? sender.toGenericUser() : null,
-      downloaded,
+      sender.toGenericUser(),
+      downloaded ?? 0,
       size,
-      hasThumbnail
+      hasThumbnail ?? false
     );
   }
 }

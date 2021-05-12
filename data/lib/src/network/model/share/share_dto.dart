@@ -52,8 +52,8 @@ class ShareDto {
   final DateTime modificationDate;
   final DateTime expirationDate;
   final DocumentResponse document;
-  final int downloaded;
-  final String description;
+  final int? downloaded;
+  final String? description;
   final GenericUserDto recipient;
 
   ShareDto(
@@ -77,13 +77,14 @@ extension ShareDtoExtension on ShareDto {
   Share toShare() {
     return Share(
       ShareId(shareId.uuid),
-      name, creationDate,
+      name,
+      creationDate,
       modificationDate,
       expirationDate,
       document.toDocument(),
-      description,
+      description ?? '',
       recipient.toGenericUser(),
-      downloaded,
+      downloaded ?? 0,
     );
   }
 }

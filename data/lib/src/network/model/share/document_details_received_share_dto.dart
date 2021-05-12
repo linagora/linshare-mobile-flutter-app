@@ -50,8 +50,8 @@ class DocumentDetailsReceivedShareDto {
   final DateTime creationDate;
   final DateTime modificationDate;
   final DateTime expirationDate;
-  final int downloaded;
-  final String description;
+  final int? downloaded;
+  final String? description;
   final GenericUserDto recipient;
 
   DocumentDetailsReceivedShareDto(
@@ -78,9 +78,9 @@ extension DocumentDetailsReceivedShareDtoExtension on DocumentDetailsReceivedSha
       creationDate,
       modificationDate,
       expirationDate,
-      description,
-      recipient != null ? recipient.toGenericUser() : null,
-      downloaded,
+      description ?? '',
+      recipient.toGenericUser(),
+      downloaded ?? 0,
     );
   }
 }

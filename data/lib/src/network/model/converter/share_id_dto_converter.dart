@@ -39,7 +39,7 @@ class ShareIdDtoConverter implements JsonConverter<ShareIdDto, String> {
   const ShareIdDtoConverter();
 
   @override
-  ShareIdDto fromJson(String? json) => ShareIdDto(json);
+  ShareIdDto fromJson(String json) => ShareIdDto(json);
 
   @override
   String toJson(ShareIdDto object) => jsonEncode(object.uuid);
