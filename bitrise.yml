@@ -42,10 +42,10 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
+    - git-clone@5: {}
     - flutter-installer@0:
         inputs:
-        - installation_bundle_url: https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.22.1-stable.zip
+        - installation_bundle_url: https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_2.0.6-stable.zip
         - is_update: 'false'
     - cache-pull@2: {}
     - script@1:
@@ -74,13 +74,13 @@ workflows:
         inputs:
         - additional_params: ''
         - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION/data"
-    - flutter-test@0:
+    - flutter-test@1:
         inputs:
         - additional_params: "--verbose"
-    - flutter-test@0:
+    - flutter-test@1:
         inputs:
         - additional_params: data
-    - flutter-test@0:
+    - flutter-test@1:
         inputs:
         - additional_params: domain
     - certificate-and-profile-installer@1:
@@ -96,7 +96,7 @@ workflows:
         - is_debug_mode: 'true'
         - ios_additional_params: "--release"
         - ios_codesign_identity: 'Apple Development: Tung Tran (D62M3529UP)'
-    - xcode-archive@2:
+    - xcode-archive@3:
         inputs:
         - team_id: 6Z27TKCGWF
         - force_team_id: 6Z27TKCGWF
