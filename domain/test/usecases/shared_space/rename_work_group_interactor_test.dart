@@ -51,12 +51,12 @@ void main() {
     test('rename workgroup interactor should return success with one valid data', () async {
       when(sharedSpaceRepository.renameWorkGroup(
         sharedSpace1.sharedSpaceId,
-        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters)))
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters, sharedSpace1.nodeType)))
       .thenAnswer((_) async => sharedSpace1);
 
       final result = await renameWorkGroupInteractor.execute(
         sharedSpace1.sharedSpaceId,
-        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters));
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters, sharedSpace1.nodeType));
 
       expect(result, Right<Failure, Success>(RenameWorkGroupViewState(sharedSpace1)));
     });
@@ -66,12 +66,12 @@ void main() {
 
       when(sharedSpaceRepository.renameWorkGroup(
          sharedSpace1.sharedSpaceId,
-         RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters)))
+         RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters, sharedSpace1.nodeType)))
       .thenThrow(exception);
 
       final result = await renameWorkGroupInteractor.execute(
         sharedSpace1.sharedSpaceId,
-        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters));
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters, sharedSpace1.nodeType));
 
       expect(result, Left<Failure, Success>(RenameWorkGroupFailure(exception)));
     });

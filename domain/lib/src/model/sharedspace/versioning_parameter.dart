@@ -37,7 +37,7 @@ class VersioningParameter extends Equatable {
   VersioningParameter(this.enable);
 
   factory VersioningParameter.initial() {
-    return VersioningParameter(false);
+    return VersioningParameter(true);
   }
 
   @override

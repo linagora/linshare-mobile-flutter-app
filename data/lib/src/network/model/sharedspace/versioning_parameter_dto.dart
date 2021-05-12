@@ -37,7 +37,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'versioning_parameter_dto.g.dart';
 
 @JsonSerializable()
-class VersioningParameterDto with EquatableMixin {
+class VersioningParameterDto extends Equatable {
   final bool enable;
 
   VersioningParameterDto(this.enable);

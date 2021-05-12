@@ -493,9 +493,6 @@ class LinShareHttpClient {
     final resultJson = await _dioClient.put(
       Endpoint.sharedSpaces.withPathParameter(sharedSpaceId.uuid).generateEndpointPath(),
       data: renameWorkGroupBodyRequest.toJson().toString(),
-      options: Options(headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      })
     );
 
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);

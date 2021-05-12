@@ -35,9 +35,10 @@ import 'package:equatable/equatable.dart';
 class RenameWorkGroupRequest with EquatableMixin {
   final String name;
   final VersioningParameter versioningParameters;
+  final LinShareNodeType nodeType;
 
-  RenameWorkGroupRequest(this.name, this.versioningParameters);
+  RenameWorkGroupRequest(this.name, this.versioningParameters, this.nodeType);
 
   @override
-  List<Object> get props => [name, versioningParameters];
+  List<Object> get props => [name, versioningParameters, nodeType];
 }
