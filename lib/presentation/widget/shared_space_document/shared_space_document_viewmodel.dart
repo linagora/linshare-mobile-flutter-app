@@ -276,6 +276,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
           .execute(workGroupDocument, downloadPreviewType, cancelToken)
           .then((result) => result.fold(
               (failure) {
+                _appNavigation.popBack();
                 if (failure is DownloadPreviewWorkGroupDocumentFailure && !(failure.downloadPreviewException is CancelDownloadFileException)) {
                   store.dispatch(SharedSpaceDocumentAction(Left(NoWorkGroupDocumentPreviewAvailable())));
                 }},
