@@ -443,7 +443,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   OnlineThunkAction _exportFileAction(List<WorkGroupNode> workGroupNodes, CancelToken cancelToken) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _downloadMultipleNodeIOSInteractor
-          .execute(workGroupNodes: workGroupNodes, cancelToken: cancelToken)
+          .execute(workGroupNodes, cancelToken)
           .then((result) => result.fold(
               (failure) => store.dispatch(_exportFileFailureAction(failure)),
               (success) => store.dispatch(_exportFileSuccessAction(success))));
