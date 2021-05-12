@@ -70,6 +70,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final RenameWorkGroupInteractor _renameWorkGroupInteractor;
+  final GetSharedSpaceInteractor _getSharedSpaceInteractor;
   StreamSubscription _storeStreamSubscription;
   List<SharedSpaceNodeNested> _sharedSpaceNodes;
 
@@ -88,6 +89,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._getSorterInteractor,
     this._saveSorterInteractor,
     this._renameWorkGroupInteractor,
+    this._getSharedSpaceInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -414,7 +416,7 @@ class SharedSpaceViewModel extends BaseViewModel {
       await _renameWorkGroupInteractor
         .execute(
           sharedSpaceNodeNested.sharedSpaceId,
-          RenameWorkGroupRequest(newName, sharedSpaceNodeNested.versioningParameters))
+          RenameWorkGroupRequest(newName, sharedSpaceNodeNested.versioningParameters, sharedSpaceNodeNested.nodeType))
         .then((result) => getAllSharedSpaces(needToGetOldSorter: true));
     });
   }
