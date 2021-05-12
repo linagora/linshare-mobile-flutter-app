@@ -111,7 +111,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     return Future.sync(() async {
       final shareDocumentBodyRequest = ShareDocumentBodyRequest(
           documentIds.map((data) => ShareIdDto(data.uuid)).toList(),
-          mailingListIds.map((data) => MailingListIdDto(data.uuid!)).toList(),
+          mailingListIds.map((data) => MailingListIdDto(data.uuid)).toList(),
           recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName)).toList());
       final shareList = await _linShareHttpClient.shareDocument(shareDocumentBodyRequest);
       return shareList.map((data) => data.toShare()).toList();
