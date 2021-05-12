@@ -189,7 +189,7 @@ void main() {
     test('create shared space work group should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
           .thenThrow(error);
@@ -203,7 +203,7 @@ void main() {
     test('create shared space should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 403, requestOptions: null), requestOptions: null
+          response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
           .thenThrow(error);
