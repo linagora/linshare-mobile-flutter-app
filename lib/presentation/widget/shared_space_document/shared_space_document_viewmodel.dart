@@ -584,8 +584,8 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
 
       await _copyMultipleFilesToSharedSpaceInteractor
           .execute(
-              copyRequests: nodes.map((node) => node.toCopyRequest()).toList(),
-              destinationSharedSpaceId: sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
+              nodes.map((node) => node.toCopyRequest()).toList(),
+              sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
               destinationParentNodeId: parentNodeId)
           .then((result) => result.fold(
               (failure) => store.dispatch(SharedSpaceDocumentAction(Left(failure))),
