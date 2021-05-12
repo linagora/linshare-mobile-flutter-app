@@ -44,6 +44,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/network_connecti
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
@@ -217,32 +218,45 @@ class ToastMessageHandler {
     sharedSpaceDocumentState.viewState.fold((failure) {
       if (failure is RemoveSharedSpaceNodeFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
+        _cleanSharedSpaceDocumentViewState();
       } else if (failure is RemoveAllSharedSpaceNodesFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_deleted);
+        _cleanSharedSpaceDocumentViewState();
       } else if (failure is CopyToMySpaceFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
+        _cleanSharedSpaceDocumentViewState();
       } else if (failure is CopyMultipleToMySpaceAllFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
+        _cleanSharedSpaceDocumentViewState();
       } else if (failure is CopyToSharedSpaceFailure || failure is CopyMultipleFilesToSharedSpaceAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
+        _cleanSharedSpaceDocumentViewState();
       } else if (failure is NoWorkGroupDocumentPreviewAvailable) {
         appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
+        _cleanSharedSpaceDocumentViewState();
       }
     }, (success) {
       if (success is RemoveSharedSpaceNodeViewState) {
         appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
+        _cleanSharedSpaceDocumentViewState();
       } else if (success is RemoveAllSharedSpaceNodesSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).files_have_been_successfully_deleted);
+        _cleanSharedSpaceDocumentViewState();
       } else if (success is RemoveSomeSharedSpaceNodesSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+        _cleanSharedSpaceDocumentViewState();
       } else if (success is CopyToMySpaceViewState) {
         appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
+        _cleanSharedSpaceDocumentViewState();
       } else if (success is CopyMultipleToMySpaceAllSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).all_items_have_been_copied_to_my_space);
+        _cleanSharedSpaceDocumentViewState();
       } else if (success is CopyMultipleToMySpaceHasSomeFilesViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
+        _cleanSharedSpaceDocumentViewState();
       } else  if (success is CopyToSharedSpaceViewState || success is CopyMultipleFilesToSharedSpaceAllSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).the_file_is_copied_to_a_shared_space);
+        _cleanSharedSpaceDocumentViewState();
       }
     });
   }
@@ -312,6 +326,10 @@ class ToastMessageHandler {
 
   void _cleanSharedSpaceViewState() {
     _store.dispatch(CleanSharedSpaceStateAction());
+  }
+
+  void _cleanSharedSpaceDocumentViewState() {
+    _store.dispatch(CleanSharedSpaceDocumentStateAction());
   }
 
   void _cleanNetworkConnectivityViewState() {
