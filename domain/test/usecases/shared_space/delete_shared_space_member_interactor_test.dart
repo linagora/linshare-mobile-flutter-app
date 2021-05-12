@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_member_repository.d
 
 void main() {
   group('delete_shared_space_member_interactor test', () {
-    MockSharedSpaceMemberRepository? sharedSpaceMemberRepository;
-    late DeleteSharedSpaceMemberInteractor deleteSharedSpaceMemberInteractor;
+    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
+    DeleteSharedSpaceMemberInteractor deleteSharedSpaceMemberInteractor;
 
     setUp(() {
       sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('deleteSharedSpaceMemberInteractor should return success state when delete a member successfully', () async {
-      when(sharedSpaceMemberRepository!.deleteMember(
+      when(sharedSpaceMemberRepository.deleteMember(
           sharedSpaceId1,
           sharedMemberId1
       )).thenAnswer((_) async => sharedSpaceMember1);
@@ -61,7 +61,7 @@ void main() {
     test('deleteSharedSpaceMemberInteractor should fail when executeDelete fail', () async {
       final exception = Exception();
 
-      when(sharedSpaceMemberRepository!.deleteMember(
+      when(sharedSpaceMemberRepository.deleteMember(
           sharedSpaceId1,
           sharedMemberId1
       )).thenThrow(exception);

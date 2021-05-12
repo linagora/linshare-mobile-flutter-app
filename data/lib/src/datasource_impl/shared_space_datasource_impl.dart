@@ -29,13 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
 import 'package:data/src/datasource/shared_space_datasource.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/sharedspace/shared_space_node_nested.dart';
-import 'package:data/data.dart';
 
 class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -110,12 +110,12 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
       return (await _linShareHttpClient.createSharedSpaceWorkGroup(createWorkGroupRequest.toCreateWorkGroupBodyRequest())).toSharedSpaceNodeNested();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response?.statusCode == 404) {
+        if (error.response.statusCode == 404) {
           throw SharedSpaceNotFound();
-        } else if (error.response?.statusCode == 403) {
+        } else if (error.response.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response?.statusMessage!);
+          throw UnknownError(error.response.statusMessage);
         }
       });
     });

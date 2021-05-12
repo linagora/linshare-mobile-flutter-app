@@ -31,17 +31,17 @@
 
 import 'dart:convert';
 
-import 'package:data/src/network/model/converter/work_group_node_id_nullable_converter.dart';
+import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'create_shared_space_node_folder_request.g.dart';
 
+@WorkGroupNodeIdConverter()
 @JsonSerializable()
-@WorkGroupNodeIdNullableConverter()
 class CreateSharedSpaceNodeFolderRequest {
-  final String? name;
-  final WorkGroupNodeId? parentWorkGroupNodeId;
+  final String name;
+  final WorkGroupNodeId parentWorkGroupNodeId;
   final WorkGroupNodeType type = WorkGroupNodeType.FOLDER;
 
   CreateSharedSpaceNodeFolderRequest(this.name, [this.parentWorkGroupNodeId]);

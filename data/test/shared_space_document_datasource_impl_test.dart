@@ -109,7 +109,7 @@ void main() {
     test('Copy To SharedSpace Should Throw Exception When Copy Failed', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
+          response: Response(statusCode: 404, requestOptions: null), requestOptions: null
       );
       when(_linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
         CopyBodyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
@@ -214,7 +214,7 @@ void main() {
     });
 
     test('Created Folder Should Throw Exception When Fail', () async {
-      final error = DioError(type: DioErrorType.response, response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: ''));
+      final error = DioError(type: DioErrorType.response, response: Response(statusCode: 404, requestOptions: null), requestOptions: null);
       when(_linShareHttpClient.createSharedSpaceNodeFolder(
         sharedSpaceFolder1.sharedSpaceId,
         CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId)

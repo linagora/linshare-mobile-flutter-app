@@ -31,18 +31,18 @@
 //
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:data/data.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
 void main() {
   group('create_work_group_interactor test', () {
-    MockSharedSpaceRepository? sharedSpaceRepository;
-    late CreateWorkGroupInteractor createWorkGroupInteractor;
+    MockSharedSpaceRepository sharedSpaceRepository;
+    CreateWorkGroupInteractor createWorkGroupInteractor;
 
     setUp(() {
       sharedSpaceRepository = MockSharedSpaceRepository();
@@ -50,20 +50,20 @@ void main() {
     });
 
     test('Create Work Group interactor should return success with valid data', () async {
-      when(sharedSpaceRepository!.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
+      when(sharedSpaceRepository.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
           .thenAnswer((_) async => sharedSpace1);
 
       final result = await createWorkGroupInteractor.execute(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
 
-      final SharedSpaceNodeNested? sharedSpace = result
+      final sharedSpace = result
           .map((success) => (success as CreateWorkGroupViewState).sharedSpaceNodeNested)
-          .getOrElse((() => null) as SharedSpaceNodeNested Function());
+          .getOrElse(() => null);
       expect(sharedSpace, sharedSpaceResponse1.toSharedSpaceNodeNested());
     });
 
     test('Create Work Group interactor should fail when createSharedSpaceWorkGroup fail', () async {
       final exception = Exception();
-      when(sharedSpaceRepository!.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))).thenThrow(exception);
+      when(sharedSpaceRepository.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))).thenThrow(exception);
 
       final result = await createWorkGroupInteractor.execute(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
 

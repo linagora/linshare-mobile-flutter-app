@@ -37,7 +37,7 @@ import 'package:equatable/equatable.dart';
 
 class CopyBodyRequest with EquatableMixin {
   String contextUuid;
-  final String? uuid;
+  final String uuid;
   final SpaceType kind;
 
   CopyBodyRequest(this.uuid, this.kind, {this.contextUuid = ''});
@@ -49,7 +49,7 @@ class CopyBodyRequest with EquatableMixin {
   };
 
   @override
-  List<Object?> get props => [contextUuid, uuid, kind];
+  List<Object> get props => [contextUuid, uuid, kind];
 }
 
 extension CopyRequestExtension on CopyRequest {

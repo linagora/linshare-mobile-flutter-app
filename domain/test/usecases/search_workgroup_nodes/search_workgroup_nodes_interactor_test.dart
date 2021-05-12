@@ -36,7 +36,7 @@ import 'package:testshared/testshared.dart';
 
 void main() {
   group('search_work_group_nodes_interactor_test', () {
-    late SearchWorkGroupNodeInteractor searchWorkGroupNodeInteractor;
+    SearchWorkGroupNodeInteractor searchWorkGroupNodeInteractor;
 
     setUp(() {
       searchWorkGroupNodeInteractor = SearchWorkGroupNodeInteractor();
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('search workGroupNodes should return failure', () async {
-      final state = await searchWorkGroupNodeInteractor.execute([], SearchQuery('Severine'));
+      final state = await searchWorkGroupNodeInteractor.execute(null, SearchQuery('Severine'));
       state.fold(
         (failure) => expect(failure, isA<SearchWorkGroupNodeFailure>()),
         (success) => null);

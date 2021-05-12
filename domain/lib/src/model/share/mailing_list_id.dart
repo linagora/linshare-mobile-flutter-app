@@ -43,5 +43,5 @@ class MailingListId with EquatableMixin {
   MailingListId(this._uuid);
 
   @override
-  List<Object> get props => [uuid];
+  List<Object?> get props => [uuid];
 }

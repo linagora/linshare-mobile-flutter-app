@@ -36,7 +36,7 @@ import 'package:testshared/testshared.dart';
 
 void main() {
   group('search_received_shares_interactor_test', () {
-    late SearchReceivedSharesInteractor searchReceivedSharesInteractor;
+    SearchReceivedSharesInteractor searchReceivedSharesInteractor;
 
     setUp(() {
       searchReceivedSharesInteractor = SearchReceivedSharesInteractor();
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('search received shares should return failure', () async {
-      final state = await searchReceivedSharesInteractor.execute([], SearchQuery('Baron Nashor'));
+      final state = await searchReceivedSharesInteractor.execute(null, SearchQuery('Baron Nashor'));
       state.fold(
         (failure) => expect(failure, isA<SearchReceivedSharesFailure>()),
         (success) => null);

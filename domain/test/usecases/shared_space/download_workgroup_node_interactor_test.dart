@@ -45,11 +45,11 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('download_workgroup_node_interactor_test', () {
-    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    late MockTokenRepository tokenRepository;
-    late MockCredentialRepository credentialRepository;
-    late DownloadWorkGroupNodeInteractor downloadNodeInteractor;
-    late WorkGroupNode workGroupNode;
+    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    MockTokenRepository tokenRepository;
+    MockCredentialRepository credentialRepository;
+    DownloadWorkGroupNodeInteractor downloadNodeInteractor;
+    WorkGroupNode workGroupNode;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();

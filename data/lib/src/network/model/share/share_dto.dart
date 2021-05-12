@@ -30,31 +30,30 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:data/src/network/model/converter/share_id_dto_converter.dart';
 import 'package:data/src/network/model/generic_user_dto.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/share/share_id_dto.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'share_dto.g.dart';
 
 @JsonSerializable()
-@DatetimeNullableConverter()
+@DatetimeConverter()
 @ShareIdDtoConverter()
 class ShareDto {
   @JsonKey(name: Attribute.uuid)
   final ShareIdDto shareId;
-  final String? name;
-  final DateTime? creationDate;
-  final DateTime? modificationDate;
-  final DateTime? expirationDate;
+  final String name;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final DateTime expirationDate;
   final DocumentResponse document;
-  final int? downloaded;
-  final String? description;
+  final int downloaded;
+  final String description;
   final GenericUserDto recipient;
 
   ShareDto(
@@ -77,15 +76,14 @@ class ShareDto {
 extension ShareDtoExtension on ShareDto {
   Share toShare() {
     return Share(
-      ShareId(shareId.uuid ?? ''),
-      name ?? '',
-      creationDate ?? DateTime.now(),
-      modificationDate ?? DateTime.now(),
-      expirationDate ?? DateTime.now(),
+      ShareId(shareId.uuid),
+      name, creationDate,
+      modificationDate,
+      expirationDate,
       document.toDocument(),
-      description ?? '',
+      description,
       recipient.toGenericUser(),
-      downloaded ?? 0,
+      downloaded,
     );
   }
 }

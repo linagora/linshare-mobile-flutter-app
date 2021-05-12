@@ -45,12 +45,12 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('download_node_ios_interactor_test', () {
-    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    late MockTokenRepository tokenRepository;
-    late MockCredentialRepository credentialRepository;
-    late DownloadNodeIOSInteractor downloadNodeIOSInteractor;
-    late CancelToken cancelToken;
-    late Uri validFilePath;
+    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    MockTokenRepository tokenRepository;
+    MockCredentialRepository credentialRepository;
+    DownloadNodeIOSInteractor downloadNodeIOSInteractor;
+    CancelToken cancelToken;
+    Uri validFilePath;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();

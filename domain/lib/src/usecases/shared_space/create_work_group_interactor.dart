@@ -34,13 +34,13 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class CreateWorkGroupInteractor {
-  final SharedSpaceRepository? _sharedSpaceRepository;
+  final SharedSpaceRepository _sharedSpaceRepository;
 
   CreateWorkGroupInteractor(this._sharedSpaceRepository);
 
   Future<Either<Failure, Success>> execute(CreateWorkGroupRequest createWorkGroupRequest) async {
     try {
-      final sharedSpaceWorkGroup = await _sharedSpaceRepository!.createSharedSpaceWorkGroup(createWorkGroupRequest);
+      final sharedSpaceWorkGroup = await _sharedSpaceRepository.createSharedSpaceWorkGroup(createWorkGroupRequest);
       return Right<Failure, Success>(CreateWorkGroupViewState(sharedSpaceWorkGroup));
     } catch (exception) {
       return Left<Failure, Success>(CreateWorkGroupFailure(exception));

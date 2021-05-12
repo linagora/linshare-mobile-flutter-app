@@ -31,11 +31,11 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
 import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
+import 'package:domain/domain.dart';
 
 class CreateSharedSpaceFolderInteractor {
-  final SharedSpaceDocumentRepository? _sharedSpaceDocumentRepository;
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
 
   CreateSharedSpaceFolderInteractor(this._sharedSpaceDocumentRepository);
 
@@ -44,7 +44,7 @@ class CreateSharedSpaceFolderInteractor {
     CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
   ) async {
     try {
-      final workGroupFolder = await _sharedSpaceDocumentRepository!.createSharedSpaceFolder(sharedSpaceId, createSharedSpaceNodeRequest);
+      final workGroupFolder = await _sharedSpaceDocumentRepository.createSharedSpaceFolder(sharedSpaceId, createSharedSpaceNodeRequest);
       return Right<Failure, Success>(CreateSharedSpaceFolderViewState(workGroupFolder));
     } catch (exception) {
       return Left<Failure, Success>(CreateSharedSpaceFolderFailure(exception));

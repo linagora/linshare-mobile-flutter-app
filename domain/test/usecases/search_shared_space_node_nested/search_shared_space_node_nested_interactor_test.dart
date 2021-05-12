@@ -36,7 +36,7 @@ import 'package:testshared/testshared.dart';
 
 void main() {
   group('search_shared_space_node_nested_interactor_test', () {
-    late SearchSharedSpaceNodeNestedInteractor searchSharedSpaceNodeNestedInteractor;
+    SearchSharedSpaceNodeNestedInteractor searchSharedSpaceNodeNestedInteractor;
 
     setUp(() {
       searchSharedSpaceNodeNestedInteractor = SearchSharedSpaceNodeNestedInteractor();
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('search shared space node should return failure', () async {
-      final state = await searchSharedSpaceNodeNestedInteractor.execute([], SearchQuery('still no hope'));
+      final state = await searchSharedSpaceNodeNestedInteractor.execute(null, SearchQuery('still no hope'));
       state.fold(
               (failure) => expect(failure, isA<SearchSharedSpaceNodeNestedFailure>()),
               (success) => null);

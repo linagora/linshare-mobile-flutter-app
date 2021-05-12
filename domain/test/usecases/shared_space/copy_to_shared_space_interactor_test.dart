@@ -40,8 +40,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('copy_to_shared_space_interactor tests', () {
-    MockSharedSpaceDocumentRepository? sharedSpaceDocumentRepository;
-    late CopyDocumentsToSharedSpaceInteractor copyDocumentsToSharedSpaceInteractor;
+    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    CopyDocumentsToSharedSpaceInteractor copyDocumentsToSharedSpaceInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('copy to shared space interactor should return success with valid data', () async {
-      when(sharedSpaceDocumentRepository!.copyToSharedSpace(
+      when(sharedSpaceDocumentRepository.copyToSharedSpace(
           CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
       .thenAnswer((_) async => [workGroupDocument1]);
@@ -65,7 +65,7 @@ void main() {
 
     test('copy to shared space interactor should fail when copyToSharedSpace fail', () async {
       final exception = Exception();
-      when(sharedSpaceDocumentRepository!.copyToSharedSpace(
+      when(sharedSpaceDocumentRepository.copyToSharedSpace(
           CopyRequest(document1.documentId.uuid, SpaceType.PERSONAL_SPACE),
           sharedSpace1.sharedSpaceId))
           .thenThrow(exception);

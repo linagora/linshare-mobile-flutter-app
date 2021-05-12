@@ -41,7 +41,7 @@ class AccountQuotaViewState extends ViewState {
 }
 
 class AccountQuotaFailure extends FeatureFailure {
-  final exception;
+  final dynamic exception;
 
   AccountQuotaFailure(this.exception);
 

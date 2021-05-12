@@ -32,16 +32,16 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('share_document_interactor_test', () {
-    late MockDocumentRepository documentRepository;
-    late ShareDocumentInteractor shareDocumentInteractor;
+    MockDocumentRepository documentRepository;
+    ShareDocumentInteractor shareDocumentInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();

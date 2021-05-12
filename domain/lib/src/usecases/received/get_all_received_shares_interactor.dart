@@ -38,13 +38,13 @@ import 'package:domain/src/state/success.dart';
 import 'package:domain/src/usecases/received/received_share_view_state.dart';
 
 class GetAllReceivedSharesInteractor {
-  final ReceivedShareRepository? _receivedShareRepository;
+  final ReceivedShareRepository _receivedShareRepository;
 
   GetAllReceivedSharesInteractor(this._receivedShareRepository);
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final receivedShares = await _receivedShareRepository!.getAllReceivedShares();
+      final receivedShares = await _receivedShareRepository.getAllReceivedShares();
       return Right<Failure, Success>(GetAllReceivedShareSuccess(receivedShares));
     } catch(exception) {
       return Left<Failure, Success>(GetAllReceivedShareFailure(exception));

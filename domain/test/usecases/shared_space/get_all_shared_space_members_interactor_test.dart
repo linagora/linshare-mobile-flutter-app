@@ -40,8 +40,8 @@ import '../../mock/repository/shared_space/mock_shared_space_member_repository.d
 
 void main() {
   group('get_all_shared_space_members_interactor', () {
-    MockSharedSpaceMemberRepository? sharedSpaceMemberRepository;
-    late GetAllSharedSpaceMembersInteractor _getAllSharedSpaceMembersInteractor;
+    MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
+    GetAllSharedSpaceMembersInteractor _getAllSharedSpaceMembersInteractor;
 
     setUp(() {
       sharedSpaceMemberRepository = MockSharedSpaceMemberRepository();
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('getAllSharedSpaceMembersInteractor should return success with members list', () async {
-      when(sharedSpaceMemberRepository!.getMembers(sharedSpaceId1)).thenAnswer((_) async => [sharedSpaceMember1, sharedSpaceMember2]);
+      when(sharedSpaceMemberRepository.getMembers(sharedSpaceId1)).thenAnswer((_) async => [sharedSpaceMember1, sharedSpaceMember2]);
 
       final result = await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId1);
 
@@ -62,7 +62,7 @@ void main() {
 
     test('getAllSharedSpaceMembersInteractor should fail when getMembers fail', () async {
       final exception = Exception();
-      when(sharedSpaceMemberRepository!.getMembers(sharedSpaceId1)).thenThrow(exception);
+      when(sharedSpaceMemberRepository.getMembers(sharedSpaceId1)).thenThrow(exception);
 
       final result = await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId1);
 
