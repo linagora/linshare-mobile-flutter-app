@@ -40,8 +40,8 @@ import '../../mock/repository/authentication/mock_document_repository.dart';
 
 void main() {
   group('share_document_interactor_test', () {
-    MockDocumentRepository documentRepository;
-    ShareDocumentInteractor shareDocumentInteractor;
+    late MockDocumentRepository documentRepository;
+    late ShareDocumentInteractor shareDocumentInteractor;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
