@@ -90,31 +90,31 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId destinationParentNodeId}) {
+  Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId? destinationParentNodeId}) {
     return Future.sync(() async {
       return (await _linShareHttpClient.copyWorkGroupNodeToSharedSpaceDestination(
             copyRequest.toCopyBodyRequest(),
             destinationSharedSpaceId,
             destinationParentNodeId: destinationParentNodeId))
-          .map<WorkGroupNode>((workgroupNode) {
+          .map((workgroupNode) {
             if (workgroupNode is WorkGroupDocumentDto) {
               return workgroupNode.toWorkGroupDocument();
             }
             if (workgroupNode is WorkGroupNodeFolderDto) {
               return workgroupNode.toWorkGroupFolder();
             }
-            return null;
-          })
+            return null;})
           .where((node) => node != null)
+          .map((node) => node!)
           .toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw WorkGroupNodeNotFoundException();
-        } else if (error.response.statusCode == 403) {
+        } else if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
