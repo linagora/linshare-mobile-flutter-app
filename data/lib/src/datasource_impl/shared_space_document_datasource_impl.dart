@@ -153,20 +153,22 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         throw DeviceNotSupportedException();
     }
 
-    final taskIds = await Future.wait(workgroupNodes.map((node) async {
-      await FlutterDownloader.enqueue(
-          url: Endpoint.sharedSpaces
-              .withPathParameter(node.sharedSpaceId.uuid)
-              .withPathParameter('nodes')
-              .downloadServicePath(node.workGroupNodeId.uuid)
-              .generateDownloadUrl(baseUrl),
-          savedDir: externalStorageDirPath,
-          headers: {Constant.authorization: 'Bearer ${token.token}'},
-          showNotification: true,
-          openFileFromNotification: true);
-        }));
+    final taskIds = await Future.wait(
+        workgroupNodes.map((node) async => await FlutterDownloader.enqueue(
+            url: Endpoint.sharedSpaces
+                .withPathParameter(node.sharedSpaceId.uuid)
+                .withPathParameter('nodes')
+                .downloadServicePath(node.workGroupNodeId.uuid)
+                .generateDownloadUrl(baseUrl),
+            savedDir: externalStorageDirPath,
+            headers: {Constant.authorization: 'Bearer ${token.token}'},
+            showNotification: true,
+            openFileFromNotification: true)));
 
-    return taskIds.map((taskId) => DownloadTaskId(taskId)).toList();
+      return taskIds
+          .where((id) => id != null)
+          .map((taskId) => DownloadTaskId(taskId!))
+          .toList();
   }
 
   @override
