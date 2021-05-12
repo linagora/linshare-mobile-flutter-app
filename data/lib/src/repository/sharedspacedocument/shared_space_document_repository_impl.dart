@@ -72,7 +72,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<List<WorkGroupNode?>> copyToSharedSpace(
+  Future<List<WorkGroupNode>> copyToSharedSpace(
     CopyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
     {WorkGroupNodeId? destinationParentNodeId}

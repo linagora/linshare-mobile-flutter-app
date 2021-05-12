@@ -246,7 +246,7 @@ class LinShareHttpClient {
   Future<List<WorkGroupNodeDto>> copyWorkGroupNodeToSharedSpaceDestination(
     CopyBodyRequest copyRequest,
     SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId destinationParentNodeId}) async {
+    {WorkGroupNodeId? destinationParentNodeId}) async {
       final copyEndpointPath = Endpoint.sharedSpaces
         .withPathParameter(destinationSharedSpaceId.uuid)
         .withPathParameter('nodes')
