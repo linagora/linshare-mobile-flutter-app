@@ -202,12 +202,12 @@ void main() {
     test('Rename WorkGroup Should Return Success Renamed', () async {
       when(_linShareHttpClient.renameWorkGroup(
         sharedSpace1.sharedSpaceId,
-        RenameWorkGroupBodyRequest(sharedSpace1.name, VersioningParameterDto(sharedSpace1.versioningParameters.enable))
+        RenameWorkGroupBodyRequest(sharedSpace1.name, VersioningParameterDto(sharedSpace1.versioningParameters.enable), sharedSpace1.nodeType)
       )).thenAnswer((_) async => sharedSpaceResponse1);
 
       final result = await _sharedSpaceDataSourceImpl.renameWorkGroup(
         sharedSpace1.sharedSpaceId,
-        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters)
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters, sharedSpace1.nodeType)
       );
 
       expect(result, sharedSpaceResponse1.toSharedSpaceNodeNested());
@@ -221,12 +221,12 @@ void main() {
 
       when(_linShareHttpClient.renameWorkGroup(
         sharedSpace1.sharedSpaceId,
-        RenameWorkGroupBodyRequest(sharedSpace1.name, VersioningParameterDto(sharedSpace1.versioningParameters.enable))
+        RenameWorkGroupBodyRequest(sharedSpace1.name, VersioningParameterDto(sharedSpace1.versioningParameters.enable), sharedSpace1.nodeType)
       )).thenThrow(error);
 
       await _sharedSpaceDataSourceImpl.renameWorkGroup(
         sharedSpace1.sharedSpaceId,
-        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters)
+        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters, sharedSpace1.nodeType)
       ).catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
     });
   });

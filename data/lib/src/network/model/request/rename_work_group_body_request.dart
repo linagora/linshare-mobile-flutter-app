@@ -38,12 +38,14 @@ import 'package:equatable/equatable.dart';
 class RenameWorkGroupBodyRequest with EquatableMixin {
   final String name;
   final VersioningParameterDto versioningParameters;
+  final LinShareNodeType nodeType;
 
-  RenameWorkGroupBodyRequest(this.name, this.versioningParameters);
+  RenameWorkGroupBodyRequest(this.name, this.versioningParameters, this.nodeType);
 
   Map<String, dynamic> toJson() => <String, dynamic>{
     jsonEncode('name'): jsonEncode(name),
-    jsonEncode('versioningParameters'): jsonEncode(versioningParameters.toJson())
+    jsonEncode('versioningParameters'): jsonEncode(versioningParameters.toJson()),
+    jsonEncode('nodeType'): jsonEncode(nodeType.value)
   };
 
   @override
@@ -51,5 +53,5 @@ class RenameWorkGroupBodyRequest with EquatableMixin {
 }
 
 extension RenameWorkGroupRequestExtension on RenameWorkGroupRequest {
-  RenameWorkGroupBodyRequest toRenameWorkGroupBodyRequest() => RenameWorkGroupBodyRequest(name, VersioningParameterDto(versioningParameters.enable));
+  RenameWorkGroupBodyRequest toRenameWorkGroupBodyRequest() => RenameWorkGroupBodyRequest(name, VersioningParameterDto(versioningParameters.enable), nodeType);
 }
