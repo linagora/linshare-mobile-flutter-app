@@ -150,7 +150,7 @@ class LinShareHttpClient {
 
   Future<List<AuditLogEntryUserDto>> getSharedSpaceActivities(SharedSpaceId sharedSpaceId) async {
     final List membersJson = await _dioClient.get(
-        Endpoint.workGroups
+        Endpoint.sharedSpaces
                 .withPathParameter(sharedSpaceId.uuid)
                 .withPathParameter('audit')
                 .generateEndpointPath());
