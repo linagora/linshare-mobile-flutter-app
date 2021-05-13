@@ -210,7 +210,7 @@ workflows:
         - from_username: mobile_bot
         - from_username_on_error: mobile_bot
         - channel_on_error: 'channel: #ft-mobile'
-        - footer: Linagora Mobile Team
+        - footer: Linagora Linshare Mobile Team
         - text_on_error: |
             Commit Author|${GIT_CLONE_COMMIT_AUTHOR_NAME}
             Message|${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
