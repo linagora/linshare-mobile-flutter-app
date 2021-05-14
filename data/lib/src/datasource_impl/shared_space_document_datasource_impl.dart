@@ -176,7 +176,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         Endpoint.sharedSpaces
             .withPathParameter(workgroupNode.sharedSpaceId.uuid)
             .withPathParameter('nodes')
-            .withPathParameter(workgroupNode.workGroupNodeId.uuid)
+            .downloadServicePath(workgroupNode.workGroupNodeId.uuid)
             .generateDownloadUrl(baseUrl),
         getTemporaryDirectory(),
         workgroupNode.name,
