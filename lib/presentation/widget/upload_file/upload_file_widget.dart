@@ -571,8 +571,9 @@ class EllipsisTextPainter extends CustomPainter {
   final TextSpan text;
   final int maxLines;
   final String ellipsis;
+  final TextAlign textAlign;
 
-  EllipsisTextPainter({this.text, this.ellipsis, this.maxLines}) : super();
+  EllipsisTextPainter({this.text, this.ellipsis, this.maxLines, this.textAlign}) : super();
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
@@ -582,6 +583,7 @@ class EllipsisTextPainter extends CustomPainter {
     var painter = TextPainter(
       text: text,
       maxLines: maxLines,
+      textAlign: textAlign,
       textDirection: TextDirection.ltr,
     )..ellipsis = ellipsis;
     painter.layout(maxWidth: size.width);
