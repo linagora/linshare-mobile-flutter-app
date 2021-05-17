@@ -144,8 +144,8 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           child: Align(
             alignment: Alignment.center,
             child: Container(
-              width: 50,
-              height: 50,
+              width: 30,
+              height: 30,
               child: CircularProgressIndicator(
                 backgroundColor: AppColor.primaryColor,
               ),
