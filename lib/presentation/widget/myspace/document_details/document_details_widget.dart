@@ -88,11 +88,17 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
               style: TextStyle(fontSize: 24, color: Colors.white)),
           backgroundColor: AppColor.primaryColor,
         ),
-        body: SingleChildScrollView(
-            child: StoreConnector<AppState, DocumentDetailsState>(
-          converter: (store) => store.state.documentDetailsState,
-          builder: (_, state) => _detailsTabWidget(state),
-        )));
+        body: Column(
+          children: [
+            Expanded(
+              child: StoreConnector<AppState, DocumentDetailsState>(
+                converter: (store) => store.state.documentDetailsState,
+                builder: (_, state) => _detailsTabWidget(state),
+              ),
+            )
+          ],
+        )
+    );
   }
 
   Widget _detailsTabWidget(DocumentDetailsState state) {
@@ -102,8 +108,8 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
           child: Align(
             alignment: Alignment.center,
             child: Container(
-              width: 50,
-              height: 50,
+              width: 30,
+              height: 30,
               child: CircularProgressIndicator(
                 backgroundColor: AppColor.primaryColor,
               ),
