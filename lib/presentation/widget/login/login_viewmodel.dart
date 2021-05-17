@@ -52,11 +52,11 @@ class LoginViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
 
-  String _urlText = '';
+  String _urlText = 'https://';
   String _emailText = '';
   String _passwordText = '';
 
-  void setUrlText(String url) => _urlText = url;
+  void setUrlText(String url) => _urlText += url;
 
   void setEmailText(String email) => _emailText = email;
 
