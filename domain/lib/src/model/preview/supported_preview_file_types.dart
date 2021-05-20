@@ -63,6 +63,9 @@ class SupportedPreviewFileTypes {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'com.microsoft.excel.xls',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation' : 'com.microsoft.powerpoint.​ppt',
     'application/pdf' : 'com.adobe.pdf',
+    'application/vnd.oasis.opendocument.text' : 'com.microsoft.word.doc',
+    'application/vnd.oasis.opendocument.spreadsheet' : 'com.microsoft.excel.xls',
+    'application/vnd.oasis.opendocument.presentation' : 'com.microsoft.powerpoint.​ppt',
   };
 
   static const androidSupportedTypes = [
@@ -75,6 +78,9 @@ class SupportedPreviewFileTypes {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/vnd.oasis.opendocument.text',
+    'application/vnd.oasis.opendocument.spreadsheet',
+    'application/vnd.oasis.opendocument.presentation',
     'application/msword',
     'application/vnd.ms-excel',
     'application/vnd.ms-powerpoint',
