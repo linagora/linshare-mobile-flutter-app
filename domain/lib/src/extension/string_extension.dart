@@ -35,7 +35,13 @@ extension StringExtension on String {
       toLowerCase().compareTo(value.toLowerCase()) * (orderType == OrderType.ascending ? -1 : 1);
 
   String toMiddleEllipsis() {
-    final subLength = length - split('.').last.length;
-    return '...' + substring(subLength-3,subLength) + split('.').last;
+    if (contains('.')) {
+      final subLength = length - split('.').last.length;
+      return subLength >= 3
+          ? '...' + substring(subLength - 3, subLength) + split('.').last
+          : this;
+    } else {
+      return length >= 3 ? '...' + substring(length - 3, length) : this;
+    }
   }
 }
