@@ -48,6 +48,11 @@ class ResponsiveUtils {
 
   static const double _contextMenuHorizontalMargin = 144.0;
 
+  static const double _loginTextBuilderWidthSmallScreen = 280.0;
+  static const double _loginTextBuilderWidthLargeScreen = 320.0;
+
+  static const double _loginButtonWidth = 240.0;
+
   double getSizeWidthScreen(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
@@ -98,4 +103,10 @@ class ResponsiveUtils {
         ? EdgeInsets.zero
         : EdgeInsets.symmetric(horizontal: _contextMenuHorizontalMargin);
   }
+
+  double getWidthLoginTextBuilder(BuildContext context) => isSmallScreen(context)
+      ? _loginTextBuilderWidthSmallScreen
+      : _loginTextBuilderWidthLargeScreen;
+
+  double getWidthLoginButton() => _loginButtonWidth;
 }
