@@ -95,31 +95,36 @@ class ContextMenuBuilder {
       backgroundColor: _backgroundColor(_context),
       context: _context,
       builder: (BuildContext buildContext) {
-        return Container(
-          margin: responsiveUtils.getMarginContextMenuForScreen(buildContext),
-          decoration: _decoration(buildContext),
-          child: Wrap(
-            children: <Widget>[
-              _header ?? SizedBox.shrink(),
-              Divider(),
-              areTilesHorizontal
-                ? Row(children: [
-                    ..._actionTiles,
-                    _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
-                  ])
-                : Column(children: [
-                    ..._actionTiles,
-                    _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
-                  ]),
-              _footer != null ? Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
+        return GestureDetector(
+          onTap: () => Navigator.of(buildContext).pop(),
+          child: SingleChildScrollView(
+            child: Container(
+              margin: responsiveUtils.getMarginContextMenuForScreen(buildContext),
+              decoration: _decoration(buildContext),
+              child: GestureDetector(
+                onTap: () => {},
                 child: Wrap(
                   children: [
-                    _footer
+                    _header ?? SizedBox.shrink(),
+                    Divider(),
+                    areTilesHorizontal
+                      ? Row(children: [
+                          ..._actionTiles,
+                          _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
+                        ])
+                      : Column(children: [
+                          ..._actionTiles,
+                          _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
+                        ]),
+                    _footer != null
+                      ? Padding(
+                          padding: EdgeInsets.only(bottom: 10.0),
+                          child: Wrap(children: [_footer]))
+                      : SizedBox.shrink()
                   ],
                 ),
-              ) : SizedBox.shrink()
-            ],
+              ),
+            ),
           ),
         );
       }
