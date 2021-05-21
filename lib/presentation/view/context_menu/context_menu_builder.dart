@@ -74,17 +74,11 @@ class ContextMenuBuilder {
   }
 
   BoxDecoration _decoration(BuildContext context) {
-    return !responsiveUtils.isSmallScreen(context)
-      ? BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(20.0),
-          topRight: const Radius.circular(20.0)))
-      : null;
-  }
-
-  Color _backgroundColor(BuildContext context) {
-    return responsiveUtils.isSmallScreen(context) ? Colors.white : Colors.transparent;
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.only(
+        topLeft: const Radius.circular(20.0),
+        topRight: const Radius.circular(20.0)));
   }
 
   void build() {
@@ -92,7 +86,7 @@ class ContextMenuBuilder {
       useRootNavigator: true,
       shape: _shape(),
       isScrollControlled: true,
-      backgroundColor: _backgroundColor(_context),
+      backgroundColor: Colors.transparent,
       context: _context,
       builder: (BuildContext buildContext) {
         return GestureDetector(
