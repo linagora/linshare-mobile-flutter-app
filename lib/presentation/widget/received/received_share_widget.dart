@@ -48,6 +48,8 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/received_share_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/share_context_menu_action_builder.dart';
@@ -56,6 +58,7 @@ import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/mu
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/received_share_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -68,6 +71,7 @@ class ReceivedShareWidget extends StatefulWidget {
 class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   final receivedShareViewModel = getIt<ReceivedShareViewModel>();
   final imagePath = getIt<AppImagePaths>();
+  final _responsiveUtils = getIt<ResponsiveUtils>();
 
   @override
   void initState() {
@@ -217,7 +221,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
     } else {
       return ListView.builder(
         key: Key('received_share_list'),
-        padding: EdgeInsets.zero,
+        padding: _responsiveUtils.getPaddingListItemForScreen(context),
         itemCount: receivedList.length,
         itemBuilder: (context, index) {
           return _buildReceivedShareListItem(context, receivedList[index], currentSelectMode);
@@ -238,31 +242,58 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   Widget _buildReceivedShareListItem(
       BuildContext context, SelectableElement<ReceivedShare> receivedShareItem, SelectMode currentSelectMode) {
     return ListTile(
-        leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(receivedShareItem.element.mediaType.getFileTypeImagePath(imagePath),
-              width: 20, height: 24, fit: BoxFit.fill)
-        ]),
-        title: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: _buildFileName(receivedShareItem.element.name),
+        leading: Transform.translate(
+          offset: _responsiveUtils.isSmallScreen(context) ? Offset(0, -12) : Offset(0, 0),
+          child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              receivedShareItem.element.mediaType.getFileTypeImagePath(imagePath),
+              width: 20,
+              height: 24,
+              fit: BoxFit.fill)
+          ]),
         ),
-        subtitle: Transform(
-          transform: Matrix4.translationValues(-16, 0.0, 0.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildSenderName(receivedShareItem.element.sender.fullName()),
-                    _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
-                        receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
-                  ],
-                ),
-              )
-            ],
+        title: ResponsiveWidget(
+          smallScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: _buildFileName(receivedShareItem.element.name)
           ),
+          mediumScreen: Transform.translate(
+            offset: Offset(-16, 0),
+            child: Row(
+              children: [
+                Expanded(child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _buildFileName(receivedShareItem.element.name))),
+                Center(child: _buildSenderName(receivedShareItem.element.sender.fullName())),
+                Expanded(child: Align(
+                  alignment: Alignment.centerRight,
+                  child: _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
+                      receivedShareItem.element.creationDate.getMMMddyyyyFormatString())))),
+              ]
+            ),
+          ),
+          responsiveUtil: _responsiveUtils,
         ),
+        subtitle: _responsiveUtils.isSmallScreen(context)
+          ? Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSenderName(receivedShareItem.element.sender.fullName()),
+                      _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
+                          receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
+                    ],
+                  ),
+                )
+              ],
+            ))
+          : null,
         trailing: StoreConnector<AppState, SelectMode>(
             converter: (store) => store.state.receivedShareState.selectMode,
             builder: (context, selectMode) {
@@ -294,27 +325,44 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
 
   Widget _buildFileName(String fileName) {
     return Padding(
-      padding: const EdgeInsets.only(top: 28.0),
-      child: Text(
-        fileName,
-        maxLines: 1,
-        style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+      padding: _responsiveUtils.isSmallScreen(context)
+        ? EdgeInsets.only(top: 16.0)
+        : EdgeInsets.zero,
+      child: CustomPaint(
+        size: Size(double.infinity, 14),
+        painter: EllipsisTextPainter(
+          text: TextSpan(
+            text: fileName,
+            style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor)),
+          ellipsis: fileName.toMiddleEllipsis(),
+          maxLines: 1,
+        ),
       ),
     );
   }
 
   Widget _buildModifiedDateText(String modificationDate) {
-    return Text(
-      modificationDate,
-      style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
-    );
+    return Padding(
+      padding: _responsiveUtils.isSmallScreen(context)
+        ? EdgeInsets.only(bottom: 8)
+        : EdgeInsets.zero,
+      child: Text(
+        modificationDate,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
+      ));
   }
 
   Widget _buildSenderName(String sender) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+      padding: _responsiveUtils.isSmallScreen(context)
+        ? EdgeInsets.only(top: 12.0, bottom: 8.0)
+        : EdgeInsets.only(left: 32, right: 32),
       child: Text(
         sender,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
       ),
     );
