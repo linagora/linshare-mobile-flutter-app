@@ -42,7 +42,9 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/view/text/input_decoration_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/text/linshare_slogan_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/text/login_text_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/text/text_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
@@ -55,6 +57,7 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidgetState extends State<LoginWidget> {
   final loginViewModel = getIt<LoginViewModel>();
   final imagePath = getIt<AppImagePaths>();
+  final _responsiveUtils = getIt<ResponsiveUtils>();
 
   @override
   void dispose() {
@@ -83,117 +86,110 @@ class _LoginWidgetState extends State<LoginWidget> {
                       alignment: Alignment.center),
                 ),
               ),
-              SingleChildScrollView(
-                reverse: true,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
+              Center(
+                child: SingleChildScrollView(
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.only(top: 100),
+                    padding: EdgeInsets.only(top: 45),
                     child: Column(
-                      key: Key('login_logo_header'),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image(
-                            image: AssetImage(imagePath.icLoginLogo),
-                            alignment: Alignment.center),
+                        LinShareSloganBuilder()
+                          .setSloganText(AppLocalizations.of(context).login_text_slogan)
+                          .setSloganTextAlign(TextAlign.center)
+                          .setSloganTextStyle(TextStyle(color: Colors.white, fontSize: 16))
+                          .setLogo(imagePath.icLoginLogo)
+                          .build(),
                         Padding(
-                          padding:
-                              EdgeInsets.only(top: 16, left: 16, right: 16),
-                          child: Text(
-                            AppLocalizations.of(context).login_text_slogan,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        SizedBox(height: 80),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 24),
+                          padding: EdgeInsets.only(bottom: 24, top: 80),
                           child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                              converter: (store) => store.state.authenticationState.viewState,
-                              builder: (context, viewState) {
-                                return CenterTextBuilder()
+                            converter: (store) => store.state.authenticationState.viewState,
+                            builder: (context, viewState) {
+                              return Container(
+                                width: _responsiveUtils.getWidthLoginTextBuilder(context),
+                                child: CenterTextBuilder()
                                     .key(Key('login_message'))
                                     .text(_getLoginMessage(viewState))
                                     .textStyle(_getLoginMessageTextStyle(viewState))
-                                    .build();
-                              }
+                                    .build(),
+                              );
+                            }
                           ),
                         ),
                         Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40),
-                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                                converter: (store) => store.state.authenticationState.viewState,
-                                builder: (context, viewState) {
-                                  return LoginTextBuilder()
-                                      .key(Key('login_url_input'))
-                                      .onChange((value) => loginViewModel.setUrlText(value))
-                                      .textInputAction(TextInputAction.next)
-                                      .textDecoration(_buildUrlInputDecoration(viewState))
-                                      .build();
-                                }
-                            )
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40),
-                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                                converter: (store) => store.state.authenticationState.viewState,
-                                builder: (context, viewState) {
-                                  return LoginTextBuilder()
-                                      .key(Key('login_email_input'))
-                                      .onChange((value) => loginViewModel.setEmailText(value))
-                                      .textInputAction(TextInputAction.next)
-                                      .textDecoration(
-                                      _buildCredentialInputDecoration(
-                                          viewState,
-                                          AppLocalizations.of(context).email,
-                                          AppLocalizations.of(context).email))
-                                      .build();
-                                }
-                            )
-                        ),
-                        SizedBox(
-                          height: 16,
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                            converter: (store) => store.state.authenticationState.viewState,
+                            builder: (context, viewState) {
+                              return Container(
+                                width: _responsiveUtils.getWidthLoginTextBuilder(context),
+                                child: LoginTextBuilder()
+                                  .key(Key('login_url_input'))
+                                  .onChange((value) => loginViewModel.setUrlText(value))
+                                  .textInputAction(TextInputAction.next)
+                                  .textDecoration(_buildUrlInputDecoration(viewState))
+                                  .build(),
+                              );
+                            }
+                          )
                         ),
                         Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40),
-                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                                converter: (store) => store.state.authenticationState.viewState,
-                                builder: (context, viewState) {
-                                  return LoginTextBuilder()
-                                      .key(Key('login_password_input'))
-                                      .obscureText(true)
-                                      .onChange((value) => loginViewModel.setPasswordText(value))
-                                      .textInputAction(TextInputAction.done)
-                                      .textDecoration(
-                                      _buildCredentialInputDecoration(
-                                          viewState,
-                                          AppLocalizations.of(context).password,
-                                          AppLocalizations.of(context).password))
-                                      .build();
-                                }
-                            )
-                        ),
-                        SizedBox(
-                          height: 32,
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                            converter: (store) => store.state.authenticationState.viewState,
+                            builder: (context, viewState) {
+                              return Container(
+                                width: _responsiveUtils.getWidthLoginTextBuilder(context),
+                                child: LoginTextBuilder()
+                                  .key(Key('login_email_input'))
+                                  .onChange((value) => loginViewModel.setEmailText(value))
+                                  .textInputAction(TextInputAction.next)
+                                  .textDecoration(
+                                  _buildCredentialInputDecoration(
+                                      viewState,
+                                      AppLocalizations.of(context).email,
+                                      AppLocalizations.of(context).email))
+                                  .build(),
+                              );
+                            }
+                          )
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 67),
+                          padding: EdgeInsets.only(bottom: 24),
+                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                            converter: (store) => store.state.authenticationState.viewState,
+                            builder: (context, viewState) {
+                              return Container(
+                                width: _responsiveUtils.getWidthLoginTextBuilder(context),
+                                child: LoginTextBuilder()
+                                  .key(Key('login_password_input'))
+                                  .obscureText(true)
+                                  .onChange((value) => loginViewModel.setPasswordText(value))
+                                  .textInputAction(TextInputAction.done)
+                                  .textDecoration(_buildCredentialInputDecoration(
+                                    viewState,
+                                    AppLocalizations.of(context).password,
+                                    AppLocalizations.of(context).password))
+                                  .build(),
+                              );
+                            }
+                          )
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 24),
                           child: StoreConnector<AppState, AuthenticationState>(
-                              converter: (store) => store.state.authenticationState,
-                              builder: (context, authenticationState) =>
-                                  authenticationState.isAuthenticationLoading()
-                                      ? loadingCircularProgress()
-                                      : loginButton(context)),
+                            converter: (store) => store.state.authenticationState,
+                            builder: (context, authenticationState) =>
+                            authenticationState.isAuthenticationLoading()
+                              ? loadingCircularProgress()
+                              : loginButton(context)),
                         )
                       ],
                     ),
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -300,7 +296,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget loginButton(BuildContext context) {
     return SizedBox(
       key: Key('login_confirm_button'),
-      width: double.infinity,
+      width: _responsiveUtils.getWidthLoginButton(),
       height: 48,
       child: RaisedButton(
         elevation: 0,

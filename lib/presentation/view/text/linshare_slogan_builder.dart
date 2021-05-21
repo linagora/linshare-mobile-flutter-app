@@ -73,8 +73,7 @@ class LinShareSloganBuilder {
         Image(image: AssetImage(_logo), alignment: Alignment.center),
         Padding(
           padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-          child:
-          Text(_text, key: _key, style: _textStyle, textAlign: _textAlign),
+          child: Text(_text, key: _key, style: _textStyle, textAlign: _textAlign),
         ),
       ],
     );
