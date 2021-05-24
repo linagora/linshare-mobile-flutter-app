@@ -66,7 +66,7 @@ abstract class SharedSpaceDocumentRepository {
     Uri baseUrl
   );
 
-  Future<Uri> downloadNodeIOS(
+  Future<String> downloadNodeIOS(
     WorkGroupNode workgroupNode,
     Token token,
     Uri baseUrl,
@@ -78,7 +78,7 @@ abstract class SharedSpaceDocumentRepository {
     CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
   );
 
-  Future<Uri> downloadPreviewWorkGroupDocument(
+  Future<String> downloadPreviewWorkGroupDocument(
     WorkGroupDocument workGroupDocument,
     DownloadPreviewType downloadPreviewType,
     Token token,

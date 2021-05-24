@@ -170,7 +170,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<Uri> downloadNodeIOS(
+  Future<String> downloadNodeIOS(
       WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) async {
     return _linShareDownloadManager.downloadFile(
         Endpoint.sharedSpaces
@@ -205,7 +205,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<Uri> downloadPreviewWorkGroupDocument(WorkGroupDocument workGroupDocument,
+  Future<String> downloadPreviewWorkGroupDocument(WorkGroupDocument workGroupDocument,
       DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken) {
     var downloadUrl;
     if (downloadPreviewType == DownloadPreviewType.original) {

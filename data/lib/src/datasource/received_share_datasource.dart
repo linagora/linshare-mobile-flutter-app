@@ -40,7 +40,7 @@ abstract class ReceivedShareDataSource {
 
   Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
 
-  Future<Uri> downloadPreviewReceivedShare(
+  Future<String> downloadPreviewReceivedShare(
     ReceivedShare receivedShare,
     DownloadPreviewType downloadPreviewType,
     Token permanentToken,

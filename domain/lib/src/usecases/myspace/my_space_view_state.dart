@@ -84,7 +84,7 @@ class ContextMenuItemViewState extends ViewState {
 }
 
 class DownloadFileIOSViewState extends ViewState {
-  final Uri filePath;
+  final String filePath;
   DownloadFileIOSViewState(this.filePath);
 
   @override

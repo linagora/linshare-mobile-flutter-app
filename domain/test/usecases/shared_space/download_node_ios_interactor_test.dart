@@ -50,7 +50,7 @@ void main() {
     MockCredentialRepository credentialRepository;
     DownloadNodeIOSInteractor downloadNodeIOSInteractor;
     CancelToken cancelToken;
-    Uri validFilePath;
+    String validFilePath;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -58,7 +58,7 @@ void main() {
       credentialRepository = MockCredentialRepository();
       downloadNodeIOSInteractor = DownloadNodeIOSInteractor(sharedSpaceDocumentRepository, tokenRepository, credentialRepository);
       cancelToken = CancelToken();
-      validFilePath = Uri(path: './document/valid_file_path/file.png');
+      validFilePath = './document/valid_file_path/file.png';
     });
 
     test('download node should return success with valid data', () async {

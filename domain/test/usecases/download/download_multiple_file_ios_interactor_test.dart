@@ -49,8 +49,8 @@ void main() {
     DownloadFileIOSInteractor downloadFileIOSInteractor;
     DownloadMultipleFileIOSInteractor downloadMultipleFileIOSInteractor;
     CancelToken cancelToken;
-    Uri validFilePath1;
-    Uri validFilePath2;
+    String validFilePath1;
+    String validFilePath2;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -59,8 +59,8 @@ void main() {
       downloadFileIOSInteractor = DownloadFileIOSInteractor(documentRepository, tokenRepository, credentialRepository);
       downloadMultipleFileIOSInteractor = DownloadMultipleFileIOSInteractor(downloadFileIOSInteractor);
       cancelToken = CancelToken();
-      validFilePath1 = Uri(path: './document/valid_file_path/file.png');
-      validFilePath2 = Uri(path: './document/valid_file_path/file2.png');
+      validFilePath1 = './document/valid_file_path/file.png';
+      validFilePath2 = './document/valid_file_path/file2.png';
     });
 
     test('download multiple file should return success with valid data', () async {

@@ -29,40 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
+extension URLExtension on Uri {
 
-import 'package:dio/dio.dart';
-import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/document/document_id.dart';
-import 'package:domain/src/model/file_info.dart';
-import 'package:domain/src/model/generic_user.dart';
-import 'package:domain/src/model/share/mailing_list_id.dart';
-import 'package:domain/src/model/share/share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
-
-abstract class DocumentRepository {
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl);
-
-  Future<List<Document>> getAll();
-
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
-
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
-
-  Future<String> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<Document> remove(DocumentId documentId);
-
-  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest);
-
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
-
-  Future<String> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<DocumentDetails> getDocument(DocumentId documentId);
-
-  Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request);
+  String getFullUriPath() {
+    if (hasFragment) {
+      return '$path#$fragment';
+    }
+    return path;
+  }
 }

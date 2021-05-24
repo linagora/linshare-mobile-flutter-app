@@ -32,7 +32,7 @@
 import '../../../domain.dart';
 
 class DownloadPreviewDocumentViewState extends ViewState {
-  final Uri filePath;
+  final String filePath;
 
   DownloadPreviewDocumentViewState(this.filePath);
 
