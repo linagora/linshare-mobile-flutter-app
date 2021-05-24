@@ -88,106 +88,111 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
               Center(
                 child: SingleChildScrollView(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(top: 45),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        LinShareSloganBuilder()
-                          .setSloganText(AppLocalizations.of(context).login_text_slogan)
-                          .setSloganTextAlign(TextAlign.center)
-                          .setSloganTextStyle(TextStyle(color: Colors.white, fontSize: 16))
-                          .setLogo(imagePath.icLoginLogo)
-                          .build(),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 24, top: 80),
-                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                            converter: (store) => store.state.authenticationState.viewState,
-                            builder: (context, viewState) {
-                              return Container(
-                                width: _responsiveUtils.getWidthLoginTextBuilder(context),
-                                child: CenterTextBuilder()
+                  reverse: true,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(top: 45),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          LinShareSloganBuilder()
+                            .setSloganText(AppLocalizations.of(context).login_text_slogan)
+                            .setSloganTextAlign(TextAlign.center)
+                            .setSloganTextStyle(TextStyle(color: Colors.white, fontSize: 16))
+                            .setLogo(imagePath.icLoginLogo)
+                            .build(),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 24, top: 80),
+                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                              converter: (store) => store.state.authenticationState.viewState,
+                              builder: (context, viewState) {
+                                return Container(
+                                  width: _responsiveUtils.getWidthLoginTextBuilder(context),
+                                  child: CenterTextBuilder()
                                     .key(Key('login_message'))
                                     .text(_getLoginMessage(viewState))
                                     .textStyle(_getLoginMessageTextStyle(viewState))
                                     .build(),
-                              );
-                            }
+                                );
+                              }
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 16),
-                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                            converter: (store) => store.state.authenticationState.viewState,
-                            builder: (context, viewState) {
-                              return Container(
-                                width: _responsiveUtils.getWidthLoginTextBuilder(context),
-                                child: LoginTextBuilder()
-                                  .key(Key('login_url_input'))
-                                  .onChange((value) => loginViewModel.setUrlText(value))
-                                  .textInputAction(TextInputAction.next)
-                                  .textDecoration(_buildUrlInputDecoration(viewState))
-                                  .build(),
-                              );
-                            }
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 16),
+                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                              converter: (store) => store.state.authenticationState.viewState,
+                              builder: (context, viewState) {
+                                return Container(
+                                  width: _responsiveUtils.getWidthLoginTextBuilder(context),
+                                  child: LoginTextBuilder()
+                                    .key(Key('login_url_input'))
+                                    .onChange((value) => loginViewModel.setUrlText(value))
+                                    .textInputAction(TextInputAction.next)
+                                    .textDecoration(_buildUrlInputDecoration(viewState))
+                                    .build(),
+                                );
+                              }
+                            )
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 16),
+                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                              converter: (store) => store.state.authenticationState.viewState,
+                              builder: (context, viewState) {
+                                return Container(
+                                  width: _responsiveUtils.getWidthLoginTextBuilder(context),
+                                  child: LoginTextBuilder()
+                                    .key(Key('login_email_input'))
+                                    .onChange((value) => loginViewModel.setEmailText(value))
+                                    .textInputAction(TextInputAction.next)
+                                    .textDecoration(
+                                      _buildCredentialInputDecoration(
+                                          viewState,
+                                          AppLocalizations.of(context).email,
+                                          AppLocalizations.of(context).email))
+                                    .build(),
+                                );
+                              }
+                            )
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 24),
+                            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                              converter: (store) => store.state.authenticationState.viewState,
+                              builder: (context, viewState) {
+                                return Container(
+                                  width: _responsiveUtils.getWidthLoginTextBuilder(context),
+                                  child: LoginTextBuilder()
+                                    .key(Key('login_password_input'))
+                                    .obscureText(true)
+                                    .onChange((value) => loginViewModel.setPasswordText(value))
+                                    .textInputAction(TextInputAction.done)
+                                    .textDecoration(
+                                      _buildCredentialInputDecoration(
+                                        viewState,
+                                        AppLocalizations.of(context).password,
+                                        AppLocalizations.of(context).password))
+                                    .build(),
+                                );
+                              }
+                            )
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 24),
+                            child: StoreConnector<AppState, AuthenticationState>(
+                              converter: (store) => store.state.authenticationState,
+                              builder: (context, authenticationState) =>
+                              authenticationState.isAuthenticationLoading()
+                                  ? loadingCircularProgress()
+                                  : loginButton(context)),
                           )
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 16),
-                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                            converter: (store) => store.state.authenticationState.viewState,
-                            builder: (context, viewState) {
-                              return Container(
-                                width: _responsiveUtils.getWidthLoginTextBuilder(context),
-                                child: LoginTextBuilder()
-                                  .key(Key('login_email_input'))
-                                  .onChange((value) => loginViewModel.setEmailText(value))
-                                  .textInputAction(TextInputAction.next)
-                                  .textDecoration(
-                                  _buildCredentialInputDecoration(
-                                      viewState,
-                                      AppLocalizations.of(context).email,
-                                      AppLocalizations.of(context).email))
-                                  .build(),
-                              );
-                            }
-                          )
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 24),
-                          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                            converter: (store) => store.state.authenticationState.viewState,
-                            builder: (context, viewState) {
-                              return Container(
-                                width: _responsiveUtils.getWidthLoginTextBuilder(context),
-                                child: LoginTextBuilder()
-                                  .key(Key('login_password_input'))
-                                  .obscureText(true)
-                                  .onChange((value) => loginViewModel.setPasswordText(value))
-                                  .textInputAction(TextInputAction.done)
-                                  .textDecoration(_buildCredentialInputDecoration(
-                                    viewState,
-                                    AppLocalizations.of(context).password,
-                                    AppLocalizations.of(context).password))
-                                  .build(),
-                              );
-                            }
-                          )
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 24),
-                          child: StoreConnector<AppState, AuthenticationState>(
-                            converter: (store) => store.state.authenticationState,
-                            builder: (context, authenticationState) =>
-                            authenticationState.isAuthenticationLoading()
-                              ? loadingCircularProgress()
-                              : loginButton(context)),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  )
                 ),
               )
             ],
