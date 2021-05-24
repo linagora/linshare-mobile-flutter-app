@@ -73,6 +73,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
+import 'package:linshare_flutter_app/presentation/util/extensions/uri_extension.dart';
 
 import 'document_details/document_details_arguments.dart';
 
@@ -411,7 +412,7 @@ class MySpaceViewModel extends BaseViewModel {
   void _previewDocument(BuildContext context, Document document) {
     _appNavigation.popBack();
     final canPreviewDocument = Platform.isIOS ? document.mediaType.isIOSSupportedPreview() : document.mediaType.isAndroidSupportedPreview();
-    if (canPreviewDocument || document.hasThumbnail) {
+    if (canPreviewDocument || (document.hasThumbnail != null && document.hasThumbnail)) {
       final cancelToken = CancelToken();
       _showPrepareToPreviewFileDialog(context, document, cancelToken);
 
@@ -448,7 +449,7 @@ class MySpaceViewModel extends BaseViewModel {
     _appNavigation.popBack();
 
     final openResult = await open_file.OpenFile.open(
-        Uri.decodeFull(viewState.filePath.path),
+        viewState.filePath,
         type: Platform.isAndroid ? document.mediaType.mimeType : null,
         uti:  Platform.isIOS ? document.mediaType.getDocumentUti().value : null);
 
@@ -594,17 +595,16 @@ class MySpaceViewModel extends BaseViewModel {
       _appNavigation.popBack();
       store.dispatch(MySpaceAction(Right(success)));
       if (success is DownloadFileIOSViewState) {
-        await share_library.Share.shareFiles([Uri.decodeFull(success.filePath.path)]);
+        await share_library.Share.shareFiles([success.filePath]);
       } else if (success is DownloadFileIOSAllSuccessViewState) {
         await share_library.Share.shareFiles(success.resultList
-            .map((result) => Uri.decodeFull(
-                ((result.getOrElse(() => null) as DownloadFileIOSViewState).filePath.path)))
+            .map((result) => ((result.getOrElse(() => null) as DownloadFileIOSViewState).filePath))
             .toList());
       } else if (success is DownloadFileIOSHasSomeFilesFailureViewState) {
         await share_library.Share.shareFiles(success.resultList
             .map((result) => result.fold(
                 (failure) => null,
-                (success) => Uri.decodeFull(((success as DownloadFileIOSViewState).filePath.path))))
+                (success) => ((success as DownloadFileIOSViewState).filePath)))
             .toList());
       }
     };

@@ -96,7 +96,7 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
   }
 
   @override
-  Future<Uri> downloadPreviewReceivedShare(ReceivedShare receivedShare,
+  Future<String> downloadPreviewReceivedShare(ReceivedShare receivedShare,
       DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
     var downloadUrl;
     if (downloadPreviewType == DownloadPreviewType.original) {

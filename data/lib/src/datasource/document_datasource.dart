@@ -41,7 +41,7 @@ abstract class DocumentDataSource {
 
   Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
 
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+  Future<String> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
 
   Future<Document> remove(DocumentId documentId);
 
@@ -49,7 +49,7 @@ abstract class DocumentDataSource {
 
   Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
 
-  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
+  Future<String> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
 
   Future<DocumentDetails> getDocument(DocumentId documentId);
 

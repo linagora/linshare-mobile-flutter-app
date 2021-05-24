@@ -90,7 +90,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<Uri> downloadNodeIOS(WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) {
+  Future<String> downloadNodeIOS(WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) {
     return _sharedSpaceDocumentDataSource.downloadNodeIOS(workgroupNode, token, baseUrl, cancelToken);
   }
 
@@ -103,7 +103,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<Uri> downloadPreviewWorkGroupDocument(
+  Future<String> downloadPreviewWorkGroupDocument(
     WorkGroupDocument workGroupDocument,
     DownloadPreviewType downloadPreviewType,
     Token token,
