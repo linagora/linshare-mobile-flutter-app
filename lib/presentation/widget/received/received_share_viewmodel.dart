@@ -272,7 +272,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   void _previewReceivedShare(BuildContext context, ReceivedShare receivedShare) {
     _appNavigation.popBack();
     final canPreviewReceivedShare = Platform.isIOS ? receivedShare.mediaType.isIOSSupportedPreview() : receivedShare.mediaType.isAndroidSupportedPreview();
-    if (canPreviewReceivedShare || receivedShare.hasThumbnail) {
+    if (canPreviewReceivedShare || (receivedShare.hasThumbnail != null && receivedShare.hasThumbnail)) {
       final cancelToken = CancelToken();
       _showPrepareToPreviewFileDialog(context, receivedShare, cancelToken);
 
@@ -308,7 +308,7 @@ class ReceivedShareViewModel extends BaseViewModel {
     _appNavigation.popBack();
 
     final openResult = await open_file.OpenFile.open(
-        Uri.decodeFull(viewState.filePath.path),
+        viewState.filePath,
         type: Platform.isAndroid ? receivedShare.mediaType.mimeType : null,
         uti:  Platform.isIOS ? receivedShare.mediaType.getDocumentUti().value : null);
 

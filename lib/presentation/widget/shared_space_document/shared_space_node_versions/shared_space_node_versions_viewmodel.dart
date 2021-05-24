@@ -133,7 +133,7 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
       ? document.mediaType.isIOSSupportedPreview()
       : document.mediaType.isAndroidSupportedPreview();
 
-    if (canPreviewDocument || document.hasThumbnail) {
+    if (canPreviewDocument || (document.hasThumbnail != null && document.hasThumbnail)) {
       final cancelToken = CancelToken();
       store.dispatch(_showPrepareToPreviewFileDialog(context, document, cancelToken));
 
@@ -182,7 +182,7 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     _appNavigation.popBack();
 
     final openResult = await open_file.OpenFile.open(
-      Uri.decodeFull(viewState.filePath.path),
+      viewState.filePath,
       type: Platform.isAndroid ? document.mediaType.mimeType : null,
       uti: Platform.isIOS ? document.mediaType.getDocumentUti().value : null);
 

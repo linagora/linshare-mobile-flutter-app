@@ -51,8 +51,8 @@ void main() {
     DownloadNodeIOSInteractor downloadNodeIOSInteractor;
     DownloadMultipleNodeIOSInteractor downloadMultipleNodeIOSInteractor;
     CancelToken cancelToken;
-    Uri validFilePath1;
-    Uri validFilePath2;
+    String validFilePath1;
+    String validFilePath2;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
@@ -61,8 +61,8 @@ void main() {
       downloadNodeIOSInteractor = DownloadNodeIOSInteractor(sharedSpaceDocumentRepository, tokenRepository, credentialRepository);
       downloadMultipleNodeIOSInteractor = DownloadMultipleNodeIOSInteractor(downloadNodeIOSInteractor);
       cancelToken = CancelToken();
-      validFilePath1 = Uri(path: './document/valid_file_path/file.png');
-      validFilePath2 = Uri(path: './document/valid_file_path/file2.png');
+      validFilePath1 = './document/valid_file_path/file.png';
+      validFilePath2 = './document/valid_file_path/file2.png';
     });
 
     test('download multiple node should return success with valid data', () async {

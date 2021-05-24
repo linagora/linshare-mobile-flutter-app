@@ -44,13 +44,13 @@ class LinShareDownloadManager {
 
   LinShareDownloadManager(this._remoteExceptionThrower, this._linShareHttpClient);
 
-  Future<Uri> downloadFile(
+  Future<String> downloadFile(
       String downloadUrl,
       Future<Directory> directoryToSave,
       String filename,
       Token permanentToken,
       {CancelToken cancelToken}) async {
-    final streamController = StreamController<Uri>();
+    final streamController = StreamController<String>();
 
     try {
       await Future.wait([
@@ -82,7 +82,7 @@ class LinShareDownloadManager {
           if (cancelToken != null && cancelToken.isCancelled) {
             streamController.sink.addError(CancelDownloadFileException(cancelToken.cancelError.message));
           } else {
-            streamController.sink.add(Uri.parse(tempFilePath));
+            streamController.sink.add(tempFilePath);
           }
           await streamController.close();
         }, onError: (error) async {

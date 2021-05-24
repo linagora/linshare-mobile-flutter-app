@@ -32,7 +32,7 @@
 import 'package:domain/domain.dart';
 
 class DownloadPreviewReceivedShareViewState extends ViewState {
-  final Uri filePath;
+  final String filePath;
 
   DownloadPreviewReceivedShareViewState(this.filePath);
 
