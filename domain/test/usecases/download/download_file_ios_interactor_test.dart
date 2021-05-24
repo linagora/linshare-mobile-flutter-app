@@ -49,7 +49,7 @@ void main() {
     MockCredentialRepository credentialRepository;
     DownloadFileIOSInteractor downloadFileIOSInteractor;
     CancelToken cancelToken;
-    Uri validFilePath;
+    String validFilePath;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
@@ -57,7 +57,7 @@ void main() {
       credentialRepository = MockCredentialRepository();
       downloadFileIOSInteractor = DownloadFileIOSInteractor(documentRepository, tokenRepository, credentialRepository);
       cancelToken = CancelToken();
-      validFilePath = Uri(path: './document/valid_file_path/file.png');
+      validFilePath = './document/valid_file_path/file.png';
     });
 
     test('download file should return success with valid data', () async {

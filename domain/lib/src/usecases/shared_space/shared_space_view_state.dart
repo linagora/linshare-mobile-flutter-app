@@ -168,7 +168,7 @@ class DownloadNodesFailure extends FeatureFailure {
 }
 
 class DownloadNodeIOSViewState extends ViewState {
-  final Uri filePath;
+  final String filePath;
   DownloadNodeIOSViewState(this.filePath);
 
   @override
