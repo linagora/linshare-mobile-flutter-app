@@ -68,7 +68,7 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
-  Future<Uri> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
+  Future<String> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
     return _documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
   }
 
@@ -83,7 +83,7 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
-  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken) {
+  Future<String> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken) {
     return _documentDataSource.downloadPreviewDocument(document, downloadPreviewType, token, baseUrl, cancelToken);
   }
 

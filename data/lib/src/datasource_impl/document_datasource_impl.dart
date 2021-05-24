@@ -125,7 +125,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<Uri> downloadDocumentIOS(Document document, Token permanentToken, Uri baseUrl, CancelToken cancelToken) async {
+  Future<String> downloadDocumentIOS(Document document, Token permanentToken, Uri baseUrl, CancelToken cancelToken) async {
     return _linShareDownloadManager.downloadFile(
         Endpoint.documents
             .downloadServicePath(document.documentId.uuid)
@@ -171,7 +171,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<Uri> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
+  Future<String> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
     var downloadUrl;
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.documents

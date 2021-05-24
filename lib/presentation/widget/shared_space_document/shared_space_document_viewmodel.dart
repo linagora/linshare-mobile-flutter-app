@@ -242,7 +242,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     final canPreviewDocument = Platform.isIOS
         ? workGroupDocument.mediaType.isIOSSupportedPreview()
         : workGroupDocument.mediaType.isAndroidSupportedPreview();
-    if (canPreviewDocument || workGroupDocument.hasThumbnail) {
+    if (canPreviewDocument || (workGroupDocument.hasThumbnail != null && workGroupDocument.hasThumbnail)) {
       final cancelToken = CancelToken();
       store.dispatch(_showPrepareToPreviewFileDialog(context, workGroupDocument, cancelToken));
 
@@ -292,7 +292,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     _appNavigation.popBack();
 
     final openResult = await open_file.OpenFile.open(
-        Uri.decodeFull(viewState.filePath.path),
+        viewState.filePath,
         type: Platform.isAndroid ? workGroupDocument.mediaType.mimeType : null,
         uti: Platform.isIOS ? workGroupDocument.mediaType.getDocumentUti().value : null);
 
@@ -457,20 +457,16 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
 
       if (success is DownloadNodeIOSViewState) {
         await share_library.Share.shareFiles(
-            [Uri.decodeFull(success.filePath.path)]);
+            [success.filePath]);
       } else if (success is DownloadNodeIOSAllSuccessViewState) {
         await share_library.Share.shareFiles(success.resultList
-            .map((result) => Uri.decodeFull(
-                ((result.getOrElse(() => null) as DownloadNodeIOSViewState)
-                    .filePath
-                    .path)))
+            .map((result) => ((result.getOrElse(() => null) as DownloadNodeIOSViewState).filePath))
             .toList());
       } else if (success is DownloadNodeIOSHasSomeFilesFailureViewState) {
         await share_library.Share.shareFiles(success.resultList
             .map((result) => result.fold(
                 (failure) => null,
-                (success) => Uri.decodeFull(
-                    ((success as DownloadNodeIOSViewState).filePath.path))))
+                (success) => ((success as DownloadNodeIOSViewState).filePath)))
             .toList());
       }
     };
