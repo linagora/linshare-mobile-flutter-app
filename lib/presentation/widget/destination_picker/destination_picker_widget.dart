@@ -97,7 +97,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         child: Container(
           margin: _responsiveUtils.getMarginForDestinationPicker(context),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(!_responsiveUtils.isSmallScreen(context) ? 20.0 : 0),
+            borderRadius: _responsiveUtils.getBorderRadiusView(context),
             child: GestureDetector(
               onTap: () => {},
               child: Scaffold(
