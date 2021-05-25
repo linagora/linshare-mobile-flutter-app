@@ -736,32 +736,61 @@
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_message_create_workgroup": "{authorName} has created a new Workgroup : {resourceName}.",
-  "@audit_action_message_create_workgroup": {
+  "audit_action_message_create_workgroup_self": "You have created a new Workgroup : {resourceName}.",
+  "@audit_action_message_create_workgroup_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_create_workgroup_other": "{authorName} has created a new Workgroup : {resourceName}.",
+  "@audit_action_message_create_workgroup_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
       "resourceName": {}
     }
   },
-  "audit_action_message_delete_workgroup": "{authorName} has deleted the Workgroup : {resourceName}.",
-  "@audit_action_message_delete_workgroup": {
+  "audit_action_message_delete_workgroup_self": "You have deleted the Workgroup : {resourceName}.",
+  "@audit_action_message_delete_workgroup_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_other": "{authorName} has deleted the Workgroup : {resourceName}.",
+  "@audit_action_message_delete_workgroup_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
       "resourceName": {}
     }
   },
-  "audit_action_message_update_workgroup": "{authorName} has edited the Workgroup : {resourceName}.",
-  "@audit_action_message_update_workgroup": {
+  "audit_action_message_update_workgroup_self": "You have edited the Workgroup : {resourceName}.",
+  "@audit_action_message_update_workgroup_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_update_workgroup_other": "{authorName} has edited the Workgroup : {resourceName}.",
+  "@audit_action_message_update_workgroup_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
       "resourceName": {}
     }
   },
-  "audit_action_message_add_member": "{authorName} has added a new member : {resourceName} to the Workgroup : {nameVarious}.",
-  "@audit_action_message_add_member": {
+  "audit_action_message_add_member_self": "You have added a new member : {resourceName} to the Workgroup : {nameVarious}.",
+  "@audit_action_message_add_member_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_add_member_other": "{authorName} has added a new member : {resourceName} to the Workgroup : {nameVarious}.",
+  "@audit_action_message_add_member_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -769,8 +798,16 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_member": "{authorName} has removed the member : {resourceName} from the Workgroup : {nameVarious}.",
-  "@audit_action_message_delete_member": {
+  "audit_action_message_delete_member_self": "You have removed the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_delete_member_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_member_other": "{authorName} has removed the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_delete_member_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -778,8 +815,16 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_member": "{authorName} has edited the member : {resourceName} from the Workgroup : {nameVarious}.",
-  "@audit_action_message_update_member": {
+  "audit_action_message_update_member_self": "You have edited the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_update_member_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_member_other": "{authorName} has edited the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_update_member_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -787,8 +832,8 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_create_folder": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
-  "@audit_action_message_create_folder": {
+  "audit_action_message_create_folder_other": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "@audit_action_message_create_folder_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -796,8 +841,16 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_folder": "{authorName} has deleted the folder : {resourceName} from the Workgroup : {nameVarious}.",
-  "@audit_action_message_delete_folder": {
+  "audit_action_message_delete_folder_self": "You have deleted the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_delete_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_folder_other": "{authorName} has deleted the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_delete_folder_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -805,8 +858,16 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_folder": "{authorName} has edited the folder : {resourceName} from the Workgroup : {nameVarious}.",
-  "@audit_action_message_update_folder": {
+  "audit_action_message_update_folder_self": "You have edited the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_update_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_folder_other": "{authorName} has edited the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_update_folder_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -814,8 +875,16 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_folder": "{authorName} has downloaded the folder : {resourceName} from the Workgroup : {nameVarious}.",
-  "@audit_action_message_download_folder": {
+  "audit_action_message_download_folder_self": "You have downloaded the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_download_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_download_folder_other": "{authorName} has downloaded the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "@audit_action_message_download_folder_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -823,8 +892,16 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_workgroup_document": "{authorName} has deleted the file : {resourceName} from the Workgroup {nameVarious}.",
-  "@audit_action_message_delete_workgroup_document": {
+  "audit_action_message_delete_workgroup_document_self": "You have deleted the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_delete_workgroup_document_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_document_other": "{authorName} has deleted the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_delete_workgroup_document_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -832,8 +909,16 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_workgroup_document": "{authorName} has edited the file : {resourceName} from the Workgroup {nameVarious}.",
-  "@audit_action_message_update_workgroup_document": {
+  "audit_action_message_update_workgroup_document_self": "You have edited the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_update_workgroup_document_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_workgroup_document_other": "{authorName} has edited the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_update_workgroup_document_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -841,8 +926,24 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_workgroup_document": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
-  "@audit_action_message_download_workgroup_document": {
+  "audit_action_message_download_workgroup_document_self": "You have downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_download_workgroup_document_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_upload_workgroup_document_self": "You have uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
+  "@audit_action_message_upload_workgroup_document_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_upload_workgroup_document_other": "{authorName} has uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
+  "@audit_action_message_upload_workgroup_document_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -850,8 +951,8 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_upload_workgroup_document": "{authorName} has upload a new file : {resourceName} into the Workgroup : {nameVarious}.",
-  "@audit_action_message_upload_workgroup_document": {
+  "audit_action_message_copy_document_from_personal_space_other": "{authorName} has created the document : {resourceName} into {nameVarious}, from his Personal Space.",
+  "@audit_action_message_copy_document_from_personal_space_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -859,45 +960,62 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_personal_space": "{authorName} has created the document : {resourceName} into {nameVarious}, from {whose} Personal Space.",
-  "@audit_action_message_copy_document_from_personal_space": {
+  "audit_action_message_copy_document_from_received_share_self": "You have created the document : {resourceName} into {nameVarious}, from your received shares.",
+  "@audit_action_message_copy_document_from_received_share_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_received_share_other": "{authorName} has created the document : {resourceName} into {nameVarious}, from his received shares.",
+  "@audit_action_message_copy_document_from_received_share_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
       "resourceName": {},
-      "nameVarious": {},
-      "whose": {}
+      "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_received_share": "{authorName} has created the document : {resourceName} into {nameVarious}, from {whose} received share.",
-  "@audit_action_message_copy_document_from_received_share": {
+  "audit_action_message_copy_document_from_shared_space_self": "You have created this file by copying : {resourceName} from another Workgroup.",
+  "@audit_action_message_copy_document_from_shared_space_self": {
     "type": "text",
     "placeholders": {
-      "authorName": {},
-      "resourceName": {},
-      "nameVarious": {},
-      "whose": {}
+      "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_from_shared_space": "{authorName} has created this file by copying : {resourceName} from another Workgroup.",
-  "@audit_action_message_copy_document_from_shared_space": {
+  "audit_action_message_copy_document_from_shared_space_other": "{authorName} has created this file by copying : {resourceName} from another Workgroup.",
+  "@audit_action_message_copy_document_from_shared_space_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_to_personal_space": "{authorName} has copied the document : {resourceName} into {whose} Personal Space.",
-  "@audit_action_message_copy_document_to_personal_space": {
+  "audit_action_message_copy_document_to_personal_space_self": "You have copied the document : {resourceName} into your Personal Space.",
+  "@audit_action_message_copy_document_to_personal_space_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_copy_document_to_personal_space_other": "{authorName} has copied the document : {resourceName} into his Personal Space.",
+  "@audit_action_message_copy_document_to_personal_space_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
-      "resourceName": {},
-      "whose": {}
+      "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_to_shared_space": "{authorName} has created a duplicated of this file into {nameVarious}.",
-  "@audit_action_message_copy_document_to_shared_space": {
+  "audit_action_message_copy_document_to_shared_space_self": "You have created a duplicated of this file into {nameVarious}.",
+  "@audit_action_message_copy_document_to_shared_space_self": {
+    "type": "text",
+    "placeholders": {
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_to_shared_space_other": "{authorName} has created a duplicated of this file into {nameVarious}.",
+  "@audit_action_message_copy_document_to_shared_space_other": {
     "type": "text",
     "placeholders": {
       "authorName": {},
@@ -936,18 +1054,8 @@
       "nameVarious": {}
     }
   },
-  "you": "You",
-  "@you": {
-    "type": "text",
-    "placeholders": {}
-  },
   "me": "Me",
   "@me": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "his": "his",
-  "@his": {
     "type": "text",
     "placeholders": {}
   },
@@ -1486,54 +1594,6 @@
   },
   "some_files_could_not_be_duplicated": "Some files could not be duplicated",
   "@some_files_could_not_be_duplicated": {
-    "type": "text",
-    "placeholders": {
-      "biometricKind": {}
-    }
-  },
-  "biometric_disabled_in_setting_app": "Please enable {biometricKind} in the Settings app on your phone to use biometric authentication",
-  "@biometric_disabled_in_setting_app": {
-    "type": "text",
-    "placeholders": {
-      "biometricKind": {}
-    }
-  },
-  "open_with_biometric": "Open with {biometricKind}",
-  "@open_with_biometric": {
-    "type": "text",
-    "placeholders": {
-      "biometricKind": {}
-    }
-  },
-  "or": "Or",
-  "@or": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "go_to_sign_in": "Go to Sign-In",
-  "@go_to_sign_in": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "biometric_authentication_is_locked": "Biometric authentication is locked due to exceeded number of attempts.",
-  "@biometric_authentication_is_locked": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "manage_version": "Manage version",
-  "@manage_version": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "version": "Version {version}",
-  "@version": {
-    "type": "text",
-    "placeholders": {
-      "version": {}
-    }
-  },
-  "duplicate": "Duplicate",
-  "@duplicate": {
     "type": "text",
     "placeholders": {}
   },

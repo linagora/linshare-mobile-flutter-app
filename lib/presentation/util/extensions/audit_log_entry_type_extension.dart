@@ -34,239 +34,313 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 
 extension AuditLogEntryTypeExtension on AuditLogEntryType {
-
   Map<AuditLogActionMessage, String> getAuditLogMapping(
       BuildContext context,
       ClientLogAction clientLogAction,
       Map<AuditLogActionMessageParam, dynamic> actionMessages,
-      bool isAuthorMe)
-  {
-    switch(this) {
+      bool isCurrentUserAuthor) {
+    switch (this) {
       case AuditLogEntryType.WORKGROUP:
-        switch(clientLogAction) {
+        switch (clientLogAction) {
           case ClientLogAction.CREATE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_create,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_create_workgroup(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_create_workgroup_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName])
+                  : AppLocalizations.of(context).audit_action_message_create_workgroup_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.resourceName]
-                  )
+                      actionMessages[AuditLogActionMessageParam.resourceName])
             };
           case ClientLogAction.DELETE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_delete,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_delete_workgroup(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_delete_workgroup_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName])
+                  : AppLocalizations.of(context).audit_action_message_delete_workgroup_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.resourceName]
-                  )
+                      actionMessages[AuditLogActionMessageParam.resourceName])
             };
           case ClientLogAction.UPDATE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_update,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_update_workgroup(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_update_workgroup_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName])
+                  : AppLocalizations.of(context).audit_action_message_update_workgroup_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.resourceName]
-                  )
+                      actionMessages[AuditLogActionMessageParam.resourceName])
             };
           default:
             return {};
         }
         break;
       case AuditLogEntryType.WORKGROUP_MEMBER:
-        switch(clientLogAction) {
+        switch (clientLogAction) {
           case ClientLogAction.ADDITION:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_addition,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_add_member(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_add_member_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context).audit_action_message_add_member_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.DELETE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_delete,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_delete_member(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_delete_member_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context).audit_action_message_delete_member_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.UPDATE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_update,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_update_member(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_update_member_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context).audit_action_message_update_member_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           default:
             return {};
         }
         break;
       case AuditLogEntryType.WORKGROUP_FOLDER:
-        switch(clientLogAction) {
+        switch (clientLogAction) {
           case ClientLogAction.CREATE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_create,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_create_folder(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_create_folder_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context).audit_action_message_create_folder_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.DELETE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_delete,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_delete_folder(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_delete_folder_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context).audit_action_message_delete_folder_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.UPDATE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_update,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_update_folder(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_update_folder_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context).audit_action_message_update_folder_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.DOWNLOAD:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_download,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_download_folder(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_download_folder_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context).audit_action_message_download_folder_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           default:
             return {};
         }
         break;
       case AuditLogEntryType.WORKGROUP_DOCUMENT:
-        switch(clientLogAction) {
+        switch (clientLogAction) {
           case ClientLogAction.DELETE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_delete,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_delete_workgroup_document(
-                      actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_delete_workgroup_document_self(
+                          actionMessages[AuditLogActionMessageParam.resourceName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context)
+                      .audit_action_message_delete_workgroup_document_other(
+                          actionMessages[AuditLogActionMessageParam.authorName],
+                          actionMessages[AuditLogActionMessageParam.resourceName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.UPDATE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_update,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_update_workgroup_document(
-                      actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_update_workgroup_document_self(
+                          actionMessages[AuditLogActionMessageParam.resourceName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context)
+                      .audit_action_message_update_workgroup_document_other(
+                          actionMessages[AuditLogActionMessageParam.authorName],
+                          actionMessages[AuditLogActionMessageParam.resourceName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.DOWNLOAD:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_download,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_download_workgroup_document(
-                      actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_download_workgroup_document_self(
+                          actionMessages[AuditLogActionMessageParam.resourceName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context)
+                      .audit_action_message_download_workgroup_document_other(
+                          actionMessages[AuditLogActionMessageParam.authorName],
+                          actionMessages[AuditLogActionMessageParam.resourceName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.UPLOAD:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_upload,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_upload_workgroup_document(
-                      actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_upload_workgroup_document_self(
+                          actionMessages[AuditLogActionMessageParam.resourceName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context)
+                      .audit_action_message_upload_workgroup_document_other(
+                          actionMessages[AuditLogActionMessageParam.authorName],
+                          actionMessages[AuditLogActionMessageParam.resourceName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.COPY_FROM_PERSONAL_SPACE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_copy,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_copy_document_from_personal_space(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_copy_document_from_personal_space_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious],
+                    )
+                  : AppLocalizations.of(context)
+                      .audit_action_message_copy_document_from_personal_space_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
                       actionMessages[AuditLogActionMessageParam.nameVarious],
-                      isAuthorMe ? AppLocalizations.of(context).your : AppLocalizations.of(context).his
-                  )
+                    )
             };
           case ClientLogAction.COPY_FROM_RECEIVED_SHARE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_copy,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_copy_document_from_received_share(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_copy_document_from_received_share_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious],
+                    )
+                  : AppLocalizations.of(context)
+                      .audit_action_message_copy_document_from_received_share_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
                       actionMessages[AuditLogActionMessageParam.nameVarious],
-                      isAuthorMe ? AppLocalizations.of(context).your : AppLocalizations.of(context).his
-                  )
+                    )
             };
           case ClientLogAction.COPY_FROM_SHARED_SPACE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_copy,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_copy_document_from_shared_space(
-                      actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.resourceName]
-                  )
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_copy_document_from_shared_space_self(
+                          actionMessages[AuditLogActionMessageParam.resourceName])
+                  : AppLocalizations.of(context)
+                      .audit_action_message_copy_document_from_shared_space_other(
+                          actionMessages[AuditLogActionMessageParam.authorName],
+                          actionMessages[AuditLogActionMessageParam.resourceName])
             };
           case ClientLogAction.COPY_TO_PERSONAL_SPACE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_copy,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_copy_document_to_personal_space(
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_copy_document_to_personal_space_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+                    )
+                  : AppLocalizations.of(context)
+                      .audit_action_message_copy_document_to_personal_space_other(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      isAuthorMe ? AppLocalizations.of(context).your : AppLocalizations.of(context).his
-                  )
+                    )
             };
           case ClientLogAction.COPY_TO_SHARED_SPACE:
             return {
               AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_copy,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_copy_document_to_shared_space(
-                      actionMessages[AuditLogActionMessageParam.authorName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context)
+                      .audit_action_message_copy_document_to_shared_space_self(
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context)
+                      .audit_action_message_copy_document_to_shared_space_other(
+                          actionMessages[AuditLogActionMessageParam.authorName],
+                          actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           default:
             return {};
         }
         break;
       case AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION:
-        switch(clientLogAction) {
+        switch (clientLogAction) {
           case ClientLogAction.UPLOAD_REVISION:
             return {
-              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_upload_revision,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_upload_revision(
+              AuditLogActionMessage.TITLE:
+                  AppLocalizations.of(context).audit_action_title_upload_revision,
+              AuditLogActionMessage.DETAILS: AppLocalizations.of(context)
+                  .audit_action_message_upload_revision(
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.DELETE_REVISION:
             return {
-              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_delete_revision,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_delete_revision(
+              AuditLogActionMessage.TITLE:
+                  AppLocalizations.of(context).audit_action_title_delete_revision,
+              AuditLogActionMessage.DETAILS: AppLocalizations.of(context)
+                  .audit_action_message_delete_revision(
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.DOWNLOAD_REVISION:
             return {
-              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_download_revision,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_download_revision(
+              AuditLogActionMessage.TITLE:
+                  AppLocalizations.of(context).audit_action_title_download_revision,
+              AuditLogActionMessage.DETAILS: AppLocalizations.of(context)
+                  .audit_action_message_download_revision(
                       actionMessages[AuditLogActionMessageParam.authorName],
                       actionMessages[AuditLogActionMessageParam.resourceName],
-                      actionMessages[AuditLogActionMessageParam.nameVarious]
-                  )
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
             };
           case ClientLogAction.RESTORE_REVISION:
             return {
-              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_restore_revision,
-              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_copy_revision_from_shared_space(
-                      actionMessages[AuditLogActionMessageParam.resourceName]
-                  )
+              AuditLogActionMessage.TITLE:
+                  AppLocalizations.of(context).audit_action_title_restore_revision,
+              AuditLogActionMessage.DETAILS: AppLocalizations.of(context)
+                  .audit_action_message_copy_revision_from_shared_space(
+                      actionMessages[AuditLogActionMessageParam.resourceName])
             };
           default:
             return {};
