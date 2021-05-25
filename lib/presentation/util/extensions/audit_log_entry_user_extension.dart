@@ -34,7 +34,6 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/log_action_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entry_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
@@ -77,11 +76,11 @@ extension AuditLogEntryUserExtension on AuditLogEntryUser {
 
     final messageComponents = getActionMessageComponents();
     final authorName = messageComponents[AuditLogActionMessageParam.authorName];
-    final isAuthorMe = authUser.accountId.uuid == loggedUserId;
-    messageComponents[AuditLogActionMessageParam.authorName] = isAuthorMe ? AppLocalizations.of(context).you : authorName;
+    final isCurrentUserAuthor = authUser.accountId.uuid == loggedUserId;
+    messageComponents[AuditLogActionMessageParam.authorName] = authorName;
 
-    final actionTitle = type.getAuditLogMapping(context, clientLogAction, messageComponents, isAuthorMe)[AuditLogActionMessage.TITLE];
-    final actionDetails = type.getAuditLogMapping(context, clientLogAction, messageComponents, isAuthorMe)[AuditLogActionMessage.DETAILS];
+    final actionTitle = type.getAuditLogMapping(context, clientLogAction, messageComponents, isCurrentUserAuthor)[AuditLogActionMessage.TITLE];
+    final actionDetails = type.getAuditLogMapping(context, clientLogAction, messageComponents, isCurrentUserAuthor)[AuditLogActionMessage.DETAILS];
 
     return {AuditLogActionDetail.TITLE : actionTitle, AuditLogActionDetail.DETAIL : actionDetails};
   }
