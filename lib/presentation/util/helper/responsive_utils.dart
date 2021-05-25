@@ -53,6 +53,8 @@ class ResponsiveUtils {
 
   static const double _loginButtonWidth = 240.0;
 
+  static const double _radiusDestinationPickerView = 20.0;
+
   double getSizeWidthScreen(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
@@ -86,15 +88,41 @@ class ResponsiveUtils {
 
   EdgeInsets getMarginForDestinationPicker(BuildContext context) {
     if (isMediumScreen(context)) {
-      return EdgeInsets.symmetric(
-        horizontal: _destinationPickerHorizontalMarginMediumScreen,
-        vertical: _destinationPickerVerticalMarginMediumScreen);
+      return getSizeHeightScreen(context) <= _destinationPickerVerticalMarginMediumScreen * 2
+        ? EdgeInsets.symmetric(
+            horizontal: _destinationPickerHorizontalMarginMediumScreen,
+            vertical: 0.0)
+        : EdgeInsets.symmetric(
+            horizontal: _destinationPickerHorizontalMarginMediumScreen,
+            vertical: _destinationPickerVerticalMarginMediumScreen);
     } else if (isLargeScreen(context)) {
-      return EdgeInsets.symmetric(
-        horizontal: _destinationPickerHorizontalMarginLargeScreen,
-        vertical: _destinationPickerVerticalMarginLargeScreen);
+      return getSizeHeightScreen(context) <= _destinationPickerVerticalMarginLargeScreen * 2
+        ? EdgeInsets.symmetric(
+            horizontal: _destinationPickerHorizontalMarginLargeScreen,
+            vertical: 0.0)
+        : EdgeInsets.symmetric(
+            horizontal: _destinationPickerHorizontalMarginLargeScreen,
+            vertical: _destinationPickerVerticalMarginLargeScreen);
     } else {
       return EdgeInsets.zero;
+    }
+  }
+
+  BorderRadius getBorderRadiusView(BuildContext context) {
+    if (isMediumScreen(context)) {
+      return getSizeHeightScreen(context) <= _destinationPickerVerticalMarginMediumScreen * 2
+        ? BorderRadius.only(
+            topLeft: Radius.circular(_radiusDestinationPickerView),
+            topRight: Radius.circular(_radiusDestinationPickerView))
+        : BorderRadius.circular(_radiusDestinationPickerView);
+    } else if (isLargeScreen(context)) {
+      return getSizeHeightScreen(context) <= _destinationPickerVerticalMarginLargeScreen * 2
+        ? BorderRadius.only(
+            topLeft: Radius.circular(_radiusDestinationPickerView),
+            topRight: Radius.circular(_radiusDestinationPickerView))
+        : BorderRadius.circular(_radiusDestinationPickerView);
+    } else {
+      return BorderRadius.zero;
     }
   }
 
