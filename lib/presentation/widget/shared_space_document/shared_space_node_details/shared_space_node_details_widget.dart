@@ -111,28 +111,29 @@ class _SharedSpaceNodeDetailsWidgetState extends State<SharedSpaceNodeDetailsWid
           ));
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (state.workgroupNode is WorkGroupDocument)
-          _workGroupDocumentDetailsTitleTileWidget(state.workgroupNode),
-        if (state.workgroupNode is WorkGroupFolder)
-          _workGroupFolderDetailsTitleTileWidget(state.workgroupNode),
-        Divider(),
-        Column(
-          children: [
-            _sharedSpaceNodeInformationTile(AppLocalizations.of(context).modified,
-                state.workgroupNode.modificationDate.getMMMddyyyyFormatString()),
-            _sharedSpaceNodeInformationTile(
-                AppLocalizations.of(context).modified_by, state.workgroupNode.lastAuthor.name),
-            _sharedSpaceNodeInformationTile(AppLocalizations.of(context).created,
-                state.workgroupNode.creationDate.getMMMddyyyyFormatString()),
-          ],
-        ),
-        Divider(),
-        _descriptionWidget(state),
-      ],
-    );
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (state.workgroupNode is WorkGroupDocument)
+            _workGroupDocumentDetailsTitleTileWidget(state.workgroupNode),
+          if (state.workgroupNode is WorkGroupFolder)
+            _workGroupFolderDetailsTitleTileWidget(state.workgroupNode),
+          Divider(),
+          Column(
+            children: [
+              _sharedSpaceNodeInformationTile(AppLocalizations.of(context).modified,
+                  state.workgroupNode.modificationDate.getMMMddyyyyFormatString()),
+              _sharedSpaceNodeInformationTile(
+                  AppLocalizations.of(context).modified_by, state.workgroupNode.lastAuthor.name),
+              _sharedSpaceNodeInformationTile(AppLocalizations.of(context).created,
+                  state.workgroupNode.creationDate.getMMMddyyyyFormatString()),
+            ],
+          ),
+          Divider(),
+          _descriptionWidget(state),
+        ],
+      ));
   }
 
   Container _descriptionWidget(SharedSpaceNodeDetailsState state) {
