@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-11-10T17:18:26.612601",
+  "@@last_modified": "2021-05-26T11:52:44.026727",
   "initializing_data": "Инициализация данных...",
   "@initializing_data": {
     "type": "text",
@@ -85,6 +85,43 @@
     "type": "text",
     "placeholders": {}
   },
+  "download_to_device":"Загрузить на устройство",
+  "@download_to_device": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "share":"Поделиться",
+  "@share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "title_quick_share":"Быстро поделиться",
+  "@title_quick_share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_recipients":"Добавить получателей",
+  "@add_recipients": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_people":"Добавить пользователей",
+  "@add_people": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{Вы успешно поделились файлом}other{The files have been successfully shared}}",
+  "@file_has_been_successfully_shared": {
+    "type": "text",
+    "placeholders": {
+      "sharesNumber": {}
+    }
+  },
+  "file_could_not_be_share":"Не удалось поделиться файлом",
+  "@file_could_not_be_share": {
+    "type": "text",
+    "placeholders": {}
+  },
   "item_last_modified": "Изменен {dateString}",
   "@item_last_modified": {
     "type": "text",
@@ -97,27 +134,22 @@
     "type": "text",
     "placeholders": {}
   },
-  "common_error_occured_message": "Произошла непредвиденная ошибка\\nПовторите загрузку или повторите попытку позже",
+  "common_error_occured_message": "Unexpected error occurs\nPlease reload or try again later",
   "@common_error_occured_message": {
     "type": "text",
     "placeholders": {}
   },
-  "download_to_device" :"Загрузить на устройство",
-  "@download_to_device": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "export_file" :"Экспорт файла",
+  "export_file":"Экспорт файла",
   "@export_file": {
     "type": "text",
     "placeholders": {}
   },
-  "preparing_to_export" :"Подготовавливаем экспорт",
+  "preparing_to_export":"Подготовавливаем экспорт",
   "@preparing_to_export": {
     "type": "text",
     "placeholders": {}
   },
-  "cancel" :"Отменить",
+  "cancel":"Отменить",
   "@cancel": {
     "type": "text",
     "placeholders": {}
@@ -129,59 +161,32 @@
       "fileName": {}
     }
   },
-  "share" :"Поделиться",
-  "@share": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "title_quick_share" :"Быстро поделиться",
-  "@title_quick_share": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_recipients" :"Добавить получателей",
-  "@add_recipients": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_people" :"Добавить пользователей",
-  "@add_people": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{Вы успешно поделились файлом}other{The files have been successfully shared}}",
-  "@file_has_been_successfully_shared": {
-    "type": "text",
-    "placeholders": {
-      "sharesNumber": {}
-    }
-  },
-  "file_could_not_be_share" :"Не удалось поделиться файлом",
-  "@file_could_not_be_share": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "logout" :"Забыть аккаунт",
+  "logout":"Забыть аккаунт",
   "@logout": {
     "type": "text",
     "placeholders": {}
   },
-  "confirm_remove_account_title" : "Вы действительно хотите выйти из этого аккаунта?",
+  "confirm_remove_account_title": "Вы действительно хотите выйти из этого аккаунта?",
   "@confirm_remove_account_title": {
     "type": "text",
     "placeholders": {}
   },
-  "shared_space" :"Рабочие группы",
+  "shared_space":"Рабочие группы",
   "@shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "do_not_have_any_workgroup" :"У вас еще нет рабочей группы",
+  "do_not_have_any_workgroup":"У вас еще нет рабочей группы",
   "@do_not_have_any_workgroup": {
     "type": "text",
     "placeholders": {}
   },
-  "unknown_user" :"Неизвестный пользователь",
+  "not_have_received_yet": "View your received shares",
+  "@not_have_received_yet": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_user":"Неизвестный пользователь",
   "@unknown_user": {
     "type": "text",
     "placeholders": {}
@@ -389,6 +394,11 @@
       "numberOfFiles": {}
     }
   },
+  "delete": "Удалить",
+  "@delete": {
+    "type": "text",
+    "placeholders": {}
+  },
   "can_not_connect_network": "Невозможно подключиться к сети",
   "@can_not_connect_network": {
     "type": "text",
@@ -404,8 +414,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "delete": "Удалить",
-  "@delete": {
+  "account_details_title": "Детали Aккаунта",
+  "@account_details_title": {
     "type": "text",
     "placeholders": {}
   },
@@ -852,6 +862,14 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_create_folder_self": "You have created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "@audit_action_message_create_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_create_folder_other": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
   "@audit_action_message_create_folder_other": {
     "type": "text",
@@ -954,6 +972,15 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_download_workgroup_document_other": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_download_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_upload_workgroup_document_self": "You have uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_self": {
     "type": "text",
@@ -967,6 +994,14 @@
     "type": "text",
     "placeholders": {
       "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space_self": "You have created the document : {resourceName} into {nameVarious}, from your Personal Space.",
+  "@audit_action_message_copy_document_from_personal_space_self": {
+    "type": "text",
+    "placeholders": {
       "resourceName": {},
       "nameVarious": {}
     }
@@ -1079,8 +1114,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "your": "your",
-  "@your": {
+  "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
+  "@second_factor_authentication_is_required_for_your_account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_enable_second_factor_authentication_to_continue": "Please enable Second factor Authentication to continue",
+  "@please_enable_second_factor_authentication_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_setup": "Go to Setup",
+  "@go_to_setup": {
     "type": "text",
     "placeholders": {}
   },

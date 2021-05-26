@@ -85,49 +85,10 @@
     "type": "text",
     "placeholders": {}
   },
-  "item_last_modified": "Modifié le {dateString}",
-  "@item_last_modified": {
-    "type": "text",
-    "placeholders": {
-      "dateString": {}
-    }
-  },
-  "my_space": "Mon Espace",
-  "@my_space": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "common_error_occured_message": "Une erreur inconnue est survenue\nVeuillez réessayer plus tard",
-  "@common_error_occured_message": {
-    "type": "text",
-    "placeholders": {}
-  },
   "download_to_device" :"Télécharger sur l'appareil",
   "@download_to_device": {
     "type": "text",
     "placeholders": {}
-  },
-  "export_file" :"Exporter le fichier",
-  "@export_file": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "preparing_to_export" :"Préparation de l'export",
-  "@preparing_to_export": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "cancel" :"Annuler",
-  "@cancel": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "downloading_file": "Téléchargement de {fileName}",
-  "@downloading_file": {
-    "type": "text",
-    "placeholders": {
-      "fileName": {}
-    }
   },
   "share" :"Partager",
   "@share": {
@@ -161,6 +122,45 @@
     "type": "text",
     "placeholders": {}
   },
+  "item_last_modified": "Modifié le {dateString}",
+  "@item_last_modified": {
+    "type": "text",
+    "placeholders": {
+      "dateString": {}
+    }
+  },
+  "my_space": "Mon Espace",
+  "@my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "common_error_occured_message": "Unexpected error occurs\nPlease reload or try again later",
+  "@common_error_occured_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "export_file" :"Exporter le fichier",
+  "@export_file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preparing_to_export" :"Préparation de l'export",
+  "@preparing_to_export": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel" :"Annuler",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "downloading_file": "Téléchargement de {fileName}",
+  "@downloading_file": {
+    "type": "text",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
   "logout" :"Se déconnecter",
   "@logout": {
     "type": "text",
@@ -178,6 +178,11 @@
   },
   "do_not_have_any_workgroup" :"Vous n'avez pas encore de Groupe De Travail",
   "@do_not_have_any_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "not_have_received_yet": "View your received shares",
+  "@not_have_received_yet": {
     "type": "text",
     "placeholders": {}
   },
@@ -409,6 +414,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "account_details_title": "Account Details",
+  "@account_details_title": {
+    "type": "text",
+    "placeholders": {}
+  },
   "account_details": "Détails du compte",
   "@account_details": {
     "type": "text",
@@ -564,6 +574,31 @@
     "type": "text",
     "placeholders": {}
   },
+  "add_new_file_or_folder": "Add new file or folder",
+  "@add_new_file_or_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_folder": "Create Folder",
+  "@create_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_folder": "New folder",
+  "@new_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "rename": "Rename",
+  "@rename": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_folder": "Create new folder",
+  "@create_new_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
   "modification_date": "Date de modification",
   "@modification_date": {
     "type": "text",
@@ -591,31 +626,6 @@
   },
   "order_by": "Order by",
   "@order_by": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_new_file_or_folder": "Add new file or folder",
-  "@add_new_file_or_folder": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "create_folder": "Create Folder",
-  "@create_folder": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "new_folder": "New folder",
-  "@new_folder": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "rename": "Rename",
-  "@rename": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "create_new_folder": "Create new folder",
-  "@create_new_folder": {
     "type": "text",
     "placeholders": {}
   },
@@ -852,6 +862,14 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_create_folder_self": "You have created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "@audit_action_message_create_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_create_folder_other": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
   "@audit_action_message_create_folder_other": {
     "type": "text",
@@ -954,6 +972,15 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_download_workgroup_document_other": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_download_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_upload_workgroup_document_self": "You have uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_self": {
     "type": "text",
@@ -967,6 +994,14 @@
     "type": "text",
     "placeholders": {
       "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space_self": "You have created the document : {resourceName} into {nameVarious}, from your Personal Space.",
+  "@audit_action_message_copy_document_from_personal_space_self": {
+    "type": "text",
+    "placeholders": {
       "resourceName": {},
       "nameVarious": {}
     }
@@ -1079,8 +1114,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "your": "your",
-  "@your": {
+  "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
+  "@second_factor_authentication_is_required_for_your_account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_enable_second_factor_authentication_to_continue": "Please enable Second factor Authentication to continue",
+  "@please_enable_second_factor_authentication_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_setup": "Go to Setup",
+  "@go_to_setup": {
     "type": "text",
     "placeholders": {}
   },
