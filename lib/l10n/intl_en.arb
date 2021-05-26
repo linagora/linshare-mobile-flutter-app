@@ -599,6 +599,36 @@
     "type": "text",
     "placeholders": {}
   },
+  "modification_date": "Modification date",
+  "@modification_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creation_date": "Creation date",
+  "@creation_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "size": "Size",
+  "@size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Name",
+  "@name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared": "Shared",
+  "@shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order_by": "Order by",
+  "@order_by": {
+    "type": "text",
+    "placeholders": {}
+  },
   "details": "Details",
   "@details": {
     "type": "text",
@@ -832,6 +862,14 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_create_folder_self": "You have created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "@audit_action_message_create_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_create_folder_other": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
   "@audit_action_message_create_folder_other": {
     "type": "text",
@@ -934,6 +972,15 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_download_workgroup_document_other": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_download_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_upload_workgroup_document_self": "You have uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_self": {
     "type": "text",
@@ -947,6 +994,14 @@
     "type": "text",
     "placeholders": {
       "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space_self": "You have created the document : {resourceName} into {nameVarious}, from your Personal Space.",
+  "@audit_action_message_copy_document_from_personal_space_self": {
+    "type": "text",
+    "placeholders": {
       "resourceName": {},
       "nameVarious": {}
     }
@@ -1106,205 +1161,6 @@
   },
   "user_locked_message": "Sorry! Your account is locked\nPlease contact the support to unlock!",
   "@user_locked_message": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_team_members": "Add team members",
-  "@add_team_members": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "existing_members": "{nbMembers,plural, =1{Existing member: {nbMembers}}other{Existing members: {nbMembers}}}",
-  "@existing_members": {
-    "type": "text",
-    "placeholders": {
-      "nbMembers": {}
-    }
-  },
-  "the_file_has_been_successfully_renamed": "The file has been successfully renamed",
-  "@the_file_has_been_successfully_renamed": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "the_file_could_not_be_renamed": "The file could not be renamed",
-  "@the_file_could_not_be_renamed": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "sender": "Sender",
-  "@sender": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "search_in_my_received_shares": "Search in Received Shares",
-  "@search_in_my_received_shares": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "are_you_sure_you_want_to_delete_member": "Are you sure you want to delete {memberName} from {workspaceName}?",
-  "@are_you_sure_you_want_to_delete_member": {
-    "type": "text",
-    "placeholders": {
-      "memberName": {},
-      "workspaceName": {}
-    }
-  },
-  "user_could_not_be_removed": "The user could not be removed",
-  "@user_could_not_be_removed": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "user_is_successfully_removed": "The user is successfully removed",
-  "@user_is_successfully_removed": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "expiration": "Expiration",
-  "@expiration": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "shared_with": "{nbContacts,plural, =0{Shared with: {nbContacts} contact}=1{Shared with: {nbContacts} contact}other{Shared with: {nbContacts} contacts}}",
-  "@shared_with": {
-    "type": "text",
-    "placeholders": {
-      "nbContacts": {}
-    }
-  },
-  "modified_by": "Modified by",
-  "@modified_by": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "biometric_authentication": "Biometric authentication",
-  "@biometric_authentication": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "face_id": "Face ID",
-  "@face_id": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "fingerprint": "Fingerprint",
-  "@fingerprint": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "biometric_authentication_message": "Allow {biometricKind} to secure access to this app",
-  "@biometric_authentication_message": {
-    "type": "text",
-    "placeholders": {
-      "biometricKind": {}
-    }
-  },
-  "biometric_authentication_not_enrolled": "{biometricKind} must be enabled to turn on biometric authentication",
-  "@biometric_authentication_not_enrolled": {
-    "type": "text",
-    "placeholders": {
-      "biometricKind": {}
-    }
-  },
-  "biometric_authentication_localized_reason_enable": "Please authenticate to enable biometric authentication for application",
-  "@biometric_authentication_localized_reason_enable": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "biometric_authentication_localized_reason_disable": "Please authenticate to disable biometric authentication for application",
-  "@biometric_authentication_localized_reason_disable": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "manage_version": "Manage version",
-  "@manage_version": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "version": "Version {version}",
-  "@version": {
-    "type": "text",
-    "placeholders": {
-      "version": {}
-    }
-  },
-  "face": "Face",
-  "@face": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "touch_id": "TouchID",
-  "@touch_id": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "touch_id_or_face_id": "TouchID or FaceID",
-  "@touch_id_or_face_id": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "fingerprint_or_face": "Fingerprint or Face",
-  "@fingerprint_or_face": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "biometric_authentication_localized_reason": "Scan your {biometricKind} to authentication",
-  "@biometric_authentication_localized_reason": {
-    "type": "text",
-    "placeholders": {
-      "biometricKind": {}
-    }
-  },
-  "biometric_disabled_in_setting_app": "Please enable {biometricKind} in the Settings app on your phone to use biometric authentication",
-  "@biometric_disabled_in_setting_app": {
-    "type": "text",
-    "placeholders": {
-      "biometricKind": {}
-    }
-  },
-  "open_with_biometric": "Open with {biometricKind}",
-  "@open_with_biometric": {
-    "type": "text",
-    "placeholders": {
-      "biometricKind": {}
-    }
-  },
-  "or": "Or",
-  "@or": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "go_to_sign_in": "Go to Sign-In",
-  "@go_to_sign_in": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "biometric_authentication_is_locked": "Biometric authentication is locked due to exceeded number of attempts.",
-  "@biometric_authentication_is_locked": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "duplicate": "Duplicate",
-  "@duplicate": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "files_have_been_successfully_duplicated": "Files have been successfully duplicated",
-  "@files_have_been_successfully_duplicated": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "files_could_not_be_duplicated": "The files could not be duplicated",
-  "@files_could_not_be_duplicated": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "some_files_could_not_be_duplicated": "Some files could not be duplicated",
-  "@some_files_could_not_be_duplicated": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "restore": "Restore",
-  "@restore": {
     "type": "text",
     "placeholders": {}
   },

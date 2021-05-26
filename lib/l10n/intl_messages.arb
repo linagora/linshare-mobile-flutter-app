@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-05-25T18:22:36.380080",
+  "@@last_modified": "2021-05-26T12:10:40.612119",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -134,8 +134,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "Unexpected error occurs\nPlease reload or try again later": "Unexpected error occurs\nPlease reload or try again later",
-  "@Unexpected error occurs\nPlease reload or try again later": {
+  "common_error_occured_message": "Unexpected error occurs\nPlease reload or try again later",
+  "@common_error_occured_message": {
     "type": "text",
     "placeholders": {}
   },
@@ -862,6 +862,14 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_create_folder_self": "You have created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "@audit_action_message_create_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_create_folder_other": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
   "@audit_action_message_create_folder_other": {
     "type": "text",
@@ -964,6 +972,15 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_download_workgroup_document_other": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_download_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_upload_workgroup_document_self": "You have uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_self": {
     "type": "text",
@@ -977,6 +994,14 @@
     "type": "text",
     "placeholders": {
       "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space_self": "You have created the document : {resourceName} into {nameVarious}, from your Personal Space.",
+  "@audit_action_message_copy_document_from_personal_space_self": {
+    "type": "text",
+    "placeholders": {
       "resourceName": {},
       "nameVarious": {}
     }
@@ -1086,6 +1111,51 @@
   },
   "me": "Me",
   "@me": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
+  "@second_factor_authentication_is_required_for_your_account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_enable_second_factor_authentication_to_continue": "Please enable Second factor Authentication to continue",
+  "@please_enable_second_factor_authentication_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_setup": "Go to Setup",
+  "@go_to_setup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "second_factor_authentication": "SECOND FACTOR AUTHENTICATION",
+  "@second_factor_authentication": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "input_6_digit_from_free_otp": "Input the 6-digit code in your FreeOTP app",
+  "@input_6_digit_from_free_otp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "submit": "Submit",
+  "@submit": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_fill_up_all_numbers": "Please fill up all numbers",
+  "@please_fill_up_all_numbers": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalid_otp": "Invalid OTP",
+  "@invalid_otp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "user_locked_message": "Sorry! Your account is locked\nPlease contact the support to unlock!",
+  "@user_locked_message": {
     "type": "text",
     "placeholders": {}
   },
@@ -1250,6 +1320,28 @@
       "biometricKind": {}
     }
   },
+  "biometric_authentication_localized_reason_enable": "Please authenticate to enable biometric authentication for application",
+  "@biometric_authentication_localized_reason_enable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason_disable": "Please authenticate to disable biometric authentication for application",
+  "@biometric_authentication_localized_reason_disable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "manage_version": "Manage version",
+  "@manage_version": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "version": "Version {version}",
+  "@version": {
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
+  },
   "face": "Face",
   "@face": {
     "type": "text",
@@ -1323,6 +1415,11 @@
   },
   "some_files_could_not_be_duplicated": "Some files could not be duplicated",
   "@some_files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "restore": "Restore",
+  "@restore": {
     "type": "text",
     "placeholders": {}
   }

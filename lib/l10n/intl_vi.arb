@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-11-10T17:18:26.612601",
+  "@@last_modified": "2021-05-26T11:52:44.026727",
   "initializing_data": "Khởi tạo ...",
   "@initializing_data": {
     "type": "text",
@@ -85,6 +85,43 @@
     "type": "text",
     "placeholders": {}
   },
+  "download_to_device": "Download to device",
+  "@download_to_device": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "share": "Chia sẻ",
+  "@share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "title_quick_share": "Chia sẻ nhanh",
+  "@title_quick_share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_recipients": "Thêm người nhận",
+  "@add_recipients": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_people": "Thêm người",
+  "@add_people": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{The file has been successfully shared}other{The files have been successfully shared}}",
+  "@file_has_been_successfully_shared": {
+    "type": "text",
+    "placeholders": {
+      "sharesNumber": {}
+    }
+  },
+  "file_could_not_be_share": "The file could not be shared",
+  "@file_could_not_be_share": {
+    "type": "text",
+    "placeholders": {}
+  },
   "item_last_modified": "Chỉnh sửa {dateString}",
   "@item_last_modified": {
     "type": "text",
@@ -102,22 +139,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "download_to_device" :"Download to device",
-  "@download_to_device": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "export_file" :"Export file",
+  "export_file": "Export file",
   "@export_file": {
     "type": "text",
     "placeholders": {}
   },
-  "preparing_to_export" :"Preparing to export",
+  "preparing_to_export": "Preparing to export",
   "@preparing_to_export": {
     "type": "text",
     "placeholders": {}
   },
-  "cancel" :"Hủy",
+  "cancel": "Hủy",
   "@cancel": {
     "type": "text",
     "placeholders": {}
@@ -129,59 +161,32 @@
       "fileName": {}
     }
   },
-  "share" :"Chia sẻ",
-  "@share": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "title_quick_share" :"Chia sẻ nhanh",
-  "@title_quick_share": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_recipients" :"Thêm người nhận",
-  "@add_recipients": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_people" :"Thêm người",
-  "@add_people": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{The file has been successfully shared}other{The files have been successfully shared}}",
-  "@file_has_been_successfully_shared": {
-    "type": "text",
-    "placeholders": {
-      "sharesNumber": {}
-    }
-  },
-  "file_could_not_be_share" :"The file could not be shared",
-  "@file_could_not_be_share": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "logout" :"Đăng xuất tài khoản",
+  "logout": "Đăng xuất tài khoản",
   "@logout": {
     "type": "text",
     "placeholders": {}
   },
-  "confirm_remove_account_title" : "Bạn muốn đăng xuất tài khoản này ?",
+  "confirm_remove_account_title": "Bạn muốn đăng xuất tài khoản này ?",
   "@confirm_remove_account_title": {
     "type": "text",
     "placeholders": {}
   },
-  "shared_space" :"Không gian chia sẻ",
+  "shared_space": "Không gian chia sẻ",
   "@shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "do_not_have_any_workgroup" :"Bạn chưa có nhóm làm việc nào",
+  "do_not_have_any_workgroup": "Bạn chưa có nhóm làm việc nào",
   "@do_not_have_any_workgroup": {
     "type": "text",
     "placeholders": {}
   },
-  "unknown_user" :"Không tìm thấy người dùng",
+  "not_have_received_yet": "View your received shares",
+  "@not_have_received_yet": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_user": "Không tìm thấy người dùng",
   "@unknown_user": {
     "type": "text",
     "placeholders": {}
@@ -389,6 +394,11 @@
       "numberOfFiles": {}
     }
   },
+  "delete": "Xóa",
+  "@delete": {
+    "type": "text",
+    "placeholders": {}
+  },
   "can_not_connect_network": "Không thể kết nối tới mạng",
   "@can_not_connect_network": {
     "type": "text",
@@ -404,8 +414,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "delete": "Xóa",
-  "@delete": {
+  "account_details_title": "Account Details",
+  "@account_details_title": {
     "type": "text",
     "placeholders": {}
   },
@@ -564,6 +574,31 @@
     "type": "text",
     "placeholders": {}
   },
+  "add_new_file_or_folder": "Add new file or folder",
+  "@add_new_file_or_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_folder": "Create Folder",
+  "@create_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_folder": "New folder",
+  "@new_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "rename": "Đổi tên",
+  "@rename": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_folder": "Create new folder",
+  "@create_new_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
   "modification_date": "Ngày sửa đổi",
   "@modification_date": {
     "type": "text",
@@ -591,31 +626,6 @@
   },
   "order_by": "Sắp xếp theo",
   "@order_by": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "add_new_file_or_folder": "Add new file or folder",
-  "@add_new_file_or_folder": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "create_folder": "Create Folder",
-  "@create_folder": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "new_folder": "New folder",
-  "@new_folder": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "rename": "Đổi tên",
-  "@rename": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "create_new_folder": "Create new folder",
-  "@create_new_folder": {
     "type": "text",
     "placeholders": {}
   },
@@ -852,6 +862,14 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_create_folder_self": "You have created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "@audit_action_message_create_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_create_folder_other": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
   "@audit_action_message_create_folder_other": {
     "type": "text",
@@ -954,6 +972,15 @@
       "nameVarious": {}
     }
   },
+  "audit_action_message_download_workgroup_document_other": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "@audit_action_message_download_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
   "audit_action_message_upload_workgroup_document_self": "You have uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_self": {
     "type": "text",
@@ -967,6 +994,14 @@
     "type": "text",
     "placeholders": {
       "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space_self": "You have created the document : {resourceName} into {nameVarious}, from your Personal Space.",
+  "@audit_action_message_copy_document_from_personal_space_self": {
+    "type": "text",
+    "placeholders": {
       "resourceName": {},
       "nameVarious": {}
     }
@@ -1079,8 +1114,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "your": "của bạn",
-  "@your": {
+  "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
+  "@second_factor_authentication_is_required_for_your_account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_enable_second_factor_authentication_to_continue": "Please enable Second factor Authentication to continue",
+  "@please_enable_second_factor_authentication_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_setup": "Go to Setup",
+  "@go_to_setup": {
     "type": "text",
     "placeholders": {}
   },
