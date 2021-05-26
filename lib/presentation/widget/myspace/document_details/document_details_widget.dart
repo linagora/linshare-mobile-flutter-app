@@ -117,26 +117,27 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
           ));
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _documentDetailsTitleTileWidget(state),
-        Divider(),
-        Column(
-          children: [
-            _documentInformationTile(AppLocalizations.of(context).modified,
-                state.document.modificationDate.getMMMddyyyyFormatString()),
-            _documentInformationTile(AppLocalizations.of(context).created,
-                state.document.creationDate.getMMMddyyyyFormatString()),
-            _documentInformationTile(AppLocalizations.of(context).expiration,
-                state.document.creationDate.getMMMddyyyyFormatString()),
-          ],
-        ),
-        Divider(),
-        _descriptionWidget(state),
-        _sharedWidget(state)
-      ],
-    );
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _documentDetailsTitleTileWidget(state),
+          Divider(),
+          Column(
+            children: [
+              _documentInformationTile(AppLocalizations.of(context).modified,
+                  state.document.modificationDate.getMMMddyyyyFormatString()),
+              _documentInformationTile(AppLocalizations.of(context).created,
+                  state.document.creationDate.getMMMddyyyyFormatString()),
+              _documentInformationTile(AppLocalizations.of(context).expiration,
+                  state.document.creationDate.getMMMddyyyyFormatString()),
+            ],
+          ),
+          Divider(),
+          _descriptionWidget(state),
+          _sharedWidget(state)
+        ],
+      ));
   }
 
   ListTile _documentDetailsTitleTileWidget(DocumentDetailsState state) {
