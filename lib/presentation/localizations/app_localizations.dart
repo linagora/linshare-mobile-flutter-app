@@ -185,7 +185,8 @@ class AppLocalizations {
   }
 
   String get common_error_occured_message {
-    return Intl.message('Unexpected error occurs\nPlease reload or try again later');
+    return Intl.message('Unexpected error occurs\nPlease reload or try again later',
+        name: 'common_error_occured_message');
   }
 
   String get export_file {
@@ -1121,7 +1122,7 @@ class AppLocalizations {
   String audit_action_message_create_folder_self(String resourceName, String nameVarious) {
     return Intl.message(
         'You have created a new folder : $resourceName into the Workgroup $nameVarious.',
-        name: 'audit_action_message_create_folder',
+        name: 'audit_action_message_create_folder_self',
         args: [resourceName, nameVarious]
     );
   }
@@ -1226,7 +1227,7 @@ class AppLocalizations {
   String audit_action_message_download_workgroup_document_other(String authorName, String resourceName, String nameVarious) {
     return Intl.message(
         '$authorName has downloaded the file : $resourceName from the Workgroup $nameVarious.',
-        name: 'audit_action_message_download_workgroup_document',
+        name: 'audit_action_message_download_workgroup_document_other',
         args: [authorName, resourceName, nameVarious]
     );
   }
@@ -1250,7 +1251,7 @@ class AppLocalizations {
   String audit_action_message_copy_document_from_personal_space_self(String resourceName, String nameVarious) {
     return Intl.message(
         'You have created the document : $resourceName into $nameVarious, from your Personal Space.',
-        name: 'audit_action_message_copy_document_from_personal_space',
+        name: 'audit_action_message_copy_document_from_personal_space_self',
         args: [resourceName, nameVarious]
     );
   }
