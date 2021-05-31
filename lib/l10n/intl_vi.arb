@@ -85,7 +85,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "download_to_device": "Download to device",
+  "download_to_device": "Tải xuống",
   "@download_to_device": {
     "type": "text",
     "placeholders": {}
@@ -110,14 +110,14 @@
     "type": "text",
     "placeholders": {}
   },
-  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{The file has been successfully shared}other{The files have been successfully shared}}",
+  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{Chia sẻ thành công}other{Chia sẻ thành công}}",
   "@file_has_been_successfully_shared": {
     "type": "text",
     "placeholders": {
       "sharesNumber": {}
     }
   },
-  "file_could_not_be_share": "The file could not be shared",
+  "file_could_not_be_share": "Chia sẻ không thành công",
   "@file_could_not_be_share": {
     "type": "text",
     "placeholders": {}
@@ -134,17 +134,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "common_error_occured_message": "Unexpected error occurs\nPlease reload or try again later",
+  "common_error_occured_message": "Lỗi không xác định\nHãy thử lại",
   "@common_error_occured_message": {
     "type": "text",
     "placeholders": {}
   },
-  "export_file": "Export file",
+  "export_file": "Xuất tệp",
   "@export_file": {
     "type": "text",
     "placeholders": {}
   },
-  "preparing_to_export": "Preparing to export",
+  "preparing_to_export": "Chuẩn bị xuất tệp",
   "@preparing_to_export": {
     "type": "text",
     "placeholders": {}
@@ -154,7 +154,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "downloading_file": "Downloading {fileName}",
+  "downloading_file": "Đang tải tệp {fileName}",
   "@downloading_file": {
     "type": "text",
     "placeholders": {
@@ -181,7 +181,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "not_have_received_yet": "View your received shares",
+  "not_have_received_yet": "Chưa nhận được tệp",
   "@not_have_received_yet": {
     "type": "text",
     "placeholders": {}
@@ -191,130 +191,130 @@
     "type": "text",
     "placeholders": {}
   },
-  "upload_and_share_button": "Upload and Share",
+  "upload_and_share_button": "Tải lên và chia sẻ",
   "@upload_and_share_button": {
     "type": "text",
     "placeholders": {}
   },
-  "sharing_single_after_uploaded_success": "The file is uploaded and shared with {recipientName}",
+  "sharing_single_after_uploaded_success": "Tệp đã được tải lên và chia sẻ với {recipientName}",
   "@sharing_single_after_uploaded_success": {
     "type": "text",
     "placeholders": {
       "recipientName": {}
     }
   },
-  "sharing_multiple_after_uploaded_success": "The file is uploaded and shared with {numberOfRecipients} people",
+  "sharing_multiple_after_uploaded_success": "Tệp đã được tải lên và chia sẻ với {numberOfRecipients} người",
   "@sharing_multiple_after_uploaded_success": {
     "type": "text",
     "placeholders": {
       "numberOfRecipients": {}
     }
   },
-  "sharing_after_uploaded_failure": "The file will be ready for upload and sharing once connection is available",
+  "sharing_after_uploaded_failure": "Không thể thực hiện tải lên và chia sẻ khi không có kết nối",
   "@sharing_after_uploaded_failure": {
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_nodes_surfing_root_back_title": "Back to Shared Space",
+  "workgroup_nodes_surfing_root_back_title": "Trở lại Không gian làm việc",
   "@workgroup_nodes_surfing_root_back_title": {
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_nodes_surfing_sort_type_title": "Modification date",
+  "workgroup_nodes_surfing_sort_type_title": "Ngày sửa đổi",
   "@workgroup_nodes_surfing_sort_type_title": {
     "type": "text",
     "placeholders": {}
   },
-  "destination": "Destination",
+  "destination": "Tới",
   "@destination": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_to_workspace": "Upload to Workspace",
+  "upload_to_workspace": "Tải lên không gian làm việc",
   "@upload_to_workspace": {
     "type": "text",
     "placeholders": {}
   },
-  "photos_and_videos": "Photos and Videos",
+  "photos_and_videos": "Ảnh và Video",
   "@photos_and_videos": {
     "type": "text",
     "placeholders": {}
   },
-  "browse": "Browse",
+  "browse": "Duyệt",
   "@browse": {
     "type": "text",
     "placeholders": {}
   },
-  "select_all": "Select all",
+  "select_all": "Tất cả",
   "@select_all": {
     "type": "text",
     "placeholders": {}
   },
-  "unselect_all": "Unselect all",
+  "unselect_all": "Bỏ chọn",
   "@unselect_all": {
     "type": "text",
     "placeholders": {}
   },
-  "items": "{numberOfItems,plural, =0{No item}=1{{numberOfItems} item}other{{numberOfItems} items}}",
+  "items": "{numberOfItems,plural, =0{Không có dữ liệu}=1{{numberOfItems} dữ liệu}other{{numberOfItems} dữ liệu}}",
   "@items": {
     "type": "text",
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "items_selected": "{numberOfItems,plural, =1{{numberOfItems} item selected}other{{numberOfItems} items selected}}",
+  "items_selected": "{numberOfItems,plural, =1{{numberOfItems} đã chọn}other{{numberOfItems} đã chọn}}",
   "@items_selected": {
     "type": "text",
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "uploading_files_status_title": "Uploading files",
+  "uploading_files_status_title": "Đang tải lên",
   "@uploading_files_status_title": {
     "type": "text",
     "placeholders": {}
   },
-  "uploading_files_view_button": "View",
+  "uploading_files_view_button": "Xem",
   "@uploading_files_view_button": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_screen_title": "Current uploads",
+  "current_uploads_screen_title": "Tải lên",
   "@current_uploads_screen_title": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_my_space_tab": "My Space",
+  "current_uploads_my_space_tab": "Không gian làm việc của tôi",
   "@current_uploads_my_space_tab": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_shared_space_tab": "Shared Space",
+  "current_uploads_shared_space_tab": "Không gian làm việc chung",
   "@current_uploads_shared_space_tab": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_waiting_status": "Waiting",
+  "current_uploads_waiting_status": "Đợi",
   "@current_uploads_waiting_status": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_uploading_status": "Uploading",
+  "current_uploads_uploading_status": "Đang tải lên",
   "@current_uploads_uploading_status": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_upload_failed_status": "Upload failed",
+  "current_uploads_upload_failed_status": "Thất bại",
   "@current_uploads_upload_failed_status": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_share_failed_status": "Share failed",
+  "current_uploads_share_failed_status": "Chia sẻ không thành công",
   "@current_uploads_share_failed_status": {
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_succeed_status": "Completed",
+  "current_uploads_succeed_status": "Hoàn thành",
   "@current_uploads_succeed_status": {
     "type": "text",
     "placeholders": {}
@@ -324,7 +324,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "copy_here": "copy here",
+  "copy_here": "sao chép",
   "@copy_here": {
     "type": "text",
     "placeholders": {}
@@ -344,12 +344,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "some_items_could_not_be_copied_to_shared_space": "Some items could not be copied to Shared space",
+  "some_items_could_not_be_copied_to_shared_space": "Sao chép đến nhóm làm việc không thành công",
   "@some_items_could_not_be_copied_to_shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_multiple": "{numberOfItems,plural, =1{Are you sure you want to delete \"{singleItemName}\"?}other{Are you sure you want to delete {numberOfItems} items?}}",
+  "are_you_sure_you_want_to_delete_multiple": "{numberOfItems,plural, =1{Dồng ý xoá \"{singleItemName}\"?}other{Đồng ý xoá {numberOfItems}?}}",
   "@are_you_sure_you_want_to_delete_multiple": {
     "type": "text",
     "placeholders": {
@@ -357,37 +357,37 @@
       "singleItemName": {}
     }
   },
-  "the_file_has_been_successfully_deleted": "The file has been successfully deleted",
+  "the_file_has_been_successfully_deleted": "Đã xoá tệp",
   "@the_file_has_been_successfully_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "files_have_been_successfully_deleted": "Files have been successfully deleted",
+  "files_have_been_successfully_deleted": "Đã xoá tệp",
   "@files_have_been_successfully_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "the_file_could_not_be_deleted": "The file could not be deleted",
+  "the_file_could_not_be_deleted": "Không thể xoá tệp thành công",
   "@the_file_could_not_be_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "files_could_not_be_deleted": "Files could not be deleted",
+  "files_could_not_be_deleted": "Không thể xoá tệp thành công",
   "@files_could_not_be_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "some_items_could_not_be_deleted": "Some items could not be deleted",
+  "some_items_could_not_be_deleted": "Không thể xoá tệp thành công",
   "@some_items_could_not_be_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "some_items_are_successfully_deleted": "Some items are successfully deleted",
+  "some_items_are_successfully_deleted": "Đã xoá tệp",
   "@some_items_are_successfully_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "downloading_files": "{numberOfFiles,plural, =1{Downloading {numberOfFiles} file}other{Downloading {numberOfFiles} files}}",
+  "downloading_files": "{numberOfFiles,plural, =1{Đang tải {numberOfFiles} tệp}other{Đang tải {numberOfFiles} tệp}}",
   "@downloading_files": {
     "type": "text",
     "placeholders": {
@@ -414,37 +414,37 @@
     "type": "text",
     "placeholders": {}
   },
-  "account_details_title": "Account Details",
+  "account_details_title": "Tài khoản",
   "@account_details_title": {
     "type": "text",
     "placeholders": {}
   },
-  "account_details": "Account details",
+  "account_details": "Tài khoản",
   "@account_details": {
     "type": "text",
     "placeholders": {}
   },
-  "first_name": "First name",
+  "first_name": "Họ",
   "@first_name": {
     "type": "text",
     "placeholders": {}
   },
-  "last_name": "Last name",
+  "last_name": "Tên",
   "@last_name": {
     "type": "text",
     "placeholders": {}
   },
-  "last_login": "Last login",
+  "last_login": "Lần đăng nhập cuối",
   "@last_login": {
     "type": "text",
     "placeholders": {}
   },
-  "available_space": "Available space",
+  "available_space": "Bộ nhớ",
   "@available_space": {
     "type": "text",
     "placeholders": {}
   },
-  "available_space_value": "{usedSpace} on {quota}",
+  "available_space_value": "{usedSpace}/{quota}",
   "@available_space_value": {
     "type": "text",
     "placeholders": {
@@ -469,14 +469,14 @@
       "dateString": {}
     }
   },
-  "notEnoughQuota": "You have reached the max quota of {quota}",
+  "notEnoughQuota": "Bạn đã sử dụng hết dung lượng {quota}",
   "@notEnoughQuota": {
     "type": "text",
     "placeholders": {
       "quota": {}
     }
   },
-  "tooBigFiles": "{nbFiles,plural, =1{{firstElementName} has exceeded the max file of {quota}}other{Some files have exceeded the max file of {quota}}}",
+  "tooBigFiles": "{nbFiles,plural, =1{{firstElementName} đã vượt quá dung lượng tệp tối đa {quota}}other{Một số tệp đã vượt quá dung lượng tệp tối đa {quota}}}",
   "@tooBigFiles": {
     "type": "text",
     "placeholders": {
@@ -485,32 +485,32 @@
       "firstElementName": {}
     }
   },
-  "copy_to_my_space": "Copy to My Space",
+  "copy_to_my_space": "Sao chép đến Không gian làm việc của tôi",
   "@copy_to_my_space": {
     "type": "text",
     "placeholders": {}
   },
-  "the_file_has_been_copied_successfully": "The file has been copied successfully",
+  "the_file_has_been_copied_successfully": "Tệp đã được sao chép thành công",
   "@the_file_has_been_copied_successfully": {
     "type": "text",
     "placeholders": {}
   },
-  "the_file_could_not_be_copied": "The file could not be copied",
+  "the_file_could_not_be_copied": "Không thể sao chép tệp",
   "@the_file_could_not_be_copied": {
     "type": "text",
     "placeholders": {}
   },
-  "cannot_copy_files_to_my_space": "Can not copy files to My Space",
+  "cannot_copy_files_to_my_space": "Không thể sao chép tệp",
   "@cannot_copy_files_to_my_space": {
     "type": "text",
     "placeholders": {}
   },
-  "some_items_have_been_copied_to_my_space": "Some items have been copied to My Space",
+  "some_items_have_been_copied_to_my_space": "Không thể sao chép tệp",
   "@some_items_have_been_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
   },
-  "all_items_have_been_copied_to_my_space": "All items have been copied to My Space",
+  "all_items_have_been_copied_to_my_space": "Sao chép tệp thành công",
   "@all_items_have_been_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
@@ -520,7 +520,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "search_in_shared_space_files": "Search in Shared Space files",
+  "search_in_shared_space_files": "trong không gian làm việc chung",
   "@search_in_shared_space_files": {
     "type": "text",
     "placeholders": {}
@@ -537,54 +537,54 @@
     "type": "text",
     "placeholders": {}
   },
-  "search_in_shared_space": "Search in Shared Space",
+  "search_in_shared_space": "trong không gian làm việc chung",
   "@search_in_shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "shared_spaces_could_not_be_deleted": "{sharedSpacesNumber,plural, =1{The Shared Space could not be deleted}other{Shared Spaces could not be deleted}}",
+  "shared_spaces_could_not_be_deleted": "{sharedSpacesNumber,plural, =1{Xoá nhóm làm việc không thành công}other{Xoá nhóm làm việc không thành công}}",
   "@shared_spaces_could_not_be_deleted": {
     "type": "text",
     "placeholders": {
       "sharedSpacesNumber": {}
     }
   },
-  "shared_space_has_been_deleted": "The Shared Space has been deleted",
+  "shared_space_has_been_deleted": "Xoá nhóm làm việc thành công",
   "@shared_space_has_been_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "all_shared_spaces_have_been_deleted": "All Shared Spaces have been deleted",
+  "all_shared_spaces_have_been_deleted": "Xoá nhóm làm việc thành công",
   "@all_shared_spaces_have_been_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "preview": "Preview",
+  "preview": "Xem trước",
   "@preview": {
     "type": "text",
     "placeholders": {}
   },
-  "no_preview_available": "No preview available",
+  "no_preview_available": "Không có bản xem trước",
   "@no_preview_available": {
     "type": "text",
     "placeholders": {}
   },
-  "preparing_to_preview_file": "Preparing to preview file",
+  "preparing_to_preview_file": "Chuẩn bị xem trước",
   "@preparing_to_preview_file": {
     "type": "text",
     "placeholders": {}
   },
-  "add_new_file_or_folder": "Add new file or folder",
+  "add_new_file_or_folder": "Tạo mới tệp và thư mục",
   "@add_new_file_or_folder": {
     "type": "text",
     "placeholders": {}
   },
-  "create_folder": "Create Folder",
+  "create_folder": "Tạo thư mục",
   "@create_folder": {
     "type": "text",
     "placeholders": {}
   },
-  "new_folder": "New folder",
+  "new_folder": "Thư mục mới",
   "@new_folder": {
     "type": "text",
     "placeholders": {}
@@ -594,7 +594,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "create_new_folder": "Create new folder",
+  "create_new_folder": "Tạo thư mục mới",
   "@create_new_folder": {
     "type": "text",
     "placeholders": {}
@@ -629,67 +629,67 @@
     "type": "text",
     "placeholders": {}
   },
-  "details": "Details",
+  "details": "Chi tiết",
   "@details": {
     "type": "text",
     "placeholders": {}
   },
-  "members": "Members",
+  "members": "Thành viên",
   "@members": {
     "type": "text",
     "placeholders": {}
   },
-  "modified": "Modified",
+  "modified": "Chỉnh sửa",
   "@modified": {
     "type": "text",
     "placeholders": {}
   },
-  "created": "Created",
+  "created": "Tạo",
   "@created": {
     "type": "text",
     "placeholders": {}
   },
-  "my_rights": "My rights",
+  "my_rights": "Quyền",
   "@my_rights": {
     "type": "text",
     "placeholders": {}
   },
-  "max_file_size": "Max file size",
+  "max_file_size": "Dung lượng tệp tối đa",
   "@max_file_size": {
     "type": "text",
     "placeholders": {}
   },
-  "description": "Description",
+  "description": "Mô tả",
   "@description": {
     "type": "text",
     "placeholders": {}
   },
-  "no_description": "No description",
+  "no_description": "Không có mô tả",
   "@no_description": {
     "type": "text",
     "placeholders": {}
   },
-  "copy_to": "Copy to",
+  "copy_to": "Sao chép tới",
   "@copy_to": {
     "type": "text",
     "placeholders": {}
   },
-  "admin": "Admin",
+  "admin": "Quản trị",
   "@admin": {
     "type": "text",
     "placeholders": {}
   },
-  "reader": "Reader",
+  "reader": "Đọc",
   "@reader": {
     "type": "text",
     "placeholders": {}
   },
-  "contributor": "Contributor",
+  "contributor": "Đóng góp",
   "@contributor": {
     "type": "text",
     "placeholders": {}
   },
-  "writer": "Writer",
+  "writer": "Ghi",
   "@writer": {
     "type": "text",
     "placeholders": {}
@@ -766,14 +766,14 @@
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_message_create_workgroup_self": "You have created a new Workgroup : {resourceName}.",
+  "audit_action_message_create_workgroup_self": "Ban đã tạo nhóm làm việc : {resourceName}.",
   "@audit_action_message_create_workgroup_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_create_workgroup_other": "{authorName} has created a new Workgroup : {resourceName}.",
+  "audit_action_message_create_workgroup_other": "{authorName} đã tạo nhóm làm việc : {resourceName}.",
   "@audit_action_message_create_workgroup_other": {
     "type": "text",
     "placeholders": {
@@ -781,14 +781,14 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_delete_workgroup_self": "You have deleted the Workgroup : {resourceName}.",
+  "audit_action_message_delete_workgroup_self": "Bạn đã xoá nhóm làm việc : {resourceName}.",
   "@audit_action_message_delete_workgroup_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_delete_workgroup_other": "{authorName} has deleted the Workgroup : {resourceName}.",
+  "audit_action_message_delete_workgroup_other": "{authorName} đã xoá nhóm làm việc : {resourceName}.",
   "@audit_action_message_delete_workgroup_other": {
     "type": "text",
     "placeholders": {
@@ -796,14 +796,14 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_update_workgroup_self": "You have edited the Workgroup : {resourceName}.",
+  "audit_action_message_update_workgroup_self": "Bạn đã sửa đổi nhóm làm việc : {resourceName}.",
   "@audit_action_message_update_workgroup_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_update_workgroup_other": "{authorName} has edited the Workgroup : {resourceName}.",
+  "audit_action_message_update_workgroup_other": "{authorName} đã sửa đổi nhóm làm việc : {resourceName}.",
   "@audit_action_message_update_workgroup_other": {
     "type": "text",
     "placeholders": {
@@ -811,7 +811,7 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_add_member_self": "You have added a new member : {resourceName} to the Workgroup : {nameVarious}.",
+  "audit_action_message_add_member_self": "Bạn đã thêm thành viên : {resourceName} vào nhóm làm việc : {nameVarious}.",
   "@audit_action_message_add_member_self": {
     "type": "text",
     "placeholders": {
@@ -819,7 +819,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_add_member_other": "{authorName} has added a new member : {resourceName} to the Workgroup : {nameVarious}.",
+  "audit_action_message_add_member_other": "{authorName} đã thêm thành viên : {resourceName} vào nhóm làm việc : {nameVarious}.",
   "@audit_action_message_add_member_other": {
     "type": "text",
     "placeholders": {
@@ -828,7 +828,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_member_self": "You have removed the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_delete_member_self": "Bạn đã xoá thành viên : {resourceName} khỏi nhóm làm việc : {nameVarious}.",
   "@audit_action_message_delete_member_self": {
     "type": "text",
     "placeholders": {
@@ -836,7 +836,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_member_other": "{authorName} has removed the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_delete_member_other": "{authorName} đã xoá thành viên : {resourceName} khỏi nhóm làm việc : {nameVarious}.",
   "@audit_action_message_delete_member_other": {
     "type": "text",
     "placeholders": {
@@ -845,7 +845,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_member_self": "You have edited the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_update_member_self": "Bạn đã thay đổi thành viên: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_update_member_self": {
     "type": "text",
     "placeholders": {
@@ -853,7 +853,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_member_other": "{authorName} has edited the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_update_member_other": "{authorName} đã thay đổi thành viên: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_update_member_other": {
     "type": "text",
     "placeholders": {
@@ -862,7 +862,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_create_folder_self": "You have created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "audit_action_message_create_folder_self": "Bạn đã tạo thư mục: {resourceName} trong nhóm làm việc {nameVarious}.",
   "@audit_action_message_create_folder_self": {
     "type": "text",
     "placeholders": {
@@ -870,7 +870,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_create_folder_other": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "audit_action_message_create_folder_other": "{authorName} đã tạo thư mục: {resourceName} trong nhóm làm việc {nameVarious}.",
   "@audit_action_message_create_folder_other": {
     "type": "text",
     "placeholders": {
@@ -879,7 +879,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_folder_self": "You have deleted the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_delete_folder_self": "Bạn đã xoá thư mục: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_delete_folder_self": {
     "type": "text",
     "placeholders": {
@@ -887,7 +887,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_folder_other": "{authorName} has deleted the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_delete_folder_other": "{authorName} đã xoá thư mục: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_delete_folder_other": {
     "type": "text",
     "placeholders": {
@@ -896,7 +896,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_folder_self": "You have edited the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_update_folder_self": "Bạn đã thay đổi thư mục: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_update_folder_self": {
     "type": "text",
     "placeholders": {
@@ -904,7 +904,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_folder_other": "{authorName} has edited the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_update_folder_other": "{authorName} đã thay đổi thư mục: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_update_folder_other": {
     "type": "text",
     "placeholders": {
@@ -913,7 +913,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_folder_self": "You have downloaded the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_download_folder_self": "Bạn đã tải xuống: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_download_folder_self": {
     "type": "text",
     "placeholders": {
@@ -921,7 +921,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_folder_other": "{authorName} has downloaded the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_download_folder_other": "{authorName} đã tải xuống: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_download_folder_other": {
     "type": "text",
     "placeholders": {
@@ -930,7 +930,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_workgroup_document_self": "You have deleted the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_delete_workgroup_document_self": "Bạn đã xoá tệp: {resourceName} trong nhóm làm việc {nameVarious}.",
   "@audit_action_message_delete_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -938,7 +938,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_workgroup_document_other": "{authorName} has deleted the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_delete_workgroup_document_other": "{authorName} đã xoá tệp : {resourceName} trong nhóm làm việc {nameVarious}.",
   "@audit_action_message_delete_workgroup_document_other": {
     "type": "text",
     "placeholders": {
@@ -947,7 +947,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_workgroup_document_self": "You have edited the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_update_workgroup_document_self": "Bạn đã thay đổi tệp: {resourceName} trong nhóm làm việc {nameVarious}.",
   "@audit_action_message_update_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -955,7 +955,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_workgroup_document_other": "{authorName} has edited the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_update_workgroup_document_other": "{authorName} đã thay đổi tệp: {resourceName} trong nhóm làm việc {nameVarious}.",
   "@audit_action_message_update_workgroup_document_other": {
     "type": "text",
     "placeholders": {
@@ -964,7 +964,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_workgroup_document_self": "You have downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_download_workgroup_document_self": "Bạn đã tải xuống tệp: {resourceName} trong nhóm làm việc {nameVarious}.",
   "@audit_action_message_download_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -972,7 +972,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_workgroup_document_other": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_download_workgroup_document_other": "{authorName} đã tải xuống tệp: {resourceName} trong nhóm làm việc {nameVarious}.",
   "@audit_action_message_download_workgroup_document_other": {
     "type": "text",
     "placeholders": {
@@ -981,7 +981,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_upload_workgroup_document_self": "You have uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
+  "audit_action_message_upload_workgroup_document_self": "Bạn đã tải lên tệp: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -989,7 +989,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_upload_workgroup_document_other": "{authorName} has uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
+  "audit_action_message_upload_workgroup_document_other": "{authorName} đã tải lên tệp: {resourceName} trong nhóm làm việc: {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_other": {
     "type": "text",
     "placeholders": {
@@ -998,7 +998,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_personal_space_self": "You have created the document : {resourceName} into {nameVarious}, from your Personal Space.",
+  "audit_action_message_copy_document_from_personal_space_self": "Bạn đã tạo một bản sao tệp: {resourceName} tại {nameVarious}, từ không  làm việc riêng.",
   "@audit_action_message_copy_document_from_personal_space_self": {
     "type": "text",
     "placeholders": {
@@ -1006,7 +1006,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_personal_space_other": "{authorName} has created the document : {resourceName} into {nameVarious}, from his Personal Space.",
+  "audit_action_message_copy_document_from_personal_space_other": "{authorName} đã tạo một bản sao: {resourceName} tại {nameVarious}, từ không gian làm việc của anh ấy.",
   "@audit_action_message_copy_document_from_personal_space_other": {
     "type": "text",
     "placeholders": {
@@ -1015,7 +1015,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_received_share_self": "You have created the document : {resourceName} into {nameVarious}, from your received shares.",
+  "audit_action_message_copy_document_from_received_share_self": "Bạn đã tạo một bản sao: {resourceName} tại {nameVarious}, từ danh sách Đã nhận.",
   "@audit_action_message_copy_document_from_received_share_self": {
     "type": "text",
     "placeholders": {
@@ -1023,7 +1023,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_received_share_other": "{authorName} has created the document : {resourceName} into {nameVarious}, from his received shares.",
+  "audit_action_message_copy_document_from_received_share_other": "{authorName} đã tạo một bản sao: {resourceName} tại {nameVarious}, từ danh sách Đã nhận của anh ấy.",
   "@audit_action_message_copy_document_from_received_share_other": {
     "type": "text",
     "placeholders": {
@@ -1032,14 +1032,14 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_shared_space_self": "You have created this file by copying : {resourceName} from another Workgroup.",
+  "audit_action_message_copy_document_from_shared_space_self": "Bạn đã tạo một bản sao: {resourceName} từ một không gian làm việc chung.",
   "@audit_action_message_copy_document_from_shared_space_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_from_shared_space_other": "{authorName} has created this file by copying : {resourceName} from another Workgroup.",
+  "audit_action_message_copy_document_from_shared_space_other": "{authorName} đã tạo một bản sao: {resourceName} từ một không gian làm việc chung.",
   "@audit_action_message_copy_document_from_shared_space_other": {
     "type": "text",
     "placeholders": {
@@ -1047,14 +1047,14 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_to_personal_space_self": "You have copied the document : {resourceName} into your Personal Space.",
+  "audit_action_message_copy_document_to_personal_space_self": "Bạn đã sao chép tệp: {resourceName} vào không gian làm việc riêng.",
   "@audit_action_message_copy_document_to_personal_space_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_to_personal_space_other": "{authorName} has copied the document : {resourceName} into his Personal Space.",
+  "audit_action_message_copy_document_to_personal_space_other": "{authorName} sao chép tệp: {resourceName} vào không gian làm việc riêng.",
   "@audit_action_message_copy_document_to_personal_space_other": {
     "type": "text",
     "placeholders": {
@@ -1062,14 +1062,14 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_to_shared_space_self": "You have created a duplicated of this file into {nameVarious}.",
+  "audit_action_message_copy_document_to_shared_space_self": "Bạn đã tạo một bản sao của tệp ở {nameVarious}.",
   "@audit_action_message_copy_document_to_shared_space_self": {
     "type": "text",
     "placeholders": {
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_to_shared_space_other": "{authorName} has created a duplicated of this file into {nameVarious}.",
+  "audit_action_message_copy_document_to_shared_space_other": "{authorName} đã tạo một bản sao của tệp ở nhóm làm việc {nameVarious}.",
   "@audit_action_message_copy_document_to_shared_space_other": {
     "type": "text",
     "placeholders": {
@@ -1114,47 +1114,47 @@
     "type": "text",
     "placeholders": {}
   },
-  "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
+  "second_factor_authentication_is_required_for_your_account": "Tài khoản này yêu cầu Xác thực 2 bước ",
   "@second_factor_authentication_is_required_for_your_account": {
     "type": "text",
     "placeholders": {}
   },
-  "please_enable_second_factor_authentication_to_continue": "Please enable Second factor Authentication to continue",
+  "please_enable_second_factor_authentication_to_continue": "Hãy kích hoạt xác thực 2 bước để tiếp tục sử dụng",
   "@please_enable_second_factor_authentication_to_continue": {
     "type": "text",
     "placeholders": {}
   },
-  "go_to_setup": "Go to Setup",
+  "go_to_setup": "Đến Cài đặt",
   "@go_to_setup": {
     "type": "text",
     "placeholders": {}
   },
-  "second_factor_authentication": "SECOND FACTOR AUTHENTICATION",
+  "second_factor_authentication": "Xác thực 2 bước",
   "@second_factor_authentication": {
     "type": "text",
     "placeholders": {}
   },
-  "input_6_digit_from_free_otp": "Input the 6-digit code in your FreeOTP app",
+  "input_6_digit_from_free_otp": "Điền mã code từ ứng dụng OTP của bạn",
   "@input_6_digit_from_free_otp": {
     "type": "text",
     "placeholders": {}
   },
-  "submit": "Submit",
+  "submit": "Gửi",
   "@submit": {
     "type": "text",
     "placeholders": {}
   },
-  "please_fill_up_all_numbers": "Please fill up all numbers",
+  "please_fill_up_all_numbers": "Hãy điền OTP",
   "@please_fill_up_all_numbers": {
     "type": "text",
     "placeholders": {}
   },
-  "invalid_otp": "Invalid OTP",
+  "invalid_otp": "OTP không hợp lệ",
   "@invalid_otp": {
     "type": "text",
     "placeholders": {}
   },
-  "user_locked_message": "Sorry! Your account is locked\nPlease contact the support to unlock!",
+  "user_locked_message": "Tài khoản của bạn đã bị khoá\nHãy liên hệ với quản trị viên để được hỗ trợ!",
   "@user_locked_message": {
     "type": "text",
     "placeholders": {}
@@ -1224,12 +1224,12 @@
       "nodeName": {}
     }
   },
-  "add_team_members": "Add team members",
+  "add_team_members": "Thêm thành viên",
   "@add_team_members": {
     "type": "text",
     "placeholders": {}
   },
-  "existing_members": "{nbMembers,plural, =1{Existing member: {nbMembers}}other{Existing members: {nbMembers}}}",
+  "existing_members": "{nbMembers,plural, =1{Thành viên: {nbMembers}}other{Thành viên: {nbMembers}}}",
   "@existing_members": {
     "type": "text",
     "placeholders": {
@@ -1246,17 +1246,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "sender": "Sender",
+  "sender": "Người gửi",
   "@sender": {
     "type": "text",
     "placeholders": {}
   },
-  "search_in_my_received_shares": "Search in Received Shares",
+  "search_in_my_received_shares": "Tìm kiếm trong Đã nhận",
   "@search_in_my_received_shares": {
     "type": "text",
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_member": "Are you sure you want to delete {memberName} from {workspaceName}?",
+  "are_you_sure_you_want_to_delete_member": "Đồng ý xoá {memberName} khỏi nhóm làm việc chung {workspaceName}?",
   "@are_you_sure_you_want_to_delete_member": {
     "type": "text",
     "placeholders": {
@@ -1264,34 +1264,34 @@
       "workspaceName": {}
     }
   },
-  "user_could_not_be_removed": "The user could not be removed",
+  "user_could_not_be_removed": "Không thể loại bỏ tài khoản này",
   "@user_could_not_be_removed": {
     "type": "text",
     "placeholders": {}
   },
-  "user_is_successfully_removed": "The user is successfully removed",
+  "user_is_successfully_removed": "Tài khoản này đã bị loại bỏ",
   "@user_is_successfully_removed": {
     "type": "text",
     "placeholders": {}
   },
-  "expiration": "Expiration",
+  "expiration": "Hết hạn",
   "@expiration": {
     "type": "text",
     "placeholders": {}
   },
-  "shared_with": "{nbContacts,plural, =0{Shared with: {nbContacts} contact}=1{Shared with: {nbContacts} contact}other{Shared with: {nbContacts} contacts}}",
+  "shared_with": "{nbContacts,plural, =0{Đã chia sẻ với: {nbContacts} người}=1{Đã chia sẻ với: {nbContacts} người}other{Đã chia sẻ với: {nbContacts} người}}",
   "@shared_with": {
     "type": "text",
     "placeholders": {
       "nbContacts": {}
     }
   },
-  "modified_by": "Modified by",
+  "modified_by": "Chỉnh sửa bởi",
   "@modified_by": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication": "Biometric authentication",
+  "biometric_authentication": "Xác thực nhân trắc học",
   "@biometric_authentication": {
     "type": "text",
     "placeholders": {}
@@ -1301,48 +1301,48 @@
     "type": "text",
     "placeholders": {}
   },
-  "fingerprint": "Fingerprint",
+  "fingerprint": "Vân tay",
   "@fingerprint": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_message": "Allow {biometricKind} to secure access to this app",
+  "biometric_authentication_message": "Chấp nhận {biometricKind} để bảo mật ứng dụng",
   "@biometric_authentication_message": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "biometric_authentication_not_enrolled": "{biometricKind} must be enabled to turn on biometric authentication",
+  "biometric_authentication_not_enrolled": "Phải kích hoạt {biometricKind} để sử dụng xác thực nhân trắc học cho ứng dụng",
   "@biometric_authentication_not_enrolled": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "biometric_authentication_localized_reason_enable": "Please authenticate to enable biometric authentication for application",
+  "biometric_authentication_localized_reason_enable": "Quét để bật xác thực nhân trắc học",
   "@biometric_authentication_localized_reason_enable": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_localized_reason_disable": "Please authenticate to disable biometric authentication for application",
+  "biometric_authentication_localized_reason_disable": "Quét để tắt xác thực nhân trắc học.",
   "@biometric_authentication_localized_reason_disable": {
     "type": "text",
     "placeholders": {}
   },
-  "manage_version": "Manage version",
+  "manage_version": "Quản lý phiên bản",
   "@manage_version": {
     "type": "text",
     "placeholders": {}
   },
-  "version": "Version {version}",
+  "version": "Phiên bản {version}",
   "@version": {
     "type": "text",
     "placeholders": {
       "version": {}
     }
   },
-  "face": "Face",
+  "face": "Khuôn mặt",
   "@face": {
     "type": "text",
     "placeholders": {}
@@ -1352,68 +1352,68 @@
     "type": "text",
     "placeholders": {}
   },
-  "touch_id_or_face_id": "TouchID or FaceID",
+  "touch_id_or_face_id": "TouchID hoặc FaceID",
   "@touch_id_or_face_id": {
     "type": "text",
     "placeholders": {}
   },
-  "fingerprint_or_face": "Fingerprint or Face",
+  "fingerprint_or_face": "Vân tay hoặc Khuôn mặt",
   "@fingerprint_or_face": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_localized_reason": "Scan your {biometricKind} to authentication",
+  "biometric_authentication_localized_reason": "Quét {biometricKind} để xác thực",
   "@biometric_authentication_localized_reason": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "biometric_disabled_in_setting_app": "Please enable {biometricKind} in the Settings app on your phone to use biometric authentication",
+  "biometric_disabled_in_setting_app": "Hãy kích hoạt {biometricKind} trong cài đặt",
   "@biometric_disabled_in_setting_app": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "open_with_biometric": "Open with {biometricKind}",
+  "open_with_biometric": "Mở với {biometricKind}",
   "@open_with_biometric": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "or": "Or",
+  "or": "hoặc",
   "@or": {
     "type": "text",
     "placeholders": {}
   },
-  "go_to_sign_in": "Go to Sign-In",
+  "go_to_sign_in": "Đăng nhập",
   "@go_to_sign_in": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_is_locked": "Biometric authentication is locked due to exceeded number of attempts.",
+  "biometric_authentication_is_locked": "Xác thực nhân trắc học đã bị khoá.",
   "@biometric_authentication_is_locked": {
     "type": "text",
     "placeholders": {}
   },
-  "duplicate": "Duplicate",
+  "duplicate": "Sao chép",
   "@duplicate": {
     "type": "text",
     "placeholders": {}
   },
-  "files_have_been_successfully_duplicated": "Files have been successfully duplicated",
+  "files_have_been_successfully_duplicated": "Các tệp đã được sao chép thành công",
   "@files_have_been_successfully_duplicated": {
     "type": "text",
     "placeholders": {}
   },
-  "files_could_not_be_duplicated": "The files could not be duplicated",
+  "files_could_not_be_duplicated": "Các tệp sao chép không thành công",
   "@files_could_not_be_duplicated": {
     "type": "text",
     "placeholders": {}
   },
-  "some_files_could_not_be_duplicated": "Some files could not be duplicated",
+  "some_files_could_not_be_duplicated": "Một vài tệp không được sao chép thành công",
   "@some_files_could_not_be_duplicated": {
     "type": "text",
     "placeholders": {}
