@@ -30,80 +30,54 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:redux/redux.dart';
 
-class UploadRequestGroup with EquatableMixin {
-  UploadRequestGroup(
-      this.uploadRequestGroupId,
-      this.label,
-      this.body,
-      this.creationDate,
-      this.modificationDate,
-      this.maxFileCount,
-      this.maxDepositSize,
-      this.maxFileSize,
-      this.activationDate,
-      this.notificationDate,
-      this.expiryDate,
-      this.canDelete,
-      this.canClose,
-      this.canEditExpiryDate,
-      this.protectedByPassword,
-      this.mailMessageId,
-      this.enableNotification,
-      this.collective,
-      this.owner,
-      this.status,
-      this.usedSpace,
-      this.nbrUploadedFiles
-  );
+class UploadRequestGroupViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
+  final GetAllUploadRequestGroupsInteractor _getAllUploadRequestGroupsInteractor;
 
-  final UploadRequestGroupId uploadRequestGroupId;
-  final String label;
-  final String body;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final int maxFileCount;
-  final double maxDepositSize;
-  final double maxFileSize;
-  final DateTime activationDate;
-  final DateTime notificationDate;
-  final DateTime expiryDate;
-  final bool canDelete;
-  final bool canClose;
-  final bool canEditExpiryDate;
-  final bool protectedByPassword;
-  final String mailMessageId;
-  final bool enableNotification;
-  final bool collective;
-  final GenericUser owner;
-  final UploadRequestStatus status;
-  final double usedSpace;
-  final int nbrUploadedFiles;
+  UploadRequestGroupViewModel(
+      Store<AppState> store, this._appNavigation, this._getAllUploadRequestGroupsInteractor)
+      : super(store);
+
+  void initState() {
+    getUploadRequestCreatedStatus();
+    getUploadRequestActiveClosedStatus();
+    getUploadRequestArchivedStatus();
+  }
+
+  void getUploadRequestCreatedStatus() {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartUploadRequestGroupLoadingAction());
+      store.dispatch(UploadRequestGroupGetAllCreatedAction(
+          await _getAllUploadRequestGroupsInteractor.execute([UploadRequestStatus.CREATED])));
+    }));
+  }
+
+  void getUploadRequestActiveClosedStatus() {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartUploadRequestGroupLoadingAction());
+      store.dispatch(UploadRequestGroupGetAllActiveClosedAction(
+          await _getAllUploadRequestGroupsInteractor
+              .execute([UploadRequestStatus.ENABLED, UploadRequestStatus.CLOSED])));
+    }));
+  }
+
+  void getUploadRequestArchivedStatus() {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartUploadRequestGroupLoadingAction());
+      store.dispatch(UploadRequestGroupGetAllArchivedAction(
+          await _getAllUploadRequestGroupsInteractor.execute([UploadRequestStatus.ARCHIVED])));
+    }));
+  }
 
   @override
-  List<Object> get props => [
-      uploadRequestGroupId,
-      label,
-      body,
-      creationDate,
-      modificationDate,
-      maxFileCount,
-      maxDepositSize,
-      maxFileSize,
-      activationDate,
-      notificationDate,
-      expiryDate,
-      canDelete,
-      canClose,
-      canEditExpiryDate,
-      protectedByPassword,
-      mailMessageId,
-      enableNotification,
-      collective,
-      owner,
-      status,
-      usedSpace,
-      nbrUploadedFiles
-  ];
+  void onDisposed() {
+    super.onDisposed();
+  }
 }

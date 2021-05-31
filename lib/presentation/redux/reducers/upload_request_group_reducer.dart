@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,82 +28,32 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
+import 'package:redux/redux.dart';
 
-class UploadRequestGroup with EquatableMixin {
-  UploadRequestGroup(
-      this.uploadRequestGroupId,
-      this.label,
-      this.body,
-      this.creationDate,
-      this.modificationDate,
-      this.maxFileCount,
-      this.maxDepositSize,
-      this.maxFileSize,
-      this.activationDate,
-      this.notificationDate,
-      this.expiryDate,
-      this.canDelete,
-      this.canClose,
-      this.canEditExpiryDate,
-      this.protectedByPassword,
-      this.mailMessageId,
-      this.enableNotification,
-      this.collective,
-      this.owner,
-      this.status,
-      this.usedSpace,
-      this.nbrUploadedFiles
-  );
-
-  final UploadRequestGroupId uploadRequestGroupId;
-  final String label;
-  final String body;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final int maxFileCount;
-  final double maxDepositSize;
-  final double maxFileSize;
-  final DateTime activationDate;
-  final DateTime notificationDate;
-  final DateTime expiryDate;
-  final bool canDelete;
-  final bool canClose;
-  final bool canEditExpiryDate;
-  final bool protectedByPassword;
-  final String mailMessageId;
-  final bool enableNotification;
-  final bool collective;
-  final GenericUser owner;
-  final UploadRequestStatus status;
-  final double usedSpace;
-  final int nbrUploadedFiles;
-
-  @override
-  List<Object> get props => [
-      uploadRequestGroupId,
-      label,
-      body,
-      creationDate,
-      modificationDate,
-      maxFileCount,
-      maxDepositSize,
-      maxFileSize,
-      activationDate,
-      notificationDate,
-      expiryDate,
-      canDelete,
-      canClose,
-      canEditExpiryDate,
-      protectedByPassword,
-      mailMessageId,
-      enableNotification,
-      collective,
-      owner,
-      status,
-      usedSpace,
-      nbrUploadedFiles
-  ];
-}
+final uploadRequestGroupReducer = combineReducers<UploadRequestGroupState>([
+  TypedReducer<UploadRequestGroupState, StartUploadRequestGroupLoadingAction>((UploadRequestGroupState state, _) => state.startLoadingState()),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllCreatedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllCreatedAction action) =>
+      state.setUploadRequestsCreatedList(
+          newUploadRequestsList: action.viewState.fold(
+                  (failure) => null,
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : null),
+          viewState: action.viewState)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllActiveClosedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllActiveClosedAction action) =>
+      state.setUploadRequestsActiveClosedList(
+          newUploadRequestsList: action.viewState.fold(
+                  (failure) => null,
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : null),
+          viewState: action.viewState)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllArchivedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllArchivedAction action) =>
+      state.setUploadRequestsArchivedList(
+          newUploadRequestsList: action.viewState.fold(
+                  (failure) => null,
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : null),
+          viewState: action.viewState)),
+  TypedReducer<UploadRequestGroupState, CleanUploadRequestGroupAction>((UploadRequestGroupState state, _) => state.clearViewState()),
+]);

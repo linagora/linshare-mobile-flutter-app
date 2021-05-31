@@ -44,7 +44,7 @@ part 'upload_request_group_response.g.dart';
 @UploadRequestGroupIdConverter()
 class UploadRequestGroupResponse extends Equatable {
   UploadRequestGroupResponse(
-      this.userId,
+      this.uploadRequestGroupId,
       this.label,
       this.body,
       this.creationDate,
@@ -68,7 +68,7 @@ class UploadRequestGroupResponse extends Equatable {
       this.nbrUploadedFiles);
 
   @JsonKey(name: Attribute.uuid)
-  final UploadRequestGroupId userId;
+  final UploadRequestGroupId uploadRequestGroupId;
 
   final String label;
   final String body;
@@ -98,7 +98,7 @@ class UploadRequestGroupResponse extends Equatable {
 
   @override
   List<Object> get props => [
-        userId,
+        uploadRequestGroupId,
         label,
         body,
         creationDate,
@@ -126,7 +126,7 @@ class UploadRequestGroupResponse extends Equatable {
 extension UploadRequestGroupResponseExtension on UploadRequestGroupResponse {
   UploadRequestGroup toUploadRequestGroup() {
     return UploadRequestGroup(
-        userId,
+        uploadRequestGroupId,
         label,
         body,
         creationDate,
