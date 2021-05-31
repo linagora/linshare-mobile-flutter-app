@@ -50,6 +50,7 @@ import 'package:linshare_flutter_app/presentation/widget/received/received_share
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 
 import 'home_viewmodel.dart';
 
@@ -123,6 +124,8 @@ class _HomeWidgetState extends State<HomeWidget> {
         return getIt<AccountDetailsWidget>();
       case RoutePaths.received_shares:
         return getIt<ReceivedShareWidget>();
+      case RoutePaths.uploadRequestGroup:
+        return getIt<UploadRequestGroupWidget>();
       default:
         return getIt<MySpaceWidget>();
     }

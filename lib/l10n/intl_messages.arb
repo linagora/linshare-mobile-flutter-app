@@ -1452,5 +1452,47 @@
   "@login_sso_failed": {
     "type": "text",
     "placeholders": {}
+  },
+  "upload_requests": "Upload Requests",
+  "@upload_requests": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "pending": "Pending",
+  "@pending": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "active_closed": "Active / Closed",
+  "@active_closed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "archived": "Archived",
+  "@archived": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_upload_requests_here": "Create upload requests here",
+  "@create_upload_requests_here": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "activated_date": "Activated {date}",
+  "@activated_date": {
+    "type": "text",
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "active": "Active",
+  "@active": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "expired_closed": "Expired / Closed",
+  "@expired_closed": {
+    "type": "text",
+    "placeholders": {}
   }
 }
