@@ -116,6 +116,9 @@ class AppModule {
         getIt<BiometricExceptionThrower>(),
         getIt<SharedPreferences>()));
     getIt.registerFactory(() => LocalDocumentDataSourceImpl(getIt<DocumentDatabaseManager>()));
+    getIt.registerFactory(() => UploadRequestGroupDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -143,6 +146,7 @@ class AppModule {
     getIt.registerFactory<SharedSpaceMemberDataSource>(() => getIt<SharedSpaceMemberDataSourceImpl>());
     getIt.registerFactory<SharedSpaceActivitiesDataSource>(() => getIt<SharedSpaceActivitiesDataSourceImpl>());
     getIt.registerFactory<BiometricDataSource>(() => getIt<BiometricDataSourceImpl>());
+    getIt.registerFactory<UploadRequestGroupDataSource>(() => getIt<UploadRequestGroupDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -179,6 +183,7 @@ class AppModule {
     getIt.registerFactory(() => BiometricRepositoryImpl(getIt<BiometricDataSource>()));
     getIt.registerFactory(() => LocalSharedSpaceDocumentDataSourceImpl(getIt<SharedSpaceDocumentDatabaseManager>()));
     getIt.registerFactory(() => LocalSharedSpaceDataSourceImpl(getIt<SharedSpaceDocumentDatabaseManager>()));
+    getIt.registerFactory(() => UploadRequestGroupRepositoryImpl(getIt<UploadRequestGroupDataSource>()));
   }
 
   void _provideRepository() {
@@ -198,6 +203,7 @@ class AppModule {
     getIt.registerFactory<SharedSpaceMemberRepository>(() => getIt<SharedSpaceMemberRepositoryImpl>());
     getIt.registerFactory<SharedSpaceActivitiesRepository>(() => getIt<SharedSpaceActivitiesRepositoryImpl>());
     getIt.registerFactory<BiometricRepository>(() => getIt<BiometricRepositoryImpl>());
+    getIt.registerFactory<UploadRequestGroupRepository>(() => getIt<UploadRequestGroupRepositoryImpl>());
   }
 
   void _provideInteractor() {
@@ -345,6 +351,7 @@ class AppModule {
     ));
     getIt.registerFactory(() => AutoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor(getIt<AutoSyncAvailableOfflineSharedSpaceDocumentInteractor>()));
     getIt.registerFactory(() => EnableAvailableOfflineSharedSpaceDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
+    getIt.registerFactory(() => GetAllUploadRequestGroupsInteractor(getIt<UploadRequestGroupRepository>()));
   }
 
   void _provideSharePreference() {
