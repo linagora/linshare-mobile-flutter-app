@@ -214,18 +214,18 @@ class _LoginWidgetState extends State<LoginWidget> {
         (success) => Colors.white);
     return TextStyle(color: messageColor);
   }
-  
+
   String _getErrorMessage(Failure failure) {
     if (failure is AuthenticationFailure) {
       if (failure.authenticationException is UnknownError) {
         return AppLocalizations.of(context).unknown_error_login_message;
       } else if (_checkCredentialError(failure)) {
-        return AppLocalizations.of(context).credential_error_message;
+        return _getCredentialErrorMessage(failure);
       } else if (_checkUrlError(failure)) {
         return AppLocalizations.of(context).wrong_url_message;
       }
     }
-    return AppLocalizations.of(context).unknown_error_login_message;
+    return '';
   }
 
   InputDecoration _buildUrlInputDecoration(dartz.Either<Failure, Success> viewState) {
