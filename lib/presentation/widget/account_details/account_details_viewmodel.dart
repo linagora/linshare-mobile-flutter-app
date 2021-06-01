@@ -46,16 +46,19 @@ class AccountDetailsViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final IsAvailableBiometricInteractor _isAvailableBiometricInteractor;
   final GetAuthorizedInteractor _getAuthorizedInteractor;
+  final DisableBiometricInteractor _disableBiometricInteractor;
 
   AccountDetailsViewModel(
     Store<AppState> store,
     this.deletePermanentTokenInteractor,
     this._appNavigation,
     this._isAvailableBiometricInteractor,
-    this._getAuthorizedInteractor
+    this._getAuthorizedInteractor,
+    this._disableBiometricInteractor,
   ) : super(store);
 
   void logout() {
+    store.dispatch(_resetBiometricSetting());
     store.dispatch(logoutAction());
     _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
     store.dispatch(ClearCurrentView());
@@ -99,6 +102,12 @@ class AccountDetailsViewModel extends BaseViewModel {
 
   void goToBiometricAuthentication() {
     _appNavigation.push(RoutePaths.biometricAuthenticationSetting);
+  }
+
+  ThunkAction<AppState> _resetBiometricSetting() {
+    return (Store<AppState> store) async {
+      await _disableBiometricInteractor.execute();
+    };
   }
 
   @override
