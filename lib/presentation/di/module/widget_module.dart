@@ -253,7 +253,8 @@ class WidgetModule {
       getIt.get<DeletePermanentTokenInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<IsAvailableBiometricInteractor>(),
-      getIt.get<GetAuthorizedInteractor>()
+      getIt.get<GetAuthorizedInteractor>(),
+      getIt.get<DisableBiometricInteractor>(),
     ));
   }
 
