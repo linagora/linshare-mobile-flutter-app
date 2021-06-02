@@ -134,7 +134,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "common_error_occured_message": "Произошла непредвиденная ошибка\\nПовторите загрузку или повторите попытку позже",
+  "common_error_occured_message": "Произошла непредвиденная ошибка\nПожалуйста, перезагрузите приложение или повторите попытку позже",
   "@common_error_occured_message": {
     "type": "text",
     "placeholders": {}
@@ -1109,23 +1109,8 @@
       "nameVarious": {}
     }
   },
-  "you": "You",
-  "@you": {
-    "type": "text",
-    "placeholders": {}
-  },
   "me": "Я",
   "@me": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "his": "his",
-  "@his": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "your": "your",
-  "@your": {
     "type": "text",
     "placeholders": {}
   },
@@ -1435,21 +1420,6 @@
   },
   "restore": "Восстановить",
   "@restore": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "workgroup_name_not_empty": "Workgroup name cannot be blank",
-  "@workgroup_name_not_empty": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "workgroup_name_already_exists": "Workgroup name already exists",
-  "@workgroup_name_already_exists": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "workgroup_name_contain_special_character": "Workgroup name cannot contain special characters",
-  "@workgroup_name_contain_special_character": {
     "type": "text",
     "placeholders": {}
   }
