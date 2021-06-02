@@ -134,7 +134,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "common_error_occured_message": "Unexpected error occurs\nPlease reload or try again later",
+  "common_error_occured_message": "Произошла непредвиденная ошибка\nПожалуйста, перезагрузите приложение или повторите попытку позже",
   "@common_error_occured_message": {
     "type": "text",
     "placeholders": {}
@@ -181,7 +181,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "not_have_received_yet": "View your received shares",
+  "not_have_received_yet": "Посмотреть полученные вами файлы",
   "@not_have_received_yet": {
     "type": "text",
     "placeholders": {}
@@ -599,181 +599,181 @@
     "type": "text",
     "placeholders": {}
   },
-  "modification_date": "Modification date",
+  "modification_date": "Дата изменения",
   "@modification_date": {
     "type": "text",
     "placeholders": {}
   },
-  "creation_date": "Creation date",
+  "creation_date": "Дата создания",
   "@creation_date": {
     "type": "text",
     "placeholders": {}
   },
-  "size": "Size",
+  "size": "Размер",
   "@size": {
     "type": "text",
     "placeholders": {}
   },
-  "name": "Name",
+  "name": "Имя",
   "@name": {
     "type": "text",
     "placeholders": {}
   },
-  "shared": "Shared",
+  "shared": "Полученные",
   "@shared": {
     "type": "text",
     "placeholders": {}
   },
-  "order_by": "Order by",
+  "order_by": "Сортировать по",
   "@order_by": {
     "type": "text",
     "placeholders": {}
   },
-  "details": "Details",
+  "details": "Информация",
   "@details": {
     "type": "text",
     "placeholders": {}
   },
-  "members": "Members",
+  "members": "Участники",
   "@members": {
     "type": "text",
     "placeholders": {}
   },
-  "modified": "Modified",
+  "modified": "Изменен",
   "@modified": {
     "type": "text",
     "placeholders": {}
   },
-  "created": "Created",
+  "created": "Создан",
   "@created": {
     "type": "text",
     "placeholders": {}
   },
-  "my_rights": "My rights",
+  "my_rights": "Мои права",
   "@my_rights": {
     "type": "text",
     "placeholders": {}
   },
-  "max_file_size": "Max file size",
+  "max_file_size": "Максимальный размер файла",
   "@max_file_size": {
     "type": "text",
     "placeholders": {}
   },
-  "description": "Description",
+  "description": "Описание",
   "@description": {
     "type": "text",
     "placeholders": {}
   },
-  "no_description": "No description",
+  "no_description": "Нет описания",
   "@no_description": {
     "type": "text",
     "placeholders": {}
   },
-  "copy_to": "Copy to",
+  "copy_to": "Скопировать в",
   "@copy_to": {
     "type": "text",
     "placeholders": {}
   },
-  "admin": "Admin",
+  "admin": "Администратор",
   "@admin": {
     "type": "text",
     "placeholders": {}
   },
-  "reader": "Reader",
+  "reader": "Читатель",
   "@reader": {
     "type": "text",
     "placeholders": {}
   },
-  "contributor": "Contributor",
+  "contributor": "Соавтор",
   "@contributor": {
     "type": "text",
     "placeholders": {}
   },
-  "writer": "Writer",
+  "writer": "Автор",
   "@writer": {
     "type": "text",
     "placeholders": {}
   },
-  "unknown_role": "Unknown Role",
+  "unknown_role": "Неизвестная роль",
   "@unknown_role": {
     "type": "text",
     "placeholders": {}
   },
-  "activities": "Activities",
+  "activities": "Действия",
   "@activities": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_log_actor": "by {actorName}",
+  "audit_log_actor": "автор {actorName}",
   "@audit_log_actor": {
     "type": "text",
     "placeholders": {
       "actorName": {}
     }
   },
-  "audit_action_title_addition": "Addition:",
+  "audit_action_title_addition": "Дополнение:",
   "@audit_action_title_addition": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_delete": "Delete:",
+  "audit_action_title_delete": "Удалить:",
   "@audit_action_title_delete": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_update": "Update:",
+  "audit_action_title_update": "Обновить:",
   "@audit_action_title_update": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_create": "Creation:",
+  "audit_action_title_create": "Создание:",
   "@audit_action_title_create": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_upload": "Upload file:",
+  "audit_action_title_upload": "Загрузить файл:",
   "@audit_action_title_upload": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_copy": "Copy:",
+  "audit_action_title_copy": "Копировать:",
   "@audit_action_title_copy": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_download": "Download:",
+  "audit_action_title_download": "Загрузить:",
   "@audit_action_title_download": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_upload_revision": "Version uploaded:",
+  "audit_action_title_upload_revision": "Версия загружена:",
   "@audit_action_title_upload_revision": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_delete_revision": "Version deleted:",
+  "audit_action_title_delete_revision": "Версия удалена:",
   "@audit_action_title_delete_revision": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_restore_revision": "Restore version:",
+  "audit_action_title_restore_revision": "Восстановить версию:",
   "@audit_action_title_restore_revision": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_title_download_revision": "Version downloaded:",
+  "audit_action_title_download_revision": "Версия скачана:",
   "@audit_action_title_download_revision": {
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_message_create_workgroup_self": "You have created a new Workgroup : {resourceName}.",
+  "audit_action_message_create_workgroup_self": "Вы создали новую рабочую группу {resourceName}.",
   "@audit_action_message_create_workgroup_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_create_workgroup_other": "{authorName} has created a new Workgroup : {resourceName}.",
+  "audit_action_message_create_workgroup_other": "{authorName} создал(а) новую рабочую группу {resourceName}.",
   "@audit_action_message_create_workgroup_other": {
     "type": "text",
     "placeholders": {
@@ -781,14 +781,14 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_delete_workgroup_self": "You have deleted the Workgroup : {resourceName}.",
+  "audit_action_message_delete_workgroup_self": "Вы удалили рабочую группу {resourceName}.",
   "@audit_action_message_delete_workgroup_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_delete_workgroup_other": "{authorName} has deleted the Workgroup : {resourceName}.",
+  "audit_action_message_delete_workgroup_other": "{authorName} удалил(а) рабочую группу {resourceName}.",
   "@audit_action_message_delete_workgroup_other": {
     "type": "text",
     "placeholders": {
@@ -796,14 +796,14 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_update_workgroup_self": "You have edited the Workgroup : {resourceName}.",
+  "audit_action_message_update_workgroup_self": "Вы изменили рабочую группу {resourceName}.",
   "@audit_action_message_update_workgroup_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_update_workgroup_other": "{authorName} has edited the Workgroup : {resourceName}.",
+  "audit_action_message_update_workgroup_other": "{authorName} редактировал(а) рабочую группу: {resourceName}.",
   "@audit_action_message_update_workgroup_other": {
     "type": "text",
     "placeholders": {
@@ -811,7 +811,7 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_add_member_self": "You have added a new member : {resourceName} to the Workgroup : {nameVarious}.",
+  "audit_action_message_add_member_self": "Вы добавили нового участника {resourceName} в рабочую группу {nameVarious}.",
   "@audit_action_message_add_member_self": {
     "type": "text",
     "placeholders": {
@@ -819,7 +819,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_add_member_other": "{authorName} has added a new member : {resourceName} to the Workgroup : {nameVarious}.",
+  "audit_action_message_add_member_other": "{authorName} добавил(а) нового участника {resourceName} в рабочую группу {nameVarious}.",
   "@audit_action_message_add_member_other": {
     "type": "text",
     "placeholders": {
@@ -828,7 +828,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_member_self": "You have removed the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_delete_member_self": "Вы удалили участника {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_delete_member_self": {
     "type": "text",
     "placeholders": {
@@ -836,7 +836,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_member_other": "{authorName} has removed the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_delete_member_other": "{authorName} удалил(а) участника {resourceName} из Рабочей группы {nameVarious}.",
   "@audit_action_message_delete_member_other": {
     "type": "text",
     "placeholders": {
@@ -845,7 +845,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_member_self": "You have edited the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_update_member_self": "Вы изменили права доступа для участника {resourceName} в рабочей группе {nameVarious}.",
   "@audit_action_message_update_member_self": {
     "type": "text",
     "placeholders": {
@@ -853,7 +853,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_member_other": "{authorName} has edited the member : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_update_member_other": "{authorName} изменил(а) права доступа для участника {resourceName} в рабочей группе {nameVarious}.",
   "@audit_action_message_update_member_other": {
     "type": "text",
     "placeholders": {
@@ -862,7 +862,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_create_folder_self": "You have created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "audit_action_message_create_folder_self": "Вы создали новую папку {resourceName} в рабочей группе {nameVarious}.",
   "@audit_action_message_create_folder_self": {
     "type": "text",
     "placeholders": {
@@ -870,7 +870,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_create_folder_other": "{authorName} has created a new folder : {resourceName} into the Workgroup {nameVarious}.",
+  "audit_action_message_create_folder_other": "{authorName} создал(а) новую папку: {resourceName} в рабочей группе {nameVarious}.",
   "@audit_action_message_create_folder_other": {
     "type": "text",
     "placeholders": {
@@ -879,7 +879,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_folder_self": "You have deleted the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_delete_folder_self": "Вы удалили папку {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_delete_folder_self": {
     "type": "text",
     "placeholders": {
@@ -887,7 +887,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_folder_other": "{authorName} has deleted the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_delete_folder_other": "{authorName} удалил(а) папку {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_delete_folder_other": {
     "type": "text",
     "placeholders": {
@@ -896,7 +896,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_folder_self": "You have edited the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_update_folder_self": "Вы отредактировали папку {resourceName} в рабочей группе {nameVarious}.",
   "@audit_action_message_update_folder_self": {
     "type": "text",
     "placeholders": {
@@ -904,7 +904,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_folder_other": "{authorName} has edited the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_update_folder_other": "{authorName} отредактировал(а) папку {resourceName} в рабочей группе {nameVarious}.",
   "@audit_action_message_update_folder_other": {
     "type": "text",
     "placeholders": {
@@ -913,7 +913,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_folder_self": "You have downloaded the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_download_folder_self": "Вы загрузили папку {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_download_folder_self": {
     "type": "text",
     "placeholders": {
@@ -921,7 +921,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_folder_other": "{authorName} has downloaded the folder : {resourceName} from the Workgroup : {nameVarious}.",
+  "audit_action_message_download_folder_other": "{authorName} загрузил(а) папку {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_download_folder_other": {
     "type": "text",
     "placeholders": {
@@ -930,7 +930,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_workgroup_document_self": "You have deleted the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_delete_workgroup_document_self": "Вы удалили файл: {resourceName} из рабочей группы  {nameVarious}.",
   "@audit_action_message_delete_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -938,7 +938,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_workgroup_document_other": "{authorName} has deleted the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_delete_workgroup_document_other": "{authorName} удалил(а) файл: {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_delete_workgroup_document_other": {
     "type": "text",
     "placeholders": {
@@ -947,7 +947,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_workgroup_document_self": "You have edited the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_update_workgroup_document_self": "Вы отредактировали файл {resourceName} в рабочей группе {nameVarious}.",
   "@audit_action_message_update_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -955,7 +955,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_update_workgroup_document_other": "{authorName} has edited the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_update_workgroup_document_other": "{authorName} отредактировал(а) файл: {resourceName} в рабочей группе {nameVarious}.",
   "@audit_action_message_update_workgroup_document_other": {
     "type": "text",
     "placeholders": {
@@ -964,7 +964,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_workgroup_document_self": "You have downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_download_workgroup_document_self": "Вы скачали файл {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_download_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -972,7 +972,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_download_workgroup_document_other": "{authorName} has downloaded the file : {resourceName} from the Workgroup {nameVarious}.",
+  "audit_action_message_download_workgroup_document_other": "{authorName} скачал(а) файл {resourceName} из рабочей группы{nameVarious}.",
   "@audit_action_message_download_workgroup_document_other": {
     "type": "text",
     "placeholders": {
@@ -981,7 +981,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_upload_workgroup_document_self": "You have uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
+  "audit_action_message_upload_workgroup_document_self": "Вы загрузили новый файл {resourceName} в рабочую группу {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -989,7 +989,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_upload_workgroup_document_other": "{authorName} has uploaded a new file : {resourceName} into the Workgroup : {nameVarious}.",
+  "audit_action_message_upload_workgroup_document_other": "{authorName} загрузил(а) новый файл {resourceName} в рабочую группу {nameVarious}.",
   "@audit_action_message_upload_workgroup_document_other": {
     "type": "text",
     "placeholders": {
@@ -998,7 +998,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_personal_space_self": "You have created the document : {resourceName} into {nameVarious}, from your Personal Space.",
+  "audit_action_message_copy_document_from_personal_space_self": "Вы создали документ {resourceName} в {nameVarious}, скопировав его из своего личного пространства.",
   "@audit_action_message_copy_document_from_personal_space_self": {
     "type": "text",
     "placeholders": {
@@ -1006,7 +1006,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_personal_space_other": "{authorName} has created the document : {resourceName} into {nameVarious}, from his Personal Space.",
+  "audit_action_message_copy_document_from_personal_space_other": "{authorName} создал(а) документ {resourceName} в {nameVarious}, скопировав его из своего личного пространства.",
   "@audit_action_message_copy_document_from_personal_space_other": {
     "type": "text",
     "placeholders": {
@@ -1015,7 +1015,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_received_share_self": "You have created the document : {resourceName} into {nameVarious}, from your received shares.",
+  "audit_action_message_copy_document_from_received_share_self": "Вы создали документ {resourceName} в {nameVarious}, скопировав его из полученных вами файлов.",
   "@audit_action_message_copy_document_from_received_share_self": {
     "type": "text",
     "placeholders": {
@@ -1023,7 +1023,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_received_share_other": "{authorName} has created the document : {resourceName} into {nameVarious}, from his received shares.",
+  "audit_action_message_copy_document_from_received_share_other": "{authorName} создал(а) документ {resourceName} в {nameVarious}, скопировав его из полученных файлов.",
   "@audit_action_message_copy_document_from_received_share_other": {
     "type": "text",
     "placeholders": {
@@ -1032,14 +1032,14 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_shared_space_self": "You have created this file by copying : {resourceName} from another Workgroup.",
+  "audit_action_message_copy_document_from_shared_space_self": "Вы создали этот файл, скопировав : {resourceName} из другой рабочей группы.",
   "@audit_action_message_copy_document_from_shared_space_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_from_shared_space_other": "{authorName} has created this file by copying : {resourceName} from another Workgroup.",
+  "audit_action_message_copy_document_from_shared_space_other": "{authorName} создал(а) этот файл путем копирования {resourceName} из другой рабочей группы.",
   "@audit_action_message_copy_document_from_shared_space_other": {
     "type": "text",
     "placeholders": {
@@ -1047,14 +1047,14 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_to_personal_space_self": "You have copied the document : {resourceName} into your Personal Space.",
+  "audit_action_message_copy_document_to_personal_space_self": "Вы скопировали документ {resourceName} в свое личное пространство.",
   "@audit_action_message_copy_document_to_personal_space_self": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_to_personal_space_other": "{authorName} has copied the document : {resourceName} into his Personal Space.",
+  "audit_action_message_copy_document_to_personal_space_other": "{authorName} скопировал(а) документ:{resourceName} в свое личное пространство.",
   "@audit_action_message_copy_document_to_personal_space_other": {
     "type": "text",
     "placeholders": {
@@ -1062,14 +1062,14 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_copy_document_to_shared_space_self": "You have created a duplicated of this file into {nameVarious}.",
+  "audit_action_message_copy_document_to_shared_space_self": "Вы создали копию этого файла в {nameVarious}.",
   "@audit_action_message_copy_document_to_shared_space_self": {
     "type": "text",
     "placeholders": {
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_to_shared_space_other": "{authorName} has created a duplicated of this file into {nameVarious}.",
+  "audit_action_message_copy_document_to_shared_space_other": "{authorName} создал(а) копию этого файла в {nameVarious}.",
   "@audit_action_message_copy_document_to_shared_space_other": {
     "type": "text",
     "placeholders": {
@@ -1077,7 +1077,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_upload_revision": "A version of the file {resourceName} has been added in the workgroup {nameVarious}.",
+  "audit_action_message_upload_revision": "Версия файла {resourceName} была добавлена в рабочую группу {nameVarious}.",
   "@audit_action_message_upload_revision": {
     "type": "text",
     "placeholders": {
@@ -1085,7 +1085,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_revision": "The version of the file {resourceName} had been removed from the workgroup {nameVarious}.",
+  "audit_action_message_delete_revision": "Версия файла {resourceName} была удалена из рабочей группы {nameVarious}.",
   "@audit_action_message_delete_revision": {
     "type": "text",
     "placeholders": {
@@ -1093,14 +1093,14 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_revision_from_shared_space": "The document was restore with the version {resourceName}.",
+  "audit_action_message_copy_revision_from_shared_space": "Документ был восстановлен с версии {resourceName}.",
   "@audit_action_message_copy_revision_from_shared_space": {
     "type": "text",
     "placeholders": {
       "resourceName": {}
     }
   },
-  "audit_action_message_download_revision": "{authorName} has downloaded the version : {resourceName} from the workgroup {nameVarious}.",
+  "audit_action_message_download_revision": "{authorName} загрузил(а) версию {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_download_revision": {
     "type": "text",
     "placeholders": {
@@ -1109,154 +1109,154 @@
       "nameVarious": {}
     }
   },
-  "me": "Me",
+  "me": "Я",
   "@me": {
     "type": "text",
     "placeholders": {}
   },
-  "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
+  "second_factor_authentication_is_required_for_your_account": "Для вашей учетной записи требуется двухфакторная аутентификация",
   "@second_factor_authentication_is_required_for_your_account": {
     "type": "text",
     "placeholders": {}
   },
-  "please_enable_second_factor_authentication_to_continue": "Please enable Second factor Authentication to continue",
+  "please_enable_second_factor_authentication_to_continue": "Пожалуйста, активируйте двухфакторную аутентификацию, чтобы продолжить",
   "@please_enable_second_factor_authentication_to_continue": {
     "type": "text",
     "placeholders": {}
   },
-  "go_to_setup": "Go to Setup",
+  "go_to_setup": "Перейти в настройки",
   "@go_to_setup": {
     "type": "text",
     "placeholders": {}
   },
-  "second_factor_authentication": "SECOND FACTOR AUTHENTICATION",
+  "second_factor_authentication": "ДВУХФАКТОРНАЯ АУТЕНТИФИКАЦИЯ",
   "@second_factor_authentication": {
     "type": "text",
     "placeholders": {}
   },
-  "input_6_digit_from_free_otp": "Input the 6-digit code in your FreeOTP app",
+  "input_6_digit_from_free_otp": "Введите 6-значный код в вашем приложении FreeOTP",
   "@input_6_digit_from_free_otp": {
     "type": "text",
     "placeholders": {}
   },
-  "submit": "Submit",
+  "submit": "Подтвердить",
   "@submit": {
     "type": "text",
     "placeholders": {}
   },
-  "please_fill_up_all_numbers": "Please fill up all numbers",
+  "please_fill_up_all_numbers": "Пожалуйста, введите все числа",
   "@please_fill_up_all_numbers": {
     "type": "text",
     "placeholders": {}
   },
-  "invalid_otp": "Invalid OTP",
+  "invalid_otp": "Недействительный OTP",
   "@invalid_otp": {
     "type": "text",
     "placeholders": {}
   },
-  "user_locked_message": "Sorry! Your account is locked\nPlease contact the support to unlock!",
+  "user_locked_message": "Извините, но ваша учетная запись заблокирована!\nПожалуйста, обратитесь в службу поддержки, чтобы её разблокировать.",
   "@user_locked_message": {
     "type": "text",
     "placeholders": {}
   },
-  "create_new_workgroup": "Create new workgroup",
+  "create_new_workgroup": "Создать новую рабочую группу",
   "@create_new_workgroup": {
     "type": "text",
     "placeholders": {}
   },
-  "new_workgroup": "New Workgroup",
+  "new_workgroup": "Новая рабочая группа",
   "@new_workgroup": {
     "type": "text",
     "placeholders": {}
   },
-  "create": "Create",
+  "create": "Создать",
   "@create": {
     "type": "text",
     "placeholders": {}
   },
-  "rename_node": "Rename {nodeName}",
+  "rename_node": "Переименовать {nodeName}",
   "@rename_node": {
     "type": "text",
     "placeholders": {
       "nodeName": {}
     }
   },
-  "workgroup": "Workgroup",
+  "workgroup": "Рабочая группа",
   "@workgroup": {
     "type": "text",
     "placeholders": {}
   },
-  "file": "File",
+  "file": "Файл",
   "@file": {
     "type": "text",
     "placeholders": {}
   },
-  "folder": "Folder",
+  "folder": "Папка",
   "@folder": {
     "type": "text",
     "placeholders": {}
   },
-  "node_name_not_empty": "{nodeName} name cannot be blank",
+  "node_name_not_empty": "Имя {nodeName} не может быть пустым",
   "@node_name_not_empty": {
     "type": "text",
     "placeholders": {
       "nodeName": {}
     }
   },
-  "node_name_already_exists": "{nodeName} name already exists",
+  "node_name_already_exists": "{nodeName} имя уже существует",
   "@node_name_already_exists": {
     "type": "text",
     "placeholders": {
       "nodeName": {}
     }
   },
-  "node_name_contain_special_character": "{nodeName} name cannot contain special characters",
+  "node_name_contain_special_character": "Имя {nodeName} не может содержать специальные символы",
   "@node_name_contain_special_character": {
     "type": "text",
     "placeholders": {
       "nodeName": {}
     }
   },
-  "node_name_contain_last_dot": "{nodeName} name cannot finishes by character \".\"",
+  "node_name_contain_last_dot": "Имя {nodeName} не может заканчиваться символами \".\"",
   "@node_name_contain_last_dot": {
     "type": "text",
     "placeholders": {
       "nodeName": {}
     }
   },
-  "add_team_members": "Add team members",
+  "add_team_members": "Добавить участников команды",
   "@add_team_members": {
     "type": "text",
     "placeholders": {}
   },
-  "existing_members": "{nbMembers,plural, =1{Existing member: {nbMembers}}other{Existing members: {nbMembers}}}",
+  "existing_members": "{nbMembers,plural, =1{Существующий участник: {nbMembers}}other{Существующие участники: {nbMembers}}}",
   "@existing_members": {
     "type": "text",
     "placeholders": {
       "nbMembers": {}
     }
   },
-  "the_file_has_been_successfully_renamed": "The file has been successfully renamed",
+  "the_file_has_been_successfully_renamed": "Файл был успешно переименован",
   "@the_file_has_been_successfully_renamed": {
     "type": "text",
     "placeholders": {}
   },
-  "the_file_could_not_be_renamed": "The file could not be renamed",
+  "the_file_could_not_be_renamed": "Не удалось переименовать файл",
   "@the_file_could_not_be_renamed": {
     "type": "text",
     "placeholders": {}
   },
-  "sender": "Sender",
+  "sender": "Отправитель",
   "@sender": {
     "type": "text",
     "placeholders": {}
   },
-  "search_in_my_received_shares": "Search in Received Shares",
+  "search_in_my_received_shares": "Искать в полученных файлах",
   "@search_in_my_received_shares": {
     "type": "text",
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_member": "Are you sure you want to delete {memberName} from {workspaceName}?",
+  "are_you_sure_you_want_to_delete_member": "Вы действительно хотите удалить {memberName} из {workspaceName}?",
   "@are_you_sure_you_want_to_delete_member": {
     "type": "text",
     "placeholders": {
@@ -1264,34 +1264,34 @@
       "workspaceName": {}
     }
   },
-  "user_could_not_be_removed": "The user could not be removed",
+  "user_could_not_be_removed": "Невозможно удалить пользователя",
   "@user_could_not_be_removed": {
     "type": "text",
     "placeholders": {}
   },
-  "user_is_successfully_removed": "The user is successfully removed",
+  "user_is_successfully_removed": "Пользователь успешно удален",
   "@user_is_successfully_removed": {
     "type": "text",
     "placeholders": {}
   },
-  "expiration": "Expiration",
+  "expiration": "Срок действия",
   "@expiration": {
     "type": "text",
     "placeholders": {}
   },
-  "shared_with": "{nbContacts,plural, =0{Shared with: {nbContacts} contact}=1{Shared with: {nbContacts} contact}other{Shared with: {nbContacts} contacts}}",
+  "shared_with": "{nbContacts,plural, =0{Отправлено {nbContacts} контакту}=1{Отправлено {nbContacts} контакту}other{Отправлено {nbContacts} контактам}}",
   "@shared_with": {
     "type": "text",
     "placeholders": {
       "nbContacts": {}
     }
   },
-  "modified_by": "Modified by",
+  "modified_by": "Изменено",
   "@modified_by": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication": "Biometric authentication",
+  "biometric_authentication": "Биометрическая аутентификация",
   "@biometric_authentication": {
     "type": "text",
     "placeholders": {}
@@ -1301,48 +1301,48 @@
     "type": "text",
     "placeholders": {}
   },
-  "fingerprint": "Fingerprint",
+  "fingerprint": "Отпечаток пальца",
   "@fingerprint": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_message": "Allow {biometricKind} to secure access to this app",
+  "biometric_authentication_message": "Разрешить {biometricKind} безопасный доступ к этому приложению",
   "@biometric_authentication_message": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "biometric_authentication_not_enrolled": "{biometricKind} must be enabled to turn on biometric authentication",
+  "biometric_authentication_not_enrolled": "Функция {biometricKind} должна быть включена, чтобы активировать биометрическую аутентификацию",
   "@biometric_authentication_not_enrolled": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "biometric_authentication_localized_reason_enable": "Please authenticate to enable biometric authentication for application",
+  "biometric_authentication_localized_reason_enable": "Пожалуйста, авторизуйтесь, чтобы включить биометрическую аутентификацию для приложения",
   "@biometric_authentication_localized_reason_enable": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_localized_reason_disable": "Please authenticate to disable biometric authentication for application",
+  "biometric_authentication_localized_reason_disable": "Пожалуйста, авторизуйтесь, чтобы отключить биометрическую аутентификацию для приложения",
   "@biometric_authentication_localized_reason_disable": {
     "type": "text",
     "placeholders": {}
   },
-  "manage_version": "Manage version",
+  "manage_version": "Управление версией",
   "@manage_version": {
     "type": "text",
     "placeholders": {}
   },
-  "version": "Version {version}",
+  "version": "Версия {версия}",
   "@version": {
     "type": "text",
     "placeholders": {
       "version": {}
     }
   },
-  "face": "Face",
+  "face": "Лицо",
   "@face": {
     "type": "text",
     "placeholders": {}
@@ -1352,73 +1352,73 @@
     "type": "text",
     "placeholders": {}
   },
-  "touch_id_or_face_id": "TouchID or FaceID",
+  "touch_id_or_face_id": "TouchID или FaceID",
   "@touch_id_or_face_id": {
     "type": "text",
     "placeholders": {}
   },
-  "fingerprint_or_face": "Fingerprint or Face",
+  "fingerprint_or_face": "По отпечатку пальца или лицу",
   "@fingerprint_or_face": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_localized_reason": "Scan your {biometricKind} to authentication",
+  "biometric_authentication_localized_reason": "Просканируйте свой {biometricKind} для аутентификации",
   "@biometric_authentication_localized_reason": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "biometric_disabled_in_setting_app": "Please enable {biometricKind} in the Settings app on your phone to use biometric authentication",
+  "biometric_disabled_in_setting_app": "Пожалуйста, включите функцию {biometricKind} в настройках своего телефона, чтобы использовать биометрическую аутентификацию",
   "@biometric_disabled_in_setting_app": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "open_with_biometric": "Open with {biometricKind}",
+  "open_with_biometric": "Открыть с помощью {biometricKind}",
   "@open_with_biometric": {
     "type": "text",
     "placeholders": {
       "biometricKind": {}
     }
   },
-  "or": "Or",
+  "or": "Или",
   "@or": {
     "type": "text",
     "placeholders": {}
   },
-  "go_to_sign_in": "Go to Sign-In",
+  "go_to_sign_in": "Перейти к входу",
   "@go_to_sign_in": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_is_locked": "Biometric authentication is locked due to exceeded number of attempts.",
+  "biometric_authentication_is_locked": "Биометрическая аутентификация заблокирована из-за превышенного количества попыток.",
   "@biometric_authentication_is_locked": {
     "type": "text",
     "placeholders": {}
   },
-  "duplicate": "Duplicate",
+  "duplicate": "Дублировать",
   "@duplicate": {
     "type": "text",
     "placeholders": {}
   },
-  "files_have_been_successfully_duplicated": "Files have been successfully duplicated",
+  "files_have_been_successfully_duplicated": "Файлы были успешно дублированы",
   "@files_have_been_successfully_duplicated": {
     "type": "text",
     "placeholders": {}
   },
-  "files_could_not_be_duplicated": "The files could not be duplicated",
+  "files_could_not_be_duplicated": "Файлы не могут быть продублированы",
   "@files_could_not_be_duplicated": {
     "type": "text",
     "placeholders": {}
   },
-  "some_files_could_not_be_duplicated": "Some files could not be duplicated",
+  "some_files_could_not_be_duplicated": "Некоторые файлы не могут быть продублированы",
   "@some_files_could_not_be_duplicated": {
     "type": "text",
     "placeholders": {}
   },
-  "restore": "Restore",
+  "restore": "Восстановить",
   "@restore": {
     "type": "text",
     "placeholders": {}
