@@ -40,8 +40,8 @@ import '../../mock/repository/mock_shared_space_document_repository.dart';
 
 void main() {
   group('restore_work_group_document_version_interactor tests', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    RestoreWorkGroupDocumentVersionInteractor restoreWorkGroupDocumentVersionInteractor;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late RestoreWorkGroupDocumentVersionInteractor restoreWorkGroupDocumentVersionInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();

@@ -85,7 +85,7 @@ class LinShareHttpClient {
       String userName,
       String password,
       PermanentTokenBodyRequest bodyRequest,
-      {OTPCode otpCode}) async {
+      {OTPCode? otpCode}) async {
     final basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
 
     final headerParam = _dioClient.getHeaders();

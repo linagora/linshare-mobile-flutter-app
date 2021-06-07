@@ -35,9 +35,6 @@ extension StringExtension on String {
       toLowerCase().compareTo(value.toLowerCase()) * (orderType == OrderType.ascending ? -1 : 1);
 
   bool isIntegerNumber() {
-    if (this == null) {
-      return false;
-    }
     return int.tryParse(this) != null;
   }
 
