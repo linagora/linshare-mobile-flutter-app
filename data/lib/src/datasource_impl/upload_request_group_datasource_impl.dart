@@ -37,6 +37,7 @@ import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:data/src/network/model/response/upload_request_group_response.dart';
+import 'package:data/src/network/model/response/upload_request_response.dart';
 
 class UploadRequestGroupDataSourceImpl implements UploadRequestGroupDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -51,10 +52,26 @@ class UploadRequestGroupDataSourceImpl implements UploadRequestGroupDataSource {
       return uploadRequestGroupResponse.map((uploadRequestGroup) => uploadRequestGroup.toUploadRequestGroup()).toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response.statusCode == 404) {
+        if (error.response?.statusCode == 404) {
           throw UploadRequestGroupsNotFound();
         } else {
-          throw UnknownError(error.response.statusMessage);
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId id, {List<UploadRequestStatus>? status}) {
+    return Future.sync(() async {
+      final uploadRequestResponse = await _linShareHttpClient.getAllUploadRequests(id, status: status);
+      return uploadRequestResponse.map((uploadRequest) => uploadRequest.toUploadRequest()).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestGroupIdNotFound();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
         }
       });
     });

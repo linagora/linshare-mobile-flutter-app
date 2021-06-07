@@ -106,3 +106,28 @@ final uploadRequest1 = UploadRequest(
     true,
     true,
     1);
+
+final uploadRequestResponse1 = UploadRequestResponse(
+    UploadRequestId("b66f2949-78fd-46f4-bb3b-471bebbc156e"),
+    UploadRequestAccountDto("John", "Doe", "user1@linshare.org"),
+    {},
+    DateTime.fromMillisecondsSinceEpoch(1614012444561),
+    DateTime.fromMillisecondsSinceEpoch(1621702801324),
+    DateTime.fromMillisecondsSinceEpoch(1614012444619),
+    DateTime.fromMillisecondsSinceEpoch(1621702044569),
+    DateTime.fromMillisecondsSinceEpoch(1619974044569),
+    "external1@linshare.org",
+    UploadRequestStatus.CLOSED,
+    10,
+    500000000,
+    null,
+    true,
+    true,
+    "",
+    false,
+    false,
+    {},
+    true,
+    true,
+    true,
+    1);

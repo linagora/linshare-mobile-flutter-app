@@ -95,6 +95,8 @@ export 'src/local/model/data_source_type.dart';
 export 'src/local/model/shared_space_cache.dart';
 export 'src/local/model/work_group_node_cache.dart';
 export 'src/network/model/response/upload_request_group_response.dart';
+export 'src/network/model/response/upload_request_response.dart';
+export 'src/network/model/upload_request/upload_request_account_dto.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';

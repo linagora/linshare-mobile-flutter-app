@@ -33,4 +33,6 @@ import 'package:domain/domain.dart';
 
 abstract class UploadRequestGroupDataSource {
   Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status);
+  Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId id,
+      {List<UploadRequestStatus>? status});
 }

@@ -29,124 +29,135 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/data.dart';
 import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/upload_request_group_id_converter.dart';
+import 'package:data/src/network/model/converter/upload_request_id_converter.dart';
+import 'package:data/src/network/model/upload_request/upload_request_account_dto.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/upload_request/upload_request_id.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'upload_request_group_response.g.dart';
+part 'upload_request_response.g.dart';
 
 @JsonSerializable()
 @DatetimeConverter()
-@UploadRequestGroupIdConverter()
-class UploadRequestGroupResponse extends Equatable {
-  UploadRequestGroupResponse(
-      this.uploadRequestGroupId,
-      this.label,
-      this.body,
-      this.creationDate,
+@UploadRequestIdConverter()
+class UploadRequestResponse extends Equatable {
+  UploadRequestResponse(
+      this.uploadRequestId,
+      this.owner,
+      this.recipients,
+      this.activationDate,
       this.modificationDate,
+      this.creationDate,
+      this.expiryDate,
+      this.notificationDate,
+      this.label,
+      this.status,
       this.maxFileCount,
       this.maxDepositSize,
       this.maxFileSize,
-      this.activationDate,
-      this.notificationDate,
-      this.expiryDate,
-      this.canDelete,
+      this.canDeleteDocument,
       this.canClose,
-      this.canEditExpiryDate,
+      this.body,
+      this.pristine,
       this.protectedByPassword,
-      this.mailMessageId,
+      this.extensions,
       this.enableNotification,
+      this.canEditExpiryDate,
       this.collective,
-      this.owner,
-      this.status,
-      this.usedSpace,
-      this.nbrUploadedFiles);
+      this.nbrUploadedFiles
+  );
 
   @JsonKey(name: Attribute.uuid)
-  final UploadRequestGroupId uploadRequestGroupId;
+  final UploadRequestId uploadRequestId;
 
-  final String label;
-  final String body;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final int maxFileCount;
-  final double maxDepositSize;
-  final double maxFileSize;
+  final UploadRequestAccountDto owner;
+  final Set<UploadRequestAccountDto> recipients;
   final DateTime activationDate;
-  final DateTime notificationDate;
+  final DateTime modificationDate;
+  final DateTime creationDate;
+
+  // could be null
   final DateTime expiryDate;
-  final bool canDelete;
-  final bool canClose;
-  final bool canEditExpiryDate;
-  final bool protectedByPassword;
-  final String mailMessageId;
-  final bool enableNotification;
-  final bool collective;
-  final GenericUserDto owner;
+  final DateTime notificationDate;
+  final String label;
   final UploadRequestStatus status;
-  final double? usedSpace;
+  final int maxFileCount;
+  final double? maxDepositSize;
+  final double? maxFileSize;
+  final bool canDeleteDocument;
+  final bool canClose;
+  final String? body;
+  final bool isClosed = false;
+  final bool pristine;
+  final bool protectedByPassword;
+  final double usedSpace = 0;
+  final Set<String>? extensions;
+  final bool enableNotification;
+  final bool canEditExpiryDate;
+  final bool collective;
   final int nbrUploadedFiles;
 
-  factory UploadRequestGroupResponse.fromJson(Map<String, dynamic> json) =>
-      _$UploadRequestGroupResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$UploadRequestGroupResponseToJson(this);
+  factory UploadRequestResponse.fromJson(Map<String, dynamic> json) =>
+      _$UploadRequestResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$UploadRequestResponseToJson(this);
 
   @override
   List<Object?> get props => [
-        uploadRequestGroupId,
-        label,
-        body,
-        creationDate,
-        modificationDate,
-        maxFileCount,
-        maxDepositSize,
-        maxFileSize,
-        activationDate,
-        notificationDate,
-        expiryDate,
-        canDelete,
-        canClose,
-        canEditExpiryDate,
-        protectedByPassword,
-        mailMessageId,
-        enableNotification,
-        collective,
-        owner,
-        status,
-        usedSpace,
-        nbrUploadedFiles
-      ];
+      uploadRequestId,
+      owner,
+      recipients,
+      activationDate,
+      modificationDate,
+      creationDate,
+      expiryDate,
+      notificationDate,
+      label,
+      status,
+      maxFileCount,
+      maxDepositSize,
+      maxFileSize,
+      canDeleteDocument,
+      canClose,
+      body,
+      pristine,
+      protectedByPassword,
+      extensions,
+      enableNotification,
+      canEditExpiryDate,
+      collective,
+      nbrUploadedFiles
+  ];
 }
 
-extension UploadRequestGroupResponseExtension on UploadRequestGroupResponse {
-  UploadRequestGroup toUploadRequestGroup() {
-    return UploadRequestGroup(
-        uploadRequestGroupId,
-        label,
-        body,
-        creationDate,
-        modificationDate,
-        maxFileCount,
-        maxDepositSize,
-        maxFileSize,
-        activationDate,
-        notificationDate,
-        expiryDate,
-        canDelete,
-        canClose,
-        canEditExpiryDate,
-        protectedByPassword,
-        mailMessageId,
-        enableNotification,
-        collective,
-        owner.toGenericUser(),
-        status,
-        usedSpace,
-        nbrUploadedFiles);
+extension UploadRequestResponseExtension on UploadRequestResponse {
+  UploadRequest toUploadRequest() {
+    return UploadRequest(
+      uploadRequestId,
+      owner.toUploadRequestAccount(),
+      recipients.map((recipient) => recipient.toUploadRequestAccount()).toSet(),
+      activationDate,
+      modificationDate,
+      creationDate,
+      expiryDate,
+      notificationDate,
+      label,
+      status,
+      maxFileCount,
+      maxDepositSize,
+      maxFileSize,
+      canDeleteDocument,
+      canClose,
+      body,
+      pristine,
+      protectedByPassword,
+      extensions,
+      enableNotification,
+      canEditExpiryDate,
+      collective,
+      nbrUploadedFiles
+    );
   }
 }

@@ -30,21 +30,17 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/datasource/upload_request_group_datasource.dart';
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class UploadRequestGroupRepositoryImpl implements UploadRequestGroupRepository {
-  final UploadRequestGroupDataSource _uploadRequestGroupDataSource;
-
-  UploadRequestGroupRepositoryImpl(this._uploadRequestGroupDataSource);
-
-  @override
-  Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status) {
-    return _uploadRequestGroupDataSource.getUploadRequestGroups(status);
-  }
+class UploadRequestIdConverter implements JsonConverter<UploadRequestId, String> {
+  const UploadRequestIdConverter();
 
   @override
-  Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId id, {List<UploadRequestStatus>? status}) {
-    return _uploadRequestGroupDataSource.getAllUploadRequests(id, status: status);
-  }
+  UploadRequestId fromJson(String json) => UploadRequestId(json);
+
+  @override
+  String toJson(UploadRequestId object) => jsonEncode(object.uuid);
 }

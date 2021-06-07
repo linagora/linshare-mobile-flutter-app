@@ -44,9 +44,9 @@ void main() {
 
 void getAllUploadRequestGroupsTest() {
   group('upload_request_group_datasource_impl getAll test', () {
-    MockLinShareHttpClient _linShareHttpClient;
+    late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
+    late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
@@ -64,8 +64,10 @@ void getAllUploadRequestGroupsTest() {
       expect(result, [uploadRequestGroupResponse1.toUploadRequestGroup()]);
     });
 
-    test('getAllUploadRequestGroups should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
-      final error = DioError(type: DioErrorType.RESPONSE, response: Response(statusCode: 400));
+    test(
+        'getAllUploadRequestGroups should throw MissingRequiredFields when linShareHttpClient response error with 400',
+        () async {
+      final error = DioError(type: DioErrorType.response, response: Response(statusCode: 400, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: ''));
 
       when(_linShareHttpClient.getAllUploadRequestGroups([UploadRequestStatus.CREATED]))
           .thenThrow(error);
@@ -73,6 +75,41 @@ void getAllUploadRequestGroupsTest() {
       await _uploadRequestGroupDataSourceImpl
           .getUploadRequestGroups([UploadRequestStatus.CREATED]).catchError(
               (error) => expect(error, isA<MissingRequiredFields>()));
+    });
+  });
+
+  group('upload_request_group_datasource_impl getAllUploadRequests test', () {
+    late MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
+
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _uploadRequestGroupDataSourceImpl =
+          UploadRequestGroupDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
+    });
+
+    test('getAllUploadRequests should return success with valid data', () async {
+      when(_linShareHttpClient.getAllUploadRequests(uploadRequestGroup1.uploadRequestGroupId, status: [UploadRequestStatus.CREATED]))
+          .thenAnswer((_) async => [uploadRequestResponse1]);
+
+      final result = await _uploadRequestGroupDataSourceImpl
+          .getAllUploadRequests(uploadRequestGroup1.uploadRequestGroupId, status: [UploadRequestStatus.CREATED]);
+      expect(result, [uploadRequestResponse1.toUploadRequest()]);
+    });
+
+    test(
+        'getAllUploadRequests should throw MissingRequiredFields when linShareHttpClient response error with 400',
+        () async {
+      final error = DioError(type: DioErrorType.response, response: Response(statusCode: 400, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: ''));
+
+      when(_linShareHttpClient.getAllUploadRequests(uploadRequestGroup1.uploadRequestGroupId, status: [UploadRequestStatus.CREATED]))
+          .thenThrow(error);
+
+      await _uploadRequestGroupDataSourceImpl
+          .getAllUploadRequests(uploadRequestGroup1.uploadRequestGroupId, status: [UploadRequestStatus.CREATED])
+          .catchError((error) => expect(error, isA<MissingRequiredFields>()));
     });
   });
 }

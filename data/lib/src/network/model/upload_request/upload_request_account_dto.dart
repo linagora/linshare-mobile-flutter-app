@@ -30,21 +30,30 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/datasource/upload_request_group_datasource.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:testshared/testshared.dart';
 
-class UploadRequestGroupRepositoryImpl implements UploadRequestGroupRepository {
-  final UploadRequestGroupDataSource _uploadRequestGroupDataSource;
+part 'upload_request_account_dto.g.dart';
 
-  UploadRequestGroupRepositoryImpl(this._uploadRequestGroupDataSource);
+@JsonSerializable()
+class UploadRequestAccountDto with EquatableMixin {
+  final String firstName;
+  final String lastName;
+  final String mail;
+
+  UploadRequestAccountDto(this.firstName, this.lastName, this.mail);
+
+  factory UploadRequestAccountDto.fromJson(Map<String, dynamic> json) =>
+      _$UploadRequestAccountDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UploadRequestAccountDtoToJson(this);
 
   @override
-  Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status) {
-    return _uploadRequestGroupDataSource.getUploadRequestGroups(status);
-  }
+  List<Object> get props => [firstName, lastName, mailListId];
+}
 
-  @override
-  Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId id, {List<UploadRequestStatus>? status}) {
-    return _uploadRequestGroupDataSource.getAllUploadRequests(id, status: status);
-  }
+extension UploadRequestAccountDtoExtension on UploadRequestAccountDto {
+  UploadRequestAccount toUploadRequestAccount() => UploadRequestAccount(firstName, lastName, mail);
 }

@@ -37,6 +37,7 @@ class Endpoint {
   static final String download = '/download';
   static final String nodes = '/nodes';
   static final String thumbnail = '/thumbnail';
+  static final String uploadRequests = '/upload_requests';
 
   static final ServicePath authentication = ServicePath('/jwt');
 
