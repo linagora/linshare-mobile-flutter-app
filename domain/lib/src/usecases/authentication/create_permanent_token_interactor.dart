@@ -40,7 +40,7 @@ class CreatePermanentTokenInteractor {
 
   CreatePermanentTokenInteractor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
 
-  Future<Either<Failure, Success>> execute(Uri baseUrl, UserName userName, Password password, {OTPCode otpCode}) async {
+  Future<Either<Failure, Success>> execute(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
     try {
       final token = await authenticationRepository.createPermanentToken(baseUrl, userName, password, otpCode: otpCode);
       await tokenRepository.persistToken(token);

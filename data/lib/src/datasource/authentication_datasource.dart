@@ -46,7 +46,7 @@ class AuthenticationDataSource {
 
   AuthenticationDataSource(this.linShareHttpClient, this.deviceManager, this._remoteExceptionThrower);
 
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode otpCode}) async {
+  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
     return Future.sync(() async {
       final deviceUUID = await deviceManager.getDeviceUUID();
       final permanentToken = await linShareHttpClient.createPermanentToken(
@@ -59,7 +59,8 @@ class AuthenticationDataSource {
     }).catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
           if (error.response?.statusCode == 401) {
-            final authErrorCode = LinShareErrorCode(int.tryParse(error.response.headers.value(Constant.linShareAuthErrorCode)) ?? 1);
+            final errorCode = error.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
+            final authErrorCode = LinShareErrorCode(int.tryParse(errorCode) ?? 1);
             if (isAuthenticateWithOTPError(authErrorCode)) {
               throw NeedAuthenticateWithOTP();
             } else if (isAuthenticateErrorUserLocked(authErrorCode)) {

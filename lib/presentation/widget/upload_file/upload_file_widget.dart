@@ -88,7 +88,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           key: Key('upload_file_arrow_back_button'),

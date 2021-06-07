@@ -97,7 +97,7 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
       name ?? '',
       nodeType,
       quotaId,
-      versioningParameters != null ? versioningParameters.toVersioningParameter() : VersioningParameter.initial()
+      versioningParameters != null ? versioningParameters!.toVersioningParameter() : VersioningParameter.initial()
     );
   }
 }
