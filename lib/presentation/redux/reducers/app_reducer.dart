@@ -83,7 +83,6 @@ AppState appStateReducer(AppState state, action) {
         biometricAuthenticationSettingState: biometricAuthenticationSettingReducer(state.biometricAuthenticationSettingState, action),
         biometricAuthenticationLoginState: biometricAuthenticationLoginReducer(state.biometricAuthenticationLoginState, action),
         sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action));
-        biometricAuthenticationSettingState: biometricAuthenticationSettingReducer(state.biometricAuthenticationSettingState, action));
   }
 
   return AppState(
@@ -111,7 +110,6 @@ AppState appStateReducer(AppState state, action) {
       biometricAuthenticationSettingState: state.biometricAuthenticationSettingState,
       biometricAuthenticationLoginState: state.biometricAuthenticationLoginState,
       sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState);
-      biometricAuthenticationSettingState: state.biometricAuthenticationSettingState);
 }
 
 bool canExecuteAction(AppState state, action) {

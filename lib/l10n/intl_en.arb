@@ -1114,11 +1114,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "your": "your",
-  "@your": {
-    "type": "text",
-    "placeholders": {}
-  },
   "second_factor_authentication_is_required_for_your_account": "Second factor Authentication is required for your account",
   "@second_factor_authentication_is_required_for_your_account": {
     "type": "text",
@@ -1290,36 +1285,6 @@
     "placeholders": {
       "nbContacts": {}
     }
-  },
-  "biometric_authentication_localized_reason_enable": "Please authenticate to enable biometric authentication for application",
-  "@biometric_authentication_localized_reason_enable": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "biometric_authentication_localized_reason_disable": "Please authenticate to disable biometric authentication for application",
-  "@biometric_authentication_localized_reason_disable": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "files_have_been_successfully_duplicated": "Files have been successfully duplicated",
-  "@files_have_been_successfully_duplicated": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "files_could_not_be_duplicated": "The files could not be duplicated",
-  "@files_could_not_be_duplicated": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "some_files_could_not_be_duplicated": "Some files could not be duplicated",
-  "@some_files_could_not_be_duplicated": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "restore": "Restore",
-  "@restore": {
-    "type": "text",
-    "placeholders": {}
   },
   "modified_by": "Modified by",
   "@modified_by": {

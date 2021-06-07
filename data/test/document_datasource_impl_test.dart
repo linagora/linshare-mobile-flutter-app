@@ -413,14 +413,15 @@ void getDocumentTest() {
 
 void editDescriptionDocumentTest() {
   group('edit description document test', () {
-    MockLinShareHttpClient _linShareHttpClient;
+    late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    DocumentDataSourceImpl _documentDataSourceImpl;
+    late DocumentDataSourceImpl _documentDataSourceImpl;
     MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _linShareDownloadManager = MockLinShareDownloadManager();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
           _remoteExceptionThrower,
@@ -437,8 +438,8 @@ void editDescriptionDocumentTest() {
 
     test('edit description document should throw DataNotFound when linShareHttpClient response error with 404', () async {
       final error = DioError(
-          type: DioErrorType.RESPONSE,
-          response: Response(statusCode: 404)
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       when(_linShareHttpClient.editDescriptionDocument(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description')))

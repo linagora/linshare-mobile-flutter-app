@@ -32,14 +32,13 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
 
 class DuplicateMultipleFilesInMySpaceInteractor {
   final CopyToMySpaceInteractor _copyToMySpaceInteractor;
 
   DuplicateMultipleFilesInMySpaceInteractor(this._copyToMySpaceInteractor);
 
-  Future<Either<Failure, Success>> execute({@required List<Document> documents}) async {
+  Future<Either<Failure, Success>> execute({required List<Document> documents}) async {
     final copyRequestsList = documents.map((document) => document.toCopyRequest()).toList();
     final listResult = await Future.wait(copyRequestsList.map((element) =>
         _copyToMySpaceInteractor.execute(element)));
