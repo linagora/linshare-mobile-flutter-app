@@ -115,7 +115,7 @@ dependencies:
   # open_file
   open_file: 3.2.0
   # url_launcher
-  url_launcher: 5.7.10
+  url_launcher: 6.0.6
 
   # pin_code
   pin_code_fields: 6.1.0
