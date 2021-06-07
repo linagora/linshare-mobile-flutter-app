@@ -40,8 +40,8 @@ import '../../mock/repository/mock_upload_request_group_repository.dart';
 
 void main() {
   group('get_all_upload_request_group_interactor_test', () {
-    MockUploadRequestGroupRepository uploadRequestGroupRepository;
-    GetAllUploadRequestGroupsInteractor getAllUploadRequestGroupsInteractor;
+    late MockUploadRequestGroupRepository uploadRequestGroupRepository;
+    late GetAllUploadRequestGroupsInteractor getAllUploadRequestGroupsInteractor;
 
     setUp(() {
       uploadRequestGroupRepository = MockUploadRequestGroupRepository();

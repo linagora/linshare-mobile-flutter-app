@@ -34,12 +34,20 @@ import 'package:domain/src/usecases/remote_exception.dart';
 
 abstract class UploadRequestGroupException extends RemoteException {
   static final UploadRequestGroupsNotFound = 'Upload Request Groups not found';
+  static final UploadRequestGroupIdNotFound = 'Upload Request Group Id not found';
 
   UploadRequestGroupException(String message) : super(message);
 }
 
 class UploadRequestGroupsNotFound extends UploadRequestGroupException {
   UploadRequestGroupsNotFound() : super(UploadRequestGroupException.UploadRequestGroupsNotFound);
+
+  @override
+  List<Object> get props => [];
+}
+
+class UploadRequestGroupIdNotFound extends UploadRequestGroupException {
+  UploadRequestGroupIdNotFound() : super(UploadRequestGroupException.UploadRequestGroupIdNotFound);
 
   @override
   List<Object> get props => [];

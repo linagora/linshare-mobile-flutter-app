@@ -29,40 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+class UploadRequestId {
+  final String uuid;
 
-class UploadRequestGroupViewState extends ViewState {
-  final List<UploadRequestGroup> uploadRequestGroups;
-
-  UploadRequestGroupViewState(this.uploadRequestGroups);
-
-  @override
-  List<Object> get props => [uploadRequestGroups];
-}
-
-class UploadRequestGroupFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestGroupFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UploadRequestsViewState extends ViewState {
-  final List<UploadRequest> uploadRequest;
-
-  UploadRequestsViewState(this.uploadRequest);
-
-  @override
-  List<Object> get props => [uploadRequest];
-}
-
-class UploadRequestsFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestsFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  UploadRequestId(this.uuid);
 }

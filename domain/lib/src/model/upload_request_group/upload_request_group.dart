@@ -78,11 +78,11 @@ class UploadRequestGroup with EquatableMixin {
   final bool collective;
   final GenericUser owner;
   final UploadRequestStatus status;
-  final double usedSpace;
+  final double? usedSpace;
   final int nbrUploadedFiles;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
       uploadRequestGroupId,
       label,
       body,

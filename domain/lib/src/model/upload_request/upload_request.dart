@@ -30,39 +30,88 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/upload_request/upload_request_id.dart';
+import 'package:equatable/equatable.dart';
 
-class UploadRequestGroupViewState extends ViewState {
-  final List<UploadRequestGroup> uploadRequestGroups;
+class UploadRequest with EquatableMixin {
+  UploadRequest(
+      this.uploadRequestId,
+      this.owner,
+      this.recipients,
+      this.activationDate,
+      this.modificationDate,
+      this.creationDate,
+      this.expiryDate,
+      this.notificationDate,
+      this.label,
+      this.status,
+      this.maxFileCount,
+      this.maxDepositSize,
+      this.maxFileSize,
+      this.canDeleteDocument,
+      this.canClose,
+      this.body,
+      this.pristine,
+      this.protectedByPassword,
+      this.extensions,
+      this.enableNotification,
+      this.canEditExpiryDate,
+      this.collective,
+      this.nbrUploadedFiles
+  );
 
-  UploadRequestGroupViewState(this.uploadRequestGroups);
+  final UploadRequestId uploadRequestId;
+  final UploadRequestAccount owner;
+  final Set<UploadRequestAccount> recipients;
+  final DateTime activationDate;
+  final DateTime modificationDate;
+  final DateTime creationDate;
+
+  // could be null
+  DateTime expiryDate;
+  final DateTime notificationDate;
+  final String label;
+  final UploadRequestStatus status;
+  final int maxFileCount;
+  double? maxDepositSize;
+  double? maxFileSize;
+  final bool canDeleteDocument;
+  final bool canClose;
+  String? body;
+  final bool isClosed = false;
+  final bool pristine;
+  final bool protectedByPassword;
+  final double usedSpace = 0;
+  final Set<String>? extensions;
+  final bool enableNotification;
+  final bool canEditExpiryDate;
+  final bool collective;
+  final int nbrUploadedFiles;
 
   @override
-  List<Object> get props => [uploadRequestGroups];
-}
-
-class UploadRequestGroupFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestGroupFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UploadRequestsViewState extends ViewState {
-  final List<UploadRequest> uploadRequest;
-
-  UploadRequestsViewState(this.uploadRequest);
-
-  @override
-  List<Object> get props => [uploadRequest];
-}
-
-class UploadRequestsFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestsFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  List<Object?> get props => [
+      uploadRequestId,
+      owner,
+      recipients,
+      activationDate,
+      modificationDate,
+      creationDate,
+      expiryDate,
+      notificationDate,
+      label,
+      status,
+      maxFileCount,
+      maxDepositSize,
+      maxFileSize,
+      canDeleteDocument,
+      canClose,
+      body,
+      pristine,
+      protectedByPassword,
+      extensions,
+      enableNotification,
+      canEditExpiryDate,
+      collective,
+      nbrUploadedFiles
+  ];
 }

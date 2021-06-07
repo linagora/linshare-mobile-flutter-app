@@ -28,41 +28,55 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/fixture/upload_request_group_fixture.dart';
 
-class UploadRequestGroupViewState extends ViewState {
-  final List<UploadRequestGroup> uploadRequestGroups;
+import '../../mock/repository/mock_upload_request_group_repository.dart';
 
-  UploadRequestGroupViewState(this.uploadRequestGroups);
+void main() {
+  group('get_all_upload_request_group_interactor_test', () {
+    late MockUploadRequestGroupRepository uploadRequestGroupRepository;
+    late GetAllUploadRequestInteractor getAllUploadRequestInteractor;
 
-  @override
-  List<Object> get props => [uploadRequestGroups];
-}
+    setUp(() {
+      uploadRequestGroupRepository = MockUploadRequestGroupRepository();
+      getAllUploadRequestInteractor = GetAllUploadRequestInteractor(uploadRequestGroupRepository);
+    });
 
-class UploadRequestGroupFailure extends FeatureFailure {
-  final exception;
+    test('getAllUploadRequestInteractor should return success with upload request list', () async {
+      when(uploadRequestGroupRepository
+              .getAllUploadRequests(uploadRequestGroup1.uploadRequestGroupId, status: [UploadRequestStatus.CLOSED]))
+          .thenAnswer((_) async => [uploadRequest1]);
 
-  UploadRequestGroupFailure(this.exception);
+      final result =
+          await getAllUploadRequestInteractor.execute(uploadRequestGroup1.uploadRequestGroupId, status: [UploadRequestStatus.CLOSED]);
 
-  @override
-  List<Object> get props => [exception];
-}
+      final uploadRequestList = result
+          .map((success) => (success as UploadRequestsViewState).uploadRequest)
+          .getOrElse(() => []);
 
-class UploadRequestsViewState extends ViewState {
-  final List<UploadRequest> uploadRequest;
+      expect(uploadRequestList, containsAllInOrder([uploadRequest1]));
+    });
 
-  UploadRequestsViewState(this.uploadRequest);
+    test('getAllUploadRequestInteractor should fail when get all failed', () async {
+      final exception = Exception();
 
-  @override
-  List<Object> get props => [uploadRequest];
-}
+      when(uploadRequestGroupRepository
+              .getAllUploadRequests(uploadRequestGroup1.uploadRequestGroupId, status: [UploadRequestStatus.CREATED]))
+          .thenThrow(exception);
 
-class UploadRequestsFailure extends FeatureFailure {
-  final exception;
+      final result =
+          await getAllUploadRequestInteractor.execute(uploadRequestGroup1.uploadRequestGroupId, status: [UploadRequestStatus.CREATED]);
 
-  UploadRequestsFailure(this.exception);
+      result.fold((failure) => expect(failure, isA<UploadRequestsFailure>()),
+          (success) => expect(success, isA<UploadRequestsViewState>()));
 
-  @override
-  List<Object> get props => [exception];
+      expect(result, Left<Failure, Success>(UploadRequestsFailure(exception)));
+    });
+  });
 }

@@ -29,40 +29,23 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class UploadRequestGroupViewState extends ViewState {
-  final List<UploadRequestGroup> uploadRequestGroups;
+class UploadRequestAccount with EquatableMixin {
+  UploadRequestAccount(
+      this.firstName,
+      this.lastName,
+      this.mail,
+  );
 
-  UploadRequestGroupViewState(this.uploadRequestGroups);
-
-  @override
-  List<Object> get props => [uploadRequestGroups];
-}
-
-class UploadRequestGroupFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestGroupFailure(this.exception);
+  final String? firstName;
+  final String? lastName;
+  final String mail;
 
   @override
-  List<Object> get props => [exception];
-}
-
-class UploadRequestsViewState extends ViewState {
-  final List<UploadRequest> uploadRequest;
-
-  UploadRequestsViewState(this.uploadRequest);
-
-  @override
-  List<Object> get props => [uploadRequest];
-}
-
-class UploadRequestsFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestsFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  List<Object?> get props => [
+      firstName,
+      lastName,
+      mail,
+  ];
 }

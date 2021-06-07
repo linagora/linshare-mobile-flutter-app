@@ -28,41 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class UploadRequestGroupViewState extends ViewState {
-  final List<UploadRequestGroup> uploadRequestGroups;
+class GetAllUploadRequestInteractor {
+  final UploadRequestGroupRepository _uploadRequestGroupRepository;
 
-  UploadRequestGroupViewState(this.uploadRequestGroups);
+  GetAllUploadRequestInteractor(this._uploadRequestGroupRepository);
 
-  @override
-  List<Object> get props => [uploadRequestGroups];
-}
-
-class UploadRequestGroupFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestGroupFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UploadRequestsViewState extends ViewState {
-  final List<UploadRequest> uploadRequest;
-
-  UploadRequestsViewState(this.uploadRequest);
-
-  @override
-  List<Object> get props => [uploadRequest];
-}
-
-class UploadRequestsFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestsFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  Future<Either<Failure, Success>> execute(UploadRequestGroupId uploadRequestGroupId, {List<UploadRequestStatus>? status }) async {
+    try {
+      final uploadRequest = await _uploadRequestGroupRepository.getAllUploadRequests(uploadRequestGroupId, status: status);
+      return Right<Failure, Success>(UploadRequestsViewState(uploadRequest));
+    } catch (exception) {
+      return Left<Failure, Success>(UploadRequestsFailure(exception));
+    }
+  }
 }
