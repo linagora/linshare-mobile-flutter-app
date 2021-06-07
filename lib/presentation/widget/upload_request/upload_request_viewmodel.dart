@@ -28,25 +28,40 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:redux/redux.dart';
 
-final uiReducer = combineReducers<UIState>([
-  TypedReducer<UIState, SetCurrentView>(
-          (UIState state, SetCurrentView action) => state.setCurrentView(action.routePath)),
-  TypedReducer<UIState, SharedSpaceInsideView>(
-          (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, sharedSpace: action.sharedSpace)),
-  TypedReducer<UIState, UploadRequestView>(
-          (UIState state, UploadRequestView action) => state.setCurrentView(action.routePath, uploadRequestGroup: action.uploadRequestGroup)),
-  TypedReducer<UIState, ClearCurrentView>(
-          (UIState state, _) => state.clearCurrentView()),
-  TypedReducer<UIState, EnableSearchStateAction>(
-      (UIState state, EnableSearchStateAction action) => state.setSearchState(
-          state.searchState.enableSearchState(action.searchDestination))),
-  TypedReducer<UIState, DisableSearchStateAction>(
-          (UIState state, DisableSearchStateAction action) => state.setSearchState(
-          state.searchState.disableSearchState())),
-]);
+class UploadRequestViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
+  final GetAllUploadRequestInteractor _getAllUploadRequestInteractor;
+
+  UploadRequestViewModel(
+    Store<AppState> store,
+    this._appNavigation,
+    this._getAllUploadRequestInteractor
+  ) : super(store);
+
+  void initState(UploadRequestGroup uploadRequestGroup) {
+    getUploadRequest(uploadRequestGroup);
+  }
+
+  void getUploadRequest(UploadRequestGroup uploadRequestGroup) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartUploadRequestLoadingAction());
+      store.dispatch(UploadRequestGetAllAction(
+          await _getAllUploadRequestInteractor.execute(uploadRequestGroup.uploadRequestGroupId)));
+    }));
+  }
+
+  @override
+  void onDisposed() {
+    store.dispatch(CleanUploadRequestAction());
+    super.onDisposed();
+  }
+}

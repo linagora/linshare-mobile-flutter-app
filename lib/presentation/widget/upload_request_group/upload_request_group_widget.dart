@@ -45,7 +45,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_group/up
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
 class UploadRequestGroupWidget extends StatefulWidget {
-  UploadRequestGroupWidget({Key key}) : super(key: key);
+  UploadRequestGroupWidget({Key? key}) : super(key: key);
 
   @override
   _UploadRequestGroupWidgetState createState() => _UploadRequestGroupWidgetState();
@@ -140,6 +140,7 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
             fit: BoxFit.fill,
           ),
           onPressed: () => null),
+      onTap: () => _model.goToUploadRequests(request),
     );
   }
 
@@ -160,6 +161,7 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
             fit: BoxFit.fill,
           ),
           onPressed: () => null),
+        onTap: () => _model.goToUploadRequests(request),
     );
   }
 

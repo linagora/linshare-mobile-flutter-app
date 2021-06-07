@@ -1848,6 +1848,13 @@ class AppLocalizations {
       name: 'expired_closed',
     );
   }
+
+  String get back_to_upload_requests {
+    return Intl.message(
+      'Back to Upload Requests',
+      name: 'back_to_upload_requests',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

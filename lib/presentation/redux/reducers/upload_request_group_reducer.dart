@@ -40,20 +40,20 @@ final uploadRequestGroupReducer = combineReducers<UploadRequestGroupState>([
   TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllCreatedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllCreatedAction action) =>
       state.setUploadRequestsCreatedList(
           newUploadRequestsList: action.viewState.fold(
-                  (failure) => null,
-                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : null),
+                  (failure) => [],
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
           viewState: action.viewState)),
   TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllActiveClosedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllActiveClosedAction action) =>
       state.setUploadRequestsActiveClosedList(
           newUploadRequestsList: action.viewState.fold(
-                  (failure) => null,
-                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : null),
+                  (failure) => [],
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
           viewState: action.viewState)),
   TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllArchivedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllArchivedAction action) =>
       state.setUploadRequestsArchivedList(
           newUploadRequestsList: action.viewState.fold(
-                  (failure) => null,
-                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : null),
+                  (failure) => [],
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
           viewState: action.viewState)),
   TypedReducer<UploadRequestGroupState, CleanUploadRequestGroupAction>((UploadRequestGroupState state, _) => state.clearViewState()),
 ]);

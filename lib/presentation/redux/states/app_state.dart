@@ -53,6 +53,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_state.dart';
 import 'package:meta/meta.dart';
 
 import 'destination_picker_state.dart';
@@ -82,6 +83,7 @@ class AppState with EquatableMixin {
   final SharedSpaceNodeVersionsState sharedSpaceNodeVersionsState;
   final BiometricAuthenticationLoginState biometricAuthenticationLoginState;
   final UploadRequestGroupState uploadRequestGroupState;
+  final UploadRequestState uploadRequestState;
 
   AppState(
       {required this.uiState,
@@ -107,7 +109,8 @@ class AppState with EquatableMixin {
       required this.biometricAuthenticationSettingState,
       required this.biometricAuthenticationLoginState,
       required this.sharedSpaceNodeVersionsState,
-      required this.uploadRequestGroupState});
+      required this.uploadRequestGroupState,
+      required this.uploadRequestState});
 
   factory AppState.initial() {
     return AppState(
@@ -134,7 +137,8 @@ class AppState with EquatableMixin {
         biometricAuthenticationSettingState: BiometricAuthenticationSettingState.initial(),
         biometricAuthenticationLoginState: BiometricAuthenticationLoginState.initial(),
         sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
-        uploadRequestGroupState: UploadRequestGroupState.initial());
+        uploadRequestGroupState: UploadRequestGroupState.initial(),
+        uploadRequestState: UploadRequestState.initial());
   }
 
   @override
@@ -161,6 +165,7 @@ class AppState with EquatableMixin {
         biometricAuthenticationSettingState,
         biometricAuthenticationLoginState,
         sharedSpaceNodeVersionsState,
-        uploadRequestGroupState
+        uploadRequestGroupState,
+        uploadRequestState
       ];
 }

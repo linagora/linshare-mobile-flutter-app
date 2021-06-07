@@ -38,16 +38,17 @@ import 'package:equatable/equatable.dart';
 class UIState with EquatableMixin {
   final String routePath;
   final SharedSpaceNodeNested? selectedSharedSpace;
+  final UploadRequestGroup? selectedUploadRequestGroup;
   final SearchState searchState;
 
-  UIState(this.routePath, this.searchState, {this.selectedSharedSpace});
+  UIState(this.routePath, this.searchState, {this.selectedSharedSpace, this.selectedUploadRequestGroup});
 
   factory UIState.initial() {
     return UIState(RoutePaths.initializeRoute, SearchState.initial());
   }
 
-  UIState setCurrentView(String routePath, {SharedSpaceNodeNested? sharedSpace}) {
-    return UIState(routePath, searchState, selectedSharedSpace: sharedSpace);
+  UIState setCurrentView(String routePath, {SharedSpaceNodeNested? sharedSpace, UploadRequestGroup? uploadRequestGroup}) {
+    return UIState(routePath, searchState, selectedSharedSpace: sharedSpace, selectedUploadRequestGroup: uploadRequestGroup);
   }
 
   UIState clearCurrentView() {

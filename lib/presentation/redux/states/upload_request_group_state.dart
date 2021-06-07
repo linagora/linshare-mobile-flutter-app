@@ -59,25 +59,25 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
   }
 
   @override
-  UploadRequestGroupState sendViewState({Either<Failure, Success> viewState}) {
+  UploadRequestGroupState sendViewState({required Either<Failure, Success> viewState}) {
     return UploadRequestGroupState(viewState, uploadRequestsCreatedList,
         uploadRequestsActiveClosedList, uploadRequestsArchivedList);
   }
 
   UploadRequestGroupState setUploadRequestsCreatedList(
-      {Either<Failure, Success> viewState, List<UploadRequestGroup> newUploadRequestsList}) {
+      {required Either<Failure, Success> viewState, required List<UploadRequestGroup> newUploadRequestsList}) {
     return UploadRequestGroupState(viewState, newUploadRequestsList, uploadRequestsActiveClosedList,
         uploadRequestsArchivedList);
   }
 
   UploadRequestGroupState setUploadRequestsActiveClosedList(
-      {Either<Failure, Success> viewState, List<UploadRequestGroup> newUploadRequestsList}) {
+      {required Either<Failure, Success> viewState, required List<UploadRequestGroup> newUploadRequestsList}) {
     return UploadRequestGroupState(
         viewState, uploadRequestsCreatedList, newUploadRequestsList, uploadRequestsArchivedList);
   }
 
   UploadRequestGroupState setUploadRequestsArchivedList(
-      {Either<Failure, Success> viewState, List<UploadRequestGroup> newUploadRequestsList}) {
+      {required Either<Failure, Success> viewState, required List<UploadRequestGroup> newUploadRequestsList}) {
     return UploadRequestGroupState(viewState, uploadRequestsCreatedList,
         uploadRequestsActiveClosedList, newUploadRequestsList);
   }
@@ -89,7 +89,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         ...super.props,
         uploadRequestsCreatedList,
         uploadRequestsActiveClosedList,

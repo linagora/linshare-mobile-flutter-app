@@ -30,23 +30,50 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:redux/redux.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
 
-final uiReducer = combineReducers<UIState>([
-  TypedReducer<UIState, SetCurrentView>(
-          (UIState state, SetCurrentView action) => state.setCurrentView(action.routePath)),
-  TypedReducer<UIState, SharedSpaceInsideView>(
-          (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, sharedSpace: action.sharedSpace)),
-  TypedReducer<UIState, UploadRequestView>(
-          (UIState state, UploadRequestView action) => state.setCurrentView(action.routePath, uploadRequestGroup: action.uploadRequestGroup)),
-  TypedReducer<UIState, ClearCurrentView>(
-          (UIState state, _) => state.clearCurrentView()),
-  TypedReducer<UIState, EnableSearchStateAction>(
-      (UIState state, EnableSearchStateAction action) => state.setSearchState(
-          state.searchState.enableSearchState(action.searchDestination))),
-  TypedReducer<UIState, DisableSearchStateAction>(
-          (UIState state, DisableSearchStateAction action) => state.setSearchState(
-          state.searchState.disableSearchState())),
-]);
+@immutable
+class UploadRequestState extends LinShareState with EquatableMixin {
+  final List<UploadRequest> uploadRequestsList;
+
+  UploadRequestState(
+    Either<Failure, Success> viewState,
+    this.uploadRequestsList
+  ) : super(viewState);
+
+  factory UploadRequestState.initial() {
+    return UploadRequestState(Right(IdleState()), []);
+  }
+
+  @override
+  UploadRequestState clearViewState() {
+    return UploadRequestState(Right(IdleState()), uploadRequestsList);
+  }
+
+  @override
+  UploadRequestState sendViewState({required Either<Failure, Success> viewState}) {
+    return UploadRequestState(viewState, uploadRequestsList);
+  }
+
+  UploadRequestState setUploadRequestsList(
+      {required Either<Failure, Success> viewState, required List<UploadRequest> newUploadRequestsList}) {
+    return UploadRequestState(viewState, newUploadRequestsList);
+  }
+
+  @override
+  UploadRequestState startLoadingState() {
+    return UploadRequestState(Right(LoadingState()), uploadRequestsList);
+  }
+
+  @override
+  List<Object?> get props => [
+      ...super.props,
+      uploadRequestsList,
+    ];
+}

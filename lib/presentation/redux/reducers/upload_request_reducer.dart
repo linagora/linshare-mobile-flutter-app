@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,23 +30,19 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_state.dart';
 import 'package:redux/redux.dart';
 
-final uiReducer = combineReducers<UIState>([
-  TypedReducer<UIState, SetCurrentView>(
-          (UIState state, SetCurrentView action) => state.setCurrentView(action.routePath)),
-  TypedReducer<UIState, SharedSpaceInsideView>(
-          (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, sharedSpace: action.sharedSpace)),
-  TypedReducer<UIState, UploadRequestView>(
-          (UIState state, UploadRequestView action) => state.setCurrentView(action.routePath, uploadRequestGroup: action.uploadRequestGroup)),
-  TypedReducer<UIState, ClearCurrentView>(
-          (UIState state, _) => state.clearCurrentView()),
-  TypedReducer<UIState, EnableSearchStateAction>(
-      (UIState state, EnableSearchStateAction action) => state.setSearchState(
-          state.searchState.enableSearchState(action.searchDestination))),
-  TypedReducer<UIState, DisableSearchStateAction>(
-          (UIState state, DisableSearchStateAction action) => state.setSearchState(
-          state.searchState.disableSearchState())),
+final uploadRequestReducer = combineReducers<UploadRequestState>([
+  TypedReducer<UploadRequestState, StartUploadRequestLoadingAction>(
+      (UploadRequestState state, _) => state.startLoadingState()),
+  TypedReducer<UploadRequestState, UploadRequestGetAllAction>(
+      (UploadRequestState state, UploadRequestGetAllAction action) => state.setUploadRequestsList(
+          newUploadRequestsList: action.viewState.fold((failure) => [],
+              (success) => (success is UploadRequestsViewState) ? success.uploadRequest : []),
+          viewState: action.viewState)),
+  TypedReducer<UploadRequestState, CleanUploadRequestAction>(
+      (UploadRequestState state, _) => state.clearViewState()),
 ]);

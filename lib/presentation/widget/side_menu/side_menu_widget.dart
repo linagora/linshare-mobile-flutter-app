@@ -233,14 +233,14 @@ class SideMenuDrawerWidget extends StatelessWidget {
             color: selected ? AppColor.primaryColor : AppColor.documentNameItemTextColor));
   }
 
-  Widget _buildUploadRequestText(BuildContext context, {@required bool selected}) {
+  Widget _buildUploadRequestText(BuildContext context, {required bool selected}) {
     return Text(AppLocalizations.of(context).upload_requests,
         style: TextStyle(
             fontSize: 16,
             color: selected ? AppColor.primaryColor : AppColor.documentNameItemTextColor));
   }
 
-  Widget _buildUploadRequestIcon({@required bool selected}) {
+  Widget _buildUploadRequestIcon({required bool selected}) {
     return SvgPicture.asset(
       imagePath.icUploadRequest,
       fit: BoxFit.none,

@@ -53,6 +53,12 @@ class SharedSpaceInsideView extends SetCurrentView {
   SharedSpaceInsideView(String routePath, this.sharedSpace) : super(routePath);
 }
 
+class UploadRequestView extends SetCurrentView {
+  final UploadRequestGroup uploadRequestGroup;
+
+  UploadRequestView(String routePath, this.uploadRequestGroup) : super(routePath);
+}
+
 @immutable
 class ClearCurrentView extends ActionOffline {
   ClearCurrentView();
