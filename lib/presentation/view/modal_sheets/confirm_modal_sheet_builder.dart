@@ -38,6 +38,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
+import 'package:domain/src/extension/string_extension.dart';
 
 typedef OnConfirmActionClick = void Function();
 
@@ -90,8 +92,20 @@ class ConfirmModalSheetBuilder {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(left: 50, right: 50, top: 48, bottom: 19),
-                  child: Text(_title, style: TextStyle(fontSize: 16, color: AppColor.confirmDialogTitleTextColor), textAlign: TextAlign.center,)),
+                  padding: EdgeInsets.only(left: 70, right: 70, top: 48, bottom: 19),
+                  child: CustomPaint(
+                    size: Size(double.infinity, 36),
+                    painter: EllipsisTextPainter(
+                      text: TextSpan(text: _title, style: TextStyle(
+                          fontSize: 16,
+                          color: AppColor.confirmDialogTitleTextColor),
+                      ),
+                    ellipsis: _title.toMiddleEllipsis(),
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Row(
