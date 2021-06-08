@@ -3,9 +3,11 @@ format_version: '8'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: flutter
 trigger_map:
-- push_branch: migrate-null-safety
+- push_branch: migrate-null-safety-continue2
   workflow: primary
 - pull_request_source_branch: "*"
+  workflow: primary
+- pull_request_target_branch: migrate-null-safety
   workflow: primary
 workflows:
   deploy:
