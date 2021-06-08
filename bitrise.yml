@@ -7,6 +7,8 @@ trigger_map:
   workflow: primary
 - pull_request_source_branch: "*"
   workflow: primary
+- pull_request_target_branch: "migrate-nullsafe"
+  workflow: primary
 workflows:
   deploy:
     steps:
