@@ -102,6 +102,7 @@ export 'src/network/model/response/upload_request_group_response.dart';
 export 'src/network/model/response/upload_request_response.dart';
 export 'src/network/model/response/upload_request_entry_response.dart';
 export 'src/network/model/response/upload_request_entry_owner_response.dart';
+export 'src/network/model/share/received_share_dto.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';

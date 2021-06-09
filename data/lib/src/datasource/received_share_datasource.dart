@@ -47,4 +47,6 @@ abstract class ReceivedShareDataSource {
     Uri baseUrl,
     CancelToken cancelToken
   );
+
+  Future<ReceivedShare> getReceivedShare(ShareId shareId);
 }
