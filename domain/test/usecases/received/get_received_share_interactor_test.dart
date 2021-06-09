@@ -31,24 +31,48 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:dio/dio.dart';
-import 'package:domain/src/model/share/received_share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/received/received_share_view_state.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-abstract class ReceivedShareRepository {
+import '../../mock/repository/received/mock_received_share_repository.dart';
 
-  Future<List<ReceivedShare>> getAllReceivedShares();
+void main() {
+  group('get_all_received_interactor', () {
+    late MockReceivedShareRepository receivedShareRepository;
+    late GetReceivedShareInteractor getReceivedShareInteractor;
 
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
+    setUp(() {
+      receivedShareRepository = MockReceivedShareRepository();
+      getReceivedShareInteractor = GetReceivedShareInteractor(receivedShareRepository);
+    });
 
-  Future<String> downloadPreviewReceivedShare(
-    ReceivedShare receivedShare,
-    DownloadPreviewType downloadPreviewType,
-    Token permanentToken,
-    Uri baseUrl,
-    CancelToken cancelToken
-  );
+    test('getReceivedShareInteractor should return success with receive', () async {
+      when(receivedShareRepository.getReceivedShare(receivedShare1.shareId)).thenAnswer((_) async => receivedShare1);
 
-  Future<ReceivedShare> getReceivedShare(ShareId shareId);
+      final result = await getReceivedShareInteractor.execute(receivedShare1.shareId);
+
+      final receivedShare = result.map((success) => (success as GetReceivedShareSuccess).receivedShare)
+          .getOrElse(() => null as ReceivedShare);
+
+      expect(receivedShare, receivedShare1);
+    });
+
+
+    test('get all received interactor should fail when getAllReceived fail', () async {
+      final exception = Exception();
+      when(receivedShareRepository.getReceivedShare(receivedShare1.shareId)).thenThrow(exception);
+
+      final result = await getReceivedShareInteractor.execute(receivedShare1.shareId);
+
+      result.fold(
+          (failure) => expect(failure, isA<GetReceivedShareFailure>()),
+          (success) => expect(success, isA<GetReceivedShareSuccess>()));
+
+      expect(result, Left<Failure, Success>(GetReceivedShareFailure(exception)));
+    });
+  });
 }
