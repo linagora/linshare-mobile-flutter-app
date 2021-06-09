@@ -44,6 +44,7 @@ import 'package:domain/domain.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:data/src/network/model/share/received_share_dto.dart';
 
 class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -64,6 +65,8 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response?.statusCode == 403) {
           throw NotAuthorized();
+        } else if (error.response?.statusCode == 404) {
+          throw ReceivedSharesNotFound();
         } else {
           throw UnknownError(error.response?.statusMessage!);
         }
@@ -119,5 +122,22 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
         receivedShare.name + '${downloadPreviewType == DownloadPreviewType.thumbnail ? '.pdf' : ''}',
         permanentToken,
         cancelToken: cancelToken);
+  }
+
+  @override
+  Future<ReceivedShare> getReceivedShare(ShareId shareId) async {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getReceivedShare(shareId)).toReceivedShare();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw ReceivedShareNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
   }
 }
