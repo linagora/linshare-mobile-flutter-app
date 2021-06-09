@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/destination_pic
 import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/network_connectivity_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/received_share_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/received_shares_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_details_reducer.dart';
@@ -88,7 +89,8 @@ AppState appStateReducer(AppState state, action) {
         biometricAuthenticationLoginState: biometricAuthenticationLoginReducer(state.biometricAuthenticationLoginState, action),
         sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action),
         uploadRequestGroupState: uploadRequestGroupReducer(state.uploadRequestGroupState, action),
-        uploadRequestInsideState: uploadRequestInsideReducer(state.uploadRequestInsideState, action));
+        uploadRequestInsideState: uploadRequestInsideReducer(state.uploadRequestInsideState, action),
+        receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action));
   }
 
   return AppState(
@@ -118,7 +120,8 @@ AppState appStateReducer(AppState state, action) {
       biometricAuthenticationLoginState: state.biometricAuthenticationLoginState,
       sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState,
       uploadRequestGroupState: state.uploadRequestGroupState,
-      uploadRequestInsideState: state.uploadRequestInsideState);
+      uploadRequestInsideState: state.uploadRequestInsideState,
+      receivedShareDetailsState: state.receivedShareDetailsState);
 }
 
 bool canExecuteAction(AppState state, action) {
