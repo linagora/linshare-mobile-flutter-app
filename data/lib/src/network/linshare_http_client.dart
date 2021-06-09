@@ -575,4 +575,13 @@ class LinShareHttpClient {
         .generateEndpointPath());
     return resultJson.map((data) => UploadRequestEntryResponse.fromJson(data)).toList();
   }
+
+  Future<ReceivedShareDto> getReceivedShare(ShareId receivedShareId) async {
+    final endpointPath =
+        Endpoint.receivedShares.withPathParameter(receivedShareId.uuid).generateEndpointPath();
+
+    final receivedShareJson = await _dioClient.get(endpointPath);
+
+    return ReceivedShareDto.fromJson(receivedShareJson);
+  }
 }
