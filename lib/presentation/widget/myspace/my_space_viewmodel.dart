@@ -73,7 +73,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
-import 'package:linshare_flutter_app/presentation/util/extensions/uri_extension.dart';
 
 import 'document_details/document_details_arguments.dart';
 
@@ -240,6 +239,9 @@ class MySpaceViewModel extends BaseViewModel {
     final copyAction = CopyDestinationPickerAction(context);
     copyAction.onDestinationPickerActionClick((data) {
       _appNavigation.popBack();
+      getAllDocument();
+      store.dispatch(MySpaceAction(Right(DisableSearchViewState())));
+
       if (data is SharedSpaceDocumentArguments) {
         store.dispatch(_copyToWorkgroupAction(documents, data));
       }

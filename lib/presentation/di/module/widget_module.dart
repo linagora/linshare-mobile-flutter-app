@@ -52,6 +52,8 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/home/home_app_bar/home_app_bar_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/home/home_app_bar/home_app_bar_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/initialize/initialize_widget.dart';
@@ -108,6 +110,7 @@ class WidgetModule {
     _provideBiometricAuthenticationLoginComponent();
     _provideBiometricAuthenticationSettingComponent();
     _provideSharedSpaceNodeVersionsComponent();
+    _provideHomeAppBarComponent();
   }
 
   void _provideLoginComponent() {
@@ -384,6 +387,13 @@ class WidgetModule {
         getIt.get<GetAvailableBiometricInteractor>(),
         getIt.get<DeletePermanentTokenInteractor>(),
         getIt.get<DisableBiometricInteractor>()
+      ));
+  }
+
+    void _provideHomeAppBarComponent() {
+      getIt.registerFactory(() => HomeAppBarWidget());
+      getIt.registerFactory(() => HomeAppBarViewModel(
+          getIt.get<Store<AppState>>(),
       ));
   }
 }
