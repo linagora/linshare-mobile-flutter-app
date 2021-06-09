@@ -50,12 +50,14 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_arguments.dart';
 import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
@@ -388,6 +390,11 @@ class ReceivedShareViewModel extends BaseViewModel {
   void openSearchState() {
     store.dispatch(EnableSearchStateAction(SearchDestination.receivedShares));
     store.dispatch((ReceivedShareSetSearchResultAction([])));
+  }
+
+  void goToDetails(ReceivedShare receivedShare) {
+    _appNavigation.popAndPush(RoutePaths.receivedShareDetails,
+        arguments: ReceivedShareDetailsArguments(receivedShare));
   }
 
   @override
