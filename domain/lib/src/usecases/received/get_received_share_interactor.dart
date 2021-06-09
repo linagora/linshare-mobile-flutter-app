@@ -31,24 +31,24 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:dio/dio.dart';
-import 'package:domain/src/model/share/received_share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/repository/received/received_share_repository.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:domain/src/usecases/received/received_share_view_state.dart';
 
-abstract class ReceivedShareRepository {
+class GetReceivedShareInteractor {
+  final ReceivedShareRepository _receivedShareRepository;
 
-  Future<List<ReceivedShare>> getAllReceivedShares();
+  GetReceivedShareInteractor(this._receivedShareRepository);
 
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
-
-  Future<String> downloadPreviewReceivedShare(
-    ReceivedShare receivedShare,
-    DownloadPreviewType downloadPreviewType,
-    Token permanentToken,
-    Uri baseUrl,
-    CancelToken cancelToken
-  );
-
-  Future<ReceivedShare> getReceivedShare(ShareId shareId);
+  Future<Either<Failure, Success>> execute(ShareId shareId) async {
+    try {
+      final receivedShares = await _receivedShareRepository.getReceivedShare(shareId);
+      return Right<Failure, Success>(GetReceivedShareSuccess(receivedShares));
+    } catch(exception) {
+      return Left<Failure, Success>(GetReceivedShareFailure(exception));
+    }
+  }
 }
