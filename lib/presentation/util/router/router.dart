@@ -42,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/document_details/document_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_widget.dart';
@@ -85,6 +86,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationLoginWidget>(), settings: settings);
     case RoutePaths.createUploadRequest:
       return MaterialPageRoute(builder: (context) => getIt<UploadRequestCreationWidget>(), settings: settings);
+    case RoutePaths.receivedShareDetails:
+      return MaterialPageRoute(builder: (context) => getIt<ReceivedShareDetailsWidget>(), settings: settings);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

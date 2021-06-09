@@ -28,31 +28,45 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
-  static const String currentUploads = 'current_uploads';
-  static const String destinationPicker = 'destination_picker';
-  static const String account_details = 'account_details';
-  static const String received_shares = 'received_shares';
-  static const String sharedSpaceDetails = 'shared_space_details';
-  static const String authentication = 'authentication';
-  static const String enter_otp = 'enter_otp';
-  static const String second_factor_authentication = 'second_factor_authentication';
-  static const String addSharedSpaceMember = 'add_shared_space_member';
-  static const String documentDetails = 'document_details';
-  static const String sharedSpaceNodeDetails = 'shared_space_node_details';
-  static const String biometricAuthenticationSetting = 'biometricAuthenticationSetting';
-  static const String sharedSpaceNodeVersions = 'shared_space_node_versions';
-  static const String biometricAuthenticationLogin = 'biometric_authentication_login';
-  static const String uploadRequestGroup = 'upload_request_group';
-  static const String createUploadRequest = 'create_upload_request';
-  static const String uploadRequestInside = 'upload_request_inside';
-  static const String receivedShareDetails = 'received_share_details';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/received_share_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_arguments.dart';
+import 'package:redux/src/store.dart';
+
+class ReceivedShareDetailsViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
+  final GetReceivedShareInteractor _getReceivedShareInteractor;
+
+  ReceivedShareDetailsViewModel(
+      Store<AppState> store,
+      this._appNavigation,
+      this._getReceivedShareInteractor
+  ) : super(store);
+
+  void initState(ReceivedShareDetailsArguments arguments) {
+    store.dispatch(_getReceivedShareAction(arguments.receivedShare.shareId));
+  }
+
+  OnlineThunkAction _getReceivedShareAction(ShareId shareId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(ReceivedShareDetailsGetReceivedShareAction(
+          await _getReceivedShareInteractor.execute(shareId)));
+    });
+  }
+
+  @override
+  void onDisposed() {
+    store.dispatch(CleanReceivedShareDetailsStateAction());
+    super.onDisposed();
+  }
+
+  void backToReceivedShare() {
+    _appNavigation.popBack();
+  }
 }
