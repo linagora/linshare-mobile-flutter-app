@@ -372,7 +372,8 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
     return [
       if (Platform.isAndroid) _downloadAction(receivedShare),
       _copyToMySpaceAction(context, receivedShare),
-      _previewReceivedShareAction(receivedShare)
+      _previewReceivedShareAction(receivedShare),
+      _detailsAction(receivedShare)
     ];
   }
 
@@ -441,6 +442,16 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
           AppLocalizations.of(context).preview,
           receivedShare)
        .onActionClick((data) => receivedShareViewModel.onClickPreviewFile(context, receivedShare))
+       .build();
+  }
+
+  Widget _detailsAction(ReceivedShare receivedShare) {
+    return ReceivedShareContextMenuTileBuilder(
+          Key('details_received_share_context_menu_action'),
+          SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).details,
+          receivedShare)
+       .onActionClick((data) => receivedShareViewModel.goToDetails(receivedShare))
        .build();
   }
 

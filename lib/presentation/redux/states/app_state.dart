@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/biometric_authent
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/received_share_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
@@ -83,6 +84,7 @@ class AppState with EquatableMixin {
   final BiometricAuthenticationLoginState biometricAuthenticationLoginState;
   final UploadRequestGroupState uploadRequestGroupState;
   final UploadRequestInsideState uploadRequestInsideState;
+  final ReceivedShareDetailsState receivedShareDetailsState;
 
   AppState(
       {required this.uiState,
@@ -109,7 +111,8 @@ class AppState with EquatableMixin {
       required this.biometricAuthenticationLoginState,
       required this.sharedSpaceNodeVersionsState,
       required this.uploadRequestGroupState,
-      required this.uploadRequestInsideState});
+      required this.uploadRequestInsideState,
+      required this.receivedShareDetailsState});
 
   factory AppState.initial() {
     return AppState(
@@ -137,7 +140,8 @@ class AppState with EquatableMixin {
         biometricAuthenticationLoginState: BiometricAuthenticationLoginState.initial(),
         sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
         uploadRequestGroupState: UploadRequestGroupState.initial(),
-        uploadRequestInsideState: UploadRequestInsideState.initial()
+        uploadRequestInsideState: UploadRequestInsideState.initial(),
+        receivedShareDetailsState: ReceivedShareDetailsState.initial()
     );
   }
 
@@ -166,6 +170,7 @@ class AppState with EquatableMixin {
         biometricAuthenticationLoginState,
         sharedSpaceNodeVersionsState,
         uploadRequestGroupState,
-        uploadRequestInsideState
+        uploadRequestInsideState,
+        receivedShareDetailsState
       ];
 }
