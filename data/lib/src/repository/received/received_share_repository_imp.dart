@@ -54,4 +54,9 @@ class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
   Future<String> downloadPreviewReceivedShare(ReceivedShare receivedShare, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
     return _receivedShareDataSource.downloadPreviewReceivedShare(receivedShare, downloadPreviewType, permanentToken, baseUrl, cancelToken);
   }
+
+  @override
+  Future<ReceivedShare> getReceivedShare(ShareId shareId) {
+    return _receivedShareDataSource.getReceivedShare(shareId);
+  }
 }
