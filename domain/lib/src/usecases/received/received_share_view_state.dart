@@ -44,13 +44,14 @@ class GetAllReceivedShareSuccess extends ViewState {
 }
 
 class GetAllReceivedShareFailure extends FeatureFailure {
-  final exception;
+  final dynamic exception;
 
   GetAllReceivedShareFailure(this.exception);
 
   @override
   List<Object> get props => [exception];
 }
+
 class CopyMultipleToMySpaceFromReceivedSharesAllSuccessViewState extends ViewState {
   final List<Either<Failure, Success>> resultList;
 
@@ -103,4 +104,22 @@ class DownloadReceivedShareFailure extends FeatureFailure {
 
   @override
   List<Object> get props => [downloadFileException];
+}
+
+class GetReceivedShareSuccess extends ViewState {
+  final ReceivedShare receivedShare;
+
+  GetReceivedShareSuccess(this.receivedShare);
+
+  @override
+  List<Object> get props => [receivedShare];
+}
+
+class GetReceivedShareFailure extends FeatureFailure {
+  final dynamic exception;
+
+  GetReceivedShareFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
 }

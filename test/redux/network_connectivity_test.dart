@@ -51,6 +51,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/document_details_
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/received_share_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
@@ -169,6 +170,7 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
     updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
     uploadRequestGroupState: UploadRequestGroupState.initial(),
-    uploadRequestInsideState: UploadRequestInsideState.initial()
+    uploadRequestInsideState: UploadRequestInsideState.initial(),
+    receivedShareDetailsState: ReceivedShareDetailsState.initial()
   );
 }
