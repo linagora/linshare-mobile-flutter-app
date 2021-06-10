@@ -767,7 +767,7 @@ class AppLocalizations {
 
   String get create_folder {
     return Intl.message(
-      'Create Folder',
+      'Create folder',
       name: 'create_folder',
     );
   }
