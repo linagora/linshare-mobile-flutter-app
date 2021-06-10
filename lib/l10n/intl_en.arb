@@ -579,7 +579,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "create_folder": "Create Folder",
+  "create_folder": "Create folder",
   "@create_folder": {
     "type": "text",
     "placeholders": {}
