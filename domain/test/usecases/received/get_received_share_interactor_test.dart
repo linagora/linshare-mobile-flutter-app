@@ -31,32 +31,48 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:data/src/datasource/received_share_datasource.dart';
-import 'package:dio/src/cancel_token.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/received/received_share_view_state.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
-  final ReceivedShareDataSource _receivedShareDataSource;
+import '../../mock/repository/received/mock_received_share_repository.dart';
 
-  ReceivedShareRepositoryImpl(this._receivedShareDataSource);
+void main() {
+  group('get_all_received_interactor', () {
+    MockReceivedShareRepository receivedShareRepository;
+    GetReceivedShareInteractor getReceivedShareInteractor;
 
-  @override
-  Future<List<ReceivedShare>> getAllReceivedShares() {
-    return _receivedShareDataSource.getAllReceivedShares();
-  }
+    setUp(() {
+      receivedShareRepository = MockReceivedShareRepository();
+      getReceivedShareInteractor = GetReceivedShareInteractor(receivedShareRepository);
+    });
 
-  @override
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) {
-    return _receivedShareDataSource.downloadReceivedShares(shareIds, token, baseUrl);
-  }
+    test('getReceivedShareInteractor should return success with receive', () async {
+      when(receivedShareRepository.getReceivedShare(receivedShare1.shareId)).thenAnswer((_) async => receivedShare1);
 
-  @override
-  Future<String> downloadPreviewReceivedShare(ReceivedShare receivedShare, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
-    return _receivedShareDataSource.downloadPreviewReceivedShare(receivedShare, downloadPreviewType, permanentToken, baseUrl, cancelToken);
-  }
+      final result = await getReceivedShareInteractor.execute(receivedShare1.shareId);
 
-  @override
-  Future<ReceivedShare> getReceivedShare(ShareId shareId) {
-    return _receivedShareDataSource.getReceivedShare(shareId);
-  }
+      final receivedShare = result.map((success) => (success as GetReceivedShareSuccess).receivedShare)
+          .getOrElse(() => null);
+
+      expect(receivedShare, receivedShare1);
+    });
+
+
+    test('get all received interactor should fail when getAllReceived fail', () async {
+      final exception = Exception();
+      when(receivedShareRepository.getReceivedShare(receivedShare1.shareId)).thenThrow(exception);
+
+      final result = await getReceivedShareInteractor.execute(receivedShare1.shareId);
+
+      result.fold(
+          (failure) => expect(failure, isA<GetReceivedShareFailure>()),
+          (success) => expect(success, isA<GetReceivedShareSuccess>()));
+
+      expect(result, Left<Failure, Success>(GetReceivedShareFailure(exception)));
+    });
+  });
 }

@@ -280,6 +280,7 @@ class AppModule {
     getIt.registerFactory(() => RestoreWorkGroupDocumentVersionInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => RenameWorkGroupInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => EditDescriptionDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => GetReceivedShareInteractor(getIt<ReceivedShareRepository>()));
   }
 
   void _provideSharePreference() {

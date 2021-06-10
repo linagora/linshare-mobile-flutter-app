@@ -49,4 +49,6 @@ abstract class ReceivedShareRepository {
     Uri baseUrl,
     CancelToken cancelToken
   );
+
+  Future<ReceivedShare> getReceivedShare(ShareId shareId);
 }

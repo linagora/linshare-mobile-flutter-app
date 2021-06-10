@@ -292,3 +292,5 @@ export 'src/usecases/sort/sort_view_state.dart';
 export 'src/usecases/upload_file/file_upload_state.dart';
 export 'src/usecases/upload_file/upload_my_space_document_interactor.dart';
 export 'src/usecases/upload_file/upload_work_group_document_interactor.dart';
+export 'src/usecases/received/received_share_exception.dart';
+export 'src/usecases/received/get_received_share_interactor.dart';

@@ -32,10 +32,17 @@
  */
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:http_parser/http_parser.dart';
 
 final RECIPIENT_1 = GenericUser(
+    'user3@linshare.org',
+    lastName: optionOf('John'),
+    firstName: optionOf('Doe')
+);
+
+final RECIPIENT_RESPONSE_1 = GenericUserDto(
     'user3@linshare.org',
     lastName: optionOf('John'),
     firstName: optionOf('Doe')
@@ -59,6 +66,21 @@ final receivedShare1 = ReceivedShare(
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     3,
     29832983,
+    true
+);
+
+final receivedShareResponse1 = ReceivedShareDto(
+    ReceivedShareIdDto('6c0e1f35-89e5-432e-a8d4-17c8d2c3b5fa'),
+    'pizza.txt',
+    DateTime.fromMillisecondsSinceEpoch(1604482138181),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482928398),
+    3,
+    '',
+    RECIPIENT_RESPONSE_1,
+    29832983,
+    MediaType.parse('image/png'),
+    GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     true
 );
 

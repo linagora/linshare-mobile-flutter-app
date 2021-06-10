@@ -64,6 +64,8 @@ import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_viewmo
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
@@ -108,6 +110,7 @@ class WidgetModule {
     _provideBiometricAuthenticationLoginComponent();
     _provideBiometricAuthenticationSettingComponent();
     _provideSharedSpaceNodeVersionsComponent();
+    _provideReceivedShareDetailsComponent();
   }
 
   void _provideLoginComponent() {
@@ -384,6 +387,16 @@ class WidgetModule {
         getIt.get<GetAvailableBiometricInteractor>(),
         getIt.get<DeletePermanentTokenInteractor>(),
         getIt.get<DisableBiometricInteractor>()
+      ));
+  }
+
+  void _provideReceivedShareDetailsComponent() {
+    getIt.registerFactory(() => ReceivedShareDetailsWidget());
+    getIt.registerFactory(() =>
+      ReceivedShareDetailsViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetReceivedShareInteractor>(),
       ));
   }
 }

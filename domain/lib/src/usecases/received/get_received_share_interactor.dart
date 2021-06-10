@@ -31,32 +31,24 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:data/src/datasource/received_share_datasource.dart';
-import 'package:dio/src/cancel_token.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/repository/received/received_share_repository.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:domain/src/usecases/received/received_share_view_state.dart';
 
-class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
-  final ReceivedShareDataSource _receivedShareDataSource;
+class GetReceivedShareInteractor {
+  final ReceivedShareRepository _receivedShareRepository;
 
-  ReceivedShareRepositoryImpl(this._receivedShareDataSource);
+  GetReceivedShareInteractor(this._receivedShareRepository);
 
-  @override
-  Future<List<ReceivedShare>> getAllReceivedShares() {
-    return _receivedShareDataSource.getAllReceivedShares();
-  }
-
-  @override
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) {
-    return _receivedShareDataSource.downloadReceivedShares(shareIds, token, baseUrl);
-  }
-
-  @override
-  Future<String> downloadPreviewReceivedShare(ReceivedShare receivedShare, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
-    return _receivedShareDataSource.downloadPreviewReceivedShare(receivedShare, downloadPreviewType, permanentToken, baseUrl, cancelToken);
-  }
-
-  @override
-  Future<ReceivedShare> getReceivedShare(ShareId shareId) {
-    return _receivedShareDataSource.getReceivedShare(shareId);
+  Future<Either<Failure, Success>> execute(ShareId shareId) async {
+    try {
+      final receivedShares = await _receivedShareRepository.getReceivedShare(shareId);
+      return Right<Failure, Success>(GetReceivedShareSuccess(receivedShares));
+    } catch(exception) {
+      return Left<Failure, Success>(GetReceivedShareFailure(exception));
+    }
   }
 }

@@ -42,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/destination_pic
 import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/network_connectivity_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/received_share_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/received_shares_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_details_reducer.dart';
@@ -82,7 +83,8 @@ AppState appStateReducer(AppState state, action) {
         sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action),
         biometricAuthenticationSettingState: biometricAuthenticationSettingReducer(state.biometricAuthenticationSettingState, action),
         biometricAuthenticationLoginState: biometricAuthenticationLoginReducer(state.biometricAuthenticationLoginState, action),
-        sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action));
+        sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action),
+        receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action));
   }
 
   return AppState(

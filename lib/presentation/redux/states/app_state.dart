@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/biometric_authent
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/received_share_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
@@ -78,6 +79,7 @@ class AppState with EquatableMixin {
   final BiometricAuthenticationSettingState biometricAuthenticationSettingState;
   final SharedSpaceNodeVersionsState sharedSpaceNodeVersionsState;
   final BiometricAuthenticationLoginState biometricAuthenticationLoginState;
+  final ReceivedShareDetailsState receivedShareDetailsState;
 
   AppState(
       {@required this.uiState,
@@ -101,7 +103,8 @@ class AppState with EquatableMixin {
       @required this.sharedSpaceNodeDetailsState,
       @required this.biometricAuthenticationSettingState,
       @required this.biometricAuthenticationLoginState,
-      @required this.sharedSpaceNodeVersionsState});
+      @required this.sharedSpaceNodeVersionsState,
+      @required this.receivedShareDetailsState});
 
   factory AppState.initial() {
     return AppState(
@@ -126,7 +129,8 @@ class AppState with EquatableMixin {
         sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
         biometricAuthenticationSettingState: BiometricAuthenticationSettingState.initial(),
         biometricAuthenticationLoginState: BiometricAuthenticationLoginState.initial(),
-        sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial());
+        sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
+        receivedShareDetailsState: ReceivedShareDetailsState.initial());
   }
 
   @override
@@ -151,6 +155,7 @@ class AppState with EquatableMixin {
         sharedSpaceNodeDetailsState,
         biometricAuthenticationSettingState,
         biometricAuthenticationLoginState,
-        sharedSpaceNodeVersionsState
+        sharedSpaceNodeVersionsState,
+        receivedShareDetailsState
       ];
 }
