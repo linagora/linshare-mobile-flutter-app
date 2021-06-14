@@ -42,16 +42,24 @@ import 'package:linshare_flutter_app/presentation/redux/states/account_state.dar
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_login_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/destination_picker_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/document_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
@@ -60,7 +68,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('network_connectivity_test', () {
-    final getIt = GetIt.asNewInstance();
+    final getIt = GetIt.instance;
     Store<AppState> store;
 
     tearDown(() {
@@ -132,7 +140,7 @@ void main() {
 
 class MockOnlineAction extends ActionOnline {}
 
-AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState networkConnectivityState, {MySpaceState mySpaceState}) {
+AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState networkConnectivityState, {MySpaceState? mySpaceState}) {
   return AppState(
     authenticationState: AuthenticationState.initial(),
     uploadFileState: UploadFileState.initial(),
@@ -148,5 +156,13 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     addSharedSpaceMembersState: AddSharedSpaceMembersState.initial(),
     sharedSpaceDetailsState: SharedSpaceDetailsState.initial(),
     receivedShareState: ReceivedShareState.initial(),
+    biometricAuthenticationLoginState: BiometricAuthenticationLoginState.initial(),
+    biometricAuthenticationSettingState: BiometricAuthenticationSettingState.initial(),
+    deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial(),
+    documentDetailsState: DocumentDetailsState.initial(),
+    sharedSpaceDocumentDestinationPickerState: SharedSpaceDocumentDestinationPickerState.initial(),
+    sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
+    sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
+    updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial()
   );
 }

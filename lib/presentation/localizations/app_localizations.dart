@@ -36,7 +36,7 @@ import 'package:linshare_flutter_app/l10n/messages_all.dart';
 class AppLocalizations {
 
   static AppLocalizations of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
   static Future<AppLocalizations> load(Locale locale) async {

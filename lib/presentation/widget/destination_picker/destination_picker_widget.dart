@@ -65,15 +65,17 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   final _destinationPickerViewModel = getIt<DestinationPickerViewModel>();
   final _sharedSpaceDocumentNavigatorKey = GlobalKey<SharedSpaceDocumentNavigatorWidgetState>();
 
-  DestinationPickerArguments _destinationPickerArguments;
+  DestinationPickerArguments? _destinationPickerArguments;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
       try {
-        _destinationPickerArguments = ModalRoute.of(context).settings.arguments as DestinationPickerArguments;
-        _destinationPickerViewModel.setCurrentViewByOperation(_destinationPickerArguments.operator);
+        _destinationPickerArguments = ModalRoute.of(context)?.settings.arguments as DestinationPickerArguments;
+        if (_destinationPickerArguments != null) {
+          _destinationPickerViewModel.setCurrentViewByOperation(_destinationPickerArguments!.operator);
+        }
       } catch (exception) {
         print(exception);
       }
@@ -109,8 +111,8 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                       stream: _destinationPickerViewModel.currentNodeObservable.stream,
                       builder: (context, AsyncSnapshot<SharedSpaceDocumentArguments> snapshot) {
                         return Column(
-                          crossAxisAlignment: _isTitleCenter(snapshot.data) ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
-                          mainAxisAlignment: _isTitleCenter(snapshot.data) ? MainAxisAlignment.center : MainAxisAlignment.start,
+                          crossAxisAlignment: (snapshot.data != null && _isTitleCenter(snapshot.data!)) ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
+                          mainAxisAlignment: (snapshot.data != null && _isTitleCenter(snapshot.data!)) ? MainAxisAlignment.center : MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             _buildTitleAppBar(snapshot)
@@ -121,10 +123,11 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                   backgroundColor: Colors.white,
                   leading: _buildLeadingAppBar(),
                   bottom: !_responsiveUtils.isSmallScreen(context)
-                    ? PreferredSize(child: Container(
+                    ? PreferredSize(
+                      preferredSize: Size.fromHeight(1.0),
+                      child: Container(
                         color: AppColor.uploadLineDividerWorkGroupDestination,
-                        height: 1.0),
-                        preferredSize: Size.fromHeight(1.0))
+                        height: 1.0))
                     : null
                 ),
                 backgroundColor: Colors.white,
@@ -142,7 +145,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                           } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
                             return SharedSpaceDocumentNavigatorWidget(
                               _sharedSpaceDocumentNavigatorKey,
-                              state.routeData.sharedSpaceNodeNested,
+                              state.routeData.sharedSpaceNodeNested!,
                               onBackSharedSpaceClickedCallback: () => _destinationPickerViewModel.backToSharedSpace(),
                               sharedSpaceDocumentUIType: SharedSpaceDocumentUIType.destinationPicker,
                               currentNodeObservable: _destinationPickerViewModel.currentNodeObservable
@@ -171,7 +174,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     );
   }
 
-  bool _isTitleCenter(SharedSpaceDocumentArguments arguments) => arguments != null;
+  bool _isTitleCenter(SharedSpaceDocumentArguments? arguments) => arguments != null;
 
   Widget _buildTitleAppBar(AsyncSnapshot<SharedSpaceDocumentArguments> snapshot) {
     if (snapshot.data == null) {
@@ -181,16 +184,16 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
           fontSize: 20.0,
           color: AppColor.destinationPickerAppBarTitleColor),
       );
-    } else if (snapshot.data.documentType == SharedSpaceDocumentType.children) {
+    } else if (snapshot.data!.documentType == SharedSpaceDocumentType.children) {
       return Text(
-        snapshot.data.workGroupFolder.name,
+        snapshot.data!.workGroupFolder?.name ?? '',
         style: TextStyle(
           fontSize: 20.0,
           color: AppColor.destinationPickerAppBarTitleColor),
       );
     } else {
       return Text(
-        snapshot.data.sharedSpaceNode.name,
+        snapshot.data!.sharedSpaceNode.name,
         style: TextStyle(
           fontSize: 20.0,
           color: AppColor.destinationPickerAppBarTitleColor),
@@ -207,7 +210,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               icon: SvgPicture.asset(_imagePath.icClose),
               onPressed: () => _destinationPickerViewModel.handleOnSharedSpaceBackPress());
         } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpace) {
-          if (_destinationPickerArguments.operator == Operation.upload) {
+          if (_destinationPickerArguments?.operator == Operation.upload) {
             return IconButton(
                 icon: SvgPicture.asset(_imagePath.icBackBlue),
                 onPressed: () => _destinationPickerViewModel.backToChooseSpaceDestination());
@@ -218,7 +221,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
           return IconButton(
               icon: SvgPicture.asset(_imagePath.icBackBlue),
-              onPressed: () => _sharedSpaceDocumentNavigatorKey.currentState.wantToBack());
+              onPressed: () => _sharedSpaceDocumentNavigatorKey.currentState?.wantToBack());
         }
         return SizedBox.shrink();
       });
@@ -251,14 +254,14 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   List<Widget> _buildBottomActionList(BuildContext context) {
     final listAction = <Widget>[];
     if (_destinationPickerArguments != null) {
-      for (final action in _destinationPickerArguments.actionList) {
+      for (final action in (_destinationPickerArguments!.actionList)) {
         listAction.add(TextButton(
             onPressed: () {
               if (action.actionClick != null) {
                 action is NegativeDestinationPickerAction
                     ? action.actionClick(null)
                     : action.actionClick(
-                    _destinationPickerViewModel.currentNodeObservable.valueWrapper.value);
+                    _destinationPickerViewModel.currentNodeObservable.valueWrapper?.value);
               }
             },
             child: action.actionWidget));
@@ -296,10 +299,14 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
             style: TextStyle(
                 fontSize: 14, color: AppColor.documentNameItemTextColor),
           ),
-          onTap: () => _destinationPickerViewModel.onChoseSpaceDestination(
-              destinationType,
-              pickerForOperation,
-              _destinationPickerArguments.actionList))
+          onTap: () {
+            if (_destinationPickerArguments != null) {
+              _destinationPickerViewModel.onChoseSpaceDestination(
+                            destinationType,
+                            pickerForOperation,
+                            _destinationPickerArguments!.actionList);
+            }
+          })
         : SizedBox.shrink();
   }
 
@@ -307,8 +314,11 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
       BuildContext context, DestinationPickerState state) {
     return state.viewState.fold(
         (failure) => RefreshIndicator(
-            onRefresh: () async =>
-                _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.operator),
+            onRefresh: () async {
+              if (_destinationPickerArguments != null) {
+                _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments!.operator);
+              }
+            },
             child: failure is SharedSpaceDetailFailure
                 ? BackgroundWidgetBuilder()
                     .key(Key('shared_space_error_background'))
@@ -337,8 +347,11 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                 ],
               )
             : RefreshIndicator(
-                onRefresh: () async =>
-                    _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments.operator),
+                onRefresh: () async {
+                  if (_destinationPickerArguments != null) {
+                    _destinationPickerViewModel.getAllSharedSpaces(_destinationPickerArguments!.operator);
+                  }
+                },
                 child: _buildSharedSpacesListView(
                     context, state)));
   }
@@ -397,7 +410,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
 
   bool _isDestinationAvailable(DestinationType destinationType) {
     return _destinationPickerArguments != null
-        && _destinationPickerArguments.availableDestinationTypes != null
-        && _destinationPickerArguments.availableDestinationTypes.contains(destinationType);
+        && _destinationPickerArguments!.availableDestinationTypes != null
+        && _destinationPickerArguments!.availableDestinationTypes.contains(destinationType);
   }
 }

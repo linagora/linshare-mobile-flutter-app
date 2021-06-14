@@ -116,7 +116,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       case RoutePaths.sharedSpaceInside:
         return SharedSpaceDocumentNavigatorWidget(
           Key('shared_space_document_navigator_widget_key'),
-          uiState.selectedSharedSpace,
+          uiState.selectedSharedSpace!,
           onBackSharedSpaceClickedCallback: () => homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace))
         );
       case RoutePaths.account_details:

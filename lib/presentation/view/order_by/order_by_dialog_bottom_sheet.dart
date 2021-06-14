@@ -46,7 +46,7 @@ class OrderByDialogBottomSheetBuilder {
   final BuildContext _context;
   final Sorter _currentSorter;
 
-  OnSelectSorterAction _onSelectSorterAction;
+  OnSelectSorterAction? _onSelectSorterAction;
 
   OrderByDialogBottomSheetBuilder(this._context, this._currentSorter);
 
@@ -74,7 +74,11 @@ class OrderByDialogBottomSheetBuilder {
             sorter.orderBy == currentSorter.orderBy
                 ? SelectMode.ACTIVE
                 : SelectMode.INACTIVE)
-        .onActionClick((sorterSelected) => _onSelectSorterAction(sorterSelected))
+        .onActionClick((sorterSelected) {
+          if (_onSelectSorterAction != null) {
+            _onSelectSorterAction!(sorterSelected);
+          }
+        })
         .build();
   }
 }

@@ -42,7 +42,6 @@ import 'package:linshare_flutter_app/presentation/util/extensions/authentication
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/list_biometric_kind_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/text/linshare_slogan_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_login_viewmodel.dart';
 
@@ -58,14 +57,14 @@ class _BiometricAuthenticationLoginState extends State<BiometricAuthenticationLo
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       _biometricAuthenticationLoginViewModel.getAvailableBiometric(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    BiometricAuthenticationArguments _arguments = ModalRoute.of(context).settings.arguments;
+    var _arguments = ModalRoute.of(context)?.settings.arguments as BiometricAuthenticationArguments;
     _biometricAuthenticationLoginViewModel.setBiometricAuthenticationArguments(_arguments);
 
     return StoreConnector<AppState, AppState>(

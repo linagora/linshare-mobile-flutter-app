@@ -44,11 +44,11 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 @immutable
 class SharedSpaceDocumentDestinationPickerState extends LinShareState  with EquatableMixin {
   final List<SelectableElement<WorkGroupNode>> workGroupNodeList;
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
+  final SharedSpaceNodeNested? sharedSpaceNodeNested;
   final SharedSpaceDocumentType documentType;
-  final WorkGroupNode workGroupNode;
+  final WorkGroupNode? workGroupNode;
   final SelectMode selectMode;
-  final Sorter sorter;
+  final Sorter? sorter;
 
   SharedSpaceDocumentDestinationPickerState(
     Either<Failure, Success> viewState,
@@ -70,31 +70,32 @@ class SharedSpaceDocumentDestinationPickerState extends LinShareState  with Equa
   }
 
   @override
-  SharedSpaceDocumentDestinationPickerState sendViewState({Either<Failure, Success> viewState}) {
+  SharedSpaceDocumentDestinationPickerState sendViewState({required Either<Failure, Success> viewState}) {
     return SharedSpaceDocumentDestinationPickerState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, selectMode, sorter);
   }
 
-  SharedSpaceDocumentDestinationPickerState setSharedSpaceDocumentArgument({SharedSpaceDocumentArguments newArguments}) {
+  SharedSpaceDocumentDestinationPickerState setSharedSpaceDocumentArgument({required SharedSpaceDocumentArguments newArguments}) {
     return SharedSpaceDocumentDestinationPickerState(
       viewState,
       workGroupNodeList,
-      newArguments.documentType ?? documentType,
+      newArguments.documentType,
       newArguments.workGroupFolder ?? workGroupNode,
-      newArguments.sharedSpaceNode ?? sharedSpaceNodeNested,
+      newArguments.sharedSpaceNode,
       selectMode,
       sorter
     );
   }
 
-  SharedSpaceDocumentDestinationPickerState setSharedSpaceDocument({Either<Failure, Success> viewState, List<WorkGroupNode> newWorkGroupNodeList, Sorter newSorter}) {
+  SharedSpaceDocumentDestinationPickerState setSharedSpaceDocument({Either<Failure, Success>? viewState, required List<WorkGroupNode?> newWorkGroupNodeList, Sorter? newSorter}) {
     final selectedElements = workGroupNodeList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
     return SharedSpaceDocumentDestinationPickerState(
       viewState ?? this.viewState,
       newWorkGroupNodeList
+          .where((workGroup) => workGroup != null)
           .map((workGroup) => selectedElements.contains(workGroup)
-            ? SelectableElement<WorkGroupNode>(workGroup, SelectMode.ACTIVE)
-            : SelectableElement<WorkGroupNode>(workGroup, SelectMode.INACTIVE))
+            ? SelectableElement<WorkGroupNode>(workGroup!, SelectMode.ACTIVE)
+            : SelectableElement<WorkGroupNode>(workGroup!, SelectMode.INACTIVE))
           .toList(),
       documentType,
       workGroupNode,
@@ -110,7 +111,7 @@ class SharedSpaceDocumentDestinationPickerState extends LinShareState  with Equa
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     workGroupNodeList,
     documentType,

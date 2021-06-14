@@ -46,7 +46,7 @@ class AuthenticationViewModel extends BaseViewModel {
   final GetAuthorizedInteractor _getAuthorizedInteractor;
   final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
   final AppNavigation _appNavigation;
-  AuthenticationArguments _authenticationArguments;
+  AuthenticationArguments? _authenticationArguments;
 
   AuthenticationViewModel(
     Store<AppState> store,
@@ -69,7 +69,11 @@ class AuthenticationViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       await _getAuthorizedInteractor.execute().then((result) => result.fold(
               (failure) => _getAuthorizedUserFailure(failure),
-              (success) => _getAuthorizedUserSuccess(success)));
+              (success) {
+                if(success is GetAuthorizedUserViewState) {
+                  _getAuthorizedUserSuccess(success);
+                }
+              }));
     };
   }
 
@@ -83,7 +87,7 @@ class AuthenticationViewModel extends BaseViewModel {
       store.dispatch(logoutAction());
       _appNavigation.popAndPush(
         RoutePaths.second_factor_authentication,
-        arguments: SecondFactorAuthenticationArguments(_authenticationArguments.baseUrl));
+        arguments: SecondFactorAuthenticationArguments(_authenticationArguments!.baseUrl));
     } else {
       store.dispatch(initializeHomeView(_appNavigation));
     }

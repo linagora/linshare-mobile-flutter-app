@@ -42,7 +42,7 @@ class UploadFilesStateWidget extends StatelessWidget {
 
   final imagePath = getIt<AppImagePaths>();
 
-  final List<UploadAndShareFileState> files;
+  final List<UploadAndShareFileState?> files;
 
   UploadFilesStateWidget(this.files);
 
@@ -54,13 +54,13 @@ class UploadFilesStateWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(BuildContext context, UploadAndShareFileState fileState) {
+  Widget _buildItem(BuildContext context, UploadAndShareFileState? fileState) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            fileState.file.fileName.getMediaType().getFileTypeImagePath(imagePath),
+            fileState?.file.fileName.getMediaType().getFileTypeImagePath(imagePath) ?? imagePath.icFileTypeFile,
             width: 20,
             height: 24,
             fit: BoxFit.fill,
@@ -70,7 +70,7 @@ class UploadFilesStateWidget extends StatelessWidget {
       title: Transform(
         transform: Matrix4.translationValues(-16, 0.0, 0.0),
         child: Text(
-          fileState.file.fileName,
+          fileState?.file.fileName ?? '',
           maxLines: 1,
           style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
         ),
@@ -85,25 +85,25 @@ class UploadFilesStateWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSubTitle(BuildContext context, UploadAndShareFileState fileState) {
+  Widget _buildSubTitle(BuildContext context, UploadAndShareFileState? fileState) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (fileState.uploadStatus == UploadFileStatus.uploading && fileState.uploadingProgress > 0)
-          _buildLinearProgress(fileState.uploadingProgress),
+        if (fileState?.uploadStatus == UploadFileStatus.uploading && (fileState?.uploadingProgress ?? 0) > 0)
+          _buildLinearProgress(fileState?.uploadingProgress ?? 0),
         Text(
-          _getStatusSubTitle(context, fileState.uploadStatus, fileState.uploadingProgress),
+          _getStatusSubTitle(context, fileState?.uploadStatus, fileState?.uploadingProgress ?? 0),
           maxLines: 1,
           style: TextStyle(
             fontSize: 13,
-            color: _getStatusSubTitleColor(fileState.uploadStatus),
+            color: _getStatusSubTitleColor(fileState?.uploadStatus),
           ),
         )
       ],
     );
   }
 
-  String _getStatusSubTitle(BuildContext context, UploadFileStatus status, int progress) {
+  String _getStatusSubTitle(BuildContext context, UploadFileStatus? status, int progress) {
     switch (status) {
       case UploadFileStatus.waiting:
         return AppLocalizations.of(context).current_uploads_waiting_status;
@@ -116,12 +116,12 @@ class UploadFilesStateWidget extends StatelessWidget {
         return AppLocalizations.of(context).current_uploads_share_failed_status;
       case UploadFileStatus.succeed:
         return AppLocalizations.of(context).current_uploads_succeed_status;
+      case null:
+        return '';
     }
-
-    return '';
   }
 
-  Color _getStatusSubTitleColor(UploadFileStatus status) {
+  Color _getStatusSubTitleColor(UploadFileStatus? status) {
     switch (status) {
       case UploadFileStatus.waiting:
       case UploadFileStatus.uploading:
@@ -131,9 +131,9 @@ class UploadFilesStateWidget extends StatelessWidget {
         return AppColor.statusUploadFailedSubTitleColor;
       case UploadFileStatus.succeed:
         return AppColor.statusUploadCompletedSubTitleColor;
+      case null:
+        return AppColor.statusUploadInProgressSubTitleColor;
     }
-
-    return AppColor.statusUploadInProgressSubTitleColor;
   }
 
   Widget _buildLinearProgress(int progress) {

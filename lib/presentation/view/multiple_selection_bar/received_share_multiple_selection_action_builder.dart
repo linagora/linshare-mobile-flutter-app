@@ -56,7 +56,11 @@ class ReceivedShareMultipleSelectionActionBuilder extends MultipleSelectionActio
     return IconButton(
       key: key,
       icon: actionIcon,
-      onPressed: () => onMultipleSelectionActionClick(_receivedShares)
+      onPressed: () {
+        if (onMultipleSelectionActionClick != null) {
+          onMultipleSelectionActionClick!(_receivedShares);
+        }
+      }
     );
   }
 }

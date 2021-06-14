@@ -38,7 +38,7 @@ class DestinationPickerState {
 
   DestinationPickerState(this.sharedSpacesList, {this.showLoading = false});
 
-  DestinationPickerState copyWith({List<SharedSpaceNodeNested> sharedSpacesList, bool showLoading}) =>
+  DestinationPickerState copyWith({List<SharedSpaceNodeNested>? sharedSpacesList, bool? showLoading}) =>
       DestinationPickerState(
           sharedSpacesList ?? this.sharedSpacesList, 
           showLoading: showLoading ?? this.showLoading);

@@ -58,7 +58,7 @@ class FileUploadDataSourceImpl implements FileUploadDataSource {
     _uploadingFileStream = Rx.merge([_uploader.result, _uploader.progress]).map<Either<Failure, Success>>((event) {
       if (event is UploadTaskResponse) {
         if (event.statusCode == 200) {
-          final jsonMap = json.decode(event.response);
+          final jsonMap = json.decode(event.response!);
           final workgroupDocument = jsonMap['workGroup'] != null;
 
           return workgroupDocument
@@ -67,7 +67,7 @@ class FileUploadDataSourceImpl implements FileUploadDataSource {
         }
         return Left(FileUploadFailure(UploadTaskId(event.taskId), Exception('Response code failed: ${event.response}')));
       } else if (event is UploadTaskProgress) {
-        return Right(UploadingProgress(UploadTaskId(event.taskId), event.progress));
+        return Right(UploadingProgress(UploadTaskId(event.taskId), event.progress!));
       } else {
         return Left(FileUploadFailure(UploadTaskId.undefined(), Exception('Something wrong with response: ${event.toString()}')));
       }

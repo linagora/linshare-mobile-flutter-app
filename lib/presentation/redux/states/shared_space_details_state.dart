@@ -40,10 +40,10 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 
 @immutable
 class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
-  final SharedSpaceNodeNested sharedSpace;
-  final List<SharedSpaceMember> membersList;
-  final List<AuditLogEntryUser> activitiesList;
-  final AccountQuota quota;
+  final SharedSpaceNodeNested? sharedSpace;
+  final List<SharedSpaceMember>? membersList;
+  final List<AuditLogEntryUser?>? activitiesList;
+  final AccountQuota? quota;
 
   SharedSpaceDetailsState(Either<Failure, Success> viewState, this.sharedSpace, this.membersList, this.activitiesList, this.quota) : super(viewState);
 
@@ -57,7 +57,7 @@ class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
   }
 
   @override
-  SharedSpaceDetailsState sendViewState({Either<Failure, Success> viewState}) {
+  SharedSpaceDetailsState sendViewState({required Either<Failure, Success> viewState}) {
     return SharedSpaceDetailsState(viewState, sharedSpace, membersList, activitiesList, quota);
   }
 
@@ -66,19 +66,19 @@ class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
     return SharedSpaceDetailsState(Right(LoadingState()), sharedSpace, membersList, activitiesList, quota);
   }
 
-  SharedSpaceDetailsState setSharedSpaceMembers({Either<Failure, Success> viewState, List<SharedSpaceMember> newMembers}) {
+  SharedSpaceDetailsState setSharedSpaceMembers({required Either<Failure, Success> viewState, required List<SharedSpaceMember> newMembers}) {
     return SharedSpaceDetailsState(viewState, sharedSpace, newMembers, activitiesList, quota);
   }
 
-  SharedSpaceDetailsState setSharedSpace({Either<Failure, Success> viewState, SharedSpaceNodeNested newSharedSpace}) {
+  SharedSpaceDetailsState setSharedSpace({required Either<Failure, Success> viewState, SharedSpaceNodeNested? newSharedSpace}) {
     return SharedSpaceDetailsState(viewState, newSharedSpace, membersList, activitiesList, quota);
   }
 
-  SharedSpaceDetailsState setSharedSpaceActivities({Either<Failure, Success> viewState, List<AuditLogEntryUser> newActivities}) {
+  SharedSpaceDetailsState setSharedSpaceActivities({required Either<Failure, Success> viewState, List<AuditLogEntryUser?>? newActivities}) {
     return SharedSpaceDetailsState(viewState, sharedSpace, membersList, newActivities, quota);
   }
 
-  SharedSpaceDetailsState setAccountQuota({Either<Failure, Success> viewState, AccountQuota newQuota}) {
+  SharedSpaceDetailsState setAccountQuota({required Either<Failure, Success> viewState, AccountQuota? newQuota}) {
     return SharedSpaceDetailsState(viewState, sharedSpace, membersList, activitiesList, newQuota);
   }
 

@@ -36,7 +36,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:redux/redux.dart';
@@ -47,12 +46,15 @@ class VerifyQuotaManager {
 
   VerifyQuotaManager(this._store, this._getQuotaInteractor);
 
-  Future<bool> hasEnoughQuotaAndMaxFileSize({List<FileInfo> filesInfos}) async {
+  Future<bool> hasEnoughQuotaAndMaxFileSize({required List<FileInfo> filesInfos}) async {
     if (_store.state.account.user == null) {
       return true;
     }
 
-    final quotaUuid = _store.state.account.user.quotaUuid;
+    if(_store.state.account.user == null) {
+      return false;
+    }
+    final quotaUuid = _store.state.account.user!.quotaUuid;
     final accountQuotaResult = (await _getQuotaInteractor.execute(quotaUuid));
 
     if (accountQuotaResult.isLeft()) {

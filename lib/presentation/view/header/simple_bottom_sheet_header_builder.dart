@@ -36,8 +36,8 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 
 class SimpleBottomSheetHeaderBuilder {
   final Key _key;
-  String _label;
-  TextStyle _textStyle;
+  String? _label;
+  TextStyle? _textStyle;
 
   SimpleBottomSheetHeaderBuilder(this._key);
 
@@ -57,7 +57,7 @@ class SimpleBottomSheetHeaderBuilder {
         title: Transform(
           transform: Matrix4.translationValues(12, 5, 0.0),
           child: Text(
-            _label,
+            _label ?? '',
             style: _textStyle ?? TextStyle(
                     fontSize: 20.0,
                     color: AppColor.uploadFileFileNameTextColor),

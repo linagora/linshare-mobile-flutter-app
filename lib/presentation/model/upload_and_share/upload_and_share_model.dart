@@ -69,11 +69,11 @@ class UploadAndShareFileState extends Equatable {
   }
 
   UploadAndShareFileState copyWith({
-    FileInfo file,
-    UploadTaskId uploadTaskId,
-    UploadFileStatus uploadStatus,
-    int uploadingProgress,
-    List<AutoCompleteResult> recipients
+    FileInfo? file,
+    UploadTaskId? uploadTaskId,
+    UploadFileStatus? uploadStatus,
+    int? uploadingProgress,
+    List<AutoCompleteResult>? recipients
   }) {
     return UploadAndShareFileState(
       file ?? this.file,
@@ -86,7 +86,7 @@ class UploadAndShareFileState extends Equatable {
   }
 
   @override
-  List<Object> get props => [file, action, uploadTaskId, uploadStatus, uploadingProgress, recipients];
+  List<Object?> get props => [file, action, uploadTaskId, uploadStatus, uploadingProgress, recipients];
 }
 
 enum UploadFileStatus { waiting, uploading, uploadFailed, shareFailed, succeed }
@@ -99,8 +99,8 @@ extension UploadFileStatusExtension on UploadFileStatus {
 
 enum UploadAndShareAction { upload, uploadAndShare, uploadSharedSpace }
 
-extension UploadAndShareFileStateListExtension on List<UploadAndShareFileState> {
-  List<UploadAndShareFileState> replaceBy(
+extension UploadAndShareFileStateListExtension on List<UploadAndShareFileState?> {
+  List<UploadAndShareFileState?> replaceBy(
     CompareStateCallback compareCallback,
     GetNewStateCallback getNewStateCallback,
   ) {
@@ -111,16 +111,16 @@ extension UploadAndShareFileStateListExtension on List<UploadAndShareFileState> 
     return this;
   }
 
-  List<UploadAndShareFileState> replaceByUploadTaskId(
+  List<UploadAndShareFileState?> replaceByUploadTaskId(
     UploadTaskId uploadTaskId,
     GetNewStateCallback getNewStateCallback,
   ) {
     return replaceBy(
-      (state) => state.uploadTaskId == uploadTaskId,
+      (state) => state?.uploadTaskId == uploadTaskId,
       getNewStateCallback,
     );
   }
 }
 
-typedef GetNewStateCallback = UploadAndShareFileState Function(UploadAndShareFileState currentState);
-typedef CompareStateCallback = bool Function(UploadAndShareFileState state);
+typedef GetNewStateCallback = UploadAndShareFileState? Function(UploadAndShareFileState? currentState);
+typedef CompareStateCallback = bool Function(UploadAndShareFileState? state);

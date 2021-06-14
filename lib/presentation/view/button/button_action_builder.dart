@@ -41,7 +41,7 @@ abstract class ButtonActionBuilder {
   @protected double heightButton = 20.0;
   @protected BorderRadius borderRadius = BorderRadius.all(Radius.circular(4));
 
-  ButtonActionBuilder(this.key, {@required this.onButtonClick}) : assert(onButtonClick != null);
+  ButtonActionBuilder(this.key, {required this.onButtonClick});
 
   ButtonActionBuilder setWidth(double widthSize) {
     widthButton = widthSize;

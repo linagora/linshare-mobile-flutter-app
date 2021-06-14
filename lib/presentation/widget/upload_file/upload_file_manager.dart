@@ -52,7 +52,8 @@ class UploadFileManager {
     if(_pendingListFileInfo.isClosed) {
       _pendingListFileInfo = BehaviorSubject.seeded([]);
     } else {
-      _pendingListFileInfo.add([]);
+      closeUploadFileManagerStream();
+      _pendingListFileInfo = BehaviorSubject.seeded([]);
     }
   }
 

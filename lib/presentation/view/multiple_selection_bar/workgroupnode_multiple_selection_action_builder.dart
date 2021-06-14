@@ -56,7 +56,11 @@ class WorkGroupNodeMultipleSelectionActionBuilder extends MultipleSelectionActio
     return IconButton(
       key: key,
       icon: actionIcon,
-      onPressed: () => onMultipleSelectionActionClick(_workGroupNodes)
+      onPressed: () {
+        if (onMultipleSelectionActionClick != null) {
+          onMultipleSelectionActionClick!(_workGroupNodes);
+        }
+      }
     );
   }
 }

@@ -44,8 +44,8 @@ class ContextMenuBuilder {
 
   final bool areTilesHorizontal;
 
-  Widget _header;
-  Widget _footer;
+  Widget? _header;
+  Widget? _footer;
 
   ContextMenuBuilder(this._context, { this.areTilesHorizontal = false });
 
@@ -113,7 +113,7 @@ class ContextMenuBuilder {
                     _footer != null
                       ? Padding(
                           padding: EdgeInsets.only(bottom: 10.0),
-                          child: Wrap(children: [_footer]))
+                          child: Wrap(children: [_footer ?? SizedBox.shrink()]))
                       : SizedBox.shrink()
                   ],
                 ),

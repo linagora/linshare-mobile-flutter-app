@@ -37,7 +37,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 
 class SharedSpaceDocumentArguments extends RouterArguments {
   final SharedSpaceDocumentType documentType;
-  final WorkGroupFolder workGroupFolder;
+  final WorkGroupFolder? workGroupFolder;
   final SharedSpaceNodeNested sharedSpaceNode;
   final SharedSpaceDocumentUIType documentUIType;
 

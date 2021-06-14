@@ -35,12 +35,13 @@
 // the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/util/styles.dart';
 
 class TextBuilder {
-  String _text;
-  TextStyle _textStyle;
-  TextAlign _textAlign;
-  Key _key;
+  String? _text;
+  TextStyle? _textStyle;
+  TextAlign? _textAlign;
+  Key? _key;
 
   TextBuilder key(Key key) {
     _key = key;
@@ -63,13 +64,13 @@ class TextBuilder {
   }
 
   Text build() {
-    return Text(_text, key: _key, style: _textStyle, textAlign: _textAlign);
+    return Text(_text ?? '', key: _key ?? Key('TextBuilder'), style: _textStyle ?? CommonTextStyle.textStyleNormal, textAlign: _textAlign ?? TextAlign.center);
   }
 }
 
 class CenterTextBuilder extends TextBuilder {
   @override
   Text build() {
-    return Text(_text, key: _key, style: _textStyle, textAlign: TextAlign.center);
+    return Text(_text ?? '', key: _key ?? Key('TextBuilder'), style: _textStyle, textAlign: TextAlign.center);
   }
 }

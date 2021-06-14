@@ -9,36 +9,35 @@ import 'package:test/test.dart';
 import 'package:redux/redux.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../domain/test/fixture/test_fixture.dart';
 import '../../domain/test/mock/repository/authentication/mock_credential_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_document_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_token_repository.dart';
-import '../../domain/test/mock/repository/authentication/mock_authentication_repository.dart';
 import '../../domain/test/mock/repository/quota/mock_quota_repository.dart';
+import '../fixtures/mock/mock_fixtures.dart';
 import '../fixtures/test_redux_module.dart';
 
 void main() {
-  final getIt = GetIt.asNewInstance();
+  final getIt = GetIt.instance;
   TestReduxModule(getIt);
+  getIt.registerLazySingleton<UploadWorkGroupDocumentInteractor>(() => MockUploadWorkGroupDocumentInteractor());
 
   group('upload_and_share_file_manager_test', () {
-    MockDocumentRepository documentRepository;
+    late MockDocumentRepository documentRepository;
     MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
     UploadMySpaceDocumentInteractor uploadFileInteractor;
     ShareDocumentInteractor shareDocumentInteractor;
     UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
-    UploadShareFileManager uploadShareFileManager;
-    UploadTaskId uploadTaskId;
+    late UploadShareFileManager uploadShareFileManager;
     FileHelper fileHelper;
     QuotaRepository quotaRepository;
     GetQuotaInteractor getQuotaInteractor;
+    late Store<AppState> store;
 
     setUp(() {
       documentRepository = MockDocumentRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
-      uploadTaskId = UploadTaskId('upload_task_id_1');
       uploadFileInteractor = UploadMySpaceDocumentInteractor(
         documentRepository,
         tokenRepository,
@@ -48,8 +47,10 @@ void main() {
       fileHelper = FileHelper();
       quotaRepository = MockQuotaRepository();
       getQuotaInteractor = GetQuotaInteractor(quotaRepository);
+      uploadWorkGroupDocumentInteractor = getIt.get<UploadWorkGroupDocumentInteractor>();
+      store = getIt.get<Store<AppState>>();
       uploadShareFileManager = UploadShareFileManager(
-        getIt.get<Store<AppState>>(),
+        store,
         Stream.fromIterable([]),
         uploadFileInteractor,
         shareDocumentInteractor,
@@ -59,26 +60,23 @@ void main() {
       );
     });
 
-    void mockPermanentUploadData() {
-      when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
-      when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-    }
-
-    test(
+    // TODO: Rewrite test with upload list files
+    /*test(
       'justUpload just mapping result into action, then dispatch to store',
       () async {
-        // TODO: Rewrite test with upload list files
+
         expect(true, true);
       },
-    );
+    );*/
 
-    test(
+    // TODO: Rewrite test with upload list files
+    /*test(
       'justUpload just mapping result into action in case failed, then dispatch to store',
       () async {
-        // TODO: Rewrite test with upload list files
+
         expect(true, true);
       },
-    );
+    );*/
 
     test(
       'justShare just mapping result into action, then dispatch to store',
@@ -92,7 +90,7 @@ void main() {
         await uploadShareFileManager.justShare(recipients, [document1.documentId]);
 
         expect(
-          getIt.get<Store<AppState>>().state.shareState.viewState,
+          store.state.shareState.viewState,
           equals(Right<Failure, Success>(ShareDocumentViewState([share1]))),
         );
       },
@@ -104,7 +102,7 @@ void main() {
         await uploadShareFileManager.justShare(recipients, []);
 
         expect(
-          getIt.get<Store<AppState>>().state.shareState.viewState,
+          store.state.shareState.viewState,
           equals(Left<Failure, Success>(ShareDocumentFailure(ShareDocumentEmpty()))),
         );
       },
@@ -116,18 +114,19 @@ void main() {
         await uploadShareFileManager.justShare([], [document1.documentId]);
 
         expect(
-          getIt.get<Store<AppState>>().state.shareState.viewState,
+          store.state.shareState.viewState,
           equals(Left<Failure, Success>(ShareDocumentFailure(ShareDocumentToNobodyException()))),
         );
       },
     );
 
-    test(
+    // TODO: Rewrite test with upload and share list files
+    /*test(
       'uploadAndShare upload and share success',
       () async {
-        // TODO: Rewrite test with upload and share list files
+
         expect(true, true);
       },
-    );
+    );*/
   });
 }

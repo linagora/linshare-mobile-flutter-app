@@ -46,17 +46,17 @@ class ShareState extends LinShareState with EquatableMixin {
   }
 
   @override
-  LinShareState clearViewState() {
+  ShareState clearViewState() {
     return ShareState(Right(IdleState()));
   }
 
   @override
-  LinShareState sendViewState({Either<Failure, Success> viewState}) {
+  ShareState sendViewState({required Either<Failure, Success> viewState}) {
     return ShareState(viewState);
   }
 
   @override
-  LinShareState startLoadingState() {
+  ShareState startLoadingState() {
     return ShareState(Right(LoadingState()));
   }
 }

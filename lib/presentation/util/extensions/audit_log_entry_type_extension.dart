@@ -36,7 +36,7 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 extension AuditLogEntryTypeExtension on AuditLogEntryType {
   Map<AuditLogActionMessage, String> getAuditLogMapping(
       BuildContext context,
-      ClientLogAction clientLogAction,
+      ClientLogAction? clientLogAction,
       Map<AuditLogActionMessageParam, dynamic> actionMessages,
       bool isCurrentUserAuthor) {
     switch (this) {
