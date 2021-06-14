@@ -50,7 +50,7 @@ class EnterOTPViewModel extends BaseViewModel {
   final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
   final AppToast _appToast;
-  EnterOTPArgument _enterOTPArgument;
+  late EnterOTPArgument _enterOTPArgument;
 
   EnterOTPViewModel(
     Store<AppState> store,
@@ -79,8 +79,16 @@ class EnterOTPViewModel extends BaseViewModel {
           .execute(_enterOTPArgument.baseUrl, _enterOTPArgument.email, _enterOTPArgument.password, otpCode: OTPCode(otp))
           .then(
               (result) => result.fold(
-                  (failure) => _loginFailure(failure, context),
-                  ((success) => _loginSuccess(success))));
+                  (failure) {
+                    if (failure is AuthenticationFailure) {
+                      _loginFailure(failure, context);
+                    }
+                  },
+                  ((success) {
+                    if(success is AuthenticationViewState) {
+                      _loginSuccess(success);
+                    }
+                  })));
     });
   }
 
@@ -88,7 +96,7 @@ class EnterOTPViewModel extends BaseViewModel {
     final authenException = authenticationFailure.authenticationException;
     store.dispatch(AuthenticationAction(Left(authenticationFailure)));
     if (authenException is UserLocked) {
-      await _appNavigation.popBack();
+      _appNavigation.popBack();
     } else {
       _appToast.showErrorToast(AppLocalizations.of(context).invalid_otp);
     }

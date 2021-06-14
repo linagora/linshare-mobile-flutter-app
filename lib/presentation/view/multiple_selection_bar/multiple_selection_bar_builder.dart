@@ -33,9 +33,9 @@ import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 class MultipleSelectionBarBuilder {
-  @protected Key _key;
-  @protected String _text;
-  @protected List<Widget> _actions;
+  @protected Key? _key;
+  @protected String? _text;
+  @protected List<Widget>? _actions;
 
   MultipleSelectionBarBuilder();
 
@@ -56,14 +56,14 @@ class MultipleSelectionBarBuilder {
   
   Container build() {
     return Container(
-      key: _key,
+      key: _key ?? Key('MultipleSelectionBarBuilder'),
       height: 56,
       margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 24.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(_text, style: TextStyle(color: AppColor.multipleSelectionBarTextColor)),
-          Row(children: _actions),
+          Text(_text ?? '', style: TextStyle(color: AppColor.multipleSelectionBarTextColor)),
+          Row(children: _actions ?? <SizedBox>[]),
         ],
       )
     );

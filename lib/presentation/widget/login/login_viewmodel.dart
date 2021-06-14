@@ -81,8 +81,16 @@ class LoginViewModel extends BaseViewModel {
       store.dispatch(StartAuthenticationLoadingAction());
       await _getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
           (result) => result.fold(
-              (failure) => _loginFailureAction(failure),
-              ((success) => store.dispatch(loginSuccessAction(success)))));
+              (failure) {
+                if(failure is AuthenticationFailure) {
+                  _loginFailureAction(failure);
+                }
+              },
+              ((success) {
+                if(success is AuthenticationViewState) {
+                  return store.dispatch(loginSuccessAction(success));
+                }
+              })));
     };
   }
 

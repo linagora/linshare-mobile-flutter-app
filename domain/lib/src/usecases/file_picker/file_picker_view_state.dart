@@ -42,7 +42,7 @@ class FilePickerSuccessViewState extends ViewState {
 }
 
 class FilePickerFailure extends FeatureFailure {
-  final Exception exception;
+  final exception;
 
   FilePickerFailure(this.exception);
 

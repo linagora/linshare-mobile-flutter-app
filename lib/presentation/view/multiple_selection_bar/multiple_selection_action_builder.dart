@@ -38,7 +38,7 @@ typedef OnMultipleSelectionActionClick<T> = void Function(T data);
 abstract class MultipleSelectionActionBuilder<T> {
   @protected final Key key;
   @protected final SvgPicture actionIcon;
-  @protected OnMultipleSelectionActionClick<T> onMultipleSelectionActionClick;
+  @protected OnMultipleSelectionActionClick<T>? onMultipleSelectionActionClick;
 
   MultipleSelectionActionBuilder(
     this.key,

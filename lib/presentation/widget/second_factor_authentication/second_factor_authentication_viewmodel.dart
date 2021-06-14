@@ -39,7 +39,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SecondFactorAuthenticationViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
-  SecondFactorAuthenticationArguments _secondFactorAuthenticationArguments;
+  late SecondFactorAuthenticationArguments _secondFactorAuthenticationArguments;
 
   SecondFactorAuthenticationViewModel(Store<AppState> store, this._appNavigation) : super(store);
 

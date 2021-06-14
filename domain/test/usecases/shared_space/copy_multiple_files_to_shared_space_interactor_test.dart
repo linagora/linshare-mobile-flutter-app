@@ -64,7 +64,7 @@ void main() {
               .map((document) => document.toCopyRequest())
               .toList(),
           sharedSpace1.sharedSpaceId);
-      final state = result.getOrElse(() => null)!;
+      final state = result.getOrElse(() => IdleState());
       expect(state, isA<CopyMultipleFilesToSharedSpaceAllSuccessViewState>());
 
       (state as CopyMultipleFilesToSharedSpaceAllSuccessViewState).resultList[0].fold(
@@ -90,7 +90,7 @@ void main() {
       final result = await copyMultipleFilesToSharedSpaceInteractor.execute(
           [document1, document2].map((document) => document.toCopyRequest()).toList(),
           sharedSpace1.sharedSpaceId);
-      final state = result.getOrElse(() => null)!;
+      final state = result.getOrElse(() => IdleState());
       expect(state, isA<CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState>());
 
       (state as CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState).resultList.forEach((element) {

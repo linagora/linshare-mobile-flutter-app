@@ -154,7 +154,7 @@ class SideMenuDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildReceivedShareIcon({@required bool selected}) {
+  Widget _buildReceivedShareIcon({required bool selected}) {
     return SvgPicture.asset(
       imagePath.icReceived,
       fit: BoxFit.none,
@@ -162,14 +162,14 @@ class SideMenuDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildReceivedShareText(BuildContext context, {@required bool selected}) {
+  Widget _buildReceivedShareText(BuildContext context, {required bool selected}) {
     return Text(AppLocalizations.of(context).received_shares,
         style: TextStyle(
             fontSize: 16,
             color: selected ? AppColor.primaryColor : AppColor.documentNameItemTextColor));
   }
 
-  Widget _buildMySpaceIcon({@required bool selected}) {
+  Widget _buildMySpaceIcon({required bool selected}) {
     return SvgPicture.asset(
       imagePath.icHome,
       fit: BoxFit.none,
@@ -177,14 +177,14 @@ class SideMenuDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildMySpaceText(BuildContext context, {@required bool selected}) {
+  Widget _buildMySpaceText(BuildContext context, {required bool selected}) {
     return Text(AppLocalizations.of(context).my_space,
         style: TextStyle(
             fontSize: 16,
             color: selected ? AppColor.primaryColor : AppColor.documentNameItemTextColor));
   }
 
-  Widget _buildSharedSpaceIcon({@required bool selected}) {
+  Widget _buildSharedSpaceIcon({required bool selected}) {
     return SvgPicture.asset(
       imagePath.icSharedSpace,
       fit: BoxFit.none,
@@ -192,14 +192,14 @@ class SideMenuDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSharedSpaceText(BuildContext context, {@required bool selected}) {
+  Widget _buildSharedSpaceText(BuildContext context, {required bool selected}) {
     return Text(AppLocalizations.of(context).shared_space,
         style: TextStyle(
             fontSize: 16,
             color: selected ? AppColor.primaryColor : AppColor.documentNameItemTextColor));
   }
 
-  Widget _buildAccountSettingIcon({@required bool selected}) {
+  Widget _buildAccountSettingIcon({required bool selected}) {
     return SvgPicture.asset(
       imagePath.icSettingsApplications,
       fit: BoxFit.none,
@@ -207,7 +207,7 @@ class SideMenuDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildAccountSettingText(BuildContext context, {@required bool selected}) {
+  Widget _buildAccountSettingText(BuildContext context, {required bool selected}) {
     return Text(AppLocalizations.of(context).account_details,
         style: TextStyle(
             fontSize: 16,

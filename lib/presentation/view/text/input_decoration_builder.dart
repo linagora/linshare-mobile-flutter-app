@@ -39,13 +39,13 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 abstract class InputDecorationBuilder {
-  String _prefixText;
-  String _labelText;
-  TextStyle _labelStyle;
-  String _hintText;
-  TextStyle _hintStyle;
-  EdgeInsets _contentPadding;
-  OutlineInputBorder _enabledBorder;
+  String? _prefixText;
+  String? _labelText;
+  TextStyle? _labelStyle;
+  String? _hintText;
+  TextStyle? _hintStyle;
+  EdgeInsets? _contentPadding;
+  OutlineInputBorder? _enabledBorder;
 
   InputDecorationBuilder prefixText(String prefixText) {
     _prefixText = prefixText;

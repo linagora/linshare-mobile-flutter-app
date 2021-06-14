@@ -44,11 +44,11 @@ typedef OnConfirmActionClick = void Function();
 class ConfirmModalSheetBuilder {
   @protected final AppNavigation _appNavigation;
 
-  @protected Key _key;
+  @protected late Key _key;
   @protected String _title = '';
   @protected String _cancelText = '';
   @protected String _confirmText = '';
-  @protected OnConfirmActionClick _onConfirmActionClick;
+  @protected late OnConfirmActionClick _onConfirmActionClick;
 
   ConfirmModalSheetBuilder(this._appNavigation);
 
@@ -105,11 +105,11 @@ class ConfirmModalSheetBuilder {
                           borderRadius: BorderRadius.circular(20)
                           )
                         ),
+                        onPressed: () => _appNavigation.popBack(),
                         child: Text(_cancelText, style: TextStyle(fontSize: 14)),
-                        onPressed: () => _appNavigation.popBack()
                       ),
                       OutlinedButton(
-                        child: Text(_confirmText),
+                        onPressed: () => _onConfirmActionClick(),
                         style: OutlinedButton.styleFrom(
                           primary: Colors.white,
                           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
@@ -118,7 +118,7 @@ class ConfirmModalSheetBuilder {
                             borderRadius: BorderRadius.circular(20)
                           )
                         ),
-                        onPressed: () => _onConfirmActionClick())
+                        child: Text(_confirmText))
                     ])),
               ],
             ),

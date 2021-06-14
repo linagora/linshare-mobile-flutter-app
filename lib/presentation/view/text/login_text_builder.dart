@@ -38,12 +38,12 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 class LoginTextBuilder {
-  Key _key;
-  ValueChanged<String> _onTextChange;
-  TextStyle _textStyle;
-  TextInputAction _textInputAction;
-  InputDecoration _inputDecoration;
-  bool _obscureText;
+  Key? _key;
+  ValueChanged<String>? _onTextChange;
+  TextStyle? _textStyle;
+  TextInputAction? _textInputAction;
+  InputDecoration? _inputDecoration;
+  bool? _obscureText;
 
   LoginTextBuilder key(Key key) {
     _key = key;
@@ -77,7 +77,7 @@ class LoginTextBuilder {
 
   TextField build() {
     return TextField(
-      key: _key,
+      key: _key ?? Key('LoginTextBuilder'),
       onChanged: _onTextChange,
       textInputAction: _textInputAction,
       decoration: _inputDecoration,

@@ -108,7 +108,7 @@ class LinShareApp extends StatelessWidget {
         ],
         localeResolutionCallback: (deviceLocale, supportedLocales) {
           for (var locale in supportedLocales) {
-            if (locale.languageCode == deviceLocale.languageCode) {
+            if (locale.languageCode == deviceLocale?.languageCode) {
               return deviceLocale;
             }
           }

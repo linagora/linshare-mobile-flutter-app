@@ -51,7 +51,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
-import 'package:meta/meta.dart';
 
 import 'destination_picker_state.dart';
 
@@ -80,28 +79,28 @@ class AppState with EquatableMixin {
   final BiometricAuthenticationLoginState biometricAuthenticationLoginState;
 
   AppState(
-      {@required this.uiState,
-      @required this.authenticationState,
-      @required this.uploadFileState,
-      @required this.mySpaceState,
-      @required this.shareState,
-      @required this.sharedSpaceState,
-      @required this.sharedSpaceDocumentState,
-      @required this.sharedSpaceDocumentDestinationPickerState,
-      @required this.receivedShareState,
-      @required this.destinationPickerState,
-      @required this.networkConnectivityState,
-      @required this.account,
-      @required this.functionalityState,
-      @required this.sharedSpaceDetailsState,
-      @required this.addSharedSpaceMembersState,
-      @required this.updateSharedSpaceMembersState,
-      @required this.deleteSharedSpaceMembersState,
-      @required this.documentDetailsState,
-      @required this.sharedSpaceNodeDetailsState,
-      @required this.biometricAuthenticationSettingState,
-      @required this.biometricAuthenticationLoginState,
-      @required this.sharedSpaceNodeVersionsState});
+      {required this.uiState,
+      required this.authenticationState,
+      required this.uploadFileState,
+      required this.mySpaceState,
+      required this.shareState,
+      required this.sharedSpaceState,
+      required this.sharedSpaceDocumentState,
+      required this.sharedSpaceDocumentDestinationPickerState,
+      required this.receivedShareState,
+      required this.destinationPickerState,
+      required this.networkConnectivityState,
+      required this.account,
+      required this.functionalityState,
+      required this.sharedSpaceDetailsState,
+      required this.addSharedSpaceMembersState,
+      required this.updateSharedSpaceMembersState,
+      required this.deleteSharedSpaceMembersState,
+      required this.documentDetailsState,
+      required this.sharedSpaceNodeDetailsState,
+      required this.biometricAuthenticationSettingState,
+      required this.biometricAuthenticationLoginState,
+      required this.sharedSpaceNodeVersionsState});
 
   factory AppState.initial() {
     return AppState(

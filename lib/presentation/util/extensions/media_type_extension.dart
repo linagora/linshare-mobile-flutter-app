@@ -105,7 +105,7 @@ extension StringMimeTypeExtension on String {
 
   MediaType getMediaType() {
     try {
-      return MediaType.parse(getMimeType()) ?? defaultMediaType;
+      return MediaType.parse(getMimeType());
     } catch(_) {
       return defaultMediaType;
     }

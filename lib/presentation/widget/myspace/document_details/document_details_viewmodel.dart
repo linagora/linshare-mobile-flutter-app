@@ -61,10 +61,13 @@ class DocumentDetailsViewModel extends BaseViewModel {
     _appNavigation.popBack();
   }
 
-  void editDescription(BuildContext context, Document document, String newDescription) {
+  void editDescription(BuildContext context, Document? document, String newDescription) {
     FocusScope.of(context).unfocus();
     toggleDescriptionEditing();
 
+    if(document == null) {
+      return;
+    }
     if (document.description == newDescription) {
       return;
     }

@@ -37,7 +37,7 @@ import 'package:equatable/equatable.dart';
 @immutable
 class UIState with EquatableMixin {
   final String routePath;
-  final SharedSpaceNodeNested selectedSharedSpace;
+  final SharedSpaceNodeNested? selectedSharedSpace;
   final SearchState searchState;
 
   UIState(this.routePath, this.searchState, {this.selectedSharedSpace});
@@ -46,7 +46,7 @@ class UIState with EquatableMixin {
     return UIState(RoutePaths.initializeRoute, SearchState.initial());
   }
 
-  UIState setCurrentView(String routePath, {SharedSpaceNodeNested sharedSpace}) {
+  UIState setCurrentView(String routePath, {SharedSpaceNodeNested? sharedSpace}) {
     return UIState(routePath, searchState, selectedSharedSpace: sharedSpace);
   }
 
@@ -59,7 +59,7 @@ class UIState with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [routePath, selectedSharedSpace];
+  List<Object?> get props => [routePath, selectedSharedSpace];
 }
 
 extension UIStateExtension on UIState {

@@ -41,7 +41,7 @@ class AuthenticationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthenticationArguments arguments = ModalRoute.of(context).settings.arguments;
+    var arguments = ModalRoute.of(context)?.settings.arguments as AuthenticationArguments;
     _authenticationViewModel.setAuthenticationArguments(arguments);
 
     return Container(

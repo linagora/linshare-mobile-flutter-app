@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -60,7 +61,8 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      _model.initState(ModalRoute.of(context).settings.arguments);
+      var arguments = ModalRoute.of(context)?.settings.arguments as DocumentDetailsArguments;
+        _model.initState(arguments);
     });
 
     super.initState();
@@ -74,7 +76,7 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final DocumentDetailsArguments arguments = ModalRoute.of(context).settings.arguments;
+    final arguments = ModalRoute.of(context)?.settings.arguments as DocumentDetailsArguments;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -126,11 +128,11 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
           Column(
             children: [
               _documentInformationTile(AppLocalizations.of(context).modified,
-                  state.document.modificationDate.getMMMddyyyyFormatString()),
+                  state.document?.modificationDate.getMMMddyyyyFormatString() ?? ''),
               _documentInformationTile(AppLocalizations.of(context).created,
-                  state.document.creationDate.getMMMddyyyyFormatString()),
+                  state.document?.creationDate.getMMMddyyyyFormatString() ?? ''),
               _documentInformationTile(AppLocalizations.of(context).expiration,
-                  state.document.creationDate.getMMMddyyyyFormatString()),
+                  state.document?.creationDate.getMMMddyyyyFormatString() ?? ''),
             ],
           ),
           Divider(),
@@ -144,13 +146,13 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
     return ListTile(
       leading: Padding(
           padding: EdgeInsets.only(left: 10),
-          child: SvgPicture.asset(state.document.mediaType.getFileTypeImagePath(imagePath),
+          child: SvgPicture.asset(state.document?.mediaType.getFileTypeImagePath(imagePath) ?? imagePath.icFileTypeFile,
               width: 20, height: 24, fit: BoxFit.fill)),
-      title: Text(state.document.name,
+      title: Text(state.document?.name ?? '',
           style: TextStyle(
               color: AppColor.workGroupDetailsName, fontWeight: FontWeight.normal, fontSize: 14.0)),
       trailing: Text(
-        filesize(state.document.size),
+        filesize(state.document?.size),
         style: TextStyle(
           fontSize: 14,
           fontStyle: FontStyle.italic,
@@ -170,7 +172,7 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
             padding: EdgeInsets.only(left: 16),
             height: 56,
             color: AppColor.topBarBackgroundColor,
-            child: Text(AppLocalizations.of(context).shared_with(state.document.shares.length),
+            child: Text(AppLocalizations.of(context).shared_with(state.document?.shares.length ?? 0),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.normal,
@@ -180,10 +182,10 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
           ListView.builder(
               shrinkWrap: true,
               physics: ScrollPhysics(),
-              itemCount: state.document.shares.length,
+              itemCount: state.document?.shares.length,
               itemBuilder: (context, index) {
-                var recipient = state.document.shares[index].recipient;
-                return DocumentRecipientListTileBuilder(recipient.fullName(), recipient.mail)
+                var recipient = state.document?.shares[index].recipient;
+                return DocumentRecipientListTileBuilder(recipient?.fullName() ?? '', recipient?.mail ?? '')
                     .build();
               })
         ]));
@@ -191,7 +193,7 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
 
   Container _descriptionWidget(DocumentDetailsState state) {
     if (_editDescriptionController.text.isEmpty) {
-      _editDescriptionController.text = state.document.description;
+      _editDescriptionController.text = state.document?.description ?? '';
     }
 
     return Container(
@@ -231,9 +233,9 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
                     : Padding(
                         padding: EdgeInsets.only(top: 14.5),
                         child: Text(
-                            state.document.description.isEmpty
+                            (state.document == null || state.document!.description.isEmpty)
                                 ? AppLocalizations.of(context).no_description
-                                : state.document.description,
+                                : state.document!.description,
                             style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic)))),
           ],
         ));

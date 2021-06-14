@@ -54,7 +54,7 @@ class SharedSpaceNodeVersionsState extends LinShareState with EquatableMixin {
   }
 
   @override
-  SharedSpaceNodeVersionsState sendViewState({Either<Failure, Success> viewState}) {
+  SharedSpaceNodeVersionsState sendViewState({required Either<Failure, Success> viewState}) {
     return SharedSpaceNodeVersionsState(viewState, workgroupNodeVersions);
   }
 
@@ -63,7 +63,7 @@ class SharedSpaceNodeVersionsState extends LinShareState with EquatableMixin {
     return SharedSpaceNodeVersionsState(Right(LoadingState()), workgroupNodeVersions);
   }
 
-  SharedSpaceNodeVersionsState setWorkGroupNodeVersions({Either<Failure, Success> viewState, List<WorkGroupNode> newWorkGroupNodeVersions}) {
+  SharedSpaceNodeVersionsState setWorkGroupNodeVersions({required Either<Failure, Success> viewState, required List<WorkGroupNode?> newWorkGroupNodeVersions}) {
     return SharedSpaceNodeVersionsState(viewState, newWorkGroupNodeVersions.cast<WorkGroupDocument>());
   }
 }

@@ -93,30 +93,30 @@ class PinCodeWidget extends StatefulWidget {
   final PinCodeValidationStateNotifier pinCodeValidationStateNotifier;
 
   const PinCodeWidget({
-    Key key,
-    this.distanceSpaceVertical,
-    this.title,
-    this.titleStyle,
-    this.subTitle,
-    this.subTitleStyle,
-    this.pinCodeFieldBackgroundColor,
-    this.pinCodeFieldPaddingHorizontal,
-    this.pinSizeWidth,
-    this.pinSizeHeight,
-    this.pinBorderRadius,
-    this.pinBackgroundColor,
-    this.pinCount,
-    this.pinTextStyle,
-    this.errorText,
-    this.errorStyle,
-    this.buttonText,
-    this.buttonStyle,
-    this.buttonBackgroundColor,
-    this.buttonWidth,
-    this.buttonHeight,
-    this.buttonBorderRadius,
-    this.onButtonClick,
-    this.pinCodeValidationStateNotifier
+    required Key key,
+    required this.distanceSpaceVertical,
+    required this.title,
+    required this.titleStyle,
+    required this.subTitle,
+    required this.subTitleStyle,
+    required this.pinCodeFieldBackgroundColor,
+    required this.pinCodeFieldPaddingHorizontal,
+    required this.pinSizeWidth,
+    required this.pinSizeHeight,
+    required this.pinBorderRadius,
+    required this.pinBackgroundColor,
+    required this.pinCount,
+    required this.pinTextStyle,
+    required this.errorText,
+    required this.errorStyle,
+    required this.buttonText,
+    required this.buttonStyle,
+    required this.buttonBackgroundColor,
+    required this.buttonWidth,
+    required this.buttonHeight,
+    required this.buttonBorderRadius,
+    required this.onButtonClick,
+    required this.pinCodeValidationStateNotifier
   }) : super(key: key);
 
   const PinCodeWidget.twoFactorAuthen({
@@ -127,23 +127,23 @@ class PinCodeWidget extends StatefulWidget {
     this.pinSizeWidth = 36,
     this.pinSizeHeight = 40,
     this.pinBorderRadius = 4,
-    this.title,
-    this.titleStyle,
-    this.subTitle,
-    this.subTitleStyle,
-    this.pinCodeFieldBackgroundColor,
-    this.pinTextStyle,
-    this.pinBackgroundColor,
-    this.errorText,
-    this.errorStyle,
+    required this.title,
+    required this.titleStyle,
+    required this.subTitle,
+    required this.subTitleStyle,
+    required this.pinCodeFieldBackgroundColor,
+    required this.pinTextStyle,
+    required this.pinBackgroundColor,
+    required this.errorText,
+    required this.errorStyle,
     this.buttonWidth = 240,
     this.buttonHeight = 48,
     this.buttonBorderRadius = 80,
-    this.buttonText,
-    this.buttonStyle,
-    this.buttonBackgroundColor,
-    this.onButtonClick,
-    this.pinCodeValidationStateNotifier
+    required this.buttonText,
+    required this.buttonStyle,
+    required this.buttonBackgroundColor,
+    required this.onButtonClick,
+    required this.pinCodeValidationStateNotifier
   });
 
   @override
@@ -151,7 +151,7 @@ class PinCodeWidget extends StatefulWidget {
 }
 
 class _PinCodeWidgetState extends State<PinCodeWidget> {
-  StreamController<ErrorAnimationType> errorController;
+  late StreamController<ErrorAnimationType> errorController;
 
   String currentText = '';
   final formKey = GlobalKey<FormState>();
@@ -195,7 +195,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
 
   Widget get _buildListPinCodeFields => ValueListenableBuilder(
     valueListenable: pinCodeErrorNotifier,
-    builder: (BuildContext context, PinCodeValidationType type, Widget child) {
+    builder: (BuildContext context, PinCodeValidationType type, Widget? child) {
       return Container(
         child: Column(
           children: [
@@ -248,7 +248,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
                       currentText = value;
                     },
                     beforeTextPaste: (text) {
-                      return text.isIntegerNumber();
+                      return text?.isIntegerNumber() ?? false;
                     },
                   )),
             ),
@@ -267,7 +267,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
 
   Widget get _buildActionWidget => ValueListenableBuilder(
     valueListenable: widget.pinCodeValidationStateNotifier,
-    builder: (BuildContext context, PinCodeValidationState codeValidationState, Widget child) {
+    builder: (BuildContext context, PinCodeValidationState codeValidationState, Widget? child) {
       if (codeValidationState == PinCodeValidationState.Loading) {
         return _loadingCircularProgress;
       } else {
@@ -278,7 +278,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
   Widget get _buttonAction =>
       ButtonTextActionBuilder(Key('pin_code_button_action'),
               text: widget.buttonText, onButtonClick: () {
-          formKey.currentState.validate();
+          formKey.currentState?.validate();
           if (currentText.length != widget.pinCount) {
             errorController.add(ErrorAnimationType.shake);
             pinCodeErrorNotifier.value = PinCodeValidationType.Error;

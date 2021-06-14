@@ -49,14 +49,14 @@ import '../../domain/test/mock/repository/quota/mock_quota_repository.dart';
 import '../fixtures/test_redux_module.dart';
 
 void main() {
-  final getIt = GetIt.asNewInstance();
+  final getIt = GetIt.instance;
   TestReduxModule(getIt);
 
   group('verify_quota_manager_test', () {
-    Store<AppState> _store;
-    QuotaRepository _quotaRepository;
+    late Store<AppState> _store;
+    late QuotaRepository _quotaRepository;
     GetQuotaInteractor _getQuotaInteractor;
-    VerifyQuotaManager _verifyQuotaManager;
+    late VerifyQuotaManager _verifyQuotaManager;
 
     setUp(() {
       _store = getIt.get<Store<AppState>>();

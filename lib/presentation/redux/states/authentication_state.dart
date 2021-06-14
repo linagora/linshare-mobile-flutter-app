@@ -49,7 +49,7 @@ class AuthenticationState extends LinShareState  {
   }
 
   @override
-  AuthenticationState sendViewState({Either<Failure, Success> viewState}) {
+  AuthenticationState sendViewState({required Either<Failure, Success> viewState}) {
     return AuthenticationState(viewState);
   }
 
@@ -59,5 +59,5 @@ class AuthenticationState extends LinShareState  {
   }
 
   @override
-  List<Object> get props => super.props;
+  List<Object?> get props => super.props;
 }
