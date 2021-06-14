@@ -31,8 +31,6 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:flutter/widgets.dart';
-
 class WidgetConstant {
-  static final Widget NO_WIDGET = null;
+
 }

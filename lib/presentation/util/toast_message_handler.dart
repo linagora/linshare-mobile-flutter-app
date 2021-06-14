@@ -63,7 +63,7 @@ import 'package:redux/redux.dart';
 class ToastMessageHandler {
   final Store<AppState> _store = getIt<Store<AppState>>();
   final appToast = getIt<AppToast>();
-  StreamSubscription _streamSubscription;
+  late StreamSubscription _streamSubscription;
 
   void setup(BuildContext context) {
     _streamSubscription = _store.onChange.listen((event) {

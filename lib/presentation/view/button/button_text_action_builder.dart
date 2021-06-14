@@ -39,7 +39,7 @@ class ButtonTextActionBuilder extends ButtonActionBuilder {
   final String text;
   TextStyle textStyle = CommonTextStyle.textStyleNormal.copyWith(color: Colors.white);
 
-  ButtonTextActionBuilder(Key key, {@required ButtonCallback onButtonClick, @required this.text})
+  ButtonTextActionBuilder(Key key, {required ButtonCallback onButtonClick, required this.text})
       : assert(text != null),
         super(key, onButtonClick: onButtonClick);
 

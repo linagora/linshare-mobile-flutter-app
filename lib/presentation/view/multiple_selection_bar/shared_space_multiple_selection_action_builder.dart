@@ -56,7 +56,11 @@ class SharedSpaceMultipleSelectionActionBuilder extends MultipleSelectionActionB
     return IconButton(
       key: key,
       icon: actionIcon,
-      onPressed: () => onMultipleSelectionActionClick(_sharedSpaces)
+      onPressed: () {
+        if (onMultipleSelectionActionClick != null) {
+          onMultipleSelectionActionClick!(_sharedSpaces);
+        }
+      }
     );
   }
 }

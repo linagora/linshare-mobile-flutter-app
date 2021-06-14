@@ -38,36 +38,36 @@ import 'package:equatable/equatable.dart';
 
 @immutable
 class UploadFileState extends LinShareState with EquatableMixin {
-  final List<UploadAndShareFileState> _uploadingStateFiles;
-  List<UploadAndShareFileState> get uploadingStateFiles => _uploadingStateFiles.toList();
+  final List<UploadAndShareFileState?> _uploadingStateFiles;
+  List<UploadAndShareFileState?> get uploadingStateFiles => _uploadingStateFiles.toList();
 
   bool get isUploadingFiles {
     return _uploadingStateFiles
         .where((element) {
-          return element.uploadStatus == UploadFileStatus.uploading ||
-              element.uploadStatus == UploadFileStatus.waiting;
+          return element?.uploadStatus == UploadFileStatus.uploading ||
+              element?.uploadStatus == UploadFileStatus.waiting;
         })
         .isNotEmpty;
   }
 
-  List<UploadAndShareFileState> get mySpaceUploadFiles {
+  List<UploadAndShareFileState?> get mySpaceUploadFiles {
     return _uploadingStateFiles
         .where((element) {
-          return element.action == UploadAndShareAction.upload ||
-              element.action == UploadAndShareAction.uploadAndShare;
+          return element?.action == UploadAndShareAction.upload ||
+              element?.action == UploadAndShareAction.uploadAndShare;
         })
         .toList();
   }
 
-  List<UploadAndShareFileState> get workgroupUploadFiles {
+  List<UploadAndShareFileState?> get workgroupUploadFiles {
     return _uploadingStateFiles
         .where((element) {
-          return element.action == UploadAndShareAction.uploadSharedSpace;
+          return element?.action == UploadAndShareAction.uploadSharedSpace;
         })
         .toList();
   }
 
-  UploadFileState(this._uploadingStateFiles, {Either<Failure, Success> viewState}) : super(viewState);
+  UploadFileState(this._uploadingStateFiles, {required Either<Failure, Success> viewState}) : super(viewState);
 
   factory UploadFileState.initial() {
     return UploadFileState([], viewState: Right(IdleState()));
@@ -79,11 +79,11 @@ class UploadFileState extends LinShareState with EquatableMixin {
   }
 
   @override
-  UploadFileState sendViewState({@required Either<Failure, Success> viewState}) {
+  UploadFileState sendViewState({required Either<Failure, Success> viewState}) {
     return UploadFileState(_uploadingStateFiles, viewState: viewState);
   }
 
-  UploadFileState updateStateList(List<UploadAndShareFileState> newStates) {
+  UploadFileState updateStateList(List<UploadAndShareFileState?> newStates) {
     return UploadFileState(newStates, viewState: viewState);
   }
 
@@ -93,7 +93,7 @@ class UploadFileState extends LinShareState with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     _uploadingStateFiles
   ];

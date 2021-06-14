@@ -57,16 +57,16 @@ class MySpaceState extends LinShareState with EquatableMixin {
   }
 
   @override
-  LinShareState clearViewState() {
+  MySpaceState clearViewState() {
     return MySpaceState(Right(IdleState()), documentList, selectMode, sorter);
   }
 
   @override
-  LinShareState sendViewState({Either<Failure, Success> viewState}) {
+  MySpaceState sendViewState({required Either<Failure, Success> viewState}) {
     return MySpaceState(viewState, documentList, selectMode, sorter);
   }
 
-  LinShareState setDocuments({Either<Failure, Success> viewState, List<Document> newDocumentList}) {
+  MySpaceState setDocuments({Either<Failure, Success>? viewState, required List<Document> newDocumentList}) {
     final selectedElements = documentList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
     return MySpaceState(viewState ?? this.viewState,
@@ -77,7 +77,7 @@ class MySpaceState extends LinShareState with EquatableMixin {
       selectMode, sorter);
   }
 
-  LinShareState setDocumentsWithSorter({Either<Failure, Success> viewState, List<Document> newDocumentList, Sorter newSorter}) {
+  MySpaceState setDocumentsWithSorter({Either<Failure, Success>? viewState, required List<Document> newDocumentList, required Sorter newSorter}) {
     final selectedElements = documentList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
     return MySpaceState(viewState ?? this.viewState,
@@ -88,24 +88,24 @@ class MySpaceState extends LinShareState with EquatableMixin {
         selectMode, newSorter);
   }
 
-  LinShareState setSorter({Either<Failure, Success> viewState, Sorter newSorter}) {
+  MySpaceState setSorter({Either<Failure, Success>? viewState, required Sorter newSorter}) {
     return MySpaceState(viewState ?? this.viewState, documentList, selectMode, newSorter);
   }
 
-  LinShareState selectDocument(SelectableElement<Document> selectedDocument) {
+  MySpaceState selectDocument(SelectableElement<Document> selectedDocument) {
     documentList.firstWhere((document) => document == selectedDocument).toggleSelect();
     return MySpaceState(viewState, documentList, SelectMode.ACTIVE, sorter);
   }
 
-  LinShareState cancelSelectedDocuments() {
+  MySpaceState cancelSelectedDocuments() {
     return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.INACTIVE, sorter);
   }
 
-  LinShareState selectAllDocuments() {
+  MySpaceState selectAllDocuments() {
     return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.ACTIVE)).toList(), SelectMode.ACTIVE, sorter);
   }
 
-  LinShareState unSelectAllDocuments() {
+  MySpaceState unSelectAllDocuments() {
     return MySpaceState(viewState, documentList.map((document) => SelectableElement<Document>(document.element, SelectMode.INACTIVE)).toList(), SelectMode.ACTIVE, sorter);
   }
 
@@ -115,7 +115,7 @@ class MySpaceState extends LinShareState with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     documentList,
     selectMode,

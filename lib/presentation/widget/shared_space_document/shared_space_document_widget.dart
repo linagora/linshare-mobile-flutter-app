@@ -91,14 +91,16 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   final imagePath = getIt<AppImagePaths>();
   final sharedSpaceDocumentViewModel = getIt<SharedSpaceDocumentNodeViewModel>();
 
-  SharedSpaceDocumentArguments _arguments;
+  SharedSpaceDocumentArguments? _arguments;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _arguments = ModalRoute.of(context).settings.arguments;
-      sharedSpaceDocumentViewModel.initial(_arguments);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceDocumentArguments;
+      if (_arguments != null) {
+        sharedSpaceDocumentViewModel.initial(_arguments!);
+      }
       sharedSpaceDocumentViewModel.getSorterAndAllWorkGroupNode();
     });
   }
@@ -154,10 +156,10 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               builder: (context, appState) => (!appState.uiState.isInSearchState() && appState.sharedSpaceDocumentState.selectMode == SelectMode.INACTIVE)
                 ? FloatingActionButton(
                     key: Key('shared_space_document_upload_button'),
-                    onPressed: () => (_arguments == null || _arguments.sharedSpaceNode.sharedSpaceRole.name == SharedSpaceRoleName.READER)
+                    onPressed: () => (_arguments == null || (_arguments != null && _arguments!.sharedSpaceNode.sharedSpaceRole?.name == SharedSpaceRoleName.READER))
                       ? {}
                       : sharedSpaceDocumentViewModel.openAddNewFileOrFolderMenu(context, addNewFileOrFolderMenuActionTiles(context)),
-                    backgroundColor: (_arguments == null || _arguments.sharedSpaceNode.sharedSpaceRole.name == SharedSpaceRoleName.READER)
+                    backgroundColor: (_arguments == null || (_arguments != null && _arguments!.sharedSpaceNode.sharedSpaceRole?.name == SharedSpaceRoleName.READER))
                       ? AppColor.workgroupDetailFilesUploadDisableColor
                       : AppColor.workgroupDetailFilesUploadActiveColor,
                     child: SvgPicture.asset(
@@ -231,7 +233,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
             child: Padding(
               padding: const EdgeInsets.only(left: 5.0, right: 45.0),
               child: Text(
-                documentState.workGroupNode.name,
+                documentState.workGroupNode?.name ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -287,8 +289,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   Widget _buildMenuSorter() {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
-      builder: (context, appState) => (!appState.uiState.isInSearchState() && appState.sharedSpaceDocumentState.sorter != null)
-        ? OrderByButtonBuilder(context, appState.sharedSpaceDocumentState.sorter)
+      builder: (context, appState) => (!appState.uiState.isInSearchState())
+        ? OrderByButtonBuilder(context, appState.sharedSpaceDocumentState.sorter ?? Sorter.fromOrderScreen(OrderScreen.sharedSpaceDocument))
           .onOpenOrderMenuAction((currentSorter) => sharedSpaceDocumentViewModel.openPopupMenuSorter(context, currentSorter))
           .build()
         : SizedBox.shrink()
@@ -404,7 +406,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               context,
               workGroupNodes,
               _moreActionList(context, documents),
-              SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)
+              SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name)
                 ? _removeWorkGroupNodeAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple)
                 : SizedBox.shrink()))
           .build();
@@ -415,7 +417,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       if (Platform.isIOS) _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadFilesAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
       _copyToAction(context, workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
-      if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)) _duplicateMultipleSelection(workGroupNodes),
+      if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name)) _duplicateMultipleSelection(workGroupNodes),
     ];
   }
 
@@ -602,7 +604,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       trailing: currentSelectMode == SelectMode.ACTIVE
         ? Checkbox(
             value: node.selectMode == SelectMode.ACTIVE,
-            onChanged: (bool value) => sharedSpaceDocumentViewModel.selectItem(node),
+            onChanged: (bool? value) => sharedSpaceDocumentViewModel.selectItem(node),
             activeColor: AppColor.primaryColor)
         : IconButton(
             icon: SvgPicture.asset(
@@ -614,17 +616,17 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                 ? sharedSpaceDocumentViewModel.openWorkGroupNodeContextMenu(
                     context,
                     node.element,
-                    _contextMenuFolderActionTiles(context, node.element))
+                    _contextMenuFolderActionTiles(context, node.element as WorkGroupFolder))
                 : sharedSpaceDocumentViewModel.openWorkGroupNodeContextMenu(
                     context,
                     node.element,
-                    _contextMenuDocumentActionTiles(context, node.element),
-                    footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name) ? _removeWorkGroupNodeAction([node.element]) : SizedBox.shrink())),
+                    _contextMenuDocumentActionTiles(context, node.element as WorkGroupDocument),
+                    footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name) ? _removeWorkGroupNodeAction([node.element]) : SizedBox.shrink())),
       onTap: () {
         if (currentSelectMode == SelectMode.ACTIVE) {
           sharedSpaceDocumentViewModel.selectItem(node);
         } else if (node.element.type == WorkGroupNodeType.DOCUMENT) {
-          sharedSpaceDocumentViewModel.previewWorkGroupDocument(context, node.element);
+          sharedSpaceDocumentViewModel.previewWorkGroupDocument(context, node.element as WorkGroupDocument);
         } else if (node.element.type == WorkGroupNodeType.FOLDER) {
           _goToWorkGroupFolder(node.element);
         }
@@ -670,7 +672,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
 
   List<Widget> _contextMenuFolderActionTiles(BuildContext context, WorkGroupFolder workGroupFolder) {
     return [
-      if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)) _renameWorkGroupNodeAction(workGroupFolder),
+      if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name)) _renameWorkGroupNodeAction(workGroupFolder),
       _detailsAction(context, workGroupFolder)
     ];
   }
@@ -683,8 +685,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       _copyToAction(context, [workGroupDocument]),
       _detailsAction(context, workGroupDocument),
       _manageVersionsAction(context, workGroupDocument),
-      if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)) _renameWorkGroupNodeAction(workGroupDocument),
-      if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name)) _duplicateAction(context, [workGroupDocument])
+      if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name)) _renameWorkGroupNodeAction(workGroupDocument),
+      if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name)) _duplicateAction(context, [workGroupDocument])
     ];
   }
 
@@ -843,7 +845,11 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               Key('duplicate_file_context_menu_action'),
               SvgPicture.asset(imagePath.icDuplicate, width: 24, height: 24, fit: BoxFit.fill),
               AppLocalizations.of(context).duplicate)
-          .onActionClick((_) => sharedSpaceDocumentViewModel.duplicateFiles(workGroupNodes, _arguments))
+          .onActionClick((_) {
+            if (_arguments != null) {
+              sharedSpaceDocumentViewModel.duplicateFiles(workGroupNodes, _arguments!);
+            }
+          })
           .build();
   }
 
@@ -855,9 +861,13 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                 SvgPicture.asset(imagePath.icDuplicate, width: 24, height: 24, fit: BoxFit.fill),
                 AppLocalizations.of(context).duplicate,
                 workGroupNodes[0])
-            .onActionClick((data) => sharedSpaceDocumentViewModel.duplicateFiles(
-                workGroupNodes, _arguments,
-                itemSelectionType: ItemSelectionType.multiple))
+            .onActionClick((data) {
+              if (_arguments != null) {
+                sharedSpaceDocumentViewModel.duplicateFiles(
+                                workGroupNodes, _arguments!,
+                                itemSelectionType: ItemSelectionType.multiple);
+              }
+            })
             .build();
   }
 }

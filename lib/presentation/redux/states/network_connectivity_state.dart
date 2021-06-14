@@ -40,7 +40,7 @@ import 'package:equatable/equatable.dart';
 
 @immutable
 class NetworkConnectivityState extends LinShareState with EquatableMixin {
-  final ConnectivityResult connectivityResult;
+  final ConnectivityResult? connectivityResult;
 
   NetworkConnectivityState(Either<Failure, Success> viewState, this.connectivityResult) : super(viewState);
 
@@ -62,7 +62,7 @@ class NetworkConnectivityState extends LinShareState with EquatableMixin {
   }
 
   @override
-  NetworkConnectivityState sendViewState({Either<Failure, Success> viewState}) {
+  NetworkConnectivityState sendViewState({required Either<Failure, Success> viewState}) {
     return NetworkConnectivityState(viewState, connectivityResult);
   }
 
@@ -72,7 +72,7 @@ class NetworkConnectivityState extends LinShareState with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     connectivityResult
   ];

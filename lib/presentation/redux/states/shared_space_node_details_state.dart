@@ -40,7 +40,7 @@ import 'package:equatable/equatable.dart';
 
 @immutable
 class SharedSpaceNodeDetailsState extends LinShareState with EquatableMixin {
-  final WorkGroupNode workgroupNode;
+  final WorkGroupNode? workgroupNode;
 
   SharedSpaceNodeDetailsState(Either<Failure, Success> viewState, this.workgroupNode) : super(viewState);
 
@@ -54,7 +54,7 @@ class SharedSpaceNodeDetailsState extends LinShareState with EquatableMixin {
   }
 
   @override
-  SharedSpaceNodeDetailsState sendViewState({Either<Failure, Success> viewState}) {
+  SharedSpaceNodeDetailsState sendViewState({required Either<Failure, Success> viewState}) {
     return SharedSpaceNodeDetailsState(viewState, workgroupNode);
   }
 
@@ -63,7 +63,7 @@ class SharedSpaceNodeDetailsState extends LinShareState with EquatableMixin {
     return SharedSpaceNodeDetailsState(Right(LoadingState()), workgroupNode);
   }
 
-  SharedSpaceNodeDetailsState setWorkGroupNode({Either<Failure, Success> viewState, WorkGroupNode newWorkGroupNode}) {
+  SharedSpaceNodeDetailsState setWorkGroupNode({required Either<Failure, Success> viewState, WorkGroupNode? newWorkGroupNode}) {
     return SharedSpaceNodeDetailsState(viewState, newWorkGroupNode);
   }
 }

@@ -53,7 +53,7 @@ class MoreActionBottomSheetHeaderBuilder {
               fontSize: 14, color: AppColor.documentNameItemTextColor),
         ),
         trailing: Text(
-            filesize(_files.fold(
+            filesize(_files.fold<int>(
                 0, (previousValue, element) => previousValue + element.fileSize())),
             style: TextStyle(
                 fontSize: 14,

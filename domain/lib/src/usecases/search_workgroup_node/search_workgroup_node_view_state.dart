@@ -33,7 +33,7 @@
 import 'package:domain/domain.dart';
 
 class SearchWorkGroupNodeSuccess extends ViewState {
-  final List<WorkGroupNode> workGroupNodesList;
+  final List<WorkGroupNode?> workGroupNodesList;
 
   SearchWorkGroupNodeSuccess(this.workGroupNodesList);
 

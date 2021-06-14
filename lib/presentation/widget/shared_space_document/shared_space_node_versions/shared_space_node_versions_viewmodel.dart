@@ -57,7 +57,7 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
   final RestoreWorkGroupDocumentVersionInteractor _restoreWorkGroupDocumentVersionInteractor;
   final DownloadPreviewWorkGroupDocumentInteractor _downloadPreviewWorkGroupDocumentInteractor;
 
-  SharedSpaceRole sharedSpaceRole;
+  late SharedSpaceRole sharedSpaceRole;
 
   SharedSpaceNodeVersionsViewModel(
     Store<AppState> store,
@@ -95,14 +95,14 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     BuildContext context,
     WorkGroupDocument document,
     List<Widget> actionTiles,
-    {Widget footerAction}
+    {Widget? footerAction}
   ) {
     ContextMenuBuilder(context)
         .addHeader(ContextMenuHeaderBuilder(Key('context_menu_header'),
                 WorkGroupDocumentPresentationFile.fromWorkGroupDocument(document))
             .build())
         .addTiles(actionTiles)
-        .addFooter(footerAction)
+        .addFooter(footerAction ?? SizedBox.shrink())
         .build();
   }
 

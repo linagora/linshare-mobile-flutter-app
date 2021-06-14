@@ -45,7 +45,7 @@ class UpdateSharedSpaceMembersState extends LinShareState with EquatableMixin {
   }
 
   @override
-  UpdateSharedSpaceMembersState sendViewState({Either<Failure, Success> viewState}) {
+  UpdateSharedSpaceMembersState sendViewState({required Either<Failure, Success> viewState}) {
     return UpdateSharedSpaceMembersState(viewState);
   }
 

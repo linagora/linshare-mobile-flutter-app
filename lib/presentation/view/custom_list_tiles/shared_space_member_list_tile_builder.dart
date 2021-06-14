@@ -43,11 +43,11 @@ class SharedSpaceMemberListTileBuilder {
   final String _name;
   final String _email;
   final String _roleName;
-  final SharedSpaceRoleName userCurrentRole;
-  final SelectRoleCallback onSelectedRoleCallback;
-  final DeleteMemberCallback onDeleteMemberCallback;
+  final SharedSpaceRoleName? userCurrentRole;
+  final SelectRoleCallback? onSelectedRoleCallback;
+  final DeleteMemberCallback? onDeleteMemberCallback;
 
-  Color tileColor;
+  Color? tileColor;
 
   SharedSpaceMemberListTileBuilder(this._name, this._email, this._roleName,
       {this.userCurrentRole,
@@ -108,14 +108,14 @@ class SharedSpaceMemberListTileBuilder {
 
   void _handleDeleteMemberTap() {
     if (onDeleteMemberCallback != null) {
-      onDeleteMemberCallback.call();
+      onDeleteMemberCallback?.call();
     }
   }
 
   void _handleUpdateRoleTap() {
     if (onSelectedRoleCallback != null &&
       SharedSpaceOperationRole.editMemberSharedSpaceRoles.contains(userCurrentRole)) {
-      onSelectedRoleCallback.call();
+      onSelectedRoleCallback?.call();
     }
   }
 

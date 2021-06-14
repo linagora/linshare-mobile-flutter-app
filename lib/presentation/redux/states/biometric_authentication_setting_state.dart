@@ -59,7 +59,7 @@ class BiometricAuthenticationSettingState extends LinShareState {
   }
 
   @override
-  BiometricAuthenticationSettingState sendViewState({Either<Failure, Success> viewState}) {
+  BiometricAuthenticationSettingState sendViewState({required Either<Failure, Success> viewState}) {
     return BiometricAuthenticationSettingState(viewState, biometricState, biometricKindList, authenticationBiometricState);
   }
 
@@ -80,7 +80,7 @@ class BiometricAuthenticationSettingState extends LinShareState {
     return BiometricAuthenticationSettingState(viewState, biometricState, biometricKindList, newAuthenticationBiometricState);
   }
 
-  BiometricAuthenticationSettingState setBiometricAuthenticationSetting({BiometricState newBiometricState, List<BiometricKind> newBiometricKindList}) {
-    return BiometricAuthenticationSettingState(viewState, newBiometricState ?? biometricState, newBiometricKindList ?? biometricKindList, authenticationBiometricState);
+  BiometricAuthenticationSettingState setBiometricAuthenticationSetting({required BiometricState newBiometricState, required List<BiometricKind> newBiometricKindList}) {
+    return BiometricAuthenticationSettingState(viewState, newBiometricState, newBiometricKindList, authenticationBiometricState);
   }
 }

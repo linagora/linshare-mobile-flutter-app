@@ -45,7 +45,7 @@ abstract class ContextMenuActionBuilder<T> {
   @protected final Key key;
   @protected final SvgPicture actionIcon;
   @protected final String actionName;
-  @protected OnContextMenuActionClick<T> onContextMenuActionClick;
+  @protected late OnContextMenuActionClick<T> onContextMenuActionClick;
 
   ContextMenuActionBuilder(
       this.key,

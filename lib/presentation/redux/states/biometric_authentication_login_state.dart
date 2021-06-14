@@ -57,7 +57,7 @@ class BiometricAuthenticationLoginState extends LinShareState {
   }
 
   @override
-  BiometricAuthenticationLoginState sendViewState({Either<Failure, Success> viewState}) {
+  BiometricAuthenticationLoginState sendViewState({required Either<Failure, Success> viewState}) {
     return BiometricAuthenticationLoginState(viewState, biometricKindList, authenticationBiometricState);
   }
 

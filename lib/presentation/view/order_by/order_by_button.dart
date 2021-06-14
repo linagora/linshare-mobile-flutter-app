@@ -39,7 +39,6 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/extensions/order_by_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/order_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
-import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 
 typedef OnOpenOrderMenuActionClick = void Function(Sorter currentSorter);
 
@@ -50,7 +49,7 @@ class OrderByButtonBuilder {
   final BuildContext _context;
   final Sorter _currentSorter;
 
-  OnOpenOrderMenuActionClick _onOpenOrderMenuActionClick;
+  OnOpenOrderMenuActionClick? _onOpenOrderMenuActionClick;
 
   OrderByButtonBuilder(this._context, this._currentSorter);
 
@@ -84,7 +83,11 @@ class OrderByButtonBuilder {
                 fontSize: 14, color: AppColor.documentNameItemTextColor),
           )),
       tileColor: AppColor.topBarBackgroundColor,
-      onTap: () => _onOpenOrderMenuActionClick(_currentSorter)
+      onTap: () {
+        if (_onOpenOrderMenuActionClick != null) {
+          _onOpenOrderMenuActionClick!(_currentSorter);
+        }
+      }
     );
   }
 }

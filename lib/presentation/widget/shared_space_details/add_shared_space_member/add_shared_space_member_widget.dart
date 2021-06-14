@@ -50,7 +50,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/ad
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_viewmodel.dart';
 
 class AddSharedSpaceMemberWidget extends StatefulWidget {
-  AddSharedSpaceMemberWidget({Key key}) : super(key: key);
+  AddSharedSpaceMemberWidget({Key? key}) : super(key: key);
 
   @override
   _AddSharedSpaceMemberWidgetState createState() => _AddSharedSpaceMemberWidgetState();
@@ -76,7 +76,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
 
   @override
   Widget build(BuildContext context) {
-    final AddSharedSpaceMemberArgument arguments = ModalRoute.of(context).settings.arguments;
+    var arguments = ModalRoute.of(context)?.settings.arguments as AddSharedSpaceMemberArgument;
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -96,8 +96,8 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
         body: StoreConnector<AppState, SharedSpaceDetailsState>(
           converter: (store) => store.state.sharedSpaceDetailsState,
           builder: (_, state) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _addMemberWidget(state.sharedSpace, state.membersList),
-            Expanded(child: _membersListWidget(state.sharedSpace, state.membersList))
+            _addMemberWidget(state.sharedSpace!, state.membersList!),
+            Expanded(child: _membersListWidget(state.sharedSpace!, state.membersList!))
           ]),
         ));
   }
@@ -175,7 +175,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
                           onSuggestionSelected: (autoCompleteResult) async {
                             _typeAheadController.text = '';
                             _model.addSharedSpaceMember(
-                                sharedSpace.sharedSpaceId, autoCompleteResult);
+                                sharedSpace.sharedSpaceId, autoCompleteResult as SharedSpaceMemberAutoCompleteResult);
                           },
                           noItemsFoundBuilder: (context) => Padding(
                                 padding: EdgeInsets.all(24.0),
@@ -209,21 +209,21 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
           itemBuilder: (context, index) {
             var member = members[index];
             return SharedSpaceMemberListTileBuilder(
-              member.account.name,
-              member.account.mail,
-              member.role.name.getRoleName(context),
-              userCurrentRole: sharedSpace.sharedSpaceRole.name,
+              member.account?.name ?? '',
+              member.account?.mail ?? '',
+              member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+              userCurrentRole: sharedSpace.sharedSpaceRole?.name,
               tileColor: Colors.white,
               onSelectedRoleCallback: () =>
                 selectRoleBottomSheet(
                   context,
-                  member.role.name,
+                  member.role?.name ?? SharedSpaceRoleName.READER,
                   onNewRoleUpdated: (newRole) {
                     _model.changeMemberRole(sharedSpace.sharedSpaceId, member, newRole);
                   }),
               onDeleteMemberCallback: () => confirmDeleteMember(
                 context,
-                member.account.name,
+                member.account?.name ?? '',
                 sharedSpace.name,
                 sharedSpace.sharedSpaceId,
                 member.sharedSpaceMemberId)).build();
@@ -234,11 +234,11 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
   void selectRoleBottomSheet(
     BuildContext context,
     SharedSpaceRoleName selectedRole,
-    {Function(SharedSpaceRoleName) onNewRoleUpdated}) {
+    {Function(SharedSpaceRoleName)? onNewRoleUpdated}) {
     SelectRoleModalSheetBuilder(
       key: Key('select_role_on_add_shared_space_member'),
       selectedRole: selectedRole)
-      .onConfirmAction((role) => onNewRoleUpdated.call(role))
+      .onConfirmAction((role) => onNewRoleUpdated?.call(role))
       .show(context);
   }
 

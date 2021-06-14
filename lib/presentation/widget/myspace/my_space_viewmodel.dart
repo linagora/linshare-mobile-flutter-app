@@ -73,7 +73,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
-import 'package:linshare_flutter_app/presentation/util/extensions/uri_extension.dart';
 
 import 'document_details/document_details_arguments.dart';
 
@@ -93,7 +92,7 @@ class MySpaceViewModel extends BaseViewModel {
   final RenameDocumentInteractor _renameDocumentInteractor;
   final DuplicateMultipleFilesInMySpaceInteractor _duplicateMultipleFilesInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
-  StreamSubscription _storeStreamSubscription;
+  late StreamSubscription _storeStreamSubscription;
   List<Document> _documentList = [];
 
   SearchQuery _searchQuery = SearchQuery('');
@@ -254,7 +253,7 @@ class MySpaceViewModel extends BaseViewModel {
   ThunkAction<AppState> _copyToWorkgroupAction(List<Document> documents, SharedSpaceDocumentArguments sharedSpaceDocumentArguments) {
     return (Store<AppState> store) async {
       final parentNodeId = sharedSpaceDocumentArguments.workGroupFolder != null
-          ? sharedSpaceDocumentArguments.workGroupFolder.workGroupNodeId
+          ? sharedSpaceDocumentArguments.workGroupFolder?.workGroupNodeId
           : null;
       await _copyMultipleFilesToSharedSpaceInteractor.execute(
           documents.map((document) => document.toCopyRequest()).toList(),
@@ -380,9 +379,9 @@ class MySpaceViewModel extends BaseViewModel {
               if (failure is VerifyNameFailure) {
                 return failure.getMessage(context);
               } else {
-                return null;
+                return '';
               }},
-            (success) => null
+            (success) => ''
     );
   }
 
@@ -395,7 +394,7 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_pickFileAction(context, fileType));
   }
 
-  void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles, {Widget footerAction}) {
+  void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles, {required Widget footerAction}) {
     store.dispatch(_handleContextMenuAction(context, document, actionTiles, footerAction: footerAction));
   }
 
@@ -509,7 +508,7 @@ class MySpaceViewModel extends BaseViewModel {
       BuildContext context,
       Document document,
       List<Widget> actionTiles,
-      {Widget footerAction}) {
+      {required Widget footerAction}) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
           .addHeader(ContextMenuHeaderBuilder(
@@ -598,12 +597,12 @@ class MySpaceViewModel extends BaseViewModel {
         await share_library.Share.shareFiles([success.filePath]);
       } else if (success is DownloadFileIOSAllSuccessViewState) {
         await share_library.Share.shareFiles(success.resultList
-            .map((result) => ((result.getOrElse(() => null) as DownloadFileIOSViewState).filePath))
+            .map((result) => ((result.getOrElse(() => IdleState()) as DownloadFileIOSViewState).filePath))
             .toList());
       } else if (success is DownloadFileIOSHasSomeFilesFailureViewState) {
         await share_library.Share.shareFiles(success.resultList
             .map((result) => result.fold(
-                (failure) => null,
+                (failure) => '',
                 (success) => ((success as DownloadFileIOSViewState).filePath)))
             .toList());
       }

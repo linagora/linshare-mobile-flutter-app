@@ -49,7 +49,7 @@ class BiometricAuthenticationLoginViewModel extends BaseViewModel {
   final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
   final GetAvailableBiometricInteractor _getAvailableBiometricInteractor;
 
-  BiometricAuthenticationArguments _biometricAuthenticationArguments;
+  late BiometricAuthenticationArguments _biometricAuthenticationArguments;
 
   BiometricAuthenticationLoginViewModel(
     Store<AppState> store,

@@ -45,7 +45,7 @@ extension ValicatorFailureExtension on VerifyNameFailure {
     } else if (exception is LastDotException) {
       return AppLocalizations.of(context).node_name_contain_last_dot(AppLocalizations.of(context).file);
     } else {
-      return null;
+      return '';
     }
   }
 }

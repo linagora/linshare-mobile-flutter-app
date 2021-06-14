@@ -71,8 +71,8 @@ class SharedSpaceViewModel extends BaseViewModel {
   final SaveSorterInteractor _saveSorterInteractor;
   final RenameWorkGroupInteractor _renameWorkGroupInteractor;
   final GetSharedSpaceInteractor _getSharedSpaceInteractor;
-  StreamSubscription _storeStreamSubscription;
-  List<SharedSpaceNodeNested> _sharedSpaceNodes;
+  late StreamSubscription _storeStreamSubscription;
+  late List<SharedSpaceNodeNested> _sharedSpaceNodes;
 
   SearchQuery _searchQuery = SearchQuery('');
   SearchQuery get searchQuery  => _searchQuery;
@@ -107,7 +107,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     });
   }
 
-  void getAllSharedSpaces({bool needToGetOldSorter}) {
+  void getAllSharedSpaces({required bool needToGetOldSorter}) {
     needToGetOldSorter
       ? store.dispatch(_getAllSharedSpacesActionAndSort())
       : store.dispatch(_getAllSharedSpacesAction());
@@ -210,7 +210,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     return store.state.uiState.isInSearchState();
   }
 
-  void openContextMenu(BuildContext context, SharedSpaceNodeNested sharedSpace, List<Widget> actionTiles, {Widget footerAction}) {
+  void openContextMenu(BuildContext context, SharedSpaceNodeNested sharedSpace, List<Widget> actionTiles, {Widget? footerAction}) {
     store.dispatch(_handleContextMenuAction(context, sharedSpace, actionTiles, footerAction: footerAction));
   }
 
@@ -218,14 +218,14 @@ class SharedSpaceViewModel extends BaseViewModel {
       BuildContext context,
       SharedSpaceNodeNested sharedSpace,
       List<Widget> actionTiles,
-      {Widget footerAction}) {
+      {Widget? footerAction}) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
         .addHeader(ContextMenuHeaderBuilder(
           Key('shared_space_context_menu_header'),
           SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(sharedSpace)).build())
         .addTiles(actionTiles)
-        .addFooter(footerAction)
+        .addFooter(footerAction ?? SizedBox.shrink())
         .build();
     };
   }
@@ -376,12 +376,12 @@ class SharedSpaceViewModel extends BaseViewModel {
         } else if (failure.exception is SpecialCharacterException) {
           return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
         } else {
-          return null;
+          return '';
         }
       } else {
-        return null;
+        return '';
       }
-    }, (success) => null);
+    }, (success) => '');
   }
 
   OnlineThunkAction _createNewWorkGroupAction(String newName) {
@@ -416,7 +416,7 @@ class SharedSpaceViewModel extends BaseViewModel {
       await _renameWorkGroupInteractor
         .execute(
           sharedSpaceNodeNested.sharedSpaceId,
-          RenameWorkGroupRequest(newName, sharedSpaceNodeNested.versioningParameters, sharedSpaceNodeNested.nodeType))
+          RenameWorkGroupRequest(newName, sharedSpaceNodeNested.versioningParameters, sharedSpaceNodeNested.nodeType!))
         .then((result) => getAllSharedSpaces(needToGetOldSorter: true));
     });
   }
