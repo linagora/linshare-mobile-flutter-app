@@ -44,7 +44,7 @@ class UploadFileAction extends ActionOnline {
 
 @immutable
 class UploadFilesUpdateAction extends ActionOnline {
-  final List<UploadAndShareFileState> uploadingStateFiles;
+  final List<UploadAndShareFileState?> uploadingStateFiles;
 
   UploadFilesUpdateAction(this.uploadingStateFiles);
 }

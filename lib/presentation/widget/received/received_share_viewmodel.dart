@@ -74,7 +74,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   List<ReceivedShare> _receivedSharesList = [];
   final SearchReceivedSharesInteractor _searchReceivedSharesInteractor;
 
-  StreamSubscription _storeStreamSubscription;
+  late StreamSubscription _storeStreamSubscription;
 
   SearchQuery _searchQuery = SearchQuery('');
   SearchQuery get searchQuery  => _searchQuery;
@@ -155,7 +155,7 @@ class ReceivedShareViewModel extends BaseViewModel {
     });
   }
 
-  void openContextMenu(BuildContext context, ReceivedShare share, List<Widget> actionTiles, {Widget footerAction}) {
+  void openContextMenu(BuildContext context, ReceivedShare share, List<Widget> actionTiles, {Widget? footerAction}) {
     store.dispatch(_handleContextMenuAction(context, share, actionTiles, footerAction: footerAction));
   }
 
@@ -163,14 +163,14 @@ class ReceivedShareViewModel extends BaseViewModel {
       BuildContext context,
       ReceivedShare share,
       List<Widget> actionTiles,
-      {Widget footerAction}) {
+      {Widget? footerAction}) {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
           .addHeader(ContextMenuHeaderBuilder(
             Key('context_menu_header'),
             SharePresentationFile.fromShare(share)).build())
           .addTiles(actionTiles)
-          .addFooter(footerAction)
+          .addFooter(footerAction ?? SizedBox.shrink())
           .build();
       store.dispatch(ReceivedShareAction(Right(ReceivedShareContextMenuItemViewState(share))));
     };

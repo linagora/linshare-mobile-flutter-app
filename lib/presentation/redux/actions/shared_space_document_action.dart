@@ -76,7 +76,7 @@ class UpdateSharedSpaceDocumentArgumentsAction extends ActionOffline {
 
 @immutable
 class SharedSpaceDocumentSetSearchResultAction extends ActionOffline {
-  final List<WorkGroupNode> workGroupNodes;
+  final List<WorkGroupNode?> workGroupNodes;
 
   SharedSpaceDocumentSetSearchResultAction(this.workGroupNodes);
 }
@@ -104,7 +104,7 @@ class SharedSpaceUnSelectAllWorkGroupNodeAction extends ActionOffline {
 
 @immutable
 class SharedSpaceDocumentSortWorkGroupNodeAction extends ActionOffline {
-  final List<WorkGroupNode> workGroupNodes;
+  final List<WorkGroupNode?> workGroupNodes;
   final Sorter sorter;
 
   SharedSpaceDocumentSortWorkGroupNodeAction(this.workGroupNodes, this.sorter);

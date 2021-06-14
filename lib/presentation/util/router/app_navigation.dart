@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
@@ -37,29 +39,29 @@ class AppNavigation {
 
   AppNavigation(this.navigatorKey);
 
-  Future push(String routeName, {RouterArguments arguments}) {
-    return navigatorKey.currentState
-        .pushNamed(routeName, arguments: RouteSettings(arguments: arguments));
+  Future push(String routeName, {RouterArguments? arguments}) {
+    return navigatorKey.currentState!
+        .pushNamed(routeName, arguments: arguments);
   }
 
-  Future popAndPush(String routeName, {RouterArguments arguments}) {
-    return navigatorKey.currentState
-        .popAndPushNamed(routeName, arguments: RouteSettings(arguments: arguments));
+  Future popAndPush(String routeName, {RouterArguments? arguments}) {
+    return navigatorKey.currentState!
+        .popAndPushNamed(routeName, arguments: arguments);
   }
 
-  Future pushAndRemoveAll(String routeName, {Object arguments}) {
-    return navigatorKey.currentState.pushNamedAndRemoveUntil(
+  Future pushAndRemoveAll(String routeName, {Object? arguments}) {
+    return navigatorKey.currentState!.pushNamedAndRemoveUntil(
         routeName, (Route<dynamic> route) => false,
-        arguments: RouteSettings(arguments: arguments));
+        arguments: arguments);
   }
 
   void popBack() {
     if (canPop()) {
-      navigatorKey.currentState.pop();
+      navigatorKey.currentState!.pop();
     }
   }
 
   bool canPop() {
-    return navigatorKey.currentState.canPop();
+    return navigatorKey.currentState!.canPop();
   }
 }

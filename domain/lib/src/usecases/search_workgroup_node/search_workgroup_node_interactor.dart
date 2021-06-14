@@ -36,12 +36,17 @@ import 'package:domain/src/usecases/search_workgroup_node/search_workgroup_node_
 
 class SearchWorkGroupNodeInteractor {
 
-  Future<Either<Failure, Success>> execute(List<WorkGroupNode> workGroupNodesList, SearchQuery searchQuery) async {
+  Future<Either<Failure, Success>> execute(List<WorkGroupNode?> workGroupNodesList, SearchQuery searchQuery) async {
     try {
       final resultList = workGroupNodesList
-          .where((element) => element.name
-              .toLowerCase()
-              .contains(searchQuery.value.toLowerCase()))
+          .where((element) {
+            if(element != null) {
+              return element.name
+                .toLowerCase()
+                .contains(searchQuery.value.toLowerCase());
+            }
+            return false;
+          })
           .toList();
       return Right<Failure, Success>(SearchWorkGroupNodeSuccess(resultList));
     } catch (exception) {

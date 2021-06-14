@@ -84,7 +84,7 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
     store.dispatch(
         _updateSharedSpaceMemberRoleAction(
             sharedSpaceId,
-            AccountId(fromMember.account.accountId.uuid),
+            AccountId(fromMember.account?.accountId.uuid ?? ''),
             changeToRole));
     _appNavigation.popBack();
   }
@@ -105,7 +105,7 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
             (success) => (success as AutoCompleteViewState)
                 .results
                 .where((user) => !members
-                    .map((member) => member.account.mail)
+                    .map((member) => member.account?.mail)
                     .contains(user.getSuggestionMail()))
                 .toList(),
           ),
@@ -128,8 +128,8 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
         return;
       }
 
-      final role = rolesList.firstWhere((element) => element.name == selectedRole, orElse: () => null);
-      if (role == null) {
+      final role = rolesList.firstWhere((element) => element.name == selectedRole, orElse: () => SharedSpaceRole.initial());
+      if (role.sharedSpaceRoleId.uuid.isEmpty) {
         store.dispatch(AddSharedSpaceMembersAction(
             Left<Failure, Success>(AddSharedSpaceMemberFailure(SelectedRoleNotFound()))));
         return;
@@ -157,8 +157,8 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
         return;
       }
 
-      final role = rolesList.firstWhere((_role) => _role.name == newRole, orElse: () => null);
-      if (role == null) {
+      final role = rolesList.firstWhere((_role) => _role.name == newRole, orElse: () => SharedSpaceRole.initial());
+      if (role.sharedSpaceRoleId.uuid.isEmpty) {
         store.dispatch(UpdateSharedSpaceMembersAction(
             Left<Failure, Success>(UpdateSharedSpaceMemberFailure(SelectedRoleNotFound()))));
         return;

@@ -45,7 +45,7 @@ class ToolbarBuilder {
 
   ToolbarBuilder(
     this.key, {
-    @required this.onButtonActionClick,
+    required this.onButtonActionClick,
     this.actionIcon = '',
     this.title = '',
     this.titleTextStyle = const TextStyle(color: Colors.white),

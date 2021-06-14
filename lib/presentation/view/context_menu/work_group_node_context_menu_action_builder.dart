@@ -43,7 +43,7 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu
 
 class WorkGroupNodeContextMenuTileBuilder extends ContextMenuActionBuilder<WorkGroupNode> {
   final WorkGroupNode _workGroupNode;
-  Widget _trailing;
+  Widget? _trailing;
 
   WorkGroupNodeContextMenuTileBuilder(
     Key key,
@@ -62,7 +62,7 @@ class WorkGroupNodeContextMenuTileBuilder extends ContextMenuActionBuilder<WorkG
     return ListTile(
       key: key,
       leading: actionIcon,
-      trailing: _trailing,
+      trailing: _trailing ?? SizedBox.shrink(),
       title: Text(
         actionName,
         style: actionTextStyle()),

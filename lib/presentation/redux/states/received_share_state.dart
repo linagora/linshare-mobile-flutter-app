@@ -55,7 +55,7 @@ class ReceivedShareState extends LinShareState with EquatableMixin {
     return ReceivedShareState(Right(IdleState()), [], SelectMode.INACTIVE, Sorter.fromOrderScreen(OrderScreen.receivedShares));
   }
 
-  ReceivedShareState setReceivedShareList(List<ReceivedShare> newReceivedShareList, {Either<Failure, Success> viewState}) {
+  ReceivedShareState setReceivedShareList(List<ReceivedShare> newReceivedShareList, {Either<Failure, Success>? viewState}) {
     final selectedElements = receivedSharesList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
     return ReceivedShareState(
@@ -70,9 +70,9 @@ class ReceivedShareState extends LinShareState with EquatableMixin {
   }
 
   ReceivedShareState setReceivedSharesWithSorter(
-      {Either<Failure, Success> viewState,
-      List<ReceivedShare> newReceivedShareList,
-      Sorter newSorter}) {
+      {Either<Failure, Success>? viewState,
+      required List<ReceivedShare> newReceivedShareList,
+        required Sorter newSorter}) {
     final selectedElements = receivedSharesList
         .where((element) => element.selectMode == SelectMode.ACTIVE)
         .map((element) => element.element)
@@ -91,7 +91,7 @@ class ReceivedShareState extends LinShareState with EquatableMixin {
         newSorter);
   }
 
-  ReceivedShareState setSorter({Either<Failure, Success> viewState, Sorter newSorter}) {
+  ReceivedShareState setSorter({Either<Failure, Success>? viewState, required Sorter newSorter}) {
     return ReceivedShareState(viewState ?? this.viewState, receivedSharesList, selectMode, newSorter);
   }
 
@@ -101,7 +101,7 @@ class ReceivedShareState extends LinShareState with EquatableMixin {
   }
 
   @override
-  ReceivedShareState sendViewState({Either<Failure, Success> viewState}) {
+  ReceivedShareState sendViewState({required Either<Failure, Success> viewState}) {
     return ReceivedShareState(viewState, receivedSharesList, selectMode, sorter);
   }
 
@@ -110,20 +110,20 @@ class ReceivedShareState extends LinShareState with EquatableMixin {
     return ReceivedShareState(Right(LoadingState()), receivedSharesList, selectMode, sorter);
   }
 
-  LinShareState selectReceivedShare(SelectableElement<ReceivedShare> selectedReceivedShare) {
+  ReceivedShareState selectReceivedShare(SelectableElement<ReceivedShare> selectedReceivedShare) {
     receivedSharesList.firstWhere((receivedShare) => receivedShare == selectedReceivedShare).toggleSelect();
     return ReceivedShareState(viewState, receivedSharesList, SelectMode.ACTIVE, sorter);
   }
 
-  LinShareState cancelSelectedReceivedShares() {
+  ReceivedShareState cancelSelectedReceivedShares() {
     return ReceivedShareState(viewState, receivedSharesList.map((receivedShare) => SelectableElement<ReceivedShare>(receivedShare.element, SelectMode.INACTIVE)).toList(), SelectMode.INACTIVE, sorter);
   }
 
-  LinShareState selectAllReceivedShares() {
+  ReceivedShareState selectAllReceivedShares() {
     return ReceivedShareState(viewState, receivedSharesList.map((receivedShare) => SelectableElement<ReceivedShare>(receivedShare.element, SelectMode.ACTIVE)).toList(), SelectMode.ACTIVE, sorter);
   }
 
-  LinShareState unselectAllReceivedShares() {
+  ReceivedShareState unselectAllReceivedShares() {
     return ReceivedShareState(viewState, receivedSharesList.map((receivedShare) => SelectableElement<ReceivedShare>(receivedShare.element, SelectMode.INACTIVE)).toList(), SelectMode.ACTIVE, sorter);
   }
 }

@@ -35,14 +35,14 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 
 class UploadFileArguments extends RouterArguments {
   final List<FileInfo> uploadFiles;
-  ShareType shareType;
-  List<Document> documents;
-  WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo;
+  late ShareType shareType;
+  List<Document>? documents;
+  late WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo;
 
   UploadFileArguments(this.uploadFiles, {
     ShareType shareType = ShareType.uploadAndShare,
-    List<Document> documents,
-    WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo
+    List<Document>? documents,
+    WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo
   }) {
     this.shareType = shareType;
     this.documents = documents;
@@ -55,8 +55,8 @@ enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
 enum ShareButtonType { justUpload, uploadAndShare, workGroup }
 
 class WorkGroupDocumentUploadInfo {
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
-  final WorkGroupNode currentNode;
+  final SharedSpaceNodeNested? sharedSpaceNodeNested;
+  final WorkGroupNode? currentNode;
   final SharedSpaceDocumentType folderType;
 
   WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);

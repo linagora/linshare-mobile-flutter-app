@@ -46,11 +46,11 @@ class SharedSpaceNodeNestedPresentationFile extends Equatable implements Present
   final imagePath = getIt<AppImagePaths>();
 
   final SharedSpaceId sharedSpaceId;
-  final SharedSpaceRole sharedSpaceRole;
+  final SharedSpaceRole? sharedSpaceRole;
   final DateTime creationDate;
   final DateTime modificationDate;
   final String name;
-  final LinShareNodeType nodeType;
+  final LinShareNodeType? nodeType;
 
   SharedSpaceNodeNestedPresentationFile(
     this.sharedSpaceId,
@@ -93,7 +93,7 @@ class SharedSpaceNodeNestedPresentationFile extends Equatable implements Present
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
       sharedSpaceId,
       sharedSpaceRole,
       creationDate,

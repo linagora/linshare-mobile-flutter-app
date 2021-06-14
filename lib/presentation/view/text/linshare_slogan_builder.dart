@@ -40,11 +40,11 @@ import 'package:flutter/material.dart';
 /// This contains the LinShare logo and the slogan text.
 /// The elements are arranged in a column.
 class LinShareSloganBuilder {
-  Key _key;
-  String _text;
-  TextStyle _textStyle;
-  TextAlign _textAlign;
-  String _logo;
+  Key? _key;
+  String? _text;
+  TextStyle? _textStyle;
+  TextAlign? _textAlign;
+  String? _logo;
 
   LinShareSloganBuilder key(Key key) {
     _key = key;
@@ -75,11 +75,11 @@ class LinShareSloganBuilder {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image(image: AssetImage(_logo), alignment: Alignment.center),
+        _logo != null ? Image(image: AssetImage(_logo!), alignment: Alignment.center) : SizedBox.shrink(),
         Padding(
           padding: EdgeInsets.only(top: 16, left: 16, right: 16),
           child:
-              Text(_text, key: _key, style: _textStyle, textAlign: _textAlign),
+              Text(_text ?? '', key: _key, style: _textStyle, textAlign: _textAlign),
         ),
       ],
     );

@@ -44,7 +44,7 @@ class CopyMultipleFilesToSharedSpaceInteractor {
 
   CopyMultipleFilesToSharedSpaceInteractor(this._copyDocumentsToSharedSpaceInteractor);
 
-  Future<Either<Failure, Success?>> execute(
+  Future<Either<Failure, Success>> execute(
       List<CopyRequest> copyRequests,
       SharedSpaceId destinationSharedSpaceId,
       {WorkGroupNodeId? destinationParentNodeId}

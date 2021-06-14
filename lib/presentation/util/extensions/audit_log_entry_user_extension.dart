@@ -64,7 +64,7 @@ extension AuditLogEntryUserExtension on AuditLogEntryUser {
     return imagePath.icFileTypeFile;
   }
 
-  String getWorkGroupNodeIconPath(AppImagePaths imagePath, WorkGroupNode workGroupNode) {
+  String getWorkGroupNodeIconPath(AppImagePaths imagePath, WorkGroupNode? workGroupNode) {
     if (workGroupNode is WorkGroupDocument) {
       return workGroupNode.mediaType.getFileTypeImagePath(imagePath);
     }
@@ -72,15 +72,15 @@ extension AuditLogEntryUserExtension on AuditLogEntryUser {
   }
 
   Map<AuditLogActionDetail, dynamic> getActionDetails(BuildContext context, String loggedUserId) {
-    final clientLogAction = type.generateClientLogAction(this);
+    final clientLogAction = type?.generateClientLogAction(this);
 
     final messageComponents = getActionMessageComponents();
     final authorName = messageComponents[AuditLogActionMessageParam.authorName];
-    final isCurrentUserAuthor = authUser.accountId.uuid == loggedUserId;
+    final isCurrentUserAuthor = authUser?.accountId.uuid == loggedUserId;
     messageComponents[AuditLogActionMessageParam.authorName] = authorName;
 
-    final actionTitle = type.getAuditLogMapping(context, clientLogAction, messageComponents, isCurrentUserAuthor)[AuditLogActionMessage.TITLE];
-    final actionDetails = type.getAuditLogMapping(context, clientLogAction, messageComponents, isCurrentUserAuthor)[AuditLogActionMessage.DETAILS];
+    final actionTitle = type?.getAuditLogMapping(context, clientLogAction, messageComponents, isCurrentUserAuthor)[AuditLogActionMessage.TITLE];
+    final actionDetails = type?.getAuditLogMapping(context, clientLogAction, messageComponents, isCurrentUserAuthor)[AuditLogActionMessage.DETAILS];
 
     return {AuditLogActionDetail.TITLE : actionTitle, AuditLogActionDetail.DETAIL : actionDetails};
   }
@@ -88,9 +88,9 @@ extension AuditLogEntryUserExtension on AuditLogEntryUser {
   String getLogTimeAndByActor(BuildContext context, String loggedUserId) {
     final logTime = creationDate.getMMMddyyyyFormatString();
     final byActor = AppLocalizations.of(context).audit_log_actor(
-        authUser.accountId.uuid == loggedUserId
+        authUser?.accountId.uuid == loggedUserId
             ? AppLocalizations.of(context).me
-            : actor.name);
+            : (actor?.name ?? ''));
     return logTime + ' | ' + byActor;
   }
 }

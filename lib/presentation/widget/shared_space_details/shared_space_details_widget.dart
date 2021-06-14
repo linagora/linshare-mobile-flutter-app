@@ -65,7 +65,8 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      _model.initState(ModalRoute.of(context).settings.arguments);
+      var arg = ModalRoute.of(context)?.settings.arguments as SharedSpaceDetailsArguments;
+      _model.initState(arg);
     });
     super.initState();
   }
@@ -78,7 +79,8 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final SharedSpaceDetailsArguments arguments = ModalRoute.of(context).settings.arguments;
+    var arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceDetailsArguments;
+
     return DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -120,7 +122,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                   converter: (store) => store.state.sharedSpaceDetailsState,
                   builder: (_, state) => _membersTabWidget(state),
                 ),
-                StoreConnector<AppState, List<AuditLogEntry>>(
+                StoreConnector<AppState, List<AuditLogEntryUser?>?>(
                   converter: (store) => store.state.sharedSpaceDetailsState.activitiesList,
                   builder: (_, activitiesList) => _activitiesTabWidget(activitiesList),
                 ),
@@ -161,13 +163,13 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
               padding: EdgeInsets.only(left: 10),
               child: SvgPicture.asset(imagePath.icSharedSpace,
                   color: AppColor.primaryColor, width: 20, height: 24, fit: BoxFit.fill)),
-          title: Text(state.sharedSpace.name,
+          title: Text(state.sharedSpace?.name ?? '',
               style: TextStyle(
                   color: AppColor.workGroupDetailsName,
                   fontWeight: FontWeight.normal,
                   fontSize: 14.0)),
           trailing: Text(
-            filesize(state.quota.usedSpace.size),
+            filesize(state.quota?.usedSpace.size),
             style: TextStyle(
               fontSize: 14,
               fontStyle: FontStyle.italic,
@@ -180,15 +182,15 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
         Column(
           children: [
             _sharedSpaceInformationTile(AppLocalizations.of(context).modified,
-                state.sharedSpace.modificationDate.getMMMddyyyyFormatString()),
+                state.sharedSpace?.modificationDate.getMMMddyyyyFormatString() ?? ''),
             _sharedSpaceInformationTile(AppLocalizations.of(context).created,
-                state.sharedSpace.creationDate.getMMMddyyyyFormatString()),
+                state.sharedSpace?.creationDate.getMMMddyyyyFormatString() ?? ''),
             _sharedSpaceInformationTile(
                 AppLocalizations.of(context).my_rights,
                 toBeginningOfSentenceCase(
-                    state.sharedSpace.sharedSpaceRole.name.getRoleName(context))),
+                    state.sharedSpace?.sharedSpaceRole?.name.getRoleName(context)) ?? ''),
             _sharedSpaceInformationTile(
-                AppLocalizations.of(context).max_file_size, filesize(state.quota.maxFileSize.size)),
+                AppLocalizations.of(context).max_file_size, filesize(state.quota?.maxFileSize.size)),
           ],
         ),
         Divider(),
@@ -239,34 +241,37 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   Widget _membersTabWidget(SharedSpaceDetailsState state) {
     return RefreshIndicator(
       onRefresh: () async {
-        _model.refreshSharedSpaceMembers(state.sharedSpace.sharedSpaceId);
+        _model.refreshSharedSpaceMembers(state.sharedSpace?.sharedSpaceId);
       },
       child: Scaffold(
         body: ListView.builder(
-          itemCount: state.membersList.length,
+          itemCount: state.membersList?.length,
           itemBuilder: (context, index) {
-            var member = state.membersList[index];
+            var member = state.membersList?[index];
+            if(member == null) {
+              return SizedBox.shrink();
+            }
             return SharedSpaceMemberListTileBuilder(
-              member.account.name,
-              member.account.mail,
-              member.role.name.getRoleName(context),
-              userCurrentRole: state.sharedSpace.sharedSpaceRole.name,
+              member.account?.name ?? '',
+              member.account?.mail ?? '',
+              member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+              userCurrentRole: state.sharedSpace?.sharedSpaceRole?.name,
               onSelectedRoleCallback: () => selectRoleBottomSheet(
                 context,
-                member.role.name,
-                state.sharedSpace.sharedSpaceId,
+                member.role?.name ?? SharedSpaceRoleName.READER,
+                state.sharedSpace!.sharedSpaceId,
                 member),
               onDeleteMemberCallback: () => confirmDeleteMember(
                 context,
-                member.account.name,
-                state.sharedSpace.name,
-                state.sharedSpace.sharedSpaceId,
+                member.account?.name ?? '',
+                state.sharedSpace?.name ?? '',
+                state.sharedSpace!.sharedSpaceId,
                 member.sharedSpaceMemberId)).build();
               }),
         floatingActionButton:
-          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(state.sharedSpace.sharedSpaceRole.name)
+          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(state.sharedSpace?.sharedSpaceRole?.name)
           ? FloatingActionButton(
-              onPressed: () => _model.goToAddSharedSpaceMember(state.sharedSpace, state.membersList),
+              onPressed: () => _model.goToAddSharedSpaceMember(state.sharedSpace!, state.membersList!),
               child: Icon(Icons.person_add, color: Colors.white, size: 24.0),
               backgroundColor: AppColor.primaryColor,
             )
@@ -276,8 +281,8 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
       ));
   }
 
-  Widget _activitiesTabWidget(List<AuditLogEntryUser> activitiesList) {
-    return activitiesList.isEmpty
+  Widget _activitiesTabWidget(List<AuditLogEntryUser?>? activitiesList) {
+    return (activitiesList == null || activitiesList.isEmpty)
         ? SizedBox.shrink()
         : ListView.builder(
             key: Key('activities_list'),
@@ -289,11 +294,11 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           );
   }
 
-  Widget _buildActivitiesListItem(BuildContext context, AuditLogEntryUser auditLogEntryUser) {
+  Widget _buildActivitiesListItem(BuildContext context, AuditLogEntryUser? auditLogEntryUser) {
     return ListTile(
         contentPadding: EdgeInsets.only(left: 24, top: 0),
         leading: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          SvgPicture.asset(auditLogEntryUser.getAuditLogIconPath(imagePath),
+          SvgPicture.asset(auditLogEntryUser?.getAuditLogIconPath(imagePath) ?? imagePath.icFileTypeFile,
               width: 20, height: 20, fit: BoxFit.fill)
         ]),
         title: Transform(
@@ -302,24 +307,24 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
             Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
-                  auditLogEntryUser.getResourceName(),
+                  auditLogEntryUser?.getResourceName() ?? '',
                   maxLines: 1,
                   style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
                 )),
-            _buildActionDetailsText(auditLogEntryUser.getActionDetails(
-                context, _model.store.state.account.user.userId.uuid)),
+            _buildActionDetailsText(auditLogEntryUser?.getActionDetails(
+                context, _model.store.state.account.user!.userId.uuid)),
             Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
-                  auditLogEntryUser.getLogTimeAndByActor(
-                      context, _model.store.state.account.user.userId.uuid),
+                  auditLogEntryUser?.getLogTimeAndByActor(
+                      context, _model.store.state.account.user!.userId.uuid) ?? '',
                   style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
                 ))
           ]),
         ));
   }
 
-  Widget _buildActionDetailsText(Map<AuditLogActionDetail, dynamic> actionDetails) {
+  Widget _buildActionDetailsText(Map<AuditLogActionDetail, dynamic>? actionDetails) {
     return Padding(
         padding: EdgeInsets.only(top: 8),
         child: RichText(
@@ -327,13 +332,13 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           style: TextStyle(fontSize: 13, color: AppColor.documentNameItemTextColor),
           children: <TextSpan>[
             TextSpan(
-                text: actionDetails[AuditLogActionDetail.TITLE],
+                text: actionDetails?[AuditLogActionDetail.TITLE],
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                     color: AppColor.documentNameItemTextColor)),
             TextSpan(
-                text: ' ${actionDetails[AuditLogActionDetail.DETAIL]}',
+                text: ' ${actionDetails?[AuditLogActionDetail.DETAIL]}',
                 style: TextStyle(fontSize: 13, color: AppColor.documentNameItemTextColor))
           ],
         )));

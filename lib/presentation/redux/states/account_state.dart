@@ -39,7 +39,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 
 @immutable
 class AccountState extends LinShareState {
-  final User user;
+  final User? user;
   final SupportBiometricState supportBiometricState;
 
   AccountState(
@@ -58,12 +58,12 @@ class AccountState extends LinShareState {
   }
 
   @override
-  AccountState sendViewState({Either<Failure, Success> viewState}) {
+  AccountState sendViewState({required Either<Failure, Success> viewState}) {
     return AccountState(viewState, user, supportBiometricState);
   }
 
   @override
-  AccountState setAccountInformation({Either<Failure, Success> newViewState, User newUser}) {
+  AccountState setAccountInformation({Either<Failure, Success>? newViewState, User? newUser}) {
     return AccountState(newViewState ?? viewState, newUser ?? user, supportBiometricState);
   }
 

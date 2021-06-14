@@ -53,35 +53,35 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case RoutePaths.loginRoute:
-      return MaterialPageRoute(builder: (context) => getIt<LoginWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<LoginWidget>(), settings: settings);
     case RoutePaths.homeRoute:
-      return MaterialPageRoute(builder: (context) => getIt<HomeWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<HomeWidget>(), settings: settings);
     case RoutePaths.uploadDocumentRoute:
-      return MaterialPageRoute(builder: (context) => getIt<UploadFileWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<UploadFileWidget>(), settings: settings);
     case RoutePaths.currentUploads:
-      return MaterialPageRoute(builder: (context) => getIt<CurrentUploadsWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<CurrentUploadsWidget>(), settings: settings);
     case RoutePaths.destinationPicker:
-      return TransparentPageRoute(builder: (context) => getIt<DestinationPickerWidget>(), settings: settings.arguments);
+      return TransparentPageRoute(builder: (context) => getIt<DestinationPickerWidget>(), settings: settings);
     case RoutePaths.sharedSpaceDetails:
-      return MaterialPageRoute(builder: (context) => getIt<SharedSpaceDetailsWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<SharedSpaceDetailsWidget>(), settings: settings);
     case RoutePaths.authentication:
-      return MaterialPageRoute(builder: (context) => getIt<AuthenticationWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<AuthenticationWidget>(), settings: settings);
     case RoutePaths.enter_otp:
-      return MaterialPageRoute(builder: (context) => getIt<EnterOTPWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<EnterOTPWidget>(), settings: settings);
     case RoutePaths.second_factor_authentication:
-      return MaterialPageRoute(builder: (context) => getIt<SecondFactorAuthenticationWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<SecondFactorAuthenticationWidget>(), settings: settings);
     case RoutePaths.addSharedSpaceMember:
-      return MaterialPageRoute(builder: (context) => getIt<AddSharedSpaceMemberWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<AddSharedSpaceMemberWidget>(), settings: settings);
     case RoutePaths.documentDetails:
-      return MaterialPageRoute(builder: (context) => getIt<DocumentDetailsWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<DocumentDetailsWidget>(), settings: settings);
     case RoutePaths.sharedSpaceNodeDetails:
-      return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeDetailsWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeDetailsWidget>(), settings: settings);
     case RoutePaths.biometricAuthenticationSetting:
-      return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationSettingWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationSettingWidget>(), settings: settings);
     case RoutePaths.sharedSpaceNodeVersions:
-      return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeVersionsWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeVersionsWidget>(), settings: settings);
     case RoutePaths.biometricAuthenticationLogin:
-      return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationLoginWidget>(), settings: settings.arguments);
+      return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationLoginWidget>(), settings: settings);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

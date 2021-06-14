@@ -43,7 +43,7 @@ import '../../fixtures/mock/mock_fixtures.dart';
 import '../../fixtures/test_redux_module.dart';
 
 void main() {
-  var getIt = GetIt.asNewInstance();
+  final getIt = GetIt.instance;
   TestReduxModule(getIt);
   getIt.registerLazySingleton<CreatePermanentTokenInteractor>(() => MockCreatePermanentTokenInteractor());
   getIt.registerLazySingleton<AppNavigation>(() => MockAppNavigation());

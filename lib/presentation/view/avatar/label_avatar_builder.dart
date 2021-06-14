@@ -36,9 +36,9 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 
 class LabelAvatarBuilder {
   final String label;
-  Color _backgroundColor;
-  TextStyle _textStyle;
-  Key _key;
+  Color? _backgroundColor;
+  TextStyle? _textStyle;
+  Key? _key;
 
   LabelAvatarBuilder(this.label);
 
@@ -59,7 +59,7 @@ class LabelAvatarBuilder {
 
   Widget build() {
     return CircleAvatar(
-        key: _key,
+        key: _key ?? Key('LabelAvatarBuilder'),
         backgroundColor: _backgroundColor ?? AppColor.defaultLabelAvatarBackgroundColor,
         child: Text(
           label,

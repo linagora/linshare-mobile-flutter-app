@@ -37,7 +37,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/base_destination_picker_action.dart';
 
 class ChooseDestinationPickerAction extends BaseDestinationPickerAction {
-  ChooseDestinationPickerAction(BuildContext buildContext, {TextStyle style})
+  ChooseDestinationPickerAction(BuildContext buildContext, {TextStyle? style})
       : super(Text(AppLocalizations.of(buildContext).choose.toUpperCase(),
       style: style ??
           TextStyle(

@@ -51,20 +51,20 @@ class DestinationPickerState extends LinShareState with EquatableMixin {
   }
 
   @override
-  LinShareState clearViewState() {
+  DestinationPickerState clearViewState() {
     return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial(), Operation.none);
   }
 
   @override
-  LinShareState sendViewState({Either<Failure, Success> viewState}) {
+  DestinationPickerState sendViewState({required Either<Failure, Success> viewState}) {
     return DestinationPickerState(viewState, sharedSpacesList, routeData, operation);
   }
 
-  LinShareState setDestinationPickerState(
-      {Either<Failure, Success> viewState,
-      List<SharedSpaceNodeNested> newSharedSpacesList,
-      DestinationPickerRouteData routeData,
-      Operation operation}) {
+  DestinationPickerState setDestinationPickerState(
+      {required Either<Failure, Success> viewState,
+        required List<SharedSpaceNodeNested> newSharedSpacesList,
+      DestinationPickerRouteData? routeData,
+      Operation? operation}) {
     return DestinationPickerState(viewState, newSharedSpacesList, routeData ?? this.routeData, operation ?? this.operation);
   }
 
@@ -74,7 +74,7 @@ class DestinationPickerState extends LinShareState with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     sharedSpacesList,
     routeData
@@ -82,8 +82,8 @@ class DestinationPickerState extends LinShareState with EquatableMixin {
 }
 
 class DestinationPickerRouteData with EquatableMixin {
-  final DestinationPickerCurrentView destinationPickerCurrentView;
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
+  final DestinationPickerCurrentView? destinationPickerCurrentView;
+  final SharedSpaceNodeNested? sharedSpaceNodeNested;
 
   DestinationPickerRouteData(this.destinationPickerCurrentView, this.sharedSpaceNodeNested);
 
@@ -91,7 +91,7 @@ class DestinationPickerRouteData with EquatableMixin {
       DestinationPickerRouteData(null, null);
 
   @override
-  List<Object> get props => [destinationPickerCurrentView, sharedSpaceNodeNested];
+  List<Object?> get props => [destinationPickerCurrentView, sharedSpaceNodeNested];
 }
 
 enum DestinationPickerCurrentView {

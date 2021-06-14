@@ -78,7 +78,10 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     _appNavigation.popBack();
   }
 
-  void refreshSharedSpaceMembers(SharedSpaceId sharedSpaceId) {
+  void refreshSharedSpaceMembers(SharedSpaceId? sharedSpaceId) {
+    if(sharedSpaceId == null) {
+      return;
+    }
     store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
   }
 
@@ -90,7 +93,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   }
 
   void changeMemberRole(SharedSpaceId sharedSpaceId, SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
-    store.dispatch(_updateSharedSpaceMemberRoleAction(sharedSpaceId, AccountId(fromMember.account.accountId.uuid), changeToRole));
+    store.dispatch(_updateSharedSpaceMemberRoleAction(sharedSpaceId, AccountId(fromMember.account?.accountId.uuid ?? ''), changeToRole));
     _appNavigation.popBack();
   }
 
@@ -130,8 +133,8 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   OnlineThunkAction _getSharedSpaceRolesAction() {
     return OnlineThunkAction((Store<AppState> store) async {
       final roles = (await _getAllSharedSpaceRolesInteractor.execute())
-          .map((result) => result is SharedSpaceRolesViewState ? result.roles : null)
-          .getOrElse(() => []);
+          .map((result) => result is SharedSpaceRolesViewState ? result.roles : <SharedSpaceRole>[])
+          .getOrElse(() => <SharedSpaceRole>[]);
 
       store.dispatch(SharedSpaceGetSharedSpaceRolesListAction(roles));
     });
@@ -147,8 +150,8 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
         return;
       }
 
-      final role = rolesList.firstWhere((_role) => _role.name == newRole, orElse: () => null);
-      if (role == null) {
+      final role = rolesList.firstWhere((_role) => _role.name == newRole, orElse: () => SharedSpaceRole.initial());
+      if (role.sharedSpaceRoleId.uuid.isEmpty) {
         store.dispatch(UpdateSharedSpaceMembersAction(
             Left<Failure, Success>(UpdateSharedSpaceMemberFailure(SelectedRoleNotFound()))));
         return;

@@ -35,7 +35,7 @@ import 'package:flutter/material.dart';
 typedef OnDestinationPickerActionClick<T> = void Function(T);
 
 abstract class BaseDestinationPickerAction {
-  OnDestinationPickerActionClick actionClick;
+  late OnDestinationPickerActionClick actionClick;
   final Widget actionWidget;
 
   BaseDestinationPickerAction(this.actionWidget);
