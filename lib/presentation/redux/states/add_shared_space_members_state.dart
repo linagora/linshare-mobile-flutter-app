@@ -57,7 +57,7 @@ class AddSharedSpaceMembersState extends LinShareState with EquatableMixin {
   }
 
   @override
-  AddSharedSpaceMembersState sendViewState({Either<Failure, Success> viewState}) {
+  AddSharedSpaceMembersState sendViewState({required Either<Failure, Success> viewState}) {
     return AddSharedSpaceMembersState(viewState, selectedRole: selectedRole);
   }
 

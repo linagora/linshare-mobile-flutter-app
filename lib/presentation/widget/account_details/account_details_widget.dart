@@ -71,10 +71,10 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
         children: [
           _buildLoadingView(),
           ListTile(
-            leading: CircleAvatar(backgroundColor: Colors.blueGrey[900], child: Text(state.user != null ? state.user.firstName[0] : '')),
+            leading: CircleAvatar(backgroundColor: Colors.blueGrey[900], child: Text(state.user != null ? state.user!.firstName[0] : '')),
             isThreeLine: true,
             subtitle: Text(
-              state.user != null ? state.user.mail : '',
+              state.user != null ? state.user!.mail : '',
               style: TextStyle(
                 fontSize: 14,
                 color: AppColor.documentModifiedDateItemTextColor
@@ -85,8 +85,8 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
             padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 24),
             child: Column(
               children: [
-                _buildAccountDetailsTile(AppLocalizations.of(context).first_name, state.user != null ? state.user.firstName : ''),
-                _buildAccountDetailsTile(AppLocalizations.of(context).last_name, state.user != null ? state.user.lastName : ''),
+                _buildAccountDetailsTile(AppLocalizations.of(context).first_name, state.user != null ? state.user!.firstName : ''),
+                _buildAccountDetailsTile(AppLocalizations.of(context).last_name, state.user != null ? state.user!.lastName : ''),
                 _buildBiometricAuthentication(),
                 Divider(),
                 Row(

@@ -74,9 +74,9 @@ class UploadShareFileManager {
   final FileHelper _fileHelper;
 
   final GetQuotaInteractor _getQuotaInteractor;
-  VerifyQuotaManager _verifyQuotaManager;
+  late VerifyQuotaManager _verifyQuotaManager;
 
-  void justUploadFiles(List<FileInfo> uploadFiles) async {
+  Future<void> justUploadFiles(List<FileInfo> uploadFiles) async {
     if (!await _verifyQuotaManager.hasEnoughQuotaAndMaxFileSize(filesInfos: uploadFiles)) {
       return;
     }
@@ -86,19 +86,19 @@ class UploadShareFileManager {
     });
   }
 
-  void uploadFilesThenShare(
+  Future<void> uploadFilesThenShare(
     List<FileInfo> uploadFiles,
-    List<AutoCompleteResult> recipients,
+    List<AutoCompleteResult>? recipients,
   ) async {
     uploadFiles.forEach((uploadFile) async {
       await _upload(uploadFile, UploadAndShareAction.uploadAndShare, recipients: recipients);
     });
   }
 
-  Future<void> _upload(FileInfo uploadFile, UploadAndShareAction action, {List<AutoCompleteResult> recipients}) async {
+  Future<void> _upload(FileInfo uploadFile, UploadAndShareAction action, {List<AutoCompleteResult>? recipients}) async {
     (await _uploadMySpaceDocumentInteractor.execute(uploadFile)).fold(
       (failure) {
-        final state = UploadAndShareFileState.initial(uploadFile, action, UploadTaskId.undefined(), recipients: recipients)
+        final state = UploadAndShareFileState.initial(uploadFile, action, UploadTaskId.undefined(), recipients: recipients ?? <AutoCompleteResult>[])
             .copyWith(uploadStatus: UploadFileStatus.uploadFailed);
         _uploadingStateFiles.add(state);
 
@@ -106,7 +106,7 @@ class UploadShareFileManager {
       },
       (success) {
         final uploadTaskId = (success as FileUploadState).taskId;
-        _uploadingStateFiles.add(UploadAndShareFileState.initial(uploadFile, action, uploadTaskId, recipients: recipients));
+        _uploadingStateFiles.add(UploadAndShareFileState.initial(uploadFile, action, uploadTaskId, recipients: recipients ?? <AutoCompleteResult>[]));
 
         _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
       },
@@ -116,7 +116,7 @@ class UploadShareFileManager {
   void uploadToSharedSpace(
     List<FileInfo> uploadFiles,
     SharedSpaceId sharedSpaceId, {
-    WorkGroupNodeId parentNodeId,
+    WorkGroupNodeId? parentNodeId,
   }) async {
     uploadFiles.forEach((uploadFile) async {
       await _uploadToSharedSpace(uploadFile, sharedSpaceId, parentNodeId: parentNodeId);
@@ -126,7 +126,7 @@ class UploadShareFileManager {
   Future<void> _uploadToSharedSpace(
     FileInfo uploadFile,
     SharedSpaceId sharedSpaceId, {
-    WorkGroupNodeId parentNodeId,
+    WorkGroupNodeId? parentNodeId,
   }) async {
     (await _uploadWorkGroupDocumentInteractor.execute(uploadFile, sharedSpaceId, parentNodeId: parentNodeId)).fold(
       (failure) {
@@ -158,7 +158,7 @@ class UploadShareFileManager {
               _uploadingStateFiles.updateElementByUploadTaskId(
                 success.uploadTaskId,
                 (currentState) {
-                  return currentState.uploadStatus.completed ? currentState : currentState.copyWith(
+                  return (currentState?.uploadStatus.completed ?? false) ? currentState : currentState?.copyWith(
                     uploadingProgress: success.progress,
                     uploadStatus: UploadFileStatus.uploading,
                   );
@@ -180,13 +180,13 @@ class UploadShareFileManager {
     final fileState = _uploadingStateFiles.getElementByUploadTaskId(uploadSuccess.uploadTaskId);
     if (fileState != null) {
       _fileHelper.deleteFile(fileState.file);
-      if (fileState.action == UploadAndShareAction.uploadAndShare) {
+      if (fileState.action == UploadAndShareAction.uploadAndShare && fileState.recipients.isNotEmpty) {
         _shareAfterUploaded(uploadSuccess, fileState.recipients);
       } else {
         _uploadingStateFiles.updateElementByUploadTaskId(
           uploadSuccess.uploadTaskId,
           (currentState) {
-            final newState = currentState.copyWith(
+            final newState = currentState?.copyWith(
               uploadingProgress: 100,
               uploadStatus: UploadFileStatus.succeed,
             );
@@ -209,19 +209,20 @@ class UploadShareFileManager {
     List<AutoCompleteResult> recipients,
   ) async {
     final uploadedDocument = fileUploadSuccess.uploadedDocument;
+    if(uploadedDocument == null) return;
     final shareResult = await _share(recipients, [uploadedDocument.documentId]);
 
     shareResult.fold(
       (failure) {
         _uploadingStateFiles.updateElementByUploadTaskId(
           fileUploadSuccess.uploadTaskId,
-          (currentState) => currentState.copyWith(uploadStatus: UploadFileStatus.shareFailed),
+          (currentState) => currentState?.copyWith(uploadStatus: UploadFileStatus.shareFailed),
         );
       },
       (success) {
         _uploadingStateFiles.updateElementByUploadTaskId(
           fileUploadSuccess.uploadTaskId,
-          (currentState) => currentState.copyWith(uploadStatus: UploadFileStatus.succeed),
+          (currentState) => currentState?.copyWith(uploadStatus: UploadFileStatus.succeed),
         );
       },
     );
@@ -229,10 +230,13 @@ class UploadShareFileManager {
     _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
   }
 
-  void justShare(
-    List<AutoCompleteResult> recipients,
-    List<DocumentId> shareDocuments,
+  Future<void> justShare(
+    List<AutoCompleteResult>? recipients,
+    List<DocumentId>? shareDocuments,
   ) async {
+    if(recipients == null || shareDocuments == null) {
+      return;
+    }
     await _share(recipients, shareDocuments)
         .then((shareResult) => _store.dispatch(ShareAction(shareResult)));
   }

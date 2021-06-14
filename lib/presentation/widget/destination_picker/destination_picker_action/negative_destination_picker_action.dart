@@ -38,7 +38,7 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 
 class NegativeDestinationPickerAction extends BaseDestinationPickerAction {
 
-  NegativeDestinationPickerAction(BuildContext buildContext, {String label, TextStyle style})
+  NegativeDestinationPickerAction(BuildContext buildContext, {String? label, TextStyle? style})
       : super(Text(label ?? AppLocalizations.of(buildContext).cancel,
                 style: style ?? TextStyle(
                   fontSize: 14.0,

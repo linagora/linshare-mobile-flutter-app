@@ -97,8 +97,16 @@ class InitializeViewModel extends BaseViewModel {
   ThunkAction<AppState> _getCredentialAction() {
     return (Store<AppState> store) async {
       await _getCredentialInteractor.execute().then((result) => result.fold(
-          (left) => store.dispatch(_getCredentialFailureAction(left)),
-          (right) => store.dispatch(_getCredentialSuccessAction((right)))));
+          (left) {
+            if(left is CredentialFailure) {
+              return store.dispatch(_getCredentialFailureAction(left));
+            }
+          },
+          (right) {
+            if(right is CredentialViewState) {
+              return store.dispatch(_getCredentialSuccessAction((right)));
+            }
+          }));
     };
   }
 

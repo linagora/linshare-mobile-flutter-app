@@ -41,7 +41,7 @@ class DownloadingFileBuilder {
   final CancelToken cancelToken;
   final AppNavigation _appNavigation;
 
-  Key _key;
+  Key? _key;
   String _title = '';
   String _content = '';
   String _actionText = '';
@@ -70,7 +70,7 @@ class DownloadingFileBuilder {
 
   Widget build() {
     return CupertinoAlertDialog(
-      key: _key,
+      key: _key ?? Key('DownloadingFileBuilder'),
       title: Text(_title, style: TextStyle(fontSize: 17.0, color: Colors.black),),
       content: Padding(
         padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
@@ -94,16 +94,16 @@ class DownloadingFileBuilder {
       ),
       actions: <Widget>[
         FlatButton(
+          onPressed: () {
+            cancelToken.cancel(['user cancel download file']);
+            _appNavigation.popBack();
+          },
           child: Text(
             _actionText,
             style: TextStyle(
                 fontSize: 17.0,
                 color: AppColor.exportFileDialogButtonCancelTextColor),
           ),
-          onPressed: () {
-            cancelToken.cancel(['user cancel download file']);
-            _appNavigation.popBack();
-          },
         )
       ],
     );

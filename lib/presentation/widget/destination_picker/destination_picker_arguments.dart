@@ -31,7 +31,6 @@
 //
 
 import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 
@@ -43,8 +42,8 @@ class DestinationPickerArguments extends RouterArguments {
   final List<DestinationType> availableDestinationTypes;
 
   DestinationPickerArguments({
-    @required this.actionList,
-    @required this.operator,
+    required this.actionList,
+    required this.operator,
     this.availableDestinationTypes = DestinationType.values
   });
 }

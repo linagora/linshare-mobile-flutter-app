@@ -300,7 +300,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
               return selectMode == SelectMode.ACTIVE
                   ? Checkbox(
                       value: receivedShareItem.selectMode == SelectMode.ACTIVE,
-                      onChanged: (bool value) => receivedShareViewModel.selectItem(receivedShareItem),
+                      onChanged: (bool? value) => receivedShareViewModel.selectItem(receivedShareItem),
                       activeColor: AppColor.primaryColor,
                     )
                   : IconButton(

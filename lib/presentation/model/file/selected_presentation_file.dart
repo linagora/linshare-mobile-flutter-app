@@ -39,12 +39,12 @@ import 'package:http_parser/http_parser.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 
 class SelectedPresentationFile extends Equatable {
-  final String fileName;
-  final int fileSize;
-  final MediaType _mediaType;
+  String fileName;
+  int fileSize;
+  MediaType? _mediaType;
   MediaType get mediaType => _mediaType ?? fileName.getMediaType();
 
-  SelectedPresentationFile(this.fileName, this.fileSize, {MediaType mediaType})
+  SelectedPresentationFile(this.fileName, this.fileSize, {required MediaType mediaType})
       : _mediaType = mediaType;
 
   @override

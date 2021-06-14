@@ -60,7 +60,7 @@ class EnterOTPWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EnterOTPArgument arguments = ModalRoute.of(context).settings.arguments;
+    var arguments = ModalRoute.of(context)?.settings.arguments as EnterOTPArgument;
     enterOTPViewModel.setEnterOTPArgument(arguments);
 
     return Scaffold(

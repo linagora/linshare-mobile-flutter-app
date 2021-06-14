@@ -47,7 +47,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_viewmodel.dart';
 
 class SharedSpaceNodeVersionsWidget extends StatefulWidget {
-  SharedSpaceNodeVersionsWidget({Key key}) : super(key: key);
+  SharedSpaceNodeVersionsWidget({Key? key}) : super(key: key);
 
   @override
   _SharedSpaceNodeVersionsWidgetState createState() => _SharedSpaceNodeVersionsWidgetState();
@@ -60,7 +60,8 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      _model.initState(ModalRoute.of(context).settings.arguments);
+      var arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceNodeVersionsArguments;
+        _model.initState(arguments);
     });
 
     super.initState();
@@ -74,7 +75,7 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
 
   @override
   Widget build(BuildContext context) {
-    final SharedSpaceNodeVersionsArguments arguments = ModalRoute.of(context).settings.arguments;
+    var arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceNodeVersionsArguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -100,8 +101,8 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
           Expanded(child: StoreConnector<AppState, SharedSpaceNodeVersionsState>(
             converter: (store) => store.state.sharedSpaceNodeVersionsState,
             builder: (_, state) => RefreshIndicator(
-              child: _versionsListWidget(state.workgroupNodeVersions, arguments.workGroupNode),
-              onRefresh: () async => _model.getAllVersions(arguments.workGroupNode)),
+              onRefresh: () async => _model.getAllVersions(arguments.workGroupNode),
+              child: _versionsListWidget(state.workgroupNodeVersions, arguments.workGroupNode)),
           ))
         ]
       )
@@ -143,7 +144,7 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
                       style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
               subtitle: Transform(
                   transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                  child: Text(versionsList[index].lastAuthor.name,
+                  child: Text(versionsList[index].lastAuthor?.name ?? '',
                       maxLines: 1,
                       style: TextStyle(fontSize: 14, color: AppColor.unselectedElementColor))),
               trailing: IconButton(

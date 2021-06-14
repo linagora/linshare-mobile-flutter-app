@@ -42,9 +42,9 @@ class UploadAndShareFileStateList {
 
   final int reduceCompletedSize;
 
-  final List<UploadAndShareFileState> _uploadingStateFiles = <UploadAndShareFileState>[];
+  final List<UploadAndShareFileState?> _uploadingStateFiles = <UploadAndShareFileState?>[];
 
-  List<UploadAndShareFileState> get uploadingStateFiles => _uploadingStateFiles.toList(growable: false);
+  List<UploadAndShareFileState?> get uploadingStateFiles => _uploadingStateFiles.toList(growable: false);
 
   UploadAndShareFileStateList({
     this.completedMaxSize = 10,
@@ -73,22 +73,26 @@ class UploadAndShareFileStateList {
     GetNewStateCallback getNewStateCallback,
   ) {
     return updateElementBy(
-      (state) => state.uploadTaskId == uploadTaskId,
+      (state) => state?.uploadTaskId == uploadTaskId,
       getNewStateCallback,
     );
   }
 
-  UploadAndShareFileState getElementBy(CompareStateCallback compareCallback) {
+  UploadAndShareFileState? getElementBy(CompareStateCallback compareCallback) {
     return _uploadingStateFiles.firstWhere((element) => compareCallback(element), orElse: () => null);
   }
 
-  UploadAndShareFileState getElementByUploadTaskId(UploadTaskId uploadTaskId) {
-    return _uploadingStateFiles.firstWhere((element) => element.uploadTaskId == uploadTaskId, orElse: () => null);
+  UploadAndShareFileState? getElementByUploadTaskId(UploadTaskId uploadTaskId) {
+    try {
+      return _uploadingStateFiles.firstWhere((element) => (element != null && element.uploadTaskId == uploadTaskId), orElse: () => null);
+    } catch (e) {
+      return null;
+    }
   }
 
-  List<UploadAndShareFileState> _completedFiles() {
+  List<UploadAndShareFileState?> _completedFiles() {
     return _uploadingStateFiles
-        .where((element) => element.uploadStatus == UploadFileStatus.succeed)
+        .where((element) => (element != null && element.uploadStatus == UploadFileStatus.succeed))
         .toList();
   }
 
@@ -102,9 +106,7 @@ class UploadAndShareFileStateList {
     }
   }
 
-  List<UploadAndShareFileState> _priorityRemoveCompletedFiles(
-    List<UploadAndShareFileState> completedFiles,
-  ) {
+  List<UploadAndShareFileState?> _priorityRemoveCompletedFiles(List<UploadAndShareFileState?> completedFiles) {
     return completedFiles;
   }
 }

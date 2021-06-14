@@ -63,8 +63,29 @@ class UploadFileViewModel extends BaseViewModel {
   final UploadShareFileManager _uploadShareFileManager;
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
   final GetAutoCompleteSharingWithDeviceContactInteractor _getAutoCompleteSharingWithDeviceContactInteractor;
-  StreamSubscription _autoCompleteResultListSubscription;
+  late StreamSubscription _autoCompleteResultListSubscription;
   ContactSuggestionSource _contactSuggestionSource = ContactSuggestionSource.linShareContact;
+
+  List<FileInfo>? _uploadFilesArgument;
+
+  ShareType _shareTypeArgument = ShareType.uploadAndShare;
+  ShareType get shareTypeArgument => _shareTypeArgument;
+
+  List<Document>? _documentsArgument;
+  WorkGroupDocumentUploadInfo? _workGroupDocumentUploadInfoArgument;
+  WorkGroupDocumentUploadInfo? get workGroupDocumentUploadInfoArgument => _workGroupDocumentUploadInfoArgument;
+
+  final BehaviorSubject<List<AutoCompleteResult>> _autoCompleteResultListObservable = BehaviorSubject.seeded([]);
+  StreamView<List<AutoCompleteResult>> get autoCompleteResultListObservable => _autoCompleteResultListObservable;
+
+  final BehaviorSubject<bool> _enableUploadAndShareButton = BehaviorSubject.seeded(true);
+  StreamView<bool> get enableUploadAndShareButton => _enableUploadAndShareButton;
+
+  final BehaviorSubject<ShareButtonType> _uploadAndShareButtonType = BehaviorSubject.seeded(ShareButtonType.justUpload);
+  StreamView<ShareButtonType> get uploadAndShareButtonType => _uploadAndShareButtonType;
+
+  final BehaviorSubject<DestinationType> _uploadDestinationTypeObservable = BehaviorSubject.seeded(DestinationType.mySpace);
+  BehaviorSubject<DestinationType> get uploadDestinationTypeObservable => _uploadDestinationTypeObservable;
 
   UploadFileViewModel(
     Store<AppState> store,
@@ -97,27 +118,6 @@ class UploadFileViewModel extends BaseViewModel {
     Future.delayed(Duration(milliseconds: 500), () => _checkContactPermission());
   }
 
-  List<FileInfo> _uploadFilesArgument;
-
-  ShareType _shareTypeArgument = ShareType.uploadAndShare;
-  ShareType get shareTypeArgument => _shareTypeArgument;
-
-  List<Document> _documentsArgument;
-  WorkGroupDocumentUploadInfo _workGroupDocumentUploadInfoArgument;
-  WorkGroupDocumentUploadInfo get workGroupDocumentUploadInfoArgument => _workGroupDocumentUploadInfoArgument;
-
-  final BehaviorSubject<List<AutoCompleteResult>> _autoCompleteResultListObservable = BehaviorSubject.seeded([]);
-  StreamView<List<AutoCompleteResult>> get autoCompleteResultListObservable => _autoCompleteResultListObservable;
-
-  final BehaviorSubject<bool> _enableUploadAndShareButton = BehaviorSubject.seeded(true);
-  StreamView<bool> get enableUploadAndShareButton => _enableUploadAndShareButton;
-
-  final BehaviorSubject<ShareButtonType> _uploadAndShareButtonType = BehaviorSubject.seeded(ShareButtonType.justUpload);
-  StreamView<ShareButtonType> get uploadAndShareButtonType => _uploadAndShareButtonType;
-
-  final BehaviorSubject<DestinationType> _uploadDestinationTypeObservable = BehaviorSubject.seeded(DestinationType.mySpace);
-  BehaviorSubject<DestinationType> get uploadDestinationTypeObservable => _uploadDestinationTypeObservable;
-
   void backToMySpace() {
     _appNavigation.popBack();
     store.dispatch(CleanUploadStateAction());
@@ -131,30 +131,34 @@ class UploadFileViewModel extends BaseViewModel {
     _shareTypeArgument = shareType;
   }
 
-  void setDocumentsArgument(List<Document> documents) {
+  void setDocumentsArgument(List<Document>? documents) {
     _documentsArgument = documents;
   }
 
-  void setWorkGroupDocumentUploadInfoArgument(WorkGroupDocumentUploadInfo workGroupDocumentUploadInfo) {
+  void setWorkGroupDocumentUploadInfoArgument(WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo) {
     _workGroupDocumentUploadInfoArgument = workGroupDocumentUploadInfo;
   }
 
   void addUserEmail(AutoCompleteResult autoCompleteResult) {
     final newAutoCompleteResultList = _autoCompleteResultListObservable.value;
-    newAutoCompleteResultList.add(autoCompleteResult);
-    _autoCompleteResultListObservable.add(newAutoCompleteResultList);
+    if (newAutoCompleteResultList != null) {
+      newAutoCompleteResultList.add(autoCompleteResult);
+      _autoCompleteResultListObservable.add(newAutoCompleteResultList);
+    }
   }
 
   void removeUserEmail(int index) {
     final newAutoCompleteResultList = _autoCompleteResultListObservable.value;
-    newAutoCompleteResultList.removeAt(index);
-    _autoCompleteResultListObservable.add(newAutoCompleteResultList);
+    if (newAutoCompleteResultList != null) {
+      newAutoCompleteResultList.removeAt(index);
+      _autoCompleteResultListObservable.add(newAutoCompleteResultList);
+    }
   }
 
-  List<SelectedPresentationFile> get filesInfos {
-    return _shareTypeArgument == ShareType.quickShare
-        ? _convertDocumentsToPresentationFile(_documentsArgument)
-        : _convertFilesToPresentationFile(_uploadFilesArgument);
+  List<SelectedPresentationFile>? get filesInfos {
+    return (_shareTypeArgument == ShareType.quickShare)
+        ? _convertDocumentsToPresentationFile(_documentsArgument!)
+        : _convertFilesToPresentationFile(_uploadFilesArgument!);
   }
 
   void onPickUploadDestinationPressed(BuildContext context) {
@@ -200,13 +204,13 @@ class UploadFileViewModel extends BaseViewModel {
       return;
     }
     if (_uploadDestinationTypeObservable.value == DestinationType.workGroup) {
-      _uploadToSharedSpace(_uploadFilesArgument);
+      _uploadToSharedSpace(_uploadFilesArgument!);
     } else {
-      if (_autoCompleteResultListObservable.value.isEmpty) {
-        _uploadShareFileManager.justUploadFiles(_uploadFilesArgument);
+      if (_autoCompleteResultListObservable.value == null || _autoCompleteResultListObservable.value!.isEmpty) {
+        _uploadShareFileManager.justUploadFiles(_uploadFilesArgument!);
       } else {
         _uploadShareFileManager.uploadFilesThenShare(
-          _uploadFilesArgument,
+          _uploadFilesArgument!,
           _autoCompleteResultListObservable.value,
         );
       }
@@ -214,20 +218,20 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   void _handleQuickShare() {
-    if (_documentsArgument != null && _documentsArgument.isNotEmpty) {
+    if (_documentsArgument != null && _documentsArgument!.isNotEmpty) {
       store.dispatch(shareAction());
     }
   }
 
   void _handleUploadAndShare() {
     if (_uploadFilesArgument != null) {
-      store.dispatch(uploadAndShareFileAction(_uploadFilesArgument));
+      store.dispatch(uploadAndShareFileAction(_uploadFilesArgument!));
     }
   }
 
   void _handleUploadToSharedSpace() {
     if (_uploadFilesArgument != null && _workGroupDocumentUploadInfoArgument != null) {
-      store.dispatch(uploadAndShareFileAction(_uploadFilesArgument));
+      store.dispatch(uploadAndShareFileAction(_uploadFilesArgument!));
     }
   }
 
@@ -254,7 +258,7 @@ class UploadFileViewModel extends BaseViewModel {
 
   ThunkAction<AppState> shareAction() {
     return (Store<AppState> store) async {
-      final documentIdList = _documentsArgument.map((document) => document.documentId).toList();
+      final documentIdList = _documentsArgument?.map((document) => document.documentId).toList();
       await _uploadShareFileManager.justShare(
         _autoCompleteResultListObservable.value,
         documentIdList,
@@ -272,7 +276,7 @@ class UploadFileViewModel extends BaseViewModel {
         case ShareButtonType.uploadAndShare:
           await _uploadShareFileManager.uploadFilesThenShare(
             uploadFiles,
-            _autoCompleteResultListObservable.value,
+            _autoCompleteResultListObservable.value!,
           );
           break;
         case ShareButtonType.workGroup:
@@ -283,21 +287,30 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   void _uploadToSharedSpace(List<FileInfo> uploadFiles) async {
+    if(_workGroupDocumentUploadInfoArgument == null || _workGroupDocumentUploadInfoArgument!.sharedSpaceNodeNested == null) {
+      return;
+    }
     _uploadShareFileManager.uploadToSharedSpace(
         uploadFiles,
-        _workGroupDocumentUploadInfoArgument.sharedSpaceNodeNested.sharedSpaceId,
-        parentNodeId: _workGroupDocumentUploadInfoArgument.isRootNode()
+        _workGroupDocumentUploadInfoArgument!.sharedSpaceNodeNested!.sharedSpaceId,
+        parentNodeId: _workGroupDocumentUploadInfoArgument!.isRootNode()
             ? null
-            : _workGroupDocumentUploadInfoArgument.currentNode.workGroupNodeId);
+            : _workGroupDocumentUploadInfoArgument!.currentNode?.workGroupNodeId);
   }
 
-  List<SelectedPresentationFile> _convertDocumentsToPresentationFile(List<Document> documents) {
+  List<SelectedPresentationFile>? _convertDocumentsToPresentationFile(List<Document>? documents) {
+    if(documents == null) {
+      return null;
+    }
     return documents.map((document) {
       return SelectedPresentationFile(document.name, document.size, mediaType: document.mediaType);
     }).toList();
   }
 
-  List<SelectedPresentationFile> _convertFilesToPresentationFile(List<FileInfo> filesInfo) {
+  List<SelectedPresentationFile>? _convertFilesToPresentationFile(List<FileInfo>? filesInfo) {
+    if(filesInfo == null) {
+      return null;
+    }
     return filesInfo.map((uploadFiles) {
       return SelectedPresentationFile(uploadFiles.fileName, uploadFiles.fileSize, mediaType: uploadFiles.fileName.getMediaType());
     }).toList();

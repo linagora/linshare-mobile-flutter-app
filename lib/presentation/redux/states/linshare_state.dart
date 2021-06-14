@@ -44,11 +44,11 @@ abstract class LinShareState with EquatableMixin {
   LinShareState startLoadingState();
 
   @protected
-  LinShareState sendViewState({@required Either<Failure, Success> viewState});
+  LinShareState sendViewState({required Either<Failure, Success> viewState});
 
   @protected
   LinShareState clearViewState();
 
   @override
-  List<Object> get props => [viewState];
+  List<Object?> get props => [viewState];
 }

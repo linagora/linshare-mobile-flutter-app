@@ -106,7 +106,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             return [];
           },
           itemBuilder: (BuildContext context, itemData) {
-            return null;
+            return SizedBox.shrink();
           },
           onSuggestionSelected: (suggestion) {},
           noItemsFoundBuilder: (context) => SizedBox(),
@@ -164,7 +164,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColor.primaryColor,
       leading: IconButton(
           icon: SvgPicture.asset(imagePath.icLinShareMenu),
-          onPressed: () => _scaffoldKey.currentState.openDrawer()),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer()),
     );
   }
 
@@ -175,7 +175,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       case RoutePaths.sharedSpace:
         return AppLocalizations.of(context).shared_space;
       case RoutePaths.sharedSpaceInside:
-        return uiState.selectedSharedSpace.name;
+        return uiState.selectedSharedSpace?.name ?? AppLocalizations.of(context).shared_space;
       case RoutePaths.account_details:
         return AppLocalizations.of(context).account_details_title;
       case RoutePaths.received_shares:

@@ -45,9 +45,9 @@ typedef OnSelectActionClick = void Function(SharedSpaceRoleName role);
 class SelectRoleModalSheetBuilder {
   @protected final Key key;
   @protected final SharedSpaceRoleName selectedRole;
-  @protected OnSelectActionClick _onSelectActionClick;
+  @protected OnSelectActionClick? _onSelectActionClick;
 
-  SelectRoleModalSheetBuilder({@required this.key, @required this.selectedRole})
+  SelectRoleModalSheetBuilder({required this.key, required this.selectedRole})
       : assert(key != null),
         assert(selectedRole != null);
 
@@ -95,7 +95,7 @@ class SelectRoleModalSheetBuilder {
           : SizedBox(),
       onTap: () {
         if (_onSelectActionClick != null) {
-          _onSelectActionClick.call(role);
+          _onSelectActionClick?.call(role);
         }
       },
     );

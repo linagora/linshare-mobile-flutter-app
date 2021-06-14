@@ -54,7 +54,7 @@ class SharePresentationFile extends Equatable implements PresentationFile {
   final DateTime expirationDate;
   final String description;
   final int downloaded;
-  final GenericUser recipient;
+  final GenericUser? recipient;
   final MediaType mediaType;
   final GenericUser sender;
   final int size;

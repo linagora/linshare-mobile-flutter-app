@@ -40,8 +40,8 @@ typedef OnSearchActionClick = void Function();
 
 class SearchBottomBarBuilder {
   final AppImagePaths _imagePath = getIt<AppImagePaths>();
-  Key _key;
-  OnSearchActionClick _onSearchActionClick;
+  Key? _key;
+  OnSearchActionClick? _onSearchActionClick;
 
   SearchBottomBarBuilder key(Key key) {
     _key = key;
@@ -55,7 +55,7 @@ class SearchBottomBarBuilder {
 
   Widget build() {
     return Container(
-      key: _key,
+      key: _key ?? Key('SearchBottomBarBuilder'),
       color: AppColor.searchBottomBarColor,
       child: SizedBox(
         height: 60,
@@ -66,7 +66,7 @@ class SearchBottomBarBuilder {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
-                  onTap: () => _onSearchActionClick != null ? _onSearchActionClick() : null,
+                  onTap: () => _onSearchActionClick != null ? _onSearchActionClick!() : null,
                   child: SvgPicture.asset(
                     _imagePath.icSearchBlue,
                     width: 32,
