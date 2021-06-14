@@ -48,9 +48,9 @@ class SharedSpaceDocumentNavigatorWidget extends StatefulWidget {
 
   final SharedSpaceNodeNested sharedSpaceNodeNested;
   final SharedSpaceDocumentUIType sharedSpaceDocumentUIType;
-  final OnBackSharedSpaceClickedCallback onBackSharedSpaceClickedCallback;
+  final OnBackSharedSpaceClickedCallback? onBackSharedSpaceClickedCallback;
 
-  final BehaviorSubject<SharedSpaceDocumentArguments> currentNodeObservable;
+  final BehaviorSubject<SharedSpaceDocumentArguments>? currentNodeObservable;
 
   SharedSpaceDocumentNavigatorWidget(
     Key key,
@@ -71,7 +71,7 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
   final structure.Stack<SharedSpaceDocumentArguments> argumentStack = structure.Stack();
-  SharedSpaceDocumentArguments get currentPageData => argumentStack.peek();
+  SharedSpaceDocumentArguments? get currentPageData => argumentStack.peek();
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
 
           argumentStack.push(rootArgs);
           if (widget.currentNodeObservable != null) {
-            widget.currentNodeObservable.add(rootArgs);
+            widget.currentNodeObservable?.add(rootArgs);
           }
           return _generateSharedSpaceDocumentNode(context, rootArgs);
         }
@@ -104,7 +104,7 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
       pageBuilder: (context, _, __) => SharedSpaceDocumentWidget(
         () => wantToBack(),
         (workGroupNode) => _onClickWorkGroupFolder(context, workGroupNode),
-        widget.sharedSpaceNodeNested.sharedSpaceRole,
+        widget.sharedSpaceNodeNested.sharedSpaceRole!,
         sharedSpaceDocumentUIType: widget.sharedSpaceDocumentUIType
       ),
       settings: RouteSettings(arguments: args),
@@ -117,14 +117,14 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
     final newArgs = SharedSpaceDocumentArguments(
       SharedSpaceDocumentType.children,
       widget.sharedSpaceNodeNested,
-      workGroupFolder: workGroupNode,
+      workGroupFolder: workGroupNode as WorkGroupFolder,
       documentUIType: widget.sharedSpaceDocumentUIType);
 
     argumentStack.push(newArgs);
     if (widget.currentNodeObservable != null) {
-      widget.currentNodeObservable.add(newArgs);
+      widget.currentNodeObservable?.add(newArgs);
     }
-    navigatorKey.currentState.pushAndRemoveUntil(
+    navigatorKey.currentState?.pushAndRemoveUntil(
       _generateSharedSpaceDocumentNode(context, newArgs),
       (Route<dynamic> route) => false
     );
@@ -132,16 +132,16 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
 
   void wantToBack() {
     argumentStack.pop();
-    if (widget.currentNodeObservable != null) {
-      widget.currentNodeObservable.add(currentPageData);
+    if (widget.currentNodeObservable != null && currentPageData != null) {
+      widget.currentNodeObservable!.add(currentPageData!);
     }
-    if (!argumentStack.isEmpty) {
-      navigatorKey.currentState.pushAndRemoveUntil(
-        _generateSharedSpaceDocumentNode(context, currentPageData),
+    if (!argumentStack.isEmpty && currentPageData != null) {
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        _generateSharedSpaceDocumentNode(context, currentPageData!),
         (Route<dynamic> route) => false
       );
-    } else {
-      widget.onBackSharedSpaceClickedCallback();
+    } else if(widget.onBackSharedSpaceClickedCallback != null) {
+      widget.onBackSharedSpaceClickedCallback!();
     }
   }
 }

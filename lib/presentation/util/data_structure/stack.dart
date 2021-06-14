@@ -40,12 +40,12 @@ class Stack<T> {
 
   void clear() => _elements.clear();
 
-  T peek() {
+  T? peek() {
     if (isEmpty) return null;
     return _elements.last;
   }
 
-  T pop() {
+  T? pop() {
     if (isEmpty) return null;
     return _elements.removeLast();
   }

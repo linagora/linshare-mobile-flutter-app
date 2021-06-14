@@ -45,10 +45,10 @@ typedef SetErrorString = String Function(String);
 
 class EditTextModalSheetBuilder {
   @protected
-  TextEditingController _textController;
+  late TextEditingController _textController;
 
   @protected
-  Key _key;
+  late Key _key;
 
   @protected
   String _title = '';
@@ -63,16 +63,16 @@ class EditTextModalSheetBuilder {
   String _hintText = '';
 
   @protected
-  OnConfirmActionClick _onConfirmActionClick;
+  OnConfirmActionClick? _onConfirmActionClick;
 
   @protected
-  SetErrorString _setErrorString;
+  SetErrorString? _setErrorString;
 
   @protected
-  String _error;
+  String? _error;
 
   @protected
-  Timer _debounce;
+  Timer? _debounce;
 
   EditTextModalSheetBuilder();
 
@@ -101,7 +101,7 @@ class EditTextModalSheetBuilder {
     return this;
   }
 
-  EditTextModalSheetBuilder setTextSelection(TextSelection textSelection, {String value}) {
+  EditTextModalSheetBuilder setTextSelection(TextSelection textSelection, {required String value}) {
     _textController = TextEditingController.fromValue(
       TextEditingValue(text: value, selection: textSelection));
     return this;
@@ -120,18 +120,20 @@ class EditTextModalSheetBuilder {
   }
 
   void _onTextChanged(String name, StateSetter setState) {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       setState(() {
-        _error = _setErrorString(name);
+        _error = (_setErrorString != null) ? _setErrorString!(name) : '';
       });
     });
   }
 
   void _onConfirmButtonPress(BuildContext context) {
-    if (_error == null || _error.isEmpty) {
+    if (_error == null || (_error != null && _error!.isEmpty)) {
       Navigator.pop(context);
-      _onConfirmActionClick(_textController.text);
+      if (_onConfirmActionClick != null) {
+        _onConfirmActionClick!(_textController.text);
+      }
     }
   }
 
@@ -187,7 +189,7 @@ class EditTextModalSheetBuilder {
                             onPressed: () => _onConfirmButtonPress(context),
                             child: Text(
                                 _confirmText.toUpperCase(),
-                                style: TextStyle(color: (_error == null || _error.isEmpty) ? AppColor.primaryColor : AppColor.unselectedElementColor)
+                                style: TextStyle(color: (_error == null || (_error != null && _error!.isEmpty)) ? AppColor.primaryColor : AppColor.unselectedElementColor)
                             ),
                           )
                         ],

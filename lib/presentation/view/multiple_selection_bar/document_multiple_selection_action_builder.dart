@@ -56,7 +56,11 @@ class DocumentMultipleSelectionActionBuilder extends MultipleSelectionActionBuil
     return IconButton(
       key: key,
       icon: actionIcon,
-      onPressed: () => onMultipleSelectionActionClick(_documents)
+      onPressed: () {
+        if (onMultipleSelectionActionClick != null) {
+          onMultipleSelectionActionClick!(_documents);
+        }
+      }
     );
   }
 }

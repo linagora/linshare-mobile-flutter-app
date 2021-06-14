@@ -58,8 +58,8 @@ class HomeViewModel extends BaseViewModel {
   final Connectivity _connectivity;
   final GetAuthorizedInteractor _getAuthorizedInteractor;
   final GetAllFunctionalityInteractor _getAllFunctionalityInteractor;
-  StreamSubscription _uploadFileManagerStreamSubscription;
-  StreamSubscription _connectivityStreamSubscription;
+  late StreamSubscription _uploadFileManagerStreamSubscription;
+  late StreamSubscription _connectivityStreamSubscription;
 
   HomeViewModel(
       Store<AppState> store,
@@ -96,7 +96,11 @@ class HomeViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       await _getAuthorizedInteractor.execute().then((result) => result.fold(
         (left) => null,
-        (right) => store.dispatch(_getAuthorizedUserSuccessAction((right)))));
+        (right) {
+          if(right is GetAuthorizedUserViewState) {
+            return store.dispatch(_getAuthorizedUserSuccessAction((right)));
+          }
+        }));
     });
   }
 

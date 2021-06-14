@@ -49,13 +49,13 @@ class WorkGroupDocumentPresentationFile extends Equatable implements Presentatio
 
   final WorkGroupNodeId workGroupNodeId;
   final WorkGroupNodeId parentWorkGroupNodeId;
-  final WorkGroupNodeType type;
+  final WorkGroupNodeType? type;
   final SharedSpaceId sharedSpaceId;
   final DateTime creationDate;
   final DateTime modificationDate;
   final String description;
   final String name;
-  final Account lastAuthor;
+  final Account? lastAuthor;
   final int size;
   final MediaType mediaType;
   final bool hasThumbnail;
@@ -122,7 +122,7 @@ class WorkGroupDocumentPresentationFile extends Equatable implements Presentatio
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
       workGroupNodeId,
       parentWorkGroupNodeId,
       type,

@@ -44,7 +44,7 @@ class SecondFactorAuthenticationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SecondFactorAuthenticationArguments arguments = ModalRoute.of(context).settings.arguments;
+    var arguments = ModalRoute.of(context)?.settings.arguments as SecondFactorAuthenticationArguments;
     viewModel.setSecondFactorAuthenticationArguments(arguments);
 
     return Scaffold(

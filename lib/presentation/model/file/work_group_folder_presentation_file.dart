@@ -47,13 +47,13 @@ class WorkGroupFolderPresentationFile extends Equatable implements PresentationF
 
   final WorkGroupNodeId workGroupNodeId;
   final WorkGroupNodeId parentWorkGroupNodeId;
-  final WorkGroupNodeType type;
+  final WorkGroupNodeType? type;
   final SharedSpaceId sharedSpaceId;
   final DateTime creationDate;
   final DateTime modificationDate;
   final String description;
   final String name;
-  final Account lastAuthor;
+  final Account? lastAuthor;
 
   WorkGroupFolderPresentationFile(
     this.workGroupNodeId,
@@ -102,7 +102,7 @@ class WorkGroupFolderPresentationFile extends Equatable implements PresentationF
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
       workGroupNodeId,
       parentWorkGroupNodeId,
       type,

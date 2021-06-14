@@ -42,3 +42,4 @@ import 'package:mockito/mockito.dart';
 class MockCreatePermanentTokenInteractor extends Mock implements CreatePermanentTokenInteractor {}
 class MockAppNavigation extends Mock implements AppNavigation {}
 class MockDynamicUrlInterceptors extends Mock implements DynamicUrlInterceptors {}
+class MockUploadWorkGroupDocumentInteractor extends Mock implements UploadWorkGroupDocumentInteractor {}

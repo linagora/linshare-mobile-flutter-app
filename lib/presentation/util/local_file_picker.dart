@@ -43,7 +43,7 @@ class LocalFilePicker {
           return FileInfo(
             _getSingleFileNameWithExtension(platformFile),
             _getSingleFilePathWithoutFileName(platformFile),
-            platformFile.size,
+            platformFile.size ?? 0,
           );
         }).toList();
 
@@ -57,13 +57,13 @@ class LocalFilePicker {
   }
 
   String _getSingleFileNameWithExtension(PlatformFile platformFile) {
-    return platformFile.name;
+    return platformFile.name ?? '';
   }
 
   String _getSingleFilePathWithoutFileName(PlatformFile platformFile) {
-    final rawFilePath = platformFile.path;
-    return rawFilePath.substring(
+    final rawFilePath = platformFile.path ?? '';
+    return rawFilePath.isNotEmpty ? rawFilePath.substring(
         0,
-        rawFilePath.length - _getSingleFileNameWithExtension(platformFile).length);
+        rawFilePath.length - _getSingleFileNameWithExtension(platformFile).length) : '';
   }
 }

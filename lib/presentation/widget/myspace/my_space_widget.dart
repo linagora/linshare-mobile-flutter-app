@@ -348,7 +348,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         trailing: currentSelectMode == SelectMode.ACTIVE
             ? Checkbox(
                 value: document.selectMode == SelectMode.ACTIVE,
-                onChanged: (bool value) => mySpaceViewModel.selectItem(document),
+                onChanged: (bool? value) => mySpaceViewModel.selectItem(document),
                 activeColor: AppColor.primaryColor,
               )
             : IconButton(

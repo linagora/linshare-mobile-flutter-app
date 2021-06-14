@@ -44,11 +44,11 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 @immutable
 class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
   final List<SelectableElement<WorkGroupNode>> workGroupNodeList;
-  final SharedSpaceNodeNested sharedSpaceNodeNested;
+  final SharedSpaceNodeNested? sharedSpaceNodeNested;
   final SharedSpaceDocumentType documentType;
-  final WorkGroupNode workGroupNode;
+  final WorkGroupNode? workGroupNode;
   final SelectMode selectMode;
-  final Sorter sorter;
+  final Sorter? sorter;
 
   SharedSpaceDocumentState(
     Either<Failure, Success> viewState,
@@ -70,31 +70,32 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
   }
 
   @override
-  SharedSpaceDocumentState sendViewState({Either<Failure, Success> viewState}) {
+  SharedSpaceDocumentState sendViewState({required Either<Failure, Success> viewState}) {
     return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, selectMode, sorter);
   }
 
-  SharedSpaceDocumentState setSharedSpaceDocumentArgument({SharedSpaceDocumentArguments newArguments}) {
+  SharedSpaceDocumentState setSharedSpaceDocumentArgument({required SharedSpaceDocumentArguments newArguments}) {
     return SharedSpaceDocumentState(
       viewState,
       workGroupNodeList,
-      newArguments.documentType ?? documentType,
+      newArguments.documentType,
       newArguments.workGroupFolder ?? workGroupNode,
-      newArguments.sharedSpaceNode ?? sharedSpaceNodeNested,
+      newArguments.sharedSpaceNode,
       selectMode,
       sorter
     );
   }
 
-  SharedSpaceDocumentState setSharedSpaceDocument({Either<Failure, Success> viewState, List<WorkGroupNode> newWorkGroupNodeList, Sorter newSorter}) {
+  SharedSpaceDocumentState setSharedSpaceDocument({Either<Failure, Success>? viewState, required List<WorkGroupNode?> newWorkGroupNodeList, Sorter? newSorter}) {
     final selectedElements = workGroupNodeList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
     return SharedSpaceDocumentState(
       viewState ?? this.viewState,
       newWorkGroupNodeList
+          .where((workGroup) => workGroup != null)
           .map((workGroup) => selectedElements.contains(workGroup)
-            ? SelectableElement<WorkGroupNode>(workGroup, SelectMode.ACTIVE)
-            : SelectableElement<WorkGroupNode>(workGroup, SelectMode.INACTIVE))
+            ? SelectableElement<WorkGroupNode>(workGroup!, SelectMode.ACTIVE)
+            : SelectableElement<WorkGroupNode>(workGroup!, SelectMode.INACTIVE))
           .toList(),
       documentType,
       workGroupNode,
@@ -109,12 +110,12 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
     return SharedSpaceDocumentState(Right(LoadingState()), workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, selectMode, sorter);
   }
 
-  LinShareState selectSharedSpaceDocument(SelectableElement<WorkGroupNode> selectedWokGroupNode) {
+  SharedSpaceDocumentState selectSharedSpaceDocument(SelectableElement<WorkGroupNode> selectedWokGroupNode) {
     workGroupNodeList.firstWhere((sharedSpace) => sharedSpace == selectedWokGroupNode).toggleSelect();
     return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, SelectMode.ACTIVE, sorter);
   }
 
-  LinShareState cancelSelectedSharedSpaceDocument() {
+  SharedSpaceDocumentState cancelSelectedSharedSpaceDocument() {
     return SharedSpaceDocumentState(
       viewState,
       workGroupNodeList
@@ -128,7 +129,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
     );
   }
 
-  LinShareState selectAllSharedSpaceDocument() {
+  SharedSpaceDocumentState selectAllSharedSpaceDocument() {
     return SharedSpaceDocumentState(
       viewState,
       workGroupNodeList
@@ -142,7 +143,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
     );
   }
 
-  LinShareState unSelectAllSharedSpaceDocument() {
+  SharedSpaceDocumentState unSelectAllSharedSpaceDocument() {
     return SharedSpaceDocumentState(
       viewState,
       workGroupNodeList
@@ -158,7 +159,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
 
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     workGroupNodeList,
     documentType,

@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependency_overrides:
   # intl
@@ -49,7 +49,7 @@ dependencies:
   json_annotation: 4.0.1
 
   #get_it
-  get_it: 6.1.1
+  get_it: 7.1.3
 
   #  redux
   flutter_redux: 0.8.2
@@ -95,7 +95,7 @@ dependencies:
   flutter_downloader: 1.6.0
 
   #filesize
-  filesize: 1.0.4
+  filesize: 2.0.1
 
   # share
   share: 2.0.1
@@ -118,7 +118,7 @@ dependencies:
   url_launcher: 6.0.6
 
   # pin_code
-  pin_code_fields: 6.1.0
+  pin_code_fields: 7.2.0
 
   # local_auth
   local_auth: 1.1.5
@@ -137,7 +137,7 @@ dev_dependencies:
   build_runner: 2.0.1
   json_serializable: 4.1.1
   test: 1.16.5
-  mockito: 5.0.6
+  mockito: 5.0.10
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

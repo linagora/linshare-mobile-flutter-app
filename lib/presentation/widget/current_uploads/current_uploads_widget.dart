@@ -74,11 +74,11 @@ class _CurrentUploadsWidgetState extends State<CurrentUploadsWidget> {
         ),
         body: TabBarView(
           children: [
-            StoreConnector<AppState, List<UploadAndShareFileState>>(
+            StoreConnector<AppState, List<UploadAndShareFileState?>>(
               builder: (_, files) => UploadFilesStateWidget(files),
               converter: (store) => store.state.uploadFileState.mySpaceUploadFiles,
             ),
-            StoreConnector<AppState, List<UploadAndShareFileState>>(
+            StoreConnector<AppState, List<UploadAndShareFileState?>>(
               builder: (_, files) => UploadFilesStateWidget(files),
               converter: (store) => store.state.uploadFileState.workgroupUploadFiles,
             ),

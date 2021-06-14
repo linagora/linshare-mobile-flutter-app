@@ -45,7 +45,7 @@ class DeleteSharedSpaceMembersState extends LinShareState with EquatableMixin {
   }
 
   @override
-  DeleteSharedSpaceMembersState sendViewState({Either<Failure, Success> viewState}) {
+  DeleteSharedSpaceMembersState sendViewState({required Either<Failure, Success> viewState}) {
     return DeleteSharedSpaceMembersState(viewState);
   }
 

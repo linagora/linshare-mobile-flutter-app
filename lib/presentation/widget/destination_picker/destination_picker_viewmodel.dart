@@ -47,7 +47,7 @@ import 'package:rxdart/rxdart.dart';
 class DestinationPickerViewModel extends BaseViewModel {
   final GetAllSharedSpacesInteractor _getAllSharedSpacesInteractor;
   final AppNavigation _appNavigation;
-  final BehaviorSubject<SharedSpaceDocumentArguments> currentNodeObservable = BehaviorSubject.seeded(null);
+  final BehaviorSubject<SharedSpaceDocumentArguments> currentNodeObservable = BehaviorSubject<SharedSpaceDocumentArguments>();
   final destinationTypeList = [DestinationType.mySpace, DestinationType.workGroup];
 
   DestinationPickerViewModel(Store<AppState> store, this._getAllSharedSpacesInteractor, this._appNavigation) : super(store);
@@ -95,13 +95,13 @@ class DestinationPickerViewModel extends BaseViewModel {
                       .where((element) {
                         if (operation == Operation.copyFromMySpace) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole.name);
+                              .contains(element.sharedSpaceRole?.name);
                         } else if (operation == Operation.upload) {
                           return SharedSpaceOperationRole.uploadToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole.name);
+                              .contains(element.sharedSpaceRole?.name);
                         } else if (operation == Operation.copyTo) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole.name);
+                              .contains(element.sharedSpaceRole?.name);
                         }
                         return true;
                       })
@@ -118,7 +118,7 @@ class DestinationPickerViewModel extends BaseViewModel {
   }
 
   void backToChooseSpaceDestination() {
-    store.dispatch(GoToChooseSpaceAction(null));
+    store.dispatch(GoToChooseSpaceAction(Operation.none));
   }
 
   void handleOnSharedSpaceBackPress() {

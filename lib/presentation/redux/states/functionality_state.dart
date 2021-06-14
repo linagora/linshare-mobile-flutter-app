@@ -39,7 +39,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 
 @immutable
 class FunctionalityState extends LinShareState {
-  final List<Functionality> functionalityList;
+  final List<Functionality?> functionalityList;
 
   FunctionalityState(Either<Failure, Success> viewState, this.functionalityList) : super(viewState);
 
@@ -57,7 +57,7 @@ class FunctionalityState extends LinShareState {
   }
 
   @override
-  FunctionalityState sendViewState({Either<Failure, Success> viewState}) {
+  FunctionalityState sendViewState({required Either<Failure, Success> viewState}) {
     return FunctionalityState(viewState, functionalityList);
   }
 
@@ -72,7 +72,7 @@ extension FunctionalityStateExtension on FunctionalityState {
 
   bool _isFunctionalityEnable(FunctionalityIdentifier functionalityIdentifier) {
     final functionality = functionalityList.firstWhere(
-            (element) => element.identifier == functionalityIdentifier,
+            (element) => (element != null && element.identifier == functionalityIdentifier),
         orElse: () => null);
     if (functionality != null && functionality is FunctionalitySimple) {
       return functionality.enable;

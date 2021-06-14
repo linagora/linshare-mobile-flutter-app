@@ -47,7 +47,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/datetime_exten
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 
 class SharedSpaceNodeDetailsWidget extends StatefulWidget {
-  SharedSpaceNodeDetailsWidget({Key key}) : super(key: key);
+  SharedSpaceNodeDetailsWidget({Key? key}) : super(key: key);
 
   @override
   _SharedSpaceNodeDetailsWidgetState createState() => _SharedSpaceNodeDetailsWidgetState();
@@ -60,7 +60,8 @@ class _SharedSpaceNodeDetailsWidgetState extends State<SharedSpaceNodeDetailsWid
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      _model.initState(ModalRoute.of(context).settings.arguments);
+      var arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceNodeDetailsArguments;
+        _model.initState(arguments);
     });
 
     super.initState();
@@ -74,7 +75,8 @@ class _SharedSpaceNodeDetailsWidgetState extends State<SharedSpaceNodeDetailsWid
 
   @override
   Widget build(BuildContext context) {
-    final SharedSpaceNodeDetailsArguments arguments = ModalRoute.of(context).settings.arguments;
+    var arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceNodeDetailsArguments;
+    _model.initState(arguments);
 
     return Scaffold(
         appBar: AppBar(
@@ -116,18 +118,18 @@ class _SharedSpaceNodeDetailsWidgetState extends State<SharedSpaceNodeDetailsWid
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (state.workgroupNode is WorkGroupDocument)
-            _workGroupDocumentDetailsTitleTileWidget(state.workgroupNode),
+            _workGroupDocumentDetailsTitleTileWidget(state.workgroupNode! as WorkGroupDocument),
           if (state.workgroupNode is WorkGroupFolder)
-            _workGroupFolderDetailsTitleTileWidget(state.workgroupNode),
+            _workGroupFolderDetailsTitleTileWidget(state.workgroupNode! as WorkGroupFolder),
           Divider(),
           Column(
             children: [
               _sharedSpaceNodeInformationTile(AppLocalizations.of(context).modified,
-                  state.workgroupNode.modificationDate.getMMMddyyyyFormatString()),
+                  state.workgroupNode!.modificationDate.getMMMddyyyyFormatString()),
               _sharedSpaceNodeInformationTile(
-                  AppLocalizations.of(context).modified_by, state.workgroupNode.lastAuthor.name),
+                  AppLocalizations.of(context).modified_by, state.workgroupNode!.lastAuthor?.name ?? ''),
               _sharedSpaceNodeInformationTile(AppLocalizations.of(context).created,
-                  state.workgroupNode.creationDate.getMMMddyyyyFormatString()),
+                  state.workgroupNode!.creationDate.getMMMddyyyyFormatString()),
             ],
           ),
           Divider(),
@@ -150,10 +152,10 @@ class _SharedSpaceNodeDetailsWidgetState extends State<SharedSpaceNodeDetailsWid
             Padding(
                 padding: EdgeInsets.only(top: 18),
                 child: Text(
-                    state.workgroupNode.description == null ||
-                            state.workgroupNode.description.isEmpty
+                    state.workgroupNode!.description == null ||
+                            state.workgroupNode!.description.isEmpty
                         ? AppLocalizations.of(context).no_description
-                        : state.workgroupNode.description,
+                        : state.workgroupNode!.description,
                     style: TextStyle(
                         color: AppColor.searchResultsCountTextColor,
                         fontStyle: FontStyle.italic,

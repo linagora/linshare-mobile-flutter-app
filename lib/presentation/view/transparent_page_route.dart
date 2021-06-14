@@ -33,8 +33,8 @@ import 'package:flutter/widgets.dart';
 
 class TransparentPageRoute extends PageRoute<void> {
   TransparentPageRoute({
-    @required this.builder,
-    RouteSettings settings,
+    required this.builder,
+    required RouteSettings settings,
   }) : assert(builder != null), super(settings: settings, fullscreenDialog: false);
 
   final WidgetBuilder builder;
@@ -43,10 +43,10 @@ class TransparentPageRoute extends PageRoute<void> {
   bool get opaque => false;
 
   @override
-  Color get barrierColor => null;
+  Color? get barrierColor => null;
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 
   @override
   bool get maintainState => true;

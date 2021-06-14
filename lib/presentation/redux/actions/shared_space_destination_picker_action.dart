@@ -75,7 +75,7 @@ class UpdateSharedSpaceDestinationArgumentsAction extends ActionOffline {
 
 @immutable
 class SharedSpaceDestinationSortNodeAction extends ActionOffline {
-  final List<WorkGroupNode> workGroupNodes;
+  final List<WorkGroupNode?> workGroupNodes;
   final Sorter sorter;
 
   SharedSpaceDestinationSortNodeAction(this.workGroupNodes, this.sorter);

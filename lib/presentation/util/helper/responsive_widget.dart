@@ -33,18 +33,18 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 
 class ResponsiveWidget extends StatelessWidget {
-  final Widget largeScreen;
+  final Widget? largeScreen;
   final Widget mediumScreen;
-  final Widget smallScreen;
+  final Widget? smallScreen;
 
   final ResponsiveUtils responsiveUtil;
 
   const ResponsiveWidget({
-    Key key,
+    Key? key,
     this.largeScreen,
-    @required this.mediumScreen,
-    @required this.smallScreen,
-    @required this.responsiveUtil,
+    required this.mediumScreen,
+    this.smallScreen,
+    required this.responsiveUtil,
   }) : super(key: key);
 
   @override

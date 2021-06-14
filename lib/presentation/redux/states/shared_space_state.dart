@@ -66,11 +66,11 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
   }
 
   @override
-  SharedSpaceState sendViewState({Either<Failure, Success> viewState}) {
+  SharedSpaceState sendViewState({required Either<Failure, Success> viewState}) {
     return SharedSpaceState(viewState, sharedSpacesList, rolesList, selectMode, sorter, showUploadButton: showUploadButton);
   }
 
-  SharedSpaceState setSharedSpaces({Either<Failure, Success> viewState, List<SharedSpaceNodeNested> newSharedSpacesList, Sorter newSorter}) {
+  SharedSpaceState setSharedSpaces({Either<Failure, Success>? viewState, required List<SharedSpaceNodeNested> newSharedSpacesList, Sorter? newSorter}) {
     final selectedElements = sharedSpacesList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
     return SharedSpaceState(viewState ?? this.viewState,
@@ -83,8 +83,8 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
       newSorter ?? sorter);
   }
 
-  SharedSpaceState setNewSorter({Either<Failure, Success> viewState, Sorter newSorter}) {
-    return SharedSpaceState(viewState ?? this.viewState, sharedSpacesList, rolesList, selectMode, newSorter ?? sorter);
+  SharedSpaceState setNewSorter({Either<Failure, Success>? viewState, required Sorter newSorter}) {
+    return SharedSpaceState(viewState ?? this.viewState, sharedSpacesList, rolesList, selectMode, newSorter);
   }
 
   SharedSpaceState disableUploadButton() {
@@ -100,12 +100,12 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
     return SharedSpaceState(Right(LoadingState()), sharedSpacesList, rolesList, selectMode, sorter);
   }
 
-  LinShareState selectSharedSpace(SelectableElement<SharedSpaceNodeNested> selectedSharedSpace) {
+  SharedSpaceState selectSharedSpace(SelectableElement<SharedSpaceNodeNested> selectedSharedSpace) {
     sharedSpacesList.firstWhere((sharedSpace) => sharedSpace == selectedSharedSpace).toggleSelect();
     return SharedSpaceState(viewState, sharedSpacesList, rolesList, SelectMode.ACTIVE, sorter);
   }
 
-  LinShareState cancelSelectedSharedSpaces() {
+  SharedSpaceState cancelSelectedSharedSpaces() {
     return SharedSpaceState(
       viewState,
       sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(),
@@ -115,7 +115,7 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
     );
   }
 
-  LinShareState selectAllSharedSpaces() {
+  SharedSpaceState selectAllSharedSpaces() {
     return SharedSpaceState(
       viewState,
       sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.ACTIVE)).toList(),
@@ -125,7 +125,7 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
     );
   }
 
-  LinShareState unSelectAllSharedSpaces() {
+  SharedSpaceState unSelectAllSharedSpaces() {
     return SharedSpaceState(
       viewState, 
       sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(),
@@ -135,7 +135,7 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
     );
   }
 
-  LinShareState setSharedSpaceRolesList(List<SharedSpaceRole> roles) {
+  SharedSpaceState setSharedSpaceRolesList(List<SharedSpaceRole> roles) {
     return SharedSpaceState(
       viewState,
       sharedSpacesList,
@@ -146,7 +146,7 @@ class SharedSpaceState extends LinShareState  with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     ...super.props,
     sharedSpacesList,
     rolesList,
