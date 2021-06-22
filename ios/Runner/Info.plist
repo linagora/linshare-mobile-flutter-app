@@ -33,6 +33,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.linagora.linshare</string>
+				<string>linsharemobile.com</string>
 			</array>
 		</dict>
 		<dict/>
@@ -46,7 +47,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To select and upload photo, we need permission to access your photo library.</string>
 	<key>NSFaceIDUsageDescription</key>
-    <string>To authentication app, we need using face id to authenticate</string>
+	<string>To authentication app, we need using face id to authenticate</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
