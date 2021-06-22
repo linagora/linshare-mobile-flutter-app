@@ -29,77 +29,88 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+
 import 'package:data/data.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
-import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/util/constant.dart';
-import 'package:data/src/util/device_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:data/src/extensions/authentication_token_extension.dart';
 
-class AuthenticationDataSource {
+class AuthenticationSSODataSource {
 
   final LinShareHttpClient linShareHttpClient;
-  final DeviceManager deviceManager;
   final RemoteExceptionThrower _remoteExceptionThrower;
+  final FlutterAppAuth appAuth;
+  final DeviceManager deviceManager;
 
-  AuthenticationDataSource(this.linShareHttpClient, this.deviceManager, this._remoteExceptionThrower);
+  AuthenticationSSODataSource(this.linShareHttpClient,
+      this._remoteExceptionThrower, this.appAuth, this.deviceManager);
 
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
+  Future<TokenSSO?> getTokenSSO(
+    String clientId,
+    String redirectUrl,
+    SSOConfiguration configuration,
+    List<String> scopes,
+    bool preferEphemeralSessionIOS,
+    List<String>? promptValues,
+    bool allowInsecureConnections) async {
+      return Future.sync(() async {
+        final result = await appAuth.authorizeAndExchangeCode(
+        AuthorizationTokenRequest(clientId, redirectUrl,
+          serviceConfiguration: AuthorizationServiceConfiguration(
+            configuration.authorizationEndpoint,
+            configuration.tokenEndpoint),
+          scopes: scopes,
+          preferEphemeralSession: preferEphemeralSessionIOS,
+          promptValues: promptValues,
+          allowInsecureConnections: allowInsecureConnections),
+        );
+        if(result != null) {
+          final tokenSSO = result.toTokenSSO();
+          if(tokenSSO.isTokenValid()) {
+              return tokenSSO;
+          } else {
+            throw BadSSOCredentials();
+          }
+        } else {
+          throw BadSSOCredentials();
+        }
+      }).catchError((error) {
+        print(error);
+        _remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
+          throw BadSSOCredentials();
+        });
+      });
+  }
+
+  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenSSO tokenSSO, {OTPCode? otpCode}) async {
     return Future.sync(() async {
       final deviceUUID = await deviceManager.getDeviceUUID();
-      final permanentToken = await linShareHttpClient.createPermanentToken(
+      final permanentToken = await linShareHttpClient.createPermanentTokenWithOIDC(
           baseUrl,
-          userName.userName,
-          password.value,
+          tokenSSO.token,
           PermanentTokenBodyRequest('LinShare-${deviceManager.getPlatformString()}-$deviceUUID'),
           otpCode: otpCode);
       return permanentToken.toToken();
     }).catchError((error) {
-        _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          if (error.response?.statusCode == 401) {
-            final errorCode = error.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
-            final authErrorCode = LinShareErrorCode(int.tryParse(errorCode) ?? 1);
-            if (authErrorCode.isAuthenticateWithOTPError()) {
-              throw NeedAuthenticateWithOTP();
-            } else if (authErrorCode.isAuthenticateErrorUserLocked()) {
-              throw UserLocked();
-            }
-            throw BadCredentials();
-          } else {
-            throw UnknownError(error.response?.statusMessage!);
-          }
-        });
-    });
-  }
-
-  Future<bool> deletePermanentToken(Token token) async {
-    return Future.sync(() async => await linShareHttpClient.deletePermanentToken(token.toPermanentToken()))
-      .catchError((error) {
-        _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response?.statusCode == 404) {
-            throw RequestedTokenNotFound();
-          } else if (error.response?.statusCode == 400) {
-            throw MissingRequiredFields();
-          } else {
-            throw UnknownError(error.response?.statusMessage!);
-          }
-        });
-      });
-  }
-
-  Future<User> getAuthorizedUser() async {
-    return Future.sync(() async {
-      final userRes = await linShareHttpClient.getAuthorizedUser();
-      if (userRes == null) {
-        throw NotAuthorizedUser();
-      }
-      return userRes.toUser();
-    }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        throw UnknownError(error.response?.statusMessage!);
+        if (error.response?.statusCode == 401) {
+          final errorCode = error.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
+          final authErrorCode = LinShareErrorCode(int.tryParse(errorCode) ?? 1);
+          if (authErrorCode.isAuthenticateWithOTPError()) {
+            throw NeedAuthenticateWithOTP();
+          } else if (authErrorCode.isAuthenticateErrorUserLocked()) {
+            throw UserLocked();
+          }
+          throw BadCredentials();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
       });
     });
   }
+
 }
