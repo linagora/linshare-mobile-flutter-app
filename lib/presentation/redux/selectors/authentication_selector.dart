@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/authentication_sso_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 
 extension AuthenticationSelector on AuthenticationState {
@@ -37,5 +38,13 @@ extension AuthenticationSelector on AuthenticationState {
     return viewState.fold(
         (failure) => false,
         (success) => success is LoadingState);
+  }
+}
+
+extension AuthenticationSSOSelector on AuthenticationSSOState {
+  bool isAuthenticationSSOLoading() {
+    return viewState.fold(
+            (failure) => false,
+            (success) => success is LoadingState);
   }
 }

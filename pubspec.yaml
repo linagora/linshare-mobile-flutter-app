@@ -129,6 +129,9 @@ dependencies:
   pedantic: 1.11.0
   permission_handler: 7.0.0
 
+  # OIDC
+  flutter_appauth: 1.0.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
