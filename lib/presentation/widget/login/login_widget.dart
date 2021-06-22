@@ -39,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/selectors/authentication_selector.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/authentication_sso_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -180,14 +181,23 @@ class _LoginWidgetState extends State<LoginWidget> {
                             )
                           ),
                           Padding(
-                            padding: EdgeInsets.only(bottom: 24),
+                            padding: EdgeInsets.only(bottom: 16),
                             child: StoreConnector<AppState, AuthenticationState>(
                               converter: (store) => store.state.authenticationState,
                               builder: (context, authenticationState) =>
                               authenticationState.isAuthenticationLoading()
                                   ? loadingCircularProgress()
                                   : loginButton(context)),
-                          )
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(bottom: 24),
+                              child: StoreConnector<AppState, AuthenticationSSOState>(
+                                converter: (store) => store.state.authenticationSSOState,
+                                builder: (context, authenticationSSOState) =>
+                                authenticationSSOState.isAuthenticationSSOLoading()
+                                    ? loadingCircularProgress()
+                                    : loginSSOButton(context)),
+                          ),
                         ],
                       ),
                     ),
@@ -328,4 +338,28 @@ class _LoginWidgetState extends State<LoginWidget> {
       ),
     );
   }
+
+  Widget loginSSOButton(BuildContext context) {
+    return SizedBox(
+      key: Key('login_sso_button'),
+      width: _responsiveUtils.getWidthLoginButton(),
+      height: 48,
+      child: RaisedButton(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(80),
+          side: BorderSide(width: 0, color: AppColor.loginButtonColor),
+        ),
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+          loginViewModel.handleLoginSSOPressed(context);
+        },
+        color: AppColor.loginButtonColor,
+        textColor: Colors.white,
+        child: Text(AppLocalizations.of(context).login_sso_button,
+            style: TextStyle(fontSize: 16, color: Colors.white)),
+      ),
+    );
+  }
+
 }
