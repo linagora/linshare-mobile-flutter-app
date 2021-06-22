@@ -30,19 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/domain.dart';
-import 'package:domain/src/model/base_error_code.dart';
+import 'package:domain/src/repository/authentication/authentication_sso_repository.dart';
+import 'package:mockito/mockito.dart';
 
-class LinShareErrorCode extends BaseErrorCode {
-  LinShareErrorCode(int value) : super(value) {
-    assert(value >= 0, 'linShareErrorCode must not be negative');
-  }
-}
-
-extension LinShareErrorCodeExtension on LinShareErrorCode {
-  bool isAuthenticateWithOTPError() =>
-      BusinessErrorCode.missingOTPAuthentication.contains(this);
-
-  bool isAuthenticateErrorUserLocked() =>
-      BusinessErrorCode.authenErrorUserLocked.contains(this);
-}
+class MockAuthenticationSSORepository extends Mock implements AuthenticationSSORepository {}

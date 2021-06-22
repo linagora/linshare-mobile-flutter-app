@@ -28,21 +28,19 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:domain/domain.dart';
-import 'package:domain/src/model/base_error_code.dart';
+import 'package:domain/src/usecases/remote_exception.dart';
 
-class LinShareErrorCode extends BaseErrorCode {
-  LinShareErrorCode(int value) : super(value) {
-    assert(value >= 0, 'linShareErrorCode must not be negative');
-  }
+abstract class AuthenticationSSOException extends RemoteException {
+  static final wrongCredential = 'Credential is wrong';
+
+  AuthenticationSSOException(String message) : super(message);
 }
 
-extension LinShareErrorCodeExtension on LinShareErrorCode {
-  bool isAuthenticateWithOTPError() =>
-      BusinessErrorCode.missingOTPAuthentication.contains(this);
+class BadSSOCredentials extends AuthenticationSSOException {
+  BadSSOCredentials() : super(AuthenticationSSOException.wrongCredential);
 
-  bool isAuthenticateErrorUserLocked() =>
-      BusinessErrorCode.authenErrorUserLocked.contains(this);
+  @override
+  List<Object> get props => [];
 }
+
