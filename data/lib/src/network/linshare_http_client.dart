@@ -87,18 +87,33 @@ class LinShareHttpClient {
       PermanentTokenBodyRequest bodyRequest,
       {OTPCode? otpCode}) async {
     final basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
+    final resultJson = await _dioClient.post(
+        Endpoint.authentication.generateAuthenticationUrl(authenticateUrl),
+        options: Options(headers: _buildPermanentTokenRequestParam(basicAuth, otpCode: otpCode)),
+        data: bodyRequest.toJson());
+    return PermanentToken.fromJson(resultJson);
+  }
 
+  Future<PermanentToken> createPermanentTokenWithOIDC(
+      Uri authenticateUrl,
+      String oidcToken,
+      PermanentTokenBodyRequest bodyRequest,
+      {OTPCode? otpCode}) async {
+    final bearerAuth = 'Bearer $oidcToken';
+    final resultJson = await _dioClient.post(
+        Endpoint.authentication.generateAuthenticationUrl(authenticateUrl),
+        options: Options(headers: _buildPermanentTokenRequestParam(bearerAuth, otpCode: otpCode)),
+        data: bodyRequest.toJson());
+    return PermanentToken.fromJson(resultJson);
+  }
+
+  Map<String, dynamic> _buildPermanentTokenRequestParam(String authorizationHeader, {OTPCode? otpCode}) {
     final headerParam = _dioClient.getHeaders();
-    headerParam[HttpHeaders.authorizationHeader] = basicAuth;
+    headerParam[HttpHeaders.authorizationHeader] = authorizationHeader;
     if (otpCode != null && otpCode.value.isNotEmpty) {
       headerParam[Constant.linShare2FAPin] = otpCode.value;
     }
-
-    final resultJson = await _dioClient.post(
-        Endpoint.authentication.generateAuthenticationUrl(authenticateUrl),
-        options: Options(headers: headerParam),
-        data: bodyRequest.toJson());
-    return PermanentToken.fromJson(resultJson);
+    return headerParam;
   }
 
   Future<bool> deletePermanentToken(PermanentToken token) async {
