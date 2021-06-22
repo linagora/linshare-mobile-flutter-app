@@ -42,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/account_state.dar
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/authentication_sso_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_login_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
@@ -143,6 +144,7 @@ class MockOnlineAction extends ActionOnline {}
 AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState networkConnectivityState, {MySpaceState? mySpaceState}) {
   return AppState(
     authenticationState: AuthenticationState.initial(),
+    authenticationSSOState: AuthenticationSSOState.initial(),
     uploadFileState: UploadFileState.initial(),
     mySpaceState: mySpaceState ?? MySpaceState.initial(),
     shareState: ShareState.initial(),
