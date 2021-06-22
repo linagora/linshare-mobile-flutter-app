@@ -47,6 +47,11 @@ final password1 = Password('qwedsazxc');
 final userName2 = UserName('user2@linshare.org');
 final password2 = Password('qwedsasca');
 final permanentToken = Token(permanentTokenString, TokenId(tokenUUID));
+final oidcToken = TokenSSO('afbe3891a4e1b48f4b4d3bbb1962ba86', TokenId('uuid'), DateTime.now(), 'refresh-token');
+final oidcTokenWrong = TokenSSO('abc123', TokenId('uuid'), DateTime.now(), 'refresh-token');
+
+const baseUrlSupported = 'https://linshare-integration-4-files.linagora.com/';
+final linShareOIDCFilesBaseUrl = Uri.parse(baseUrlSupported);
 
 final fileInfo1 = FileInfo('fileName1', 'filePath1', 1000);
 final fileInfo2 = FileInfo('fileName2', 'filePath2', 500);

@@ -28,21 +28,27 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/base_error_code.dart';
+import 'dart:core';
 
-class LinShareErrorCode extends BaseErrorCode {
-  LinShareErrorCode(int value) : super(value) {
-    assert(value >= 0, 'linShareErrorCode must not be negative');
+class CreatePermanentTokenSSOInteractor {
+  final AuthenticationSSORepository authenticationSSORepository;
+  final TokenRepository tokenRepository;
+  final CredentialRepository credentialRepository;
+
+  CreatePermanentTokenSSOInteractor(this.authenticationSSORepository, this.tokenRepository, this.credentialRepository);
+
+  Future<Either<Failure, Success>> execute(Uri baseUrl, TokenSSO tokenSSO, {OTPCode? otpCode}) async {
+    try {
+      final token = await authenticationSSORepository.createPermanentTokenWithOIDC(baseUrl, tokenSSO, otpCode: otpCode).then((token) {
+        tokenRepository.persistToken(token);
+        credentialRepository.saveBaseUrl(baseUrl);
+      });
+      return Right(AuthenticationViewState(token));
+    } catch (e) {
+      return Left(AuthenticationFailure(e));
+    }
   }
-}
-
-extension LinShareErrorCodeExtension on LinShareErrorCode {
-  bool isAuthenticateWithOTPError() =>
-      BusinessErrorCode.missingOTPAuthentication.contains(this);
-
-  bool isAuthenticateErrorUserLocked() =>
-      BusinessErrorCode.authenErrorUserLocked.contains(this);
 }
