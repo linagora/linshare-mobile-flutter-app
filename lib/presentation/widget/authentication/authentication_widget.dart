@@ -43,7 +43,6 @@ class AuthenticationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var arguments = ModalRoute.of(context)?.settings.arguments as AuthenticationArguments;
     _authenticationViewModel.setAuthenticationArguments(arguments);
-
     return Container(
       color: AppColor.primaryColor,
       child: SizedBox(

@@ -36,10 +36,14 @@
 
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:mockito/mockito.dart';
 
 class MockCreatePermanentTokenInteractor extends Mock implements CreatePermanentTokenInteractor {}
+class MockCreatePermanentTokenSSOInteractor extends Mock implements CreatePermanentTokenSSOInteractor {}
+class MockGetTokenSSOInteractor extends Mock implements GetTokenSSOInteractor {}
 class MockAppNavigation extends Mock implements AppNavigation {}
 class MockDynamicUrlInterceptors extends Mock implements DynamicUrlInterceptors {}
 class MockUploadWorkGroupDocumentInteractor extends Mock implements UploadWorkGroupDocumentInteractor {}
+class MockAppToast extends Mock implements AppToast {}

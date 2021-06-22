@@ -48,6 +48,7 @@ import 'package:redux/src/store.dart';
 class EnterOTPViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
+  final CreatePermanentTokenSSOInteractor _getPermanentTokenSSOInteractor;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
   final AppToast _appToast;
   late EnterOTPArgument _enterOTPArgument;
@@ -56,6 +57,7 @@ class EnterOTPViewModel extends BaseViewModel {
     Store<AppState> store,
     this._appNavigation,
     this._getPermanentTokenInteractor,
+    this._getPermanentTokenSSOInteractor,
     this._dynamicUrlInterceptors,
     this._appToast
   ) : super(store);
@@ -69,14 +71,18 @@ class EnterOTPViewModel extends BaseViewModel {
   }
 
   void onLoginPressed(String otp, BuildContext context) {
-    store.dispatch(_loginWithOTPAction(otp, context));
+    if(_enterOTPArgument.tokenSSO != null) {
+      store.dispatch(_loginSSOWithOTPAction(otp, context));
+    } else if(_enterOTPArgument.email != null && _enterOTPArgument.password != null) {
+      store.dispatch(_loginWithOTPAction(otp, context));
+    }
   }
 
   OnlineThunkAction _loginWithOTPAction(String otp, BuildContext context) {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartAuthenticationLoadingAction());
       await _getPermanentTokenInteractor
-          .execute(_enterOTPArgument.baseUrl, _enterOTPArgument.email, _enterOTPArgument.password, otpCode: OTPCode(otp))
+          .execute(_enterOTPArgument.baseUrl, _enterOTPArgument.email!, _enterOTPArgument.password!, otpCode: OTPCode(otp))
           .then(
               (result) => result.fold(
                   (failure) {
@@ -89,6 +95,26 @@ class EnterOTPViewModel extends BaseViewModel {
                       _loginSuccess(success);
                     }
                   })));
+    });
+  }
+
+  OnlineThunkAction _loginSSOWithOTPAction(String otp, BuildContext context) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartAuthenticationLoadingAction());
+      await _getPermanentTokenSSOInteractor
+          .execute(_enterOTPArgument.baseUrl, _enterOTPArgument.tokenSSO!, otpCode: OTPCode(otp))
+          .then(
+              (result) => result.fold(
+                  (failure) {
+                if (failure is AuthenticationFailure) {
+                  _loginFailure(failure, context);
+                }
+              },
+              ((success) {
+                if(success is AuthenticationViewState) {
+                  _loginSuccess(success);
+                }
+              })));
     });
   }
 
