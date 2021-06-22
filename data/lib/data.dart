@@ -2,6 +2,7 @@ library data;
 
 // data source
 export 'src/datasource/authentication_datasource.dart';
+export 'src/datasource/authentication_sso_datasource.dart';
 export 'src/datasource/autocomplete_datasource.dart';
 export 'src/datasource/document_datasource.dart';
 export 'src/datasource/file_upload_datasource.dart';
@@ -86,6 +87,7 @@ export 'src/local/model/data_source_type.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
+export 'src/repository/authentication/authentication_sso_repository_impl.dart';
 export 'src/repository/authentication/credential_repository_impl.dart';
 export 'src/repository/authentication/token_repository_impl.dart';
 export 'src/repository/autocomplete/autocomplete_repository_impl.dart';
