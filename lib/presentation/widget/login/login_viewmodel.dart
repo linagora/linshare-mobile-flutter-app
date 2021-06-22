@@ -32,8 +32,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/authentication_sso_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
+import 'package:linshare_flutter_app/presentation/util/authentication_sso_config.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/url_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -47,17 +52,25 @@ class LoginViewModel extends BaseViewModel {
   LoginViewModel(
     Store<AppState> store,
     this._getPermanentTokenInteractor,
+    this._getPermanentTokenSSOInteractor,
+    this._getTokenSSOInteractor,
     this._appNavigation,
-    this._dynamicUrlInterceptors
+    this._dynamicUrlInterceptors,
+    this._appToast
   ) : super(store);
 
   final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
+  final CreatePermanentTokenSSOInteractor _getPermanentTokenSSOInteractor;
+  final GetTokenSSOInteractor _getTokenSSOInteractor;
   final AppNavigation _appNavigation;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
+  final AppToast _appToast;
 
   String _urlText = '';
   String _emailText = '';
   String _passwordText = '';
+
+
 
   void setUrlText(String url) => _urlText = url.formatURLValid();
 
@@ -70,6 +83,18 @@ class LoginViewModel extends BaseViewModel {
         _parsePassword(_passwordText)));
   }
 
+  void handleLoginSSOPressed(BuildContext context) {
+    store.dispatch(loginSSOAction(
+        context,
+        AuthenticationSSOConfig.clientId,
+        AuthenticationSSOConfig.redirectUrl,
+        AuthenticationSSOConfig.ssoConfiguration,
+        AuthenticationSSOConfig.scopes,
+        AuthenticationSSOConfig.preferEphemeralSession,
+        AuthenticationSSOConfig.allowInsecureConnection,
+        AuthenticationSSOConfig.baseUrlSupported));
+  }
+
   Uri _parseUri(String url) => Uri.parse(url);
 
   UserName _parseUserName(String userName) => UserName(userName);
@@ -80,17 +105,17 @@ class LoginViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartAuthenticationLoadingAction());
       await _getPermanentTokenInteractor.execute(baseUrl, userName, password).then(
-          (result) => result.fold(
-              (failure) {
-                if(failure is AuthenticationFailure) {
-                  _loginFailureAction(failure);
-                }
-              },
-              ((success) {
-                if(success is AuthenticationViewState) {
-                  return store.dispatch(loginSuccessAction(success));
-                }
-              })));
+        (result) => result.fold(
+          (failure) {
+            if(failure is AuthenticationFailure) {
+              _loginFailureAction(failure);
+            }
+          },
+          (success) {
+            if(success is AuthenticationViewState) {
+              return store.dispatch(loginSuccessAction(success));
+            }
+          }));
     };
   }
 
@@ -106,12 +131,79 @@ class LoginViewModel extends BaseViewModel {
     store.dispatch(AuthenticationAction(Left(failure)));
     if (failure.authenticationException is NeedAuthenticateWithOTP) {
       await _appNavigation.push(RoutePaths.enter_otp,
-          arguments: EnterOTPArgument(_parseUri(_urlText), _parseUserName(_emailText), _parsePassword(_passwordText)));
+          arguments: EnterOTPArgument(_parseUri(_urlText), email: _parseUserName(_emailText), password: _parsePassword(_passwordText)));
     }
   }
 
-  @override
-  void onDisposed() {
-    super.onDisposed();
+  ThunkAction<AppState> loginSSOAction(
+      BuildContext context,
+      String clientId,
+      String redirectUrl,
+      SSOConfiguration configuration,
+      List<String> scopes,
+      bool preferEphemeralSession,
+      bool allowInsecureConnections,
+      String baseUrlSupported) {
+    return (Store<AppState> store) async {
+      store.dispatch(StartAuthenticationSSOLoadingAction());
+      await _getTokenSSOInteractor
+          .execute(
+            clientId,
+            redirectUrl,
+            configuration,
+            scopes,
+            preferEphemeralSession,
+            allowInsecureConnections)
+          .then((result) => result.fold(
+            (failure) {
+              if (failure is AuthenticationSSOFailure) {
+                _getTokenSSOFailureAction(failure, context);
+              }
+            },
+            ((success) {
+              if (success is AuthenticationSSOViewState) {
+                return store.dispatch(getTokenSSOSuccessAction(success, baseUrlSupported));
+              }
+            })));
+    };
   }
+
+  ThunkAction<AppState> getTokenSSOSuccessAction(AuthenticationSSOViewState success, String baseUrl) {
+    return (Store<AppState> store) async {
+      await _getPermanentTokenSSOInteractor.execute(_parseUri(baseUrl), success.tokenSSO).then(
+        (result) => result.fold(
+          (failure) {
+            if(failure is AuthenticationFailure) {
+              _loginSSOFailureAction(failure, success.tokenSSO);
+            }
+          },
+          (success) {
+            if(success is AuthenticationViewState) {
+              return store.dispatch(_loginSSOSuccessAction(success));
+            }
+          }));
+    };
+  }
+
+  void _getTokenSSOFailureAction(AuthenticationSSOFailure failure, BuildContext context) async {
+    store.dispatch(AuthenticationSSOAction(Left(failure)));
+    _appToast.showErrorToast(AppLocalizations.of(context).login_sso_failed);
+  }
+
+  ThunkAction<AppState> _loginSSOSuccessAction(AuthenticationViewState success) {
+    return (Store<AppState> store) async {
+      store.dispatch(AuthenticationSSOAction(Right(success)));
+      _dynamicUrlInterceptors.changeBaseUrl(AuthenticationSSOConfig.baseUrlSupported);
+      await _appNavigation.push(RoutePaths.authentication, arguments: AuthenticationArguments(_parseUri(AuthenticationSSOConfig.baseUrlSupported)));
+    };
+  }
+
+  void _loginSSOFailureAction(AuthenticationFailure failure, TokenSSO tokenSSO) async {
+    store.dispatch(AuthenticationSSOAction(Left(failure)));
+    if (failure.authenticationException is NeedAuthenticateWithOTP) {
+      await _appNavigation.push(RoutePaths.enter_otp,
+          arguments: EnterOTPArgument(_parseUri(AuthenticationSSOConfig.baseUrlSupported), tokenSSO: tokenSSO));
+    }
+  }
+
 }

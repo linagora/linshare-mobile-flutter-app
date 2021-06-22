@@ -34,6 +34,7 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
 import 'package:redux/redux.dart';
@@ -46,13 +47,19 @@ void main() {
   final getIt = GetIt.instance;
   TestReduxModule(getIt);
   getIt.registerLazySingleton<CreatePermanentTokenInteractor>(() => MockCreatePermanentTokenInteractor());
+  getIt.registerLazySingleton<CreatePermanentTokenSSOInteractor>(() => MockCreatePermanentTokenSSOInteractor());
+  getIt.registerLazySingleton<GetTokenSSOInteractor>(() => MockGetTokenSSOInteractor());
   getIt.registerLazySingleton<AppNavigation>(() => MockAppNavigation());
   getIt.registerLazySingleton<DynamicUrlInterceptors>(() => MockDynamicUrlInterceptors());
+  getIt.registerLazySingleton<AppToast>(() => MockAppToast());
   getIt.registerLazySingleton<LoginViewModel>(() => LoginViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<CreatePermanentTokenInteractor>(),
+      getIt.get<CreatePermanentTokenSSOInteractor>(),
+      getIt.get<GetTokenSSOInteractor>(),
       getIt.get<AppNavigation>(),
-      getIt.get<DynamicUrlInterceptors>()
+      getIt.get<DynamicUrlInterceptors>(),
+      getIt<AppToast>()
   ));
 
   group('test loginViewModel', () {

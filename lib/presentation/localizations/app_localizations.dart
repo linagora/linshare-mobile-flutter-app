@@ -1777,6 +1777,20 @@ class AppLocalizations {
     return Intl.message('This file cannot be switched to offline mode',
         name: 'file_cannot_be_switched_to_offline_mode');
   }
+
+  String get login_sso_button {
+    return Intl.message(
+      'Login with SSO',
+      name: 'login_sso_button',
+    );
+  }
+
+  String get login_sso_failed {
+    return Intl.message(
+      'Login failed',
+      name: 'login_sso_failed',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
