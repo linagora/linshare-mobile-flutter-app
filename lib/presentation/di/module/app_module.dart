@@ -34,6 +34,7 @@ import 'package:data/data.dart';
 import 'package:device_info/device_info.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
@@ -54,6 +55,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppModule {
   AppModule() {
+    _provideAppAuth();
     _provideDataSourceImpl();
     _provideDataSource();
     _provideRepositoryImpl();
@@ -122,6 +124,12 @@ class AppModule {
       getIt<DeviceManager>(),
       getIt<RemoteExceptionThrower>()
     ));
+    getIt.registerFactory(() => AuthenticationSSODataSource(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>(),
+        getIt<FlutterAppAuth>(),
+        getIt<DeviceManager>()
+    ));
     getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDataSource>(() => getIt<SharedSpaceDataSourceImpl>());
     getIt.registerFactory<AutoCompleteDataSource>(() => getIt<AutoCompleteDataSourceImpl>());
@@ -139,6 +147,7 @@ class AppModule {
 
   void _provideRepositoryImpl() {
     getIt.registerFactory(() => AuthenticationRepositoryImpl(getIt<AuthenticationDataSource>()));
+    getIt.registerFactory(() => AuthenticationSSORepositoryImpl(getIt<AuthenticationSSODataSource>()));
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => DocumentRepositoryImpl(
@@ -162,6 +171,7 @@ class AppModule {
 
   void _provideRepository() {
     getIt.registerFactory<AuthenticationRepository>(() => getIt<AuthenticationRepositoryImpl>());
+    getIt.registerFactory<AuthenticationSSORepository>(() => getIt<AuthenticationSSORepositoryImpl>());
     getIt.registerFactory<TokenRepository>(() => getIt<TokenRepositoryImpl>());
     getIt.registerFactory<CredentialRepository>(() => getIt<CredentialRepositoryImpl>());
     getIt.registerFactory<DocumentRepository>(() => getIt<DocumentRepositoryImpl>());
@@ -183,6 +193,12 @@ class AppModule {
       getIt<AuthenticationRepository>(),
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
+    getIt.registerFactory(() => GetTokenSSOInteractor(
+      getIt<AuthenticationSSORepository>()));
+    getIt.registerFactory(() => CreatePermanentTokenSSOInteractor(
+        getIt<AuthenticationSSORepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetQuotaInteractor(getIt<QuotaRepository>()));
     getIt.registerFactory(() => GetCredentialInteractor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
     getIt.registerFactory(() => UploadMySpaceDocumentInteractor(
@@ -369,5 +385,9 @@ class AppModule {
     getIt.registerLazySingleton(() => AutoSyncOfflineManager(
       getIt.get<Store<AppState>>(),
       getIt.get<AutoSyncAvailableOfflineMultipleDocumentInteractor>()));
+  }
+
+  void _provideAppAuth() {
+    getIt.registerLazySingleton(() => FlutterAppAuth());
   }
 }

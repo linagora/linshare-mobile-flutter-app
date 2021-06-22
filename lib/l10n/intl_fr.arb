@@ -1442,5 +1442,15 @@
   "@file_cannot_be_switched_to_offline_mode": {
     "type": "text",
     "placeholders": {}
+  },
+  "login_sso_button": "Login with SSO",
+  "@login_sso_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_sso_failed": "Login failed",
+  "@login_sso_failed": {
+    "type": "text",
+    "placeholders": {}
   }
 }
