@@ -28,21 +28,31 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/base_error_code.dart';
+import 'package:equatable/equatable.dart';
 
-class LinShareErrorCode extends BaseErrorCode {
-  LinShareErrorCode(int value) : super(value) {
-    assert(value >= 0, 'linShareErrorCode must not be negative');
-  }
+class TokenSSO extends Equatable {
+  const TokenSSO(this.token, this.tokenId, this.expiredTime, this.refreshToken);
+
+  final String token;
+  final TokenId tokenId;
+  final DateTime expiredTime;
+  final String refreshToken;
+
+  @override
+  List<Object> get props => [token, tokenId, expiredTime, refreshToken];
+
+  @override
+  bool get stringify => true;
 }
 
-extension LinShareErrorCodeExtension on LinShareErrorCode {
-  bool isAuthenticateWithOTPError() =>
-      BusinessErrorCode.missingOTPAuthentication.contains(this);
+extension TokenSSOExtension on TokenSSO {
 
-  bool isAuthenticateErrorUserLocked() =>
-      BusinessErrorCode.authenErrorUserLocked.contains(this);
+  bool isTokenValid() => token.isNotEmpty && tokenId.uuid.isNotEmpty;
+
+  Token toToken() {
+    return Token(token, tokenId);
+  }
+
 }
