@@ -37,20 +37,17 @@ import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
-class GetAllDocumentInteractor {
+class EnableAvailableOfflineDocumentInteractor {
   final DocumentRepository _documentRepository;
 
-  GetAllDocumentInteractor(this._documentRepository);
+  EnableAvailableOfflineDocumentInteractor(this._documentRepository);
 
-  Future<Either<Failure, Success>> execute() async {
+  Future<Either<Failure, Success>> execute(List<Document> documents) async {
     try {
-      final documents = await _documentRepository.getAll();
-
       final listDocument = await Future.wait(documents.map((item) async {
-        final documentLocal = await _documentRepository.getDocumentOffline(item.documentId);
-        return documentLocal ?? item;
-      }).toList());
-
+          final documentLocal = await _documentRepository.getDocumentOffline(item.documentId);
+          return documentLocal ?? item;
+        }).toList());
       return Right<Failure, Success>(MySpaceViewState(listDocument));
     } catch (exception) {
       return Left<Failure, Success>(MySpaceFailure(exception));

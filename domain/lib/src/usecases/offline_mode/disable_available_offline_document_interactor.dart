@@ -35,25 +35,20 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/repository/document/document_repository.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
-import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
-class GetAllDocumentInteractor {
+class DisableAvailableOfflineDocumentInteractor {
   final DocumentRepository _documentRepository;
 
-  GetAllDocumentInteractor(this._documentRepository);
+  DisableAvailableOfflineDocumentInteractor(this._documentRepository);
 
-  Future<Either<Failure, Success>> execute() async {
+  Future<Either<Failure, Success>> execute(Document document) async {
     try {
-      final documents = await _documentRepository.getAll();
-
-      final listDocument = await Future.wait(documents.map((item) async {
-        final documentLocal = await _documentRepository.getDocumentOffline(item.documentId);
-        return documentLocal ?? item;
-      }).toList());
-
-      return Right<Failure, Success>(MySpaceViewState(listDocument));
+      final result = await _documentRepository.disableAvailableOffline(document.documentId, document.localPath!);
+      return Right<Failure, Success>(DisableAvailableOfflineDocumentViewState(result
+        ? OfflineModeActionResult.successful
+        : OfflineModeActionResult.failure));
     } catch (exception) {
-      return Left<Failure, Success>(MySpaceFailure(exception));
+      return Left<Failure, Success>(DisableAvailableOfflineDocumentFailure(exception));
     }
   }
 }

@@ -30,7 +30,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  test: 1.16.5
+  test: 1.16.8
   mockito: 5.0.10
 
 # For information on the generic Dart part of this file, see the
