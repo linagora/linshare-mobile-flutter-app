@@ -38,19 +38,11 @@ class WorkGroupNodeIdConverter implements JsonConverter<WorkGroupNodeId, String>
 
   @override
   WorkGroupNodeId fromJson(String json) {
-    try {
-      return WorkGroupNodeId(json);
-    } catch (_) {
-      return null;
-    }
+    return WorkGroupNodeId(json);
   }
 
   @override
   String toJson(WorkGroupNodeId object) {
-    try {
-      return object.uuid;
-    } catch (_) {
-      return null;
-    }
+    return object.uuid;
   }
 }

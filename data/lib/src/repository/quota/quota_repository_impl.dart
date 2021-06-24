@@ -38,7 +38,7 @@ class QuotaRepositoryImpl implements QuotaRepository {
   QuotaRepositoryImpl(this._documentDataSource);
 
   @override
-  Future<AccountQuota> findQuota(QuotaId quotaUuid) {
+  Future<AccountQuota> findQuota(QuotaId? quotaUuid) {
     return _documentDataSource.findQuota(quotaUuid);
   }
 }

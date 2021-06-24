@@ -49,7 +49,7 @@ part 'work_group_folder_dto.g.dart';
 class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
 
   @JsonKey(name: Attribute.treePath)
-  final List<TreeNodeDto> listTreeNodeDto;
+  final List<TreeNodeDto>? listTreeNodeDto;
 
   WorkGroupNodeFolderDto(
     WorkGroupNodeId workGroupNodeId,
@@ -104,7 +104,9 @@ extension WorkGroupNodeFolderDtoExtension on WorkGroupNodeFolderDto {
         modificationDate,
         description ?? '',
         name ?? '',
-        lastAuthor?.toAccount()
-        listTreeNodeDto != null ? listTreeNodeDto.map((node) => node.toTreeNode()).toList() : null
+        lastAuthor != null
+          ? lastAuthor!.toAccount()
+          : Account('', '', AccountId(''), AccountType.INTERNAL, '', ''),
+        listTreeNodeDto != null ? listTreeNodeDto!.map((node) => node.toTreeNode()).toList() : []
       );
 }

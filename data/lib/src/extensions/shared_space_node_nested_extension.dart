@@ -36,15 +36,15 @@ extension SharedSpaceNodeNestedExtension on SharedSpaceNodeNested {
   SharedSpaceCache toSharedSpaceDto() {
     return SharedSpaceCache(
         sharedSpaceId,
-        sharedSpaceRole != null ? sharedSpaceRole.sharedSpaceRoleId : null,
-        sharedSpaceRole != null ? sharedSpaceRole.name : null,
-        sharedSpaceRole != null ? sharedSpaceRole.enabled : null,
+        sharedSpaceRole != null ? sharedSpaceRole!.sharedSpaceRoleId : null,
+        sharedSpaceRole != null ? sharedSpaceRole!.name : null,
+        sharedSpaceRole != null ? sharedSpaceRole!.enabled : null,
         creationDate,
         modificationDate,
         name,
         nodeType,
         quotaId,
-        versioningParameters != null ? versioningParameters.enable : null
+        versioningParameters.enable
     );
   }
 }

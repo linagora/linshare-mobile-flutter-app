@@ -33,22 +33,22 @@
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class QuotaIdConverter implements JsonConverter<QuotaId, String> {
+class QuotaIdConverter implements JsonConverter<QuotaId?, String?> {
   const QuotaIdConverter();
 
   @override
-  QuotaId fromJson(String json) {
+  QuotaId? fromJson(String? json) {
     try {
-      return QuotaId(json);
+      return json != null ? QuotaId(json) : null;
     } catch (_) {
       return null;
     }
   }
 
   @override
-  String toJson(QuotaId object) {
+  String? toJson(QuotaId? object) {
     try {
-      return object.uuid;
+      return object != null ? object.uuid : null;
     } catch (_) {
       return null;
     }
