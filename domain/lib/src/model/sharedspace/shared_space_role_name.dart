@@ -33,3 +33,20 @@
 enum SharedSpaceRoleName {
   READER, CONTRIBUTOR, WRITER, ADMIN
 }
+
+extension SharedSpaceRoleNameExtension on SharedSpaceRoleName {
+  String get value {
+    switch (this) {
+      case SharedSpaceRoleName.READER:
+        return 'READER';
+      case SharedSpaceRoleName.CONTRIBUTOR:
+        return 'CONTRIBUTOR';
+      case SharedSpaceRoleName.WRITER:
+        return 'WRITER';
+      case SharedSpaceRoleName.ADMIN:
+        return 'ADMIN';
+      default:
+        return toString();
+    }
+  }
+}

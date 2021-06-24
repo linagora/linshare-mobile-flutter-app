@@ -96,4 +96,20 @@ abstract class SharedSpaceDocumentRepository {
     SharedSpaceId sharedSpaceId,
     WorkGroupNodeId workGroupNodeId,
     {bool hasTreePath});
+
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(
+    SharedSpaceNodeNested sharedSpaceNodeNested,
+    WorkGroupDocument workGroupDocument,
+    String localPath,
+    {List<TreeNode> treeNodes});
+
+  Future<String> downloadMakeOfflineSharedSpaceDocument(
+    SharedSpaceId sharedSpaceId,
+    WorkGroupNodeId workGroupNodeId,
+    String workGroupNodeName,
+    DownloadPreviewType downloadPreviewType,
+    Token permanentToken,
+    Uri baseUrl);
+
+  Future<WorkGroupDocument> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId);
 }

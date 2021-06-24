@@ -28,62 +28,9 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:domain/domain.dart';
-import 'package:http_parser/http_parser.dart';
-
-class WorkGroupDocument extends WorkGroupNode {
-  final int size;
-  final MediaType mediaType;
-  final bool hasThumbnail;
-  final DateTime uploadDate;
-  final bool hasRevision;
-  final String sha256sum;
-  final String localPath;
-  final SyncOfflineState syncOfflineState;
-
-  WorkGroupDocument(
-    WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String description,
-    String name,
-    Account? lastAuthor,
-    this.size,
-    this.mediaType,
-    this.hasThumbnail,
-    this.uploadDate,
-    this.hasRevision,
-    this.sha256sum,
-    {
-      this.localPath,
-      this.syncOfflineState = SyncOfflineState.none
-    }) : super(
-      workGroupNodeId,
-      parentWorkGroupNodeId,
-      type,
-      sharedSpaceId,
-      creationDate,
-      modificationDate,
-      description,
-      name,
-      lastAuthor);
-
-  bool isOfflineMode() => localPath != null && localPath.isNotEmpty;
-
-  @override
-  List<Object?> get props => [
-    ...super.props,
-    size,
-    hasThumbnail,
-    uploadDate,
-    hasRevision,
-    sha256sum,
-    localPath,
-    syncOfflineState,
-  ];
+enum SyncOfflineState {
+  none,
+  waiting,
+  completed
 }
