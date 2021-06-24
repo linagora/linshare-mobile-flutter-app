@@ -28,62 +28,51 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'dart:io';
+
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:http_parser/http_parser.dart';
 
-class WorkGroupDocument extends WorkGroupNode {
-  final int size;
-  final MediaType mediaType;
-  final bool hasThumbnail;
-  final DateTime uploadDate;
-  final bool hasRevision;
-  final String sha256sum;
-  final String localPath;
-  final SyncOfflineState syncOfflineState;
+class MakeAvailableOfflineSharedSpaceDocumentInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+  final TokenRepository _tokenRepository;
+  final CredentialRepository _credentialRepository;
 
-  WorkGroupDocument(
-    WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String description,
-    String name,
-    Account? lastAuthor,
-    this.size,
-    this.mediaType,
-    this.hasThumbnail,
-    this.uploadDate,
-    this.hasRevision,
-    this.sha256sum,
-    {
-      this.localPath,
-      this.syncOfflineState = SyncOfflineState.none
-    }) : super(
-      workGroupNodeId,
-      parentWorkGroupNodeId,
-      type,
-      sharedSpaceId,
-      creationDate,
-      modificationDate,
-      description,
-      name,
-      lastAuthor);
+  MakeAvailableOfflineSharedSpaceDocumentInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository);
 
-  bool isOfflineMode() => localPath != null && localPath.isNotEmpty;
+  Future<Either<Failure, Success>> execute(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, {List<TreeNode> treeNodes}) async {
+    try {
+      final downloadPreviewType = workGroupDocument.mediaType.isImageFile() ? DownloadPreviewType.image : DownloadPreviewType.original;
 
-  @override
-  List<Object?> get props => [
-    ...super.props,
-    size,
-    hasThumbnail,
-    uploadDate,
-    hasRevision,
-    sha256sum,
-    localPath,
-    syncOfflineState,
-  ];
+      final filePath = await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
+          .then((List responses) async {
+        return await _sharedSpaceDocumentRepository.downloadMakeOfflineSharedSpaceDocument(
+          workGroupDocument.sharedSpaceId,
+          workGroupDocument.workGroupNodeId,
+          workGroupDocument.name,
+          downloadPreviewType,
+          responses[0],
+          responses[1]);
+      });
+
+      final result = await _sharedSpaceDocumentRepository.makeAvailableOfflineSharedSpaceDocument(
+        sharedSpaceNodeNested,
+        workGroupDocument,
+        filePath,
+        treeNodes: treeNodes);
+
+      if (result) {
+        return Right<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentViewState(OfflineModeActionResult.successful, filePath));
+      } else {
+        final fileSaved = File(filePath);
+        if (fileSaved.existsSync()) {
+          fileSaved.deleteSync();
+        }
+        return Left<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentFailure(OfflineModeActionResult.failure));
+      }
+    } catch (exception) {
+      return Left<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentFailure(exception));
+    }
+  }
 }
