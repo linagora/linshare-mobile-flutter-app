@@ -28,77 +28,56 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
-import 'package:dio/dio.dart';
+import 'package:data/src/local/model/work_group_node_cache.dart';
 import 'package:domain/domain.dart';
 
-abstract class SharedSpaceDocumentDataSource {
-  Future<List<WorkGroupNode?>> getAllChildNodes(
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId? parentNodeId});
+extension WorkGroupDocumentExtension on WorkGroupDocument {
+  WorkGroupNodeCache toWorkGroupNodeCache(String localPath) {
+    return WorkGroupNodeCache(
+        workGroupNodeId,
+        sharedSpaceId,
+        parentWorkGroupNodeId,
+        creationDate,
+        modificationDate,
+        name,
+        type,
+        description,
+        lastAuthor != null ? lastAuthor.name : null,
+        lastAuthor != null ? lastAuthor.mail : null,
+        lastAuthor != null ? lastAuthor.firstName : null,
+        lastAuthor != null ? lastAuthor.lastName : null,
+        lastAuthor != null ? lastAuthor.accountId : null,
+        lastAuthor != null ? lastAuthor.accountType : null,
+        size,
+        mediaType,
+        hasThumbnail,
+        uploadDate,
+        hasRevision,
+        sha256sum,
+        localPath
+    );
+  }
 
-  Future<List<WorkGroupNode>> copyToSharedSpace(
-    CopyRequest copyRequest,
-    SharedSpaceId destinationSharedSpaceId,
-    {WorkGroupNodeId? destinationParentNodeId}
-  );
-
-  Future<WorkGroupNode> removeSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId,
-  );
-
-  Future<List<DownloadTaskId>> downloadNodes(
-    List<WorkGroupNode> workgroupNodes,
-    Token token,
-    Uri baseUrl
-  );
-
-  Future<String> downloadNodeIOS(
-      WorkGroupNode workgroupNode,
-      Token token,
-      Uri baseUrl,
-      CancelToken cancelToken);
-
-  Future<WorkGroupFolder> createSharedSpaceFolder(
-    SharedSpaceId sharedSpaceId,
-    CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
-  );
-
-  Future<String> downloadPreviewWorkGroupDocument(
-    WorkGroupDocument workGroupDocument,
-    DownloadPreviewType downloadPreviewType,
-    Token token,
-    Uri baseUrl,
-    CancelToken cancelToken
-  );
-
-  Future<WorkGroupNode> renameSharedSpaceNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId sharedSpaceNodeId,
-    RenameWorkGroupNodeRequest renameRequest
-  );
-
-  Future<WorkGroupNode> getWorkGroupNode(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId workGroupNodeId,
-    {bool hasTreePath});
-
-  Future<String> downloadMakeOfflineSharedSpaceDocument(
-    SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId workGroupNodeId,
-    String workGroupNodeName,
-    DownloadPreviewType downloadPreviewType,
-    Token permanentToken,
-    Uri baseUrl);
-
-  Future<bool> makeAvailableOfflineSharedSpaceDocument(
-    SharedSpaceNodeNested sharedSpaceNodeNested,
-    WorkGroupDocument workGroupDocument,
-    String localPath,
-    {List<TreeNode> treeNodes});
-
-  Future<WorkGroupDocument> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId);
+  WorkGroupDocument toSyncOfflineWorkGroupDocument({WorkGroupNodeId parentId, String localPath, SyncOfflineState syncOfflineState}) {
+    return WorkGroupDocument(
+        workGroupNodeId,
+        parentId,
+        type,
+        sharedSpaceId,
+        creationDate,
+        modificationDate,
+        description,
+        name,
+        lastAuthor,
+        size,
+        mediaType,
+        hasThumbnail,
+        uploadDate,
+        hasRevision,
+        sha256sum,
+        localPath: localPath,
+        syncOfflineState: syncOfflineState
+    );
+  }
 }
