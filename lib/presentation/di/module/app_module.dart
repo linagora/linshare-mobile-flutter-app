@@ -330,6 +330,7 @@ class AppModule {
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()
     ));
+    getIt.registerFactory(() => DisableAvailableOfflineWorkGroupDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
   void _provideSharePreference() {

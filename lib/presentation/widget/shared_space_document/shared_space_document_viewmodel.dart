@@ -102,6 +102,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
   final GetWorkGroupNodeDetailInteractor _getWorkGroupNodeDetailInteractor;
   final MakeAvailableOfflineSharedSpaceDocumentInteractor _makeAvailableOfflineSharedSpaceDocumentInteractor;
+  final DisableAvailableOfflineWorkGroupDocumentInteractor _disableAvailableOfflineWorkGroupDocumentInteractor;
 
   late StreamSubscription _storeStreamSubscription;
 
@@ -132,6 +133,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     this._removeMultipleSharedSpaceNodesInteractor,
     this._getWorkGroupNodeDetailInteractor,
     this._makeAvailableOfflineSharedSpaceDocumentInteractor,
+    this._disableAvailableOfflineWorkGroupDocumentInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold((failure) => null, (success) {
@@ -885,7 +887,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     store.dispatch(_copyToWorkgroupAction(workGroupNodes, sharedSpaceDocumentArguments));
   }
 
-  WorkGroupFolder getWorkGroupFolder() {
+  WorkGroupFolder? getWorkGroupFolder() {
     return _documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
       ? getSharedSpaceDocumentState().workGroupFolder
       : null;
@@ -899,22 +901,22 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     }
   }
 
-  OnlineThunkAction _getWorkGroupNodeDetailAction(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId) {
+  OnlineThunkAction _getWorkGroupNodeDetailAction(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _getWorkGroupNodeDetailInteractor
         .execute(sharedSpaceId, workGroupNodeId)
         .then((result) => result.fold(
           (failure) => store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(null)),
           (success) => success is GetWorkGroupNodeDetailViewState
-            ? store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(success.workGroupNode))
+            ? store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(success.workGroupNode as WorkGroupFolder))
             : store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(null))
       ));
     });
   }
 
-  List<TreeNode> _getListTreeNodeInWorkGroupNodeCurrent() => getWorkGroupFolder().listTreeNode.length == 1
-    ? [getWorkGroupNode().toTreeNode()]
-    : getWorkGroupFolder().listTreeNode;
+  List<TreeNode> _getListTreeNodeInWorkGroupNodeCurrent() => getWorkGroupFolder()?.listTreeNode.length == 1
+    ? getWorkGroupNode() != null ? [getWorkGroupNode()!.toTreeNode()] : []
+    : getWorkGroupFolder() != null ? getWorkGroupFolder()!.listTreeNode : [];
 
   void makeAvailableOfflineSharedSpaceDocument(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
     _appNavigation.popBack();
@@ -936,10 +938,10 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   }
 
   OnlineThunkAction _makeAvailableOfflineSharedSpaceDocumentAction(
-      SharedSpaceNodeNested sharedSpaceNodeNested,
+      SharedSpaceNodeNested? sharedSpaceNodeNested,
       WorkGroupDocument workGroupDocument,
       int indexWorkGroupDocument,
-      {List<TreeNode> treeNodes}) {
+      {List<TreeNode>? treeNodes}) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _makeAvailableOfflineSharedSpaceDocumentInteractor
         .execute(sharedSpaceNodeNested, workGroupDocument, treeNodes: treeNodes)
@@ -964,6 +966,30 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
             }
           }));
     });
+  }
+
+  void disableAvailableOfflineSharedSpaceDocument(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
+    _appNavigation.popBack();
+    store.dispatch(_disableAvailableOfflineSharedSpaceDocumentAction(context, workGroupDocument, indexWorkGroupDocument));
+  }
+
+  ThunkAction<AppState> _disableAvailableOfflineSharedSpaceDocumentAction(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
+    return (Store<AppState> store) async {
+      await _disableAvailableOfflineWorkGroupDocumentInteractor
+        .execute(workGroupDocument)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceDocumentAction(Left(failure))),
+          (success) {
+            if (success is DisableAvailableOfflineSharedSpaceDocumentViewState && success.result == OfflineModeActionResult.successful) {
+              _workGroupNodesList[indexWorkGroupDocument] = workGroupDocument.toSyncOfflineWorkGroupDocument(localPath: null, syncOfflineState: SyncOfflineState.none);
+              store.dispatch(SharedSpaceDocumentSetSyncOfflineModeAction(_workGroupNodesList));
+
+              store.dispatch(SharedSpaceDocumentAction(Right(success)));
+            } else {
+              store.dispatch(SharedSpaceDocumentAction(Left(CannotAvailableOfflineSharedSpaceDocument())));
+            }
+          }));
+    };
   }
 
   @override

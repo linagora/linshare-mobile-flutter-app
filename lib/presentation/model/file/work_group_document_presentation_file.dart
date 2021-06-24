@@ -48,12 +48,12 @@ class WorkGroupDocumentPresentationFile extends Equatable implements Presentatio
   final imagePath = getIt<AppImagePaths>();
 
   final WorkGroupNodeId workGroupNodeId;
-  final WorkGroupNodeId parentWorkGroupNodeId;
+  final WorkGroupNodeId? parentWorkGroupNodeId;
   final WorkGroupNodeType? type;
   final SharedSpaceId sharedSpaceId;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final String description;
+  final String? description;
   final String name;
   final Account? lastAuthor;
   final int size;
