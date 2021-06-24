@@ -159,6 +159,8 @@ export 'src/network/service_path.dart';
 export 'src/model/offline_mode/sycn_offline_state.dart';
 export 'src/model/offline_mode/offline_mode_action_result.dart';
 export 'src/model/sharedspacedocument/tree_node.dart';
+export 'src/model/offline_mode/offline_mode_action_result.dart';
+export 'src/model/offline_mode/sync_offline_state.dart';
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
 export 'src/repository/authentication/credential_repository.dart';
@@ -184,6 +186,7 @@ export 'src/usecases/authentication/authentication_exception.dart';
 export 'src/usecases/authentication/authentication_sso_exception.dart';
 export 'src/usecases/authentication/authentication_view_state.dart';
 export 'src/usecases/authentication/authentication_sso_view_state.dart';
+export 'src/usecases/local_exception.dart';
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
 export 'src/usecases/authentication/create_permanent_token_sso_interactor.dart';
@@ -312,3 +315,5 @@ export 'src/usecases/offline_mode/auto_sync_available_offline_multiple_document_
 export 'src/usecases/offline_mode/enable_available_offline_document_interactor.dart';
 export 'src/usecases/shared_space_document/get_work_group_node_detail_interactor.dart';
 export 'src/usecases/shared_space_document/get_work_group_node_detail_view_state.dart';
+export 'src/usecases/shared_space_document/make_available_offline_shared_space_document_interactor.dart';
+export 'src/usecases/shared_space_document/make_available_offline_shared_space_document_view_state.dart';

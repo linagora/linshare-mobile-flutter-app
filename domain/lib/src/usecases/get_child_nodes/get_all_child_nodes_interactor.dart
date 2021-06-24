@@ -48,14 +48,28 @@ class GetAllChildNodesInteractor {
       if (childNodes.every((element) => element?.type == WorkGroupNodeType.DOCUMENT_REVISION)) {
         childNodes.sort((node1, node2) {
           return node2!.creationDate.compareTo(node1!.creationDate);
+      final newChildNodes = await Future.wait(childNodes.map((item) async {
+        if (item is WorkGroupDocument) {
+          final documentLocal = await _sharedSpaceDocumentRepository.getSharesSpaceDocumentOffline(item.workGroupNodeId);
+          return documentLocal ?? item;
+        } else {
+          return item;
+        }
+      }).toList());
+
+      if (newChildNodes.every((element) => element.type == WorkGroupNodeType.DOCUMENT_REVISION)) {
+        newChildNodes.sort((node1, node2) {
+          return node2.creationDate.compareTo(node1.creationDate);
         });
       } else {
         childNodes.sort((node1, node2) {
           return node2!.modificationDate.compareTo(node1!.modificationDate);
+        newChildNodes.sort((node1, node2) {
+          return node2.modificationDate.compareTo(node1.modificationDate);
         });
       }
 
-      return Right(GetChildNodesViewState(childNodes));
+      return Right(GetChildNodesViewState(newChildNodes));
     } catch (exception) {
       return Left(GetChildNodesFailure(exception));
     }

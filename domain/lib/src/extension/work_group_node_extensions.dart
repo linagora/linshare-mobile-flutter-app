@@ -33,10 +33,13 @@
 
 import 'package:domain/src/model/copy/copy_request.dart';
 import 'package:domain/src/model/copy/space_type.dart';
+import 'package:domain/src/model/sharedspacedocument/tree_node.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node.dart';
 
 extension WorkGroupNodeExtensions on WorkGroupNode {
   CopyRequest toCopyRequest() {
     return CopyRequest(workGroupNodeId.uuid, SpaceType.SHARED_SPACE);
   }
+
+  TreeNode toTreeNode() => TreeNode(workGroupNodeId, name);
 }
