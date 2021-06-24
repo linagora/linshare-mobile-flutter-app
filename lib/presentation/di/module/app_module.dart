@@ -36,6 +36,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -69,6 +70,7 @@ class AppModule {
     _provideNetworkStateComponent();
     _provideLocalAuthentication();
     _provideBiometric();
+    _provideOfflineMode();
   }
 
   void _provideDataSourceImpl() {
@@ -111,6 +113,7 @@ class AppModule {
         getIt<LocalBiometricService>(),
         getIt<BiometricExceptionThrower>(),
         getIt<SharedPreferences>()));
+    getIt.registerFactory(() => LocalDocumentDataSourceImpl(getIt<DocumentDatabaseManager>()));
   }
 
   void _provideDataSource() {
@@ -138,7 +141,12 @@ class AppModule {
     getIt.registerFactory(() => AuthenticationRepositoryImpl(getIt<AuthenticationDataSource>()));
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
-    getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>(), getIt<FileUploadDataSource>()));
+    getIt.registerFactory(() => DocumentRepositoryImpl(
+      {
+        DataSourceType.network : getIt<DocumentDataSource>(),
+        DataSourceType.local : getIt<LocalDocumentDataSourceImpl>()
+      },
+      getIt<FileUploadDataSource>()));
     getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
     getIt.registerFactory(() => AutoCompleteRepositoryImpl(getIt<AutoCompleteDataSource>()));
     getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(getIt<SharedSpaceDocumentDataSource>(), getIt<FileUploadDataSource>()));
@@ -280,6 +288,20 @@ class AppModule {
     getIt.registerFactory(() => RestoreWorkGroupDocumentVersionInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => RenameWorkGroupInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => EditDescriptionDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => MakeAvailableOfflineDocumentInteractor(
+        getIt<DocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()
+    ));
+    getIt.registerFactory(() => DisableAvailableOfflineDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => GetAllDocumentOfflineInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => AutoSyncAvailableOfflineDocumentInteractor(
+        getIt<DocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
+    getIt.registerFactory(() => AutoSyncAvailableOfflineMultipleDocumentInteractor(
+        getIt<AutoSyncAvailableOfflineDocumentInteractor>()));
+    getIt.registerFactory(() => EnableAvailableOfflineDocumentInteractor(getIt<DocumentRepository>()));
   }
 
   void _provideSharePreference() {
@@ -339,5 +361,13 @@ class AppModule {
   void _provideBiometric() {
     getIt.registerSingleton<BiometricExceptionThrower>(BiometricExceptionThrower());
     getIt.registerLazySingleton(() => LocalBiometricService(getIt<LocalAuthentication>()));
+  }
+
+  void _provideOfflineMode() {
+    getIt.registerSingleton(DatabaseClient());
+    getIt.registerFactory(() => DocumentDatabaseManager(getIt<DatabaseClient>()));
+    getIt.registerLazySingleton(() => AutoSyncOfflineManager(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AutoSyncAvailableOfflineMultipleDocumentInteractor>()));
   }
 }
