@@ -33,5 +33,5 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/model/quota/account_quota.dart';
 
 abstract class QuotaRepository {
-  Future<AccountQuota> findQuota(QuotaId quotaUuid);
+  Future<AccountQuota> findQuota(QuotaId? quotaUuid);
 }
