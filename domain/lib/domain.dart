@@ -317,3 +317,5 @@ export 'src/usecases/shared_space_document/get_work_group_node_detail_interactor
 export 'src/usecases/shared_space_document/get_work_group_node_detail_view_state.dart';
 export 'src/usecases/shared_space_document/make_available_offline_shared_space_document_interactor.dart';
 export 'src/usecases/shared_space_document/make_available_offline_shared_space_document_view_state.dart';
+export 'src/usecases/shared_space_document/disable_available_offline_shared_space_document_interactor.dart';
+export 'src/usecases/shared_space_document/disable_available_offline_shared_space_document_view_state.dart';

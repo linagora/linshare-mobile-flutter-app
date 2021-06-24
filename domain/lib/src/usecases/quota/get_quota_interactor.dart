@@ -39,7 +39,7 @@ class GetQuotaInteractor {
 
   GetQuotaInteractor(this.quotaRepository);
 
-  Future<Either<Failure, Success>> execute(QuotaId quotaUuid) async {
+  Future<Either<Failure, Success>> execute(QuotaId? quotaUuid) async {
     try {
       final accountQuota = await quotaRepository.findQuota(quotaUuid);
       return Right(AccountQuotaViewState(accountQuota));
