@@ -637,10 +637,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                 : sharedSpaceDocumentViewModel.openWorkGroupNodeContextMenu(
                     context,
                     node.element,
-                    _contextMenuDocumentActionTiles(context, node.element as WorkGroupDocument),
+                    _contextMenuDocumentActionTiles(context, node.element as WorkGroupDocument, indexWorkGroupDocument),
                     footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name) ? _removeWorkGroupNodeAction([node.element]) : SizedBox.shrink())),
-                    _contextMenuDocumentActionTiles(context, node.element, indexWorkGroupDocument),
-                    footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name) ? _removeWorkGroupNodeAction([node.element]) : SizedBox.shrink())),
       onTap: () {
         if (currentSelectMode == SelectMode.ACTIVE) {
           sharedSpaceDocumentViewModel.selectItem(node);
@@ -749,6 +747,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
         if (data is WorkGroupDocument) {
           if (!data.isOfflineMode()) {
             sharedSpaceDocumentViewModel.makeAvailableOfflineSharedSpaceDocument(context, workGroupDocument, indexWorkGroupDocument)
+          } else {
+            sharedSpaceDocumentViewModel.disableAvailableOfflineSharedSpaceDocument(context, workGroupDocument, indexWorkGroupDocument)
           }
         }})
       .build();

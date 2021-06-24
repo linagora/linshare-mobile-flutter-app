@@ -49,7 +49,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
   final WorkGroupNode? workGroupNode;
   final SelectMode selectMode;
   final Sorter? sorter;
-  final WorkGroupFolder workGroupFolder;
+  final WorkGroupFolder? workGroupFolder;
 
   SharedSpaceDocumentState(
     Either<Failure, Success> viewState,
@@ -72,10 +72,8 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
   }
 
   @override
-  SharedSpaceDocumentState sendViewState({Either<Failure, Success> viewState}) {
-    return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, selectMode, sorter, workGroupFolder);
   SharedSpaceDocumentState sendViewState({required Either<Failure, Success> viewState}) {
-    return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, selectMode, sorter);
+    return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, selectMode, sorter, workGroupFolder);
   }
 
   SharedSpaceDocumentState setSharedSpaceDocumentArgument({required SharedSpaceDocumentArguments newArguments}) {
@@ -111,7 +109,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
     );
   }
 
-  SharedSpaceDocumentState setSharedSpaceDocumentWorkGroupFolder(WorkGroupFolder newWorkGroupFolder) {
+  SharedSpaceDocumentState setSharedSpaceDocumentWorkGroupFolder(WorkGroupFolder? newWorkGroupFolder) {
     return SharedSpaceDocumentState(
       viewState,
       workGroupNodeList,

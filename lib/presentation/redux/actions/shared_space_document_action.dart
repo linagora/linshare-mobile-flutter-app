@@ -117,14 +117,14 @@ class ClearWorkGroupListSharedSpaceDocumentAction extends ActionOffline {
 
 @immutable
 class SharedSpaceDocumentSetWorkGroupFolderAction extends ActionOffline {
-  final WorkGroupFolder workGroupFolder;
+  final WorkGroupFolder? workGroupFolder;
 
   SharedSpaceDocumentSetWorkGroupFolderAction(this.workGroupFolder);
 }
 
 @immutable
 class SharedSpaceDocumentSetSyncOfflineModeAction extends ActionOffline {
-  final List<WorkGroupNode> workGroupNodes;
+  final List<WorkGroupNode?> workGroupNodes;
 
   SharedSpaceDocumentSetSyncOfflineModeAction(this.workGroupNodes);
 }
