@@ -440,12 +440,12 @@ class SharedSpaceRolesFailure extends FeatureFailure {
 }
 
 class SharedSpaceNodeViewState extends ViewState {
-  final WorkGroupNode workGroupNode;
+  final WorkGroupNode? workGroupNode;
 
   SharedSpaceNodeViewState(this.workGroupNode);
 
   @override
-  List<Object> get props => [workGroupNode];
+  List<Object> get props => [if(workGroupNode != null) workGroupNode!];
 }
 
 class SharedSpaceNodeFailure extends FeatureFailure {
