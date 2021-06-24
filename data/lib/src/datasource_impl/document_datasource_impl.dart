@@ -245,4 +245,55 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       });
     });
   }
+
+  @override
+  Future<String> downloadMakeOfflineDocument(
+      DocumentId documentId,
+      String documentName,
+      DownloadPreviewType downloadPreviewType,
+      Token permanentToken,
+      Uri baseUrl) {
+    var downloadUrl;
+    if (downloadPreviewType == DownloadPreviewType.original) {
+      downloadUrl = Endpoint.documents
+        .downloadServicePath(documentId.uuid)
+        .generateDownloadUrl(baseUrl);
+    } else {
+      downloadUrl = Endpoint.documents
+        .withPathParameter(documentId.uuid)
+        .withPathParameter(Endpoint.thumbnail)
+        .withPathParameter(downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
+        .generateEndpointPath();
+    }
+    return _linShareDownloadManager.downloadFile(
+      downloadUrl,
+      getApplicationSupportDirectory(),
+      documentName,
+      permanentToken);
+  }
+
+  @override
+  Future<Document> getDocumentOffline(DocumentId documentId) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> makeAvailableOffline(Document document, String localPath) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> disableAvailableOffline(DocumentId documentId, String localPath) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> updateDocumentOffline(Document document, String localPath) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Document>> getAllDocumentOffline() {
+    throw UnimplementedError();
+  }
 }

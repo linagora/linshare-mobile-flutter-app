@@ -31,6 +31,7 @@
 
 import 'package:data/src/datasource/document_datasource.dart';
 import 'package:data/src/datasource/file_upload_datasource.dart';
+import 'package:data/src/local/model/data_source_type.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
@@ -38,10 +39,10 @@ import 'package:domain/src/model/share/mailing_list_id.dart';
 import 'package:data/src/extensions/uri_extension.dart';
 
 class DocumentRepositoryImpl implements DocumentRepository {
-  final DocumentDataSource _documentDataSource;
+  final Map<DataSourceType, DocumentDataSource> _documentDataSources;
   final FileUploadDataSource _fileUploadDataSource;
 
-  DocumentRepositoryImpl(this._documentDataSource, this._fileUploadDataSource);
+  DocumentRepositoryImpl(this._documentDataSources, this._fileUploadDataSource);
 
   @override
   Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl) async {
@@ -54,51 +55,81 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<List<Document>> getAll() {
-    return _documentDataSource.getAll();
+    return _documentDataSources[DataSourceType.network]!.getAll();
   }
 
   @override
   Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl) {
-    return _documentDataSource.downloadDocuments(documentIds, token, baseUrl);
+    return _documentDataSources[DataSourceType.network]!.downloadDocuments(documentIds, token, baseUrl);
   }
 
   @override
   Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients) {
-    return _documentDataSource.share(documentIds, mailingListIds, recipients);
+    return _documentDataSources[DataSourceType.network]!.share(documentIds, mailingListIds, recipients);
   }
 
   @override
   Future<String> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken) {
-    return _documentDataSource.downloadDocumentIOS(document, token, baseUrl, cancelToken);
+    return _documentDataSources[DataSourceType.network]!.downloadDocumentIOS(document, token, baseUrl, cancelToken);
   }
 
   @override
   Future<Document> remove(DocumentId documentId) {
-    return _documentDataSource.remove(documentId);
+    return _documentDataSources[DataSourceType.network]!.remove(documentId);
   }
 
   @override
   Future<List<Document>> copyToMySpace(CopyRequest copyRequest) {
-    return _documentDataSource.copyToMySpace(copyRequest);
+    return _documentDataSources[DataSourceType.network]!.copyToMySpace(copyRequest);
   }
 
   @override
   Future<String> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken) {
-    return _documentDataSource.downloadPreviewDocument(document, downloadPreviewType, token, baseUrl, cancelToken);
+    return _documentDataSources[DataSourceType.network]!.downloadPreviewDocument(document, downloadPreviewType, token, baseUrl, cancelToken);
   }
 
   @override
   Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest) {
-    return _documentDataSource.rename(documentId, renameDocumentRequest);
+    return _documentDataSources[DataSourceType.network]!.rename(documentId, renameDocumentRequest);
   }
 
   @override
   Future<DocumentDetails> getDocument(DocumentId documentId) {
-    return _documentDataSource.getDocument(documentId);
+    return _documentDataSources[DataSourceType.network]!.getDocument(documentId);
   }
 
   @override
   Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request) {
-    return _documentDataSource.editDescription(documentId, request);
+    return _documentDataSources[DataSourceType.network]!.editDescription(documentId, request);
+  }
+
+  @override
+  Future<bool> makeAvailableOffline(Document document, String localPath) {
+    return _documentDataSources[DataSourceType.local]!.makeAvailableOffline(document, localPath);
+  }
+
+  @override
+  Future<Document?> getDocumentOffline(DocumentId documentId) {
+    return _documentDataSources[DataSourceType.local]!.getDocumentOffline(documentId);
+  }
+
+  @override
+  Future<bool> disableAvailableOffline(DocumentId documentId, String localPath) {
+    return _documentDataSources[DataSourceType.local]!.disableAvailableOffline(documentId, localPath);
+  }
+
+  @override
+  Future<List<Document>> getAllDocumentOffline() {
+    return _documentDataSources[DataSourceType.local]!.getAllDocumentOffline();
+  }
+
+  @override
+  Future<bool> updateDocumentOffline(Document document, String localPath) {
+    return _documentDataSources[DataSourceType.local]!.updateDocumentOffline(document, localPath);
+  }
+
+  @override
+  Future<String> downloadMakeOfflineDocument(DocumentId documentId, String documentName, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
+    return _documentDataSources[DataSourceType.network]!.downloadMakeOfflineDocument(documentId, documentName, downloadPreviewType, permanentToken, baseUrl);
   }
 }
