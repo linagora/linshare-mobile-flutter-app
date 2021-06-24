@@ -236,6 +236,7 @@ class WidgetModule {
         getIt.get<CopyMultipleFilesToSharedSpaceInteractor>(),
         getIt.get<RemoveMultipleSharedSpaceNodesInteractor>(),
         getIt.get<GetWorkGroupNodeDetailInteractor>(),
+        getIt.get<MakeAvailableOfflineSharedSpaceDocumentInteractor>(),
     ));
   }
 

@@ -34,6 +34,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
@@ -493,7 +494,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               : EdgeInsets.zero,
             key: Key('shared_space_document_list'),
             itemCount: workGroupNodes.length,
-            itemBuilder: (context, index) => _buildSharedSpaceDocumentListItem(context, workGroupNodes[index], selectMode))
+            itemBuilder: (context, index) => _buildSharedSpaceDocumentListItem(context, workGroupNodes[index], selectMode, index))
         : _buildEmptyListIndicator();
   }
 
@@ -513,16 +514,17 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       .build();
   }
 
-  Widget _buildSharedSpaceDocumentListItem(BuildContext context, SelectableElement<WorkGroupNode> node, SelectMode currentSelectMode) {
+  Widget _buildSharedSpaceDocumentListItem(BuildContext context, SelectableElement<WorkGroupNode> node, SelectMode currentSelectMode, int indexWorkGroupDocument) {
     switch (widget.sharedSpaceDocumentUIType) {
       case SharedSpaceDocumentUIType.destinationPicker:
         return _buildNodeItemDestinationPicker(context, node.element);
       default:
-        return _buildNodeItemNormal(context, node, currentSelectMode);
+        return _buildNodeItemNormal(context, node, currentSelectMode, indexWorkGroupDocument);
     }
   }
 
-  Widget _buildNodeItemNormal(BuildContext context, SelectableElement<WorkGroupNode> node, SelectMode currentSelectMode) {
+  Widget _buildNodeItemNormal(BuildContext context, SelectableElement<WorkGroupNode> node,
+      SelectMode currentSelectMode, int indexWorkGroupDocument) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -563,6 +565,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+                  _buildOfflineModeIcon(node.element),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
@@ -583,6 +586,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+                  _buildOfflineModeIcon(node.element),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
@@ -592,7 +596,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                     ))
                 ])),
             responsiveUtil: _responsiveUtils),
-      subtitle: (_responsiveUtils.isSmallScreen(context) || widget.sharedSpaceDocumentUIType == SharedSpaceDocumentUIType.destinationPicker)
+      subtitle: widget.sharedSpaceDocumentUIType == SharedSpaceDocumentUIType.destinationPicker
         ? Transform(
             transform: Matrix4.translationValues(-16, 0.0, 0.0),
             child: Text(
@@ -600,7 +604,20 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               maxLines: 1,
               style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)
             ))
-        : null,
+        : _responsiveUtils.isSmallScreen(context)
+          ? Transform(
+              transform: Matrix4.translationValues(-16, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text(
+                    AppLocalizations.of(context).item_last_modified(node.element.modificationDate.getMMMddyyyyFormatString()),
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor)),
+                  _buildOfflineModeIcon(node.element)
+                ],
+              ),
+            )
+          : null,
       trailing: currentSelectMode == SelectMode.ACTIVE
         ? Checkbox(
             value: node.selectMode == SelectMode.ACTIVE,
@@ -622,6 +639,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                     node.element,
                     _contextMenuDocumentActionTiles(context, node.element as WorkGroupDocument),
                     footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name) ? _removeWorkGroupNodeAction([node.element]) : SizedBox.shrink())),
+                    _contextMenuDocumentActionTiles(context, node.element, indexWorkGroupDocument),
+                    footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments.sharedSpaceNode.sharedSpaceRole.name) ? _removeWorkGroupNodeAction([node.element]) : SizedBox.shrink())),
       onTap: () {
         if (currentSelectMode == SelectMode.ACTIVE) {
           sharedSpaceDocumentViewModel.selectItem(node);
@@ -633,6 +652,35 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       },
       onLongPress: () => sharedSpaceDocumentViewModel.selectItem(node)
     );
+  }
+
+  Widget _buildOfflineModeIcon(WorkGroupNode workGroupNode) {
+
+    if (workGroupNode is WorkGroupDocument) {
+      switch (workGroupNode.syncOfflineState) {
+        case SyncOfflineState.waiting:
+          return Padding(
+            padding: EdgeInsets.only(left: 8),
+            child: SizedBox(
+                width: 16,
+                height: 16,
+                child: CupertinoActivityIndicator()
+            ));
+        case SyncOfflineState.completed:
+          return Padding(
+            padding: EdgeInsets.only(left: 8),
+            child: SvgPicture.asset(
+              imagePath.icAvailableOfflineEnabled,
+              width: 16,
+              height: 16,
+              fit: BoxFit.fill,
+            ));
+        default:
+          return SizedBox.shrink();
+      }
+    } else {
+      return SizedBox.shrink();
+    }
   }
 
   Widget _buildNodeItemDestinationPicker(BuildContext context, WorkGroupNode node) {
@@ -677,17 +725,33 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
     ];
   }
 
-  List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument) {
+  List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
     return [
       if (Platform.isIOS) _exportFileAction([workGroupDocument]),
       if (Platform.isAndroid) _downloadFilesAction([workGroupDocument]),
       _previewWorkGroupDocumentAction(workGroupDocument),
+      _makeAvailableOfflineSharedSpaceDocument(workGroupDocument, indexWorkGroupDocument),
       _copyToAction(context, [workGroupDocument]),
       _detailsAction(context, workGroupDocument),
       _manageVersionsAction(context, workGroupDocument),
       if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name)) _renameWorkGroupNodeAction(workGroupDocument),
       if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole?.name)) _duplicateAction(context, [workGroupDocument])
     ];
+  }
+
+  Widget _makeAvailableOfflineSharedSpaceDocument(WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('make_available_offline_shared_space_document_context_menu_action'),
+          SvgPicture.asset(workGroupDocument.isOfflineMode() ? imagePath.icAvailableOfflineEnabled : imagePath.icAvailableOffline, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).available_offline,
+          workGroupDocument)
+      .onActionClick((data) => {
+        if (data is WorkGroupDocument) {
+          if (!data.isOfflineMode()) {
+            sharedSpaceDocumentViewModel.makeAvailableOfflineSharedSpaceDocument(context, workGroupDocument, indexWorkGroupDocument)
+          }
+        }})
+      .build();
   }
 
   Widget _detailsAction(BuildContext context, WorkGroupNode workGroupNode) {

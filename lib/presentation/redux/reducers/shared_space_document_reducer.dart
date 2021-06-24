@@ -75,4 +75,6 @@ final sharedSpaceDocumentReducer = combineReducers<SharedSpaceDocumentState>([
       state.unSelectAllSharedSpaceDocument()),
   TypedReducer<SharedSpaceDocumentState, SharedSpaceDocumentSetWorkGroupFolderAction>((SharedSpaceDocumentState state, SharedSpaceDocumentSetWorkGroupFolderAction action) =>
       state.setSharedSpaceDocumentWorkGroupFolder(action.workGroupFolder)),
+  TypedReducer<SharedSpaceDocumentState, SharedSpaceDocumentSetSyncOfflineModeAction>((SharedSpaceDocumentState state, SharedSpaceDocumentSetSyncOfflineModeAction action) =>
+      state.setSharedSpaceDocument(newWorkGroupNodeList: action.workGroupNodes)),
 ]);

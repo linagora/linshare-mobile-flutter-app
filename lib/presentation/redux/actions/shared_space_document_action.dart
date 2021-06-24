@@ -121,3 +121,10 @@ class SharedSpaceDocumentSetWorkGroupFolderAction extends ActionOffline {
 
   SharedSpaceDocumentSetWorkGroupFolderAction(this.workGroupFolder);
 }
+
+@immutable
+class SharedSpaceDocumentSetSyncOfflineModeAction extends ActionOffline {
+  final List<WorkGroupNode> workGroupNodes;
+
+  SharedSpaceDocumentSetSyncOfflineModeAction(this.workGroupNodes);
+}
