@@ -318,6 +318,7 @@ class AppModule {
     getIt.registerFactory(() => AutoSyncAvailableOfflineMultipleDocumentInteractor(
         getIt<AutoSyncAvailableOfflineDocumentInteractor>()));
     getIt.registerFactory(() => EnableAvailableOfflineDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => GetWorkGroupNodeDetailInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
   void _provideSharePreference() {
