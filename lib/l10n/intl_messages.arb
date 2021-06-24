@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-05-26T12:10:40.612119",
+  "@@last_modified": "2021-06-25T02:07:23.082266",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -1420,6 +1420,26 @@
   },
   "restore": "Restore",
   "@restore": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "available_offline": "Available offline",
+  "@available_offline": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_will_be_made_available_for_offline_use": "The files will be made available for offline use.",
+  "@files_will_be_made_available_for_offline_use": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_will_no_longer_be_usable_without_be_network": "The files will no longer be usable without the network.",
+  "@files_will_no_longer_be_usable_without_be_network": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_cannot_be_switched_to_offline_mode": "This file cannot be switched to offline mode",
+  "@file_cannot_be_switched_to_offline_mode": {
     "type": "text",
     "placeholders": {}
   }

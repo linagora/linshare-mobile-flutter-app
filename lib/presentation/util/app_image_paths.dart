@@ -93,6 +93,8 @@ class AppImagePaths {
   String get icFaceId => _getImagePath('ic_face_id.svg');
   String get icTouchID => _getImagePath('ic_touch_id.svg');
   String get icDuplicate => _getImagePath('ic_duplicate.svg');
+  String get icAvailableOffline => _getImagePath('ic_available_offline.svg');
+  String get icAvailableOfflineEnabled => _getImagePath('ic_available_offline_enabled.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;
