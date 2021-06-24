@@ -90,7 +90,8 @@ class LoginViewModel extends BaseViewModel {
         AuthenticationSSOConfig.redirectUrl,
         AuthenticationSSOConfig.ssoConfiguration,
         AuthenticationSSOConfig.scopes,
-        AuthenticationSSOConfig.preferEphemeralSession,
+        AuthenticationSSOConfig.preferEphemeralSessionIOS,
+        AuthenticationSSOConfig.promptValues,
         AuthenticationSSOConfig.allowInsecureConnection,
         AuthenticationSSOConfig.baseUrlSupported));
   }
@@ -141,7 +142,8 @@ class LoginViewModel extends BaseViewModel {
       String redirectUrl,
       SSOConfiguration configuration,
       List<String> scopes,
-      bool preferEphemeralSession,
+      bool preferEphemeralSessionIOS,
+      List<String>? promptValues,
       bool allowInsecureConnections,
       String baseUrlSupported) {
     return (Store<AppState> store) async {
@@ -152,7 +154,8 @@ class LoginViewModel extends BaseViewModel {
             redirectUrl,
             configuration,
             scopes,
-            preferEphemeralSession,
+            preferEphemeralSessionIOS,
+            promptValues,
             allowInsecureConnections)
           .then((result) => result.fold(
             (failure) {
