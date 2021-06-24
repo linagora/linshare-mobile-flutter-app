@@ -296,7 +296,9 @@ void main() {
       await _sharedSpaceDataSourceImpl.getWorkGroupNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
-      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+      ).catchError((error) {
+        expect(error, isA<WorkGroupNodeNotFoundException>());
+      });
     });
 
     test('GetWorkGroupNode With hasTreePath is true Should Return Success Node', () async {
@@ -317,8 +319,8 @@ void main() {
 
     test('GetWorkGroupNode With hasTreePath is true  Should Throw Exception When Get Failed', () async {
       final error = DioError(
-        type: DioErrorType.RESPONSE,
-        response: Response(statusCode: 404)
+        type: DioErrorType.response,
+        response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
 
       when(_linShareHttpClient.getWorkGroupNode(
@@ -331,7 +333,9 @@ void main() {
         workGroupFolderDto.sharedSpaceId,
         workGroupFolderDto.workGroupNodeId,
         hasTreePath: true
-      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+      ).catchError((error) {
+        expect(error, isA<WorkGroupNodeNotFoundException>());
+      });
     });
   });
 }

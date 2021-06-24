@@ -37,18 +37,18 @@ extension WorkGroupDocumentExtension on WorkGroupDocument {
     return WorkGroupNodeCache(
         workGroupNodeId,
         sharedSpaceId,
-        parentWorkGroupNodeId,
+        parentWorkGroupNodeId ?? WorkGroupNodeId(''),
         creationDate,
         modificationDate,
         name,
         type,
         description,
-        lastAuthor != null ? lastAuthor.name : null,
-        lastAuthor != null ? lastAuthor.mail : null,
-        lastAuthor != null ? lastAuthor.firstName : null,
-        lastAuthor != null ? lastAuthor.lastName : null,
-        lastAuthor != null ? lastAuthor.accountId : null,
-        lastAuthor != null ? lastAuthor.accountType : null,
+        lastAuthor.name,
+        lastAuthor.mail,
+        lastAuthor.firstName,
+        lastAuthor.lastName,
+        lastAuthor.accountId,
+        lastAuthor.accountType,
         size,
         mediaType,
         hasThumbnail,
@@ -59,7 +59,7 @@ extension WorkGroupDocumentExtension on WorkGroupDocument {
     );
   }
 
-  WorkGroupDocument toSyncOfflineWorkGroupDocument({WorkGroupNodeId parentId, String localPath, SyncOfflineState syncOfflineState}) {
+  WorkGroupDocument toSyncOfflineWorkGroupDocument({WorkGroupNodeId? parentId, String? localPath, SyncOfflineState? syncOfflineState}) {
     return WorkGroupDocument(
         workGroupNodeId,
         parentId,
@@ -76,8 +76,8 @@ extension WorkGroupDocumentExtension on WorkGroupDocument {
         uploadDate,
         hasRevision,
         sha256sum,
-        localPath: localPath,
-        syncOfflineState: syncOfflineState
+        localPath: localPath ?? '',
+        syncOfflineState: syncOfflineState ?? SyncOfflineState.none
     );
   }
 }

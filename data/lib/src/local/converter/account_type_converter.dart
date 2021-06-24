@@ -32,22 +32,22 @@
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class AccountTypeConverter implements JsonConverter<AccountType, String> {
+class AccountTypeConverter implements JsonConverter<AccountType?, String?> {
   const AccountTypeConverter();
 
   @override
-  AccountType fromJson(String json) {
+  AccountType? fromJson(String? json) {
     try {
-      return json.toAccountType();
+      return json != null ? json.toAccountType() : null;
     } catch (_) {
       return null;
     }
   }
 
   @override
-  String toJson(AccountType object) {
+  String? toJson(AccountType? object) {
     try {
-      return object.value;
+      return object != null ? object.value : null;
     } catch (_) {
       return null;
     }

@@ -46,18 +46,15 @@ class DatabaseClient {
     return _database ?? await _initDatabase();
   Database _database;
   Batch _batch;
+  Database? _database;
+  Batch? _batch;
 
   Future<Database> get database async {
-    if (_database != null) return _database;
-    _database = await _initDatabase();
-    return _database;
+    return _database ?? await _initDatabase();
   }
 
   Future<Batch> get batch async {
-    if (_batch != null) return _batch;
-    final db = await database;
-    _batch = db.batch();
-    return _batch;
+    return _batch ?? (await database).batch();
   }
 
   Future<Database> _initDatabase() async {
@@ -127,7 +124,9 @@ class DatabaseClient {
   Future<bool> deleteLocalFile(String localPath) async {
     final fileSaved = File(localPath);
     final fileExist = await fileSaved.exists();
-    return fileExist ? await fileSaved.delete() : true;
+    if (fileExist) {
+      fileSaved.deleteSync();
+    }
   }
 
   Future<List<Map<String, dynamic>>> getListDataWithCondition(String tableName, String condition, List<dynamic> values) async {
