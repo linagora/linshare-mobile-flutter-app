@@ -17,3 +17,7 @@ class MockLinShareDownloadManager extends Mock implements LinShareDownloadManage
 class MockLocalBiometricService extends Mock implements LocalBiometricService {}
 
 class MockBiometricExceptionThrower extends Mock implements BiometricExceptionThrower {}
+
+class MockDocumentDatabaseManager extends Mock implements DocumentDatabaseManager {}
+
+class MockDatabaseClient extends Mock implements DatabaseClient {}

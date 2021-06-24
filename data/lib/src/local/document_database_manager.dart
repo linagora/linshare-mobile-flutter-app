@@ -29,46 +29,51 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
-
-import 'package:dio/dio.dart';
+import 'package:data/data.dart';
+import 'package:data/src/local/config/document_table.dart';
 import 'package:domain/domain.dart';
 
-abstract class DocumentDataSource {
-  Future<List<Document>> getAll();
+class DocumentDatabaseManager implements LinShareDatabaseManager<Document> {
+  final DatabaseClient _databaseClient;
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
+  DocumentDatabaseManager(this._databaseClient);
 
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
+  @override
+  Future<bool> deleteData(String id, String localPath) async {
+    await _databaseClient.deleteLocalFile(localPath);
+    final res = await _databaseClient.deleteData(DocumentTable.TABLE_NAME, DocumentTable.DOCUMENT_ID, id);
+    return res > 0 ? true : false;
+  }
 
-  Future<String> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
+  @override
+  Future<Document?> getData(String id) async {
+    final res = await _databaseClient.getData(DocumentTable.TABLE_NAME, DocumentTable.DOCUMENT_ID, id);
+    return res.isNotEmpty ? DocumentCache.fromJson(res.first).toDocument() : null;
+  }
 
-  Future<Document> remove(DocumentId documentId);
+  @override
+  Future<List<Document>> getListData() async {
+    final res = await _databaseClient.getListData(DocumentTable.TABLE_NAME);
+    return res.isNotEmpty
+      ? res.map((mapObject) => DocumentCache.fromJson(mapObject).toDocument()).toList()
+      : [];
+  }
 
-  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest);
+  @override
+  Future<bool> insertData(Document document, String localPath) async {
+    final newDocument = document.toSyncOfflineDocument(localPath: localPath);
+    final res = await _databaseClient.insertData(DocumentTable.TABLE_NAME, newDocument.toDocumentCache().toJson());
+    return res > 0 ? true : false;
+  }
 
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
-
-  Future<String> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<DocumentDetails> getDocument(DocumentId documentId);
-
-  Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request);
-
-  Future<String> downloadMakeOfflineDocument(
-    DocumentId documentId,
-    String documentName,
-    DownloadPreviewType downloadPreviewType,
-    Token permanentToken,
-    Uri baseUrl);
-
-  Future<Document?> getDocumentOffline(DocumentId documentId);
-
-  Future<bool> makeAvailableOffline(Document document, String localPath);
-
-  Future<bool> disableAvailableOffline(DocumentId documentId, String localPath);
-
-  Future<bool> updateDocumentOffline(Document document, String localPath);
-
-  Future<List<Document>> getAllDocumentOffline();
+  @override
+  Future<bool> updateData(Document document, String localPath) async {
+    final newDocument = document.toSyncOfflineDocument(localPath: localPath);
+    final res = await _databaseClient.updateData(
+      DocumentTable.TABLE_NAME,
+      DocumentTable.DOCUMENT_ID,
+      newDocument.documentId.uuid,
+      newDocument.toDocumentCache().toJson());
+    return res > 0 ? true : false;
+  }
 }

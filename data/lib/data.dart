@@ -30,6 +30,7 @@ export 'src/datasource_impl/sort_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_member_datasource_impl.dart';
 export 'src/datasource_impl/shared_space_activities_datasource_impl.dart';
 export 'src/datasource_impl/biometric_datasource_impl.dart';
+export 'src/datasource_impl/local_document_datasource_impl.dart';
 
 // config
 export 'src/network/config/dynamic_url_interceptors.dart';
@@ -41,6 +42,13 @@ export 'src/network/dio_client.dart';
 export 'src/network/linshare_http_client.dart';
 export 'src/network/remote_exception_thrower.dart';
 export 'src/network/linshare_download_manager.dart';
+export 'src/network/config/endpoint.dart';
+
+// local
+export 'src/local/config/database_config.dart';
+export 'src/local/database_client.dart';
+export 'src/local/linshare_database_manager.dart';
+export 'src/local/document_database_manager.dart';
 
 // model
 export 'src/network/model/response/document_response.dart';
@@ -72,6 +80,9 @@ export 'src/network/model/share/received_share_id_dto.dart';
 export 'src/network/model/generic_user_dto.dart';
 export 'src/network/model/request/rename_work_group_body_request.dart';
 export 'src/network/model/sharedspace/versioning_parameter_dto.dart';
+export 'src/network/model/share/share_dto.dart';
+export 'src/local/model/document_cache.dart';
+export 'src/local/model/data_source_type.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
@@ -101,3 +112,4 @@ export 'src/exception/biometric_exception_thrower.dart';
 // extension
 export 'src/extensions/biometric_type_extension.dart';
 export 'src/extensions/platform_exception_extension.dart';
+export 'src/extensions/document_extension.dart';
