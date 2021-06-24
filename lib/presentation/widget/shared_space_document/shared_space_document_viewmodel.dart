@@ -100,6 +100,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final CopyMultipleFilesToMySpaceInteractor _copyMultipleToMySpaceInteractor;
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
+  final GetWorkGroupNodeDetailInteractor _getWorkGroupNodeDetailInteractor;
 
   late StreamSubscription _storeStreamSubscription;
 
@@ -128,6 +129,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     this._copyMultipleToMySpaceInteractor,
     this._copyMultipleFilesToSharedSpaceInteractor,
     this._removeMultipleSharedSpaceNodesInteractor,
+    this._getWorkGroupNodeDetailInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold((failure) => null, (success) {
@@ -182,6 +184,10 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
       });
 
       store.dispatch(_sortFilesAction(getSorter()));
+
+      if (_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace) {
+        getWorkGroupNodeDetail();
+      }
     }));
   }
 
@@ -215,6 +221,10 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
           }));
 
       store.dispatch(_sortFilesAction(getSorter()));
+
+      if (_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace) {
+        getWorkGroupNodeDetail();
+      }
     }));
   }
 
@@ -871,6 +881,33 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     }
 
     store.dispatch(_copyToWorkgroupAction(workGroupNodes, sharedSpaceDocumentArguments));
+  }
+
+  WorkGroupFolder getWorkGroupFolder() {
+    return _documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
+      ? getSharedSpaceDocumentState().workGroupFolder
+      : null;
+  }
+
+  void getWorkGroupNodeDetail() {
+    final sharedSpaceId = getSharedSpaceId(args: _documentArguments);
+    final workGroupNodeId = getWorkGroupNodeId(args: _documentArguments);
+    if (workGroupNodeId != null) {
+      store.dispatch(_getWorkGroupNodeDetailAction(sharedSpaceId, workGroupNodeId));
+    }
+  }
+
+  OnlineThunkAction _getWorkGroupNodeDetailAction(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _getWorkGroupNodeDetailInteractor
+        .execute(sharedSpaceId, workGroupNodeId)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(null)),
+          (success) => success is GetWorkGroupNodeDetailViewState
+            ? store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(success.workGroupNode))
+            : store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(null))
+      ));
+    });
   }
 
   @override
