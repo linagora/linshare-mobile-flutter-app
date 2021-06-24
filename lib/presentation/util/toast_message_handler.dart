@@ -101,6 +101,10 @@ class ToastMessageHandler {
       } else if (failure is DuplicateMultipleToMySpaceAllFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_duplicated);
         _cleanMySpaceViewState();
+      } else if (failure is MakeAvailableOfflineDocumentFailure || failure is CannotAvailableOfflineDocument
+          || failure is DisableAvailableOfflineDocumentFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).file_cannot_be_switched_to_offline_mode);
+        _cleanMySpaceViewState();
       }
     }, (success) {
       if (success is CopyToSharedSpaceViewState || success is CopyMultipleFilesToSharedSpaceAllSuccessViewState) {
@@ -128,6 +132,12 @@ class ToastMessageHandler {
         _cleanMySpaceViewState();
       } else if (success is DuplicateMultipleToMySpaceHasSomeFilesViewState) {
         appToast.showToast(AppLocalizations.of(context).some_files_could_not_be_duplicated);
+        _cleanMySpaceViewState();
+      } else if (success is MakeAvailableOfflineDocumentViewState) {
+        appToast.showToast(AppLocalizations.of(context).files_will_be_made_available_for_offline_use);
+        _cleanMySpaceViewState();
+      } else if (success is DisableAvailableOfflineDocumentViewState) {
+        appToast.showToast(AppLocalizations.of(context).files_will_no_longer_be_usable_without_be_network);
         _cleanMySpaceViewState();
       }
     });
