@@ -114,3 +114,10 @@ class SharedSpaceDocumentSortWorkGroupNodeAction extends ActionOffline {
 class ClearWorkGroupListSharedSpaceDocumentAction extends ActionOffline {
   ClearWorkGroupListSharedSpaceDocumentAction();
 }
+
+@immutable
+class SharedSpaceDocumentSetWorkGroupFolderAction extends ActionOffline {
+  final WorkGroupFolder workGroupFolder;
+
+  SharedSpaceDocumentSetWorkGroupFolderAction(this.workGroupFolder);
+}
