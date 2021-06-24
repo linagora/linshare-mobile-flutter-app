@@ -31,3 +31,14 @@
 //
 
 enum AccountType { INTERNAL }
+
+extension AccountTypeExtension on AccountType {
+  String get value {
+    switch (this) {
+      case AccountType.INTERNAL:
+        return 'INTERNAL';
+      default:
+        return toString();
+    }
+  }
+}
