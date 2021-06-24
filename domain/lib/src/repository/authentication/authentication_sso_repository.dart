@@ -38,7 +38,8 @@ abstract class AuthenticationSSORepository {
       String redirectUrl,
       SSOConfiguration configuration,
       List<String> scopes,
-      bool preferEphemeralSession,
+      bool preferEphemeralSessionIOS,
+      List<String>? promptValues,
       bool allowInsecureConnections);
 
   Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenSSO tokenSSO, {OTPCode? otpCode});

@@ -44,9 +44,17 @@ class AuthenticationSSORepositoryImpl extends AuthenticationSSORepository {
       String redirectUrl,
       SSOConfiguration configuration,
       List<String> scopes,
-      bool preferEphemeralSession,
+      bool preferEphemeralSessionIOS,
+      List<String>? promptValues,
       bool allowInsecureConnections) {
-      return authenticationSSODataSource.getTokenSSO(clientId, redirectUrl, configuration, scopes, preferEphemeralSession, allowInsecureConnections);
+    return authenticationSSODataSource.getTokenSSO(
+        clientId,
+        redirectUrl,
+        configuration,
+        scopes,
+        preferEphemeralSessionIOS,
+        promptValues,
+        allowInsecureConnections);
   }
 
   @override
