@@ -101,6 +101,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
   final GetWorkGroupNodeDetailInteractor _getWorkGroupNodeDetailInteractor;
+  final MakeAvailableOfflineSharedSpaceDocumentInteractor _makeAvailableOfflineSharedSpaceDocumentInteractor;
 
   late StreamSubscription _storeStreamSubscription;
 
@@ -130,6 +131,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     this._copyMultipleFilesToSharedSpaceInteractor,
     this._removeMultipleSharedSpaceNodesInteractor,
     this._getWorkGroupNodeDetailInteractor,
+    this._makeAvailableOfflineSharedSpaceDocumentInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold((failure) => null, (success) {
@@ -907,6 +909,60 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
             ? store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(success.workGroupNode))
             : store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(null))
       ));
+    });
+  }
+
+  List<TreeNode> _getListTreeNodeInWorkGroupNodeCurrent() => getWorkGroupFolder().listTreeNode.length == 1
+    ? [getWorkGroupNode().toTreeNode()]
+    : getWorkGroupFolder().listTreeNode;
+
+  void makeAvailableOfflineSharedSpaceDocument(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
+    _appNavigation.popBack();
+
+    final listTreeNode = getWorkGroupFolder() != null ? _getListTreeNodeInWorkGroupNodeCurrent() : <TreeNode>[];
+
+    final newWorkGroupDocument = workGroupDocument.toSyncOfflineWorkGroupDocument(
+      parentId: getWorkGroupNodeId(args: _documentArguments),
+      syncOfflineState: SyncOfflineState.waiting);
+
+    _workGroupNodesList[indexWorkGroupDocument] = newWorkGroupDocument;
+    store.dispatch(SharedSpaceDocumentSetSyncOfflineModeAction(_workGroupNodesList));
+
+    store.dispatch(_makeAvailableOfflineSharedSpaceDocumentAction(
+      getSharedSpaceNodeNested(),
+      newWorkGroupDocument,
+      indexWorkGroupDocument,
+      treeNodes: listTreeNode));
+  }
+
+  OnlineThunkAction _makeAvailableOfflineSharedSpaceDocumentAction(
+      SharedSpaceNodeNested sharedSpaceNodeNested,
+      WorkGroupDocument workGroupDocument,
+      int indexWorkGroupDocument,
+      {List<TreeNode> treeNodes}) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _makeAvailableOfflineSharedSpaceDocumentInteractor
+        .execute(sharedSpaceNodeNested, workGroupDocument, treeNodes: treeNodes)
+        .then((result) => result.fold(
+          (failure) {
+            _workGroupNodesList[indexWorkGroupDocument] = workGroupDocument.toSyncOfflineWorkGroupDocument(syncOfflineState: SyncOfflineState.none);
+            store.dispatch(SharedSpaceDocumentSetSyncOfflineModeAction(_workGroupNodesList));
+
+            store.dispatch(SharedSpaceDocumentAction(Left(failure)));
+          },
+          (success) {
+            if (success is MakeAvailableOfflineSharedSpaceDocumentViewState && success.result == OfflineModeActionResult.successful) {
+              _workGroupNodesList[indexWorkGroupDocument] = workGroupDocument.toSyncOfflineWorkGroupDocument(localPath: success.localPath, syncOfflineState: SyncOfflineState.completed);
+              store.dispatch(SharedSpaceDocumentSetSyncOfflineModeAction(_workGroupNodesList));
+
+              store.dispatch(SharedSpaceDocumentAction(Right(success)));
+            } else {
+              _workGroupNodesList[indexWorkGroupDocument] = workGroupDocument.toSyncOfflineWorkGroupDocument(syncOfflineState: SyncOfflineState.none);
+              store.dispatch(SharedSpaceDocumentSetSyncOfflineModeAction(_workGroupNodesList));
+
+              store.dispatch(SharedSpaceDocumentAction(Left(CannotAvailableOfflineSharedSpaceDocument())));
+            }
+          }));
     });
   }
 
