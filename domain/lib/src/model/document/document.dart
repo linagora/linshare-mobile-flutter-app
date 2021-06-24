@@ -48,6 +48,8 @@ class Document extends Equatable {
   final bool hasThumbnail;
   final int shared;
   final MediaType mediaType;
+  final String? localPath;
+  final SyncOfflineState? syncOfflineState;
 
   Document(
       this.documentId,
@@ -61,22 +63,31 @@ class Document extends Equatable {
       this.sha256sum,
       this.hasThumbnail,
       this.shared,
-      this.mediaType);
+      this.mediaType,
+      {
+        this.localPath,
+        this.syncOfflineState
+      }
+  );
 
   bool isShared() => shared != 0;
 
+  bool isOfflineMode() => localPath != null ? localPath!.isNotEmpty : false;
+
   @override
-  List<Object> get props => [
-        documentId,
-        description,
-        creationDate,
-        modificationDate,
-        expirationDate,
-        ciphered,
-        name,
-        size,
-        sha256sum,
-        hasThumbnail,
-        shared
-      ];
+  List<Object?> get props => [
+    documentId,
+    description,
+    creationDate,
+    modificationDate,
+    expirationDate,
+    ciphered,
+    name,
+    size,
+    sha256sum,
+    hasThumbnail,
+    mediaType,
+    localPath,
+    syncOfflineState
+  ];
 }
