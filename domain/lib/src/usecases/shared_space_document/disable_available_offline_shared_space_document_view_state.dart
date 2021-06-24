@@ -31,19 +31,20 @@
 
 import 'package:domain/domain.dart';
 
-class GetWorkGroupNodeDetailViewState extends ViewState {
-  final WorkGroupNode? workGroupNode;
+class DisableAvailableOfflineSharedSpaceDocumentViewState extends ViewState {
 
-  GetWorkGroupNodeDetailViewState(this.workGroupNode);
+  final OfflineModeActionResult result;
+
+  DisableAvailableOfflineSharedSpaceDocumentViewState(this.result);
 
   @override
-  List<Object> get props => [if(workGroupNode != null) workGroupNode!];
+  List<Object> get props => [result];
 }
 
-class GetWorkGroupNodeDetailFailure extends FeatureFailure {
+class DisableAvailableOfflineSharedSpaceDocumentFailure extends FeatureFailure {
   final exception;
 
-  GetWorkGroupNodeDetailFailure(this.exception);
+  DisableAvailableOfflineSharedSpaceDocumentFailure(this.exception);
 
   @override
   List<Object> get props => [exception];
