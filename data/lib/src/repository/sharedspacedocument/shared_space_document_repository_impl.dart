@@ -120,7 +120,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<WorkGroupNode> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId) {
-    return _sharedSpaceDocumentDataSource.getWorkGroupNode(sharedSpaceId, workGroupNodeId);
+  Future<WorkGroupNode> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath}) {
+    return _sharedSpaceDocumentDataSource.getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: hasTreePath);
   }
 }
