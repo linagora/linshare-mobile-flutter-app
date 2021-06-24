@@ -33,6 +33,8 @@ import 'dart:io';
 
 import 'package:data/src/local/config/database_config.dart';
 import 'package:data/src/local/config/document_table.dart';
+import 'package:data/src/local/config/shared_space_table.dart';
+import 'package:data/src/local/config/work_group_node_table.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -42,6 +44,20 @@ class DatabaseClient {
 
   Future<Database> get database async {
     return _database ?? await _initDatabase();
+  Database _database;
+  Batch _batch;
+
+  Future<Database> get database async {
+    if (_database != null) return _database;
+    _database = await _initDatabase();
+    return _database;
+  }
+
+  Future<Batch> get batch async {
+    if (_batch != null) return _batch;
+    final db = await database;
+    _batch = db.batch();
+    return _batch;
   }
 
   Future<Database> _initDatabase() async {
@@ -108,5 +124,25 @@ class DatabaseClient {
     if (fileExist) {
       await fileSaved.delete();
     }
+  Future<bool> deleteLocalFile(String localPath) async {
+    final fileSaved = File(localPath);
+    final fileExist = await fileSaved.exists();
+    return fileExist ? await fileSaved.delete() : true;
+  }
+
+  Future<List<Map<String, dynamic>>> getListDataWithCondition(String tableName, String condition, List<dynamic> values) async {
+    final db = await database;
+    return await db.query(
+        tableName,
+        where: condition,
+        whereArgs: values);
+  }
+
+  Future insertMultipleData(String tableName, List<Map<String, dynamic>> mapObjects) async {
+    final bat = await batch;
+    mapObjects.forEach((element) {
+      bat.insert(tableName, element);
+    });
+    await bat.commit(noResult: true);
   }
 }

@@ -283,4 +283,39 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
       });
     });
   }
+
+  @override
+  Future<String> downloadMakeOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, String workGroupNodeName, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
+    var downloadUrl;
+    if (downloadPreviewType == DownloadPreviewType.original) {
+      downloadUrl = Endpoint.sharedSpaces
+        .withPathParameter(sharedSpaceId.uuid)
+        .withPathParameter('nodes')
+        .downloadServicePath(workGroupNodeId.uuid)
+        .generateDownloadUrl(baseUrl);
+    } else {
+      downloadUrl = Endpoint.sharedSpaces
+        .withPathParameter(sharedSpaceId.uuid)
+        .withPathParameter('nodes')
+        .withPathParameter(workGroupNodeId.uuid)
+        .withPathParameter(Endpoint.thumbnail)
+        .withPathParameter(downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
+        .generateEndpointPath();
+    }
+    return _linShareDownloadManager.downloadFile(
+      downloadUrl,
+      getApplicationSupportDirectory(),
+      workGroupNodeName,
+      permanentToken);
+  }
+
+  @override
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode> treeNodes}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<WorkGroupDocument> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId) {
+    throw UnimplementedError();
+  }
 }
