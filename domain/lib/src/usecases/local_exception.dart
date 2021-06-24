@@ -32,6 +32,8 @@
 import 'package:equatable/equatable.dart';
 
 abstract class LocalException extends Equatable implements Exception {
+  static const String SQLiteDatabaseException = 'SQLiteDatabaseException';
+
   final String message;
 
   LocalException(this.message);
@@ -39,6 +41,14 @@ abstract class LocalException extends Equatable implements Exception {
 
 class LocalUnknownError extends LocalException {
   LocalUnknownError(String message) : super(message);
+
+  @override
+  List<Object> get props => [];
+}
+
+
+class SQLiteDatabaseException extends LocalException {
+  SQLiteDatabaseException() : super(LocalException.SQLiteDatabaseException);
 
   @override
   List<Object> get props => [];
