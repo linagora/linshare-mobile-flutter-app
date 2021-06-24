@@ -43,14 +43,14 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   LocalSharedSpaceDocumentDataSourceImpl(this._sharedSpaceDocumentDatabaseManager);
 
   @override
-  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode> treeNodes}) {
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
     return Future.sync(() async {
       if (localPath.isEmpty) {
         return false;
       }
       await Future.wait([
-        _sharedSpaceDocumentDatabaseManager.insertSharedSpace(sharedSpaceNodeNested),
-        if (treeNodes != null && treeNodes.isNotEmpty) _sharedSpaceDocumentDatabaseManager.insertListTreeNode(sharedSpaceNodeNested.sharedSpaceId, treeNodes),
+        if (sharedSpaceNodeNested != null) _sharedSpaceDocumentDatabaseManager.insertSharedSpace(sharedSpaceNodeNested),
+        if (sharedSpaceNodeNested != null && treeNodes != null && treeNodes.isNotEmpty) _sharedSpaceDocumentDatabaseManager.insertListTreeNode(sharedSpaceNodeNested.sharedSpaceId, treeNodes),
       ]);
       return await _sharedSpaceDocumentDatabaseManager.insertData(workGroupDocument, localPath);
     }).catchError((error) {
@@ -63,7 +63,7 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   }
 
   @override
-  Future<WorkGroupDocument> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId) {
+  Future<WorkGroupDocument?> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId) {
     return Future.sync(() async {
       return await _sharedSpaceDocumentDatabaseManager.getData(workGroupNodeId.uuid);
     }).catchError((error) {
@@ -76,7 +76,21 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   }
 
   @override
-  Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId destinationParentNodeId}) {
+  Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath) {
+    return Future.sync(() async {
+      final result = await _sharedSpaceDocumentDatabaseManager.deleteData(workGroupNodeId.uuid, localPath);
+      final listNodeBySharedSpaceId = await _sharedSpaceDocumentDatabaseManager.getListWorkGroupCacheBySharedSpaceID(sharedSpaceId);
+      if (listNodeBySharedSpaceId.isEmpty) {
+        await _sharedSpaceDocumentDatabaseManager.deleteSharedSpace(sharedSpaceId);
+      }
+      return result;
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
+
+  @override
+  Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId? destinationParentNodeId}) {
     // TODO: implement copyToSharedSpace
     throw UnimplementedError();
   }
@@ -112,13 +126,13 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   }
 
   @override
-  Future<List<WorkGroupNode>> getAllChildNodes(SharedSpaceId sharedSpaceId, {WorkGroupNodeId parentNodeId}) {
+  Future<List<WorkGroupNode>> getAllChildNodes(SharedSpaceId sharedSpaceId, {WorkGroupNodeId? parentNodeId}) {
     // TODO: implement getAllChildNodes
     throw UnimplementedError();
   }
 
   @override
-  Future<WorkGroupNode> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath}) {
+  Future<WorkGroupNode?> getWorkGroupNode(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) {
     // TODO: implement getWorkGroupNode
     throw UnimplementedError();
   }

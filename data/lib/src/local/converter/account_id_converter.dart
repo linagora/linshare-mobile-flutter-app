@@ -33,22 +33,22 @@
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class AccountIdConverter implements JsonConverter<AccountId, String> {
+class AccountIdConverter implements JsonConverter<AccountId?, String?> {
   const AccountIdConverter();
 
   @override
-  AccountId fromJson(String json) {
+  AccountId? fromJson(String? json) {
     try {
-      return AccountId(json);
+      return json != null ? AccountId(json) : null;
     } catch (_) {
       return null;
     }
   }
 
   @override
-  String toJson(AccountId object) {
+  String? toJson(AccountId? object) {
     try {
-      return object.uuid;
+      return object != null ? object.uuid : null;
     } catch (_) {
       return null;
     }
