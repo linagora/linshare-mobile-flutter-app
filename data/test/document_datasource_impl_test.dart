@@ -46,6 +46,7 @@ void main() {
   renameDocumentTest();
   getDocumentTest();
   editDescriptionDocumentTest();
+  makeAvailableOfflineDocumentTest();
 }
 
 void getAllDocumentTest() {
@@ -70,7 +71,7 @@ void getAllDocumentTest() {
           .thenAnswer((_) async => [documentResponse1, documentResponse2, documentResponse3]);
 
       final result = await _documentDataSourceImpl.getAll();
-      expect(result, [document1, document2, document3]);
+      expect(result, [documentResponse1.toDocument(), documentResponse2.toDocument(), documentResponse3.toDocument()]);
     });
 
     test('getAllDocument should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
@@ -173,7 +174,7 @@ void shareDocumentTest() {
           .thenAnswer((_) async => [shareDto1]);
 
       final result = await _documentDataSourceImpl.share([document1.documentId], [mailingListId1], [genericUser1]);
-      expect(result, [share1]);
+      expect(result, [shareDto1.toShare()]);
     });
 
     test('shareDocument should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
@@ -288,7 +289,7 @@ void removeDocumentTest() {
           .thenAnswer((_) async => documentResponse1);
 
       final result = await _documentDataSourceImpl.remove(document1.documentId);
-      expect(result, document1);
+      expect(result, documentResponse1.toDocument());
     });
 
     test('remove document should throw DataNotFound when linShareHttpClient response error with 404', () async {
@@ -311,7 +312,7 @@ void removeDocumentTest() {
           .thenAnswer((_) async => [documentResponse1]);
 
       final result = await _documentDataSourceImpl.copyToMySpace(copyRequest);
-      expect(result, [document1]);
+      expect(result, [documentResponse1.toDocument()]);
     });
 
     test('copy to my sapce throw no document found when linShareHttpClient response error with 404', () async {
@@ -353,7 +354,7 @@ void renameDocumentTest() {
           .thenAnswer((_) async => documentResponse1);
 
       final result = await _documentDataSourceImpl.rename(document1.documentId, RenameDocumentRequest(document1.name));
-      expect(result, document1);
+      expect(result, documentResponse1.toDocument());
     });
 
     test('rename document should throw DataNotFound when linShareHttpClient response error with 404', () async {
@@ -394,7 +395,7 @@ void getDocumentTest() {
           .thenAnswer((_) async => documentDetailsResponse1);
 
       final result = await _documentDataSourceImpl.getDocument(documentDetailsResponse1.documentId);
-      expect(result, documentDetails1);
+      expect(result, documentDetailsResponse1.toDocumentDetails());
     });
 
     test('get document should throw DataNotFound when linShareHttpClient response error with 404', () async {
@@ -433,7 +434,7 @@ void editDescriptionDocumentTest() {
         .thenAnswer((_) async => documentResponse1);
 
       final result = await _documentDataSourceImpl.editDescription(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description'));
-      expect(result, document1);
+      expect(result, documentResponse1.toDocument());
     });
 
     test('edit description document should throw DataNotFound when linShareHttpClient response error with 404', () async {
@@ -447,6 +448,26 @@ void editDescriptionDocumentTest() {
 
       await _documentDataSourceImpl.editDescription(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description'))
           .catchError((error) => expect(error, isA<DocumentNotFound>()));
+    });
+  });
+}
+
+void makeAvailableOfflineDocumentTest() {
+  group('make available offline document test', () {
+    late LocalDocumentDataSourceImpl _localDocumentDataSourceImpl;
+    late MockDocumentDatabaseManager _documentDatabaseManager;
+
+    setUp(() {
+      _documentDatabaseManager = MockDocumentDatabaseManager();
+      _localDocumentDataSourceImpl = LocalDocumentDataSourceImpl(_documentDatabaseManager);
+    });
+
+    test('make available offline document should return success with valid data', () async {
+      when(_documentDatabaseManager.insertData(document1, '')).thenAnswer((_) async => true);
+
+      final result = await _localDocumentDataSourceImpl.makeAvailableOffline(document1, '');
+
+      expect(result, true);
     });
   });
 }
