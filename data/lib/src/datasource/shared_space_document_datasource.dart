@@ -83,5 +83,6 @@ abstract class SharedSpaceDocumentDataSource {
 
   Future<WorkGroupNode> getWorkGroupNode(
     SharedSpaceId sharedSpaceId,
-    WorkGroupNodeId workGroupNodeId);
+    WorkGroupNodeId workGroupNodeId,
+    {bool hasTreePath});
 }

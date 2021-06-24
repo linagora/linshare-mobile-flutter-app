@@ -29,15 +29,34 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Attribute {
-  static const uuid = 'uuid';
-  static const type = 'type';
-  static const mimeType = 'mimeType';
-  static const workGroup = 'workGroup';
-  static const parent = 'parent';
-  static const quotaUuid = 'quotaUuid';
-  static const resourceUuid = 'resourceUuid';
-  static const fromResourceUuid = 'fromResourceUuid';
-  static const contextUuid = 'contextUuid';
-  static const treePath = 'treePath';
+import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
+import 'package:data/src/util/attribute.dart';
+import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'tree_node_dto.g.dart';
+
+@JsonSerializable(explicitToJson: true)
+@WorkGroupNodeIdConverter()
+class TreeNodeDto with EquatableMixin {
+  @JsonKey(name: Attribute.uuid)
+  final WorkGroupNodeId workGroupNodeId;
+  final String name;
+
+  TreeNodeDto(this.workGroupNodeId, this.name);
+
+  factory TreeNodeDto.fromJson(Map<String, dynamic> json) => _$TreeNodeDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TreeNodeDtoToJson(this);
+
+  @override
+  List<Object> get props => [
+    workGroupNodeId,
+    name
+  ];
+}
+
+extension TreeNodeDtoExtension on TreeNodeDto {
+  TreeNode toTreeNode() => TreeNode(workGroupNodeId, name);
 }

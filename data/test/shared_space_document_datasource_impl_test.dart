@@ -167,7 +167,8 @@ void main() {
         DateTime.now(),
         'Dat is good',
         'description',
-        accountDto1
+        accountDto1,
+        []
       );
 
       final request = CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId);
@@ -195,7 +196,8 @@ void main() {
         DateTime.now(),
         'Dat is good',
         'description',
-        accountDto1
+        accountDto1,
+        []
       );
 
       final request = CreateSharedSpaceNodeFolderRequest('Dat is good');
@@ -294,6 +296,41 @@ void main() {
       await _sharedSpaceDataSourceImpl.getWorkGroupNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
+      ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
+    });
+
+    test('GetWorkGroupNode With hasTreePath is true Should Return Success Node', () async {
+      when(_linShareHttpClient.getWorkGroupNode(
+        workGroupFolderDto.sharedSpaceId,
+        workGroupFolderDto.workGroupNodeId,
+        hasTreePath: true)
+      ).thenAnswer((_) async => workGroupFolderDto);
+
+      final result = await _sharedSpaceDataSourceImpl.getWorkGroupNode(
+        workGroupFolderDto.sharedSpaceId,
+        workGroupFolderDto.workGroupNodeId,
+        hasTreePath: true
+      );
+
+      expect(result, workGroupFolderDto.toWorkGroupFolder());
+    });
+
+    test('GetWorkGroupNode With hasTreePath is true  Should Throw Exception When Get Failed', () async {
+      final error = DioError(
+        type: DioErrorType.RESPONSE,
+        response: Response(statusCode: 404)
+      );
+
+      when(_linShareHttpClient.getWorkGroupNode(
+        workGroupFolderDto.sharedSpaceId,
+        workGroupFolderDto.workGroupNodeId,
+        hasTreePath: true
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.getWorkGroupNode(
+        workGroupFolderDto.sharedSpaceId,
+        workGroupFolderDto.workGroupNodeId,
+        hasTreePath: true
       ).catchError((error) => expect(error, isA<WorkGroupNodeNotFoundException>()));
     });
   });

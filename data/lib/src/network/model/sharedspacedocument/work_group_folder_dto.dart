@@ -34,7 +34,9 @@ import 'package:data/src/network/model/account/account_dto.dart';
 import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/converter/work_group_node_id_converter.dart';
+import 'package:data/src/network/model/sharedspacedocument/tree_node_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -45,6 +47,10 @@ part 'work_group_folder_dto.g.dart';
 @WorkGroupNodeIdConverter()
 @SharedSpaceIdConverter()
 class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
+
+  @JsonKey(name: Attribute.treePath)
+  final List<TreeNodeDto> listTreeNodeDto;
+
   WorkGroupNodeFolderDto(
     WorkGroupNodeId workGroupNodeId,
     WorkGroupNodeId parentWorkGroupNodeId,
@@ -55,6 +61,7 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
     String? description,
     String? name,
     AccountDto? lastAuthor,
+    this.listTreeNodeDto,
   ) : super(
           workGroupNodeId,
           parentWorkGroupNodeId,
@@ -83,6 +90,7 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
         description,
         name,
         lastAuthor,
+        listTreeNodeDto
       ];
 }
 
@@ -97,5 +105,6 @@ extension WorkGroupNodeFolderDtoExtension on WorkGroupNodeFolderDto {
         description ?? '',
         name ?? '',
         lastAuthor?.toAccount()
+        listTreeNodeDto != null ? listTreeNodeDto.map((node) => node.toTreeNode()).toList() : null
       );
 }
