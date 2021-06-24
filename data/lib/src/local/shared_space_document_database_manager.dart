@@ -45,7 +45,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   }
 
   @override
-  Future<WorkGroupDocument> getData(String id) async {
+  Future<WorkGroupDocument?> getData(String id) async {
     final res = await _databaseClient.getData(WorkGroupNodeTable.TABLE_NAME, WorkGroupNodeTable.NODE_ID, id);
     return res.isNotEmpty ? WorkGroupNodeCache.fromJson(res.first).toWorkGroupDocument() : null;
   }
@@ -91,7 +91,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   }
 
   Future insertListTreeNode(SharedSpaceId sharedSpaceId, List<TreeNode> treeNodes) async {
-    var listParentId = treeNodes.map((node) => node.workGroupNodeId).toList();
+    var listParentId = treeNodes.map<WorkGroupNodeId?>((node) => node.workGroupNodeId).toList();
     listParentId.insert(0, null);
 
     final listWorkGroupNodeCache = treeNodes.map((node) {
@@ -105,10 +105,50 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
           WorkGroupNodeTable.NODE_ID,
           node.nodeId.uuid);
       return workGroupNodeExist.isEmpty ? node : null;
-    }).where((element) => element != null).toList());
+    }).toList());
 
-    final mapObjects = listWorkGroupNodeNotExist.map((node) => node.toJson()).toList();
+    final mapObjects = listWorkGroupNodeNotExist.map((node) => node!.toJson()).toList();
 
     await _databaseClient.insertMultipleData(WorkGroupNodeTable.TABLE_NAME, mapObjects);
+  }
+
+  Future<bool> deleteSharedSpace(SharedSpaceId sharedSpaceId) async {
+    final res = await _databaseClient.deleteData(SharedSpaceTable.TABLE_NAME, SharedSpaceTable.SHARED_SPACE_ID, sharedSpaceId.uuid);
+    return res > 0 ? true : false;
+  }
+
+  Future<List<WorkGroupNodeCache>> getListWorkGroupCacheByParentNodeID(WorkGroupNodeId parentNodeId) async {
+    final res = await _databaseClient.getListDataWithCondition(
+      WorkGroupNodeTable.TABLE_NAME,
+      '${WorkGroupNodeTable.PARENT_NODE_ID} = ?',
+      [parentNodeId.uuid]
+    );
+
+    return res.isNotEmpty? res.map((mapObject) => WorkGroupNodeCache.fromJson(mapObject)).toList(): [];
+  }
+
+  Future<List<WorkGroupNodeCache>> getListWorkGroupCacheBySharedSpaceID(SharedSpaceId sharedSpaceId) async {
+    final res = await _databaseClient.getListDataWithCondition(
+        WorkGroupNodeTable.TABLE_NAME,
+        '${WorkGroupNodeTable.SHARED_SPACE_ID} = ?',
+        [sharedSpaceId.uuid]
+    );
+
+    return res.isNotEmpty? res.map((mapObject) => WorkGroupNodeCache.fromJson(mapObject)).toList(): [];
+  }
+
+  Future<bool> deleteWorkGroupNode(WorkGroupNodeId parentNodeId) async {
+    final res = await _databaseClient.deleteData(WorkGroupNodeTable.TABLE_NAME, WorkGroupNodeTable.NODE_ID, parentNodeId.uuid);
+    return res > 0 ? true : false;
+  }
+
+  Future<List<WorkGroupDocument>> getListWorkGroupDocumentInSharedSpace(SharedSpaceId sharedSpaceId, {WorkGroupNodeId? parentNodeId}) async {
+    final keyCondition = parentNodeId == null
+        ? '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.PARENT_NODE_ID} IS NULL'
+        : '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.PARENT_NODE_ID} = ?';
+
+    final listValueCondition = parentNodeId == null? [sharedSpaceId.uuid]: [sharedSpaceId.uuid, parentNodeId.uuid];
+    final res = await _databaseClient.getListDataWithCondition(WorkGroupNodeTable.TABLE_NAME, keyCondition, listValueCondition);
+    return res.isNotEmpty? res.map((mapObject) => WorkGroupNodeCache.fromJson(mapObject).toWorkGroupDocument()).toList(): [];
   }
 }

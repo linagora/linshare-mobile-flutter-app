@@ -320,8 +320,8 @@ class LinShareHttpClient {
     return _convertToWorkGroupNodeChild(workGroupNode);
   }
 
-  Future<AccountQuotaResponse> findQuota(QuotaId quotaUuid) async {
-    final resultJson = await _dioClient.get(Endpoint.quota.withPathParameter(quotaUuid.uuid)
+  Future<AccountQuotaResponse> findQuota(QuotaId? quotaUuid) async {
+    final resultJson = await _dioClient.get(Endpoint.quota.withPathParameter(quotaUuid?.uuid)
         .generateEndpointPath());
     return AccountQuotaResponse.fromJson(resultJson);
   }
@@ -489,19 +489,19 @@ class LinShareHttpClient {
   }
 
   Future<WorkGroupNodeDto> getWorkGroupNode(
-      SharedSpaceId sharedSpaceId,
+      SharedSpaceId? sharedSpaceId,
       WorkGroupNodeId workGroupNodeId,
-      {bool hasTreePath}
+      {bool hasTreePath = false}
   ) async {
     final endpointPath = hasTreePath
       ? Endpoint.sharedSpaces
-          .withPathParameter(sharedSpaceId.uuid)
+          .withPathParameter(sharedSpaceId?.uuid)
           .withPathParameter(Endpoint.nodes)
           .withPathParameter(workGroupNodeId.uuid)
           .withQueryParameters([BooleanQueryParameter('tree', true)])
           .generateEndpointPath()
       : Endpoint.sharedSpaces
-          .withPathParameter(sharedSpaceId.uuid)
+          .withPathParameter(sharedSpaceId?.uuid)
           .withPathParameter(Endpoint.nodes)
           .withPathParameter(workGroupNodeId.uuid)
           .generateEndpointPath();

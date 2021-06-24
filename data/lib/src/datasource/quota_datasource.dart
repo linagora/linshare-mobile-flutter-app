@@ -32,5 +32,5 @@
 import 'package:domain/domain.dart';
 
 abstract class QuotaDataSource {
-  Future<AccountQuota> findQuota(QuotaId quotaUuid);
+  Future<AccountQuota> findQuota(QuotaId? quotaUuid);
 }

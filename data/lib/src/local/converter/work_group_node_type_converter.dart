@@ -32,22 +32,22 @@
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class WorkGroupNodeTypeConverter implements JsonConverter<WorkGroupNodeType, String> {
+class WorkGroupNodeTypeConverter implements JsonConverter<WorkGroupNodeType?, String?> {
   const WorkGroupNodeTypeConverter();
 
   @override
-  WorkGroupNodeType fromJson(String json) {
+  WorkGroupNodeType? fromJson(String? json) {
     try {
-      return json.toWorkGroupNodeType();
+      return json != null ? json.toWorkGroupNodeType() : null;
     } catch (_) {
       return null;
     }
   }
 
   @override
-  String toJson(WorkGroupNodeType object) {
+  String? toJson(WorkGroupNodeType? object) {
     try {
-      return object.value;
+      return object != null ? object.value : null;
     } catch (_) {
       return null;
     }

@@ -108,7 +108,7 @@ extension WorkGroupDocumentDtoExtension on WorkGroupDocumentDto {
       modificationDate,
       description ?? '',
       name ?? '',
-      lastAuthor?.toAccount(),
+      lastAuthor != null ? lastAuthor!.toAccount() : Account('', '', AccountId(''), AccountType.INTERNAL, '', ''),
       size ?? 0,
       mediaType,
       hasThumbnail ?? false,
