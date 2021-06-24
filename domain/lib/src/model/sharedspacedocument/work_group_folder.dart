@@ -38,14 +38,14 @@ class WorkGroupFolder extends WorkGroupNode {
 
   WorkGroupFolder(
     WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId parentWorkGroupNodeId,
+    WorkGroupNodeId? parentWorkGroupNodeId,
     WorkGroupNodeType? type,
     SharedSpaceId sharedSpaceId,
     DateTime creationDate,
     DateTime modificationDate,
-    String description,
+    String? description,
     String name,
-    Account? lastAuthor,
+    Account lastAuthor,
     this.listTreeNode
   ) : super(
     workGroupNodeId,
@@ -54,7 +54,7 @@ class WorkGroupFolder extends WorkGroupNode {
     sharedSpaceId,
     creationDate,
     modificationDate,
-    description,
+    description ?? '',
     name,
     lastAuthor,
   );

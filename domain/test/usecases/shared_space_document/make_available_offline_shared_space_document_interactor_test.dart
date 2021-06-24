@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -43,10 +42,10 @@ import '../../mock/repository/authentication/mock_token_repository.dart';
 
 void main() {
   group('MakeAvailableOfflineSharedSpaceDocumentInteractor test', () {
-    MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
-    MakeAvailableOfflineSharedSpaceDocumentInteractor _makeAvailableOfflineSharedSpaceDocumentInteractor;
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late MockTokenRepository tokenRepository;
+    late MockCredentialRepository credentialRepository;
+    late MakeAvailableOfflineSharedSpaceDocumentInteractor _makeAvailableOfflineSharedSpaceDocumentInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();

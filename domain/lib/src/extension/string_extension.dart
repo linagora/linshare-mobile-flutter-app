@@ -49,7 +49,7 @@ extension StringExtension on String {
     }
   }
 
-  SharedSpaceRoleName toSharedSpaceRoleName() {
+  SharedSpaceRoleName? toSharedSpaceRoleName() {
     switch (this) {
       case 'READER':
         return SharedSpaceRoleName.READER;
@@ -64,7 +64,7 @@ extension StringExtension on String {
     }
   }
 
-  LinShareNodeType toLinShareNodeType() {
+  LinShareNodeType? toLinShareNodeType() {
     switch (this) {
       case 'DRIVE':
         return LinShareNodeType.DRIVE;
@@ -75,7 +75,7 @@ extension StringExtension on String {
     }
   }
 
-  WorkGroupNodeType toWorkGroupNodeType() {
+  WorkGroupNodeType? toWorkGroupNodeType() {
     switch (this) {
       case 'FOLDER':
         return WorkGroupNodeType.FOLDER;
@@ -88,7 +88,7 @@ extension StringExtension on String {
     }
   }
 
-  AccountType toAccountType() {
+  AccountType? toAccountType() {
     switch (this) {
       case 'INTERNAL':
         return AccountType.INTERNAL;
