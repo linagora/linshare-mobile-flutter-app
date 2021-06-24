@@ -32,7 +32,6 @@
 import 'package:domain/domain.dart';
 import 'package:test/test.dart';
 import 'package:testshared/fixture/my_space_fixture.dart';
-import 'package:domain/src/model/document/document.dart';
 import 'package:testshared/testshared.dart';
 
 void main() {

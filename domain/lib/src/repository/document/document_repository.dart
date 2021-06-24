@@ -65,4 +65,16 @@ abstract class DocumentRepository {
   Future<DocumentDetails> getDocument(DocumentId documentId);
 
   Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request);
+
+  Future<Document?> getDocumentOffline(DocumentId documentId);
+
+  Future<bool> updateDocumentOffline(Document document, String localPath);
+
+  Future<bool> makeAvailableOffline(Document document, String localPath);
+
+  Future<bool> disableAvailableOffline(DocumentId documentId, String localPath);
+
+  Future<List<Document>> getAllDocumentOffline();
+
+  Future<String> downloadMakeOfflineDocument(DocumentId documentId, String documentName, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl);
 }
