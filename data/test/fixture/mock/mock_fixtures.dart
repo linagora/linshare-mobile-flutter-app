@@ -21,3 +21,5 @@ class MockBiometricExceptionThrower extends Mock implements BiometricExceptionTh
 class MockDocumentDatabaseManager extends Mock implements DocumentDatabaseManager {}
 
 class MockDatabaseClient extends Mock implements DatabaseClient {}
+
+class MockSharedSpaceDocumentDatabaseManager extends Mock implements SharedSpaceDocumentDatabaseManager {}
