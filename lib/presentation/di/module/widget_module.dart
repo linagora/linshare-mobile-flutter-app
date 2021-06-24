@@ -33,6 +33,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
@@ -150,7 +151,12 @@ class WidgetModule {
       getIt<SaveSorterInteractor>(),
       getIt<RenameDocumentInteractor>(),
       getIt<VerifyNameInteractor>(),
-      getIt<DuplicateMultipleFilesInMySpaceInteractor>()
+      getIt<DuplicateMultipleFilesInMySpaceInteractor>(),
+      getIt<MakeAvailableOfflineDocumentInteractor>(),
+      getIt<DisableAvailableOfflineDocumentInteractor>(),
+      getIt<GetAllDocumentOfflineInteractor>(),
+      getIt<EnableAvailableOfflineDocumentInteractor>(),
+      getIt<AutoSyncOfflineManager>(),
     ));
   }
 

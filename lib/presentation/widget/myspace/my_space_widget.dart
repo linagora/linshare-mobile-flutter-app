@@ -34,6 +34,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -294,14 +295,14 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                 key: Key('my_space_documents_list'),
                 itemCount: documentList.length,
                 itemBuilder: (context, index) {
-                  return _buildMySpaceListItem(context, documentList[index], selectMode);
+                  return _buildMySpaceListItem(context, documentList[index], selectMode, index);
                 });
           });
     }
   }
 
   Widget _buildMySpaceListItem(
-      BuildContext context, SelectableElement<Document> document, SelectMode currentSelectMode) {
+      BuildContext context, SelectableElement<Document> document, SelectMode currentSelectMode, int positionDocument) {
     return ListTile(
         onTap: () {
           if (currentSelectMode == SelectMode.ACTIVE) {
@@ -320,7 +321,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Row(children: [
                 _buildDocumentName(document.element.name),
-                _buildSharedIcon(document.element.isShared())
+                _buildSharedIcon(document.element.isShared()),
+                _buildOfflineModeIcon(document.element.syncOfflineState),
               ]),
               Align(
                   alignment: Alignment.centerRight,
@@ -340,7 +342,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                   children: [
                     _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
                         document.element.modificationDate.getMMMddyyyyFormatString())),
-                    _buildSharedIcon(document.element.isShared())
+                    _buildSharedIcon(document.element.isShared()),
+                    _buildOfflineModeIcon(document.element.syncOfflineState)
                   ],
                 ),
               )
@@ -359,7 +362,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                   fit: BoxFit.fill,
                 ),
                 onPressed: () => mySpaceViewModel.openContextMenu(
-                    context, document.element, _contextMenuActionTiles(context, document.element),
+                    context, document.element, _contextMenuActionTiles(context, document.element, positionDocument),
                     footerAction: _removeFileAction([document.element]))),
         onLongPress: () => mySpaceViewModel.selectItem(document));
   }
@@ -393,6 +396,30 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         : SizedBox.shrink();
   }
 
+  Widget _buildOfflineModeIcon(SyncOfflineState? syncOfflineState) {
+    switch(syncOfflineState) {
+      case SyncOfflineState.waiting:
+        return Padding(
+          padding: EdgeInsets.only(left: 8),
+          child: SizedBox(
+            width: 16,
+            height: 16,
+            child: CupertinoActivityIndicator()
+          ));
+      case SyncOfflineState.completed:
+        return Padding(
+          padding: EdgeInsets.only(left: 8),
+          child: SvgPicture.asset(
+            imagePath.icAvailableOfflineEnabled,
+            width: 16,
+            height: 16,
+            fit: BoxFit.fill,
+          ));
+      default:
+        return SizedBox.shrink();
+    }
+  }
+
   Widget _buildUploadFileHere(BuildContext context) {
     return BackgroundWidgetBuilder()
       .key(Key('my_space_upload_file_here'))
@@ -404,11 +431,12 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       .text(AppLocalizations.of(context).my_space_text_upload_your_files_here).build();
   }
 
-  List<Widget> _contextMenuActionTiles(BuildContext context, Document document) {
+  List<Widget> _contextMenuActionTiles(BuildContext context, Document document, int positionDocument) {
     return [
       if (Platform.isIOS) _exportFileAction(context, document),
       if (Platform.isAndroid) _downloadAction(document),
       _shareAction([document]),
+      _makeAvailableOffline(document, positionDocument),
       _copyToWorkGroupAction(context, [document]),
       _previewDocumentAction(document),
       _renameDocumentAction(context, document),
@@ -515,6 +543,21 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         documents[0])
         .onActionClick((data) => mySpaceViewModel.shareDocuments(documents, itemSelectionType: itemSelectionType))
         .build();
+  }
+
+  Widget _makeAvailableOffline(Document document, int positionDocument) {
+    return DocumentContextMenuTileBuilder(
+        Key('make_available_offline_context_menu_action'),
+        SvgPicture.asset(document.isOfflineMode() ? imagePath.icAvailableOfflineEnabled : imagePath.icAvailableOffline, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).available_offline,
+        document)
+      .onActionClick((data) => {
+        if (data.isOfflineMode()) {
+          mySpaceViewModel.disableAvailableOffline(context, document, positionDocument)
+        } else {
+          mySpaceViewModel.makeAvailableOffline(context, document, positionDocument)
+        }})
+      .build();
   }
 
   List<Widget> _multipleSelectionActions(List<Document> documents) {

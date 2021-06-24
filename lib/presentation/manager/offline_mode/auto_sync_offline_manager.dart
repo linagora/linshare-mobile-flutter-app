@@ -28,83 +28,41 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:redux/redux.dart';
 
-@immutable
-class StartMySpaceLoadingAction extends ActionOnline {}
+class AutoSyncOfflineManager {
 
-@immutable
-class MySpaceAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
+  final Store<AppState> _store;
+  final AutoSyncAvailableOfflineMultipleDocumentInteractor _autoSyncAvailableOfflineMultipleDocumentInteractor;
 
-  MySpaceAction(this.viewState);
-}
+  AutoSyncOfflineManager(
+    this._store,
+    this._autoSyncAvailableOfflineMultipleDocumentInteractor,
+  );
 
-@immutable
-class MySpaceGetAllDocumentAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  MySpaceGetAllDocumentAction(this.viewState);
-}
-
-@immutable
-class MySpaceSelectDocumentAction extends ActionOffline {
-  final SelectableElement<Document> selectedDocument;
-
-  MySpaceSelectDocumentAction(this.selectedDocument);
-}
-
-@immutable
-class MySpaceClearSelectedDocumentsAction extends ActionOffline {
-  MySpaceClearSelectedDocumentsAction();
-}
-
-@immutable
-class MySpaceSelectAllDocumentsAction extends ActionOffline {
-  MySpaceSelectAllDocumentsAction();
-}
-
-@immutable
-class MySpaceUnselectAllDocumentsAction extends ActionOffline {
-  MySpaceUnselectAllDocumentsAction();
-}
-
-@immutable
-class CleanMySpaceStateAction extends ActionOffline {
-  CleanMySpaceStateAction();
-}
-
-@immutable
-class MySpaceSetSearchResultAction extends ActionOffline {
-  final List<Document> documentList;
-
-  MySpaceSetSearchResultAction(this.documentList);
-}
-
-@immutable
-class MySpaceSortDocumentAction extends ActionOffline {
-  final List<Document> documentList;
-  final Sorter sorter;
-
-  MySpaceSortDocumentAction(this.documentList, this.sorter);
-}
-
-@immutable
-class MySpaceGetSorterAction extends ActionOffline {
-  final Sorter sorter;
-
-  MySpaceGetSorterAction(this.sorter);
-}
-
-@immutable
-class MySpaceSetSyncOfflineMode extends ActionOffline {
-  final List<Document> documentList;
-
-  MySpaceSetSyncOfflineMode(this.documentList);
+  void syncOfflineDocument(List<Document?> documents) async {
+    if (_store.state.networkConnectivityState.connectivityResult != ConnectivityResult.none) {
+      await _autoSyncAvailableOfflineMultipleDocumentInteractor.execute(documents)
+        .then((response) => response.fold(
+          (failure) {
+            if (failure is MakeAvailableOfflineMultipleDocumentsAllFailure
+              || failure is MakeAvailableOfflineMultipleDocumentsThrowExceptionFailure) {
+              _store.dispatch(MySpaceAction(Left<Failure, Success>(failure)));
+            }
+          },
+          (success) {
+            if (success is MakeAvailableOfflineMultipleDocumentsAllSuccessViewState
+              || success is MakeAvailableOfflineMultipleDocumentsHasSomeFilesFailedViewState) {
+              _store.dispatch(MySpaceAction(Right<Failure, Success>(success)));
+            }
+          }
+        ));
+    }
+  }
 }

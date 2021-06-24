@@ -32,13 +32,16 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
 import 'package:linshare_flutter_app/presentation/model/file/document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
@@ -93,6 +96,11 @@ class MySpaceViewModel extends BaseViewModel {
   final DuplicateMultipleFilesInMySpaceInteractor _duplicateMultipleFilesInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
   late StreamSubscription _storeStreamSubscription;
+  final MakeAvailableOfflineDocumentInteractor _makeAvailableOfflineDocumentInteractor;
+  final DisableAvailableOfflineDocumentInteractor _disableAvailableOfflineDocumentInteractor;
+  final GetAllDocumentOfflineInteractor _getAllDocumentOfflineInteractor;
+  final EnableAvailableOfflineDocumentInteractor _enableAvailableOfflineDocumentInteractor;
+  final AutoSyncOfflineManager _autoSyncOfflineManager;
   List<Document> _documentList = [];
 
   SearchQuery _searchQuery = SearchQuery('');
@@ -113,7 +121,12 @@ class MySpaceViewModel extends BaseViewModel {
       this._saveSorterInteractor,
       this._renameDocumentInteractor,
       this._verifyNameInteractor,
-      this._duplicateMultipleFilesInteractor
+      this._duplicateMultipleFilesInteractor,
+      this._makeAvailableOfflineDocumentInteractor,
+      this._disableAvailableOfflineDocumentInteractor,
+      this._getAllDocumentOfflineInteractor,
+      this._enableAvailableOfflineDocumentInteractor,
+      this._autoSyncOfflineManager,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.mySpaceState.viewState.fold(
@@ -128,6 +141,9 @@ class MySpaceViewModel extends BaseViewModel {
                 success is RemoveMultipleDocumentsAllSuccessViewState ||
                 success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
               getAllDocument();
+            } else if (success is MakeAvailableOfflineMultipleDocumentsAllSuccessViewState ||
+                success is MakeAvailableOfflineMultipleDocumentsHasSomeFilesFailedViewState) {
+              store.dispatch(_enableAvailableOfflineDocument(_documentList));
             }
       });
     });
@@ -386,7 +402,15 @@ class MySpaceViewModel extends BaseViewModel {
   }
 
   void getAllDocument() {
-    store.dispatch(_getAllDocumentAction());
+    if (store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
+      getAllDocumentOffline();
+    } else {
+      store.dispatch(_getAllDocumentAction());
+    }
+  }
+
+  void getAllDocumentOffline() {
+    store.dispatch(_getAllDocumentOfflineAction());
   }
 
   void openFilePickerByType(BuildContext context, FileType fileType) {
@@ -403,9 +427,13 @@ class MySpaceViewModel extends BaseViewModel {
   }
   
   void onClickPreviewFile(BuildContext context, Document document) {
-    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
-      _previewDocument(context, document);
-    }));
+    if (document.isOfflineMode() && store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
+      _openDownloadedPreviewDocument(document, DownloadPreviewDocumentViewState(document.localPath!));
+    } else {
+      store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+        _previewDocument(context, document);
+      }));
+    }
   }
 
   void _previewDocument(BuildContext context, Document document) {
@@ -522,7 +550,11 @@ class MySpaceViewModel extends BaseViewModel {
   }
 
   void getSorterAndAllDocumentAction() {
-    store.dispatch(_getSorterAndAllDocumentAction());
+    if (store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
+      store.dispatch(_getSorterAndAllDocumentOfflineAction());
+    } else {
+      store.dispatch(_getSorterAndAllDocumentAction());
+    }
   }
 
   OnlineThunkAction _getSorterAndAllDocumentAction() {
@@ -545,13 +577,42 @@ class MySpaceViewModel extends BaseViewModel {
           _documentList = [];
         }, (success) {
           store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
-          _documentList =
-              success is MySpaceViewState ? success.documentList : [];
+          _documentList = success is MySpaceViewState ? success.documentList : [];
+
+          _autoSyncOfflineAllDocuments(_documentList);
         });
       });
 
       store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
     });
+  }
+
+  ThunkAction<AppState> _getSorterAndAllDocumentOfflineAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartMySpaceLoadingAction());
+
+      await Future.wait([
+        _getSorterInteractor.execute(OrderScreen.mySpace),
+        _getAllDocumentOfflineInteractor.execute()
+      ]).then((response) async {
+        response[0].fold((failure) {
+          store.dispatch(MySpaceGetSorterAction(Sorter.fromOrderScreen(OrderScreen.mySpace)));
+        }, (success) {
+          store.dispatch(MySpaceGetSorterAction(success is GetSorterSuccess
+              ? success.sorter
+              : Sorter.fromOrderScreen(OrderScreen.mySpace)));
+        });
+        response[1].fold((failure) {
+          store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
+          _documentList = [];
+        }, (success) {
+          store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
+          _documentList = success is MySpaceViewState ? success.documentList : [];
+        });
+      });
+
+      store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
+    };
   }
 
   OnlineThunkAction _getAllDocumentAction() {
@@ -565,11 +626,30 @@ class MySpaceViewModel extends BaseViewModel {
             store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
           }, (success) {
             store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
-            _documentList =
-                success is MySpaceViewState ? success.documentList : [];
+            _documentList = success is MySpaceViewState ? success.documentList : [];
+
+            _autoSyncOfflineAllDocuments(_documentList);
+
             store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
           }));
     });
+  }
+
+  ThunkAction<AppState> _getAllDocumentOfflineAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartMySpaceLoadingAction());
+
+      await _getAllDocumentOfflineInteractor.execute().then((result) =>
+        result.fold((failure) {
+          store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
+          _documentList = [];
+          store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
+        }, (success) {
+          store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
+          _documentList = success is MySpaceViewState ? success.documentList : [];
+          store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
+        }));
+    };
   }
 
   ThunkAction<AppState> _downloadFileAction(List<DocumentId> documentIds) {
@@ -693,15 +773,102 @@ class MySpaceViewModel extends BaseViewModel {
       await Future.wait([
         _saveSorterInteractor.execute(sorter),
         _sortInteractor.execute(_documentList, sorter)
-      ]).then((response) => response[1].fold((failure) {
-            _documentList = [];
-            store.dispatch(MySpaceSortDocumentAction(_documentList, sorter));
-          }, (success) {
-            _documentList =
-                success is MySpaceViewState ? success.documentList : [];
-            store.dispatch(MySpaceSortDocumentAction(_documentList, sorter));
+      ]).then((response) => response[1].fold(
+        (failure) {
+          _documentList = [];
+          store.dispatch(MySpaceSortDocumentAction(_documentList, sorter));
+        },
+        (success) {
+          _documentList = success is MySpaceViewState ? success.documentList : [];
+          store.dispatch(MySpaceSortDocumentAction(_documentList, sorter));
+        }));
+    };
+  }
+
+  void makeAvailableOffline(BuildContext context, Document document, int positionDocument) {
+    _appNavigation.popBack();
+
+    _documentList[positionDocument] = document.toSyncOfflineDocument(syncOfflineState: SyncOfflineState.waiting);
+    store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
+
+    store.dispatch(_makeAvailableOfflineDocumentAction(document, positionDocument));
+  }
+
+  void disableAvailableOffline(BuildContext context, Document document, int positionDocument) {
+    _appNavigation.popBack();
+    store.dispatch(_disableAvailableOfflineAction(context, document));
+  }
+
+  ThunkAction<AppState> _disableAvailableOfflineAction(BuildContext context, Document document) {
+    return (Store<AppState> store) async {
+      await _disableAvailableOfflineDocumentInteractor
+        .execute(document)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(MySpaceAction(Left(failure))),
+          (success) {
+            if (success is DisableAvailableOfflineDocumentViewState) {
+              store.dispatch(MySpaceAction(success.result == OfflineModeActionResult.successful
+                  ? Right(success)
+                  : Left(CannotAvailableOfflineDocument())));
+              getAllDocument();
+            } else {
+              store.dispatch(MySpaceAction(Left(CannotAvailableOfflineDocument())));
+            }
           }));
     };
+  }
+
+  OnlineThunkAction _makeAvailableOfflineDocumentAction(Document document, int positionDocument) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _makeAvailableOfflineDocumentInteractor.execute(document)
+        .then((result) => result.fold(
+          (failure) {
+            _documentList[positionDocument] = document.toSyncOfflineDocument(syncOfflineState: SyncOfflineState.none);
+            store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
+
+            store.dispatch(MySpaceAction(Left(failure)));
+          },
+          (success) {
+            if (success is MakeAvailableOfflineDocumentViewState && success.result == OfflineModeActionResult.successful) {
+              _documentList[positionDocument] = document.toSyncOfflineDocument(localPath: success.localPath, syncOfflineState: SyncOfflineState.completed);
+              store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
+
+              store.dispatch(MySpaceAction(Right(success)));
+            } else {
+              _documentList[positionDocument] = document.toSyncOfflineDocument(syncOfflineState: SyncOfflineState.none);
+              store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
+
+              store.dispatch(MySpaceAction(Left(CannotAvailableOfflineDocument())));
+            }
+          }));
+    });
+  }
+
+  ThunkAction<AppState> _enableAvailableOfflineDocument(List<Document> documents) {
+    return (Store<AppState> store) async {
+      store.dispatch(StartMySpaceLoadingAction());
+
+      await _enableAvailableOfflineDocumentInteractor
+        .execute(documents)
+        .then((result) => result.fold(
+          (failure) {
+            store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
+            _documentList = [];
+          },
+          (success) {
+            store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
+            _documentList = success is MySpaceViewState ? success.documentList : [];
+          }));
+    };
+  }
+
+  void _autoSyncOfflineAllDocuments(List<Document> documents) {
+    List<Document?> listDocumentAvailableOffline = documents.map((document) => document.isOfflineMode() ? document : null)
+        .where((document) => document != null)
+        .toList();
+    if (listDocumentAvailableOffline.isNotEmpty) {
+      _autoSyncOfflineManager.syncOfflineDocument(listDocumentAvailableOffline);
+    }
   }
 
   @override
