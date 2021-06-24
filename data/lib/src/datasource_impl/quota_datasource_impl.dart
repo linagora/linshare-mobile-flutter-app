@@ -45,7 +45,7 @@ class QuotaDataSourceImpl implements QuotaDataSource {
   QuotaDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
 
   @override
-  Future<AccountQuota> findQuota(QuotaId quotaUuid) async {
+  Future<AccountQuota> findQuota(QuotaId? quotaUuid) async {
     return Future.sync(() async {
       final quotaResponse = await _linShareHttpClient.findQuota(quotaUuid);
       return quotaResponse.toAccountQuota();

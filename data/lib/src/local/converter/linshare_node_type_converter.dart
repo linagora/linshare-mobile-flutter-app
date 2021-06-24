@@ -32,22 +32,22 @@
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class LinShareNodeTypeConverter implements JsonConverter<LinShareNodeType, String> {
+class LinShareNodeTypeConverter implements JsonConverter<LinShareNodeType?, String?> {
   const LinShareNodeTypeConverter();
 
   @override
-  LinShareNodeType fromJson(String json) {
+  LinShareNodeType? fromJson(String? json) {
     try {
-      return json.toLinShareNodeType();
+      return json != null ? json.toLinShareNodeType() : null;
     } catch (_) {
       return null;
     }
   }
 
   @override
-  String toJson(LinShareNodeType object) {
+  String? toJson(LinShareNodeType? object) {
     try {
-      return object.value;
+      return object != null ? object.value : null;
     } catch (_) {
       return null;
     }

@@ -258,7 +258,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<WorkGroupNode> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath}) {
+  Future<WorkGroupNode?> getWorkGroupNode(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) {
     return Future.sync(() async {
       final workGroupNode = (await _linShareHttpClient.getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: hasTreePath));
 
@@ -310,12 +310,17 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode> treeNodes}) {
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
     throw UnimplementedError();
   }
 
   @override
   Future<WorkGroupDocument> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath) {
     throw UnimplementedError();
   }
 }

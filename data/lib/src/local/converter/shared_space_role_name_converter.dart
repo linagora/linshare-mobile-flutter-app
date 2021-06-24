@@ -32,22 +32,22 @@
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class SharedSpaceRoleNameConverter implements JsonConverter<SharedSpaceRoleName, String> {
+class SharedSpaceRoleNameConverter implements JsonConverter<SharedSpaceRoleName?, String?> {
   const SharedSpaceRoleNameConverter();
 
   @override
-  SharedSpaceRoleName fromJson(String json) {
+  SharedSpaceRoleName? fromJson(String? json) {
     try {
-      return json.toSharedSpaceRoleName();
+      return json != null ? json.toSharedSpaceRoleName() : null;
     } catch (_) {
       return null;
     }
   }
 
   @override
-  String toJson(SharedSpaceRoleName object) {
+  String? toJson(SharedSpaceRoleName? object) {
     try {
-      return object.value;
+      return object != null ? object.value : null;
     } catch (_) {
       return null;
     }

@@ -81,8 +81,8 @@ abstract class SharedSpaceDocumentDataSource {
     RenameWorkGroupNodeRequest renameRequest
   );
 
-  Future<WorkGroupNode> getWorkGroupNode(
-    SharedSpaceId sharedSpaceId,
+  Future<WorkGroupNode?> getWorkGroupNode(
+    SharedSpaceId? sharedSpaceId,
     WorkGroupNodeId workGroupNodeId,
     {bool hasTreePath});
 
@@ -95,10 +95,12 @@ abstract class SharedSpaceDocumentDataSource {
     Uri baseUrl);
 
   Future<bool> makeAvailableOfflineSharedSpaceDocument(
-    SharedSpaceNodeNested sharedSpaceNodeNested,
+    SharedSpaceNodeNested? sharedSpaceNodeNested,
     WorkGroupDocument workGroupDocument,
     String localPath,
-    {List<TreeNode> treeNodes});
+    {List<TreeNode>? treeNodes});
 
-  Future<WorkGroupDocument> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId);
+  Future<WorkGroupDocument?> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId);
+
+  Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath);
 }
