@@ -29,46 +29,14 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
+abstract class LinShareDatabaseManager<T> {
+  Future<bool> insertData(T newObject, String localPath);
 
-import 'package:dio/dio.dart';
-import 'package:domain/domain.dart';
+  Future<bool> deleteData(String id, String localPath);
 
-abstract class DocumentDataSource {
-  Future<List<Document>> getAll();
+  Future<bool> updateData(T newObject, String localPath);
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
+  Future<T?> getData(String id);
 
-  Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
-
-  Future<String> downloadDocumentIOS(Document document, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<Document> remove(DocumentId documentId);
-
-  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest);
-
-  Future<List<Document>> copyToMySpace(CopyRequest copyRequest);
-
-  Future<String> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<DocumentDetails> getDocument(DocumentId documentId);
-
-  Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request);
-
-  Future<String> downloadMakeOfflineDocument(
-    DocumentId documentId,
-    String documentName,
-    DownloadPreviewType downloadPreviewType,
-    Token permanentToken,
-    Uri baseUrl);
-
-  Future<Document?> getDocumentOffline(DocumentId documentId);
-
-  Future<bool> makeAvailableOffline(Document document, String localPath);
-
-  Future<bool> disableAvailableOffline(DocumentId documentId, String localPath);
-
-  Future<bool> updateDocumentOffline(Document document, String localPath);
-
-  Future<List<Document>> getAllDocumentOffline();
+  Future<List<T>> getListData();
 }
