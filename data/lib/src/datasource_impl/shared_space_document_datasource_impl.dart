@@ -258,9 +258,9 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<WorkGroupNode> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId) {
+  Future<WorkGroupNode> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath}) {
     return Future.sync(() async {
-      final workGroupNode = (await _linShareHttpClient.getWorkGroupNode(sharedSpaceId, workGroupNodeId));
+      final workGroupNode = (await _linShareHttpClient.getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: hasTreePath));
 
       if (workGroupNode is WorkGroupDocumentDto) {
         return workGroupNode.toWorkGroupDocument();
