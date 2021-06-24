@@ -41,7 +41,7 @@ class MakeAvailableOfflineSharedSpaceDocumentInteractor {
 
   MakeAvailableOfflineSharedSpaceDocumentInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<Either<Failure, Success>> execute(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, {List<TreeNode> treeNodes}) async {
+  Future<Either<Failure, Success>> execute(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, {List<TreeNode>? treeNodes}) async {
     try {
       final downloadPreviewType = workGroupDocument.mediaType.isImageFile() ? DownloadPreviewType.image : DownloadPreviewType.original;
 

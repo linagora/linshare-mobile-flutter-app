@@ -45,14 +45,14 @@ class WorkGroupDocument extends WorkGroupNode {
 
   WorkGroupDocument(
     WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId parentWorkGroupNodeId,
+    WorkGroupNodeId? parentWorkGroupNodeId,
     WorkGroupNodeType? type,
     SharedSpaceId sharedSpaceId,
     DateTime creationDate,
     DateTime modificationDate,
-    String description,
+    String? description,
     String name,
-    Account? lastAuthor,
+    Account lastAuthor,
     this.size,
     this.mediaType,
     this.hasThumbnail,
@@ -60,7 +60,7 @@ class WorkGroupDocument extends WorkGroupNode {
     this.hasRevision,
     this.sha256sum,
     {
-      this.localPath,
+      this.localPath = '',
       this.syncOfflineState = SyncOfflineState.none
     }) : super(
       workGroupNodeId,
@@ -69,11 +69,11 @@ class WorkGroupDocument extends WorkGroupNode {
       sharedSpaceId,
       creationDate,
       modificationDate,
-      description,
+      description ?? '',
       name,
       lastAuthor);
 
-  bool isOfflineMode() => localPath != null && localPath.isNotEmpty;
+  bool isOfflineMode() => localPath.isNotEmpty;
 
   @override
   List<Object?> get props => [
