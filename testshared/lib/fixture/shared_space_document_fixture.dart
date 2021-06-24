@@ -49,7 +49,8 @@ final workGroupFolder1 = WorkGroupFolder(
         AccountId('1f75190b-73aa-4c4b-9efb-2760be07c3bb'),
         AccountType.INTERNAL,
         'John',
-        'Doe')
+        'Doe'),
+    []
 );
 
 final workGroupDocument1 = WorkGroupDocument(
@@ -151,7 +152,8 @@ final sharedSpaceFolder1 = WorkGroupNodeFolderDto(
     DateTime.now(),
     'Folder 1',
     'Folder 1',
-    accountDto1);
+    accountDto1,
+    []);
 
 final sharedSpaceFolder2 = WorkGroupNodeFolderDto(
     workGroupNodeId2,
@@ -162,4 +164,5 @@ final sharedSpaceFolder2 = WorkGroupNodeFolderDto(
     DateTime.now(),
     'Folder 2',
     'Folder 2',
-    accountDto1);
+    accountDto1,
+    []);
