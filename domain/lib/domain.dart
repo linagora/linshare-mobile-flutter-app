@@ -154,6 +154,8 @@ export 'src/model/verification/special_character_validator.dart';
 export 'src/model/verification/validator.dart';
 export 'src/network/service_path.dart';
 export 'src/network/service_path.dart';
+export 'src/model/offline_mode/sycn_offline_state.dart';
+export 'src/model/offline_mode/offline_mode_action_result.dart';
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
 export 'src/repository/authentication/credential_repository.dart';
@@ -292,3 +294,12 @@ export 'src/usecases/sort/sort_view_state.dart';
 export 'src/usecases/upload_file/file_upload_state.dart';
 export 'src/usecases/upload_file/upload_my_space_document_interactor.dart';
 export 'src/usecases/upload_file/upload_work_group_document_interactor.dart';
+export 'src/usecases/offline_mode/offline_view_state.dart';
+export 'src/usecases/offline_mode/make_available_offline_document_interactor.dart';
+export 'src/usecases/offline_mode/disable_available_offline_document_interactor.dart';
+export 'src/usecases/offline_mode/get_all_document_offline_interactor.dart';
+export 'src/usecases/local_exception.dart';
+export 'src/usecases/offline_mode/auto_sync_available_offline_document_interactor.dart';
+export 'src/usecases/offline_mode/auto_sync_available_offline_multiple_document_interactor.dart';
+export 'src/usecases/offline_mode/enable_available_offline_document_interactor.dart';
+

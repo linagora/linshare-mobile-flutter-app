@@ -32,28 +32,36 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/repository/document/document_repository.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
-import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
-class GetAllDocumentInteractor {
-  final DocumentRepository _documentRepository;
+class AutoSyncAvailableOfflineMultipleDocumentInteractor {
+  final AutoSyncAvailableOfflineDocumentInteractor _autoSyncAvailableOfflineDocumentInteractor;
 
-  GetAllDocumentInteractor(this._documentRepository);
+  AutoSyncAvailableOfflineMultipleDocumentInteractor(this._autoSyncAvailableOfflineDocumentInteractor);
 
-  Future<Either<Failure, Success>> execute() async {
+  Future<Either<Failure, Success>> execute(List<Document?> documents) async {
     try {
-      final documents = await _documentRepository.getAll();
-
-      final listDocument = await Future.wait(documents.map((item) async {
-        final documentLocal = await _documentRepository.getDocumentOffline(item.documentId);
-        return documentLocal ?? item;
-      }).toList());
-
-      return Right<Failure, Success>(MySpaceViewState(listDocument));
+      final listResult = await Future.wait(documents.map((element) =>
+          _autoSyncAvailableOfflineDocumentInteractor.execute(element!)));
+      if (listResult.length == 1) {
+        return listResult.first;
+      } else {
+        var failedFileCount = 0;
+        listResult.forEach((element) {
+          if (element is Left) {
+            failedFileCount++;
+          }
+        });
+        if (failedFileCount == 0) {
+          return Right(MakeAvailableOfflineMultipleDocumentsAllSuccessViewState(listResult));
+        } else if (failedFileCount == listResult.length) {
+          return Left(MakeAvailableOfflineMultipleDocumentsAllFailure(listResult));
+        }
+        return Right(MakeAvailableOfflineMultipleDocumentsHasSomeFilesFailedViewState(listResult));
+      }
     } catch (exception) {
-      return Left<Failure, Success>(MySpaceFailure(exception));
+      return Left<Failure, Success>(MakeAvailableOfflineMultipleDocumentsThrowExceptionFailure(exception));
     }
   }
 }
