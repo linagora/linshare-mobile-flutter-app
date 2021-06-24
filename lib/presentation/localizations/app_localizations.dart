@@ -1757,6 +1757,26 @@ class AppLocalizations {
       name: 'restore',
     );
   }
+
+  String get available_offline {
+    return Intl.message('Available offline',
+        name: 'available_offline');
+  }
+
+  String get files_will_be_made_available_for_offline_use {
+    return Intl.message('The files will be made available for offline use.',
+        name: 'files_will_be_made_available_for_offline_use');
+  }
+
+  String get files_will_no_longer_be_usable_without_be_network {
+    return Intl.message('The files will no longer be usable without the network.',
+        name: 'files_will_no_longer_be_usable_without_be_network');
+  }
+
+  String get file_cannot_be_switched_to_offline_mode {
+    return Intl.message('This file cannot be switched to offline mode',
+        name: 'file_cannot_be_switched_to_offline_mode');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
