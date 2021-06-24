@@ -39,8 +39,8 @@ import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
   group('test local shared spaces documents datasource impl', () {
-    MockSharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
-    LocalSharedSpaceDocumentDataSourceImpl _localSharedSpaceDocumentDataSourceImpl;
+    late MockSharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
+    late LocalSharedSpaceDocumentDataSourceImpl _localSharedSpaceDocumentDataSourceImpl;
 
     setUp(() {
       _sharedSpaceDocumentDatabaseManager = MockSharedSpaceDocumentDatabaseManager();

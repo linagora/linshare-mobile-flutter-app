@@ -38,19 +38,11 @@ class SharedSpaceIdConverter implements JsonConverter<SharedSpaceId, String> {
 
   @override
   SharedSpaceId fromJson(String json) {
-    try {
-      return SharedSpaceId(json);
-    } catch (_) {
-      return null;
-    }
+    return SharedSpaceId(json);
   }
 
   @override
   String toJson(SharedSpaceId object) {
-    try {
-      return object.uuid;
-    } catch (_) {
-      return null;
-    }
+    return object.uuid;
   }
 }

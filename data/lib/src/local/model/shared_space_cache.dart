@@ -56,11 +56,11 @@ class SharedSpaceCache with EquatableMixin {
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ID)
   final SharedSpaceId sharedSpaceId;
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ROLE_ID)
-  final SharedSpaceRoleId sharedSpaceRoleId;
+  final SharedSpaceRoleId? sharedSpaceRoleId;
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ROLE_NAME)
-  final SharedSpaceRoleName sharedSpaceRoleName;
+  final SharedSpaceRoleName? sharedSpaceRoleName;
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ROLE_ENABLE)
-  final bool sharedSpaceRoleEnable;
+  final bool? sharedSpaceRoleEnable;
   @JsonKey(name: SharedSpaceTable.CREATION_DATE)
   final DateTime creationDate;
   @JsonKey(name: SharedSpaceTable.MODIFICATION_DATE)
@@ -68,9 +68,9 @@ class SharedSpaceCache with EquatableMixin {
   @JsonKey(name: SharedSpaceTable.NAME)
   final String name;
   @JsonKey(name: SharedSpaceTable.NODE_TYPE)
-  final LinShareNodeType nodeType;
+  final LinShareNodeType? nodeType;
   @JsonKey(name: SharedSpaceTable.QUOTA_ID)
-  final QuotaId quotaId;
+  final QuotaId? quotaId;
   @JsonKey(name: SharedSpaceTable.VERSIONING_PARAMETERS)
   final bool versioningParameters;
 
@@ -91,7 +91,7 @@ class SharedSpaceCache with EquatableMixin {
   Map<String, dynamic> toJson() => _$SharedSpaceCacheToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     sharedSpaceId,
     sharedSpaceRoleId,
     sharedSpaceRoleName,
@@ -109,13 +109,15 @@ extension SharedSpaceCacheExtension on SharedSpaceCache {
   SharedSpaceNodeNested toSharedSpaceNodeNested() {
     return SharedSpaceNodeNested(
         sharedSpaceId,
-        SharedSpaceRole(sharedSpaceRoleId, sharedSpaceRoleName, enabled: sharedSpaceRoleEnable),
+        (sharedSpaceRoleId == null || sharedSpaceRoleName == null || sharedSpaceRoleEnable == null)
+            ?  null
+            : SharedSpaceRole(sharedSpaceRoleId!, sharedSpaceRoleName!, enabled: sharedSpaceRoleEnable!),
         creationDate,
         modificationDate,
         name,
         nodeType,
         quotaId,
-        versioningParameters != null ? VersioningParameter(versioningParameters) : null
+        VersioningParameter(versioningParameters)
     );
   }
 }

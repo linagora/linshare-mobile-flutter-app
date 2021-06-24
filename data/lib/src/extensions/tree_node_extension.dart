@@ -33,11 +33,11 @@ import 'package:data/src/local/model/work_group_node_cache.dart';
 import 'package:domain/domain.dart';
 
 extension TreeNodeExtension on TreeNode {
-  WorkGroupNodeCache toWorkGroupNodeCache(SharedSpaceId sharedSpaceId, WorkGroupNodeId parentId) {
+  WorkGroupNodeCache toWorkGroupNodeCache(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentId) {
     return WorkGroupNodeCache(
         workGroupNodeId,
         sharedSpaceId,
-        parentId,
+        parentId ?? WorkGroupNodeId(''),
         null,
         null,
         name,

@@ -69,7 +69,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
       SharedSpaceId sharedSpaceId,
       {WorkGroupNodeId? parentNodeId}
   ) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].getAllChildNodes(sharedSpaceId, parentNodeId: parentNodeId);
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.getAllChildNodes(sharedSpaceId, parentNodeId: parentNodeId);
   }
 
   @override
@@ -78,24 +78,22 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
     SharedSpaceId destinationSharedSpaceId,
     {WorkGroupNodeId? destinationParentNodeId}
   ) {
-      return _sharedSpaceDocumentDataSource.copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
-    {WorkGroupNodeId destinationParentNodeId}) {
-      return _sharedSpaceDocumentDataSources[DataSourceType.network].copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
+      return _sharedSpaceDocumentDataSources[DataSourceType.network]!.copyToSharedSpace(copyRequest, destinationSharedSpaceId, destinationParentNodeId: destinationParentNodeId);
   }
 
   @override
   Future<WorkGroupNode> removeSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].removeSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId);
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.removeSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId);
   }
 
   @override
   Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].downloadNodes(workgroupNodes, token, baseUrl);
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.downloadNodes(workgroupNodes, token, baseUrl);
   }
 
   @override
   Future<String> downloadNodeIOS(WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].downloadNodeIOS(workgroupNode, token, baseUrl, cancelToken);
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.downloadNodeIOS(workgroupNode, token, baseUrl, cancelToken);
   }
 
   @override
@@ -103,7 +101,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
     SharedSpaceId sharedSpaceId,
     CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest
   ) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].createSharedSpaceFolder(sharedSpaceId, createSharedSpaceNodeRequest);
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.createSharedSpaceFolder(sharedSpaceId, createSharedSpaceNodeRequest);
   }
 
   @override
@@ -114,31 +112,40 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
     Uri baseUrl,
     CancelToken cancelToken
   ) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].downloadPreviewWorkGroupDocument(workGroupDocument, downloadPreviewType, token, baseUrl, cancelToken);
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.downloadPreviewWorkGroupDocument(workGroupDocument, downloadPreviewType, token, baseUrl, cancelToken);
   }
 
   @override
   Future<WorkGroupNode> renameSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId, RenameWorkGroupNodeRequest renameWorkGroupNodeRequest) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].renameSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId, renameWorkGroupNodeRequest);
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.renameSharedSpaceNode(sharedSpaceId, sharedSpaceNodeId, renameWorkGroupNodeRequest);
   }
 
   @override
-  Future<WorkGroupNode> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath}) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: hasTreePath);
+  Future<WorkGroupNode?> getWorkGroupNode(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: hasTreePath);
   }
 
   @override
   Future<String> downloadMakeOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, String workGroupNodeName, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network].downloadMakeOfflineSharedSpaceDocument(sharedSpaceId, workGroupNodeId, workGroupNodeName, downloadPreviewType, permanentToken, baseUrl);
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.downloadMakeOfflineSharedSpaceDocument(sharedSpaceId, workGroupNodeId, workGroupNodeName, downloadPreviewType, permanentToken, baseUrl);
   }
 
   @override
-  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode> treeNodes}) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.local].makeAvailableOfflineSharedSpaceDocument(sharedSpaceNodeNested, workGroupDocument, localPath, treeNodes: treeNodes);
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.local]!.makeAvailableOfflineSharedSpaceDocument(sharedSpaceNodeNested, workGroupDocument, localPath, treeNodes: treeNodes);
   }
 
   @override
-  Future<WorkGroupDocument> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.local].getSharesSpaceDocumentOffline(workGroupNodeId);
+  Future<WorkGroupDocument?> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.local]!.getSharesSpaceDocumentOffline(workGroupNodeId);
+  }
+
+  @override
+  Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.local]!.disableAvailableOfflineSharedSpaceDocument(
+      sharedSpaceId,
+      parentNodeId,
+      workGroupNodeId,
+      localPath);
   }
 }
