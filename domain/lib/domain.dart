@@ -158,6 +158,7 @@ export 'src/network/service_path.dart';
 export 'src/network/service_path.dart';
 export 'src/model/offline_mode/sycn_offline_state.dart';
 export 'src/model/offline_mode/offline_mode_action_result.dart';
+export 'src/model/sharedspacedocument/tree_node.dart';
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
 export 'src/repository/authentication/credential_repository.dart';
@@ -309,4 +310,5 @@ export 'src/usecases/local_exception.dart';
 export 'src/usecases/offline_mode/auto_sync_available_offline_document_interactor.dart';
 export 'src/usecases/offline_mode/auto_sync_available_offline_multiple_document_interactor.dart';
 export 'src/usecases/offline_mode/enable_available_offline_document_interactor.dart';
-
+export 'src/usecases/shared_space_document/get_work_group_node_detail_interactor.dart';
+export 'src/usecases/shared_space_document/get_work_group_node_detail_view_state.dart';

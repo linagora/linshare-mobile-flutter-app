@@ -125,7 +125,8 @@ final workGroupFolderDto = WorkGroupNodeFolderDto(
     DateTime.fromMillisecondsSinceEpoch(1616561531356),
     '',
     'sample.ods',
-    accountDto1
+    accountDto1,
+    []
 );
 
 final workGroupFolder = WorkGroupFolder(
@@ -137,7 +138,8 @@ final workGroupFolder = WorkGroupFolder(
     DateTime.fromMillisecondsSinceEpoch(1616561531356),
     '',
     'sample.ods',
-    account1
+    account1,
+    []
 );
 
 
