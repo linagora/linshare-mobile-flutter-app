@@ -30,30 +30,53 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/repository/document/document_repository.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
-import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 
-class GetAllDocumentInteractor {
+class MakeAvailableOfflineDocumentInteractor {
   final DocumentRepository _documentRepository;
+  final TokenRepository _tokenRepository;
+  final CredentialRepository _credentialRepository;
 
-  GetAllDocumentInteractor(this._documentRepository);
+  MakeAvailableOfflineDocumentInteractor(this._documentRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<Either<Failure, Success>> execute() async {
+  Future<Either<Failure, Success>> execute(Document document) async {
     try {
-      final documents = await _documentRepository.getAll();
+      final downloadPreviewType = document.mediaType.isImageFile()
+          ? DownloadPreviewType.image
+          : DownloadPreviewType.original;
 
-      final listDocument = await Future.wait(documents.map((item) async {
-        final documentLocal = await _documentRepository.getDocumentOffline(item.documentId);
-        return documentLocal ?? item;
-      }).toList());
+      final filePath = await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
+          .then((List responses) async {
+         return await _documentRepository.downloadMakeOfflineDocument(
+           document.documentId,
+           document.name,
+           downloadPreviewType,
+           responses[0],
+           responses[1]);
+      });
 
-      return Right<Failure, Success>(MySpaceViewState(listDocument));
+      if (filePath.isNotEmpty) {
+        final result = await _documentRepository.makeAvailableOffline(document, filePath);
+        if (result) {
+          return Right<Failure, Success>(MakeAvailableOfflineDocumentViewState(OfflineModeActionResult.successful, filePath));
+        } else {
+          final fileSaved = File(filePath);
+          if (fileSaved.existsSync()) {
+            fileSaved.deleteSync();
+          }
+          return Left<Failure, Success>(MakeAvailableOfflineDocumentFailure(OfflineModeActionResult.failure));
+        }
+      } else {
+        return Left<Failure, Success>(MakeAvailableOfflineDocumentFailure(OfflineModeActionResult.failure));
+      }
     } catch (exception) {
-      return Left<Failure, Success>(MySpaceFailure(exception));
+      return Left<Failure, Success>(MakeAvailableOfflineDocumentFailure(exception));
     }
   }
 }
