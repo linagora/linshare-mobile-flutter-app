@@ -28,32 +28,8 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:domain/src/repository/document/document_repository.dart';
-import 'package:domain/src/state/failure.dart';
-import 'package:domain/src/state/success.dart';
-import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
-
-class GetAllDocumentInteractor {
-  final DocumentRepository _documentRepository;
-
-  GetAllDocumentInteractor(this._documentRepository);
-
-  Future<Either<Failure, Success>> execute() async {
-    try {
-      final documents = await _documentRepository.getAll();
-
-      final listDocument = await Future.wait(documents.map((item) async {
-        final documentLocal = await _documentRepository.getDocumentOffline(item.documentId);
-        return documentLocal ?? item;
-      }).toList());
-
-      return Right<Failure, Success>(MySpaceViewState(listDocument));
-    } catch (exception) {
-      return Left<Failure, Success>(MySpaceFailure(exception));
-    }
-  }
+enum OfflineModeActionResult {
+  successful,
+  failure
 }
