@@ -48,4 +48,52 @@ extension StringExtension on String {
       return length >= 3 ? '...' + substring(length - 3, length) : this;
     }
   }
+
+  SharedSpaceRoleName toSharedSpaceRoleName() {
+    switch (this) {
+      case 'READER':
+        return SharedSpaceRoleName.READER;
+      case 'CONTRIBUTOR':
+        return SharedSpaceRoleName.CONTRIBUTOR;
+      case 'WRITER':
+        return SharedSpaceRoleName.WRITER;
+      case 'ADMIN':
+        return SharedSpaceRoleName.ADMIN;
+      default:
+        return null;
+    }
+  }
+
+  LinShareNodeType toLinShareNodeType() {
+    switch (this) {
+      case 'DRIVE':
+        return LinShareNodeType.DRIVE;
+      case 'WORK_GROUP':
+        return LinShareNodeType.WORK_GROUP;
+      default:
+        return null;
+    }
+  }
+
+  WorkGroupNodeType toWorkGroupNodeType() {
+    switch (this) {
+      case 'FOLDER':
+        return WorkGroupNodeType.FOLDER;
+      case 'DOCUMENT':
+        return WorkGroupNodeType.DOCUMENT;
+      case 'DOCUMENT_REVISION':
+        return WorkGroupNodeType.DOCUMENT_REVISION;
+      default:
+        return null;
+    }
+  }
+
+  AccountType toAccountType() {
+    switch (this) {
+      case 'INTERNAL':
+        return AccountType.INTERNAL;
+      default:
+        return null;
+    }
+  }
 }

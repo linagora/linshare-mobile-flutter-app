@@ -168,3 +168,17 @@ final sharedSpaceRole1 = SharedSpaceRole(SharedSpaceRoleId('an id 1'), SharedSpa
 final sharedSpaceRole2 = SharedSpaceRole(SharedSpaceRoleId('an id 2'), SharedSpaceRoleName.ADMIN);
 final sharedSpaceRole3 = SharedSpaceRole(SharedSpaceRoleId('an id 3'), SharedSpaceRoleName.CONTRIBUTOR);
 final sharedSpaceRole4 = SharedSpaceRole(SharedSpaceRoleId('an id 4'), SharedSpaceRoleName.WRITER);
+
+final sharedSpaceNodeNested = SharedSpaceNodeNested(
+    SharedSpaceId('eda9a917-10a7-44e0-98dc-7179ab914ab7'),
+    SharedSpaceRole(
+        SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
+        SharedSpaceRoleName.ADMIN
+    ),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    'Shared Space 1',
+    LinShareNodeType.WORK_GROUP,
+    QuotaId('e352ed55-abef-4630-816f-c025caa3b025'),
+    VersioningParameter(false)
+);
