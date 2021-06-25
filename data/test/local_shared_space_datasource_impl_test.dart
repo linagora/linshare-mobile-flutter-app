@@ -30,52 +30,41 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/data.dart';
-import 'package:data/src/datasource/shared_space_datasource.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
-  final Map<DataSourceType, SharedSpaceDataSource> _sharedSpaceDataSources;
+import 'fixture/mock/mock_fixtures.dart';
 
-  SharedSpaceRepositoryImpl(this._sharedSpaceDataSources);
+void main() {
+  group('test shared spaces dataSource', () {
+    late MockSharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
+    late LocalSharedSpaceDataSourceImpl _localSharedSpaceDataSourceImpl;
 
-  @override
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces() {
-    return _sharedSpaceDataSources[DataSourceType.network]!.getSharedSpaces();
-  }
+    setUp(() {
+      _sharedSpaceDocumentDatabaseManager = MockSharedSpaceDocumentDatabaseManager();
+      _localSharedSpaceDataSourceImpl = LocalSharedSpaceDataSourceImpl(_sharedSpaceDocumentDatabaseManager);
+    });
 
-  @override
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId) {
-    return _sharedSpaceDataSources[DataSourceType.network]!.deleteSharedSpace(sharedSpaceId);
-  }
+    test('getAllSharedSpaceOffline should return success with valid data', () async {
+      when(_sharedSpaceDocumentDatabaseManager.getListSharedSpace())
+        .thenAnswer((_) async => [sharedSpaceCache1, sharedSpaceCache2]);
 
-  @override
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId sharedSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
-  ) {
-    return _sharedSpaceDataSources[DataSourceType.network]!.getSharedSpace(sharedSpaceId, membersParameter: membersParameter, rolesParameter: rolesParameter);
-  }
+      final result = await _localSharedSpaceDataSourceImpl.getAllSharedSpacesOffline();
 
-  @override
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest) {
-    return _sharedSpaceDataSources[DataSourceType.network]!.createSharedSpaceWorkGroup(createWorkGroupRequest);
-  }
+      expect(result, [sharedSpace1, sharedSpace2]);
+    });
 
-  @override
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles() {
-    return _sharedSpaceDataSources[DataSourceType.network]!.getSharedSpaceRoles();
-  }
+    test('getAllSharedSpaces should throw SQLiteDatabaseException when getListSharedSpace response error', () async {
+      final error = SQLiteDatabaseException();
 
-  @override
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest) {
-    return _sharedSpaceDataSources[DataSourceType.network]!.renameWorkGroup(sharedSpaceId, renameRequest);
-  }
+      when(_sharedSpaceDocumentDatabaseManager.getListSharedSpace()).thenThrow(error);
 
-  @override
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline() {
-    return _sharedSpaceDataSources[DataSourceType.local]!.getAllSharedSpacesOffline();
-  }
+      await _localSharedSpaceDataSourceImpl.getAllSharedSpacesOffline()
+        .catchError((error) {
+          expect(error, isA<SQLiteDatabaseException>());
+        });
+    });
+  });
 }
