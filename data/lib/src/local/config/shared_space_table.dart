@@ -43,16 +43,16 @@ class SharedSpaceTable {
   static const String QUOTA_ID = 'quotaId';
   static const String VERSIONING_PARAMETERS = 'versioningParameters';
 
-  static const String CREATE = '''CREATE TABLE ${TABLE_NAME} (
-    ${SHARED_SPACE_ID} TEXT PRIMARY KEY,
-    ${SHARED_SPACE_ROLE_ID} TEXT,
-    ${SHARED_SPACE_ROLE_NAME} TEXT,
-    ${SHARED_SPACE_ROLE_ENABLE} Integer,
-    ${CREATION_DATE} Integer,
-    ${MODIFICATION_DATE} Integer,
-    ${NAME} TEXT,
-    ${NODE_TYPE} TEXT,
-    ${QUOTA_ID} TEXT,
-    ${VERSIONING_PARAMETERS} Integer
+  static const String CREATE = '''CREATE TABLE $TABLE_NAME (
+    $SHARED_SPACE_ID TEXT PRIMARY KEY,
+    $SHARED_SPACE_ROLE_ID TEXT,
+    $SHARED_SPACE_ROLE_NAME TEXT,
+    $SHARED_SPACE_ROLE_ENABLE Integer,
+    $CREATION_DATE Integer,
+    $MODIFICATION_DATE Integer,
+    $NAME TEXT,
+    $NODE_TYPE TEXT,
+    $QUOTA_ID TEXT,
+    $VERSIONING_PARAMETERS Integer
   )''';
 }
