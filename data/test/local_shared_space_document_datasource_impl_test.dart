@@ -98,5 +98,35 @@ void main() {
           workGroupDocument.workGroupNodeId
       ).catchError((error) => expect(error, isA<SQLiteDatabaseException>()));
     });
+
+    test('getAllSharedSpaceDocumentOffline Should Return Success List Node', () async {
+      when(_sharedSpaceDocumentDatabaseManager.getListWorkGroupCacheInSharedSpace(
+          sharedSpaceIdOffline1,
+          workGroupNodeIdOffline1,
+      )).thenAnswer((_) async => [workGroupNode1, workGroupNode2]);
+
+      final result = await _localSharedSpaceDocumentDataSourceImpl.getAllSharedSpaceDocumentOffline(
+        sharedSpaceIdOffline1,
+        workGroupNodeIdOffline1,
+      );
+
+      expect(result, [workGroupNode1, workGroupNode2]);
+    });
+
+    test('getAllSharedSpaceDocumentOffline Should Throw Exception When getListWorkGroupCacheInSharedSpace Failed', () async {
+      final error = SQLiteDatabaseException();
+
+      when(_sharedSpaceDocumentDatabaseManager.getListWorkGroupCacheInSharedSpace(
+        sharedSpaceIdOffline1,
+        workGroupNodeIdOffline1
+      )).thenThrow(error);
+
+      await _localSharedSpaceDocumentDataSourceImpl.getAllSharedSpaceDocumentOffline(
+        sharedSpaceIdOffline1,
+        workGroupNodeIdOffline1
+      ).catchError((error) {
+        expect(error, isA<SQLiteDatabaseException>());
+      });
+    });
   });
 }

@@ -148,4 +148,9 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
       workGroupNodeId,
       localPath);
   }
+
+  @override
+  Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.local]!.getAllSharedSpaceDocumentOffline(sharedSpaceId, parentNodeId);
+  }
 }

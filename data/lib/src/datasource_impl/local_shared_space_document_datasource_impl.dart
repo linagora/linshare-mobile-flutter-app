@@ -90,62 +90,65 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   }
 
   @override
+  Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) {
+    return Future.sync(() async {
+      return await _sharedSpaceDocumentDatabaseManager.getListWorkGroupCacheInSharedSpace(sharedSpaceId, parentNodeId);
+    }).catchError((error) {
+      if (error is SQLiteDatabaseException) {
+        throw SQLiteDatabaseException();
+      } else {
+        throw LocalUnknownError(error);
+      }
+    });
+  }
+
+  @override
   Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId? destinationParentNodeId}) {
-    // TODO: implement copyToSharedSpace
     throw UnimplementedError();
   }
 
   @override
   Future<WorkGroupFolder> createSharedSpaceFolder(SharedSpaceId sharedSpaceId, CreateSharedSpaceNodeFolderRequest createSharedSpaceNodeRequest) {
-    // TODO: implement createSharedSpaceFolder
     throw UnimplementedError();
   }
 
   @override
   Future<String> downloadMakeOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, String workGroupNodeName, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
-    // TODO: implement downloadMakeOfflineSharedSpaceDocument
     throw UnimplementedError();
   }
 
   @override
   Future<String> downloadNodeIOS(WorkGroupNode workgroupNode, Token token, Uri baseUrl, CancelToken cancelToken) {
-    // TODO: implement downloadNodeIOS
     throw UnimplementedError();
   }
 
   @override
   Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl) {
-    // TODO: implement downloadNodes
     throw UnimplementedError();
   }
 
   @override
   Future<String> downloadPreviewWorkGroupDocument(WorkGroupDocument workGroupDocument, DownloadPreviewType downloadPreviewType, Token token, Uri baseUrl, CancelToken cancelToken) {
-    // TODO: implement downloadPreviewWorkGroupDocument
     throw UnimplementedError();
   }
 
   @override
   Future<List<WorkGroupNode>> getAllChildNodes(SharedSpaceId sharedSpaceId, {WorkGroupNodeId? parentNodeId}) {
-    // TODO: implement getAllChildNodes
     throw UnimplementedError();
   }
 
   @override
   Future<WorkGroupNode?> getWorkGroupNode(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) {
-    // TODO: implement getWorkGroupNode
     throw UnimplementedError();
   }
 
   @override
   Future<WorkGroupNode> removeSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId) {
-    // TODO: implement removeSharedSpaceNode
     throw UnimplementedError();
   }
 
   @override
   Future<WorkGroupNode> renameSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId, RenameWorkGroupNodeRequest renameRequest) {
-    // TODO: implement renameSharedSpaceNode
     throw UnimplementedError();
   }
 }

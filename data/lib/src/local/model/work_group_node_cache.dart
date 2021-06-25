@@ -71,23 +71,23 @@ class WorkGroupNodeCache with EquatableMixin {
   @JsonKey(name: WorkGroupNodeTable.NODE_TYPE)
   final WorkGroupNodeType? nodeType;
   @JsonKey(name: WorkGroupNodeTable.DESCRIPTION)
-  final String? description;
+  final String description;
   @JsonKey(name: WorkGroupNodeTable.NAME_ACCOUNT)
-  final String? nameAccount;
+  final String nameAccount;
   @JsonKey(name: WorkGroupNodeTable.MAIL_ACCOUNT)
-  final String? mailAccount;
+  final String mailAccount;
   @JsonKey(name: WorkGroupNodeTable.FIRST_NAME_ACCOUNT)
-  final String? firstNameAccount;
+  final String firstNameAccount;
   @JsonKey(name: WorkGroupNodeTable.LAST_NAME_ACCOUNT)
-  final String? lastNameAccount;
+  final String lastNameAccount;
   @JsonKey(name: WorkGroupNodeTable.ACCOUNT_ID)
   final AccountId? accountId;
   @JsonKey(name: WorkGroupNodeTable.ACCOUNT_TYPE)
   final AccountType? accountType;
   @JsonKey(name: WorkGroupNodeTable.SIZE)
-  final int? size;
+  final int size;
   @JsonKey(name: WorkGroupNodeTable.MEDIA_TYPE)
-  final MediaType? mediaType;
+  final MediaType mediaType;
   @JsonKey(name: WorkGroupNodeTable.HAS_THUMBNAIL)
   final bool? hasThumbnail;
   @JsonKey(name: WorkGroupNodeTable.UPLOAD_DATE)
@@ -95,9 +95,9 @@ class WorkGroupNodeCache with EquatableMixin {
   @JsonKey(name: WorkGroupNodeTable.HAS_REVISION)
   final bool? hasRevision;
   @JsonKey(name: WorkGroupNodeTable.SHA256_SUM)
-  final String? sha256sum;
+  final String sha256sum;
   @JsonKey(name: WorkGroupNodeTable.LOCAL_PATH)
-  final String? localPath;
+  final String localPath;
 
   WorkGroupNodeCache(
       this.nodeId,
@@ -164,19 +164,19 @@ extension WorkGroupNodeCacheExtension on WorkGroupNodeCache {
         description,
         name,
         Account(
-          nameAccount ?? '',
-          mailAccount ?? '',
+          nameAccount,
+          mailAccount,
           accountId ?? AccountId(''),
           accountType ?? AccountType.INTERNAL,
-          firstNameAccount ?? '',
-          lastNameAccount ?? ''),
-        size ?? 0,
-        mediaType ?? MediaType.parse(''),
+          firstNameAccount,
+          lastNameAccount),
+        size,
+        mediaType,
         hasThumbnail ?? false,
         uploadDate ?? DateTime.now(),
         hasRevision ?? false,
-        sha256sum ?? '',
-        localPath: localPath ?? '',
+        sha256sum,
+        localPath: localPath,
         syncOfflineState: SyncOfflineState.completed
     );
   }
@@ -192,12 +192,12 @@ extension WorkGroupNodeCacheExtension on WorkGroupNodeCache {
         description,
         name,
         Account(
-          nameAccount ?? '',
-          mailAccount ?? '',
+          nameAccount,
+          mailAccount,
           accountId ?? AccountId(''),
           accountType ?? AccountType.INTERNAL,
-          firstNameAccount ?? '',
-          lastNameAccount ?? ''),
+          firstNameAccount,
+          lastNameAccount),
         []
     );
   }

@@ -31,6 +31,7 @@
 
 import 'package:data/src/local/model/work_group_node_cache.dart';
 import 'package:domain/domain.dart';
+import 'package:http_parser/http_parser.dart';
 
 extension TreeNodeExtension on TreeNode {
   WorkGroupNodeCache toWorkGroupNodeCache(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentId) {
@@ -41,21 +42,21 @@ extension TreeNodeExtension on TreeNode {
         null,
         null,
         name,
+        WorkGroupNodeType.FOLDER,
+        '',
+        '',
+        '',
+        '',
+        '',
+        null,
+        null,
+        0,
+        MediaType.parse('application/pdf'),
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        '',
+        ''
     );
   }
 }
