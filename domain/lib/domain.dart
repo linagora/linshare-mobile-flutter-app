@@ -319,3 +319,4 @@ export 'src/usecases/shared_space_document/make_available_offline_shared_space_d
 export 'src/usecases/shared_space_document/make_available_offline_shared_space_document_view_state.dart';
 export 'src/usecases/shared_space_document/disable_available_offline_shared_space_document_interactor.dart';
 export 'src/usecases/shared_space_document/disable_available_offline_shared_space_document_view_state.dart';
+export 'src/usecases/shared_space/get_all_shared_spaces_offline_interactor.dart';
