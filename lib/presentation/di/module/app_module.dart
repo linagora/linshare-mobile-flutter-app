@@ -157,6 +157,13 @@ class AppModule {
       },
       getIt<FileUploadDataSource>()));
     getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
+    getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>(), getIt<FileUploadDataSource>()));
+    getIt.registerFactory(() => SharedSpaceRepositoryImpl(
+        {
+          DataSourceType.network : getIt<SharedSpaceDataSource>(),
+          DataSourceType.local : getIt<LocalSharedSpaceDataSourceImpl>()
+        }
+    ));
     getIt.registerFactory(() => AutoCompleteRepositoryImpl(getIt<AutoCompleteDataSource>()));
     getIt.registerFactory(() => SharedSpaceDocumentRepositoryImpl(
       {
@@ -173,6 +180,7 @@ class AppModule {
     getIt.registerFactory(() => SharedSpaceActivitiesRepositoryImpl(getIt<SharedSpaceActivitiesDataSource>()));
     getIt.registerFactory(() => BiometricRepositoryImpl(getIt<BiometricDataSource>()));
     getIt.registerFactory(() => LocalSharedSpaceDocumentDataSourceImpl(getIt<SharedSpaceDocumentDatabaseManager>()));
+    getIt.registerFactory(() => LocalSharedSpaceDataSourceImpl(getIt<SharedSpaceDocumentDatabaseManager>()));
   }
 
   void _provideRepository() {
@@ -331,6 +339,7 @@ class AppModule {
         getIt<CredentialRepository>()
     ));
     getIt.registerFactory(() => DisableAvailableOfflineWorkGroupDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
+    getIt.registerFactory(() => GetAllSharedSpaceOfflineInteractor(getIt<SharedSpaceRepository>()));
   }
 
   void _provideSharePreference() {

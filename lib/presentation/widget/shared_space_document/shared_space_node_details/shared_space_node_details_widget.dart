@@ -127,7 +127,7 @@ class _SharedSpaceNodeDetailsWidgetState extends State<SharedSpaceNodeDetailsWid
               _sharedSpaceNodeInformationTile(AppLocalizations.of(context).modified,
                   state.workgroupNode!.modificationDate.getMMMddyyyyFormatString()),
               _sharedSpaceNodeInformationTile(
-                  AppLocalizations.of(context).modified_by, state.workgroupNode!.lastAuthor?.name ?? ''),
+                  AppLocalizations.of(context).modified_by, state.workgroupNode!.lastAuthor.name),
               _sharedSpaceNodeInformationTile(AppLocalizations.of(context).created,
                   state.workgroupNode!.creationDate.getMMMddyyyyFormatString()),
             ],
@@ -152,8 +152,7 @@ class _SharedSpaceNodeDetailsWidgetState extends State<SharedSpaceNodeDetailsWid
             Padding(
                 padding: EdgeInsets.only(top: 18),
                 child: Text(
-                    state.workgroupNode!.description == null ||
-                            state.workgroupNode!.description.isEmpty
+                    state.workgroupNode!.description.isEmpty
                         ? AppLocalizations.of(context).no_description
                         : state.workgroupNode!.description,
                     style: TextStyle(
