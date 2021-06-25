@@ -62,9 +62,9 @@ class SharedSpaceCache with EquatableMixin {
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ROLE_ENABLE)
   final bool? sharedSpaceRoleEnable;
   @JsonKey(name: SharedSpaceTable.CREATION_DATE)
-  final DateTime creationDate;
+  final DateTime? creationDate;
   @JsonKey(name: SharedSpaceTable.MODIFICATION_DATE)
-  final DateTime modificationDate;
+  final DateTime? modificationDate;
   @JsonKey(name: SharedSpaceTable.NAME)
   final String name;
   @JsonKey(name: SharedSpaceTable.NODE_TYPE)
@@ -72,7 +72,7 @@ class SharedSpaceCache with EquatableMixin {
   @JsonKey(name: SharedSpaceTable.QUOTA_ID)
   final QuotaId? quotaId;
   @JsonKey(name: SharedSpaceTable.VERSIONING_PARAMETERS)
-  final bool versioningParameters;
+  final bool? versioningParameters;
 
   SharedSpaceCache(
     this.sharedSpaceId,
@@ -112,12 +112,12 @@ extension SharedSpaceCacheExtension on SharedSpaceCache {
         (sharedSpaceRoleId == null || sharedSpaceRoleName == null || sharedSpaceRoleEnable == null)
             ?  null
             : SharedSpaceRole(sharedSpaceRoleId!, sharedSpaceRoleName!, enabled: sharedSpaceRoleEnable!),
-        creationDate,
-        modificationDate,
+        creationDate ?? DateTime.now(),
+        modificationDate ?? DateTime.now(),
         name,
         nodeType,
         quotaId,
-        VersioningParameter(versioningParameters)
+        VersioningParameter(versioningParameters ?? false)
     );
   }
 }
