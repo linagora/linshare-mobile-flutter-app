@@ -54,27 +54,27 @@ class WorkGroupNodeTable {
   static const String SHA256_SUM = 'sha256sum';
   static const String LOCAL_PATH = 'localPath';
 
-  static const String CREATE = '''CREATE TABLE ${TABLE_NAME} (
-    ${NODE_ID} TEXT PRIMARY KEY,
-    ${SHARED_SPACE_ID} TEXT,
-    ${PARENT_NODE_ID} TEXT,
-    ${CREATION_DATE} Integer,
-    ${MODIFICATION_DATE} Integer,
-    ${NAME} TEXT,
-    ${NODE_TYPE} TEXT,
-    ${DESCRIPTION} TEXT,
-    ${NAME_ACCOUNT} TEXT,
-    ${MAIL_ACCOUNT} TEXT,
-    ${FIRST_NAME_ACCOUNT} TEXT,
-    ${LAST_NAME_ACCOUNT} TEXT,
-    ${ACCOUNT_ID} TEXT,
-    ${ACCOUNT_TYPE} TEXT,
-    ${SIZE} Integer,
-    ${MEDIA_TYPE} TEXT,
-    ${HAS_THUMBNAIL} Integer,
-    ${UPLOAD_DATE} Integer,
-    ${HAS_REVISION} Integer,
-    ${SHA256_SUM} TEXT,
-    ${LOCAL_PATH} TEXT
+  static const String CREATE = '''CREATE TABLE $TABLE_NAME (
+    $NODE_ID TEXT PRIMARY KEY,
+    $SHARED_SPACE_ID TEXT,
+    $PARENT_NODE_ID TEXT,
+    $CREATION_DATE Integer,
+    $MODIFICATION_DATE Integer,
+    $NAME TEXT,
+    $NODE_TYPE TEXT,
+    $DESCRIPTION TEXT,
+    $NAME_ACCOUNT TEXT,
+    $MAIL_ACCOUNT TEXT,
+    $FIRST_NAME_ACCOUNT TEXT,
+    $LAST_NAME_ACCOUNT TEXT,
+    $ACCOUNT_ID TEXT,
+    $ACCOUNT_TYPE TEXT,
+    $SIZE Integer,
+    $MEDIA_TYPE TEXT,
+    $HAS_THUMBNAIL Integer,
+    $UPLOAD_DATE Integer,
+    $HAS_REVISION Integer,
+    $SHA256_SUM TEXT,
+    $LOCAL_PATH TEXT
   )''';
 }
