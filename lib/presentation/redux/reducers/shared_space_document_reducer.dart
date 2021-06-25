@@ -77,4 +77,19 @@ final sharedSpaceDocumentReducer = combineReducers<SharedSpaceDocumentState>([
       state.setSharedSpaceDocumentWorkGroupFolder(action.workGroupFolder)),
   TypedReducer<SharedSpaceDocumentState, SharedSpaceDocumentSetSyncOfflineModeAction>((SharedSpaceDocumentState state, SharedSpaceDocumentSetSyncOfflineModeAction action) =>
       state.setSharedSpaceDocument(newWorkGroupNodeList: action.workGroupNodes)),
+  TypedReducer<SharedSpaceDocumentState, SharedSpaceDocumentGetSorterAndAllWorkGroupNodeOfflineAction>((SharedSpaceDocumentState state, SharedSpaceDocumentGetSorterAndAllWorkGroupNodeOfflineAction action) {
+    return state.setSharedSpaceDocument(
+      viewState: action.viewState,
+      newWorkGroupNodeList: action.viewState.fold(
+        (failure) => [],
+        (success) => (success is GetChildNodesViewState) ? success.workGroupNodes : []),
+      newSorter: action.sorter);
+  }),
+  TypedReducer<SharedSpaceDocumentState, SharedSpaceDocumentGetAllWorkGroupNodeOfflineAction>((SharedSpaceDocumentState state, SharedSpaceDocumentGetAllWorkGroupNodeOfflineAction action) {
+    return state.setSharedSpaceDocument(
+      viewState: action.viewState,
+      newWorkGroupNodeList: action.viewState.fold(
+        (failure) => [],
+        (success) => (success is GetChildNodesViewState) ? success.workGroupNodes : []));
+  }),
 ]);

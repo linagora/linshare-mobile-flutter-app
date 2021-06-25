@@ -128,3 +128,18 @@ class SharedSpaceDocumentSetSyncOfflineModeAction extends ActionOffline {
 
   SharedSpaceDocumentSetSyncOfflineModeAction(this.workGroupNodes);
 }
+
+@immutable
+class SharedSpaceDocumentGetSorterAndAllWorkGroupNodeOfflineAction extends ActionOffline {
+  final Either<Failure, Success> viewState;
+  final Sorter sorter;
+
+  SharedSpaceDocumentGetSorterAndAllWorkGroupNodeOfflineAction(this.viewState, this.sorter);
+}
+
+@immutable
+class SharedSpaceDocumentGetAllWorkGroupNodeOfflineAction extends ActionOffline {
+  final Either<Failure, Success> viewState;
+
+  SharedSpaceDocumentGetAllWorkGroupNodeOfflineAction(this.viewState);
+}
