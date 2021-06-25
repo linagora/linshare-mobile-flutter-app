@@ -210,3 +210,89 @@ final folderAuditLog = WorkGroupFolderAuditLogEntry(
     workGroupCopy2,
     workGroupCopy2
 );
+
+final sharedSpaceIdOffline1 = SharedSpaceId('eda9a917-10a7-44e0-98dc-7179ab914ab7');
+final workGroupNodeIdOffline1 = WorkGroupNodeId('e2c7569a-2fba-4a46-a02d-9a11643c0a46');
+final workGroupCache1 = WorkGroupNodeCache(
+    WorkGroupNodeId('2638b3a2-f782-4bf1-9015-200ee0067921'),
+    SharedSpaceId('eda9a917-10a7-44e0-98dc-7179ab914ab7'),
+    WorkGroupNodeId('e2c7569a-2fba-4a46-a02d-9a11643c0a46'),
+    DateTime.fromMillisecondsSinceEpoch(1616561531356),
+    DateTime.fromMillisecondsSinceEpoch(1616561531356),
+    'sample.ods',
+    WorkGroupNodeType.DOCUMENT,
+    '',
+    account1.name,
+    account1.mail,
+    account1.firstName,
+    account1.lastName,
+    account1.accountId,
+    account1.accountType,
+    3112,
+    MediaType.parse('application/vnd.oasis.opendocument.spreadsheet'),
+    false,
+    DateTime.fromMillisecondsSinceEpoch(1616561531356),
+    false,
+    'c6215e10c2f6086a2cd090cecfbad515d13170f00b7effe9cd6b162991622dea',
+    '/storage/path'
+);
+
+final workGroupCache2 = WorkGroupNodeCache(
+    WorkGroupNodeId('2638b3a2-f782-4bf1-9015-200ee0067921'),
+    SharedSpaceId('eda9a917-10a7-44e0-98dc-7179ab914ab7'),
+    WorkGroupNodeId('e2c7569a-2fba-4a46-a02d-9a11643c0a46'),
+    DateTime.fromMillisecondsSinceEpoch(1616561531358),
+    DateTime.fromMillisecondsSinceEpoch(1616561531358),
+    'hello.ods',
+    WorkGroupNodeType.DOCUMENT,
+    '',
+    account1.name,
+    account1.mail,
+    account1.firstName,
+    account1.lastName,
+    account1.accountId,
+    account1.accountType,
+    3112,
+    MediaType.parse('application/vnd.oasis.opendocument.spreadsheet'),
+    false,
+    DateTime.fromMillisecondsSinceEpoch(1616561531358),
+    false,
+    'c6215e10c2f6086a2cd090cecfbad515d13170f00b7effe9cd6b162991622dea',
+    '/storage/path'
+);
+final workGroupNode1 = WorkGroupDocument(
+    WorkGroupNodeId('2638b3a2-f782-4bf1-9015-200ee0067921'),
+    WorkGroupNodeId('e2c7569a-2fba-4a46-a02d-9a11643c0a46'),
+    WorkGroupNodeType.DOCUMENT,
+    SharedSpaceId('eda9a917-10a7-44e0-98dc-7179ab914ab7'),
+    DateTime.fromMillisecondsSinceEpoch(1616561531356),
+    DateTime.fromMillisecondsSinceEpoch(1616561531356),
+    '',
+    'sample.ods',
+    account1,
+    3112,
+    MediaType.parse('application/vnd.oasis.opendocument.spreadsheet'),
+    false,
+    DateTime.fromMillisecondsSinceEpoch(1616561531356),
+    false,
+    'c6215e10c2f6086a2cd090cecfbad515d13170f00b7effe9cd6b162991622dea',
+    localPath: '/storage/path'
+);
+final workGroupNode2 = WorkGroupDocument(
+    WorkGroupNodeId('2638b3a2-f782-4bf1-9015-200ee0067921'),
+    WorkGroupNodeId('e2c7569a-2fba-4a46-a02d-9a11643c0a46'),
+    WorkGroupNodeType.DOCUMENT,
+    SharedSpaceId('eda9a917-10a7-44e0-98dc-7179ab914ab7'),
+    DateTime.fromMillisecondsSinceEpoch(1616561531358),
+    DateTime.fromMillisecondsSinceEpoch(1616561531358),
+    '',
+    'hello.ods',
+    account1,
+    3112,
+    MediaType.parse('application/vnd.oasis.opendocument.spreadsheet'),
+    false,
+    DateTime.fromMillisecondsSinceEpoch(1616561531358),
+    false,
+    'c6215e10c2f6086a2cd090cecfbad515d13170f00b7effe9cd6b162991622dea',
+    localPath: '/storage/path'
+);
