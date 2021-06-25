@@ -35,68 +35,46 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../fixture/test_fixture.dart';
 import '../../mock/repository/mock_shared_space_document_repository.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
 
 void main() {
-  group('MakeAvailableOfflineSharedSpaceDocumentInteractor test', () {
+  group('get_all_shared_space_document_interactor test', () {
     late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    late MockTokenRepository tokenRepository;
-    late MockCredentialRepository credentialRepository;
-    late MakeAvailableOfflineSharedSpaceDocumentInteractor _makeAvailableOfflineSharedSpaceDocumentInteractor;
+    late GetAllSharedSpaceDocumentOfflineInteractor getAllSharedSpaceDocumentOfflineInteractor;
 
     setUp(() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
-      tokenRepository = MockTokenRepository();
-      credentialRepository = MockCredentialRepository();
-      _makeAvailableOfflineSharedSpaceDocumentInteractor = MakeAvailableOfflineSharedSpaceDocumentInteractor(sharedSpaceDocumentRepository, tokenRepository, credentialRepository);
+      getAllSharedSpaceDocumentOfflineInteractor = GetAllSharedSpaceDocumentOfflineInteractor(sharedSpaceDocumentRepository);
     });
 
-    test('MakeAvailableOfflineSharedSpaceDocumentInteractor should return success with one valid data', () async {
-      when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
+    test('get_all_shared_space_document_interactor should return success with one valid data', () async {
+      when(sharedSpaceDocumentRepository.getAllSharedSpaceDocumentOffline(
+          sharedSpaceIdOffline1,
+          workGroupNodeIdOffline1
+      )).thenAnswer((_) async => [workGroupNode1, workGroupNode2]);
 
-      when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-
-      when(sharedSpaceDocumentRepository.downloadMakeOfflineSharedSpaceDocument(
-          workGroupDocument.sharedSpaceId,
-          workGroupDocument.workGroupNodeId,
-          workGroupDocument.name,
-          DownloadPreviewType.original,
-          permanentToken,
-          linShareBaseUrl
-      )).thenAnswer((_) async => '');
-
-      when(sharedSpaceDocumentRepository.makeAvailableOfflineSharedSpaceDocument(
-          sharedSpaceNodeNested,
-          workGroupDocument,
-          ''
-      )).thenAnswer((_) async => true);
-
-      final result = await _makeAvailableOfflineSharedSpaceDocumentInteractor.execute(
-          sharedSpaceNodeNested,
-          workGroupDocument
+      final result = await getAllSharedSpaceDocumentOfflineInteractor.execute(
+          sharedSpaceIdOffline1,
+          workGroupNodeIdOffline1
       );
 
-      expect(result, Right<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentViewState(OfflineModeActionResult.successful, '')));
+      expect(result, Right<Failure, Success>(GetChildNodesViewState([workGroupNode1, workGroupNode2])));
     });
 
-    test('MakeAvailableOfflineSharedSpaceDocumentInteractor should fail when makeAvailableOfflineSharedSpaceDocument fail', () async {
+    test('get_all_shared_space_document_interactor should fail when getAllSharedSpaceDocumentOffline fail', () async {
       final error = SQLiteDatabaseException();
 
-      when(sharedSpaceDocumentRepository.makeAvailableOfflineSharedSpaceDocument(
-          sharedSpaceNodeNested,
-          workGroupDocument,
-          ''
+      when(sharedSpaceDocumentRepository.getAllSharedSpaceDocumentOffline(
+          sharedSpaceIdOffline1,
+          workGroupNodeIdOffline1
       )).thenThrow(error);
 
-      await _makeAvailableOfflineSharedSpaceDocumentInteractor.execute(
-          sharedSpaceNodeNested,
-          workGroupDocument
-      ).catchError((error) {
-        expect(error, isA<SQLiteDatabaseException>());
-      });
+      final result = await getAllSharedSpaceDocumentOfflineInteractor.execute(
+          sharedSpaceIdOffline1,
+          workGroupNodeIdOffline1
+      );
+
+      expect(result, Left<Failure, Success>(GetChildNodesFailure(SQLiteDatabaseException())));
     });
   });
 }
