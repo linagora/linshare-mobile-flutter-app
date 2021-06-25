@@ -31,8 +31,10 @@
 
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
@@ -71,6 +73,8 @@ class SharedSpaceViewModel extends BaseViewModel {
   final SaveSorterInteractor _saveSorterInteractor;
   final RenameWorkGroupInteractor _renameWorkGroupInteractor;
   final GetSharedSpaceInteractor _getSharedSpaceInteractor;
+  final GetAllSharedSpaceOfflineInteractor _getAllSharedSpaceOfflineInteractor;
+
   late StreamSubscription _storeStreamSubscription;
   late List<SharedSpaceNodeNested> _sharedSpaceNodes;
 
@@ -90,6 +94,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._saveSorterInteractor,
     this._renameWorkGroupInteractor,
     this._getSharedSpaceInteractor,
+    this._getAllSharedSpaceOfflineInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -108,9 +113,15 @@ class SharedSpaceViewModel extends BaseViewModel {
   }
 
   void getAllSharedSpaces({required bool needToGetOldSorter}) {
-    needToGetOldSorter
-      ? store.dispatch(_getAllSharedSpacesActionAndSort())
-      : store.dispatch(_getAllSharedSpacesAction());
+    if (store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
+      needToGetOldSorter
+        ? store.dispatch(_getAllSharedSpaceOfflineActionAndSort())
+        : store.dispatch(_getAllSharedSpaceOfflineAction());
+    } else {
+      needToGetOldSorter
+        ? store.dispatch(_getAllSharedSpacesActionAndSort())
+        : store.dispatch(_getAllSharedSpacesAction());
+    }
   }
 
   OnlineThunkAction _getAllSharedSpacesActionAndSort() {
@@ -419,6 +430,52 @@ class SharedSpaceViewModel extends BaseViewModel {
           RenameWorkGroupRequest(newName, sharedSpaceNodeNested.versioningParameters, sharedSpaceNodeNested.nodeType!))
         .then((result) => getAllSharedSpaces(needToGetOldSorter: true));
     });
+  }
+
+  ThunkAction<AppState> _getAllSharedSpaceOfflineAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartSharedSpaceLoadingAction());
+
+      await _getAllSharedSpaceOfflineInteractor.execute().then((result) => result.fold(
+        (failure) {
+          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
+          _sharedSpaceNodes = [];
+        },
+        (success) {
+          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
+          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+        }));
+
+      store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
+    };
+  }
+
+   ThunkAction<AppState> _getAllSharedSpaceOfflineActionAndSort() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartSharedSpaceLoadingAction());
+
+      await Future.wait([
+        _getSorterInteractor.execute(OrderScreen.workGroup),
+        _getAllSharedSpaceOfflineInteractor.execute()
+      ]).then((response) async {
+        response[0].fold((failure) {
+          store.dispatch(SharedSpaceGetSorterAction(Sorter.fromOrderScreen(OrderScreen.workGroup)));
+        }, (success) {
+          store.dispatch(SharedSpaceGetSorterAction(success is GetSorterSuccess
+            ? success.sorter
+            : Sorter.fromOrderScreen(OrderScreen.workGroup)));
+        });
+        response[1].fold((failure) {
+          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
+          _sharedSpaceNodes = [];
+        }, (success) {
+          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
+          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+        });
+      });
+
+      store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
+    };
   }
 
   @override
