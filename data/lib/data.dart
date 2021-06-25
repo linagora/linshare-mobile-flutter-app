@@ -33,6 +33,7 @@ export 'src/datasource_impl/shared_space_activities_datasource_impl.dart';
 export 'src/datasource_impl/biometric_datasource_impl.dart';
 export 'src/datasource_impl/local_document_datasource_impl.dart';
 export 'src/datasource_impl/local_shared_space_document_datasource_impl.dart';
+export 'src/datasource_impl/local_shared_space_datasource_impl.dart';
 
 // config
 export 'src/network/config/dynamic_url_interceptors.dart';
