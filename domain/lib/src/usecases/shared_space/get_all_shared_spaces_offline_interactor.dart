@@ -28,27 +28,23 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
-abstract class SharedSpaceRepository {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+class GetAllSharedSpaceOfflineInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+  GetAllSharedSpaceOfflineInteractor(this._sharedSpaceRepository);
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId shareSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
+  Future<Either<Failure, Success>> execute() async {
+    try {
+      final sharedSpaces = await _sharedSpaceRepository.getAllSharedSpacesOffline();
+      return Right<Failure, Success>(SharedSpacesViewState(sharedSpaces));
+    } catch (exception) {
+      return Left<Failure, Success>(SharedSpacesFailure(exception));
     }
-  );
-
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
-
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles();
-
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
-
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
+  }
 }

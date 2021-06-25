@@ -182,3 +182,29 @@ final sharedSpaceNodeNested = SharedSpaceNodeNested(
     QuotaId('e352ed55-abef-4630-816f-c025caa3b025'),
     VersioningParameter(false)
 );
+
+final sharedSpaceCache1 = SharedSpaceCache(
+  SharedSpaceId('e352ed55-abef-4630-816f-c025caa3b025'),
+  SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
+  SharedSpaceRoleName.ADMIN,
+  true,
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  'Shared Space 1',
+  LinShareNodeType.WORK_GROUP,
+  QuotaId('e352ed55-abef-4630-816f-c025caa3b025'),
+  false
+);
+
+final sharedSpaceCache2 = SharedSpaceCache(
+  SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+  SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
+  SharedSpaceRoleName.CONTRIBUTOR,
+  true,
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  'Shared Space 2',
+  LinShareNodeType.DRIVE,
+  QuotaId('e352ed55-abef-4630-816f-c025caa3b025'),
+  false
+);
