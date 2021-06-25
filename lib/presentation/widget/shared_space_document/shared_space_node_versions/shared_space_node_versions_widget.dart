@@ -144,7 +144,7 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
                       style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
               subtitle: Transform(
                   transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                  child: Text(versionsList[index].lastAuthor?.name ?? '',
+                  child: Text(versionsList[index].lastAuthor.name,
                       maxLines: 1,
                       style: TextStyle(fontSize: 14, color: AppColor.unselectedElementColor))),
               trailing: IconButton(
