@@ -323,4 +323,9 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) {
+    throw UnimplementedError();
+  }
 }

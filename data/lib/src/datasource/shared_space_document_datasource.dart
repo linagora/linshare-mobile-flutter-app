@@ -103,4 +103,6 @@ abstract class SharedSpaceDocumentDataSource {
   Future<WorkGroupDocument?> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId);
 
   Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath);
+
+  Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId);
 }
