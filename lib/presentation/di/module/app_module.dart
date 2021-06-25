@@ -340,6 +340,7 @@ class AppModule {
     ));
     getIt.registerFactory(() => DisableAvailableOfflineWorkGroupDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => GetAllSharedSpaceOfflineInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => GetAllSharedSpaceDocumentOfflineInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
   void _provideSharePreference() {

@@ -102,7 +102,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       if (_arguments != null) {
         sharedSpaceDocumentViewModel.initial(_arguments!);
       }
-      sharedSpaceDocumentViewModel.getSorterAndAllWorkGroupNode();
+      sharedSpaceDocumentViewModel.getAllWorkGroupNode(needToGetOldSorter: true);
     });
   }
 
@@ -455,14 +455,14 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
         builder: (context, documentState) =>
           documentState.viewState.fold(
             (failure) => RefreshIndicator(
-              onRefresh: () async => sharedSpaceDocumentViewModel.getAllWorkGroupNode(),
+              onRefresh: () async => sharedSpaceDocumentViewModel.getAllWorkGroupNode(needToGetOldSorter: false),
               child: failure is GetChildNodesFailure
                   ? SizedBox.shrink()
                   : _buildSharedSpaceDocumentListView(documentState.workGroupNodeList, documentState.selectMode)),
             (success) => success is LoadingState
               ? _buildSharedSpaceDocumentListView(documentState.workGroupNodeList, documentState.selectMode)
               : RefreshIndicator(
-                  onRefresh: () async => sharedSpaceDocumentViewModel.getAllWorkGroupNode(),
+                  onRefresh: () async => sharedSpaceDocumentViewModel.getAllWorkGroupNode(needToGetOldSorter: false),
                   child: _buildSharedSpaceDocumentListView(documentState.workGroupNodeList, documentState.selectMode))
           )
       );
@@ -472,14 +472,14 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
         builder: (context, destinationState) =>
           destinationState.viewState.fold(
             (failure) => RefreshIndicator(
-              onRefresh: () async => sharedSpaceDocumentViewModel.getAllWorkGroupNode(),
+              onRefresh: () async => sharedSpaceDocumentViewModel.getAllWorkGroupNode(needToGetOldSorter: false),
               child: failure is GetChildNodesFailure
                   ? SizedBox.shrink()
                   : _buildSharedSpaceDocumentListView(destinationState.workGroupNodeList, destinationState.selectMode)),
             (success) => success is LoadingState
               ? _buildSharedSpaceDocumentListView(destinationState.workGroupNodeList, destinationState.selectMode)
               : RefreshIndicator(
-                  onRefresh: () async => sharedSpaceDocumentViewModel.getAllWorkGroupNode(),
+                  onRefresh: () async => sharedSpaceDocumentViewModel.getAllWorkGroupNode(needToGetOldSorter: false),
                   child: _buildSharedSpaceDocumentListView(destinationState.workGroupNodeList, destinationState.selectMode))
         )
       );

@@ -239,6 +239,7 @@ class WidgetModule {
         getIt.get<GetWorkGroupNodeDetailInteractor>(),
         getIt.get<MakeAvailableOfflineSharedSpaceDocumentInteractor>(),
         getIt.get<DisableAvailableOfflineWorkGroupDocumentInteractor>(),
+        getIt.get<GetAllSharedSpaceDocumentOfflineInteractor>(),
     ));
   }
 
