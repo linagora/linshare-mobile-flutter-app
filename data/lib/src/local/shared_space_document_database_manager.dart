@@ -107,7 +107,11 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
       return workGroupNodeExist.isEmpty ? node : null;
     }).toList());
 
-    final mapObjects = listWorkGroupNodeNotExist.map((node) => node!.toJson()).toList();
+    final mapObjects = listWorkGroupNodeNotExist.map((node) {
+      return node != null ? node.toJson() : null;
+    }).toList();
+
+    mapObjects.removeWhere((element) => element == null);
 
     await _databaseClient.insertMultipleData(WorkGroupNodeTable.TABLE_NAME, mapObjects);
   }
@@ -142,14 +146,23 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
     return res > 0 ? true : false;
   }
 
-  Future<List<WorkGroupDocument>> getListWorkGroupDocumentInSharedSpace(SharedSpaceId sharedSpaceId, {WorkGroupNodeId? parentNodeId}) async {
+  Future<List<WorkGroupNode>> getListWorkGroupCacheInSharedSpace(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) async {
     final keyCondition = parentNodeId == null
-        ? '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.PARENT_NODE_ID} IS NULL'
+        ? '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND (${WorkGroupNodeTable.PARENT_NODE_ID} IS NULL OR ${WorkGroupNodeTable.PARENT_NODE_ID} = \'\')'
         : '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.PARENT_NODE_ID} = ?';
 
     final listValueCondition = parentNodeId == null? [sharedSpaceId.uuid]: [sharedSpaceId.uuid, parentNodeId.uuid];
     final res = await _databaseClient.getListDataWithCondition(WorkGroupNodeTable.TABLE_NAME, keyCondition, listValueCondition);
-    return res.isNotEmpty? res.map((mapObject) => WorkGroupNodeCache.fromJson(mapObject).toWorkGroupDocument()).toList(): [];
+    return res.isNotEmpty
+      ? res.map((mapObject) => _convertToWorkGroupNode(mapObject)).toList()
+      : <WorkGroupNode>[];
+  }
+
+  WorkGroupNode _convertToWorkGroupNode(Map<String, dynamic> mapObject) {
+    if (mapObject[WorkGroupNodeTable.LOCAL_PATH] == '') {
+      return WorkGroupNodeCache.fromJson(mapObject).toWorkGroupFolder();
+    }
+    return WorkGroupNodeCache.fromJson(mapObject).toWorkGroupDocument();
   }
 
   Future<List<SharedSpaceCache>> getListSharedSpace() async {
