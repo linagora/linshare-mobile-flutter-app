@@ -137,10 +137,12 @@ class DatabaseClient {
         whereArgs: values);
   }
 
-  Future insertMultipleData(String tableName, List<Map<String, dynamic>> mapObjects) async {
+  Future insertMultipleData(String tableName, List<Map<String, dynamic>?> mapObjects) async {
     final bat = await batch;
     mapObjects.forEach((element) {
-      bat.insert(tableName, element);
+      if (element != null) {
+        bat.insert(tableName, element);
+      }
     });
     await bat.commit(noResult: true);
   }
