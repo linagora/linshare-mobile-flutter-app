@@ -29,26 +29,47 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-abstract class SharedSpaceRepository {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+void main() {
+  group('get_all_shared_space_offline_interactor', () {
+    late MockSharedSpaceRepository sharedSpaceRepository;
+    late GetAllSharedSpaceOfflineInteractor getAllSharedSpaceOfflineInteractor;
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId shareSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
-  );
+    setUp(() {
+      sharedSpaceRepository = MockSharedSpaceRepository();
+      getAllSharedSpaceOfflineInteractor = GetAllSharedSpaceOfflineInteractor(sharedSpaceRepository);
+    });
 
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
+    test('get_all_shared_space_offline_interactor should return success with shared spaces list', () async {
+      when(sharedSpaceRepository.getSharedSpaces()).thenAnswer((_) async => [sharedSpace1, sharedSpace2]);
 
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles();
+      final result = await getAllSharedSpaceOfflineInteractor.execute();
 
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
+      final sharedSpacesList = result.map((success) => (success as SharedSpacesViewState).sharedSpacesList)
+        .getOrElse(() => []);
 
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
+      expect(sharedSpacesList, containsAllInOrder([sharedSpace1, sharedSpace2]));
+    });
+
+
+    test('get_all_shared_space_offline_interactor should fail when getAllSharedSpaceOffline fail', () async {
+      final exception = Exception();
+      when(sharedSpaceRepository.getSharedSpaces()).thenThrow(exception);
+
+      final result = await getAllSharedSpaceOfflineInteractor.execute();
+
+      result.fold(
+        (failure) => expect(failure, isA<SharedSpacesFailure>()),
+        (success) => expect(success, isA<SharedSpacesViewState>()));
+
+      expect(result, Left<Failure, Success>(SharedSpacesFailure(exception)));
+    });
+  });
 }
