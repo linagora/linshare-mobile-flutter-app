@@ -151,4 +151,11 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
     final res = await _databaseClient.getListDataWithCondition(WorkGroupNodeTable.TABLE_NAME, keyCondition, listValueCondition);
     return res.isNotEmpty? res.map((mapObject) => WorkGroupNodeCache.fromJson(mapObject).toWorkGroupDocument()).toList(): [];
   }
+
+  Future<List<SharedSpaceCache>> getListSharedSpace() async {
+    final res = await _databaseClient.getListData(SharedSpaceTable.TABLE_NAME);
+    return res.isNotEmpty
+      ? res.map((mapObject) => SharedSpaceCache.fromJson(mapObject)).toList()
+      : [];
+  }
 }

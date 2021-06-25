@@ -154,4 +154,9 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
       });
     });
   }
+
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline() {
+    throw UnimplementedError();
+  }
 }

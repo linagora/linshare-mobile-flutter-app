@@ -32,50 +32,56 @@
 import 'package:data/data.dart';
 import 'package:data/src/datasource/shared_space_datasource.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/sharedspace/shared_space_node_nested.dart';
 
-class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
-  final Map<DataSourceType, SharedSpaceDataSource> _sharedSpaceDataSources;
+class LocalSharedSpaceDataSourceImpl implements SharedSpaceDataSource {
+  final SharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
 
-  SharedSpaceRepositoryImpl(this._sharedSpaceDataSources);
-
-  @override
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces() {
-    return _sharedSpaceDataSources[DataSourceType.network]!.getSharedSpaces();
-  }
+  LocalSharedSpaceDataSourceImpl(this._sharedSpaceDocumentDatabaseManager);
 
   @override
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId) {
-    return _sharedSpaceDataSources[DataSourceType.network]!.deleteSharedSpace(sharedSpaceId);
-  }
-
-  @override
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId sharedSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
-  ) {
-    return _sharedSpaceDataSources[DataSourceType.network]!.getSharedSpace(sharedSpaceId, membersParameter: membersParameter, rolesParameter: rolesParameter);
+  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline() {
+    return Future.sync(() async {
+      final result = await _sharedSpaceDocumentDatabaseManager.getListSharedSpace();
+      return result.isNotEmpty
+        ? result.map((node) => node.toSharedSpaceNodeNested()).toList()
+        : <SharedSpaceNodeNested>[];
+    }).catchError((error) {
+      if (error is SQLiteDatabaseException) {
+        throw SQLiteDatabaseException();
+      } else {
+        throw LocalUnknownError(error);
+      }
+    });
   }
 
   @override
   Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest) {
-    return _sharedSpaceDataSources[DataSourceType.network]!.createSharedSpaceWorkGroup(createWorkGroupRequest);
+    throw UnimplementedError();
   }
 
   @override
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles() {
-    return _sharedSpaceDataSources[DataSourceType.network]!.getSharedSpaceRoles();
+  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<SharedSpaceNodeNested> getSharedSpace(SharedSpaceId sharedSpaceId, {MembersParameter membersParameter = MembersParameter.withoutMembers, RolesParameter rolesParameter = RolesParameter.withRole}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<SharedSpaceRole>> getSharedSpaceRoles() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<SharedSpaceNodeNested>> getSharedSpaces() {
+    throw UnimplementedError();
   }
 
   @override
   Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest) {
-    return _sharedSpaceDataSources[DataSourceType.network]!.renameWorkGroup(sharedSpaceId, renameRequest);
-  }
-
-  @override
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline() {
-    return _sharedSpaceDataSources[DataSourceType.local]!.getAllSharedSpacesOffline();
+    throw UnimplementedError();
   }
 }
