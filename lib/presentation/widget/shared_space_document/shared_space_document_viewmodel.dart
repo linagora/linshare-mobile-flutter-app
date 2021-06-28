@@ -42,6 +42,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
 import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
@@ -101,10 +102,12 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final CopyMultipleFilesToMySpaceInteractor _copyMultipleToMySpaceInteractor;
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
   final RemoveMultipleSharedSpaceNodesInteractor _removeMultipleSharedSpaceNodesInteractor;
-  final GetWorkGroupNodeDetailInteractor _getWorkGroupNodeDetailInteractor;
+  final GetSharedSpaceNodeInteractor _getSharedSpaceNodeInteractor;
   final MakeAvailableOfflineSharedSpaceDocumentInteractor _makeAvailableOfflineSharedSpaceDocumentInteractor;
   final DisableAvailableOfflineWorkGroupDocumentInteractor _disableAvailableOfflineWorkGroupDocumentInteractor;
   final GetAllSharedSpaceDocumentOfflineInteractor _getAllSharedSpaceDocumentOfflineInteractor;
+  final AutoSyncOfflineManager _autoSyncOfflineManager;
+  final EnableAvailableOfflineSharedSpaceDocumentInteractor _enableAvailableOfflineSharedSpaceDocumentInteractor;
 
   late StreamSubscription _storeStreamSubscription;
 
@@ -133,10 +136,12 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     this._copyMultipleToMySpaceInteractor,
     this._copyMultipleFilesToSharedSpaceInteractor,
     this._removeMultipleSharedSpaceNodesInteractor,
-    this._getWorkGroupNodeDetailInteractor,
+    this._getSharedSpaceNodeInteractor,
     this._makeAvailableOfflineSharedSpaceDocumentInteractor,
     this._disableAvailableOfflineWorkGroupDocumentInteractor,
     this._getAllSharedSpaceDocumentOfflineInteractor,
+    this._autoSyncOfflineManager,
+    this._enableAvailableOfflineSharedSpaceDocumentInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold((failure) => null, (success) {
@@ -145,6 +150,9 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         } else if (success is DisableSearchViewState) {
           store.dispatch(SharedSpaceDocumentSetSearchResultAction(_workGroupNodesList));
           _searchQuery = SearchQuery('');
+        } else if (success is MakeAvailableOfflineMultipleSharedSpaceDocumentsAllSuccessViewState ||
+            success is MakeAvailableOfflineMultipleSharedSpaceDocumentsHasSomeFilesFailedViewState) {
+          store.dispatch(_enableAvailableOfflineSharedSpaceDocument(_workGroupNodesList));
         }
       });
     });
@@ -193,11 +201,15 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
               ? SharedSpaceDocumentGetSorterAndAllWorkGroupNodeAction(Left(failure), sorter)
               : SharedSpaceDestinationGetSorterAndAllNodeAction(Left(failure), sorter));
         }, (success) {
-          _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : <WorkGroupNode?>[];
+          _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : <WorkGroupNode>[];
 
           store.dispatch(_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
               ? SharedSpaceDocumentGetSorterAndAllWorkGroupNodeAction(Right(success), sorter)
               : SharedSpaceDestinationGetSorterAndAllNodeAction(Right(success), sorter));
+
+          if (_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace) {
+            _autoSyncOfflineAllSharedSpaceDocuments(_workGroupNodesList);
+          }
         });
 
         if (getSorter() != null) {
@@ -234,6 +246,10 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
                       ? SharedSpaceDocumentGetAllWorkGroupNodeAction(Right(success))
                       : SharedSpaceDestinationGetAllNodeAction(Right(success)));
                 }
+
+                if (_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace) {
+                  _autoSyncOfflineAllSharedSpaceDocuments(_workGroupNodesList);
+                }
           }));
 
       if (getSorter() != null) {
@@ -253,9 +269,8 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         _sortInteractor.execute(_workGroupNodesList, sorter)
       ]).then((response) async {
         _workGroupNodesList = response[1]
-            .map((result) =>
-                result is GetChildNodesViewState ? result.workGroupNodes : <WorkGroupNode?>[])
-            .getOrElse(() => <WorkGroupNode?>[]);
+            .map((result) => result is GetChildNodesViewState ? result.workGroupNodes : <WorkGroupNode>[])
+            .getOrElse(() => <WorkGroupNode>[]);
 
         store.dispatch(_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
             ? SharedSpaceDocumentSortWorkGroupNodeAction(_workGroupNodesList, sorter)
@@ -910,27 +925,37 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   void getWorkGroupNodeDetail() {
     final sharedSpaceId = getSharedSpaceId(args: _documentArguments);
     final workGroupNodeId = getWorkGroupNodeId(args: _documentArguments);
-    if (workGroupNodeId != null) {
+    if (sharedSpaceId != null && workGroupNodeId != null) {
       store.dispatch(_getWorkGroupNodeDetailAction(sharedSpaceId, workGroupNodeId));
     }
   }
 
-  OnlineThunkAction _getWorkGroupNodeDetailAction(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId) {
+  OnlineThunkAction _getWorkGroupNodeDetailAction(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId) {
     return OnlineThunkAction((Store<AppState> store) async {
-      await _getWorkGroupNodeDetailInteractor
-        .execute(sharedSpaceId, workGroupNodeId)
+      await _getSharedSpaceNodeInteractor
+        .execute(sharedSpaceId, workGroupNodeId, hasTreePath: true)
         .then((result) => result.fold(
           (failure) => store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(null)),
-          (success) => success is GetWorkGroupNodeDetailViewState
+          (success) => success is SharedSpaceNodeViewState
             ? store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(success.workGroupNode as WorkGroupFolder))
             : store.dispatch(SharedSpaceDocumentSetWorkGroupFolderAction(null))
       ));
     });
   }
 
-  List<TreeNode> _getListTreeNodeInWorkGroupNodeCurrent() => getWorkGroupFolder()?.listTreeNode.length == 1
-    ? getWorkGroupNode() != null ? [getWorkGroupNode()!.toTreeNode()] : []
-    : getWorkGroupFolder() != null ? getWorkGroupFolder()!.listTreeNode : [];
+  List<TreeNode> _getListTreeNodeInWorkGroupNodeCurrent() {
+    final workGroupFolderCurrent = getWorkGroupFolder();
+    if (workGroupFolderCurrent != null && workGroupFolderCurrent.treePath.isNotEmpty) {
+      final listTreePathOnlyContainFolder = workGroupFolderCurrent.treePath;
+      listTreePathOnlyContainFolder.removeAt(0);
+      if (getWorkGroupNode() != null) {
+        listTreePathOnlyContainFolder.add(getWorkGroupNode()!.toTreeNode());
+      }
+      return listTreePathOnlyContainFolder;
+    } else {
+      return [];
+    }
+  }
 
   void makeAvailableOfflineSharedSpaceDocument(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
     _appNavigation.popBack();
@@ -945,14 +970,14 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     store.dispatch(SharedSpaceDocumentSetSyncOfflineModeAction(_workGroupNodesList));
 
     store.dispatch(_makeAvailableOfflineSharedSpaceDocumentAction(
-      getSharedSpaceNodeNested(),
+      getSharedSpaceNodeNested()!,
       newWorkGroupDocument,
       indexWorkGroupDocument,
       treeNodes: listTreeNode));
   }
 
   OnlineThunkAction _makeAvailableOfflineSharedSpaceDocumentAction(
-      SharedSpaceNodeNested? sharedSpaceNodeNested,
+      SharedSpaceNodeNested sharedSpaceNodeNested,
       WorkGroupDocument workGroupDocument,
       int indexWorkGroupDocument,
       {List<TreeNode>? treeNodes}) {
@@ -1023,12 +1048,12 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
             .getOrElse(() => defaultSorter);
 
         response[1].fold((failure) {
-          _workGroupNodesList = <WorkGroupNode?>[];
+          _workGroupNodesList = [];
           store.dispatch(_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
             ? SharedSpaceDocumentGetSorterAndAllWorkGroupNodeOfflineAction(Left(failure), sorter)
             : SharedSpaceDestinationGetSorterAndAllNodeAction(Left(failure), sorter));
         }, (success) {
-          _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : <WorkGroupNode?>[];
+          _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : [];
           store.dispatch(_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
             ? SharedSpaceDocumentGetSorterAndAllWorkGroupNodeOfflineAction(Right(success), sorter)
             : SharedSpaceDestinationGetSorterAndAllNodeAction(Right(success), sorter));
@@ -1052,13 +1077,13 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
           getWorkGroupNodeId(args: _documentArguments))
         .then((result) => result.fold(
           (failure) {
-            _workGroupNodesList = <WorkGroupNode?>[];
+            _workGroupNodesList = [];
             store.dispatch(_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
               ? SharedSpaceDocumentGetAllWorkGroupNodeOfflineAction(Left(failure))
               : SharedSpaceDestinationGetAllNodeAction(Left(failure)));
           },
           (success) {
-            _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : <WorkGroupNode?>[];
+            _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : [];
             store.dispatch(_documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
               ? SharedSpaceDocumentGetAllWorkGroupNodeOfflineAction(Right(success))
               : SharedSpaceDestinationGetAllNodeAction(Right(success)));
@@ -1068,6 +1093,43 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         store.dispatch(_sortFilesAction(getSorter()!));
       }
     };
+  }
+
+  void _autoSyncOfflineAllSharedSpaceDocuments(List<WorkGroupNode?> workGroupNodes) {
+    final listWorkGroupDocumentAvailableOffline = workGroupNodes
+        .whereType<WorkGroupDocument>()
+        .where((element) => element.isOfflineMode())
+        .toList();
+    if (listWorkGroupDocumentAvailableOffline.isNotEmpty) {
+      _autoSyncOfflineManager.syncOfflineSharedSpaceDocument(listWorkGroupDocumentAvailableOffline);
+    }
+  }
+
+  ThunkAction<AppState> _enableAvailableOfflineSharedSpaceDocument(List<WorkGroupNode?> workGroupNodes) {
+    return (Store<AppState> store) async {
+      _showLoading();
+      await _enableAvailableOfflineSharedSpaceDocumentInteractor
+        .execute(workGroupNodes)
+        .then((result) => result.fold(
+          (failure) {
+            store.dispatch(SharedSpaceDocumentGetAllWorkGroupNodeOfflineAction(Left(failure)));
+            _workGroupNodesList = <WorkGroupNode?>[];
+          },
+          (success) {
+            store.dispatch(SharedSpaceDocumentGetAllWorkGroupNodeOfflineAction(Right(success)));
+            _workGroupNodesList = success is GetChildNodesViewState ? success.workGroupNodes : <WorkGroupNode?>[];
+          }));
+    };
+  }
+
+  void onClickPreviewFile(BuildContext context, WorkGroupDocument workGroupDocument) {
+    if (workGroupDocument.isOfflineMode() && store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
+      _openDownloadedPreviewWorkGroupDocument(workGroupDocument, DownloadPreviewWorkGroupDocumentViewState(workGroupDocument.localPath!));
+    } else {
+      store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+        previewWorkGroupDocument(context, workGroupDocument);
+      }));
+    }
   }
 
   @override
