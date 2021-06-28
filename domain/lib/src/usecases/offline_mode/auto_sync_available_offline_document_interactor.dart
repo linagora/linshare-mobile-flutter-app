@@ -45,19 +45,28 @@ class AutoSyncAvailableOfflineDocumentInteractor {
 
   Future<Either<Failure, Success>> execute(Document document) async {
     try {
-      final downloadPreviewType = document.mediaType.isImageFile()
-        ? DownloadPreviewType.image
-        : DownloadPreviewType.original;
+      final documentLocal = await _documentRepository.getDocumentOffline(document.documentId);
+      var filePath = documentLocal?.localPath ?? '';
+      final shaLocal = documentLocal?.sha256sum;
 
-      final filePath = await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
-          .then((List responses) async {
-        return await _documentRepository.downloadMakeOfflineDocument(
-          document.documentId,
-          document.name,
-          downloadPreviewType,
-          responses[0],
-          responses[1]);
-      });
+      if (shaLocal != document.sha256sum) {
+        final downloadPreviewType = document.mediaType.isImageFile()
+            ? DownloadPreviewType.image
+            : DownloadPreviewType.original;
+
+        filePath = await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
+            .then((List responses) async {
+          final token = responses[0];
+          final baseUrl = responses[1];
+
+          return await _documentRepository.downloadMakeOfflineDocument(
+              document.documentId,
+              document.name,
+              downloadPreviewType,
+              token,
+              baseUrl);
+        });
+      }
 
       if (filePath.isNotEmpty) {
         final result = await _documentRepository.updateDocumentOffline(document, filePath);

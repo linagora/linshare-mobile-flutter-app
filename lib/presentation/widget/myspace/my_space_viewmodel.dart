@@ -863,9 +863,7 @@ class MySpaceViewModel extends BaseViewModel {
   }
 
   void _autoSyncOfflineAllDocuments(List<Document> documents) {
-    List<Document?> listDocumentAvailableOffline = documents.map((document) => document.isOfflineMode() ? document : null)
-        .where((document) => document != null)
-        .toList();
+    final listDocumentAvailableOffline = documents.where((document) => document.isOfflineMode()).toList();
     if (listDocumentAvailableOffline.isNotEmpty) {
       _autoSyncOfflineManager.syncOfflineDocument(listDocumentAvailableOffline);
     }
