@@ -51,12 +51,14 @@ void main() {
     test('get shared space node interactor should return success with one valid data', () async {
       when(sharedSpaceDocumentRepository.getWorkGroupNode(
         workGroupDocument1.sharedSpaceId,
-        workGroupDocument1.workGroupNodeId))
+        workGroupDocument1.workGroupNodeId,
+        hasTreePath: false))
       .thenAnswer((_) async => workGroupDocument1);
 
       final result = await getSharedSpaceNodeInteractor.execute(
           workGroupDocument1.sharedSpaceId,
-          workGroupDocument1.workGroupNodeId);
+          workGroupDocument1.workGroupNodeId,
+          hasTreePath: false);
 
       result.fold((left) {
         expect((left as SharedSpaceNodeFailure).exception, Exception());
@@ -70,12 +72,14 @@ void main() {
 
       when(sharedSpaceDocumentRepository.getWorkGroupNode(
          workGroupDocument1.sharedSpaceId,
-         workGroupDocument1.workGroupNodeId))
+         workGroupDocument1.workGroupNodeId,
+         hasTreePath: false))
       .thenThrow(exception);
 
       final result = await getSharedSpaceNodeInteractor.execute(
         workGroupDocument1.sharedSpaceId,
-        workGroupDocument1.workGroupNodeId);
+        workGroupDocument1.workGroupNodeId,
+        hasTreePath: false);
 
       expect(result, Left<Failure, Success>(SharedSpaceNodeFailure(exception)));
     });

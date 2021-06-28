@@ -34,8 +34,6 @@ import 'package:domain/domain.dart';
 
 class WorkGroupFolder extends WorkGroupNode {
 
-  final List<TreeNode> listTreeNode;
-
   WorkGroupFolder(
     WorkGroupNodeId workGroupNodeId,
     WorkGroupNodeId? parentWorkGroupNodeId,
@@ -46,7 +44,7 @@ class WorkGroupFolder extends WorkGroupNode {
     String? description,
     String name,
     Account lastAuthor,
-    this.listTreeNode
+    List<TreeNode> listTreeNode
   ) : super(
     workGroupNodeId,
     parentWorkGroupNodeId,
@@ -57,5 +55,6 @@ class WorkGroupFolder extends WorkGroupNode {
     description ?? '',
     name,
     lastAuthor,
+    listTreeNode,
   );
 }
