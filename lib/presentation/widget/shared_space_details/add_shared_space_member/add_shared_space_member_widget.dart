@@ -212,7 +212,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
               member.account?.name ?? '',
               member.account?.mail ?? '',
               member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
-              userCurrentRole: sharedSpace.sharedSpaceRole?.name,
+              userCurrentRole: sharedSpace.sharedSpaceRole.name,
               tileColor: Colors.white,
               onSelectedRoleCallback: () =>
                 selectRoleBottomSheet(
