@@ -46,7 +46,9 @@ class EnableAvailableOfflineDocumentInteractor {
     try {
       final listDocument = await Future.wait(documents.map((item) async {
           final documentLocal = await _documentRepository.getDocumentOffline(item.documentId);
-          return documentLocal ?? item;
+          return documentLocal != null
+            ? item.toDocument(documentLocal.localPath ?? '')
+            : item;
         }).toList());
       return Right<Failure, Success>(MySpaceViewState(listDocument));
     } catch (exception) {
