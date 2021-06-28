@@ -48,8 +48,7 @@ part 'work_group_folder_dto.g.dart';
 @SharedSpaceIdConverter()
 class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
 
-  @JsonKey(name: Attribute.treePath)
-  final List<TreeNodeDto>? listTreeNodeDto;
+  final List<TreeNodeDto>? treePath;
 
   WorkGroupNodeFolderDto(
     WorkGroupNodeId workGroupNodeId,
@@ -61,7 +60,7 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
     String? description,
     String? name,
     AccountDto? lastAuthor,
-    this.listTreeNodeDto,
+    this.treePath,
   ) : super(
           workGroupNodeId,
           parentWorkGroupNodeId,
@@ -90,7 +89,7 @@ class WorkGroupNodeFolderDto extends WorkGroupNodeDto {
         description,
         name,
         lastAuthor,
-        listTreeNodeDto
+        treePath
       ];
 }
 
@@ -107,6 +106,6 @@ extension WorkGroupNodeFolderDtoExtension on WorkGroupNodeFolderDto {
         lastAuthor != null
           ? lastAuthor!.toAccount()
           : Account('', '', AccountId(''), AccountType.INTERNAL, '', ''),
-        listTreeNodeDto != null ? listTreeNodeDto!.map((node) => node.toTreeNode()).toList() : []
+        treePath != null ? treePath!.map((node) => node.toTreeNode()).toList() : []
       );
 }
