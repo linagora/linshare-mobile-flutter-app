@@ -40,10 +40,10 @@ class AutoSyncAvailableOfflineMultipleDocumentInteractor {
 
   AutoSyncAvailableOfflineMultipleDocumentInteractor(this._autoSyncAvailableOfflineDocumentInteractor);
 
-  Future<Either<Failure, Success>> execute(List<Document?> documents) async {
+  Future<Either<Failure, Success>> execute(List<Document> documents) async {
     try {
       final listResult = await Future.wait(documents.map((element) =>
-          _autoSyncAvailableOfflineDocumentInteractor.execute(element!)));
+          _autoSyncAvailableOfflineDocumentInteractor.execute(element)));
       if (listResult.length == 1) {
         return listResult.first;
       } else {
