@@ -46,7 +46,7 @@ class AutoSyncOfflineManager {
     this._autoSyncAvailableOfflineMultipleDocumentInteractor,
   );
 
-  void syncOfflineDocument(List<Document?> documents) async {
+  void syncOfflineDocument(List<Document> documents) async {
     if (_store.state.networkConnectivityState.connectivityResult != ConnectivityResult.none) {
       await _autoSyncAvailableOfflineMultipleDocumentInteractor.execute(documents)
         .then((response) => response.fold(
