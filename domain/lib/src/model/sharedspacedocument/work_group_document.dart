@@ -40,7 +40,7 @@ class WorkGroupDocument extends WorkGroupNode {
   final DateTime uploadDate;
   final bool hasRevision;
   final String sha256sum;
-  final String localPath;
+  final String? localPath;
   final SyncOfflineState syncOfflineState;
 
   WorkGroupDocument(
@@ -53,6 +53,7 @@ class WorkGroupDocument extends WorkGroupNode {
     String? description,
     String name,
     Account lastAuthor,
+    List<TreeNode> listTreeNode,
     this.size,
     this.mediaType,
     this.hasThumbnail,
@@ -60,7 +61,7 @@ class WorkGroupDocument extends WorkGroupNode {
     this.hasRevision,
     this.sha256sum,
     {
-      this.localPath = '',
+      this.localPath,
       this.syncOfflineState = SyncOfflineState.none
     }) : super(
       workGroupNodeId,
@@ -71,9 +72,10 @@ class WorkGroupDocument extends WorkGroupNode {
       modificationDate,
       description ?? '',
       name,
-      lastAuthor);
+      lastAuthor,
+      listTreeNode);
 
-  bool isOfflineMode() => localPath.isNotEmpty;
+  bool isOfflineMode() => localPath != null && localPath!.isNotEmpty;
 
   @override
   List<Object?> get props => [
