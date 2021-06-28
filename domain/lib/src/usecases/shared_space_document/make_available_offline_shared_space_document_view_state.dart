@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class MakeAvailableOfflineSharedSpaceDocumentViewState extends ViewState {
@@ -57,4 +58,40 @@ class CannotAvailableOfflineSharedSpaceDocument extends FeatureFailure {
 
   @override
   List<Object> get props => [];
+}
+
+class MakeAvailableOfflineMultipleSharedSpaceDocumentsAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  MakeAvailableOfflineMultipleSharedSpaceDocumentsAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class MakeAvailableOfflineMultipleSharedSpaceDocumentsHasSomeFilesFailedViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  MakeAvailableOfflineMultipleSharedSpaceDocumentsHasSomeFilesFailedViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class MakeAvailableOfflineMultipleSharedSpaceDocumentsAllFailure extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  MakeAvailableOfflineMultipleSharedSpaceDocumentsAllFailure(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class MakeAvailableOfflineMultipleSharedSpaceDocumentsThrowExceptionFailure extends FeatureFailure {
+  final exception;
+
+  MakeAvailableOfflineMultipleSharedSpaceDocumentsThrowExceptionFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
 }

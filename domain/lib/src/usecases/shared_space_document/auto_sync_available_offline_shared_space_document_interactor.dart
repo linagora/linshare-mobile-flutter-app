@@ -33,19 +33,48 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
-import 'package:domain/src/usecases/shared_space_document/get_work_group_node_detail_view_state.dart';
 
-class GetWorkGroupNodeDetailInteractor {
+class AutoSyncAvailableOfflineSharedSpaceDocumentInteractor {
   final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
+  final TokenRepository _tokenRepository;
+  final CredentialRepository _credentialRepository;
 
-  GetWorkGroupNodeDetailInteractor(this._sharedSpaceDocumentRepository);
+  AutoSyncAvailableOfflineSharedSpaceDocumentInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository);
 
-  Future<Either<Failure, Success>> execute(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId) async {
+  Future<Either<Failure, Success>> execute(WorkGroupDocument workGroupDocument) async {
     try {
-      final workGroupNode = await _sharedSpaceDocumentRepository.getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: true);
-      return Right<Failure, Success>(GetWorkGroupNodeDetailViewState(workGroupNode));
+      final workGroupOffline = await _sharedSpaceDocumentRepository.getSharesSpaceDocumentOffline(workGroupDocument.workGroupNodeId);
+
+      var filePath = workGroupDocument.localPath;
+      final shaLocal = workGroupOffline?.sha256sum;
+
+      if (shaLocal != workGroupDocument.sha256sum) {
+        final downloadPreviewType = workGroupDocument.mediaType.isImageFile() ? DownloadPreviewType.image : DownloadPreviewType.original;
+
+        filePath = await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
+            .then((List responses) async {
+          final token = responses[0];
+          final baseUrl = responses[1];
+
+          return await _sharedSpaceDocumentRepository.downloadMakeOfflineSharedSpaceDocument(
+              workGroupDocument.sharedSpaceId,
+              workGroupDocument.workGroupNodeId,
+              workGroupDocument.name,
+              downloadPreviewType,
+              token,
+              baseUrl);
+        });
+      }
+
+      final resultUpdate = await _sharedSpaceDocumentRepository.updateSharedSpaceDocumentOffline(workGroupDocument, filePath!);
+
+      if (resultUpdate) {
+        return Right<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentViewState(OfflineModeActionResult.successful, filePath));
+      } else {
+        return Left<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentFailure(OfflineModeActionResult.failure));
+      }
     } catch (exception) {
-      return Left<Failure, Success>(GetWorkGroupNodeDetailFailure(exception));
+      return Left<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentFailure(exception));
     }
   }
 }

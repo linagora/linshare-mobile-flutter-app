@@ -31,31 +31,29 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:domain/src/model/copy/copy_request.dart';
-import 'package:domain/src/model/copy/space_type.dart';
-import 'package:domain/src/model/document/document.dart';
-import 'package:domain/src/model/offline_mode/sync_offline_state.dart';
+import 'package:domain/domain.dart';
 
-extension DocumentExtensions on Document {
-  CopyRequest toCopyRequest() {
-    return CopyRequest(documentId.uuid, SpaceType.PERSONAL_SPACE);
-  }
-
-  Document toDocument(String localPath) {
-    return Document(
-        documentId,
-        description,
+extension WorkGroupDocumentExtensions on WorkGroupDocument {
+  WorkGroupDocument toWorkGroupDocument(String? localPath) {
+    return WorkGroupDocument(
+        workGroupNodeId,
+        parentWorkGroupNodeId,
+        type,
+        sharedSpaceId,
         creationDate,
         modificationDate,
-        expirationDate,
-        ciphered,
+        description,
         name,
+        lastAuthor,
+        [],
         size,
-        sha256sum,
-        hasThumbnail,
-        shared,
         mediaType,
+        hasThumbnail,
+        uploadDate,
+        hasRevision,
+        sha256sum,
         localPath: localPath,
-        syncOfflineState: SyncOfflineState.completed);
+        syncOfflineState: SyncOfflineState.completed
+    );
   }
 }

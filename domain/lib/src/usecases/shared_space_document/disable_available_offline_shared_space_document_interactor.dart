@@ -43,7 +43,7 @@ class DisableAvailableOfflineWorkGroupDocumentInteractor {
         workGroupDocument.sharedSpaceId,
         workGroupDocument.parentWorkGroupNodeId,
         workGroupDocument.workGroupNodeId,
-        workGroupDocument.localPath);
+        workGroupDocument.localPath!);
       return Right<Failure, Success>(DisableAvailableOfflineSharedSpaceDocumentViewState(result
         ? OfflineModeActionResult.successful
         : OfflineModeActionResult.failure));
