@@ -377,14 +377,14 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
 
   List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
     return [
-      if (SharedSpaceOperationRole.renameWorkGroupSharedSpaceRoles.contains(sharedSpace.element.sharedSpaceRole?.name))
+      if (SharedSpaceOperationRole.renameWorkGroupSharedSpaceRoles.contains(sharedSpace.element.sharedSpaceRole.name))
         _renameWorkgroupAction(context, sharedSpace.element),
       _sharedSpaceDetailsAction(sharedSpace.element)
     ];
   }
 
   Widget _contextMenuFooterAction(SharedSpaceNodeNested sharedSpace) {
-    return SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole?.name)
+    return SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name)
         ? SimpleContextMenuActionBuilder(
                 Key('delete_shared_space_context_menu_action'),
                 SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
