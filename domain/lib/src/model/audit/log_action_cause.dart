@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 enum LogActionCause {
+  MOVE,
   COPY,
   RESTORE,
   UNDEFINED,
