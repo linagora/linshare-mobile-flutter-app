@@ -31,52 +31,36 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:testshared/testshared.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
 
-import '../../mock/repository/mock_shared_space_document_repository.dart';
+class AutoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor {
+  final AutoSyncAvailableOfflineSharedSpaceDocumentInteractor _autoSyncAvailableOfflineSharedSpaceDocumentInteractor;
 
-void main() {
-  group('get_work_group_node_detail_interactor test', () {
-    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
-    late GetWorkGroupNodeDetailInteractor getWorkGroupNodeDetailInteractor;
+  AutoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor(this._autoSyncAvailableOfflineSharedSpaceDocumentInteractor);
 
-    setUp(() {
-      sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
-      getWorkGroupNodeDetailInteractor = GetWorkGroupNodeDetailInteractor(sharedSpaceDocumentRepository);
-    });
-
-    test('get_work_group_node_detail_interactor should return success with one valid data', () async {
-      when(sharedSpaceDocumentRepository.getWorkGroupNode(
-          workGroupDocument1.sharedSpaceId,
-          workGroupDocument1.workGroupNodeId,
-          hasTreePath: true
-      )).thenAnswer((_) async => workGroupDocument1);
-
-      final result = await getWorkGroupNodeDetailInteractor.execute(
-          workGroupDocument1.sharedSpaceId,
-          workGroupDocument1.workGroupNodeId
-      );
-
-      expect(result, Right<Failure, Success>(GetWorkGroupNodeDetailViewState(workGroupDocument1)));
-    });
-
-    test('get_work_group_node_detail_interactor should fail when getWorkGroupNode fail', () async {
-      final exception = Exception();
-
-      when(sharedSpaceDocumentRepository.getWorkGroupNode(
-          workGroupDocument1.sharedSpaceId,
-          workGroupDocument1.workGroupNodeId,
-          hasTreePath: true
-      )).thenThrow(exception);
-
-      final result = await getWorkGroupNodeDetailInteractor.execute(
-          workGroupDocument1.sharedSpaceId,
-          workGroupDocument1.workGroupNodeId
-      );
-
-      expect(result, Left<Failure, Success>(GetWorkGroupNodeDetailFailure(exception)));
-    });
-  });
+  Future<Either<Failure, Success>> execute(List<WorkGroupDocument> workGroupDocuments) async {
+    try {
+      final listResult = await Future.wait(workGroupDocuments.map((element) =>
+          _autoSyncAvailableOfflineSharedSpaceDocumentInteractor.execute(element)));
+      if (listResult.length == 1) {
+        return listResult.first;
+      } else {
+        var failedFileCount = 0;
+        listResult.forEach((element) {
+          if (element is Left) {
+            failedFileCount++;
+          }
+        });
+        if (failedFileCount == 0) {
+          return Right(MakeAvailableOfflineMultipleSharedSpaceDocumentsAllSuccessViewState(listResult));
+        } else if (failedFileCount == listResult.length) {
+          return Left(MakeAvailableOfflineMultipleSharedSpaceDocumentsAllFailure(listResult));
+        }
+        return Right(MakeAvailableOfflineMultipleSharedSpaceDocumentsHasSomeFilesFailedViewState(listResult));
+      }
+    } catch (exception) {
+      return Left<Failure, Success>(MakeAvailableOfflineMultipleSharedSpaceDocumentsThrowExceptionFailure(exception));
+    }
+  }
 }

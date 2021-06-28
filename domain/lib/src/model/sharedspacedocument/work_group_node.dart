@@ -46,6 +46,7 @@ abstract class WorkGroupNode with EquatableMixin {
   final String description;
   final String name;
   final Account lastAuthor;
+  final List<TreeNode> treePath;
 
   WorkGroupNode(
       this.workGroupNodeId,
@@ -56,7 +57,8 @@ abstract class WorkGroupNode with EquatableMixin {
       this.modificationDate,
       this.description,
       this.name,
-      this.lastAuthor);
+      this.lastAuthor,
+      this.treePath);
 
   @override
   List<Object?> get props => [
@@ -68,6 +70,7 @@ abstract class WorkGroupNode with EquatableMixin {
     modificationDate,
     description,
     name,
-    lastAuthor
+    lastAuthor,
+    treePath,
   ];
 }
