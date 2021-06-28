@@ -48,19 +48,25 @@ class GetAllChildNodesInteractor {
       final newChildNodes = await Future.wait(childNodes.map((item) async {
         if (item is WorkGroupDocument) {
           final documentLocal = await _sharedSpaceDocumentRepository.getSharesSpaceDocumentOffline(item.workGroupNodeId);
-          return documentLocal ?? item;
+          return documentLocal != null ? item.toWorkGroupDocument(documentLocal.localPath) : item;
         } else {
           return item;
         }
       }).toList());
 
-      if (newChildNodes.every((element) => element!.type == WorkGroupNodeType.DOCUMENT_REVISION)) {
+      if (newChildNodes.every((element) => element?.type == WorkGroupNodeType.DOCUMENT_REVISION)) {
         newChildNodes.sort((node1, node2) {
-          return node2!.creationDate.compareTo(node1!.creationDate);
+          if (node2 != null && node1 != null) {
+            return node2.creationDate.compareTo(node1.creationDate);
+          }
+          return 0;
         });
       } else {
         newChildNodes.sort((node1, node2) {
-          return node2!.modificationDate.compareTo(node1!.modificationDate);
+          if (node2 != null && node1 != null) {
+            return node2.modificationDate.compareTo(node1.modificationDate);
+          }
+          return 0;
         });
       }
 

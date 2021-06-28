@@ -29,22 +29,29 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
 
-class GetWorkGroupNodeDetailViewState extends ViewState {
-  final WorkGroupNode? workGroupNode;
+class EnableAvailableOfflineSharedSpaceDocumentInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
 
-  GetWorkGroupNodeDetailViewState(this.workGroupNode);
+  EnableAvailableOfflineSharedSpaceDocumentInteractor(this._sharedSpaceDocumentRepository);
 
-  @override
-  List<Object> get props => [if(workGroupNode != null) workGroupNode!];
-}
-
-class GetWorkGroupNodeDetailFailure extends FeatureFailure {
-  final exception;
-
-  GetWorkGroupNodeDetailFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  Future<Either<Failure, Success>> execute(List<WorkGroupNode?> workGroupNodes) async {
+    try {
+      final result = await Future.wait(workGroupNodes.map((item) async {
+        if (item is WorkGroupDocument) {
+          final documentLocal = await _sharedSpaceDocumentRepository.getSharesSpaceDocumentOffline(item.workGroupNodeId);
+          return documentLocal != null ? item.toWorkGroupDocument(documentLocal.localPath) : item;
+        } else {
+          return item;
+        }
+      }).toList());
+      return Right<Failure, Success>(GetChildNodesViewState(result));
+    } catch (exception) {
+      return Left<Failure, Success>(GetChildNodesFailure(exception));
+    }
+  }
 }
