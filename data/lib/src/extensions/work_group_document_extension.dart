@@ -37,7 +37,7 @@ extension WorkGroupDocumentExtension on WorkGroupDocument {
     return WorkGroupNodeCache(
         workGroupNodeId,
         sharedSpaceId,
-        parentWorkGroupNodeId ?? WorkGroupNodeId(''),
+        parentWorkGroupNodeId != null ? WorkGroupNodeParentId(parentWorkGroupNodeId!.uuid) : null,
         creationDate,
         modificationDate,
         name,
@@ -70,13 +70,14 @@ extension WorkGroupDocumentExtension on WorkGroupDocument {
         description,
         name,
         lastAuthor,
+        [],
         size,
         mediaType,
         hasThumbnail,
         uploadDate,
         hasRevision,
         sha256sum,
-        localPath: localPath ?? '',
+        localPath: localPath,
         syncOfflineState: syncOfflineState ?? SyncOfflineState.none
     );
   }
