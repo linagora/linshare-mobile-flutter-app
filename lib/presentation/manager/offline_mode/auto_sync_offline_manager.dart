@@ -33,6 +33,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:redux/redux.dart';
 
@@ -40,10 +41,12 @@ class AutoSyncOfflineManager {
 
   final Store<AppState> _store;
   final AutoSyncAvailableOfflineMultipleDocumentInteractor _autoSyncAvailableOfflineMultipleDocumentInteractor;
+  final AutoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor _autoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor;
 
   AutoSyncOfflineManager(
     this._store,
     this._autoSyncAvailableOfflineMultipleDocumentInteractor,
+    this._autoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor,
   );
 
   void syncOfflineDocument(List<Document> documents) async {
@@ -63,6 +66,26 @@ class AutoSyncOfflineManager {
             }
           }
         ));
+      }
+  }
+
+  void syncOfflineSharedSpaceDocument(List<WorkGroupDocument> workGroupDocuments) async {
+    if (_store.state.networkConnectivityState.connectivityResult != ConnectivityResult.none) {
+      await _autoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor.execute(workGroupDocuments)
+        .then((response) => response.fold(
+          (failure) {
+            if (failure is MakeAvailableOfflineMultipleSharedSpaceDocumentsAllFailure
+                || failure is MakeAvailableOfflineMultipleSharedSpaceDocumentsThrowExceptionFailure) {
+              _store.dispatch(SharedSpaceDocumentAction(Left<Failure, Success>(failure)));
+            }
+          },
+          (success) {
+            if (success is MakeAvailableOfflineMultipleSharedSpaceDocumentsAllSuccessViewState
+                || success is MakeAvailableOfflineMultipleSharedSpaceDocumentsHasSomeFilesFailedViewState) {
+              _store.dispatch(SharedSpaceDocumentAction(Right<Failure, Success>(success)));
+            }
+          }));
     }
   }
+
 }

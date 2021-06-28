@@ -156,8 +156,6 @@ class AppModule {
         DataSourceType.local : getIt<LocalDocumentDataSourceImpl>()
       },
       getIt<FileUploadDataSource>()));
-    getIt.registerFactory(() => SharedSpaceRepositoryImpl(getIt<SharedSpaceDataSource>()));
-    getIt.registerFactory(() => DocumentRepositoryImpl(getIt<DocumentDataSource>(), getIt<FileUploadDataSource>()));
     getIt.registerFactory(() => SharedSpaceRepositoryImpl(
         {
           DataSourceType.network : getIt<SharedSpaceDataSource>(),
@@ -332,7 +330,6 @@ class AppModule {
     getIt.registerFactory(() => AutoSyncAvailableOfflineMultipleDocumentInteractor(
         getIt<AutoSyncAvailableOfflineDocumentInteractor>()));
     getIt.registerFactory(() => EnableAvailableOfflineDocumentInteractor(getIt<DocumentRepository>()));
-    getIt.registerFactory(() => GetWorkGroupNodeDetailInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => MakeAvailableOfflineSharedSpaceDocumentInteractor(
         getIt<SharedSpaceDocumentRepository>(),
         getIt<TokenRepository>(),
@@ -341,6 +338,13 @@ class AppModule {
     getIt.registerFactory(() => DisableAvailableOfflineWorkGroupDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => GetAllSharedSpaceOfflineInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => GetAllSharedSpaceDocumentOfflineInteractor(getIt<SharedSpaceDocumentRepository>()));
+    getIt.registerFactory(() => AutoSyncAvailableOfflineSharedSpaceDocumentInteractor(
+        getIt<SharedSpaceDocumentRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()
+    ));
+    getIt.registerFactory(() => AutoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor(getIt<AutoSyncAvailableOfflineSharedSpaceDocumentInteractor>()));
+    getIt.registerFactory(() => EnableAvailableOfflineSharedSpaceDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
   void _provideSharePreference() {
@@ -405,10 +409,11 @@ class AppModule {
   void _provideOfflineMode() {
     getIt.registerSingleton(DatabaseClient());
     getIt.registerFactory(() => DocumentDatabaseManager(getIt<DatabaseClient>()));
+    getIt.registerFactory(() => SharedSpaceDocumentDatabaseManager(getIt<DatabaseClient>()));
     getIt.registerLazySingleton(() => AutoSyncOfflineManager(
       getIt.get<Store<AppState>>(),
-      getIt.get<AutoSyncAvailableOfflineMultipleDocumentInteractor>()));
-    getIt.registerFactory(() => SharedSpaceDocumentDatabaseManager(getIt<DatabaseClient>()));
+      getIt.get<AutoSyncAvailableOfflineMultipleDocumentInteractor>(),
+      getIt.get<AutoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor>()));
   }
 
   void _provideAppAuth() {
