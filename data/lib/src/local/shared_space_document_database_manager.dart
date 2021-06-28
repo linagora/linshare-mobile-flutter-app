@@ -121,20 +121,10 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
     return res > 0 ? true : false;
   }
 
-  Future<List<WorkGroupNodeCache>> getListWorkGroupCacheByParentNodeID(WorkGroupNodeId parentNodeId) async {
-    final res = await _databaseClient.getListDataWithCondition(
-      WorkGroupNodeTable.TABLE_NAME,
-      '${WorkGroupNodeTable.PARENT_NODE_ID} = ?',
-      [parentNodeId.uuid]
-    );
-
-    return res.isNotEmpty? res.map((mapObject) => WorkGroupNodeCache.fromJson(mapObject)).toList(): [];
-  }
-
   Future<List<WorkGroupNodeCache>> getListWorkGroupCacheBySharedSpaceID(SharedSpaceId sharedSpaceId) async {
     final res = await _databaseClient.getListDataWithCondition(
         WorkGroupNodeTable.TABLE_NAME,
-        '${WorkGroupNodeTable.SHARED_SPACE_ID} = ?',
+        '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.LOCAL_PATH} IS NOT NULL',
         [sharedSpaceId.uuid]
     );
 
@@ -148,10 +138,10 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
 
   Future<List<WorkGroupNode>> getListWorkGroupCacheInSharedSpace(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) async {
     final keyCondition = parentNodeId == null
-        ? '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND (${WorkGroupNodeTable.PARENT_NODE_ID} IS NULL OR ${WorkGroupNodeTable.PARENT_NODE_ID} = \'\')'
+        ? '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.PARENT_NODE_ID} IS NULL'
         : '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.PARENT_NODE_ID} = ?';
 
-    final listValueCondition = parentNodeId == null? [sharedSpaceId.uuid]: [sharedSpaceId.uuid, parentNodeId.uuid];
+    final listValueCondition = parentNodeId == null ? [sharedSpaceId.uuid] : [sharedSpaceId.uuid, parentNodeId.uuid];
     final res = await _databaseClient.getListDataWithCondition(WorkGroupNodeTable.TABLE_NAME, keyCondition, listValueCondition);
     return res.isNotEmpty
       ? res.map((mapObject) => _convertToWorkGroupNode(mapObject)).toList()
@@ -159,7 +149,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   }
 
   WorkGroupNode _convertToWorkGroupNode(Map<String, dynamic> mapObject) {
-    if (mapObject[WorkGroupNodeTable.LOCAL_PATH] == '') {
+    if (mapObject[WorkGroupNodeTable.NODE_TYPE] == WorkGroupNodeType.FOLDER.value) {
       return WorkGroupNodeCache.fromJson(mapObject).toWorkGroupFolder();
     }
     return WorkGroupNodeCache.fromJson(mapObject).toWorkGroupDocument();

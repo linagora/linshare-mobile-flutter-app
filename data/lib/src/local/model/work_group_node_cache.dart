@@ -37,6 +37,7 @@ import 'package:data/src/local/converter/datetime_converter.dart';
 import 'package:data/src/local/converter/media_type_converter.dart';
 import 'package:data/src/local/converter/shared_space_id_converter.dart';
 import 'package:data/src/local/converter/work_group_node_id_converter.dart';
+import 'package:data/src/local/converter/work_group_node_parent_id_converter.dart';
 import 'package:data/src/local/converter/work_group_node_type_converter.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
@@ -50,6 +51,7 @@ part 'work_group_node_cache.g.dart';
 @BooleanConverter()
 @SharedSpaceIdConverter()
 @WorkGroupNodeIdConverter()
+@WorkGroupNodeParentIdConverter()
 @AccountIdConverter()
 @WorkGroupNodeTypeConverter()
 @AccountTypeConverter()
@@ -61,7 +63,7 @@ class WorkGroupNodeCache with EquatableMixin {
   @JsonKey(name: WorkGroupNodeTable.SHARED_SPACE_ID)
   final SharedSpaceId sharedSpaceId;
   @JsonKey(name: WorkGroupNodeTable.PARENT_NODE_ID)
-  final WorkGroupNodeId parentNodeId;
+  final WorkGroupNodeParentId? parentNodeId;
   @JsonKey(name: WorkGroupNodeTable.CREATION_DATE)
   final DateTime? creationDate;
   @JsonKey(name: WorkGroupNodeTable.MODIFICATION_DATE)
@@ -97,7 +99,7 @@ class WorkGroupNodeCache with EquatableMixin {
   @JsonKey(name: WorkGroupNodeTable.SHA256_SUM)
   final String sha256sum;
   @JsonKey(name: WorkGroupNodeTable.LOCAL_PATH)
-  final String localPath;
+  final String? localPath;
 
   WorkGroupNodeCache(
       this.nodeId,
@@ -156,7 +158,7 @@ extension WorkGroupNodeCacheExtension on WorkGroupNodeCache {
   WorkGroupDocument toWorkGroupDocument() {
     return WorkGroupDocument(
         nodeId,
-        parentNodeId,
+        parentNodeId != null ? WorkGroupNodeId(parentNodeId!.uuid) : null,
         nodeType,
         sharedSpaceId,
         creationDate ?? DateTime.now(),
@@ -170,6 +172,7 @@ extension WorkGroupNodeCacheExtension on WorkGroupNodeCache {
           accountType ?? AccountType.INTERNAL,
           firstNameAccount,
           lastNameAccount),
+        [],
         size,
         mediaType,
         hasThumbnail ?? false,
@@ -184,7 +187,7 @@ extension WorkGroupNodeCacheExtension on WorkGroupNodeCache {
   WorkGroupFolder toWorkGroupFolder() {
     return WorkGroupFolder(
         nodeId,
-        parentNodeId,
+        parentNodeId != null ? WorkGroupNodeId(parentNodeId!.uuid) : null,
         nodeType,
         sharedSpaceId,
         creationDate ?? DateTime.now(),

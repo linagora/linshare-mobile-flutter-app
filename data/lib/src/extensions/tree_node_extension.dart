@@ -38,7 +38,7 @@ extension TreeNodeExtension on TreeNode {
     return WorkGroupNodeCache(
         workGroupNodeId,
         sharedSpaceId,
-        parentId ?? WorkGroupNodeId(''),
+        parentId != null ? WorkGroupNodeParentId(parentId.uuid) : null,
         null,
         null,
         name,
@@ -56,7 +56,7 @@ extension TreeNodeExtension on TreeNode {
         null,
         null,
         '',
-        ''
+        null
     );
   }
 }

@@ -28,23 +28,29 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/local/model/shared_space_cache.dart';
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-extension SharedSpaceNodeNestedExtension on SharedSpaceNodeNested {
-  SharedSpaceCache toSharedSpaceDto() {
-    return SharedSpaceCache(
-        sharedSpaceId,
-        sharedSpaceRole.sharedSpaceRoleId,
-        sharedSpaceRole.name,
-        sharedSpaceRole.enabled,
-        creationDate,
-        modificationDate,
-        name,
-        nodeType,
-        quotaId,
-        versioningParameters.enable
-    );
+class WorkGroupNodeParentIdConverter implements JsonConverter<WorkGroupNodeParentId?, String?> {
+  const WorkGroupNodeParentIdConverter();
+
+  @override
+  WorkGroupNodeParentId? fromJson(String? json) {
+    try {
+      return json != null ? WorkGroupNodeParentId(json) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  String? toJson(WorkGroupNodeParentId? object) {
+    try {
+      return object != null ? object.uuid : null;
+    } catch (_) {
+      return null;
+    }
   }
 }

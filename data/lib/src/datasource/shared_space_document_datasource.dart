@@ -82,7 +82,7 @@ abstract class SharedSpaceDocumentDataSource {
   );
 
   Future<WorkGroupNode?> getWorkGroupNode(
-    SharedSpaceId? sharedSpaceId,
+    SharedSpaceId sharedSpaceId,
     WorkGroupNodeId workGroupNodeId,
     {bool hasTreePath});
 
@@ -95,7 +95,7 @@ abstract class SharedSpaceDocumentDataSource {
     Uri baseUrl);
 
   Future<bool> makeAvailableOfflineSharedSpaceDocument(
-    SharedSpaceNodeNested? sharedSpaceNodeNested,
+    SharedSpaceNodeNested sharedSpaceNodeNested,
     WorkGroupDocument workGroupDocument,
     String localPath,
     {List<TreeNode>? treeNodes});
@@ -105,4 +105,6 @@ abstract class SharedSpaceDocumentDataSource {
   Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath);
 
   Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId);
+
+  Future<bool> updateSharedSpaceDocumentOffline(WorkGroupDocument workGroupDocument, String localPath);
 }
