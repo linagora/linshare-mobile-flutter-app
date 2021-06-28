@@ -41,12 +41,6 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseClient {
 
   Database? _database;
-
-  Future<Database> get database async {
-    return _database ?? await _initDatabase();
-  Database _database;
-  Batch _batch;
-  Database? _database;
   Batch? _batch;
 
   Future<Database> get database async {
@@ -67,6 +61,8 @@ class DatabaseClient {
       onCreate: (db, version) async {
         final batch = db.batch();
         batch.execute(DocumentTable.CREATE);
+        batch.execute(SharedSpaceTable.CREATE);
+        batch.execute(WorkGroupNodeTable.CREATE);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -121,12 +117,6 @@ class DatabaseClient {
     if (fileExist) {
       await fileSaved.delete();
     }
-  Future<bool> deleteLocalFile(String localPath) async {
-    final fileSaved = File(localPath);
-    final fileExist = await fileSaved.exists();
-    if (fileExist) {
-      fileSaved.deleteSync();
-    }
   }
 
   Future<List<Map<String, dynamic>>> getListDataWithCondition(String tableName, String condition, List<dynamic> values) async {
@@ -138,12 +128,12 @@ class DatabaseClient {
   }
 
   Future insertMultipleData(String tableName, List<Map<String, dynamic>?> mapObjects) async {
-    final bat = await batch;
+    final batchInsert = await batch;
     mapObjects.forEach((element) {
       if (element != null) {
-        bat.insert(tableName, element);
+        batchInsert.insert(tableName, element);
       }
     });
-    await bat.commit(noResult: true);
+    await batchInsert.commit(noResult: true);
   }
 }

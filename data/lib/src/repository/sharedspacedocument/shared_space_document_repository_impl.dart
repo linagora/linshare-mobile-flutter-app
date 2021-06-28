@@ -121,7 +121,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<WorkGroupNode?> getWorkGroupNode(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) {
+  Future<WorkGroupNode?> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) {
     return _sharedSpaceDocumentDataSources[DataSourceType.network]!.getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: hasTreePath);
   }
 
@@ -131,7 +131,7 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
     return _sharedSpaceDocumentDataSources[DataSourceType.local]!.makeAvailableOfflineSharedSpaceDocument(sharedSpaceNodeNested, workGroupDocument, localPath, treeNodes: treeNodes);
   }
 
@@ -152,5 +152,10 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   @override
   Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) {
     return _sharedSpaceDocumentDataSources[DataSourceType.local]!.getAllSharedSpaceDocumentOffline(sharedSpaceId, parentNodeId);
+  }
+
+  @override
+  Future<bool> updateSharedSpaceDocumentOffline(WorkGroupDocument workGroupDocument, String localPath) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.local]!.updateSharedSpaceDocumentOffline(workGroupDocument, localPath);
   }
 }

@@ -258,7 +258,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<WorkGroupNode?> getWorkGroupNode(SharedSpaceId? sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) {
+  Future<WorkGroupNode?> getWorkGroupNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) {
     return Future.sync(() async {
       final workGroupNode = (await _linShareHttpClient.getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: hasTreePath));
 
@@ -285,7 +285,22 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<String> downloadMakeOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, String workGroupNodeName, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
+  Future<String> downloadMakeOfflineSharedSpaceDocument(
+      SharedSpaceId sharedSpaceId, 
+      WorkGroupNodeId workGroupNodeId, 
+      String workGroupNodeName, 
+      DownloadPreviewType downloadPreviewType, 
+      Token permanentToken, 
+      Uri baseUrl) async
+  {
+    final appDocDir = await getApplicationSupportDirectory();
+    final appDocPath = appDocDir.path;
+    final savedDir = Directory('$appDocPath/shared_spaces');
+    final hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      await savedDir.create();
+    }
+    
     var downloadUrl;
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.sharedSpaces
@@ -302,9 +317,10 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         .withPathParameter(downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
         .generateEndpointPath();
     }
+    
     return _linShareDownloadManager.downloadFile(
       downloadUrl,
-      getApplicationSupportDirectory(),
+      Future.sync(() => savedDir),
       workGroupNodeName,
       permanentToken);
   }
@@ -326,6 +342,11 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
 
   @override
   Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> updateSharedSpaceDocumentOffline(WorkGroupDocument workGroupDocument, String localPath) {
     throw UnimplementedError();
   }
 }

@@ -109,14 +109,12 @@ extension SharedSpaceCacheExtension on SharedSpaceCache {
   SharedSpaceNodeNested toSharedSpaceNodeNested() {
     return SharedSpaceNodeNested(
         sharedSpaceId,
-        (sharedSpaceRoleId == null || sharedSpaceRoleName == null || sharedSpaceRoleEnable == null)
-            ?  null
-            : SharedSpaceRole(sharedSpaceRoleId!, sharedSpaceRoleName!, enabled: sharedSpaceRoleEnable!),
+        SharedSpaceRole(sharedSpaceRoleId ?? SharedSpaceRoleId(''), sharedSpaceRoleName ?? SharedSpaceRoleName.READER, enabled: sharedSpaceRoleEnable ?? true),
         creationDate ?? DateTime.now(),
         modificationDate ?? DateTime.now(),
         name,
         nodeType,
-        quotaId,
+        quotaId ?? QuotaId(''),
         VersioningParameter(versioningParameters ?? false)
     );
   }
