@@ -91,7 +91,7 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
   SharedSpaceNodeNested toSharedSpaceNodeNested() {
     return SharedSpaceNodeNested(
       sharedSpaceId,
-      role?.toSharedSpaceRole(),
+      role?.toSharedSpaceRole() ?? SharedSpaceRole.initial(),
       creationDate,
       modificationDate,
       name ?? '',

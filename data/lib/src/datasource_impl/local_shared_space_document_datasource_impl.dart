@@ -103,6 +103,19 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   }
 
   @override
+  Future<bool> updateSharedSpaceDocumentOffline(WorkGroupDocument workGroupDocument, String localPath) {
+    return Future.sync(() async {
+      return await _sharedSpaceDocumentDatabaseManager.updateData(workGroupDocument, localPath);
+    }).catchError((error) {
+      if (error is SQLiteDatabaseException) {
+        throw SQLiteDatabaseException();
+      } else {
+        throw LocalUnknownError(error);
+      }
+    });
+  }
+
+  @override
   Future<List<WorkGroupNode>> copyToSharedSpace(CopyRequest copyRequest, SharedSpaceId destinationSharedSpaceId, {WorkGroupNodeId? destinationParentNodeId}) {
     throw UnimplementedError();
   }
