@@ -40,9 +40,9 @@ class GetSharedSpaceNodeInteractor {
 
   GetSharedSpaceNodeInteractor(this._sharedSpaceDocumentRepository);
 
-  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId) async {
+  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, WorkGroupNodeId workGroupNodeId, {bool hasTreePath = false}) async {
     try {
-      final workGroupNode = await _sharedSpaceDocumentRepository.getWorkGroupNode(sharedSpaceId, workGroupNodeId);
+      final workGroupNode = await _sharedSpaceDocumentRepository.getWorkGroupNode(sharedSpaceId, workGroupNodeId, hasTreePath: hasTreePath);
       return Right<Failure, Success>(SharedSpaceNodeViewState(workGroupNode));
     } catch (exception) {
       return Left<Failure, Success>(SharedSpaceNodeFailure(exception));
