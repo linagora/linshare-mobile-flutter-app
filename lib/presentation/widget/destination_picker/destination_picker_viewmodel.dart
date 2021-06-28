@@ -95,13 +95,13 @@ class DestinationPickerViewModel extends BaseViewModel {
                       .where((element) {
                         if (operation == Operation.copyFromMySpace) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole?.name);
+                              .contains(element.sharedSpaceRole.name);
                         } else if (operation == Operation.upload) {
                           return SharedSpaceOperationRole.uploadToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole?.name);
+                              .contains(element.sharedSpaceRole.name);
                         } else if (operation == Operation.copyTo) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole?.name);
+                              .contains(element.sharedSpaceRole.name);
                         }
                         return true;
                       })
