@@ -19,7 +19,9 @@ SQLite plugin for Flutter. Supports iOS, Android and MacOS.
 
 Usage 
 
-- Table Document: Help save documents when it make available offline in MySpace
+- Data
+
+ - Document Table: Help save documents when it make available offline in MySpace
 
 ````
 Table Document {
@@ -38,6 +40,128 @@ Table Document {
   localPath TEXT // local storage path of document file.
 }
 ````
+ - SharedSpace Table: Help save shared space when it contains at least one file make available offline in SharedSpace
+
+````
+Table SharedSpace {
+    sharedSpaceId TEXT PRIMARY KEY,
+    sharedSpaceRoleId TEXT,
+    sharedSpaceRoleName TEXT,
+    sharedSpaceRoleEnable Integer,
+    creationDate Integer,
+    modificationDate Integer,
+    name TEXT,
+    nodeType TEXT,
+    quotaId TEXT,
+    versioningParameters Integer
+}
+````
+
+ - WorkGroupNode Table: Help save file/folder when it contains at least one file make available offline in SharedSpace
+
+````
+Table WorkGroupNode {
+    nodeId TEXT PRIMARY KEY,
+    sharedSpaceId TEXT,
+    parentNodeId TEXT,
+    creationDate Integer,
+    modificationDate Integer,
+    name TEXT,
+    nodeType TEXT,
+    description TEXT,
+    nameAccount TEXT,
+    mailAccount TEXT,
+    firstNameAccount TEXT,
+    lastNameAccount TEXT,
+    accountId TEXT,
+    accountType TEXT,
+    size Integer,
+    mediaType TEXT,
+    hasThumbnail Integer,
+    uploadDate Integer,
+    hasRevision Integer,
+    sha256sum TEXT,
+    localPath TEXT
+}
+````
+
+- Deployment
+
+ - Example 1: 
+ 
+ + Make available file `A.png` in SharedSpace `SP1` has path: `SP1 > A.png`
+ + The data is stored as follows: 
+ 
+Information of SharedSpace `SP1` will be saved in the SharedSpace table:
+```
+SharedSpace {
+    sharedSpaceId = SP1_ID,
+    name = SP1_NAME,
+    ...
+}
+```
+
+Information of file `A.png` will be saved in the WorkGroupNode table:
+```
+WorkGroupNode {
+    nodeId = A_ID,
+    sharedSpaceId = SP1_ID,
+    parentNodeId = null,
+    name = A,
+    nodeType = DOCUMENT
+    ...
+}
+```
+ 
+ - Example 2: 
+ 
+ + Make available file `file.png` in folders `B` & `B1` of SharedSpace `SP2` has path: `SP2 > B > B2 > A.png`
+ + The data is stored as follows: 
+ 
+Information of SharedSpace `SP2` will be saved in the SharedSpace table:
+```
+SharedSpace {
+    sharedSpaceId = SP2_ID,
+    name = SP2_NAME,
+    ...
+}
+```
+
+Information of folder `B` will be saved in the WorkGroupNode table:
+```
+WorkGroupNode {
+    nodeId = B_ID,
+    sharedSpaceId = SP2_ID,
+    parentNodeId = null,
+    name = B,
+    nodeType = FOLDER
+    ...
+}
+```
+
+Information of folder `B1` will be saved in the WorkGroupNode table:
+```
+WorkGroupNode {
+    nodeId = B1_ID,
+    sharedSpaceId = SP2_ID,
+    parentNodeId = B_ID,
+    name = B1,
+    nodeType = FOLDER
+    ...
+}
+```
+
+Information of file `file.png` will be saved in the WorkGroupNode table:
+```
+WorkGroupNode {
+    nodeId = file_ID,
+    sharedSpaceId = SP1_ID,
+    parentNodeId = B1_ID,
+    name = file,
+    nodeType = DOCUMENT
+    ...
+}
+```
 
 ## Decision
 
