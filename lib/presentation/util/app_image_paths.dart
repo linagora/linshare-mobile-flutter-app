@@ -95,6 +95,9 @@ class AppImagePaths {
   String get icDuplicate => _getImagePath('ic_duplicate.svg');
   String get icAvailableOffline => _getImagePath('ic_available_offline.svg');
   String get icAvailableOfflineEnabled => _getImagePath('ic_available_offline_enabled.svg');
+  String get icUploadRequest => _getImagePath('ic_upload_request.svg');
+  String get icCreateUploadRequest => _getImagePath('ic_create_upload_request.svg');
+  String get icCollective => _getImagePath('ic_collective.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

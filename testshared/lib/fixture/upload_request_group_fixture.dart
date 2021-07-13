@@ -28,47 +28,58 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/src/store.dart';
+import 'package:data/data.dart';
+import 'package:dartz/dartz.dart';
 
-class SideMenuDrawerViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
+final uploadRequestGroup1 = UploadRequestGroup(
+  UploadRequestGroupId('upload_request_group_1'),
+  'uploadRequestGroup1',
+  'uploadRequestGroupBody1',
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  23232323,
+  232332323232,
+  23232323232323,
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  true,
+  true,
+  true,
+  true,
+  'mailmessageId1',
+  false,
+  true,
+  GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+  UploadRequestStatus.CREATED,
+  2323872,
+  1
+);
 
-  SideMenuDrawerViewModel(
-    Store<AppState> store,
-    this._appNavigation,
-    this.deletePermanentTokenInteractor
-  ) : super(store);
-
-  void goToMySpace() {
-    store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    _appNavigation.popBack();
-  }
-
-  void goToSharedSpace() {
-    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-    _appNavigation.popBack();
-  }
-
-  void goToAccountDetails() {
-    store.dispatch(SetCurrentView(RoutePaths.account_details));
-    _appNavigation.popBack();
-  }
-
-  void goToReceivedShares() {
-    store.dispatch(SetCurrentView(RoutePaths.received_shares));
-    _appNavigation.popBack();
-  }
-
-  void goToUploadRequest() {
-    store.dispatch(SetCurrentView(RoutePaths.uploadRequestGroup));
-    _appNavigation.popBack();
-  }
-}
+final uploadRequestGroupResponse1 = UploadRequestGroupResponse(
+  UploadRequestGroupId('upload_request_group_1'),
+  'uploadRequestGroup1',
+  'uploadRequestGroupBody1',
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  23232323,
+  232332323232,
+  23232323232323,
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  true,
+  true,
+  true,
+  true,
+  'mailmessageId1',
+  false,
+  true,
+  GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+  UploadRequestStatus.CREATED,
+  2323872,
+  1
+);

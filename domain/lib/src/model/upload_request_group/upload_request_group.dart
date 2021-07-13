@@ -30,45 +30,80 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/src/store.dart';
+import 'package:equatable/equatable.dart';
 
-class SideMenuDrawerViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
+class UploadRequestGroup with EquatableMixin {
+  UploadRequestGroup(
+      this.uploadRequestGroupId,
+      this.label,
+      this.body,
+      this.creationDate,
+      this.modificationDate,
+      this.maxFileCount,
+      this.maxDepositSize,
+      this.maxFileSize,
+      this.activationDate,
+      this.notificationDate,
+      this.expiryDate,
+      this.canDelete,
+      this.canClose,
+      this.canEditExpiryDate,
+      this.protectedByPassword,
+      this.mailMessageId,
+      this.enableNotification,
+      this.collective,
+      this.owner,
+      this.status,
+      this.usedSpace,
+      this.nbrUploadedFiles
+  );
 
-  SideMenuDrawerViewModel(
-    Store<AppState> store,
-    this._appNavigation,
-    this.deletePermanentTokenInteractor
-  ) : super(store);
+  final UploadRequestGroupId uploadRequestGroupId;
+  final String label;
+  final String body;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final int maxFileCount;
+  final double maxDepositSize;
+  final double maxFileSize;
+  final DateTime activationDate;
+  final DateTime notificationDate;
+  final DateTime expiryDate;
+  final bool canDelete;
+  final bool canClose;
+  final bool canEditExpiryDate;
+  final bool protectedByPassword;
+  final String mailMessageId;
+  final bool enableNotification;
+  final bool collective;
+  final GenericUser owner;
+  final UploadRequestStatus status;
+  final double usedSpace;
+  final int nbrUploadedFiles;
 
-  void goToMySpace() {
-    store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    _appNavigation.popBack();
-  }
-
-  void goToSharedSpace() {
-    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-    _appNavigation.popBack();
-  }
-
-  void goToAccountDetails() {
-    store.dispatch(SetCurrentView(RoutePaths.account_details));
-    _appNavigation.popBack();
-  }
-
-  void goToReceivedShares() {
-    store.dispatch(SetCurrentView(RoutePaths.received_shares));
-    _appNavigation.popBack();
-  }
-
-  void goToUploadRequest() {
-    store.dispatch(SetCurrentView(RoutePaths.uploadRequestGroup));
-    _appNavigation.popBack();
-  }
+  @override
+  List<Object> get props => [
+      uploadRequestGroupId,
+      label,
+      body,
+      creationDate,
+      modificationDate,
+      maxFileCount,
+      maxDepositSize,
+      maxFileSize,
+      activationDate,
+      notificationDate,
+      expiryDate,
+      canDelete,
+      canClose,
+      canEditExpiryDate,
+      protectedByPassword,
+      mailMessageId,
+      enableNotification,
+      collective,
+      owner,
+      status,
+      usedSpace,
+      nbrUploadedFiles
+  ];
 }

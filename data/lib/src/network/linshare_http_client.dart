@@ -56,6 +56,7 @@ import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/shared_space_member_response.dart';
+import 'package:data/src/network/model/response/upload_request_group_response.dart';
 import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/network/model/share/received_share_dto.dart';
 import 'package:data/src/network/model/shared_space_activities/shared_space_member_audit_log_entry_dto.dart';
@@ -534,5 +535,15 @@ class LinShareHttpClient {
         })
     );
     return DocumentResponse.fromJson(resultJson);
+  }
+
+  Future<List<UploadRequestGroupResponse>> getAllUploadRequestGroups(
+      List<UploadRequestStatus> status) async {
+    final List resultJson = await _dioClient.get(Endpoint.uploadRequestGroups
+        .withQueryParameters(
+            status.map((element) => StringQueryParameter('status', element.value)).toList())
+        .generateEndpointPath());
+
+    return resultJson.map((data) => UploadRequestGroupResponse.fromJson(data)).toList();
   }
 }

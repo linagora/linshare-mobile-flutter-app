@@ -29,46 +29,50 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/src/store.dart';
+import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
-class SideMenuDrawerViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
+import 'package:testshared/fixture/upload_request_group_fixture.dart';
+import 'fixture/mock/mock_fixtures.dart';
 
-  SideMenuDrawerViewModel(
-    Store<AppState> store,
-    this._appNavigation,
-    this.deletePermanentTokenInteractor
-  ) : super(store);
+void main() {
+  getAllUploadRequestGroupsTest();
+}
 
-  void goToMySpace() {
-    store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    _appNavigation.popBack();
-  }
+void getAllUploadRequestGroupsTest() {
+  group('upload_request_group_datasource_impl getAll test', () {
+    MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
 
-  void goToSharedSpace() {
-    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-    _appNavigation.popBack();
-  }
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _uploadRequestGroupDataSourceImpl =
+          UploadRequestGroupDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
+    });
 
-  void goToAccountDetails() {
-    store.dispatch(SetCurrentView(RoutePaths.account_details));
-    _appNavigation.popBack();
-  }
+    test('getAllUploadRequestGroups should return success with valid data', () async {
+      when(_linShareHttpClient.getAllUploadRequestGroups([UploadRequestStatus.CREATED]))
+          .thenAnswer((_) async => [uploadRequestGroupResponse1]);
 
-  void goToReceivedShares() {
-    store.dispatch(SetCurrentView(RoutePaths.received_shares));
-    _appNavigation.popBack();
-  }
+      final result = await _uploadRequestGroupDataSourceImpl
+          .getUploadRequestGroups([UploadRequestStatus.CREATED]);
+      expect(result, [uploadRequestGroupResponse1.toUploadRequestGroup()]);
+    });
 
-  void goToUploadRequest() {
-    store.dispatch(SetCurrentView(RoutePaths.uploadRequestGroup));
-    _appNavigation.popBack();
-  }
+    test('getAllUploadRequestGroups should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
+      final error = DioError(type: DioErrorType.RESPONSE, response: Response(statusCode: 400));
+
+      when(_linShareHttpClient.getAllUploadRequestGroups([UploadRequestStatus.CREATED]))
+          .thenThrow(error);
+
+      await _uploadRequestGroupDataSourceImpl
+          .getUploadRequestGroups([UploadRequestStatus.CREATED]).catchError(
+              (error) => expect(error, isA<MissingRequiredFields>()));
+    });
+  });
 }

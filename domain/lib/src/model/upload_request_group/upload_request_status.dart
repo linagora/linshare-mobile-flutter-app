@@ -29,46 +29,36 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/src/store.dart';
-
-class SideMenuDrawerViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
-
-  SideMenuDrawerViewModel(
-    Store<AppState> store,
-    this._appNavigation,
-    this.deletePermanentTokenInteractor
-  ) : super(store);
-
-  void goToMySpace() {
-    store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    _appNavigation.popBack();
-  }
-
-  void goToSharedSpace() {
-    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-    _appNavigation.popBack();
-  }
-
-  void goToAccountDetails() {
-    store.dispatch(SetCurrentView(RoutePaths.account_details));
-    _appNavigation.popBack();
-  }
-
-  void goToReceivedShares() {
-    store.dispatch(SetCurrentView(RoutePaths.received_shares));
-    _appNavigation.popBack();
-  }
-
-  void goToUploadRequest() {
-    store.dispatch(SetCurrentView(RoutePaths.uploadRequestGroup));
-    _appNavigation.popBack();
-  }
+enum UploadRequestStatus {
+  DELETED,
+  PURGED,
+  ARCHIVED,
+  CLOSED,
+  ENABLED,
+  CANCELED,
+  CREATED
 }
+
+extension UploadRequestStatusExtension on UploadRequestStatus {
+    String get value {
+        switch(this) {
+          case UploadRequestStatus.DELETED: 
+            return 'DELETED';
+          case UploadRequestStatus.PURGED:
+            return 'PURGED';
+          case UploadRequestStatus.ARCHIVED:
+            return 'ARCHIVED';
+          case UploadRequestStatus.CLOSED:
+            return 'CLOSED';
+          case UploadRequestStatus.ENABLED:
+            return 'ENABLED';
+          case UploadRequestStatus.CANCELED:
+            return 'CANCELED';
+          case UploadRequestStatus.CREATED:
+            return 'CREATED';
+          default:
+            return 'UNKNOWN';
+        }
+    }
+}
+

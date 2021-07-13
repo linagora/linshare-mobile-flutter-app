@@ -28,47 +28,51 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/src/store.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/fixture/upload_request_group_fixture.dart';
 
-class SideMenuDrawerViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
+import '../../mock/repository/mock_upload_request_group_repository.dart';
 
-  SideMenuDrawerViewModel(
-    Store<AppState> store,
-    this._appNavigation,
-    this.deletePermanentTokenInteractor
-  ) : super(store);
+void main() {
+  group('get_all_upload_request_group_interactor_test', () {
+    late MockUploadRequestGroupRepository uploadRequestGroupRepository;
+    late GetAllUploadRequestGroupsInteractor getAllUploadRequestGroupsInteractor;
 
-  void goToMySpace() {
-    store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    _appNavigation.popBack();
-  }
+    setUp(() {
+      uploadRequestGroupRepository = MockUploadRequestGroupRepository();
+      getAllUploadRequestGroupsInteractor = GetAllUploadRequestGroupsInteractor(uploadRequestGroupRepository);
+    });
 
-  void goToSharedSpace() {
-    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-    _appNavigation.popBack();
-  }
+    test('getAllUploadRequestGroupsInteractor should return success with upload request list', () async {
+      when(uploadRequestGroupRepository.getUploadRequestGroups([UploadRequestStatus.CREATED])).thenAnswer((_) async => [uploadRequestGroup1]);
 
-  void goToAccountDetails() {
-    store.dispatch(SetCurrentView(RoutePaths.account_details));
-    _appNavigation.popBack();
-  }
+      final result = await getAllUploadRequestGroupsInteractor.execute([UploadRequestStatus.CREATED]);
 
-  void goToReceivedShares() {
-    store.dispatch(SetCurrentView(RoutePaths.received_shares));
-    _appNavigation.popBack();
-  }
+      final uploadRequestGroupsList = result.map((success) => (success as UploadRequestGroupViewState).uploadRequestGroups)
+          .getOrElse(() => []);
 
-  void goToUploadRequest() {
-    store.dispatch(SetCurrentView(RoutePaths.uploadRequestGroup));
-    _appNavigation.popBack();
-  }
+      expect(
+          uploadRequestGroupsList,
+          containsAllInOrder([uploadRequestGroup1]));
+    });
+
+    test('getAllUploadRequestGroupsInteractor should fail when get all failed', () async {
+      final exception = Exception();
+
+      when(uploadRequestGroupRepository.getUploadRequestGroups([UploadRequestStatus.CREATED])).thenThrow(exception);
+
+      final result = await getAllUploadRequestGroupsInteractor.execute([UploadRequestStatus.CREATED]);
+
+      result.fold(
+        (failure) => expect(failure, isA<UploadRequestGroupFailure>()),
+        (success) => expect(success, isA<UploadRequestGroupViewState>()));
+
+      expect(result, Left<Failure, Success>(UploadRequestGroupFailure(exception)));
+    });
+  });
 }

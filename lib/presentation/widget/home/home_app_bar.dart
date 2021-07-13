@@ -180,6 +180,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         return AppLocalizations.of(context).account_details_title;
       case RoutePaths.received_shares:
         return AppLocalizations.of(context).received;
+      case RoutePaths.uploadRequestGroup:
+        return AppLocalizations.of(context).upload_requests;
       default:
         return AppLocalizations.of(context).my_space_title;
     }
