@@ -83,6 +83,9 @@ import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_wid
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request/upload_request_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 import 'package:redux/redux.dart';
 
 class WidgetModule {
@@ -109,6 +112,8 @@ class WidgetModule {
     _provideBiometricAuthenticationLoginComponent();
     _provideBiometricAuthenticationSettingComponent();
     _provideSharedSpaceNodeVersionsComponent();
+    _provideUploadRequestGroupComponent();
+    _provideUploadRequestComponent();
   }
 
   void _provideLoginComponent() {
@@ -401,6 +406,25 @@ class WidgetModule {
         getIt.get<GetAvailableBiometricInteractor>(),
         getIt.get<DeletePermanentTokenInteractor>(),
         getIt.get<DisableBiometricInteractor>()
+      ));
+  }
+
+  void _provideUploadRequestGroupComponent() {
+    getIt.registerFactory(() => UploadRequestGroupWidget());
+    getIt.registerFactory(() =>
+      UploadRequestGroupViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAllUploadRequestGroupsInteractor>(),
+      ));
+  }
+
+  void _provideUploadRequestComponent() {
+    getIt.registerFactory(() =>
+      UploadRequestViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAllUploadRequestInteractor>(),
       ));
   }
 }

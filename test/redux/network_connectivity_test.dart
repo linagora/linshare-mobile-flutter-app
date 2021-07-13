@@ -62,6 +62,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_state.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -165,6 +167,8 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     sharedSpaceDocumentDestinationPickerState: SharedSpaceDocumentDestinationPickerState.initial(),
     sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
     sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
-    updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial()
+    updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
+    uploadRequestState: UploadRequestState.initial(),
+    uploadRequestGroupState: UploadRequestGroupState.initial()
   );
 }

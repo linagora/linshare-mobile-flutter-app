@@ -66,4 +66,9 @@ class SideMenuDrawerViewModel extends BaseViewModel {
     store.dispatch(SetCurrentView(RoutePaths.received_shares));
     _appNavigation.popBack();
   }
+
+  void goToUploadRequest() {
+    store.dispatch(SetCurrentView(RoutePaths.uploadRequestGroup));
+    _appNavigation.popBack();
+  }
 }

@@ -37,6 +37,7 @@ class Endpoint {
   static final String download = '/download';
   static final String nodes = '/nodes';
   static final String thumbnail = '/thumbnail';
+  static final String uploadRequests = '/upload_requests';
 
   static final ServicePath authentication = ServicePath('/jwt');
 
@@ -58,6 +59,8 @@ class Endpoint {
   static final ServicePath workGroups = ServicePath('/work_groups');
 
   static final ServicePath sharedSpaceRoles = ServicePath('/shared_space_roles');
+
+  static final ServicePath uploadRequestGroups = ServicePath('/upload_request_groups');
 }
 
 extension ServicePathExtension on ServicePath {
