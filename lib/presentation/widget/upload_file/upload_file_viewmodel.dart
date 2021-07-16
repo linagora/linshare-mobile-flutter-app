@@ -282,6 +282,7 @@ class UploadFileViewModel extends BaseViewModel {
         case ShareButtonType.workGroup:
           _uploadToSharedSpace(uploadFiles);
           break;
+        default:
       }
     };
   }

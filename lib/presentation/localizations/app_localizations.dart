@@ -1791,6 +1791,71 @@ class AppLocalizations {
       name: 'login_sso_failed',
     );
   }
+
+  String get upload_requests {
+    return Intl.message(
+      'Upload Requests',
+      name: 'upload_requests',
+    );
+  }
+
+  String get pending {
+    return Intl.message(
+      'Pending',
+      name: 'pending',
+    );
+  }
+
+  String get active_closed {
+    return Intl.message(
+      'Active / Closed',
+      name: 'active_closed',
+    );
+  }
+
+  String get archived {
+    return Intl.message(
+      'Archived',
+      name: 'archived',
+    );
+  }
+
+  String get create_upload_requests_here {
+    return Intl.message(
+      'Create upload requests here',
+      name: 'create_upload_requests_here',
+    );
+  }
+
+  String activated_date(String date) {
+    return Intl.message(
+        'Activated $date',
+        name: 'activated_date',
+        args: [date]
+    );
+  }
+
+  String archived_date(String date) {
+    return Intl.message(
+        'Archived $date',
+        name: 'archived_date',
+        args: [date]
+    );
+  }
+
+  String get active {
+    return Intl.message(
+      'Active',
+      name: 'active',
+    );
+  }
+
+  String get expired_closed {
+    return Intl.message(
+      'Expired / Closed',
+      name: 'expired_closed',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
