@@ -3,6 +3,7 @@ description: LinShare testshared package.
 version: 0.0.1
 author:
 homepage: 'https://www.linshare.org'
+publish_to: none
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
