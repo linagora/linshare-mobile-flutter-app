@@ -90,4 +90,5 @@ extension AppColor on Color {
   static const deleteMemberIconColor = Color(0xffACACAC);
   static const documentDetailsSharedTitleColor = Color(0xff7B7B7B);
   static const touchIDIconColor = Color(0xffFF1059);
+  static const uploadRequestLabelsColor = Color(0xff7B7B7B);
 }

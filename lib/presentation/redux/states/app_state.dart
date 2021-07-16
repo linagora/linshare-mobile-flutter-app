@@ -52,6 +52,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
 
 import 'destination_picker_state.dart';
 
@@ -79,6 +80,7 @@ class AppState with EquatableMixin {
   final BiometricAuthenticationSettingState biometricAuthenticationSettingState;
   final SharedSpaceNodeVersionsState sharedSpaceNodeVersionsState;
   final BiometricAuthenticationLoginState biometricAuthenticationLoginState;
+  final UploadRequestGroupState uploadRequestGroupState;
 
   AppState(
       {required this.uiState,
@@ -103,7 +105,8 @@ class AppState with EquatableMixin {
       required this.sharedSpaceNodeDetailsState,
       required this.biometricAuthenticationSettingState,
       required this.biometricAuthenticationLoginState,
-      required this.sharedSpaceNodeVersionsState});
+      required this.sharedSpaceNodeVersionsState,
+      required this.uploadRequestGroupState});
 
   factory AppState.initial() {
     return AppState(
@@ -129,7 +132,8 @@ class AppState with EquatableMixin {
         sharedSpaceNodeDetailsState: SharedSpaceNodeDetailsState.initial(),
         biometricAuthenticationSettingState: BiometricAuthenticationSettingState.initial(),
         biometricAuthenticationLoginState: BiometricAuthenticationLoginState.initial(),
-        sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial());
+        sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
+        uploadRequestGroupState: UploadRequestGroupState.initial());
   }
 
   @override
@@ -155,6 +159,7 @@ class AppState with EquatableMixin {
         sharedSpaceNodeDetailsState,
         biometricAuthenticationSettingState,
         biometricAuthenticationLoginState,
-        sharedSpaceNodeVersionsState
+        sharedSpaceNodeVersionsState,
+        uploadRequestGroupState
       ];
 }
