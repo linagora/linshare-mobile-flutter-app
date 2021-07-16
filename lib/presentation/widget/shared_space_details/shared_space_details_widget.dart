@@ -188,7 +188,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
             _sharedSpaceInformationTile(
                 AppLocalizations.of(context).my_rights,
                 toBeginningOfSentenceCase(
-                    state.sharedSpace?.sharedSpaceRole?.name.getRoleName(context)) ?? ''),
+                    state.sharedSpace?.sharedSpaceRole.name.getRoleName(context)) ?? ''),
             _sharedSpaceInformationTile(
                 AppLocalizations.of(context).max_file_size, filesize(state.quota?.maxFileSize.size)),
           ],
@@ -255,7 +255,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
               member.account?.name ?? '',
               member.account?.mail ?? '',
               member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
-              userCurrentRole: state.sharedSpace?.sharedSpaceRole?.name,
+              userCurrentRole: state.sharedSpace?.sharedSpaceRole.name,
               onSelectedRoleCallback: () => selectRoleBottomSheet(
                 context,
                 member.role?.name ?? SharedSpaceRoleName.READER,
@@ -269,11 +269,11 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                 member.sharedSpaceMemberId)).build();
               }),
         floatingActionButton:
-          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(state.sharedSpace?.sharedSpaceRole?.name)
+          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(state.sharedSpace?.sharedSpaceRole.name)
           ? FloatingActionButton(
               onPressed: () => _model.goToAddSharedSpaceMember(state.sharedSpace!, state.membersList!),
-              child: Icon(Icons.person_add, color: Colors.white, size: 24.0),
               backgroundColor: AppColor.primaryColor,
+              child: Icon(Icons.person_add, color: Colors.white, size: 24.0),
             )
           : SizedBox.shrink(),
         floatingActionButtonLocation:
