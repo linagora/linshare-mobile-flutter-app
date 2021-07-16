@@ -132,6 +132,25 @@ class SideMenuDrawerWidget extends StatelessWidget {
               }),
           Divider(),
           ListTile(
+            key: Key('side_menu_upload_requests_button'),
+            leading: StoreConnector<AppState, UIState>(
+                converter: (Store<AppState> store) => store.state.uiState,
+                distinct: true,
+                builder: (context, state) =>
+                state.routePath == RoutePaths.uploadRequestGroup
+                    ? _buildUploadRequestIcon(selected: true)
+                    : _buildUploadRequestIcon(selected: false)),
+            title: StoreConnector<AppState, UIState>(
+                converter: (Store<AppState> store) => store.state.uiState,
+                distinct: true,
+                builder: (context, state) =>
+                state.routePath == RoutePaths.uploadRequestGroup
+                    ? _buildUploadRequestText(context, selected: true)
+                    : _buildUploadRequestText(context, selected: false)),
+            onTap: () => sideMenuDrawerViewModel.goToUploadRequest(),
+          ),
+          Divider(),
+          ListTile(
             leading: StoreConnector<AppState, UIState>(
                 converter: (Store<AppState> store) => store.state.uiState,
                 distinct: true,
@@ -212,5 +231,20 @@ class SideMenuDrawerWidget extends StatelessWidget {
         style: TextStyle(
             fontSize: 16,
             color: selected ? AppColor.primaryColor : AppColor.documentNameItemTextColor));
+  }
+
+  Widget _buildUploadRequestText(BuildContext context, {required bool selected}) {
+    return Text(AppLocalizations.of(context).upload_requests,
+        style: TextStyle(
+            fontSize: 16,
+            color: selected ? AppColor.primaryColor : AppColor.documentNameItemTextColor));
+  }
+
+  Widget _buildUploadRequestIcon({required bool selected}) {
+    return SvgPicture.asset(
+      imagePath.icUploadRequest,
+      fit: BoxFit.none,
+      color: selected ? AppColor.primaryColor : null,
+    );
   }
 }

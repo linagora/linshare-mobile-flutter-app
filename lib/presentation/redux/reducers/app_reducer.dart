@@ -54,6 +54,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_re
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/update_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 
@@ -84,7 +85,8 @@ AppState appStateReducer(AppState state, action) {
         sharedSpaceNodeDetailsState: sharedSpaceNodeDetailsReducer(state.sharedSpaceNodeDetailsState, action),
         biometricAuthenticationSettingState: biometricAuthenticationSettingReducer(state.biometricAuthenticationSettingState, action),
         biometricAuthenticationLoginState: biometricAuthenticationLoginReducer(state.biometricAuthenticationLoginState, action),
-        sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action));
+        sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action),
+        uploadRequestGroupState: uploadRequestGroupReducer(state.uploadRequestGroupState, action));
   }
 
   return AppState(
@@ -112,7 +114,8 @@ AppState appStateReducer(AppState state, action) {
       sharedSpaceNodeDetailsState: state.sharedSpaceNodeDetailsState,
       biometricAuthenticationSettingState: state.biometricAuthenticationSettingState,
       biometricAuthenticationLoginState: state.biometricAuthenticationLoginState,
-      sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState);
+      sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState,
+      uploadRequestGroupState: state.uploadRequestGroupState);
 }
 
 bool canExecuteAction(AppState state, action) {
