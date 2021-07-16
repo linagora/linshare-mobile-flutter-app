@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,47 +28,32 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
-import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:redux/src/store.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
+import 'package:redux/redux.dart';
 
-class SideMenuDrawerViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
-  final AppNavigation _appNavigation;
-
-  SideMenuDrawerViewModel(
-    Store<AppState> store,
-    this._appNavigation,
-    this.deletePermanentTokenInteractor
-  ) : super(store);
-
-  void goToMySpace() {
-    store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    _appNavigation.popBack();
-  }
-
-  void goToSharedSpace() {
-    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
-    _appNavigation.popBack();
-  }
-
-  void goToAccountDetails() {
-    store.dispatch(SetCurrentView(RoutePaths.account_details));
-    _appNavigation.popBack();
-  }
-
-  void goToReceivedShares() {
-    store.dispatch(SetCurrentView(RoutePaths.received_shares));
-    _appNavigation.popBack();
-  }
-
-  void goToUploadRequest() {
-    store.dispatch(SetCurrentView(RoutePaths.uploadRequestGroup));
-    _appNavigation.popBack();
-  }
-}
+final uploadRequestGroupReducer = combineReducers<UploadRequestGroupState>([
+  TypedReducer<UploadRequestGroupState, StartUploadRequestGroupLoadingAction>((UploadRequestGroupState state, _) => state.startLoadingState()),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllCreatedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllCreatedAction action) =>
+      state.setUploadRequestsCreatedList(
+          newUploadRequestsList: action.viewState.fold(
+                  (failure) => [],
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
+          viewState: action.viewState)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllActiveClosedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllActiveClosedAction action) =>
+      state.setUploadRequestsActiveClosedList(
+          newUploadRequestsList: action.viewState.fold(
+                  (failure) => [],
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
+          viewState: action.viewState)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllArchivedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllArchivedAction action) =>
+      state.setUploadRequestsArchivedList(
+          newUploadRequestsList: action.viewState.fold(
+                  (failure) => [],
+                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
+          viewState: action.viewState)),
+  TypedReducer<UploadRequestGroupState, CleanUploadRequestGroupAction>((UploadRequestGroupState state, _) => state.clearViewState()),
+]);

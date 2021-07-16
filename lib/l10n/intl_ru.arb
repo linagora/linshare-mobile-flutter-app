@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-05-26T11:52:44.026727",
+  "@@last_modified": "2021-07-15T14:47:42.745402",
   "initializing_data": "Инициализация данных...",
   "@initializing_data": {
     "type": "text",
@@ -1450,6 +1450,55 @@
   },
   "login_sso_failed": "Login failed",
   "@login_sso_failed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_requests": "Upload Requests",
+  "@upload_requests": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "pending": "Pending",
+  "@pending": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "active_closed": "Active / Closed",
+  "@active_closed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "archived": "Archived",
+  "@archived": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_upload_requests_here": "Create upload requests here",
+  "@create_upload_requests_here": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "activated_date": "Activated {date}",
+  "@activated_date": {
+    "type": "text",
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "archived_date": "Archived {date}",
+  "@archived_date": {
+    "type": "text",
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "active": "Active",
+  "@active": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "expired_closed": "Expired / Closed",
+  "@expired_closed": {
     "type": "text",
     "placeholders": {}
   }
