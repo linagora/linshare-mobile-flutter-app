@@ -48,3 +48,20 @@ class UploadRequestGroupFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class AddNewUploadRequestViewState extends ViewState {
+  final UploadRequestGroup uploadRequestGroup;
+  AddNewUploadRequestViewState(this.uploadRequestGroup);
+
+  @override
+  List<Object?> get props => [uploadRequestGroup];
+}
+
+class AddNewUploadRequestFailure extends FeatureFailure {
+  final exception;
+
+  AddNewUploadRequestFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

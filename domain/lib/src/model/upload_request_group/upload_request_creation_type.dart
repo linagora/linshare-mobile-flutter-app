@@ -28,28 +28,8 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:domain/src/usecases/remote_exception.dart';
-
-abstract class UploadRequestGroupException extends RemoteException {
-  static final UploadRequestGroupsNotFound = 'Upload Request Groups not found';
-  static final UploadRequestCreationFailed = 'Upload Request Create Failed';
-
-  UploadRequestGroupException(String message) : super(message);
-}
-
-class UploadRequestGroupsNotFound extends UploadRequestGroupException {
-  UploadRequestGroupsNotFound() : super(UploadRequestGroupException.UploadRequestGroupsNotFound);
-
-  @override
-  List<Object> get props => [];
-}
-
-
-class UploadRequestCreateFailed extends UploadRequestGroupException {
-  UploadRequestCreateFailed() : super(UploadRequestGroupException.UploadRequestCreationFailed);
-
-  @override
-  List<Object> get props => [];
+enum UploadRequestCreationType {
+  COLLECTIVE,
+  INDIVIDUAL
 }
