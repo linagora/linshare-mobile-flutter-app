@@ -42,4 +42,9 @@ class UploadRequestGroupRepositoryImpl implements UploadRequestGroupRepository {
   Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status) {
     return _uploadRequestGroupDataSource.getUploadRequestGroups(status);
   }
+
+  @override
+  Future<UploadRequestGroup> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest) {
+    return _uploadRequestGroupDataSource.addNewUploadRequest(creationType, addUploadRequest);
+  }
 }
