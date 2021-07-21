@@ -28,28 +28,60 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class UploadRequestGroupException extends RemoteException {
-  static final UploadRequestGroupsNotFound = 'Upload Request Groups not found';
-  static final UploadRequestCreationFailed = 'Upload Request Create Failed';
+class AddUploadRequest extends Equatable {
 
-  UploadRequestGroupException(String message) : super(message);
-}
+  // Simple settings
+  final List<String> contactList;
+  final String label;
+  final String? body;
+  final DateTime? activationDate;
+  final DateTime expiryDate;
+  final int maxFileCount;
+  final int maxFileSize;
+  // Advance settings
+  final DateTime? notificationDate;
+  final int maxDepositSize;
+  final bool canDelete;
+  final bool canClose;
+  final String locale;
+  final bool protectedByPassword;
+  final bool enableNotification;
 
-class UploadRequestGroupsNotFound extends UploadRequestGroupException {
-  UploadRequestGroupsNotFound() : super(UploadRequestGroupException.UploadRequestGroupsNotFound);
+
+  AddUploadRequest(
+      this.contactList,
+      this.label,
+      this.body,
+      this.activationDate,
+      this.expiryDate,
+      this.maxFileCount,
+      this.maxFileSize,
+      this.notificationDate,
+      this.maxDepositSize,
+      this.canDelete,
+      this.canClose,
+      this.locale,
+      this.protectedByPassword,
+      this.enableNotification);
 
   @override
-  List<Object> get props => [];
-}
-
-
-class UploadRequestCreateFailed extends UploadRequestGroupException {
-  UploadRequestCreateFailed() : super(UploadRequestGroupException.UploadRequestCreationFailed);
-
-  @override
-  List<Object> get props => [];
+  List<Object?> get props => [
+    contactList,
+    label,
+    body,
+    activationDate,
+    expiryDate,
+    maxFileCount,
+    maxFileSize,
+    notificationDate,
+    maxDepositSize,
+    canDelete,
+    canClose,
+    locale,
+    protectedByPassword,
+    enableNotification
+  ];
 }
