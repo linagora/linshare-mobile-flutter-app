@@ -164,6 +164,8 @@ export 'src/model/sharedspacedocument/work_group_node_parent_id.dart';
 export 'src/model/upload_request_group/upload_request_group.dart';
 export 'src/model/upload_request_group/upload_request_status.dart';
 export 'src/model/upload_request_group/upload_request_group_id.dart';
+export 'src/model/upload_request_group/upload_request_creation_type.dart';
+export 'src/model/upload_request_group/add_upload_request.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -332,3 +334,4 @@ export 'src/usecases/shared_space_document/auto_sync_available_offline_multiple_
 export 'src/usecases/shared_space_document/enable_available_offline_shared_space_document_interactor.dart';
 export 'src/usecases/upload_request_group/get_all_upload_request_groups_interactor.dart';
 export 'src/usecases/upload_request_group/upload_request_group_view_state.dart';
+export 'src/usecases/upload_request_group/add_new_upload_request_interactor.dart';
