@@ -34,4 +34,5 @@ import 'package:domain/domain.dart';
 
 abstract class UploadRequestGroupRepository {
   Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status);
+  Future<UploadRequestGroup> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest);
 }

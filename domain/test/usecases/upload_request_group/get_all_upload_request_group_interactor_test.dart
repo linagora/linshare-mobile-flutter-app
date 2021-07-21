@@ -42,10 +42,12 @@ void main() {
   group('get_all_upload_request_group_interactor_test', () {
     late MockUploadRequestGroupRepository uploadRequestGroupRepository;
     late GetAllUploadRequestGroupsInteractor getAllUploadRequestGroupsInteractor;
+    late AddNewUploadRequestInteractor addNewUploadRequestInteractor;
 
     setUp(() {
       uploadRequestGroupRepository = MockUploadRequestGroupRepository();
       getAllUploadRequestGroupsInteractor = GetAllUploadRequestGroupsInteractor(uploadRequestGroupRepository);
+      addNewUploadRequestInteractor = AddNewUploadRequestInteractor(uploadRequestGroupRepository);
     });
 
     test('getAllUploadRequestGroupsInteractor should return success with upload request list', () async {
@@ -74,5 +76,31 @@ void main() {
 
       expect(result, Left<Failure, Success>(UploadRequestGroupFailure(exception)));
     });
+
+    test('addNewUploadRequest should return success with an upload request', () async {
+      when(uploadRequestGroupRepository.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1)).thenAnswer((_) async => uploadRequestGroup1);
+
+      final result = await addNewUploadRequestInteractor.execute(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1);
+
+      result.fold((failure) => null, (success) {
+        expect(success, isA<AddNewUploadRequestViewState>());
+        expect((success as AddNewUploadRequestViewState).uploadRequestGroup, uploadRequestGroup1);
+      });
+    });
+
+    test('addNewUploadRequest should return failure with an exception', () async {
+      final exception = Exception();
+
+      when(uploadRequestGroupRepository.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1)).thenThrow(exception);
+
+      final result = await addNewUploadRequestInteractor.execute(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1);
+
+      result.fold(
+              (failure) => expect(failure, isA<AddNewUploadRequestFailure>()),
+              (success) => expect(success, isA<AddNewUploadRequestViewState>()));
+
+      expect(result, Left<Failure, Success>(AddNewUploadRequestFailure(exception)));
+    });
+
   });
 }
