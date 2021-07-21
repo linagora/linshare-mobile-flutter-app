@@ -67,6 +67,7 @@ import 'package:domain/domain.dart';
 
 import 'model/autocomplete/shared_space_member_autocomplete_result_dto.dart';
 import 'model/request/add_shared_space_member_body_request.dart';
+import 'model/request/add_upload_body_request.dart';
 import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
 import 'model/request/update_shared_space_member_body_request.dart';
@@ -545,5 +546,15 @@ class LinShareHttpClient {
         .generateEndpointPath());
 
     return resultJson.map((data) => UploadRequestGroupResponse.fromJson(data)).toList();
+  }
+
+  Future<UploadRequestGroupResponse> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest) async {
+    final resultJson = await _dioClient.post(
+        Endpoint.uploadRequestGroups
+            .withQueryParameters([BooleanQueryParameter('collective',
+                (creationType == UploadRequestCreationType.COLLECTIVE))])
+            .generateEndpointPath(),
+        data: addUploadRequest.toAddUploadBodyRequest().toJson().toString());
+    return UploadRequestGroupResponse.fromJson(resultJson);
   }
 }

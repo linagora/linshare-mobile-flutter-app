@@ -78,5 +78,39 @@ void getAllUploadRequestGroupsTest() {
         expect(error, isA<MissingRequiredFields>());
       });
     });
+
+    test('addNewUploadRequest should return success with valid Collective request', () async {
+      when(_linShareHttpClient.addNewUploadRequest(UploadRequestCreationType.COLLECTIVE, addUploadRequest1))
+          .thenAnswer((_) async => uploadRequestGroupResponse1);
+
+      final result = await _uploadRequestGroupDataSourceImpl
+          .addNewUploadRequest(UploadRequestCreationType.COLLECTIVE, addUploadRequest1);
+      expect(result, uploadRequestGroupResponse1.toUploadRequestGroup());
+    });
+
+    test('addNewUploadRequest should return success with valid Individual request', () async {
+      when(_linShareHttpClient.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1))
+          .thenAnswer((_) async => uploadRequestGroupResponse1);
+
+      final result = await _uploadRequestGroupDataSourceImpl
+          .addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1);
+      expect(result, uploadRequestGroupResponse1.toUploadRequestGroup());
+    });
+
+    test('addNewUploadRequest should throw exception when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')),
+          requestOptions: RequestOptions(path: ''));
+
+      when(_linShareHttpClient.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1))
+          .thenThrow(error);
+
+      await _uploadRequestGroupDataSourceImpl
+          .addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1).catchError((error) {
+        expect(error, isA<ServerNotFound>());
+      });
+    });
+
   });
 }
