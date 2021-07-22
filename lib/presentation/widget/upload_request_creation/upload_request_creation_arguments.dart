@@ -29,24 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
-class CommonTextStyle {
-  static final textStyleNormal = TextStyle(
-    color: AppColor.primaryColor,
-    fontSize: 14,
-    fontStyle: FontStyle.normal,
-    fontWeight: FontWeight.normal,
-  );
+class UploadRequestCreationArguments extends RouterArguments {
+  final UploadRequestCreationType type;
 
-  // Upload Request
-  static final textStyleUploadRequestSettingsTitle =
-    TextStyle(fontSize: 16.0, color: AppColor.uploadRequestHintTextColor);
-
-  static final textStyleUploadRequestSettingsValue = TextStyle(
-      fontSize: 16.0,
-      color: AppColor.uploadRequestTitleTextColor,
-      decoration: TextDecoration.underline,
-      decorationColor: AppColor.uploadRequestTextDecorationColor);
+  UploadRequestCreationArguments(this.type);
 }
