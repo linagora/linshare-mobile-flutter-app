@@ -41,6 +41,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_request_gr
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_horizontal_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
@@ -110,6 +112,25 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
               ],
             ),
           ),
+          bottomNavigationBar: StoreConnector<AppState, AppState>(
+            converter: (store) => store.state,
+            builder: (context, appState) {
+              return SearchBottomBarBuilder()
+                .key(Key('search_bottom_bar'))
+                .onSearchActionClick((){})
+                .build();
+              }),
+          floatingActionButton: FloatingActionButton(
+            key: Key('upload_request_add_button'),
+            onPressed: () => _model.openUploadRequestAddMenu(context, _addNewUploadRequestMenuActionTiles(context)),
+            backgroundColor: AppColor.primaryColor,
+            child: SvgPicture.asset(
+              imagePath.icPlus,
+              width: 24,
+              height: 24,
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ));
   }
 
@@ -263,4 +284,37 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
           fit: BoxFit.fill)
     ]);
   }
+
+  List<Widget> _addNewUploadRequestMenuActionTiles(BuildContext context) {
+    return [
+      _addCollectiveAction(context),
+      _addIndividualAction(context)
+    ];
+  }
+
+  Widget _addCollectiveAction(BuildContext context) =>
+    SimpleHorizontalContextMenuActionBuilder(
+        Key('add_collective_ur_context_menu_action'),
+        SvgPicture.asset(imagePath.icUploadRequestCollective,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+          color: AppColor.uploadRequestAddNewIconColor),
+        AppLocalizations.of(context).collective_upload)
+    .onActionClick((_) =>
+        _model.addNewUploadRequest(UploadRequestCreationType.COLLECTIVE))
+    .build();
+
+  Widget _addIndividualAction(BuildContext context) =>
+    SimpleHorizontalContextMenuActionBuilder(
+        Key('add_individual_ur_context_menu_action'),
+        SvgPicture.asset(imagePath.icUploadRequestIndividual,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+          color: AppColor.uploadRequestAddNewIconColor),
+        AppLocalizations.of(context).individual_upload)
+    .onActionClick((_) =>
+        _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL))
+    .build();
 }

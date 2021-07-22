@@ -42,12 +42,20 @@ class SimpleHorizontalContextMenuActionBuilder extends ContextMenuActionBuilder<
   @override
   Widget build() {
     return GestureDetector(
+        behavior: HitTestBehavior.translucent,  // when sometimes onTap() is not invoked, add this
+        onTap: () {
+          onContextMenuActionClick(null);
+        },
         child: Container(
           padding: EdgeInsets.only(top: 20, bottom: 36, left: 26),
             child: Column(
-              children: [actionIcon, Text(actionName, style: actionTextStyle())]
-            )
-        ),
-        onTap: () => onContextMenuActionClick(null));
+              children: [
+                actionIcon,
+                SizedBox(height: 8),
+                Text(actionName,
+                  style: actionTextStyle(),
+                  textAlign: TextAlign.center)
+            ])
+        ));
   }
 }

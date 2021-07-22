@@ -83,6 +83,8 @@ import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_wid
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 import 'package:redux/redux.dart';
@@ -112,6 +114,7 @@ class WidgetModule {
     _provideBiometricAuthenticationSettingComponent();
     _provideSharedSpaceNodeVersionsComponent();
     _provideUploadRequestGroupComponent();
+    _provideUploadRequestCreationComponent();
   }
 
   void _provideLoginComponent() {
@@ -416,4 +419,17 @@ class WidgetModule {
         getIt.get<GetAllUploadRequestGroupsInteractor>(),
       ));
   }
+
+  void _provideUploadRequestCreationComponent() {
+    getIt.registerFactory(() => UploadRequestCreationWidget());
+    getIt.registerFactory(() => UploadRequestCreationViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<AddNewUploadRequestInteractor>(),
+        getIt.get<GetAllUploadRequestGroupsInteractor>(),
+        getIt.get<GetAutoCompleteSharingInteractor>(),
+        getIt.get<GetAutoCompleteSharingWithDeviceContactInteractor>()
+    ));
+  }
+
 }
