@@ -352,6 +352,7 @@ class AppModule {
     getIt.registerFactory(() => AutoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor(getIt<AutoSyncAvailableOfflineSharedSpaceDocumentInteractor>()));
     getIt.registerFactory(() => EnableAvailableOfflineSharedSpaceDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestGroupsInteractor(getIt<UploadRequestGroupRepository>()));
+    getIt.registerFactory(() => AddNewUploadRequestInteractor(getIt<UploadRequestGroupRepository>()));
   }
 
   void _provideSharePreference() {
