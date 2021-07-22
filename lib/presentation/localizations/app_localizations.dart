@@ -1856,6 +1856,154 @@ class AppLocalizations {
       name: 'expired_closed',
     );
   }
+
+  String get add_new_upload_request {
+    return Intl.message(
+      'Add new upload request',
+      name: 'add_new_upload_request',
+    );
+  }
+
+  String get collective_upload {
+    return Intl.message(
+      'Collective \nUpload',
+      name: 'collective_upload',
+    );
+  }
+
+  String get individual_upload {
+    return Intl.message(
+      'Individual \nUpload',
+      name: 'individual_upload',
+    );
+  }
+
+  String get create_collective_upload_request_title {
+    return Intl.message(
+      'Collective Upload',
+      name: 'create_collective_upload_request_title',
+    );
+  }
+
+  String get create_individual_upload_request_title {
+    return Intl.message(
+      'Individual Upload',
+      name: 'create_individual_upload_request_title',
+    );
+  }
+
+  String get create_upload_request_button {
+    return Intl.message(
+      'Create Upload Request',
+      name: 'create_upload_request_button',
+    );
+  }
+
+  String get email_subject {
+    return Intl.message(
+        'Email subject',
+        name: 'email_subject'
+    );
+  }
+
+  String get email_message {
+    return Intl.message(
+      'Email message',
+      name: 'email_message'
+    );
+  }
+
+  String get settings {
+    return Intl.message(
+        'Settings',
+        name: 'settings'
+    );
+  }
+
+  String get advanced_options {
+    return Intl.message(
+        'Advanced options',
+        name: 'advanced_options'
+    );
+  }
+
+  String get show_less {
+    return Intl.message(
+        'Show less',
+        name: 'show_less'
+    );
+  }
+
+  String get activation_date {
+    return Intl.message(
+        'Activation date',
+        name: 'activation_date'
+    );
+  }
+
+  String get expiration_date {
+    return Intl.message(
+        'Expiration date',
+        name: 'expiration_date'
+    );
+  }
+
+  String get reminder_date {
+    return Intl.message(
+        'Reminder date',
+        name: 'reminder_date'
+    );
+  }
+
+  String get max_number_of_files {
+    return Intl.message(
+        'Max number of files',
+        name: 'max_number_of_files'
+    );
+  }
+
+  String get max_size_of_a_file {
+    return Intl.message(
+        'Max size of a file',
+        name: 'max_size_of_a_file'
+    );
+  }
+
+  String get allow_deletion {
+    return Intl.message(
+        'Allow deletion',
+        name: 'allow_deletion'
+    );
+  }
+
+  String get allow_closure {
+    return Intl.message(
+        'Allow closure',
+        name: 'allow_closure'
+    );
+  }
+
+  String get notification_language {
+    return Intl.message(
+        'Notification Language',
+        name: 'notification_language'
+    );
+  }
+
+  String get max_number_files_error {
+    return Intl.message(
+        'Max number of files must be set and smaller than 1000',
+        name: 'max_number_files_error'
+    );
+  }
+
+  String get max_file_size_error {
+    return Intl.message(
+        'Max size of a file must be set and smaller than 100 GB',
+        name: 'max_file_size_error'
+    );
+  }
+ 
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

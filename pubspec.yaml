@@ -132,6 +132,9 @@ dependencies:
   # OIDC
   flutter_appauth: 1.0.0+1
 
+  # datetime picker
+  flutter_datetime_picker: 1.5.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

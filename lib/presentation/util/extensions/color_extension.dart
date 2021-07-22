@@ -91,4 +91,10 @@ extension AppColor on Color {
   static const documentDetailsSharedTitleColor = Color(0xff7B7B7B);
   static const touchIDIconColor = Color(0xffFF1059);
   static const uploadRequestLabelsColor = Color(0xff7B7B7B);
+  static const uploadRequestAddNewIconColor = Color(0xff4AC6FF);
+  static const uploadRequestTitleTextColor = Color(0xff7B7B7B);
+  static const uploadRequestHintTextColor = Color(0xffACACAC);
+  static const uploadRequestTitleRequiredTextColor = Color(0xffFF5858);
+  static const uploadRequestTextClickableColor = Color(0xff4AC6FF);
+  static const uploadRequestTextDecorationColor = Color(0xffDEDEDE);
 }

@@ -49,7 +49,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/sh
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_widget.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -83,6 +83,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<SharedSpaceNodeVersionsWidget>(), settings: settings);
     case RoutePaths.biometricAuthenticationLogin:
       return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationLoginWidget>(), settings: settings);
+    case RoutePaths.createUploadRequest:
+      return MaterialPageRoute(builder: (context) => getIt<UploadRequestCreationWidget>(), settings: settings);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

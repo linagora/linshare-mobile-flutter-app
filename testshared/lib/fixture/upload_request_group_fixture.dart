@@ -83,3 +83,20 @@ final uploadRequestGroupResponse1 = UploadRequestGroupResponse(
   2323872,
   1
 );
+
+final addUploadRequest1 = AddUploadRequest(
+  ['user1@linshare.org'],
+  'subject 1',
+  'body 1',
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  400,
+  50000000000,
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  50000000000,
+  true,
+  true,
+  "FRENCH",
+  true,
+  true
+);
