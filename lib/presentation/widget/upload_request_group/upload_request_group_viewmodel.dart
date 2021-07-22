@@ -30,12 +30,19 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_arguments.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class UploadRequestGroupViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
@@ -74,6 +81,29 @@ class UploadRequestGroupViewModel extends BaseViewModel {
       store.dispatch(UploadRequestGroupGetAllArchivedAction(
           await _getAllUploadRequestGroupsInteractor.execute([UploadRequestStatus.ARCHIVED])));
     }));
+  }
+
+  void openUploadRequestAddMenu(BuildContext context, List<Widget> actionTiles) {
+    store.dispatch(_handleUploadRequestAddMenuAction(context, actionTiles));
+  }
+
+  ThunkAction<AppState> _handleUploadRequestAddMenuAction(BuildContext context, List<Widget> actionTiles) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context, areTilesHorizontal: true)
+          .addHeader(SimpleBottomSheetHeaderBuilder(Key('add_upload_request_bottom_sheet_header_builder'))
+          .addLabel(AppLocalizations.of(context).add_new_upload_request)
+          .build())
+          .addTiles(actionTiles)
+          .build();
+    };
+  }
+
+  void addNewUploadRequest(UploadRequestCreationType type) {
+    _appNavigation.popBack();
+    _appNavigation.push(
+      RoutePaths.createUploadRequest,
+      arguments: UploadRequestCreationArguments(type),
+    );
   }
 
   @override

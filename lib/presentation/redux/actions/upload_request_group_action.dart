@@ -67,6 +67,13 @@ class UploadRequestGroupGetAllArchivedAction extends ActionOnline {
 }
 
 @immutable
+class UploadRequestCreationAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+
+  UploadRequestCreationAction(this.viewState);
+}
+
+@immutable
 class CleanUploadRequestGroupAction extends ActionOffline {
   CleanUploadRequestGroupAction();
 }

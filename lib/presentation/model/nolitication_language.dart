@@ -29,24 +29,21 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+enum NotificationLanguage {
+  ENGLISH, FRENCH, RUSSIAN
+}
 
-class CommonTextStyle {
-  static final textStyleNormal = TextStyle(
-    color: AppColor.primaryColor,
-    fontSize: 14,
-    fontStyle: FontStyle.normal,
-    fontWeight: FontWeight.normal,
-  );
-
-  // Upload Request
-  static final textStyleUploadRequestSettingsTitle =
-    TextStyle(fontSize: 16.0, color: AppColor.uploadRequestHintTextColor);
-
-  static final textStyleUploadRequestSettingsValue = TextStyle(
-      fontSize: 16.0,
-      color: AppColor.uploadRequestTitleTextColor,
-      decoration: TextDecoration.underline,
-      decorationColor: AppColor.uploadRequestTextDecorationColor);
+extension NotificationLanguageExtension on NotificationLanguage {
+  String get text {
+    switch(this) {
+      case NotificationLanguage.ENGLISH:
+        return 'ENGLISH';
+      case NotificationLanguage.FRENCH:
+        return 'FRENCH';
+      case NotificationLanguage.RUSSIAN:
+        return 'RUSSIAN';
+      default:
+        return toString();
+    }
+  }
 }
