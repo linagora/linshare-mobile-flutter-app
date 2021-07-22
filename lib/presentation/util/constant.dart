@@ -29,24 +29,18 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+class Constant {
+  static const MAX_NUMBER_FILES_INIT = 400;
+  static const MAX_NUMBER_FILES_LIMIT = 1000;
 
-class CommonTextStyle {
-  static final textStyleNormal = TextStyle(
-    color: AppColor.primaryColor,
-    fontSize: 14,
-    fontStyle: FontStyle.normal,
-    fontWeight: FontWeight.normal,
-  );
+  static const MAX_FILE_SIZE_INIT = 50;
+  static const MAX_FILE_SIZE_LIMIT = 100;
 
-  // Upload Request
-  static final textStyleUploadRequestSettingsTitle =
-    TextStyle(fontSize: 16.0, color: AppColor.uploadRequestHintTextColor);
+  static const MAX_DEPOSIT_SIZE_INIT = 50;
+  static const MAX_DEPOSIT_SIZE_LIMIT = 100;
 
-  static final textStyleUploadRequestSettingsValue = TextStyle(
-      fontSize: 16.0,
-      color: AppColor.uploadRequestTitleTextColor,
-      decoration: TextDecoration.underline,
-      decorationColor: AppColor.uploadRequestTextDecorationColor);
+  static const EXPIRATION_DATE_INIT = 2;
+  static const ACTIVATION_DATE_MAX = 2;
+  static const EXPIRATION_DATE_MIN = 2;
+  static const EXPIRATION_DATE_MAX = 3;
 }

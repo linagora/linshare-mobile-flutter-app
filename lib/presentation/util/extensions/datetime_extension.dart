@@ -35,4 +35,9 @@ import 'package:intl/intl.dart';
 extension DateTimeExtension on DateTime {
 
   String getMMMddyyyyFormatString() => DateFormat.yMMMd().format(this);
+
+  String getYMMMMdFormatWithJm() => DateFormat.yMMMMd().add_jm().format(this);
+
+  DateTime roundUpHour(int numberHourRoundUp) => add(Duration(hours: numberHourRoundUp))
+      .subtract(Duration(minutes: minute, seconds: second, milliseconds: millisecond, microseconds: microsecond));
 }

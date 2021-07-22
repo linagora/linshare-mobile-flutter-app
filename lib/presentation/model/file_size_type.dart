@@ -29,24 +29,36 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+enum FileSizeType {
+  KB, MB, GB
+}
 
-class CommonTextStyle {
-  static final textStyleNormal = TextStyle(
-    color: AppColor.primaryColor,
-    fontSize: 14,
-    fontStyle: FontStyle.normal,
-    fontWeight: FontWeight.normal,
-  );
+const unit = 1000;
 
-  // Upload Request
-  static final textStyleUploadRequestSettingsTitle =
-    TextStyle(fontSize: 16.0, color: AppColor.uploadRequestHintTextColor);
+extension FileSizeTypeExtension on FileSizeType {
+  String get text {
+    switch(this) {
+      case FileSizeType.KB:
+        return 'KB';
+      case FileSizeType.MB:
+        return 'MB';
+      case FileSizeType.GB:
+        return 'GB';
+      default:
+        return toString();
+    }
+  }
 
-  static final textStyleUploadRequestSettingsValue = TextStyle(
-      fontSize: 16.0,
-      color: AppColor.uploadRequestTitleTextColor,
-      decoration: TextDecoration.underline,
-      decorationColor: AppColor.uploadRequestTextDecorationColor);
+  int toByte(int number) {
+    switch(this) {
+      case FileSizeType.KB:
+        return number * unit;
+      case FileSizeType.MB:
+        return number * unit * unit;
+      case FileSizeType.GB:
+        return number * unit * unit * unit;
+      default:
+        return -1;
+    }
+  }
 }
