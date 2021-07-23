@@ -87,6 +87,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_creation
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
 import 'package:redux/redux.dart';
 
 class WidgetModule {
@@ -115,6 +116,7 @@ class WidgetModule {
     _provideSharedSpaceNodeVersionsComponent();
     _provideUploadRequestGroupComponent();
     _provideUploadRequestCreationComponent();
+    _provideUploadRequestInsideComponent();
   }
 
   void _provideLoginComponent() {
@@ -430,6 +432,15 @@ class WidgetModule {
         getIt.get<GetAutoCompleteSharingInteractor>(),
         getIt.get<GetAutoCompleteSharingWithDeviceContactInteractor>()
     ));
+  }
+
+  void _provideUploadRequestInsideComponent() {
+    getIt.registerFactory(() =>
+        UploadRequestInsideViewModel(
+          getIt.get<Store<AppState>>(),
+          getIt.get<GetAllUploadRequestsInteractor>(),
+          getIt.get<GetAllUploadRequestEntriesInteractor>(),
+        ));
   }
 
 }
