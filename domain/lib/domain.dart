@@ -344,6 +344,7 @@ export 'src/usecases/shared_space_document/auto_sync_available_offline_multiple_
 export 'src/usecases/shared_space_document/enable_available_offline_shared_space_document_interactor.dart';
 export 'src/usecases/upload_request_group/get_all_upload_request_groups_interactor.dart';
 export 'src/usecases/upload_request/get_all_upload_requests_interactor.dart';
+export 'src/usecases/upload_request_entry/get_all_upload_request_entries_interactor.dart';
 export 'src/usecases/upload_request_group/upload_request_group_view_state.dart';
 export 'src/usecases/upload_request_group/add_new_upload_request_interactor.dart';
 export 'src/usecases/upload_request/upload_request_view_state.dart';
