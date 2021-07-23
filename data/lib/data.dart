@@ -17,6 +17,8 @@ export 'src/datasource/shared_space_member_datasource.dart';
 export 'src/datasource/shared_space_activities_datasource.dart';
 export 'src/datasource/biometric_datasource.dart';
 export 'src/datasource/upload_request_group_datasource.dart';
+export 'src/datasource/upload_request_datasource.dart';
+export 'src/datasource/upload_request_entry_datasource.dart';
 
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
@@ -36,6 +38,8 @@ export 'src/datasource_impl/local_document_datasource_impl.dart';
 export 'src/datasource_impl/local_shared_space_document_datasource_impl.dart';
 export 'src/datasource_impl/local_shared_space_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_group_datasource_impl.dart';
+export 'src/datasource_impl/upload_request_datasource_impl.dart';
+export 'src/datasource_impl/upload_request_entry_datasource_impl.dart';
 
 // config
 export 'src/network/config/dynamic_url_interceptors.dart';
@@ -95,6 +99,9 @@ export 'src/local/model/data_source_type.dart';
 export 'src/local/model/shared_space_cache.dart';
 export 'src/local/model/work_group_node_cache.dart';
 export 'src/network/model/response/upload_request_group_response.dart';
+export 'src/network/model/response/upload_request_response.dart';
+export 'src/network/model/response/upload_request_entry_response.dart';
+export 'src/network/model/response/upload_request_entry_owner_response.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
@@ -114,6 +121,8 @@ export 'src/repository/sharedspacemember/shared_space_member_repository_impl.dar
 export 'src/repository/shared_space_activities/shared_space_activities_repository_impl.dart';
 export 'src/repository/biometric_authentication/biometric_repository_impl.dart';
 export 'src/repository/upload_request_group/upload_request_group_repository_impl.dart';
+export 'src/repository/upload_request/upload_request_repository_impl.dart';
+export 'src/repository/upload_request_entry/upload_request_entry_repository_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';
