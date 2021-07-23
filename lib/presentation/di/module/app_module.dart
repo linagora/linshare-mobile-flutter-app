@@ -119,6 +119,12 @@ class AppModule {
     getIt.registerFactory(() => UploadRequestGroupDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => UploadRequestDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => UploadRequestEntryDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -147,6 +153,8 @@ class AppModule {
     getIt.registerFactory<SharedSpaceActivitiesDataSource>(() => getIt<SharedSpaceActivitiesDataSourceImpl>());
     getIt.registerFactory<BiometricDataSource>(() => getIt<BiometricDataSourceImpl>());
     getIt.registerFactory<UploadRequestGroupDataSource>(() => getIt<UploadRequestGroupDataSourceImpl>());
+    getIt.registerFactory<UploadRequestDataSource>(() => getIt<UploadRequestDataSourceImpl>());
+    getIt.registerFactory<UploadRequestEntryDataSource>(() => getIt<UploadRequestEntryDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -184,6 +192,8 @@ class AppModule {
     getIt.registerFactory(() => LocalSharedSpaceDocumentDataSourceImpl(getIt<SharedSpaceDocumentDatabaseManager>()));
     getIt.registerFactory(() => LocalSharedSpaceDataSourceImpl(getIt<SharedSpaceDocumentDatabaseManager>()));
     getIt.registerFactory(() => UploadRequestGroupRepositoryImpl(getIt<UploadRequestGroupDataSource>()));
+    getIt.registerFactory(() => UploadRequestRepositoryImpl(getIt<UploadRequestDataSource>()));
+    getIt.registerFactory(() => UploadRequestEntryRepositoryImpl(getIt<UploadRequestEntryDataSource>()));
   }
 
   void _provideRepository() {
@@ -204,6 +214,8 @@ class AppModule {
     getIt.registerFactory<SharedSpaceActivitiesRepository>(() => getIt<SharedSpaceActivitiesRepositoryImpl>());
     getIt.registerFactory<BiometricRepository>(() => getIt<BiometricRepositoryImpl>());
     getIt.registerFactory<UploadRequestGroupRepository>(() => getIt<UploadRequestGroupRepositoryImpl>());
+    getIt.registerFactory<UploadRequestRepository>(() => getIt<UploadRequestRepositoryImpl>());
+    getIt.registerFactory<UploadRequestEntryRepository>(() => getIt<UploadRequestEntryRepositoryImpl>());
   }
 
   void _provideInteractor() {
@@ -353,6 +365,8 @@ class AppModule {
     getIt.registerFactory(() => EnableAvailableOfflineSharedSpaceDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestGroupsInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => AddNewUploadRequestInteractor(getIt<UploadRequestGroupRepository>()));
+    getIt.registerFactory(() => GetAllUploadRequestsInteractor(getIt<UploadRequestRepository>()));
+    getIt.registerFactory(() => GetAllUploadRequestEntriesInteractor(getIt<UploadRequestEntryRepository>()));
   }
 
   void _provideSharePreference() {
