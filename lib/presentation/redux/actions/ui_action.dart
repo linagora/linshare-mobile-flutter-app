@@ -74,3 +74,9 @@ class EnableSearchStateAction extends ActionOffline {
 
 @immutable
 class DisableSearchStateAction extends ActionOffline {}
+
+class UploadRequestInsideView extends SetCurrentView {
+  final UploadRequestGroup uploadRequestGroup;
+
+  UploadRequestInsideView(String routePath, this.uploadRequestGroup) : super(routePath);
+}

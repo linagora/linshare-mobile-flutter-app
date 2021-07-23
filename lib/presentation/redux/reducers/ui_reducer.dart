@@ -39,6 +39,8 @@ final uiReducer = combineReducers<UIState>([
           (UIState state, SetCurrentView action) => state.setCurrentView(action.routePath)),
   TypedReducer<UIState, SharedSpaceInsideView>(
           (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, sharedSpace: action.sharedSpace)),
+  TypedReducer<UIState, UploadRequestInsideView>(
+          (UIState state, UploadRequestInsideView action) => state.setCurrentView(action.routePath, uploadRequestGroup: action.uploadRequestGroup)),
   TypedReducer<UIState, ClearCurrentView>(
           (UIState state, _) => state.clearCurrentView()),
   TypedReducer<UIState, EnableSearchStateAction>(
