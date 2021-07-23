@@ -32,6 +32,7 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -81,6 +82,10 @@ class UploadRequestGroupViewModel extends BaseViewModel {
       store.dispatch(UploadRequestGroupGetAllArchivedAction(
           await _getAllUploadRequestGroupsInteractor.execute([UploadRequestStatus.ARCHIVED])));
     }));
+  }
+
+  void getListUploadRequests(UploadRequestGroup requestGroup) {
+    store.dispatch(UploadRequestInsideView(RoutePaths.uploadRequestInside, requestGroup));
   }
 
   void openUploadRequestAddMenu(BuildContext context, List<Widget> actionTiles) {

@@ -2003,7 +2003,21 @@ class AppLocalizations {
         name: 'max_file_size_error'
     );
   }
- 
+
+  String get upload_requests_root_back_title {
+    return Intl.message(
+        'Back to Upload Requests',
+        name: 'upload_requests_root_back_title'
+    );
+  }
+
+  String get upload_requests_no_files_uploaded {
+    return Intl.message(
+        'No files uploaded yet',
+        name: 'upload_requests_no_files_uploaded'
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

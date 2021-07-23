@@ -97,4 +97,5 @@ extension AppColor on Color {
   static const uploadRequestTitleRequiredTextColor = Color(0xffFF5858);
   static const uploadRequestTextClickableColor = Color(0xff4AC6FF);
   static const uploadRequestTextDecorationColor = Color(0xffDEDEDE);
+  static const uploadRequestSurfingBackTitleColor = Color(0xff4AC6FF);
 }
