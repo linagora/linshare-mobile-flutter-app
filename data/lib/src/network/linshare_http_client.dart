@@ -56,6 +56,7 @@ import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/shared_space_member_response.dart';
+import 'package:data/src/network/model/response/upload_request_entry_response.dart';
 import 'package:data/src/network/model/response/upload_request_group_response.dart';
 import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/network/model/share/received_share_dto.dart';
@@ -72,6 +73,7 @@ import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
 import 'model/request/update_shared_space_member_body_request.dart';
 import 'model/response/document_details_response.dart';
+import 'model/response/upload_request_response.dart';
 import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
@@ -556,5 +558,21 @@ class LinShareHttpClient {
             .generateEndpointPath(),
         data: addUploadRequest.toAddUploadBodyRequest().toJson().toString());
     return UploadRequestGroupResponse.fromJson(resultJson);
+  }
+
+  Future<List<UploadRequestResponse>> getAllUploadRequests(UploadRequestGroupId uploadRequestGroupId) async {
+    final List resultJson = await _dioClient.get(Endpoint.uploadRequestGroups
+        .withPathParameter(uploadRequestGroupId.uuid)
+        .withPathParameter(Endpoint.uploadRequests)
+        .generateEndpointPath());
+    return resultJson.map((data) => UploadRequestResponse.fromJson(data)).toList();
+  }
+
+  Future<List<UploadRequestEntryResponse>> getAllUploadRequestEntries(UploadRequestId uploadRequestId) async {
+    final List resultJson = await _dioClient.get(Endpoint.uploadRequestsRoute
+        .withPathParameter(uploadRequestId.uuid)
+        .withPathParameter(Endpoint.entries)
+        .generateEndpointPath());
+    return resultJson.map((data) => UploadRequestEntryResponse.fromJson(data)).toList();
   }
 }
