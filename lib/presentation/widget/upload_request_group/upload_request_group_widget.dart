@@ -172,6 +172,7 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   ListTile _buildPendingUploadTile(UploadRequestGroup request) {
     return ListTile(
+      onTap: () => _model.getListUploadRequests(request),
       dense: true,
       leading: _getTileIcon(request.collective),
       title: Text(request.label,
@@ -193,6 +194,7 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   ListTile _buildArchivedUploadTile(UploadRequestGroup request) {
     return ListTile(
+      onTap: () => _model.getListUploadRequests(request),
       dense: true,
       leading: _getTileIcon(request.collective),
       title: Text(request.label,
@@ -214,6 +216,7 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   ListTile _buildActiveClosedUploadTile(UploadRequestGroup request) {
     return ListTile(
+      onTap: () => _model.getListUploadRequests(request),
       dense: true,
       leading: _getTileIcon(request.collective),
       title: Text(request.label,

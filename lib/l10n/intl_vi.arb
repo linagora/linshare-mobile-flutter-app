@@ -1606,5 +1606,15 @@
   "@max_file_size_error": {
     "type": "text",
     "placeholders": {}
+  },
+  "upload_requests_root_back_title": "Back to Upload Requests",
+  "@upload_requests_root_back_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_requests_no_files_uploaded": "No files uploaded yet",
+  "@upload_requests_no_files_uploaded": {
+    "type": "text",
+    "placeholders": {}
   }
 }
