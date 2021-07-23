@@ -30,76 +30,51 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/domain.dart';
-import 'package:data/data.dart';
 import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/fixture/upload_request_fixture.dart';
+import 'package:testshared/fixture/upload_request_group_fixture.dart';
 
-final uploadRequestGroup1 = UploadRequestGroup(
-  UploadRequestGroupId('upload_request_group_1'),
-  'uploadRequestGroup1',
-  'uploadRequestGroupBody1',
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  23232323,
-  232332323232,
-  23232323232323,
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  true,
-  true,
-  true,
-  true,
-  'mailmessageId1',
-  false,
-  true,
-  GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
-  UploadRequestStatus.CREATED,
-  2323872,
-  1
-);
+import '../../mock/repository/mock_upload_request_repository.dart';
 
-final uploadRequestGroupResponse1 = UploadRequestGroupResponse(
-  UploadRequestGroupId('upload_request_group_1'),
-  'uploadRequestGroup1',
-  'uploadRequestGroupBody1',
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  23232323,
-  232332323232,
-  23232323232323,
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  true,
-  true,
-  true,
-  true,
-  'mailmessageId1',
-  false,
-  true,
-  GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
-  UploadRequestStatus.CREATED,
-  2323872,
-  1
-);
+void main() {
+  group('get_all_upload_request_interactor_test', () {
+    late MockUploadRequestRepository uploadRequestRepository;
+    late GetAllUploadRequestsInteractor getAllUploadRequestsInteractor;
 
-final addUploadRequest1 = AddUploadRequest(
-  ['user1@linshare.org'],
-  'subject 1',
-  'body 1',
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  400,
-  50000000000,
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  50000000000,
-  true,
-  true,
-  "FRENCH",
-  true,
-  true
-);
+    setUp(() {
+      uploadRequestRepository = MockUploadRequestRepository();
+      getAllUploadRequestsInteractor = GetAllUploadRequestsInteractor(uploadRequestRepository);
+    });
 
-final uploadRequestGroupId1 = UploadRequestGroupId('upload_request_group_1');
-final uploadRequestGroupIdWrong1 = UploadRequestGroupId('upload_request_group_wrong_1');
+    test('getAllUploadRequestsInteractor should return success with upload request list', () async {
+      when(uploadRequestRepository.getAllUploadRequests(uploadRequestGroupId1)).thenAnswer((_) async => [uploadRequest1]);
+
+      final result = await getAllUploadRequestsInteractor.execute(uploadRequestGroupId1);
+
+      final uploadRequestsList = result.map((success) => (success as UploadRequestViewState).uploadRequests)
+          .getOrElse(() => []);
+
+      expect(
+          uploadRequestsList,
+          containsAllInOrder([uploadRequest1]));
+    });
+
+    test('getAllUploadRequestsInteractor should fail when get all failed', () async {
+      final exception = Exception();
+
+      when(uploadRequestRepository.getAllUploadRequests(uploadRequestGroupIdWrong1)).thenThrow(exception);
+
+      final result = await getAllUploadRequestsInteractor.execute(uploadRequestGroupIdWrong1);
+
+      result.fold(
+        (failure) => expect(failure, isA<UploadRequestFailure>()),
+        (success) => expect(success, isA<UploadRequestViewState>()));
+
+      expect(result, Left<Failure, Success>(UploadRequestFailure(exception)));
+    });
+
+  });
+}
