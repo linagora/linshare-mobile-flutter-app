@@ -55,5 +55,24 @@ final uploadRequestGroupReducer = combineReducers<UploadRequestGroupState>([
                   (failure) => [],
                   (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
           viewState: action.viewState)),
+
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupSortPendingAction>((UploadRequestGroupState state, UploadRequestGroupSortPendingAction action) =>
+      state.setUploadRequestsCreatedListWithSort(
+          action.sorter,
+          newUploadRequestsList: action.uploadRequestGroups)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupSortActiveClosedAction>((UploadRequestGroupState state, UploadRequestGroupSortActiveClosedAction action) =>
+      state.setUploadRequestsActiveClosedListWithSort(
+          action.sorter,
+          newUploadRequestsList: action.uploadRequestGroups)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupSortArchivedAction>((UploadRequestGroupState state, UploadRequestGroupSortArchivedAction action) =>
+      state.setUploadRequestsArchivedListWithSort(
+          action.sorter,
+          newUploadRequestsList: action.uploadRequestGroups)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetSorterCreatedAction>((UploadRequestGroupState state, UploadRequestGroupGetSorterCreatedAction action) =>
+      state.setSorterCreated(newSorter: action.sorter)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetSorterActiveClosedAction>((UploadRequestGroupState state, UploadRequestGroupGetSorterActiveClosedAction action) =>
+      state.setSorterActiveClosed(newSorter: action.sorter)),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetSorterArchivedAction>((UploadRequestGroupState state, UploadRequestGroupGetSorterArchivedAction action) =>
+      state.setSorterArchived(newSorter: action.sorter)),
   TypedReducer<UploadRequestGroupState, CleanUploadRequestGroupAction>((UploadRequestGroupState state, _) => state.clearViewState()),
 ]);
