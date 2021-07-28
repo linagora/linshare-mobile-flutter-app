@@ -42,7 +42,7 @@ enum UploadRequestStatus {
 extension UploadRequestStatusExtension on UploadRequestStatus {
     String get value {
         switch(this) {
-          case UploadRequestStatus.DELETED: 
+          case UploadRequestStatus.DELETED:
             return 'DELETED';
           case UploadRequestStatus.PURGED:
             return 'PURGED';
