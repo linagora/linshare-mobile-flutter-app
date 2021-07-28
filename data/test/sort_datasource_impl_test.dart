@@ -33,6 +33,7 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testshared/fixture/upload_request_group_fixture.dart';
 import 'package:testshared/testshared.dart';
 
 void main() {
@@ -134,6 +135,15 @@ void sortFilesTest() {
           [sharedSpace1, sharedSpace3],
           Sorter.fromOrderScreen(OrderScreen.workGroup));
       expect(result, [sharedSpace3, sharedSpace1]);
+    });
+
+    test('sortFiles should return success with list upload request groups has been sorted modification date', () async {
+      await _initDataSource();
+
+      final result = await _sortDataSourceImpl.sortFiles(
+          [uploadRequestGroup1, uploadRequestGroup2],
+          Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsActiveClosed));
+      expect(result, [uploadRequestGroup1, uploadRequestGroup2]);
     });
   });
 }
