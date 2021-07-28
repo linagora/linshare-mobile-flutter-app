@@ -2018,6 +2018,19 @@ class AppLocalizations {
     );
   }
 
+  String get status {
+    return Intl.message(
+        'Status',
+        name: 'status'
+    );
+  }
+
+  String get type {
+    return Intl.message(
+        'Type',
+        name: 'type'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
