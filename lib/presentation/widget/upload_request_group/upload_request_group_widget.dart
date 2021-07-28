@@ -45,6 +45,9 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/simple_horiz
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
+import 'package:redux/redux.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 
 class UploadRequestGroupWidget extends StatefulWidget {
   UploadRequestGroupWidget({Key? key}) : super(key: key);
@@ -113,16 +116,17 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
             ),
           ),
           bottomNavigationBar: StoreConnector<AppState, AppState>(
-            converter: (store) => store.state,
-            builder: (context, appState) {
-              return SearchBottomBarBuilder()
-                .key(Key('search_bottom_bar'))
-                .onSearchActionClick((){})
-                .build();
+              converter: (store) => store.state,
+              builder: (context, appState) {
+                return SearchBottomBarBuilder()
+                    .key(Key('search_bottom_bar'))
+                    .onSearchActionClick(() {})
+                    .build();
               }),
           floatingActionButton: FloatingActionButton(
             key: Key('upload_request_add_button'),
-            onPressed: () => _model.openUploadRequestAddMenu(context, _addNewUploadRequestMenuActionTiles(context)),
+            onPressed: () => _model.openUploadRequestAddMenu(
+                context, _addNewUploadRequestMenuActionTiles(context)),
             backgroundColor: AppColor.primaryColor,
             child: SvgPicture.asset(
               imagePath.icPlus,
@@ -136,38 +140,50 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   Widget _buildArchivedUploadRequestListWidget(
       BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return RefreshIndicator(
-        onRefresh: () async => _model.getUploadRequestArchivedStatus(),
-        child: uploadRequestList.isEmpty
-            ? _buildCreateUploadRequestsHere(context)
-            : ListView.builder(
-                itemCount: uploadRequestList.length,
-                itemBuilder: (context, index) =>
-                    _buildArchivedUploadTile(uploadRequestList[index])));
+    return Column(children: [
+      _buildMenuSorterArchived(),
+      Expanded(
+          child: RefreshIndicator(
+              onRefresh: () async => _model.getUploadRequestArchivedStatus(),
+              child: uploadRequestList.isEmpty
+                  ? _buildCreateUploadRequestsHere(context)
+                  : ListView.builder(
+                      itemCount: uploadRequestList.length,
+                      itemBuilder: (context, index) =>
+                          _buildArchivedUploadTile(uploadRequestList[index]))))
+    ]);
   }
 
   Widget _buildPendingUploadRequestListWidget(
       BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return RefreshIndicator(
-        onRefresh: () async => _model.getUploadRequestCreatedStatus(),
-        child: uploadRequestList.isEmpty
-            ? _buildCreateUploadRequestsHere(context)
-            : ListView.builder(
-                itemCount: uploadRequestList.length,
-                itemBuilder: (context, index) =>
-                    _buildPendingUploadTile(uploadRequestList[index])));
+    return Column(children: [
+      _buildMenuSorterPending(),
+      Expanded(
+          child: RefreshIndicator(
+              onRefresh: () async => _model.getUploadRequestCreatedStatus(),
+              child: uploadRequestList.isEmpty
+                  ? _buildCreateUploadRequestsHere(context)
+                  : ListView.builder(
+                      itemCount: uploadRequestList.length,
+                      itemBuilder: (context, index) =>
+                          _buildPendingUploadTile(uploadRequestList[index]))))
+    ]);
   }
 
   Widget _buildActiveClosedListWidget(
       BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return RefreshIndicator(
-        onRefresh: () async => _model.getUploadRequestActiveClosedStatus(),
-        child: uploadRequestList.isEmpty
-            ? _buildCreateUploadRequestsHere(context)
-            : ListView.builder(
-                itemCount: uploadRequestList.length,
-                itemBuilder: (context, index) =>
-                    _buildActiveClosedUploadTile(uploadRequestList[index])));
+    return Column(children: [
+      _buildMenuSorterActiveClosed(),
+      Expanded(
+          child: RefreshIndicator(
+              onRefresh: () async => _model.getUploadRequestActiveClosedStatus(),
+              child: uploadRequestList.isEmpty
+                  ? _buildCreateUploadRequestsHere(context)
+                  : ListView.builder(
+                      itemCount: uploadRequestList.length,
+                      itemBuilder: (context, index) =>
+                          _buildActiveClosedUploadTile(uploadRequestList[index]))))
+    ]);
   }
 
   ListTile _buildPendingUploadTile(UploadRequestGroup request) {
@@ -289,35 +305,70 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
   }
 
   List<Widget> _addNewUploadRequestMenuActionTiles(BuildContext context) {
-    return [
-      _addCollectiveAction(context),
-      _addIndividualAction(context)
-    ];
+    return [_addCollectiveAction(context), _addIndividualAction(context)];
   }
 
-  Widget _addCollectiveAction(BuildContext context) =>
-    SimpleHorizontalContextMenuActionBuilder(
-        Key('add_collective_ur_context_menu_action'),
-        SvgPicture.asset(imagePath.icUploadRequestCollective,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
-          color: AppColor.uploadRequestAddNewIconColor),
-        AppLocalizations.of(context).collective_upload)
-    .onActionClick((_) =>
-        _model.addNewUploadRequest(UploadRequestCreationType.COLLECTIVE))
-    .build();
+  Widget _addCollectiveAction(BuildContext context) => SimpleHorizontalContextMenuActionBuilder(
+          Key('add_collective_ur_context_menu_action'),
+          SvgPicture.asset(imagePath.icUploadRequestCollective,
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+              color: AppColor.uploadRequestAddNewIconColor),
+          AppLocalizations.of(context).collective_upload)
+      .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.COLLECTIVE))
+      .build();
 
-  Widget _addIndividualAction(BuildContext context) =>
-    SimpleHorizontalContextMenuActionBuilder(
-        Key('add_individual_ur_context_menu_action'),
-        SvgPicture.asset(imagePath.icUploadRequestIndividual,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
-          color: AppColor.uploadRequestAddNewIconColor),
-        AppLocalizations.of(context).individual_upload)
-    .onActionClick((_) =>
-        _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL))
-    .build();
+  Widget _addIndividualAction(BuildContext context) => SimpleHorizontalContextMenuActionBuilder(
+          Key('add_individual_ur_context_menu_action'),
+          SvgPicture.asset(imagePath.icUploadRequestIndividual,
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+              color: AppColor.uploadRequestAddNewIconColor),
+          AppLocalizations.of(context).individual_upload)
+      .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL))
+      .build();
+
+  Widget _buildMenuSorterPending() {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (context, appState) {
+        return !appState.uiState.isInSearchState()
+            ? OrderByButtonBuilder(context, appState.uploadRequestGroupState.pendingSorter)
+                .onOpenOrderMenuAction(
+                    (currentSorter) => _model.openPopupMenuSorterPending(context, currentSorter))
+                .build()
+            : SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _buildMenuSorterArchived() {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (context, appState) {
+        return !appState.uiState.isInSearchState()
+            ? OrderByButtonBuilder(context, appState.uploadRequestGroupState.archivedSorter)
+                .onOpenOrderMenuAction(
+                    (currentSorter) => _model.openPopupMenuSorterArchived(context, currentSorter))
+                .build()
+            : SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _buildMenuSorterActiveClosed() {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (context, appState) {
+        return !appState.uiState.isInSearchState()
+            ? OrderByButtonBuilder(context, appState.uploadRequestGroupState.activeClosedSorter)
+                .onOpenOrderMenuAction((currentSorter) =>
+                    _model.openPopupMenuSorterActiveClosed(context, currentSorter))
+                .build()
+            : SizedBox.shrink();
+      },
+    );
+  }
 }
