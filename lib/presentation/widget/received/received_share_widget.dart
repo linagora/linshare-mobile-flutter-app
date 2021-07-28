@@ -76,7 +76,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   @override
   void initState() {
     super.initState();
-    receivedShareViewModel.getAllReceivedShare();
+    receivedShareViewModel.getSorterAndAllReceivedSharesAction();
   }
 
   @override

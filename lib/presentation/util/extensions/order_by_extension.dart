@@ -48,6 +48,14 @@ extension OrderByExtension on OrderBy {
         return AppLocalizations.of(context).shared;
       case OrderBy.sender:
         return AppLocalizations.of(context).sender;
+      case OrderBy.expirationDate:
+        return AppLocalizations.of(context).expiration_date;
+      case OrderBy.activationDate:
+        return AppLocalizations.of(context).activation_date;
+      case OrderBy.status:
+        return AppLocalizations.of(context).status;
+      case OrderBy.type:
+        return AppLocalizations.of(context).type;
       default:
         return '';
     }
