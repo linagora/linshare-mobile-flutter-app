@@ -104,3 +104,5 @@ final sharedSpaceFileSizeSorter = Sorter(OrderScreen.workGroup, OrderBy.fileSize
 final sharedSpaceSharedSorter = Sorter(OrderScreen.workGroup, OrderBy.shared, OrderType.descending);
 final sharedSpaceSenderSorter = Sorter(OrderScreen.workGroup, OrderBy.sender, OrderType.descending);
 final sharedSpaceModificationDateSorter = Sorter(OrderScreen.workGroup, OrderBy.modificationDate, OrderType.descending);
+
+final uploadRequestSorter1 = Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.modificationDate, OrderType.descending);

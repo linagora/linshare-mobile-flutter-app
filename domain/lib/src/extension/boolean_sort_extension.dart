@@ -28,12 +28,20 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-enum OrderScreen {
-  mySpace,
-  sharedSpaceDocument,
-  workGroup,
-  receivedShares,
-  uploadRequestGroupsCreated,
-  uploadRequestGroupsActiveClosed,
-  uploadRequestGroupsArchived
+
+import 'package:domain/domain.dart';
+
+extension BooleanSortExtension on bool {
+  int compareToSort(bool value, OrderType orderType) {
+    var sortInt;
+    if (this == value) {
+      sortInt = 0;
+    } else if (this && !value) {
+      sortInt = 1;
+    } else {
+      sortInt = -1;
+    }
+
+    return sortInt * (orderType == OrderType.ascending ? -1 : 1);
+  }
 }

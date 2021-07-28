@@ -33,7 +33,6 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class Sorter extends Equatable {
-
   final OrderScreen orderScreen;
   final OrderBy orderBy;
   final OrderType orderType;
@@ -62,13 +61,70 @@ extension SorterExtension on Sorter {
   Sorter getSorterByOrderType(OrderType orderType) => Sorter(orderScreen, orderBy, orderType == OrderType.descending ? OrderType.ascending : OrderType.descending);
 
   List<Sorter> getListSorter(OrderScreen orderScreen) {
+    switch (orderScreen) {
+      case OrderScreen.mySpace:
+        return _getListSorterMySpace();
+      case OrderScreen.sharedSpaceDocument:
+        return _getListSorterWorkGroupDocuments();
+      case OrderScreen.workGroup:
+        return _getListSorterWorkGroups();
+      case OrderScreen.receivedShares:
+        return _getListSorterReceivedShare();
+      case OrderScreen.uploadRequestGroupsCreated:
+        return _getListSorterUploadRequest();
+      case OrderScreen.uploadRequestGroupsActiveClosed:
+        return _getListSorterUploadRequest();
+      case OrderScreen.uploadRequestGroupsArchived:
+        return _getListSorterUploadRequest();
+    }
+  }
+
+  List<Sorter> _getListSorterMySpace() {
     return <Sorter>[
       Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending),
       Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
-      if (orderScreen != OrderScreen.workGroup) Sorter(orderScreen, OrderBy.fileSize, OrderType.descending),
+      Sorter(orderScreen, OrderBy.fileSize, OrderType.descending),
       Sorter(orderScreen, OrderBy.name, OrderType.descending),
-      if (orderScreen == OrderScreen.mySpace) Sorter(orderScreen, OrderBy.shared, OrderType.descending),
-      if (orderScreen == OrderScreen.receivedShares) Sorter(orderScreen, OrderBy.sender, OrderType.descending)
+      Sorter(orderScreen, OrderBy.shared, OrderType.descending),
+    ];
+  }
+
+  List<Sorter> _getListSorterReceivedShare() {
+    return <Sorter>[
+      Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.fileSize, OrderType.descending),
+      Sorter(orderScreen, OrderBy.name, OrderType.descending),
+      Sorter(orderScreen, OrderBy.sender, OrderType.descending),
+    ];
+  }
+
+  List<Sorter> _getListSorterWorkGroups() {
+    return <Sorter>[
+      Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.name, OrderType.descending),
+    ];
+  }
+
+  List<Sorter> _getListSorterWorkGroupDocuments() {
+    return <Sorter>[
+      Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.fileSize, OrderType.descending),
+      Sorter(orderScreen, OrderBy.name, OrderType.descending),
+    ];
+  }
+
+  List<Sorter> _getListSorterUploadRequest() {
+    return <Sorter>[
+      Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.expirationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.activationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.name, OrderType.descending),
+      Sorter(orderScreen, OrderBy.status, OrderType.descending),
+      Sorter(orderScreen, OrderBy.type, OrderType.descending),
     ];
   }
 }

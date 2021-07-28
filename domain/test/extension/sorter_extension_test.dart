@@ -57,5 +57,18 @@ void main() {
       expect(sharedSpaceSorter1.getListSorter(OrderScreen.workGroup).contains(sharedSpaceSenderSorter), false);
     });
 
+    test('getListSorter should return valid list only when sorting on Upload Request screen', () {
+      final expectSorterList = <Sorter>[
+        Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.modificationDate, OrderType.descending),
+        Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.creationDate, OrderType.descending),
+        Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.expirationDate, OrderType.descending),
+        Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.activationDate, OrderType.descending),
+        Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.name, OrderType.descending),
+        Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.status, OrderType.descending),
+        Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.type, OrderType.descending)
+      ];
+
+      expect(uploadRequestSorter1.getListSorter(OrderScreen.uploadRequestGroupsActiveClosed), expectSorterList);
+    });
   });
 }
