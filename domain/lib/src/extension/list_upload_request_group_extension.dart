@@ -28,12 +28,30 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-enum OrderScreen {
-  mySpace,
-  sharedSpaceDocument,
-  workGroup,
-  receivedShares,
-  uploadRequestGroupsCreated,
-  uploadRequestGroupsActiveClosed,
-  uploadRequestGroupsArchived
+
+import 'package:domain/domain.dart';
+
+extension ListUploadRequestGroup on List<UploadRequestGroup> {
+  void sortFiles(OrderBy orderBy, OrderType orderType) {
+    sort((file1, file2) {
+      switch (orderBy) {
+        case OrderBy.modificationDate:
+          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
+        case OrderBy.creationDate:
+          return file2.creationDate.compareToSort(file1.creationDate, orderType);
+        case OrderBy.expirationDate:
+          return file2.expiryDate.compareToSort(file1.expiryDate, orderType);
+        case OrderBy.activationDate:
+          return file2.activationDate.compareToSort(file1.activationDate, orderType);
+        case OrderBy.name:
+          return file2.label.compareToSort(file1.label, orderType);
+        case OrderBy.status:
+          return file2.status.compareToSort(file1.status, orderType);
+        case OrderBy.type:
+          return file2.collective.compareToSort(file1.collective, orderType);
+        default:
+          return file2.modificationDate.compareToSort(file1.modificationDate, orderType);
+      }
+    });
+  }
 }
