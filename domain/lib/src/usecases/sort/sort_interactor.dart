@@ -50,6 +50,8 @@ class SortInteractor {
         return Right<Failure, Success>(GetChildNodesViewState(filesSorted.cast<WorkGroupNode>()));
       } else if (filesSorted is List<ReceivedShare>) {
         return Right<Failure, Success>(GetAllReceivedShareSuccess(filesSorted.cast<ReceivedShare>()));
+      } else if (filesSorted is List<UploadRequestGroup>) {
+        return Right<Failure, Success>(UploadRequestGroupViewState(filesSorted.cast<UploadRequestGroup>()));
       } else {
         return Right<Failure, Success>(SortFileSuccess(filesSorted));
       }
@@ -63,6 +65,12 @@ class SortInteractor {
           return Left<Failure, Success>(GetChildNodesFailure(exception));
         case OrderScreen.receivedShares:
           return Left<Failure, Success>(GetAllReceivedShareFailure(exception));
+        case OrderScreen.uploadRequestGroupsCreated:
+          return Left<Failure, Success>(UploadRequestGroupFailure(exception));
+        case OrderScreen.uploadRequestGroupsActiveClosed:
+          return Left<Failure, Success>(UploadRequestGroupFailure(exception));
+        case OrderScreen.uploadRequestGroupsArchived:
+          return Left<Failure, Success>(UploadRequestGroupFailure(exception));
         default:
           return Left<Failure, Success>(SortFileFailure(exception));
       }
