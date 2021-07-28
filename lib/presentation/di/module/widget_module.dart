@@ -419,6 +419,9 @@ class WidgetModule {
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
         getIt.get<GetAllUploadRequestGroupsInteractor>(),
+        getIt<GetSorterInteractor>(),
+        getIt<SaveSorterInteractor>(),
+        getIt<SortInteractor>(),
       ));
   }
 

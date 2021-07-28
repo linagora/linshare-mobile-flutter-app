@@ -1616,5 +1616,15 @@
   "@upload_requests_no_files_uploaded": {
     "type": "text",
     "placeholders": {}
+  },
+  "status": "Status",
+  "@status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "type": "Type",
+  "@type": {
+    "type": "text",
+    "placeholders": {}
   }
 }

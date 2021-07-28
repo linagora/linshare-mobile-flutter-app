@@ -43,49 +43,204 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
   final List<UploadRequestGroup> uploadRequestsCreatedList;
   final List<UploadRequestGroup> uploadRequestsActiveClosedList;
   final List<UploadRequestGroup> uploadRequestsArchivedList;
+  final Sorter pendingSorter;
+  final Sorter activeClosedSorter;
+  final Sorter archivedSorter;
 
-  UploadRequestGroupState(Either<Failure, Success> viewState, this.uploadRequestsCreatedList,
-      this.uploadRequestsActiveClosedList, this.uploadRequestsArchivedList)
-      : super(viewState);
+  UploadRequestGroupState(
+    Either<Failure, Success> viewState,
+    this.uploadRequestsCreatedList,
+    this.uploadRequestsActiveClosedList,
+    this.uploadRequestsArchivedList,
+    this.pendingSorter,
+    this.activeClosedSorter,
+    this.archivedSorter
+  ) : super(viewState);
 
   factory UploadRequestGroupState.initial() {
-    return UploadRequestGroupState(Right(IdleState()), [], [], []);
+    return UploadRequestGroupState(
+      Right(IdleState()),
+      [],
+      [],
+      [],
+      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsCreated),
+      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsActiveClosed),
+      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsArchived)
+    );
   }
 
   @override
   UploadRequestGroupState clearViewState() {
-    return UploadRequestGroupState(Right(IdleState()), uploadRequestsCreatedList,
-        uploadRequestsActiveClosedList, uploadRequestsArchivedList);
+    return UploadRequestGroupState(
+      Right(IdleState()),
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsCreated),
+      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsActiveClosed),
+      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsArchived)
+    );
   }
 
   @override
   UploadRequestGroupState sendViewState({required Either<Failure, Success> viewState}) {
-    return UploadRequestGroupState(viewState, uploadRequestsCreatedList,
-        uploadRequestsActiveClosedList, uploadRequestsArchivedList);
+    return UploadRequestGroupState(
+      viewState,
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      pendingSorter,
+      activeClosedSorter,
+      archivedSorter
+    );
   }
 
   UploadRequestGroupState setUploadRequestsCreatedList(
-      {required Either<Failure, Success> viewState, required List<UploadRequestGroup> newUploadRequestsList}) {
-    return UploadRequestGroupState(viewState, newUploadRequestsList, uploadRequestsActiveClosedList,
-        uploadRequestsArchivedList);
+    {
+      required Either<Failure, Success> viewState,
+      required List<UploadRequestGroup> newUploadRequestsList
+    }) {
+    return UploadRequestGroupState(
+      viewState,
+      newUploadRequestsList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      pendingSorter,
+      activeClosedSorter,
+      archivedSorter
+    );
   }
 
   UploadRequestGroupState setUploadRequestsActiveClosedList(
-      {required Either<Failure, Success> viewState, required List<UploadRequestGroup> newUploadRequestsList}) {
+    {
+      required Either<Failure, Success> viewState,
+      required List<UploadRequestGroup> newUploadRequestsList
+  }) {
     return UploadRequestGroupState(
-        viewState, uploadRequestsCreatedList, newUploadRequestsList, uploadRequestsArchivedList);
+      viewState,
+      uploadRequestsCreatedList,
+      newUploadRequestsList,
+      uploadRequestsArchivedList,
+      pendingSorter,
+      activeClosedSorter,
+      archivedSorter
+    );
   }
 
   UploadRequestGroupState setUploadRequestsArchivedList(
-      {required Either<Failure, Success> viewState, required List<UploadRequestGroup> newUploadRequestsList}) {
-    return UploadRequestGroupState(viewState, uploadRequestsCreatedList,
-        uploadRequestsActiveClosedList, newUploadRequestsList);
+    {
+      required Either<Failure, Success> viewState,
+      required List<UploadRequestGroup> newUploadRequestsList
+    }) {
+    return UploadRequestGroupState(
+      viewState,
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      newUploadRequestsList,
+      pendingSorter,
+      activeClosedSorter,
+      archivedSorter
+    );
+  }
+
+  UploadRequestGroupState setUploadRequestsCreatedListWithSort(
+    Sorter newSorter,
+    {
+      Either<Failure, Success>? viewState,
+      required List<UploadRequestGroup> newUploadRequestsList
+    }) {
+    return UploadRequestGroupState(
+      viewState ?? this.viewState,
+      newUploadRequestsList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      newSorter,
+      activeClosedSorter,
+      archivedSorter
+    );
+  }
+
+  UploadRequestGroupState setUploadRequestsActiveClosedListWithSort(
+    Sorter newSorter,
+    {
+      Either<Failure, Success>? viewState,
+      required List<UploadRequestGroup> newUploadRequestsList
+  }) {
+    return UploadRequestGroupState(
+      viewState ?? this.viewState,
+      uploadRequestsCreatedList,
+      newUploadRequestsList,
+      uploadRequestsArchivedList,
+      pendingSorter,
+      newSorter,
+      archivedSorter
+    );
+  }
+
+  UploadRequestGroupState setUploadRequestsArchivedListWithSort(
+    Sorter newSorter,
+    {
+      Either<Failure, Success>? viewState,
+      required List<UploadRequestGroup> newUploadRequestsList
+    }) {
+    return UploadRequestGroupState(
+      viewState ?? this.viewState,
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      newUploadRequestsList,
+      pendingSorter,
+      activeClosedSorter,
+      newSorter
+    );
   }
 
   @override
   UploadRequestGroupState startLoadingState() {
-    return UploadRequestGroupState(Right(LoadingState()), uploadRequestsCreatedList,
-        uploadRequestsActiveClosedList, uploadRequestsArchivedList);
+    return UploadRequestGroupState(
+      Right(LoadingState()),
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      pendingSorter,
+      activeClosedSorter,
+      archivedSorter
+    );
+  }
+
+  UploadRequestGroupState setSorterCreated({Either<Failure, Success>? viewState, required Sorter newSorter}) {
+    return UploadRequestGroupState(
+      viewState ?? this.viewState,
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      newSorter,
+      activeClosedSorter,
+      archivedSorter
+    );
+  }
+
+  UploadRequestGroupState setSorterActiveClosed({Either<Failure, Success>? viewState, required Sorter newSorter}) {
+    return UploadRequestGroupState(
+      viewState ?? this.viewState,
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      pendingSorter,
+      newSorter,
+      archivedSorter
+    );
+  }
+
+  UploadRequestGroupState setSorterArchived({Either<Failure, Success>? viewState, required Sorter newSorter}) {
+    return UploadRequestGroupState(
+      viewState ?? this.viewState,
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      pendingSorter,
+      activeClosedSorter,
+      newSorter
+    );
   }
 
   @override
@@ -93,6 +248,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
         ...super.props,
         uploadRequestsCreatedList,
         uploadRequestsActiveClosedList,
-        uploadRequestsArchivedList
+        uploadRequestsArchivedList,
+        pendingSorter
       ];
 }
