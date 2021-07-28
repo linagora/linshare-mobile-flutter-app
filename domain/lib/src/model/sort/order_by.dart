@@ -31,6 +31,10 @@
 enum OrderBy {
   modificationDate,
   creationDate,
+  expirationDate,
+  activationDate,
+  status,
+  type,
   fileSize,
   name,
   shared,
