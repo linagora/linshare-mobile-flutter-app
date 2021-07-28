@@ -77,3 +77,48 @@ class UploadRequestCreationAction extends ActionOnline {
 class CleanUploadRequestGroupAction extends ActionOffline {
   CleanUploadRequestGroupAction();
 }
+
+@immutable
+class UploadRequestGroupGetSorterCreatedAction extends ActionOffline {
+  final Sorter sorter;
+
+  UploadRequestGroupGetSorterCreatedAction(this.sorter);
+}
+
+@immutable
+class UploadRequestGroupGetSorterActiveClosedAction extends ActionOffline {
+  final Sorter sorter;
+
+  UploadRequestGroupGetSorterActiveClosedAction(this.sorter);
+}
+
+@immutable
+class UploadRequestGroupGetSorterArchivedAction extends ActionOffline {
+  final Sorter sorter;
+
+  UploadRequestGroupGetSorterArchivedAction(this.sorter);
+}
+
+@immutable
+class UploadRequestGroupSortPendingAction extends ActionOffline {
+  final List<UploadRequestGroup> uploadRequestGroups;
+  final Sorter sorter;
+
+  UploadRequestGroupSortPendingAction(this.uploadRequestGroups, this.sorter);
+}
+
+@immutable
+class UploadRequestGroupSortActiveClosedAction extends ActionOffline {
+  final List<UploadRequestGroup> uploadRequestGroups;
+  final Sorter sorter;
+
+  UploadRequestGroupSortActiveClosedAction(this.uploadRequestGroups, this.sorter);
+}
+
+@immutable
+class UploadRequestGroupSortArchivedAction extends ActionOffline {
+  final List<UploadRequestGroup> uploadRequestGroups;
+  final Sorter sorter;
+
+  UploadRequestGroupSortArchivedAction(this.uploadRequestGroups, this.sorter);
+}

@@ -146,10 +146,12 @@ class ReceivedShareViewModel extends BaseViewModel {
               (failure) {
                 store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure)));
                 _receivedSharesList = [];
+                store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
               },
               (success) {
                 store.dispatch(ReceivedShareGetAllReceivedSharesAction(Right(success)));
                 _receivedSharesList = success is GetAllReceivedShareSuccess ? success.receivedShares : [];
+                store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
               })
       );
     });
