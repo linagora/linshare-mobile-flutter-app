@@ -122,3 +122,10 @@ class UploadRequestGroupSortArchivedAction extends ActionOffline {
 
   UploadRequestGroupSortArchivedAction(this.uploadRequestGroups, this.sorter);
 }
+
+@immutable
+class UploadRequestGroupSetSearchResultAction extends ActionOffline {
+  final List<UploadRequestGroup> uploadRequestGroupsList;
+
+  UploadRequestGroupSetSearchResultAction(this.uploadRequestGroupsList);
+}
