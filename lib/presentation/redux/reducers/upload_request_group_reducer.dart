@@ -37,6 +37,7 @@ import 'package:redux/redux.dart';
 
 final uploadRequestGroupReducer = combineReducers<UploadRequestGroupState>([
   TypedReducer<UploadRequestGroupState, StartUploadRequestGroupLoadingAction>((UploadRequestGroupState state, _) => state.startLoadingState()),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupAction>((UploadRequestGroupState state, UploadRequestGroupAction action) => state.sendViewState(viewState: action.viewState)),
   TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllCreatedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllCreatedAction action) =>
       state.setUploadRequestsCreatedList(
           newUploadRequestsList: action.viewState.fold(
@@ -75,4 +76,6 @@ final uploadRequestGroupReducer = combineReducers<UploadRequestGroupState>([
   TypedReducer<UploadRequestGroupState, UploadRequestGroupGetSorterArchivedAction>((UploadRequestGroupState state, UploadRequestGroupGetSorterArchivedAction action) =>
       state.setSorterArchived(newSorter: action.sorter)),
   TypedReducer<UploadRequestGroupState, CleanUploadRequestGroupAction>((UploadRequestGroupState state, _) => state.clearViewState()),
+  TypedReducer<UploadRequestGroupState, UploadRequestGroupSetSearchResultAction>((UploadRequestGroupState state, UploadRequestGroupSetSearchResultAction action) =>
+      state.setSearchResult(newSearchResult: action.uploadRequestGroupsList)),
 ]);

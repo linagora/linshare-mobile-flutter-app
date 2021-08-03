@@ -43,6 +43,8 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
   final List<UploadRequestGroup> uploadRequestsCreatedList;
   final List<UploadRequestGroup> uploadRequestsActiveClosedList;
   final List<UploadRequestGroup> uploadRequestsArchivedList;
+  final List<UploadRequestGroup> searchResult;
+
   final Sorter pendingSorter;
   final Sorter activeClosedSorter;
   final Sorter archivedSorter;
@@ -52,6 +54,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
     this.uploadRequestsCreatedList,
     this.uploadRequestsActiveClosedList,
     this.uploadRequestsArchivedList,
+    this.searchResult,
     this.pendingSorter,
     this.activeClosedSorter,
     this.archivedSorter
@@ -60,6 +63,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
   factory UploadRequestGroupState.initial() {
     return UploadRequestGroupState(
       Right(IdleState()),
+      [],
       [],
       [],
       [],
@@ -76,6 +80,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       uploadRequestsActiveClosedList,
       uploadRequestsArchivedList,
+      searchResult,
       Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsCreated),
       Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsActiveClosed),
       Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsArchived)
@@ -89,6 +94,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       uploadRequestsActiveClosedList,
       uploadRequestsArchivedList,
+      searchResult,
       pendingSorter,
       activeClosedSorter,
       archivedSorter
@@ -105,6 +111,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       newUploadRequestsList,
       uploadRequestsActiveClosedList,
       uploadRequestsArchivedList,
+      searchResult,
       pendingSorter,
       activeClosedSorter,
       archivedSorter
@@ -121,6 +128,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       newUploadRequestsList,
       uploadRequestsArchivedList,
+      searchResult,
       pendingSorter,
       activeClosedSorter,
       archivedSorter
@@ -137,6 +145,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       uploadRequestsActiveClosedList,
       newUploadRequestsList,
+      searchResult,
       pendingSorter,
       activeClosedSorter,
       archivedSorter
@@ -154,6 +163,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       newUploadRequestsList,
       uploadRequestsActiveClosedList,
       uploadRequestsArchivedList,
+      searchResult,
       newSorter,
       activeClosedSorter,
       archivedSorter
@@ -171,6 +181,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       newUploadRequestsList,
       uploadRequestsArchivedList,
+      searchResult,
       pendingSorter,
       newSorter,
       archivedSorter
@@ -188,6 +199,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       uploadRequestsActiveClosedList,
       newUploadRequestsList,
+      searchResult,
       pendingSorter,
       activeClosedSorter,
       newSorter
@@ -201,6 +213,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       uploadRequestsActiveClosedList,
       uploadRequestsArchivedList,
+      searchResult,
       pendingSorter,
       activeClosedSorter,
       archivedSorter
@@ -213,6 +226,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       uploadRequestsActiveClosedList,
       uploadRequestsArchivedList,
+      searchResult,
       newSorter,
       activeClosedSorter,
       archivedSorter
@@ -225,6 +239,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       uploadRequestsActiveClosedList,
       uploadRequestsArchivedList,
+      searchResult,
       pendingSorter,
       newSorter,
       archivedSorter
@@ -237,9 +252,23 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
       uploadRequestsCreatedList,
       uploadRequestsActiveClosedList,
       uploadRequestsArchivedList,
+      searchResult,
       pendingSorter,
       activeClosedSorter,
       newSorter
+    );
+  }
+
+  UploadRequestGroupState setSearchResult({required List<UploadRequestGroup> newSearchResult}) {
+    return UploadRequestGroupState(
+      viewState,
+      uploadRequestsCreatedList,
+      uploadRequestsActiveClosedList,
+      uploadRequestsArchivedList,
+      newSearchResult,
+      pendingSorter,
+      activeClosedSorter,
+      archivedSorter
     );
   }
 
@@ -249,6 +278,7 @@ class UploadRequestGroupState extends LinShareState with EquatableMixin {
         uploadRequestsCreatedList,
         uploadRequestsActiveClosedList,
         uploadRequestsArchivedList,
+        searchResult,
         pendingSorter
       ];
 }

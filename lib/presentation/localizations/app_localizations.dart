@@ -2031,6 +2031,13 @@ class AppLocalizations {
         name: 'type'
     );
   }
+
+  String get search_in_upload_request_groups {
+    return Intl.message(
+      'Search in Upload Request Groups',
+      name: 'search_in_upload_request_groups',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

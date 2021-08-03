@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -58,14 +61,34 @@ class UploadRequestGroupViewModel extends BaseViewModel {
   List<UploadRequestGroup> _uploadRequestListActiveClosed = [];
   List<UploadRequestGroup> _uploadRequestListArchived = [];
 
+  final SearchUploadRequestGroupsInteractor _searchUploadRequestGroupsInteractor;
+  late StreamSubscription _storeStreamSubscription;
+
+  SearchQuery _searchQuery = SearchQuery('');
+  SearchQuery get searchQuery  => _searchQuery;
+
   UploadRequestGroupViewModel(
       Store<AppState> store,
       this._appNavigation,
       this._getAllUploadRequestGroupsInteractor,
       this._getSorterInteractor,
       this._saveSorterInteractor,
-      this._sortInteractor
-  ) : super(store);
+      this._sortInteractor,
+      this._searchUploadRequestGroupsInteractor
+  ) : super(store) {
+    _storeStreamSubscription = store.onChange.listen((event) {
+      event.uploadRequestGroupState.viewState.fold(
+        (failure) => null,
+        (success) {
+          if (success is SearchUploadRequestGroupsNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
+            _search(success.searchQuery);
+          } else if (success is DisableSearchViewState) {
+            store.dispatch((UploadRequestGroupSetSearchResultAction([..._uploadRequestListActiveClosed, ..._uploadRequestListArchived, ..._uploadRequestListPending])));
+            _searchQuery = SearchQuery('');
+          }
+      });
+    });
+  }
 
   void initState() {
     getUploadRequestCreatedStatusWithSort();
@@ -74,7 +97,12 @@ class UploadRequestGroupViewModel extends BaseViewModel {
   }
 
   void getListUploadRequests(UploadRequestGroup requestGroup) {
-    store.dispatch(UploadRequestInsideView(RoutePaths.uploadRequestInside, requestGroup));
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(DisableSearchStateAction());
+      store.dispatch(UploadRequestGroupAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanUploadRequestGroupAction());
+      store.dispatch(UploadRequestInsideView(RoutePaths.uploadRequestInside, requestGroup));
+    }));
   }
 
   void openUploadRequestAddMenu(BuildContext context, List<Widget> actionTiles) {
@@ -369,8 +397,45 @@ class UploadRequestGroupViewModel extends BaseViewModel {
     }));
   }
 
+  // Search
+  void _search(SearchQuery searchQuery) {
+    _searchQuery = searchQuery;
+    if (searchQuery.value.isNotEmpty) {
+      store.dispatch(_searchUploadRequestGroupsAction([..._uploadRequestListActiveClosed, ..._uploadRequestListArchived, ..._uploadRequestListPending], searchQuery));
+    } else {
+      store.dispatch(UploadRequestGroupSetSearchResultAction([]));
+    }
+  }
+
+  ThunkAction<AppState> _searchUploadRequestGroupsAction(List<UploadRequestGroup> uploadRequestGroupsList, SearchQuery searchQuery) {
+    return (Store<AppState> store) async {
+      await _searchUploadRequestGroupsInteractor.execute(uploadRequestGroupsList, searchQuery).then((result) => result.fold(
+              (failure) {
+                if (isInSearchState()) {
+                  store.dispatch(UploadRequestGroupSetSearchResultAction([]));
+                }
+              },
+              (success) {
+                if (isInSearchState()) {
+                  store.dispatch(UploadRequestGroupSetSearchResultAction(success is SearchUploadRequestGroupsSuccess ? success.uploadRequestGroupList : []));
+                }
+              })
+      );
+    };
+  }
+
+  bool isInSearchState() {
+    return store.state.uiState.isInSearchState();
+  }
+
+  void openSearchState() {
+    store.dispatch(EnableSearchStateAction(SearchDestination.uploadRequestGroups));
+    store.dispatch((UploadRequestGroupSetSearchResultAction([])));
+  }
+
   @override
   void onDisposed() {
     super.onDisposed();
+    _storeStreamSubscription.cancel();
   }
 }

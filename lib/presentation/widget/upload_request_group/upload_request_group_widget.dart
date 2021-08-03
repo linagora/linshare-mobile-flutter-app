@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_horizontal_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
@@ -59,6 +60,7 @@ class UploadRequestGroupWidget extends StatefulWidget {
 class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
   final _model = getIt<UploadRequestGroupViewModel>();
   final imagePath = getIt<AppImagePaths>();
+  final _responsiveUtils = getIt<ResponsiveUtils>();
 
   @override
   void initState() {
@@ -76,6 +78,13 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return StoreConnector<AppState, bool>(
+        converter: (store) => store.state.uiState.isInSearchState(),
+        builder: (context, isInSearchState) =>
+            isInSearchState ? _buildSearchViewWidget(context) : _buildDefaultViewWidget());
+  }
+
+  Widget _buildDefaultViewWidget() {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -115,14 +124,10 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
               ],
             ),
           ),
-          bottomNavigationBar: StoreConnector<AppState, AppState>(
-              converter: (store) => store.state,
-              builder: (context, appState) {
-                return SearchBottomBarBuilder()
-                    .key(Key('search_bottom_bar'))
-                    .onSearchActionClick(() {})
-                    .build();
-              }),
+          bottomNavigationBar:
+              SearchBottomBarBuilder().key(Key('search_bottom_bar')).onSearchActionClick(() {
+            _model.openSearchState();
+          }).build(),
           floatingActionButton: FloatingActionButton(
             key: Key('upload_request_add_button'),
             onPressed: () => _model.openUploadRequestAddMenu(
@@ -346,16 +351,12 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   Widget _buildMenuSorterArchived() {
     return StoreConnector<AppState, AppState>(
-      converter: (Store<AppState> store) => store.state,
-      builder: (context, appState) {
-        return !appState.uiState.isInSearchState()
-            ? OrderByButtonBuilder(context, appState.uploadRequestGroupState.archivedSorter)
+        converter: (Store<AppState> store) => store.state,
+        builder: (context, appState) =>
+            OrderByButtonBuilder(context, appState.uploadRequestGroupState.archivedSorter)
                 .onOpenOrderMenuAction(
                     (currentSorter) => _model.openPopupMenuSorterArchived(context, currentSorter))
-                .build()
-            : SizedBox.shrink();
-      },
-    );
+                .build());
   }
 
   Widget _buildMenuSorterActiveClosed() {
@@ -370,5 +371,146 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
             : SizedBox.shrink();
       },
     );
+  }
+
+  // Search Widgets
+  Widget _buildSearchViewWidget(BuildContext context) {
+    return DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: TabBar(
+              unselectedLabelColor: AppColor.uploadRequestLabelsColor,
+              unselectedLabelStyle: TextStyle(fontSize: 16),
+              labelStyle: TextStyle(fontSize: 16),
+              labelColor: AppColor.primaryColor,
+              indicatorColor: AppColor.primaryColor,
+              tabs: [
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: Tab(
+                    text: AppLocalizations.of(context).pending,
+                  ),
+                ),
+                FittedBox(
+                  fit: BoxFit.none,
+                  child: Tab(
+                    text: AppLocalizations.of(context).active_closed,
+                  ),
+                ),
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: Tab(
+                    text: AppLocalizations.of(context).archived,
+                  ),
+                ),
+              ]),
+          body: StoreConnector<AppState, UploadRequestGroupState>(
+            converter: (store) => store.state.uploadRequestGroupState,
+            builder: (_, state) => TabBarView(
+              children: [
+                _buildPendingUploadRequestSearchListWidget(
+                    context,
+                    state.searchResult
+                        .where((element) => element.status == UploadRequestStatus.CREATED)
+                        .toList()),
+                _buildActiveClosedSearchListWidget(
+                    context,
+                    state.searchResult
+                        .where((element) =>
+                            element.status == UploadRequestStatus.ENABLED ||
+                            element.status == UploadRequestStatus.CLOSED)
+                        .toList()),
+                _buildArchivedUploadRequestSearchListWidget(
+                    context,
+                    state.searchResult
+                        .where((element) => element.status == UploadRequestStatus.ARCHIVED)
+                        .toList())
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Widget _buildNoResultFound() {
+    return BackgroundWidgetBuilder()
+        .key(Key('search_no_result_found'))
+        .text(AppLocalizations.of(context).no_results_found)
+        .build();
+  }
+
+  Widget _buildResultCount(int count) {
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, appState) {
+          if (_model.searchQuery.value.isNotEmpty) {
+            return _buildResultCountRow(count);
+          }
+          return SizedBox.shrink();
+        });
+  }
+
+  Widget _buildResultCountRow(int count) {
+    return Container(
+      color: AppColor.topBarBackgroundColor,
+      height: 40.0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context).results_count(count),
+            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildArchivedUploadRequestSearchListWidget(
+      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
+    return Column(children: [
+      _buildResultCount(uploadRequestList.length),
+      Expanded(
+          child: RefreshIndicator(
+              onRefresh: () async => _model.getUploadRequestArchivedStatus(),
+              child: uploadRequestList.isEmpty
+                  ? _buildNoResultFound()
+                  : ListView.builder(
+                      itemCount: uploadRequestList.length,
+                      itemBuilder: (context, index) =>
+                          _buildArchivedUploadTile(uploadRequestList[index]))))
+    ]);
+  }
+
+  Widget _buildPendingUploadRequestSearchListWidget(
+      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
+    return Column(children: [
+      _buildResultCount(uploadRequestList.length),
+      Expanded(
+          child: RefreshIndicator(
+              onRefresh: () async => _model.getUploadRequestCreatedStatus(),
+              child: uploadRequestList.isEmpty
+                  ? _buildNoResultFound()
+                  : ListView.builder(
+                      itemCount: uploadRequestList.length,
+                      itemBuilder: (context, index) =>
+                          _buildPendingUploadTile(uploadRequestList[index]))))
+    ]);
+  }
+
+  Widget _buildActiveClosedSearchListWidget(
+      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
+    return Column(children: [
+      _buildResultCount(uploadRequestList.length),
+      Expanded(
+          child: RefreshIndicator(
+              onRefresh: () async => _model.getUploadRequestActiveClosedStatus(),
+              child: uploadRequestList.isEmpty
+                  ? _buildNoResultFound()
+                  : ListView.builder(
+                      itemCount: uploadRequestList.length,
+                      itemBuilder: (context, index) =>
+                          _buildActiveClosedUploadTile(uploadRequestList[index]))))
+    ]);
   }
 }
