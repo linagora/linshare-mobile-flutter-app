@@ -98,5 +98,6 @@ enum SearchDestination {
   mySpace,
   sharedSpace,
   allSharedSpaces,
-  receivedShares
+  receivedShares,
+  uploadRequestGroups
 }
