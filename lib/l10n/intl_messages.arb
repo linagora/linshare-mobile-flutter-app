@@ -2113,5 +2113,10 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "search_in_upload_request_groups": "Search in Upload Request Groups",
+  "@search_in_upload_request_groups": {
+    "type": "text",
+    "placeholders": {}
   }
 }

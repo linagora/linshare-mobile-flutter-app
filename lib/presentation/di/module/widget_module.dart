@@ -425,6 +425,7 @@ class WidgetModule {
         getIt<GetSorterInteractor>(),
         getIt<SaveSorterInteractor>(),
         getIt<SortInteractor>(),
+        getIt<SearchUploadRequestGroupsInteractor>()
       ));
   }
 
