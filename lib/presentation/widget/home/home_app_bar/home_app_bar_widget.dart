@@ -224,6 +224,8 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
         return AppLocalizations.of(context).search_in_shared_space;
       case SearchDestination.receivedShares:
         return AppLocalizations.of(context).search_in_my_received_shares;
+      case SearchDestination.uploadRequestGroups:
+        return AppLocalizations.of(context).search_in_upload_request_groups;
       default:
         return '';
     }

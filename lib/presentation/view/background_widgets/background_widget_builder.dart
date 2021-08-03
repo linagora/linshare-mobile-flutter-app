@@ -54,26 +54,24 @@ class BackgroundWidgetBuilder {
   }
 
   Widget build() {
-    return Stack(
-      key: _key ?? Key('BackgroundWidgetBuilder'),
-      children: <Widget>[
-        Center(
-          child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _image ?? SizedBox.shrink(),
-            Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Text(
-                _text ?? '',
-                style: TextStyle(color: AppColor.loginTextFieldTextColor, fontSize: 20),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        )),
-        ListView()
-      ]);
+    return Center(
+        key: _key ?? Key('BackgroundWidgetBuilder'),
+        child: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _image ?? SizedBox.shrink(),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    _text ?? '',
+                    style: TextStyle(color: AppColor.loginTextFieldTextColor, fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            )));
   }
 }
