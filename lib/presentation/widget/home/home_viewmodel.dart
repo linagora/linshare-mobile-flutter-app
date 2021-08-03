@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/network_connecti
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -151,6 +152,9 @@ class HomeViewModel extends BaseViewModel {
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.receivedShares) {
       store.dispatch(ReceivedShareAction(Right(DisableSearchViewState())));
       store.dispatch(CleanReceivedShareStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.uploadRequestGroups) {
+      store.dispatch(UploadRequestGroupAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanUploadRequestGroupAction());
     }
   }
 
@@ -167,6 +171,9 @@ class HomeViewModel extends BaseViewModel {
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.receivedShares) {
       store.dispatch(ReceivedShareAction(Right(SearchReceivedSharesNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanReceivedShareStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.uploadRequestGroups) {
+      store.dispatch(UploadRequestGroupAction(Right(SearchUploadRequestGroupsNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanUploadRequestGroupAction());
     }
   }
 
