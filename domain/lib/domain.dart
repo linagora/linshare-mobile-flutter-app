@@ -354,3 +354,5 @@ export 'src/usecases/upload_request_group/upload_request_group_view_state.dart';
 export 'src/usecases/upload_request_group/add_new_upload_request_interactor.dart';
 export 'src/usecases/upload_request/upload_request_view_state.dart';
 export 'src/usecases/upload_request_entry/upload_request_entry_view_state.dart';
+export 'src/usecases/search_upload_request_groups/search_upload_request_groups_interactor.dart';
+export 'src/usecases/search_upload_request_groups/search_upload_request_groups_view_state.dart';
