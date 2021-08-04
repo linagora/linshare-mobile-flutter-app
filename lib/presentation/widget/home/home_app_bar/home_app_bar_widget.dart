@@ -42,17 +42,42 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 
+import 'home_app_bar_viewmodel.dart';
+
 typedef OnCancelSearchPressed = Function();
 typedef OnNewSearchQuery = Function(String);
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class HomeAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
+  final OnCancelSearchPressed? onCancelSearchPressed;
+  final OnNewSearchQuery? onNewSearchQuery;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
+
+  HomeAppBarWidget({Key? key, this.scaffoldKey, this.onCancelSearchPressed, this.onNewSearchQuery})
+      : super(key: key);
+
+  @override
+  _HomeAppBarWidgetState createState() => _HomeAppBarWidgetState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
   final TextEditingController _typeAheadController = TextEditingController();
   final imagePath = getIt<AppImagePaths>();
-  final GlobalKey<ScaffoldState> _scaffoldKey;
-  final OnCancelSearchPressed _onCancelSearchPressed;
-  final OnNewSearchQuery _onNewSearchQuery;
+  final _model = getIt<HomeAppBarViewModel>();
 
-  HomeAppBar(this._scaffoldKey, this._onCancelSearchPressed, this._onNewSearchQuery);
+    @override
+  void initState() {
+    _model.registerViewStateHandler(_typeAheadController);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _model.onDisposed();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +125,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ))),
           debounceDuration: Duration(milliseconds: 300),
           suggestionsCallback: (pattern) async {
-            if (_onNewSearchQuery != null) {
-              _onNewSearchQuery(pattern);
+            if (widget.onNewSearchQuery != null) {
+              widget.onNewSearchQuery!(pattern);
             }
             return [];
           },
@@ -125,8 +150,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             const EdgeInsets.only(left: 8.0, right: 16.0),
             child: GestureDetector(
                 onTap: () {
-                  if (_onCancelSearchPressed != null) {
-                    _onCancelSearchPressed();
+                  if (widget.onCancelSearchPressed != null) {
+                    widget.onCancelSearchPressed!();
                   }
                   _typeAheadController.clear();
                 },
@@ -164,7 +189,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColor.primaryColor,
       leading: IconButton(
           icon: SvgPicture.asset(imagePath.icLinShareMenu),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer()),
+          onPressed: () => widget.scaffoldKey!.currentState!.openDrawer()),
     );
   }
 
@@ -203,7 +228,4 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         return '';
     }
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
