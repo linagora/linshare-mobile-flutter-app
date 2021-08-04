@@ -44,7 +44,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/home/home_app_bar.dart';
+import 'package:linshare_flutter_app/presentation/widget/home/home_app_bar/home_app_bar_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
@@ -84,9 +84,11 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: HomeAppBar(_scaffoldKey,
-          () => homeViewModel.cancelSearchState(),
-          (String searchQuery) => homeViewModel.search(searchQuery)),
+      appBar: HomeAppBarWidget(
+        key: Key('home_app_bar'),
+        scaffoldKey: _scaffoldKey,
+        onCancelSearchPressed: () => homeViewModel.cancelSearchState(),
+        onNewSearchQuery: (String searchQuery) => homeViewModel.search(searchQuery)),
       drawer: SideMenuDrawerWidget(),
       body: Column(
         children: [
