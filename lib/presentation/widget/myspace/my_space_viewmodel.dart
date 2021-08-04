@@ -255,6 +255,9 @@ class MySpaceViewModel extends BaseViewModel {
     final copyAction = CopyDestinationPickerAction(context);
     copyAction.onDestinationPickerActionClick((data) {
       _appNavigation.popBack();
+      getAllDocument();
+      store.dispatch(MySpaceAction(Right(DisableSearchViewState())));
+
       if (data is SharedSpaceDocumentArguments) {
         store.dispatch(_copyToWorkgroupAction(documents, data));
       }
