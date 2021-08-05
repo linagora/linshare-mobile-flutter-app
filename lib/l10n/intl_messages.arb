@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-08-06T11:38:22.786243",
+  "@@last_modified": "2021-08-05T16:49:48.474867",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -722,7 +722,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_folder": "Create Folder",
+  "create_folder": "Create folder",
   "@create_folder": {
     "type": "text",
     "placeholders_order": [],
