@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/upload_request_status_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
@@ -210,6 +211,18 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
     return SizedBox.shrink();
   }
 
+  Widget _buildEmptyListIndicator() {
+    return BackgroundWidgetBuilder()
+      .image(SvgPicture.asset(
+        imagePath.icUploadFile,
+        width: 120,
+        height: 120,
+        fit: BoxFit.fill,
+      ))
+      .text(AppLocalizations.of(context).upload_requests_no_files_uploaded)
+      .build();
+  }
+
   Widget _buildUploadRequestEntriesListView(List<UploadRequestEntry> uploadRequestEntries) {
     if(uploadRequestEntries.isEmpty) {
       return _buildEmptyListIndicator();
@@ -232,12 +245,12 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
         mediumScreen: Transform(
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            _buildDocumentName(entry.name),
+            _buildItemTitle(entry.name),
             Align(alignment: Alignment.centerRight, child: _buildRecipientText(entry.recipient.mail))
           ]),
         ),
         smallScreen:
-            Transform(transform: Matrix4.translationValues(-16, 0.0, 0.0), child: _buildDocumentName(entry.name)),
+            Transform(transform: Matrix4.translationValues(-16, 0.0, 0.0), child: _buildItemTitle(entry.name)),
         responsiveUtil: _responsiveUtils,
       ),
       subtitle: _responsiveUtils.isSmallScreen(context)
@@ -261,18 +274,18 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
     );
   }
 
-  Widget _buildDocumentName(String documentName) {
+  Widget _buildItemTitle(String title) {
     return Text(
-      documentName,
+      title,
       maxLines: 1,
-      style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+      style: TextStyle(fontSize: 14, color: AppColor.uploadRequestTitleTextColor),
     );
   }
 
-  Widget _buildRecipientText(String modificationDate) {
+  Widget _buildRecipientText(String recipient) {
     return Text(
-      modificationDate,
-      style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
+      recipient,
+      style: TextStyle(fontSize: 13, color: AppColor.uploadRequestHintTextColor),
     );
   }
 
@@ -280,19 +293,68 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
     if(uploadRequests.isEmpty) {
       return _buildEmptyListIndicator();
     }
-    return SizedBox.shrink();
+    return ListView.builder(
+      itemCount: uploadRequests.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _buildRecipientListItem(context, uploadRequests[index]);
+      },
+    );
   }
 
-  Widget _buildEmptyListIndicator() {
-    return BackgroundWidgetBuilder()
-      .image(SvgPicture.asset(
-        imagePath.icUploadFile,
-        width: 120,
-        height: 120,
-        fit: BoxFit.fill,
-      ))
-      .text(AppLocalizations.of(context).upload_requests_no_files_uploaded)
-      .build();
+  Widget _buildRecipientListItem(BuildContext context, UploadRequest uploadRequest) {
+    return ListTile(
+      onTap: () {},
+      leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [SvgPicture.asset(imagePath.icUploadRequestIndividual, width: 20, height: 24, fit: BoxFit.fill)]),
+      title: ResponsiveWidget(
+        mediumScreen: Transform(
+          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            _buildItemTitle(uploadRequest.recipients.first.mail),
+            Align(alignment: Alignment.centerRight, child: _buildRecipientStatus(uploadRequest.status))
+          ]),
+        ),
+        smallScreen: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: _buildItemTitle(uploadRequest.recipients.first.mail)),
+        responsiveUtil: _responsiveUtils,
+      ),
+      subtitle: _responsiveUtils.isSmallScreen(context)
+          ? Transform(
+              transform: Matrix4.translationValues(-16, 0.0, 0.0),
+              child: Row(
+                children: [
+                  _buildRecipientStatus(uploadRequest.status),
+                ],
+              ),
+            )
+          : null,
+      trailing: IconButton(
+          icon: SvgPicture.asset(
+            imagePath.icContextMenu,
+            width: 24,
+            height: 24,
+            fit: BoxFit.fill,
+          ),
+          onPressed: () => {}),
+    );
+  }
+
+  Widget _buildRecipientStatus(UploadRequestStatus status) {
+    return Row(children: [
+      Container(
+        margin: EdgeInsets.only(right: 4),
+        width: 7.0,
+        height: 7.0,
+        decoration: BoxDecoration(
+          color: status.displayColor,
+          shape: BoxShape.circle,
+        ),
+      ),
+      Text(status.displayValue(context),
+          style: TextStyle(fontSize: 13, color: AppColor.uploadRequestHintTextColor))
+    ]);
   }
 
 }
