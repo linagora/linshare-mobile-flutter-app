@@ -76,7 +76,7 @@ class UploadRequestGroupResponse extends Equatable {
   final DateTime modificationDate;
   final int maxFileCount;
   final double maxDepositSize;
-  final double maxFileSize;
+  final double? maxFileSize;
   final DateTime activationDate;
   final DateTime notificationDate;
   final DateTime expiryDate;
