@@ -99,6 +99,7 @@ class AppImagePaths {
   String get icCreateUploadRequest => _getImagePath('ic_create_upload_request.svg');
   String get icUploadRequestCollective => _getImagePath('ic_upload_request_collective.svg');
   String get icUploadRequestIndividual => _getImagePath('ic_upload_request_individual.svg');
+  String get icUploadRequestAddRecipient => _getImagePath('ic_add_recipient.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

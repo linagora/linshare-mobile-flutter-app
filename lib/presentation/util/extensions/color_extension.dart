@@ -98,4 +98,8 @@ extension AppColor on Color {
   static const uploadRequestTextClickableColor = Color(0xff4AC6FF);
   static const uploadRequestTextDecorationColor = Color(0xffDEDEDE);
   static const uploadRequestSurfingBackTitleColor = Color(0xff4AC6FF);
+  static const uploadRequestStatusActiveColor = Color(0xff4AC6FF);
+  static const uploadRequestStatusExpiredClosedColor = Color(0xff7B7B7B);
+  static const uploadRequestStatusPendingColor = Color(0xff7B7B7B);
+  static const uploadRequestStatusArchivedColor = Color(0xffACACAC);
 }
