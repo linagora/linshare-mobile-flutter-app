@@ -42,10 +42,9 @@ class CreatePermanentTokenSSOInteractor {
 
   Future<Either<Failure, Success>> execute(Uri baseUrl, TokenSSO tokenSSO, {OTPCode? otpCode}) async {
     try {
-      final token = await authenticationSSORepository.createPermanentTokenWithOIDC(baseUrl, tokenSSO, otpCode: otpCode).then((token) {
-        tokenRepository.persistToken(token);
-        credentialRepository.saveBaseUrl(baseUrl);
-      });
+      final token = await authenticationSSORepository.createPermanentTokenWithOIDC(baseUrl, tokenSSO, otpCode: otpCode);
+      await tokenRepository.persistToken(token);
+      await credentialRepository.saveBaseUrl(baseUrl);
       return Right(AuthenticationViewState(token));
     } catch (e) {
       return Left(AuthenticationFailure(e));
