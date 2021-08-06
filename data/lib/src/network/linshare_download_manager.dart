@@ -72,6 +72,9 @@ class LinShareDownloadManager {
               randomAccessFile.writeFrom(data).then((_randomAccessFile) {
                 randomAccessFile = _randomAccessFile;
                 subscription.resume();
+                if (cancelToken != null && cancelToken.isCancelled) {
+                  streamController.sink.addError(CancelDownloadFileException(cancelToken.cancelError?.message));
+                }
               }).catchError((error) async {
                 await subscription.cancel();
                 streamController.sink.addError(CommonDownloadFileException(error.toString()));
