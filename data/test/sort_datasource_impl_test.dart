@@ -143,7 +143,7 @@ void sortFilesTest() {
       final result = await _sortDataSourceImpl.sortFiles(
           [uploadRequestGroup1, uploadRequestGroup2],
           Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsActiveClosed));
-      expect(result, [uploadRequestGroup2, uploadRequestGroup1]);
+      expect(result, containsAllInOrder([uploadRequestGroup2, uploadRequestGroup1]));
     });
   });
 }
