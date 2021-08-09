@@ -84,6 +84,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
+import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 
 class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
@@ -355,6 +356,11 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
 
   void openCreateFolderModal(BuildContext context) {
     _appNavigation.popBack();
+    final suggestName = SuggestNameType.WORKGROUP_FOLDER
+        .suggestNewName(
+          context,
+          _workGroupNodesList.whereType<WorkGroupFolder>().map((folder) => folder.name).toList()
+        );
 
     EditTextModalSheetBuilder()
         .key(Key('create_new_folder_modal'))
@@ -362,9 +368,9 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         .cancelText(AppLocalizations.of(context).cancel)
         .setTextController(TextEditingController.fromValue(
           TextEditingValue(
-              text: AppLocalizations.of(context).new_folder,
+              text: suggestName,
               selection: TextSelection(
-                  baseOffset: 0, extentOffset: AppLocalizations.of(context).new_folder.length)),
+                  baseOffset: 0, extentOffset: suggestName.length)),
         ))
         .onConfirmAction(AppLocalizations.of(context).create,
             (value) {

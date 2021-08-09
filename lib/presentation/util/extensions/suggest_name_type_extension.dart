@@ -42,6 +42,8 @@ extension SuggestNameTypeExtension on SuggestNameType {
     switch(this) {
       case SuggestNameType.WORKGROUP:
         return AppLocalizations.of(context).new_workgroup;
+      case SuggestNameType.WORKGROUP_FOLDER:
+        return AppLocalizations.of(context).new_folder;
       default:
         return '';
     }
@@ -65,7 +67,7 @@ extension SuggestNameTypeExtension on SuggestNameType {
   String suggestNewName(BuildContext buildContext, List<String> listName) {
     final originalSuggestName = getName(buildContext);
 
-    if (listName == null || listName.isEmpty || !listName.contains(originalSuggestName)) {
+    if (listName.isEmpty || !listName.contains(originalSuggestName)) {
       return originalSuggestName;
     } else {
       return suggestNameWithIndex(originalSuggestName, listName);
