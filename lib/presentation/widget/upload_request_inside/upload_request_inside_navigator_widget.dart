@@ -36,27 +36,21 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_widget.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../../util/data_structure/stack.dart' as structure;
 
 typedef OnBackUploadRequestClickedCallback = void Function();
-typedef OnNodeClickedCallback = void Function(UploadRequestGroup uploadRequestGroup);
+typedef OnUploadRequestClickedCallback = void Function(UploadRequest uploadRequest);
 
 class UploadRequestNavigatorWidget extends StatefulWidget {
 
   final UploadRequestGroup uploadRequestGroup;
   final OnBackUploadRequestClickedCallback? onBackUploadRequestClickedCallback;
 
-  final BehaviorSubject<UploadRequestArguments>? currentNodeObservable;
-
   UploadRequestNavigatorWidget(
-    Key key,
-    this.uploadRequestGroup,
-    {
-      this.onBackUploadRequestClickedCallback,
-      this.currentNodeObservable
-    }
+      Key key,
+      this.uploadRequestGroup,
+      {this.onBackUploadRequestClickedCallback}
   ) : super(key: key);
 
   @override
@@ -82,24 +76,24 @@ class UploadRequestNavigatorWidgetState extends State<UploadRequestNavigatorWidg
         onGenerateRoute: (settings) {
           final rootArgs = UploadRequestArguments(
               widget.uploadRequestGroup.collective
-                  ? UploadRequestDocumentType.children
-                  : UploadRequestDocumentType.root,
-              widget.uploadRequestGroup
+                  ? UploadRequestDocumentType.files
+                  : UploadRequestDocumentType.recipients,
+              widget.uploadRequestGroup,
+              null
           );
 
           argumentStack.push(rootArgs);
-          widget.currentNodeObservable?.add(rootArgs);
-          return _generateUploadRequestDocumentNode(context, rootArgs);
+          return _generateUploadRequestWidget(context, rootArgs);
         }
       )
     );
   }
 
-  PageRoute _generateUploadRequestDocumentNode(BuildContext context, UploadRequestArguments args) {
+  PageRoute _generateUploadRequestWidget(BuildContext context, UploadRequestArguments args) {
     return PageRouteBuilder(
       pageBuilder: (context, _, __) => UploadRequestInsideWidget(
         () => wantToBack(),
-        (uploadRequestGroup) => _onClickUploadRequest(context, uploadRequestGroup)
+        (uploadRequest) => _onClickUploadRequest(context, uploadRequest)
       ),
       settings: RouteSettings(arguments: args),
       transitionDuration: Duration(seconds: 0),
@@ -107,27 +101,24 @@ class UploadRequestNavigatorWidgetState extends State<UploadRequestNavigatorWidg
     );
   }
 
-  void _onClickUploadRequest(BuildContext context, UploadRequestGroup uploadRequestGroup) {
+  void _onClickUploadRequest(BuildContext context, UploadRequest selectedUploadRequest) {
     final newArgs = UploadRequestArguments(
-      UploadRequestDocumentType.children,
-      widget.uploadRequestGroup);
+      UploadRequestDocumentType.files,
+      widget.uploadRequestGroup,
+      selectedUploadRequest);
 
     argumentStack.push(newArgs);
-    widget.currentNodeObservable?.add(newArgs);
     navigatorKey.currentState?.pushAndRemoveUntil(
-      _generateUploadRequestDocumentNode(context, newArgs),
+      _generateUploadRequestWidget(context, newArgs),
       (Route<dynamic> route) => false
     );
   }
 
   void wantToBack() {
     argumentStack.pop();
-    if (widget.currentNodeObservable != null && currentPageData != null) {
-      widget.currentNodeObservable!.add(currentPageData!);
-    }
     if (!argumentStack.isEmpty && currentPageData != null) {
       navigatorKey.currentState?.pushAndRemoveUntil(
-        _generateUploadRequestDocumentNode(context, currentPageData!),
+        _generateUploadRequestWidget(context, currentPageData!),
         (Route<dynamic> route) => false
       );
     } else if(widget.onBackUploadRequestClickedCallback != null) {
