@@ -36,6 +36,7 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:redux/src/store.dart';
 
 class UploadRequestInsideViewModel extends BaseViewModel {
@@ -73,11 +74,14 @@ class UploadRequestInsideViewModel extends BaseViewModel {
             (success) {
               if(success is UploadRequestViewState) {
                 if(_arguments.uploadRequestGroup.collective) {
-                  // List of files in Collective Upload request
-                  return store.dispatch(_getAllUploadRequestEntries(success.uploadRequests));
+                  _loadListFilesCollectiveUploadRequest(success);
                 } else {
-                  // List of recipients in Individual Upload request
-                  store.dispatch(GetAllUploadRequestsAction(Right(success)));
+                  if(_arguments.documentType == UploadRequestDocumentType.recipients) {
+                    _loadListRecipientsIndividualUploadRequest(success);
+                  } else if (_arguments.documentType == UploadRequestDocumentType.files &&
+                    _arguments.selectedUploadRequest != null) {
+                    _loadUploadRequestEntriesByRecipient(_arguments.selectedUploadRequest!);
+                  }
                 }
               }
             })
@@ -85,13 +89,27 @@ class UploadRequestInsideViewModel extends BaseViewModel {
     });
   }
 
-  OnlineThunkAction _getAllUploadRequestEntries(List<UploadRequest> uploadRequests) {
+  void _loadListFilesCollectiveUploadRequest(UploadRequestViewState uploadRequestViewState) {
+    if(uploadRequestViewState.uploadRequests.isEmpty) {
+      _handleFailedAction(UploadRequestFailure(UploadRequestNotFound()));
+    } else {
+      return store.dispatch(_getAllUploadRequestEntries(uploadRequestViewState.uploadRequests.first));
+    }
+  }
+
+  void _loadListRecipientsIndividualUploadRequest(UploadRequestViewState uploadRequestViewState) {
+    store.dispatch(GetAllUploadRequestsAction(Right(uploadRequestViewState)));
+  }
+
+  void _loadUploadRequestEntriesByRecipient(UploadRequest uploadRequest) {
+    store.dispatch(SetSelectedUploadRequestAction(uploadRequest));
+    store.dispatch(_getAllUploadRequestEntries(uploadRequest));
+  }
+
+  OnlineThunkAction _getAllUploadRequestEntries(UploadRequest uploadRequest) {
     return OnlineThunkAction((Store<AppState> store) async {
-      if(uploadRequests.isEmpty) {
-        _handleFailedAction(UploadRequestFailure(UploadRequestNotFound()));
-        return;
-      }
-      await _getAllUploadRequestEntriesInteractor.execute(uploadRequests.first.uploadRequestId).then(
+      _showLoading();
+      await _getAllUploadRequestEntriesInteractor.execute(uploadRequest.uploadRequestId).then(
         (result) => result.fold(
           (failure) {
             if(failure is UploadRequestEntryFailure) {
@@ -104,7 +122,6 @@ class UploadRequestInsideViewModel extends BaseViewModel {
             }
           })
       );
-
     });
   }
 
