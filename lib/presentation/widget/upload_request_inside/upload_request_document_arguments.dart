@@ -37,6 +37,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/u
 class UploadRequestArguments extends RouterArguments {
   final UploadRequestDocumentType documentType;
   final UploadRequestGroup uploadRequestGroup;
+  final UploadRequest? selectedUploadRequest;
 
-  UploadRequestArguments(this.documentType, this.uploadRequestGroup);
+  UploadRequestArguments(this.documentType, this.uploadRequestGroup, this.selectedUploadRequest);
 }

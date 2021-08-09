@@ -46,27 +46,31 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
   final List<UploadRequestEntry> uploadRequestEntries;
   final UploadRequestDocumentType uploadRequestDocumentType;
   final UploadRequestGroup? uploadRequestGroup;
+  final UploadRequest? selectedUploadRequest;
 
   UploadRequestInsideState(
       Either<Failure, Success> viewState,
       this.uploadRequests,
       this.uploadRequestEntries,
       this.uploadRequestDocumentType,
-      this.uploadRequestGroup)
+      this.uploadRequestGroup,
+      this.selectedUploadRequest)
       : super(viewState);
 
   factory UploadRequestInsideState.initial() {
-    return UploadRequestInsideState(Right(IdleState()), [], [], UploadRequestDocumentType.root, null);
+    return UploadRequestInsideState(Right(IdleState()), [], [], UploadRequestDocumentType.recipients, null, null);
   }
 
   @override
   UploadRequestInsideState clearViewState() {
-    return UploadRequestInsideState(Right(IdleState()), uploadRequests, uploadRequestEntries, uploadRequestDocumentType, uploadRequestGroup);
+    return UploadRequestInsideState(Right(IdleState()), uploadRequests, uploadRequestEntries, uploadRequestDocumentType,
+        uploadRequestGroup, selectedUploadRequest);
   }
 
   @override
   UploadRequestInsideState sendViewState({required Either<Failure, Success> viewState}) {
-    return UploadRequestInsideState(viewState, uploadRequests, uploadRequestEntries, uploadRequestDocumentType, null);
+    return UploadRequestInsideState(
+        viewState, uploadRequests, uploadRequestEntries, uploadRequestDocumentType, null, null);
   }
 
   UploadRequestInsideState setUploadRequestArgument({required UploadRequestArguments newUploadRequestArguments}) {
@@ -75,23 +79,33 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
       uploadRequests,
       uploadRequestEntries,
       newUploadRequestArguments.documentType,
-      newUploadRequestArguments.uploadRequestGroup
+      newUploadRequestArguments.uploadRequestGroup,
+      null
     );
   }
 
   UploadRequestInsideState setUploadRequests(
       {required Either<Failure, Success> viewState, required List<UploadRequest> newUploadRequests}) {
-    return UploadRequestInsideState(viewState, newUploadRequests, uploadRequestEntries, UploadRequestDocumentType.root, uploadRequestGroup);
+    return UploadRequestInsideState(
+        viewState, newUploadRequests, uploadRequestEntries, UploadRequestDocumentType.recipients, uploadRequestGroup, selectedUploadRequest);
   }
 
   UploadRequestInsideState setUploadRequestEntries(
       {required Either<Failure, Success> viewState, required List<UploadRequestEntry> newUploadRequestEntries}) {
-    return UploadRequestInsideState(viewState, uploadRequests, newUploadRequestEntries, UploadRequestDocumentType.children, uploadRequestGroup);
+    return UploadRequestInsideState(viewState, uploadRequests, newUploadRequestEntries,
+        UploadRequestDocumentType.files, uploadRequestGroup, selectedUploadRequest);
+  }
+
+  UploadRequestInsideState setSelectedUploadRequest(
+      {required UploadRequest selectedUploadRequest}) {
+    return UploadRequestInsideState(viewState, uploadRequests, uploadRequestEntries,
+        UploadRequestDocumentType.files, uploadRequestGroup, selectedUploadRequest);
   }
 
   @override
   UploadRequestInsideState startLoadingState() {
-    return UploadRequestInsideState(Right(LoadingState()), uploadRequests, uploadRequestEntries, uploadRequestDocumentType, uploadRequestGroup);
+    return UploadRequestInsideState(Right(LoadingState()), uploadRequests, uploadRequestEntries,
+        uploadRequestDocumentType, uploadRequestGroup, selectedUploadRequest);
   }
 
   @override
@@ -100,6 +114,7 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
       uploadRequests,
       uploadRequestEntries,
       uploadRequestDocumentType,
-      uploadRequestGroup
+      uploadRequestGroup,
+      selectedUploadRequest
     ];
 }

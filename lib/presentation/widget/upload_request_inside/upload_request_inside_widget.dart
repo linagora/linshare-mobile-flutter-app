@@ -54,9 +54,9 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/u
 
 class UploadRequestInsideWidget extends StatefulWidget {
   final OnBackUploadRequestClickedCallback onBackUploadRequestClickedCallback;
-  final OnNodeClickedCallback onNodeClickedCallback;
+  final OnUploadRequestClickedCallback onUploadRequestClickedCallback;
 
-  UploadRequestInsideWidget(this.onBackUploadRequestClickedCallback, this.onNodeClickedCallback);
+  UploadRequestInsideWidget(this.onBackUploadRequestClickedCallback, this.onUploadRequestClickedCallback);
 
   @override
   _UploadRequestInsideWidgetState createState() => _UploadRequestInsideWidgetState();
@@ -133,7 +133,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
         converter: (store) => store.state.uploadRequestInsideState,
         builder: (context, urState) =>
             ((urState.uploadRequestGroup?.collective == false
-                && urState.uploadRequestDocumentType == UploadRequestDocumentType.root)
+                && urState.uploadRequestDocumentType == UploadRequestDocumentType.recipients)
               || urState.uploadRequestGroup?.collective == true)
             ? GestureDetector(
                 onTap: widget.onBackUploadRequestClickedCallback,
@@ -155,7 +155,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
             child: Padding(
                 padding: const EdgeInsets.only(left: 5.0, right: 45.0),
                 child: Text(
-                    urState.uploadRequestGroup?.label ?? '',
+                    urState.selectedUploadRequest?.recipients.first.mail ?? '',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 18,
@@ -303,7 +303,9 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
 
   Widget _buildRecipientListItem(BuildContext context, UploadRequest uploadRequest) {
     return ListTile(
-      onTap: () {},
+      onTap: () {
+        widget.onUploadRequestClickedCallback(uploadRequest);
+      },
       leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [SvgPicture.asset(imagePath.icUploadRequestIndividual, width: 20, height: 24, fit: BoxFit.fill)]),

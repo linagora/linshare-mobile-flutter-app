@@ -68,6 +68,17 @@ class GetAllUploadRequestEntriesAction extends ActionOnline {
 }
 
 @immutable
+class SetSelectedUploadRequestAction extends ActionOnline {
+  final UploadRequest selectedUploadRequest;
+
+  SetSelectedUploadRequestAction(this.selectedUploadRequest);
+}
+@immutable
+class ClearUploadRequestNodeListAction extends ActionOffline {
+  ClearUploadRequestNodeListAction();
+}
+
+@immutable
 class CleanUploadRequestAction extends ActionOffline {
   CleanUploadRequestAction();
 }
