@@ -52,4 +52,6 @@ final uploadRequestInsideReducer = combineReducers<UploadRequestInsideState>([
                   (success) => (success is UploadRequestEntryViewState) ? success.uploadRequestEntries : []),
           viewState: action.viewState)),
   TypedReducer<UploadRequestInsideState, CleanUploadRequestAction>((UploadRequestInsideState state, _) => state.clearViewState()),
+  TypedReducer<UploadRequestInsideState, SetSelectedUploadRequestAction>((UploadRequestInsideState state, SetSelectedUploadRequestAction action) =>
+      state.setSelectedUploadRequest(selectedUploadRequest: action.selectedUploadRequest)),
 ]);
