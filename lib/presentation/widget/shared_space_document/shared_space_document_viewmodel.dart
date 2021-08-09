@@ -374,7 +374,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         ))
         .onConfirmAction(AppLocalizations.of(context).create,
             (value) {
-              if (getSharedSpaceId() != null) {
+              if (getSharedSpaceId() != null && value.isNotEmpty) {
                 return store.dispatch(_createNewFolderAction(context, value));
               }
             })
