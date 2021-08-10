@@ -70,11 +70,13 @@ class FunctionalityState extends LinShareState {
 extension FunctionalityStateExtension on FunctionalityState {
   bool isSharedSpaceEnable() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP);
 
+  bool isUploadRequestEnable() => _isFunctionalityEnable(FunctionalityIdentifier.UPLOAD_REQUEST);
+
   bool _isFunctionalityEnable(FunctionalityIdentifier functionalityIdentifier) {
     final functionality = functionalityList.firstWhere(
             (element) => (element != null && element.identifier == functionalityIdentifier),
         orElse: () => null);
-    if (functionality != null && functionality is FunctionalitySimple) {
+    if (functionality != null) {
       return functionality.enable;
     }
     return true;
