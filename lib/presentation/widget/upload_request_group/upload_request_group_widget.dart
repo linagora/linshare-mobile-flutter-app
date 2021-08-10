@@ -86,6 +86,7 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   Widget _buildDefaultViewWidget() {
     return DefaultTabController(
+        initialIndex: _model.store.state.uiState.uploadRequestGroupTabIndex,
         length: 3,
         child: Scaffold(
           appBar: TabBar(
@@ -94,6 +95,7 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
               labelStyle: TextStyle(fontSize: 16),
               labelColor: AppColor.primaryColor,
               indicatorColor: AppColor.primaryColor,
+              onTap: (index) => _model.setTabIndex(index),
               tabs: [
                 FittedBox(
                   fit: BoxFit.contain,

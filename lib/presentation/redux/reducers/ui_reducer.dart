@@ -49,4 +49,6 @@ final uiReducer = combineReducers<UIState>([
   TypedReducer<UIState, DisableSearchStateAction>(
           (UIState state, DisableSearchStateAction action) => state.setSearchState(
           state.searchState.disableSearchState())),
+  TypedReducer<UIState, UIStateSetUploadRequestGroupIndexAction>(
+          (UIState state, UIStateSetUploadRequestGroupIndexAction action) => state.setUploadRequestGroupIndexTab(action.newIndex)),
 ]);

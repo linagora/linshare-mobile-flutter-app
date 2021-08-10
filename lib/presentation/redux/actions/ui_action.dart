@@ -80,3 +80,10 @@ class UploadRequestInsideView extends SetCurrentView {
 
   UploadRequestInsideView(String routePath, this.uploadRequestGroup) : super(routePath);
 }
+
+@immutable
+class UIStateSetUploadRequestGroupIndexAction extends ActionOffline {
+  final int newIndex;
+
+  UIStateSetUploadRequestGroupIndexAction(this.newIndex);
+}
