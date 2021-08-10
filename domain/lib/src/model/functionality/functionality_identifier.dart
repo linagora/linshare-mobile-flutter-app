@@ -33,4 +33,5 @@
 enum FunctionalityIdentifier {
   UNKNOWN_IDENTIFIER,
   WORK_GROUP,
+  UPLOAD_REQUEST,
 }
