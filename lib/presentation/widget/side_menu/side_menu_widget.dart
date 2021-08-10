@@ -131,25 +131,38 @@ class SideMenuDrawerWidget extends StatelessWidget {
                 return SizedBox.shrink();
               }),
           Divider(),
-          ListTile(
-            key: Key('side_menu_upload_requests_button'),
-            leading: StoreConnector<AppState, UIState>(
-                converter: (Store<AppState> store) => store.state.uiState,
-                distinct: true,
-                builder: (context, state) =>
-                state.routePath == RoutePaths.uploadRequestGroup
-                    ? _buildUploadRequestIcon(selected: true)
-                    : _buildUploadRequestIcon(selected: false)),
-            title: StoreConnector<AppState, UIState>(
-                converter: (Store<AppState> store) => store.state.uiState,
-                distinct: true,
-                builder: (context, state) =>
-                state.routePath == RoutePaths.uploadRequestGroup
-                    ? _buildUploadRequestText(context, selected: true)
-                    : _buildUploadRequestText(context, selected: false)),
-            onTap: () => sideMenuDrawerViewModel.goToUploadRequest(),
+          StoreConnector<AppState, FunctionalityState>(
+            converter: (Store<AppState> store) => store.state.functionalityState,
+            distinct: true,
+            builder: (context, state) {
+              if (state.isUploadRequestEnable()) {
+                return Column(
+                  children: [
+                    ListTile(
+                      key: Key('side_menu_upload_requests_button'),
+                      leading: StoreConnector<AppState, UIState>(
+                          converter: (Store<AppState> store) => store.state.uiState,
+                          distinct: true,
+                          builder: (context, state) =>
+                          state.routePath == RoutePaths.uploadRequestGroup
+                              ? _buildUploadRequestIcon(selected: true)
+                              : _buildUploadRequestIcon(selected: false)),
+                      title: StoreConnector<AppState, UIState>(
+                          converter: (Store<AppState> store) => store.state.uiState,
+                          distinct: true,
+                          builder: (context, state) =>
+                          state.routePath == RoutePaths.uploadRequestGroup
+                              ? _buildUploadRequestText(context, selected: true)
+                              : _buildUploadRequestText(context, selected: false)),
+                      onTap: () => sideMenuDrawerViewModel.goToUploadRequest(),
+                    ),
+                    Divider(),
+                  ],
+                );
+              }
+              return SizedBox.shrink();
+            }
           ),
-          Divider(),
           ListTile(
             leading: StoreConnector<AppState, UIState>(
                 converter: (Store<AppState> store) => store.state.uiState,
