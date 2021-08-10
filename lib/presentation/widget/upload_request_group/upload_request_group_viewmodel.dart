@@ -67,6 +67,8 @@ class UploadRequestGroupViewModel extends BaseViewModel {
   SearchQuery _searchQuery = SearchQuery('');
   SearchQuery get searchQuery  => _searchQuery;
 
+  int _tabIndex = 0;
+
   UploadRequestGroupViewModel(
       Store<AppState> store,
       this._appNavigation,
@@ -94,6 +96,8 @@ class UploadRequestGroupViewModel extends BaseViewModel {
     getUploadRequestCreatedStatusWithSort();
     getUploadRequestActiveClosedStatusWithSort();
     getUploadRequestArchivedStatusWithSort();
+
+    _tabIndex = store.state.uiState.uploadRequestGroupTabIndex;
   }
 
   void getListUploadRequests(UploadRequestGroup requestGroup) {
@@ -103,6 +107,10 @@ class UploadRequestGroupViewModel extends BaseViewModel {
       store.dispatch(CleanUploadRequestGroupAction());
       store.dispatch(UploadRequestInsideView(RoutePaths.uploadRequestInside, requestGroup));
     }));
+  }
+
+  void setTabIndex(int index) {
+    _tabIndex = index;
   }
 
   void openUploadRequestAddMenu(BuildContext context, List<Widget> actionTiles) {
@@ -435,6 +443,7 @@ class UploadRequestGroupViewModel extends BaseViewModel {
 
   @override
   void onDisposed() {
+    store.dispatch(UIStateSetUploadRequestGroupIndexAction(_tabIndex));
     super.onDisposed();
     _storeStreamSubscription.cancel();
   }

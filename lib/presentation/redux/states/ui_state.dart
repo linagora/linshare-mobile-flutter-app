@@ -40,15 +40,24 @@ class UIState with EquatableMixin {
   final SharedSpaceNodeNested? selectedSharedSpace;
   final UploadRequestGroup? uploadRequestGroup;
   final SearchState searchState;
+  final int uploadRequestGroupTabIndex;
 
-  UIState(this.routePath, this.searchState, {this.selectedSharedSpace, this.uploadRequestGroup});
+  UIState(
+    this.routePath,
+    this.searchState,
+    {
+      this.uploadRequestGroupTabIndex = 0,
+      this.selectedSharedSpace,
+      this.uploadRequestGroup
+    }
+  );
 
   factory UIState.initial() {
     return UIState(RoutePaths.initializeRoute, SearchState.initial());
   }
 
   UIState setCurrentView(String routePath, {SharedSpaceNodeNested? sharedSpace, UploadRequestGroup? uploadRequestGroup}) {
-    return UIState(routePath, searchState, selectedSharedSpace: sharedSpace, uploadRequestGroup: uploadRequestGroup);
+    return UIState(routePath, searchState, uploadRequestGroupTabIndex: uploadRequestGroupTabIndex, selectedSharedSpace: sharedSpace, uploadRequestGroup: uploadRequestGroup);
   }
 
   UIState clearCurrentView() {
@@ -56,11 +65,15 @@ class UIState with EquatableMixin {
   }
 
   UIState setSearchState(SearchState searchState) {
-    return UIState(routePath, searchState, selectedSharedSpace: selectedSharedSpace);
+    return UIState(routePath, searchState, uploadRequestGroupTabIndex: uploadRequestGroupTabIndex, selectedSharedSpace: selectedSharedSpace);
+  }
+
+  UIState setUploadRequestGroupIndexTab(int newIndex) {
+    return UIState(routePath, searchState, uploadRequestGroupTabIndex: newIndex, selectedSharedSpace: selectedSharedSpace, uploadRequestGroup: uploadRequestGroup);
   }
 
   @override
-  List<Object?> get props => [routePath, selectedSharedSpace, uploadRequestGroup];
+  List<Object?> get props => [routePath, selectedSharedSpace, uploadRequestGroup, uploadRequestGroupTabIndex];
 }
 
 extension UIStateExtension on UIState {
