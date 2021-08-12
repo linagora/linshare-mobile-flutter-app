@@ -58,4 +58,28 @@ final uploadRequestEntryResponse1 = UploadRequestEntryResponse(
   true
 );
 
+final uploadRequestEntryResponse2 = UploadRequestEntryResponse(
+    UploadRequestEntryId('uploadRequestEntry2'),
+    UploadRequestEntryOwnerResponse(UploadRequestEntryOwnerId('uploadRequestEntryOwnerId'),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    null,
+    null,
+    'dd2b70d0-6193-4980-8d5f-035a1e3c3da7'),
+    GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  DateTime.fromMillisecondsSinceEpoch(1604482138188),
+  'android-12-2.jpeg',
+  '',
+  '',
+  false,
+  30223,
+  MediaType.parse('image/jpeg'),
+  'd14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f',
+  true,
+  true
+);
+
 final uploadRequestEntry1 = uploadRequestEntryResponse1.toUploadRequestEntry();
+final uploadRequestEntry2 = uploadRequestEntryResponse2.toUploadRequestEntry();
