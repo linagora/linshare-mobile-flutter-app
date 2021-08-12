@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class UploadRequestEntryViewState extends ViewState {
@@ -48,3 +49,67 @@ class UploadRequestEntryFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class DownloadEntriesSuccessViewState extends ViewState {
+  final List<DownloadTaskId> taskIds;
+
+  DownloadEntriesSuccessViewState(this.taskIds);
+
+  @override
+  List<Object> get props => [taskIds];
+}
+
+class DownloadEntriesFailure extends FeatureFailure {
+  final exception;
+
+  DownloadEntriesFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class DownloadEntryIOSViewState extends ViewState {
+  final String filePath;
+
+  DownloadEntryIOSViewState(this.filePath);
+
+  @override
+  List<Object> get props => [filePath];
+}
+
+class DownloadEntryIOSFailure extends FeatureFailure {
+  final downloadFileException;
+
+  DownloadEntryIOSFailure(this.downloadFileException);
+
+  @override
+  List<Object> get props => [downloadFileException];
+}
+
+class DownloadEntryIOSAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadEntryIOSAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class DownloadEntryIOSHasSomeFilesFailureViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadEntryIOSHasSomeFilesFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class DownloadEntryIOSAllFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  DownloadEntryIOSAllFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
