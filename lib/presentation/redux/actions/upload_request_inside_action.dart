@@ -33,6 +33,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 
@@ -73,12 +74,34 @@ class SetSelectedUploadRequestAction extends ActionOnline {
 
   SetSelectedUploadRequestAction(this.selectedUploadRequest);
 }
+
 @immutable
-class ClearUploadRequestNodeListAction extends ActionOffline {
-  ClearUploadRequestNodeListAction();
+class ClearUploadRequestEntriesListAction extends ActionOffline {
+  ClearUploadRequestEntriesListAction();
 }
 
 @immutable
-class CleanUploadRequestAction extends ActionOffline {
-  CleanUploadRequestAction();
+class ClearUploadRequestsListAction extends ActionOffline {
+  ClearUploadRequestsListAction();
+}
+
+class UploadRequestSelectEntryAction extends ActionOffline {
+  final SelectableElement<UploadRequestEntry> selectedEntry;
+
+  UploadRequestSelectEntryAction(this.selectedEntry);
+}
+
+@immutable
+class UploadRequestClearSelectedEntryAction extends ActionOffline {
+  UploadRequestClearSelectedEntryAction();
+}
+
+@immutable
+class UploadRequestSelectAllEntryAction extends ActionOffline {
+  UploadRequestSelectAllEntryAction();
+}
+
+@immutable
+class UploadRequestUnSelectAllEntryAction extends ActionOffline {
+  UploadRequestUnSelectAllEntryAction();
 }
