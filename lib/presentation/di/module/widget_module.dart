@@ -448,8 +448,11 @@ class WidgetModule {
     getIt.registerFactory(() =>
         UploadRequestInsideViewModel(
           getIt.get<Store<AppState>>(),
+          getIt.get<AppNavigation>(),
           getIt.get<GetAllUploadRequestsInteractor>(),
           getIt.get<GetAllUploadRequestEntriesInteractor>(),
+          getIt<DownloadUploadRequestEntriesInteractor>(),
+          getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
         ));
   }
 

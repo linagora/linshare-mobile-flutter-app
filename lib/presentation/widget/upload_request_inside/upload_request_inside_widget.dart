@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:io';
+
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +38,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
@@ -47,6 +51,9 @@ import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.d
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_entry_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_entry_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
@@ -191,18 +198,18 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
   Widget _buildUploadRequestList() {
     return StoreConnector<AppState, UploadRequestInsideState>(
         converter: (store) => store.state.uploadRequestInsideState,
-        builder: (context, urState) =>
-            urState.viewState.fold(
+        builder: (context, uploadRequestInsideState) =>
+            uploadRequestInsideState.viewState.fold(
                 (failure) => RefreshIndicator(
                   onRefresh: () async => _viewModel.requestToGetUploadRequestAndEntries(),
                   child: _buildEmptyListIndicator()),
                 (success) => RefreshIndicator(
                   onRefresh: () async => _viewModel.requestToGetUploadRequestAndEntries(),
-                    child: _buildLayoutCorrespondingWithState(success)))
+                    child: _buildLayoutCorrespondingWithState(success, uploadRequestInsideState)))
     );
   }
 
-  Widget _buildLayoutCorrespondingWithState(state) {
+  Widget _buildLayoutCorrespondingWithState(state, uploadRequestInsideState) {
     if(state is UploadRequestEntryViewState) {
       return _buildUploadRequestEntriesListView(state.uploadRequestEntries);
     } else if(state is UploadRequestViewState) {
@@ -270,7 +277,10 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
             height: 24,
             fit: BoxFit.fill,
           ),
-          onPressed: () => {}),
+          onPressed: () => _viewModel.openActiveCloseContextMenu(
+              context,
+              entry.element,
+              _contextMenuActiveCloseActionTiles(context, entry.element))),
     );
   }
 
