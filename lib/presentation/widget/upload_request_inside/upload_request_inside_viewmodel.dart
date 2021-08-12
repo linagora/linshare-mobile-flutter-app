@@ -172,6 +172,11 @@ class UploadRequestInsideViewModel extends BaseViewModel {
     return store.state.uploadRequestInsideState;
   }
 
+  void clearUploadRequestListAction() {
+    store.dispatch(ClearUploadRequestEntriesListAction());
+    store.dispatch(ClearUploadRequestsListAction());
+  }
+
   // Upload Request Entry actions
 
   void selectItem(SelectableElement<UploadRequestEntry> selectedEntry) {
@@ -326,6 +331,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
   @override
   void onDisposed() {
     cancelSelection();
+    clearUploadRequestListAction();
     super.onDisposed();
   }
 
