@@ -35,6 +35,7 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
@@ -43,7 +44,10 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/u
 @immutable
 class UploadRequestInsideState extends LinShareState with EquatableMixin {
   final List<UploadRequest> uploadRequests;
-  final List<UploadRequestEntry> uploadRequestEntries;
+
+  final List<SelectableElement<UploadRequestEntry>> uploadRequestEntries;
+  final SelectMode selectMode;
+
   final UploadRequestDocumentType uploadRequestDocumentType;
   final UploadRequestGroup? uploadRequestGroup;
   final UploadRequest? selectedUploadRequest;
@@ -52,25 +56,26 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
       Either<Failure, Success> viewState,
       this.uploadRequests,
       this.uploadRequestEntries,
+      this.selectMode,
       this.uploadRequestDocumentType,
       this.uploadRequestGroup,
       this.selectedUploadRequest)
       : super(viewState);
 
   factory UploadRequestInsideState.initial() {
-    return UploadRequestInsideState(Right(IdleState()), [], [], UploadRequestDocumentType.recipients, null, null);
+    return UploadRequestInsideState(Right(IdleState()), [], [], SelectMode.INACTIVE, UploadRequestDocumentType.recipients, null, null);
   }
 
   @override
   UploadRequestInsideState clearViewState() {
-    return UploadRequestInsideState(Right(IdleState()), uploadRequests, uploadRequestEntries, uploadRequestDocumentType,
+    return UploadRequestInsideState(Right(IdleState()), uploadRequests, uploadRequestEntries, selectMode, uploadRequestDocumentType,
         uploadRequestGroup, selectedUploadRequest);
   }
 
   @override
   UploadRequestInsideState sendViewState({required Either<Failure, Success> viewState}) {
     return UploadRequestInsideState(
-        viewState, uploadRequests, uploadRequestEntries, uploadRequestDocumentType, null, null);
+        viewState, uploadRequests, uploadRequestEntries, selectMode, uploadRequestDocumentType, null, null);
   }
 
   UploadRequestInsideState setUploadRequestArgument({required UploadRequestArguments newUploadRequestArguments}) {
@@ -78,6 +83,7 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
       viewState,
       uploadRequests,
       uploadRequestEntries,
+      selectMode,
       newUploadRequestArguments.documentType,
       newUploadRequestArguments.uploadRequestGroup,
       null
@@ -85,27 +91,96 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
   }
 
   UploadRequestInsideState setUploadRequests(
-      {required Either<Failure, Success> viewState, required List<UploadRequest> newUploadRequests}) {
+      {Either<Failure, Success>? viewState, required List<UploadRequest> newUploadRequests}) {
     return UploadRequestInsideState(
-        viewState, newUploadRequests, uploadRequestEntries, UploadRequestDocumentType.recipients, uploadRequestGroup, selectedUploadRequest);
+        viewState ?? this.viewState,
+        newUploadRequests,
+        uploadRequestEntries,
+        selectMode,
+        UploadRequestDocumentType.recipients,
+        uploadRequestGroup,
+        selectedUploadRequest);
   }
 
   UploadRequestInsideState setUploadRequestEntries(
-      {required Either<Failure, Success> viewState, required List<UploadRequestEntry> newUploadRequestEntries}) {
-    return UploadRequestInsideState(viewState, uploadRequests, newUploadRequestEntries,
+      {Either<Failure, Success>? viewState, required List<UploadRequestEntry> newUploadRequestEntries}) {
+    final selectedElements = uploadRequestEntries.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
+
+    return UploadRequestInsideState(
+        viewState ?? this.viewState,
+        uploadRequests,
+        newUploadRequestEntries.map((entry) => selectedElements.contains(entry)
+          ? SelectableElement<UploadRequestEntry>(entry, SelectMode.ACTIVE)
+          : SelectableElement<UploadRequestEntry>(entry, SelectMode.INACTIVE))
+          .toList(),
+        selectMode,
         UploadRequestDocumentType.files, uploadRequestGroup, selectedUploadRequest);
   }
 
   UploadRequestInsideState setSelectedUploadRequest(
       {required UploadRequest selectedUploadRequest}) {
-    return UploadRequestInsideState(viewState, uploadRequests, uploadRequestEntries,
+    return UploadRequestInsideState(viewState, uploadRequests, uploadRequestEntries, selectMode,
         UploadRequestDocumentType.files, uploadRequestGroup, selectedUploadRequest);
   }
 
   @override
   UploadRequestInsideState startLoadingState() {
-    return UploadRequestInsideState(Right(LoadingState()), uploadRequests, uploadRequestEntries,
+    return UploadRequestInsideState(Right(LoadingState()), uploadRequests, uploadRequestEntries, selectMode,
         uploadRequestDocumentType, uploadRequestGroup, selectedUploadRequest);
+  }
+
+  UploadRequestInsideState selectUploadRequestEntry(SelectableElement<UploadRequestEntry> selectedUploadRequestEntry) {
+    uploadRequestEntries.firstWhere((entry) => entry == selectedUploadRequestEntry).toggleSelect();
+    return UploadRequestInsideState(
+        viewState, 
+        uploadRequests, 
+        uploadRequestEntries, 
+        SelectMode.ACTIVE,
+        uploadRequestDocumentType, 
+        uploadRequestGroup, 
+        selectedUploadRequest);
+  }
+
+  UploadRequestInsideState cancelSelectedUploadRequestEntry() {
+    return UploadRequestInsideState(
+        viewState,
+        uploadRequests,
+        uploadRequestEntries
+          .map((entry) => SelectableElement<UploadRequestEntry>(entry.element, SelectMode.INACTIVE))
+          .toList(),
+        SelectMode.INACTIVE,
+        uploadRequestDocumentType, 
+        uploadRequestGroup, 
+        selectedUploadRequest
+    );
+  }
+
+  UploadRequestInsideState selectAllUploadRequestEntry() {
+    return UploadRequestInsideState(
+        viewState,
+        uploadRequests,
+        uploadRequestEntries
+          .map((entry) => SelectableElement<UploadRequestEntry>(entry.element, SelectMode.ACTIVE))
+          .toList(),
+        SelectMode.ACTIVE,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
+  }
+
+  UploadRequestInsideState unSelectAllUploadRequestEntry() {
+    return UploadRequestInsideState(
+        viewState,
+        uploadRequests,
+        uploadRequestEntries
+          .map((entry) => SelectableElement<UploadRequestEntry>(entry.element, SelectMode.INACTIVE))
+          .toList(),
+        SelectMode.ACTIVE,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
   }
 
   @override
@@ -113,8 +188,22 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
     [...super.props,
       uploadRequests,
       uploadRequestEntries,
+      selectMode,
       uploadRequestDocumentType,
       uploadRequestGroup,
       selectedUploadRequest
     ];
+}
+
+extension MultipleSelections on UploadRequestInsideState {
+  bool isAllEntriesSelected() {
+    return uploadRequestEntries.every((entry) => entry.selectMode == SelectMode.ACTIVE);
+  }
+
+  List<UploadRequestEntry> getAllSelectedEntries() {
+    return uploadRequestEntries
+        .where((entry) => entry.selectMode == SelectMode.ACTIVE)
+        .map((entry) => entry.element)
+        .toList();
+  }
 }
