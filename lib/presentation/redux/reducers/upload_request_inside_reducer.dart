@@ -51,7 +51,20 @@ final uploadRequestInsideReducer = combineReducers<UploadRequestInsideState>([
                   (failure) => [],
                   (success) => (success is UploadRequestEntryViewState) ? success.uploadRequestEntries : []),
           viewState: action.viewState)),
-  TypedReducer<UploadRequestInsideState, CleanUploadRequestAction>((UploadRequestInsideState state, _) => state.clearViewState()),
   TypedReducer<UploadRequestInsideState, SetSelectedUploadRequestAction>((UploadRequestInsideState state, SetSelectedUploadRequestAction action) =>
       state.setSelectedUploadRequest(selectedUploadRequest: action.selectedUploadRequest)),
+  TypedReducer<UploadRequestInsideState, ClearUploadRequestEntriesListAction>((UploadRequestInsideState state, ClearUploadRequestEntriesListAction action) =>
+      state.setUploadRequestEntries(
+          newUploadRequestEntries: [])),
+  TypedReducer<UploadRequestInsideState, ClearUploadRequestsListAction>((UploadRequestInsideState state, ClearUploadRequestsListAction action) =>
+      state.setUploadRequests(
+          newUploadRequests: [])),
+  TypedReducer<UploadRequestInsideState, UploadRequestSelectEntryAction>((UploadRequestInsideState state, UploadRequestSelectEntryAction action) =>
+      state.selectUploadRequestEntry(action.selectedEntry)),
+  TypedReducer<UploadRequestInsideState, UploadRequestClearSelectedEntryAction>((UploadRequestInsideState state, UploadRequestClearSelectedEntryAction action) =>
+      state.cancelSelectedUploadRequestEntry()),
+  TypedReducer<UploadRequestInsideState, UploadRequestSelectAllEntryAction>((UploadRequestInsideState state, UploadRequestSelectAllEntryAction action) =>
+      state.selectAllUploadRequestEntry()),
+  TypedReducer<UploadRequestInsideState, UploadRequestUnSelectAllEntryAction>((UploadRequestInsideState state, UploadRequestUnSelectAllEntryAction action) =>
+      state.unSelectAllUploadRequestEntry()),
 ]);
