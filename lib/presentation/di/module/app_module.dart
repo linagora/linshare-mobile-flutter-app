@@ -124,7 +124,8 @@ class AppModule {
         getIt<RemoteExceptionThrower>()));
     getIt.registerFactory(() => UploadRequestEntryDataSourceImpl(
         getIt<LinShareHttpClient>(),
-        getIt<RemoteExceptionThrower>()));
+        getIt<RemoteExceptionThrower>(),
+        getIt<LinShareDownloadManager>()));
   }
 
   void _provideDataSource() {
@@ -369,6 +370,16 @@ class AppModule {
     getIt.registerFactory(() => GetAllUploadRequestEntriesInteractor(getIt<UploadRequestEntryRepository>()));
     getIt.registerFactory(() => SearchUploadRequestGroupsInteractor());
     getIt.registerFactory(() => GetReceivedShareInteractor(getIt<ReceivedShareRepository>()));
+    getIt.registerFactory(() => DownloadUploadRequestEntriesInteractor(
+        getIt<UploadRequestEntryRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
+    getIt.registerFactory(() => DownloadUploadRequestEntryIOSInteractor(
+        getIt<UploadRequestEntryRepository>(),
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
+    getIt.registerFactory(() => DownloadMultipleUploadRequestEntryIOSInteractor(
+        getIt<DownloadUploadRequestEntryIOSInteractor>()));
   }
 
   void _provideSharePreference() {
