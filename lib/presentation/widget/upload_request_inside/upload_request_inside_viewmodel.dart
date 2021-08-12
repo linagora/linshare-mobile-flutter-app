@@ -31,23 +31,46 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/file/upload_request_entry_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
+import 'package:dio/dio.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:share/share.dart' as share_library;
 
 class UploadRequestInsideViewModel extends BaseViewModel {
+  final AppNavigation _appNavigation;
   final GetAllUploadRequestsInteractor _getAllUploadRequestsInteractor;
   final GetAllUploadRequestEntriesInteractor _getAllUploadRequestEntriesInteractor;
   late UploadRequestArguments _arguments;
+  final DownloadUploadRequestEntriesInteractor _downloadEntriesInteractor;
+  final DownloadMultipleUploadRequestEntryIOSInteractor _downloadMultipleEntryIOSInteractor;
 
   UploadRequestInsideViewModel(
       Store<AppState> store,
+      this._appNavigation,
       this._getAllUploadRequestsInteractor,
-      this._getAllUploadRequestEntriesInteractor
+      this._getAllUploadRequestEntriesInteractor,
+      this._downloadEntriesInteractor,
+      this._downloadMultipleEntryIOSInteractor,
   ) : super(store);
 
   void initState(UploadRequestArguments arguments) {
@@ -132,4 +155,178 @@ class UploadRequestInsideViewModel extends BaseViewModel {
   void _showLoading() {
     store.dispatch(StartUploadRequestInsideLoadingAction());
   }
+
+  void openActiveCloseContextMenu(BuildContext context, UploadRequestEntry entry, List<Widget> actionTiles,
+      {Widget? footerAction}) {
+    ContextMenuBuilder(context)
+        .addHeader(ContextMenuHeaderBuilder(
+        Key('upload_request_entry_context_menu_header'),
+        UploadRequestEntryPresentationFile.fromUploadRequestEntry(entry))
+        .build())
+        .addTiles(actionTiles)
+        .addFooter(footerAction ?? SizedBox.shrink())
+        .build();
+  }
+
+  UploadRequestInsideState getUploadRequestInsideState() {
+    return store.state.uploadRequestInsideState;
+  }
+
+  // Upload Request Entry actions
+
+  void selectItem(SelectableElement<UploadRequestEntry> selectedEntry) {
+    store.dispatch(UploadRequestSelectEntryAction(selectedEntry));
+  }
+
+  void cancelSelection() {
+    store.dispatch(UploadRequestClearSelectedEntryAction());
+  }
+
+  void toggleSelectAllEntries() {
+    if (getUploadRequestInsideState().isAllEntriesSelected()) {
+      store.dispatch(UploadRequestUnSelectAllEntryAction());
+    } else {
+      store.dispatch(UploadRequestSelectAllEntryAction());
+    }
+  }
+
+  void openMoreActionBottomMenu(
+      BuildContext context,
+      List<UploadRequestEntry> entries,
+      List<Widget> actionTiles,
+      Widget footerAction) {
+    ContextMenuBuilder(context)
+      .addHeader(MoreActionBottomSheetHeaderBuilder(
+      context,
+      Key('more_action_menu_header'),
+      entries.map<PresentationFile>(
+          (element) => UploadRequestEntryPresentationFile.fromUploadRequestEntry(element))
+        .toList())
+      .build())
+      .addTiles(actionTiles)
+      .addFooter(footerAction)
+      .build();
+  }
+
+  // Upload Request Entry actions - Download
+
+  void downloadEntries(List<UploadRequestEntry> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    store.dispatch(_downloadEntriesAction(entries));
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+  }
+
+  void exportFiles(BuildContext context, List<UploadRequestEntry> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+    final cancelToken = CancelToken();
+    _showDownloadingFileDialog(context, entries, cancelToken);
+    store.dispatch(_exportFileAction(entries, cancelToken));
+  }
+
+  OnlineThunkAction _downloadEntriesAction(List<UploadRequestEntry> entries) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final status = await Permission.storage.status;
+      switch (status) {
+        case PermissionStatus.granted:
+          _dispatchHandleDownloadAction(entries);
+          break;
+        case PermissionStatus.permanentlyDenied:
+          _appNavigation.popBack();
+          break;
+        default:
+          {
+            final requested = await Permission.storage.request();
+            switch (requested) {
+              case PermissionStatus.granted:
+                _dispatchHandleDownloadAction(entries);
+                break;
+              default:
+                _appNavigation.popBack();
+                break;
+            }
+          }
+      }
+    });
+  }
+
+  void _dispatchHandleDownloadAction(List<UploadRequestEntry> entries) {
+    store.dispatch(_handleDownloadEntries(entries));
+  }
+
+  OnlineThunkAction _handleDownloadEntries(List<UploadRequestEntry> entries) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadEntriesInteractor.execute(entries).then((result) =>
+        result.fold(
+          (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
+          (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
+    });
+  }
+
+  void _showDownloadingFileDialog(BuildContext context, List<UploadRequestEntry> entries, CancelToken cancelToken) {
+    final downloadMessage = entries.length <= 1
+      ? AppLocalizations.of(context).downloading_file(entries.first.name)
+      : AppLocalizations.of(context).downloading_files(entries.length);
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+        .key(Key('downloading_file_dialog'))
+        .title(AppLocalizations.of(context).preparing_to_export)
+        .content(downloadMessage)
+        .actionText(AppLocalizations.of(context).cancel)
+        .build());
+  }
+
+  OnlineThunkAction _exportFileAction(List<UploadRequestEntry> entries, CancelToken cancelToken) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadMultipleEntryIOSInteractor
+        .execute(entries, cancelToken)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(_exportFileFailureAction(failure)),
+          (success) => store.dispatch(_exportFileSuccessAction(success))));
+    });
+  }
+
+  ThunkAction<AppState> _exportFileSuccessAction(Success success) {
+    return (Store<AppState> store) async {
+      _appNavigation.popBack();
+      if (success is DownloadEntryIOSViewState) {
+        await share_library.Share.shareFiles(
+            [success.filePath]);
+      } else if (success is DownloadEntryIOSAllSuccessViewState) {
+        await share_library.Share.shareFiles(success.resultList
+            .map((result) => ((result.getOrElse(() => IdleState()) as DownloadEntryIOSViewState).filePath))
+            .toList());
+      } else if (success is DownloadEntryIOSHasSomeFilesFailureViewState) {
+        await share_library.Share.shareFiles(success.resultList
+            .map((result) => result.fold(
+                (failure) => '',
+                (success) => ((success as DownloadEntryIOSViewState).filePath)))
+            .toList());
+      }
+    };
+  }
+
+  ThunkAction<AppState> _exportFileFailureAction(Failure failure) {
+    return (Store<AppState> store) async {
+      if (failure is DownloadEntryIOSFailure
+          && !(failure.downloadFileException is CancelDownloadFileException)) {
+        _appNavigation.popBack();
+      }
+      store.dispatch(UploadRequestInsideAction(Left(failure)));
+    };
+  }
+
+  @override
+  void onDisposed() {
+    cancelSelection();
+    super.onDisposed();
+  }
+
 }
