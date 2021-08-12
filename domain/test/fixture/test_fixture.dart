@@ -106,3 +106,5 @@ final sharedSpaceSenderSorter = Sorter(OrderScreen.workGroup, OrderBy.sender, Or
 final sharedSpaceModificationDateSorter = Sorter(OrderScreen.workGroup, OrderBy.modificationDate, OrderType.descending);
 
 final uploadRequestSorter1 = Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.modificationDate, OrderType.descending);
+final String validFilePath1 = './document/valid_file_path/file.png';
+final String validFilePath2 = './document/valid_file_path/file2.png';
