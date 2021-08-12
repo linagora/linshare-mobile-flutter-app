@@ -48,11 +48,16 @@ void getAllUploadRequestEntriesTest() {
     late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
     late UploadRequestEntryDataSourceImpl _uploadRequestEntryDataSourceImpl;
+    late MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
-      _uploadRequestEntryDataSourceImpl = UploadRequestEntryDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
+      _linShareDownloadManager = MockLinShareDownloadManager();
+      _uploadRequestEntryDataSourceImpl = UploadRequestEntryDataSourceImpl(
+          _linShareHttpClient,
+          _remoteExceptionThrower,
+          _linShareDownloadManager);
     });
 
     test('getAllUploadRequestEntries should return success with valid data', () async {

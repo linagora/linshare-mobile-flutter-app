@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/datasource/upload_request_entry_datasource.dart';
+import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
 
 class UploadRequestEntryRepositoryImpl implements UploadRequestEntryRepository {
@@ -41,4 +42,15 @@ class UploadRequestEntryRepositoryImpl implements UploadRequestEntryRepository {
   Future<List<UploadRequestEntry>> getAllUploadRequestEntries(UploadRequestId uploadRequestGroupId) {
     return _uploadRequestEntryDataSource.getAllUploadRequestEntries(uploadRequestGroupId);
   }
+
+  @override
+  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl) {
+    return _uploadRequestEntryDataSource.downloadUploadRequestEntries(uploadRequestEntry, token, baseUrl);
+  }
+
+  @override
+  Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken) {
+    return _uploadRequestEntryDataSource.downloadUploadRequestEntryIOS(uploadRequestEntry, token, baseUrl, cancelToken);
+  }
+
 }
