@@ -358,3 +358,6 @@ export 'src/usecases/search_upload_request_groups/search_upload_request_groups_i
 export 'src/usecases/search_upload_request_groups/search_upload_request_groups_view_state.dart';
 export 'src/usecases/received/received_share_exception.dart';
 export 'src/usecases/received/get_received_share_interactor.dart';
+export 'src/usecases/upload_request_entry/download_upload_request_entry_interactor.dart';
+export 'src/usecases/upload_request_entry/download_upload_request_entry_ios_interactor.dart';
+export 'src/usecases/upload_request_entry/download_multiple_upload_request_entry_ios_interactor.dart';
