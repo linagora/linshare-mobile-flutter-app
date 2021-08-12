@@ -64,6 +64,9 @@ class Endpoint {
   static final ServicePath uploadRequestGroups = ServicePath('/upload_request_groups');
 
   static final ServicePath uploadRequestsRoute = ServicePath('/upload_requests');
+
+  static final ServicePath uploadRequestsEntriesRoute = ServicePath('/upload_request_entries');
+
 }
 
 extension ServicePathExtension on ServicePath {
