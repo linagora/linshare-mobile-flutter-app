@@ -30,8 +30,13 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 abstract class UploadRequestEntryRepository {
   Future<List<UploadRequestEntry>> getAllUploadRequestEntries(UploadRequestId uploadRequestId);
+
+  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl);
+
+  Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
 }

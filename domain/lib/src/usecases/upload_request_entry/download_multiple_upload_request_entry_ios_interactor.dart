@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,62 +28,32 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
-import 'package:http_parser/http_parser.dart';
 
-class UploadRequestEntry with EquatableMixin {
-  final UploadRequestEntryId uploadRequestEntryId;
-  final UploadRequestEntryOwner entryOwner;
-  final GenericUser recipient;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime expirationDate;
-  final String name;
-  final String comment;
-  final String metaData;
-  final bool cmisSync;
-  final int size;
-  final MediaType mediaType;
-  final String sha256sum;
-  final bool copied;
-  final bool ciphered;
+import 'download_upload_request_entry_ios_interactor.dart';
 
-  UploadRequestEntry(
-      this.uploadRequestEntryId,
-      this.entryOwner,
-      this.recipient,
-      this.creationDate,
-      this.modificationDate,
-      this.expirationDate,
-      this.name,
-      this.comment,
-      this.metaData,
-      this.cmisSync,
-      this.size,
-      this.mediaType,
-      this.sha256sum,
-      this.copied,
-      this.ciphered);
+class DownloadMultipleUploadRequestEntryIOSInteractor {
+  final DownloadUploadRequestEntryIOSInteractor _downloadEntryIOSInteractor;
 
-  @override
-  List<Object?> get props => [
-    entryOwner,
-    recipient,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    name,
-    comment,
-    uploadRequestEntryId,
-    metaData,
-    cmisSync,
-    size,
-    mediaType,
-    sha256sum,
-    copied,
-    ciphered,
-  ];
+  DownloadMultipleUploadRequestEntryIOSInteractor(this._downloadEntryIOSInteractor);
 
+  Future<Either<Failure, Success>> execute(List<UploadRequestEntry> entries, CancelToken cancelToken) async {
+    final listResult = await Future.wait(entries.map((element) =>
+        _downloadEntryIOSInteractor.execute(element, cancelToken)));
+    if (listResult.length == 1) {
+      return listResult.first;
+    } else {
+      final failedFileCount = listResult.whereType<Left>().toList().length;
+      if (failedFileCount == 0) {
+        return Right(DownloadEntryIOSAllSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(DownloadEntryIOSAllFailureViewState(listResult));
+      }
+      return Right(DownloadEntryIOSHasSomeFilesFailureViewState(listResult));
+    }
+  }
 }
