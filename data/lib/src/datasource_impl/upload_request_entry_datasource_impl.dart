@@ -30,19 +30,30 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:data/src/datasource/upload_request_entry_datasource.dart';
+import 'package:data/src/network/config/endpoint.dart';
+import 'package:data/src/network/linshare_download_manager.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
+import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:data/src/network/model/response/upload_request_entry_response.dart';
+import 'package:ext_storage/ext_storage.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 
 class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
   final LinShareHttpClient _linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
+  final LinShareDownloadManager _linShareDownloadManager;
 
-  UploadRequestEntryDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
+  UploadRequestEntryDataSourceImpl(
+      this._linShareHttpClient,
+      this._remoteExceptionThrower,
+      this._linShareDownloadManager);
 
   @override
   Future<List<UploadRequestEntry>> getAllUploadRequestEntries(UploadRequestId uploadRequestId) async {
@@ -58,5 +69,45 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
         }
       });
     });
+  }
+
+  @override
+  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> entries, Token token, Uri baseUrl) async {
+    var externalStorageDirPath;
+    if (Platform.isAndroid) {
+      externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+    } else if (Platform.isIOS) {
+      externalStorageDirPath = (await getApplicationDocumentsDirectory()).absolute.path;
+    } else {
+      throw DeviceNotSupportedException();
+    }
+
+    final taskIds = await Future.wait(
+        entries.map((entry) async => await FlutterDownloader.enqueue(
+        url: Endpoint.uploadRequestsEntriesRoute
+            .downloadServicePath(entry.uploadRequestEntryId.uuid)
+            .generateDownloadUrl(baseUrl),
+        savedDir: externalStorageDirPath,
+        fileName: entry.name,
+        headers: {Constant.authorization: 'Bearer ${token.token}'},
+        showNotification: true,
+        openFileFromNotification: true)));
+
+    return taskIds
+        .where((id) => id != null)
+        .map((taskId) => DownloadTaskId(taskId!))
+        .toList();
+  }
+
+  @override
+  Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken) async {
+    return _linShareDownloadManager.downloadFile(
+        Endpoint.uploadRequestsEntriesRoute
+            .downloadServicePath(uploadRequestEntry.uploadRequestEntryId.uuid)
+            .generateDownloadUrl(baseUrl),
+        getTemporaryDirectory(),
+        uploadRequestEntry.name,
+        token,
+        cancelToken: cancelToken);
   }
 }
