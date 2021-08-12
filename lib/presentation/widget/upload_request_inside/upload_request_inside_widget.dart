@@ -88,13 +88,26 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
   }
 
   @override
+  void dispose() {
+    _viewModel.onDisposed();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           _buildTopBar(),
+          _buildMultipleSelectionTopBar(),
           _buildLoadingLayout(),
-          Expanded(child: _buildUploadRequestList())
+          Expanded(child: _buildUploadRequestList()),
+          StoreConnector<AppState, UploadRequestInsideState>(
+              converter: (store) => store.state.uploadRequestInsideState,
+              builder: (context, state) => (state.selectMode == SelectMode.ACTIVE && state.getAllSelectedEntries().isNotEmpty)
+                  ? _buildMultipleSelectionBottomBar(context, state.getAllSelectedEntries())
+                  : SizedBox.shrink()
+          )
         ],
       ),
     );
@@ -175,6 +188,32 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
     );
   }
 
+  Widget _buildMultipleSelectionTopBar() {
+    return StoreConnector<AppState, UploadRequestInsideState>(
+      converter: (store) => store.state.uploadRequestInsideState,
+      builder: (context, state) => state.selectMode == SelectMode.ACTIVE
+        ? ListTile(
+          leading: SvgPicture.asset(imagePath.icSelectAll,
+            width: 28,
+            height: 28,
+            fit: BoxFit.fill,
+            color: state.isAllEntriesSelected() ? AppColor.unselectedElementColor : AppColor.primaryColor),
+          title: Transform(
+            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            child: state.isAllEntriesSelected()
+              ? Text(AppLocalizations.of(context).unselect_all,
+                  maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))
+              : Text(AppLocalizations.of(context).select_all,
+                  maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+          tileColor: AppColor.topBarBackgroundColor,
+          onTap: () => _viewModel.toggleSelectAllEntries(),
+          trailing: TextButton(
+            onPressed: () => _viewModel.cancelSelection(),
+            child: Text(AppLocalizations.of(context).cancel,
+                maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.primaryColor))))
+        : SizedBox.shrink());
+  }
+
   Widget _buildLoadingLayout() {
     return StoreConnector<AppState, dartz.Either<Failure, Success>>(
         converter: (store) => store.state.uploadRequestInsideState.viewState,
@@ -211,7 +250,9 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
 
   Widget _buildLayoutCorrespondingWithState(state, uploadRequestInsideState) {
     if(state is UploadRequestEntryViewState) {
-      return _buildUploadRequestEntriesListView(state.uploadRequestEntries);
+      return _buildUploadRequestEntriesListView(
+          uploadRequestInsideState.uploadRequestEntries,
+          uploadRequestInsideState.selectMode);
     } else if(state is UploadRequestViewState) {
       return _buildUploadRequestListView(state.uploadRequests);
     }
@@ -230,34 +271,44 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
       .build();
   }
 
-  Widget _buildUploadRequestEntriesListView(List<UploadRequestEntry> uploadRequestEntries) {
+  Widget _buildUploadRequestEntriesListView(
+      List<SelectableElement<UploadRequestEntry>> uploadRequestEntries,
+      SelectMode selectMode) {
     if(uploadRequestEntries.isEmpty) {
       return _buildEmptyListIndicator();
     }
     return ListView.builder(
       itemCount: uploadRequestEntries.length,
       itemBuilder: (BuildContext context, int index) {
-        return _buildEntryListItem(context, uploadRequestEntries[index]);
+        return _buildEntryListItem(context, uploadRequestEntries[index], selectMode);
       },
     );
   }
 
-  Widget _buildEntryListItem(BuildContext context, UploadRequestEntry entry) {
+  Widget _buildEntryListItem(
+      BuildContext context,
+      SelectableElement<UploadRequestEntry> entry,
+      SelectMode selectMode) {
     return ListTile(
-      onTap: () {},
+      onTap: () {
+        if (selectMode == SelectMode.ACTIVE) {
+          _viewModel.selectItem(entry);
+        }
+      },
+      onLongPress: () => _viewModel.selectItem(entry),
       leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SvgPicture.asset(entry.mediaType.getFileTypeImagePath(imagePath), width: 20, height: 24, fit: BoxFit.fill)
+        SvgPicture.asset(entry.element.mediaType.getFileTypeImagePath(imagePath), width: 20, height: 24, fit: BoxFit.fill)
       ]),
       title: ResponsiveWidget(
         mediumScreen: Transform(
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            _buildItemTitle(entry.name),
-            Align(alignment: Alignment.centerRight, child: _buildRecipientText(entry.recipient.mail))
+            _buildItemTitle(entry.element.name),
+            Align(alignment: Alignment.centerRight, child: _buildRecipientText(entry.element.recipient.mail))
           ]),
         ),
         smallScreen:
-            Transform(transform: Matrix4.translationValues(-16, 0.0, 0.0), child: _buildItemTitle(entry.name)),
+            Transform(transform: Matrix4.translationValues(-16, 0.0, 0.0), child: _buildItemTitle(entry.element.name)),
         responsiveUtil: _responsiveUtils,
       ),
       subtitle: _responsiveUtils.isSmallScreen(context)
@@ -265,12 +316,17 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
               transform: Matrix4.translationValues(-16, 0.0, 0.0),
               child: Row(
                 children: [
-                  _buildRecipientText(entry.recipient.mail),
+                  _buildRecipientText(entry.element.recipient.mail),
                 ],
               ),
             )
           : null,
-      trailing: IconButton(
+      trailing: selectMode == SelectMode.ACTIVE
+          ? Checkbox(
+            value: entry.selectMode == SelectMode.ACTIVE,
+            onChanged: (bool? value) => _viewModel.selectItem(entry),
+            activeColor: AppColor.primaryColor)
+          : IconButton(
           icon: SvgPicture.asset(
             imagePath.icContextMenu,
             width: 24,
@@ -367,6 +423,96 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
       Text(status.displayValue(context),
           style: TextStyle(fontSize: 13, color: AppColor.uploadRequestHintTextColor))
     ]);
+  }
+
+  Widget _buildMultipleSelectionBottomBar(BuildContext context, List<UploadRequestEntry> allSelectedEntries) {
+    return MultipleSelectionBarBuilder()
+      .key(Key('multiple_upload_request_entry_selection_bar'))
+      .text(AppLocalizations.of(context).items(allSelectedEntries.length))
+      .actions(_multipleSelectionActions(context, allSelectedEntries))
+      .build();
+  }
+
+  List<Widget> _multipleSelectionActions(BuildContext context, List<UploadRequestEntry> allSelectedEntries) {
+    return [
+      _downloadFileMultipleSelection(allSelectedEntries),
+      _moreActionMultipleSelection(context, allSelectedEntries)
+    ];
+  }
+
+  Widget _downloadFileMultipleSelection(List<UploadRequestEntry> uploadRequestEntries) {
+    return UploadRequestEntryMultipleSelectionActionBuilder(
+        Key('multiple_selection_download_action'),
+        SvgPicture.asset(
+          Platform.isAndroid
+              ? imagePath.icFileDownload
+              : imagePath.icExportFile,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+        ),
+        uploadRequestEntries).onActionClick((entries) => Platform.isAndroid
+            ? _viewModel.downloadEntries(
+                entries,
+                itemSelectionType: ItemSelectionType.multiple)
+            : _viewModel.exportFiles(
+                context,
+                entries,
+                itemSelectionType: ItemSelectionType.multiple))
+        .build();
+  }
+
+  Widget _moreActionMultipleSelection(BuildContext context, List<UploadRequestEntry> entries) {
+    return UploadRequestEntryMultipleSelectionActionBuilder(
+        Key('multiple_selection_more_action'),
+        SvgPicture.asset(
+          imagePath.icMoreVertical,
+          width: 24,
+          height: 24,
+          fit: BoxFit.fill,
+        ),
+        entries).onActionClick((entries) => _viewModel.openMoreActionBottomMenu(
+            context,
+            entries,
+            _moreActionList(context, entries),
+            SizedBox.shrink()))
+        .build();
+  }
+
+  List<Widget> _moreActionList(BuildContext context, List<UploadRequestEntry> entries) {
+    return [
+      if (Platform.isIOS) _exportFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
+      if (Platform.isAndroid) _downloadFilesAction(entries, itemSelectionType: ItemSelectionType.multiple),
+    ];
+  }
+
+  List<Widget> _contextMenuActiveCloseActionTiles(BuildContext context, UploadRequestEntry entry) {
+    return [
+      if (Platform.isIOS) _exportFileAction([entry]),
+      if (Platform.isAndroid) _downloadFilesAction([entry])
+    ];
+  }
+
+  Widget _exportFileAction(List<UploadRequestEntry> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return UploadRequestEntryContextMenuTileBuilder(
+      Key('export_file_context_menu_action'),
+      SvgPicture.asset(imagePath.icExportFile, width: 24, height: 24, fit: BoxFit.fill),
+      AppLocalizations.of(context).export_file,
+      entries.first)
+      .onActionClick((data) => _viewModel.exportFiles(context, entries, itemSelectionType: itemSelectionType))
+      .build();
+  }
+
+  Widget _downloadFilesAction(List<UploadRequestEntry> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return UploadRequestEntryContextMenuTileBuilder(
+      Key('download_file_context_menu_action'),
+      SvgPicture.asset(imagePath.icFileDownload, width: 24, height: 24, fit: BoxFit.fill),
+      AppLocalizations.of(context).download_to_device,
+      entries.first)
+      .onActionClick((data) => _viewModel.downloadEntries(entries, itemSelectionType: itemSelectionType))
+      .build();
   }
 
 }
