@@ -65,3 +65,30 @@ class AddNewUploadRequestFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class AddRecipientsToUploadRequestGroupViewState extends ViewState {
+  final UploadRequestGroup uploadRequestGroup;
+
+  AddRecipientsToUploadRequestGroupViewState(this.uploadRequestGroup);
+
+  @override
+  List<Object?> get props => [uploadRequestGroup];
+}
+
+class AddRecipientsToUploadRequestGroupFailure extends FeatureFailure {
+  final exception;
+
+  AddRecipientsToUploadRequestGroupFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class UploadRequestGroupContextMenuItemViewState extends ViewState {
+  final UploadRequestGroup uploadRequestGroup;
+
+  UploadRequestGroupContextMenuItemViewState(this.uploadRequestGroup);
+
+  @override
+  List<Object> get props => [uploadRequestGroup];
+}
