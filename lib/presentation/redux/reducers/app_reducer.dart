@@ -60,6 +60,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 
+import 'add_recipients_upload_request_group_reducer.dart';
 import 'document_details_reducer.dart';
 
 AppState appStateReducer(AppState state, action) {
@@ -90,7 +91,8 @@ AppState appStateReducer(AppState state, action) {
         sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action),
         uploadRequestGroupState: uploadRequestGroupReducer(state.uploadRequestGroupState, action),
         uploadRequestInsideState: uploadRequestInsideReducer(state.uploadRequestInsideState, action),
-        receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action));
+        receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action),
+        addRecipientsUploadRequestGroupState: addRecipientUploadRequestGroupReducer(state.addRecipientsUploadRequestGroupState, action));
   }
 
   return AppState(
@@ -121,7 +123,8 @@ AppState appStateReducer(AppState state, action) {
       sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState,
       uploadRequestGroupState: state.uploadRequestGroupState,
       uploadRequestInsideState: state.uploadRequestInsideState,
-      receivedShareDetailsState: state.receivedShareDetailsState);
+      receivedShareDetailsState: state.receivedShareDetailsState,
+      addRecipientsUploadRequestGroupState: state.addRecipientsUploadRequestGroupState);
 }
 
 bool canExecuteAction(AppState state, action) {

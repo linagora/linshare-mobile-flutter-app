@@ -56,6 +56,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 
+import 'add_recipients_upload_request_group_state.dart';
 import 'destination_picker_state.dart';
 
 class AppState with EquatableMixin {
@@ -85,6 +86,7 @@ class AppState with EquatableMixin {
   final UploadRequestGroupState uploadRequestGroupState;
   final UploadRequestInsideState uploadRequestInsideState;
   final ReceivedShareDetailsState receivedShareDetailsState;
+  final AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState;
 
   AppState(
       {required this.uiState,
@@ -112,7 +114,8 @@ class AppState with EquatableMixin {
       required this.sharedSpaceNodeVersionsState,
       required this.uploadRequestGroupState,
       required this.uploadRequestInsideState,
-      required this.receivedShareDetailsState});
+      required this.receivedShareDetailsState,
+      required this.addRecipientsUploadRequestGroupState});
 
   factory AppState.initial() {
     return AppState(
@@ -141,7 +144,8 @@ class AppState with EquatableMixin {
         sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
         uploadRequestGroupState: UploadRequestGroupState.initial(),
         uploadRequestInsideState: UploadRequestInsideState.initial(),
-        receivedShareDetailsState: ReceivedShareDetailsState.initial()
+        receivedShareDetailsState: ReceivedShareDetailsState.initial(),
+        addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial()
     );
   }
 
@@ -171,6 +175,7 @@ class AppState with EquatableMixin {
         sharedSpaceNodeVersionsState,
         uploadRequestGroupState,
         uploadRequestInsideState,
-        receivedShareDetailsState
+        receivedShareDetailsState,
+        addRecipientsUploadRequestGroupState
       ];
 }
