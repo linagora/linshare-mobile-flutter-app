@@ -34,12 +34,14 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:testshared/fixture/my_space_fixture.dart';
 
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
 import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
   getAllUploadRequestGroupsTest();
+  addRecipientsTest();
 }
 
 void getAllUploadRequestGroupsTest() {
@@ -114,3 +116,59 @@ void getAllUploadRequestGroupsTest() {
 
   });
 }
+
+
+void addRecipientsTest() {
+  group('upload_request_group_datasource_impl addRecipients test', () {
+    late MockLinShareHttpClient _linShareHttpClient;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+    late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
+
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _uploadRequestGroupDataSourceImpl =
+          UploadRequestGroupDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
+    });
+
+    test('addRecipients should return success with valid data', () async {
+      when(_linShareHttpClient.addRecipientsToUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]))
+          .thenAnswer((_) async => uploadRequestGroupResponse1);
+
+      final result = await _uploadRequestGroupDataSourceImpl
+          .addRecipients(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]);
+      expect(result, uploadRequestGroupResponse1.toUploadRequestGroup());
+    });
+
+    test('addRecipients should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
+      final error = DioError(
+          type: DioErrorType.response,
+          response: Response(statusCode: 400, requestOptions: RequestOptions(path: '')),
+          requestOptions: RequestOptions(path: ''));
+
+      when(_linShareHttpClient.addRecipientsToUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]))
+          .thenThrow(error);
+
+      await _uploadRequestGroupDataSourceImpl
+          .addRecipients(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]).catchError((error) {
+        expect(error, isA<MissingRequiredFields>());
+      });
+    });
+
+    test('addRecipients should throw exception when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')),
+          requestOptions: RequestOptions(path: ''));
+
+      when(_linShareHttpClient.addRecipientsToUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]))
+          .thenThrow(error);
+
+      await _uploadRequestGroupDataSourceImpl
+          .addRecipients(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]).catchError((error) {
+        expect(error, isA<ServerNotFound>());
+      });
+    });
+  });
+}
+
