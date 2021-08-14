@@ -30,12 +30,20 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class UploadRequestGroupRepository {
-  Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status);
+class AddRecipientsToUploadRequestGroupInteractor {
+  final UploadRequestGroupRepository _uploadRequestGroupRepository;
 
-  Future<UploadRequestGroup> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest);
+  AddRecipientsToUploadRequestGroupInteractor(this._uploadRequestGroupRepository);
 
-  Future<UploadRequestGroup> addRecipients(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients);
+  Future<Either<Failure, Success>> execute(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients) async {
+    try {
+      final uploadRequestGroup = await _uploadRequestGroupRepository.addRecipients(uploadRequestGroupId, recipients);
+      return Right<Failure, Success>(AddRecipientsToUploadRequestGroupViewState(uploadRequestGroup));
+    } catch (exception) {
+      return Left<Failure, Success>(AddRecipientsToUploadRequestGroupFailure(exception));
+    }
+  }
 }
