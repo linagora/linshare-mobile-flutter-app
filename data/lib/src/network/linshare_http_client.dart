@@ -584,4 +584,14 @@ class LinShareHttpClient {
 
     return ReceivedShareDto.fromJson(receivedShareJson);
   }
+
+  Future<UploadRequestGroupResponse> addRecipientsToUploadRequestGroup(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients) async {
+    final resultJson = await _dioClient.post(
+        Endpoint.uploadRequestGroups
+            .withPathParameter(uploadRequestGroupId.uuid)
+            .withPathParameter(Endpoint.recipents)
+            .generateEndpointPath(),
+        data: recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName).toJson()).toList().toString());
+    return UploadRequestGroupResponse.fromJson(resultJson);
+  }
 }

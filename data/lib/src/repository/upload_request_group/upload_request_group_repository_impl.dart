@@ -47,4 +47,9 @@ class UploadRequestGroupRepositoryImpl implements UploadRequestGroupRepository {
   Future<UploadRequestGroup> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest) {
     return _uploadRequestGroupDataSource.addNewUploadRequest(creationType, addUploadRequest);
   }
+
+  @override
+  Future<UploadRequestGroup> addRecipients(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients) {
+    return _uploadRequestGroupDataSource.addRecipients(uploadRequestGroupId, recipients);
+  }
 }
