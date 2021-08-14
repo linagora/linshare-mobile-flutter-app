@@ -75,4 +75,20 @@ class UploadRequestGroupDataSourceImpl implements UploadRequestGroupDataSource {
       });
     });
   }
+
+  @override
+  Future<UploadRequestGroup> addRecipients(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients) {
+    return Future.sync(() async {
+      final uploadRequestGroupResponse = await _linShareHttpClient.addRecipientsToUploadRequestGroup(uploadRequestGroupId, recipients);
+      return uploadRequestGroupResponse.toUploadRequestGroup();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestGroupsNotFound();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
 }
