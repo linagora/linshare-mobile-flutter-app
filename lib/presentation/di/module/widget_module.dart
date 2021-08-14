@@ -89,6 +89,8 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/add_recipient_upload_request_group/add_recipients_upload_request_group_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/add_recipient_upload_request_group/add_recipients_upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
@@ -123,6 +125,7 @@ class WidgetModule {
     _provideUploadRequestInsideComponent();
     _provideHomeAppBarComponent();
     _provideReceivedShareDetailsComponent();
+    _provideAddRecipientsUploadRequestGroupComponent();
   }
 
   void _provideLoginComponent() {
@@ -471,5 +474,17 @@ class WidgetModule {
         getIt.get<AppNavigation>(),
         getIt.get<GetReceivedShareInteractor>(),
       ));
+  }
+
+  void _provideAddRecipientsUploadRequestGroupComponent() {
+    getIt.registerFactory(() => AddRecipientsUploadRequestGroupWidget());
+    getIt.registerFactory(() => AddRecipientsUploadRequestGroupViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAutoCompleteSharingInteractor>(),
+        getIt.get<GetAutoCompleteSharingWithDeviceContactInteractor>(),
+        getIt.get<AddRecipientsToUploadRequestGroupInteractor>(),
+        getIt.get<GetAllUploadRequestsInteractor>()
+    ));
   }
 }

@@ -51,6 +51,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/add_recipient_upload_request_group/add_recipients_upload_request_group_widget.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -88,6 +89,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<UploadRequestCreationWidget>(), settings: settings);
     case RoutePaths.receivedShareDetails:
       return MaterialPageRoute(builder: (context) => getIt<ReceivedShareDetailsWidget>(), settings: settings);
+    case RoutePaths.addRecipientsUploadRequestGroup:
+      return MaterialPageRoute(builder: (context) => getIt<AddRecipientsUploadRequestGroupWidget>(), settings: settings);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

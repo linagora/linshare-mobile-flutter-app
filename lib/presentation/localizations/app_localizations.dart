@@ -1524,8 +1524,8 @@ class AppLocalizations {
   String existing_members(int nbMembers) {
     return Intl.message(
       '''${Intl.plural(nbMembers,
-          one: 'Existing member: ${nbMembers}',
-          other: 'Existing members: ${nbMembers}')}''',
+          one: 'Existing member: $nbMembers',
+          other: 'Existing members: $nbMembers')}''',
       name: 'existing_members',
       args: [nbMembers],
     );
@@ -1656,7 +1656,7 @@ class AppLocalizations {
 
   String version(int version) {
     return Intl.message(
-      'Version ${version}',
+      'Version $version',
       name: 'version',
       args: [version],
     );
@@ -2060,6 +2060,22 @@ class AppLocalizations {
     );
   }
 
+  String get add {
+    return Intl.message('Add',
+        name: 'add');
+  }
+
+  String get confirm_add_recipients_title {
+    return Intl.message('You are about to add a recipient to this upload request ! Beware, this action cannot be undone',
+        name: 'confirm_add_recipients_title');
+  }
+
+  String get recipients_have_been_successfully_added {
+    return Intl.message(
+      'Recipients have been successfully added',
+      name: 'recipients_have_been_successfully_added'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

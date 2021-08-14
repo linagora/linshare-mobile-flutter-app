@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-08-16T11:14:04.557903",
+  "@@last_modified": "2021-08-20T14:29:52.783953",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -2134,6 +2134,24 @@
   },
   "total_file_size_error": "Total size of files must be set and smaller than 100 GB",
   "@total_file_size_error": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add": "Add",
+  "@add": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_add_recipients_title": "You are about to add a recipient to this upload request ! Beware, this action cannot be undone",
+  "@confirm_add_recipients_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipients_have_been_successfully_added": "Recipients have been successfully added",
+  "@recipients_have_been_successfully_added": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

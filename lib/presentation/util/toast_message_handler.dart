@@ -38,6 +38,7 @@ import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/add_recipients_upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
@@ -47,6 +48,8 @@ import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_act
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
@@ -57,6 +60,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_docu
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:redux/redux.dart';
 
@@ -76,6 +80,7 @@ class ToastMessageHandler {
       _handleReceivedShareToastMessage(context, event.receivedShareState);
       _handleDeleteSharedSpaceMembersToastMessage(context, event.deleteSharedSpaceMembersState);
       _handleSharedSpaceNodeVersionsToastMessage(context, event.sharedSpaceNodeVersionsState);
+      _handleAddRecipientUploadRequestGroupToastMessage(context, event.addRecipientsUploadRequestGroupState);
     });
   }
 
@@ -343,6 +348,21 @@ class ToastMessageHandler {
           _cleanSharedSpaceNodeVersionsViewState();
         }},
       (success) => {});
+  }
+
+  void _handleAddRecipientUploadRequestGroupToastMessage(BuildContext context, AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState) {
+    addRecipientsUploadRequestGroupState.viewState.fold(
+      (failure) {},
+      (success) => {
+        if (success is AddRecipientsToUploadRequestGroupViewState) {
+          appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added),
+          _cleanAddRecipientUploadRequestGroupViewState()
+        }
+      });
+  }
+
+  void _cleanAddRecipientUploadRequestGroupViewState() {
+    _store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
   }
 
   void _cleanMySpaceViewState() {
