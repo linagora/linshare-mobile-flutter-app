@@ -39,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart'
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/app_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
@@ -171,6 +172,7 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
     uploadRequestGroupState: UploadRequestGroupState.initial(),
     uploadRequestInsideState: UploadRequestInsideState.initial(),
-    receivedShareDetailsState: ReceivedShareDetailsState.initial()
+    receivedShareDetailsState: ReceivedShareDetailsState.initial(),
+    addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial()
   );
 }

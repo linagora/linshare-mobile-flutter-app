@@ -380,6 +380,7 @@ class AppModule {
         getIt<CredentialRepository>()));
     getIt.registerFactory(() => DownloadMultipleUploadRequestEntryIOSInteractor(
         getIt<DownloadUploadRequestEntryIOSInteractor>()));
+    getIt.registerFactory(() => AddRecipientsToUploadRequestGroupInteractor(getIt<UploadRequestGroupRepository>()));
   }
 
   void _provideSharePreference() {
