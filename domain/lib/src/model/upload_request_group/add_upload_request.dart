@@ -41,8 +41,9 @@ class AddUploadRequest extends Equatable {
   final DateTime expiryDate;
   final int maxFileCount;
   final int maxFileSize;
+
   // Advance settings
-  final DateTime? notificationDate;
+  final DateTime notificationDate;
   final int maxDepositSize;
   final bool canDelete;
   final bool canClose;
