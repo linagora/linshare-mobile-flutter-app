@@ -31,7 +31,8 @@
 
 import 'dart:convert';
 
-import 'package:data/src/local/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -40,6 +41,7 @@ part 'add_upload_body_request.g.dart';
 
 @JsonSerializable()
 @DatetimeConverter()
+@DatetimeNullableConverter()
 class AddUploadBodyRequest with EquatableMixin {
 
   // Simple settings
@@ -50,8 +52,9 @@ class AddUploadBodyRequest with EquatableMixin {
   final DateTime expiryDate;
   final int maxFileCount;
   final int maxFileSize;
+
   // Advance settings
-  final DateTime? notificationDate;
+  final DateTime notificationDate;
   final int maxDepositSize;
   final bool canDelete;
   final bool canClose;
@@ -83,8 +86,8 @@ class AddUploadBodyRequest with EquatableMixin {
         jsonEncode('contactList'): instance.contactList.map((e) => jsonEncode(e)).toList(),
         jsonEncode('label'): jsonEncode(instance.label),
         jsonEncode('body'): jsonEncode(instance.body),
-        jsonEncode('activationDate'): const DatetimeConverter().toJson(instance.activationDate),
-        jsonEncode('expiryDate'): jsonEncode(instance.expiryDate.toIso8601String()),
+        jsonEncode('activationDate'): const DatetimeNullableConverter().toJson(instance.activationDate),
+        jsonEncode('expiryDate'): const DatetimeConverter().toJson(instance.expiryDate),
         jsonEncode('maxFileCount'): jsonEncode(instance.maxFileCount),
         jsonEncode('maxFileSize'): jsonEncode(instance.maxFileSize),
         jsonEncode('notificationDate'): const DatetimeConverter().toJson(instance.notificationDate),
