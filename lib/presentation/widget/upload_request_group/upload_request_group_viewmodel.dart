@@ -130,11 +130,11 @@ class UploadRequestGroupViewModel extends BaseViewModel {
     };
   }
 
-  void addNewUploadRequest(UploadRequestCreationType type) {
+  void addNewUploadRequest(UploadRequestCreationType type, List<Functionality?> uploadRequestFunctionalities) {
     _appNavigation.popBack();
     _appNavigation.push(
       RoutePaths.createUploadRequest,
-      arguments: UploadRequestCreationArguments(type),
+      arguments: UploadRequestCreationArguments(type, uploadRequestFunctionalities),
     );
   }
 
