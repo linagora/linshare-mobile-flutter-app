@@ -36,7 +36,9 @@ import 'package:equatable/equatable.dart';
 
 class FunctionalityTime extends Functionality implements EquatableMixin {
   final int value;
+  final int maxValue;
   final String unit;
+  final String maxUnit;
   final List<String> units;
 
   FunctionalityTime(
@@ -45,9 +47,11 @@ class FunctionalityTime extends Functionality implements EquatableMixin {
       bool canOverride,
       this.value,
       this.unit,
-      this.units)
+      this.units,
+      this.maxValue,
+      this.maxUnit)
       : super(identifier, enable, canOverride);
 
   @override
-  List<Object> get props => [...super.props, value, unit, units];
+  List<Object> get props => [...super.props, value, unit, units, maxValue, maxUnit];
 }
