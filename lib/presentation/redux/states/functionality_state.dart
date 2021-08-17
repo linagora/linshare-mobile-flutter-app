@@ -81,4 +81,13 @@ extension FunctionalityStateExtension on FunctionalityState {
     }
     return true;
   }
+
+  List<Functionality?> getAllEnabledUploadRequest() {
+    return functionalityList
+        .where((element) =>
+            element != null &&
+            element.enable &&
+            element.identifier.name.contains(FunctionalityIdentifier.UPLOAD_REQUEST.name))
+        .toList();
+  }
 }

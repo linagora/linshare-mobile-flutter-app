@@ -37,10 +37,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_horizontal_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
@@ -60,7 +60,6 @@ class UploadRequestGroupWidget extends StatefulWidget {
 class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
   final _model = getIt<UploadRequestGroupViewModel>();
   final imagePath = getIt<AppImagePaths>();
-  final _responsiveUtils = getIt<ResponsiveUtils>();
 
   @override
   void initState() {
@@ -130,15 +129,18 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
               SearchBottomBarBuilder().key(Key('search_bottom_bar')).onSearchActionClick(() {
             _model.openSearchState();
           }).build(),
-          floatingActionButton: FloatingActionButton(
-            key: Key('upload_request_add_button'),
-            onPressed: () => _model.openUploadRequestAddMenu(
-                context, _addNewUploadRequestMenuActionTiles(context)),
-            backgroundColor: AppColor.primaryColor,
-            child: SvgPicture.asset(
-              imagePath.icPlus,
-              width: 24,
-              height: 24,
+          floatingActionButton: StoreConnector<AppState, FunctionalityState>(
+            converter: (Store<AppState> store) => store.state.functionalityState,
+            builder: (context, state) => FloatingActionButton(
+              key: Key('upload_request_add_button'),
+              onPressed: () => _model.openUploadRequestAddMenu(
+                context, _addNewUploadRequestMenuActionTiles(context, state)),
+              backgroundColor: AppColor.primaryColor,
+              child: SvgPicture.asset(
+                imagePath.icPlus,
+                width: 24,
+                height: 24,
+              ),
             ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -311,31 +313,31 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
     ]);
   }
 
-  List<Widget> _addNewUploadRequestMenuActionTiles(BuildContext context) {
-    return [_addCollectiveAction(context), _addIndividualAction(context)];
+  List<Widget> _addNewUploadRequestMenuActionTiles(BuildContext context, FunctionalityState state) {
+    final uploadRequestFunctionality = state.getAllEnabledUploadRequest();
+    return [
+      _addCollectiveAction(context, uploadRequestFunctionality),
+      _addIndividualAction(context, uploadRequestFunctionality)
+    ];
   }
 
-  Widget _addCollectiveAction(BuildContext context) => SimpleHorizontalContextMenuActionBuilder(
-          Key('add_collective_ur_context_menu_action'),
-          SvgPicture.asset(imagePath.icUploadRequestCollective,
-              width: 24,
-              height: 24,
-              fit: BoxFit.fill,
-              color: AppColor.uploadRequestAddNewIconColor),
-          AppLocalizations.of(context).collective_upload)
-      .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.COLLECTIVE))
-      .build();
+  Widget _addCollectiveAction(BuildContext context, List<Functionality?> uploadRequestFunctionalities) =>
+    SimpleHorizontalContextMenuActionBuilder(
+      Key('add_collective_ur_context_menu_action'),
+      SvgPicture.asset(imagePath.icUploadRequestCollective,
+        width: 24, height: 24, fit: BoxFit.fill, color: AppColor.uploadRequestAddNewIconColor),
+      AppLocalizations.of(context).collective_upload)
+    .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.COLLECTIVE, uploadRequestFunctionalities))
+    .build();
 
-  Widget _addIndividualAction(BuildContext context) => SimpleHorizontalContextMenuActionBuilder(
-          Key('add_individual_ur_context_menu_action'),
-          SvgPicture.asset(imagePath.icUploadRequestIndividual,
-              width: 24,
-              height: 24,
-              fit: BoxFit.fill,
-              color: AppColor.uploadRequestAddNewIconColor),
-          AppLocalizations.of(context).individual_upload)
-      .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL))
-      .build();
+  Widget _addIndividualAction(BuildContext context, List<Functionality?> uploadRequestFunctionalities) =>
+    SimpleHorizontalContextMenuActionBuilder(
+      Key('add_individual_ur_context_menu_action'),
+      SvgPicture.asset(imagePath.icUploadRequestIndividual,
+        width: 24, height: 24, fit: BoxFit.fill, color: AppColor.uploadRequestAddNewIconColor),
+      AppLocalizations.of(context).individual_upload)
+    .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, uploadRequestFunctionalities))
+    .build();
 
   Widget _buildMenuSorterPending() {
     return StoreConnector<AppState, AppState>(

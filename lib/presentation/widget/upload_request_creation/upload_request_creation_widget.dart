@@ -39,23 +39,18 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
+import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
+import 'package:linshare_flutter_app/presentation/model/unit_time_type.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
-import 'package:linshare_flutter_app/presentation/util/constant.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/styles.dart';
+import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
-
-class DateTimeTextValueNotifier extends ValueNotifier<dartz.Tuple2<DateTime, String>?> {
-  DateTimeTextValueNotifier() : super(null);
-}
-
-class FileSizeValueNotifier extends ValueNotifier<FileSizeType> {
-  FileSizeValueNotifier() : super(FileSizeType.GB);
-}
+import 'package:linshare_flutter_app/presentation/util/extensions/string_extensions.dart';
 
 class UploadRequestCreationWidget extends StatefulWidget {
   const UploadRequestCreationWidget({Key? key}) : super(key: key);
@@ -71,55 +66,208 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
   final _appToast = getIt<AppToast>();
 
   UploadRequestCreationArguments? _arguments;
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController _typeAheadController = TextEditingController();
   final TextEditingController _emailSubjectController = TextEditingController();
   final TextEditingController _emailMessageController = TextEditingController();
   final TextEditingController _maxNumberFilesController = TextEditingController();
   final TextEditingController _maxFileSizeController = TextEditingController();
+  final TextEditingController _totalFileSizeController = TextEditingController();
+
   final DateTimeTextValueNotifier _textActivationNotifier = DateTimeTextValueNotifier();
   final DateTimeTextValueNotifier _textExpirationNotifier = DateTimeTextValueNotifier();
+  final ValueNotifier<bool> _advanceVisibilityNotifier = ValueNotifier<bool>(false);
+  final DateTimeTextValueNotifier _textReminderNotifier = DateTimeTextValueNotifier();
   final FileSizeValueNotifier _maxFileSizeTypeNotifier = FileSizeValueNotifier();
+  final FileSizeValueNotifier _totalFileSizeTypeNotifier = FileSizeValueNotifier();
+  final NotificationLanguageValueNotifier _notificationLanguageNotifier = NotificationLanguageValueNotifier();
+  final ValueNotifier<bool> _passwordProtectNotifier = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _allowDeletionNotifier = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _allowClosureNotifier = ValueNotifier<bool>(true);
+
+  late DateTime _creationDateRoundUp;
   late DateTime _initActivationDateRoundUp;
   late DateTime _initExpirationDateRoundUp;
-  final _formKey = GlobalKey<FormState>();
+  late DateTime _initReminderDateRoundUp;
+
+  late DateTime _maxActivationDateRoundUp;
+  late DateTime _maxExpirationDateRoundUp;
+  late DateTime _minReminderDateRoundUp;
+
+  FunctionalityTime? activationSetting;
+  FunctionalityTime? expirationSetting;
+  FunctionalityTime? notificationSetting;
+  FunctionalitySize? totalFileSize;
+  FunctionalityInteger? maxFileCount;
+  FunctionalitySize? maxFileSize;
+  FunctionalityBoolean? canClose;
+  FunctionalityBoolean? canDelete;
+  FunctionalityBoolean? protectPassword;
+  FunctionalitySimple? enableReminderNotification;
+  FunctionalityLanguage? notificationLanguage;
+
+  void _initialize() {
+    _getFunctionalityData();
+
+    _getRoundUpDate();
+    _getActivationDate(isInitialize: true);
+    _getExpirationDate();
+    _getReminderDate();
+
+    _initDefaultData();
+  }
+
+  void _getFunctionalityData() {
+    final listFunctionalities = _arguments?.uploadRequestFunctionalities ?? [];
+    activationSetting = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_ACTIVATION)) as FunctionalityTime?;
+    expirationSetting = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_EXPIRATION)) as FunctionalityTime?;
+    notificationSetting = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_NOTIFICATION)) as FunctionalityTime?;
+    totalFileSize = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_DEPOSIT_SIZE)) as FunctionalitySize?;
+    maxFileCount = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_FILE_COUNT)) as FunctionalityInteger?;
+    maxFileSize = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_FILE_SIZE)) as FunctionalitySize?;
+    canClose = listFunctionalities.firstWhere(
+        (element) => (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__CAN_CLOSE)) as FunctionalityBoolean?;
+    canDelete = listFunctionalities.firstWhere(
+        (element) => (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__CAN_DELETE)) as FunctionalityBoolean?;
+    protectPassword = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__PROTECTED_BY_PASSWORD)) as FunctionalityBoolean?;
+    enableReminderNotification = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__REMINDER_NOTIFICATION)) as FunctionalitySimple?;
+    notificationLanguage = listFunctionalities.firstWhere((element) =>
+        (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__NOTIFICATION_LANGUAGE)) as FunctionalityLanguage?;
+  }
+
+  void _getRoundUpDate() {
+    _creationDateRoundUp = DateTime.now().roundUpHour(1);
+  }
+
+  void _getActivationDate({required bool isInitialize}) {
+    switch(activationSetting?.unit.toUnitTimeType()) {
+      case UnitTimeType.DAY:
+        _initActivationDateRoundUp = _creationDateRoundUp.add(Duration(days: activationSetting!.value));
+        _maxActivationDateRoundUp = _creationDateRoundUp.add(Duration(days: activationSetting!.maxValue));
+        break;
+      case UnitTimeType.WEEK:
+        _initActivationDateRoundUp = _creationDateRoundUp.add(Duration(days: activationSetting!.value * 7));
+        _maxActivationDateRoundUp = _creationDateRoundUp.add(Duration(days: activationSetting!.maxValue * 7));
+        break;
+      case UnitTimeType.MONTH:
+        _initActivationDateRoundUp = _creationDateRoundUp.copyWith(month: _creationDateRoundUp.month + activationSetting!.value);
+        _maxActivationDateRoundUp = _creationDateRoundUp.copyWith(month: _creationDateRoundUp.month + activationSetting!.maxValue);
+        break;
+      case null:
+        _initActivationDateRoundUp = _creationDateRoundUp;
+        _maxActivationDateRoundUp = _creationDateRoundUp;
+        break;
+    }
+    if(isInitialize) {
+      _textActivationNotifier.value = dartz.Tuple2(_initActivationDateRoundUp, _initActivationDateRoundUp.getYMMMMdFormatWithJm());
+    }
+  }
+
+  void _getExpirationDate() {
+    switch(expirationSetting?.unit.toUnitTimeType()) {
+      case UnitTimeType.DAY:
+        _initExpirationDateRoundUp = _textActivationNotifier.value!.value1.add(Duration(days: expirationSetting!.value));
+        _maxExpirationDateRoundUp = _creationDateRoundUp.add(Duration(days: expirationSetting!.maxValue));
+        break;
+      case UnitTimeType.WEEK:
+        _initExpirationDateRoundUp = _textActivationNotifier.value!.value1.add(Duration(days: expirationSetting!.value * 7));
+        _maxExpirationDateRoundUp = _creationDateRoundUp.add(Duration(days: expirationSetting!.maxValue * 7));
+        break;
+      case UnitTimeType.MONTH:
+        _initExpirationDateRoundUp = _textActivationNotifier.value!.value1.copyWith(month: _textActivationNotifier.value!.value1.month + expirationSetting!.value);
+        _maxExpirationDateRoundUp = _creationDateRoundUp.copyWith(month: _creationDateRoundUp.month + expirationSetting!.maxValue);
+        break;
+      case null:
+        _initExpirationDateRoundUp = _textActivationNotifier.value!.value1;
+        _maxExpirationDateRoundUp = _creationDateRoundUp;
+        break;
+    }
+    _textExpirationNotifier.value = dartz.Tuple2(_initExpirationDateRoundUp, _initExpirationDateRoundUp.getYMMMMdFormatWithJm());
+  }
+
+  void _getReminderDate() {
+    switch(notificationSetting?.unit.toUnitTimeType()) {
+      case UnitTimeType.DAY:
+        _initReminderDateRoundUp = _textExpirationNotifier.value!.value1.subtract(Duration(days: notificationSetting!.value));
+        _minReminderDateRoundUp = _textExpirationNotifier.value!.value1.subtract(Duration(days: notificationSetting!.maxValue));
+        break;
+      case UnitTimeType.WEEK:
+        _initReminderDateRoundUp = _textExpirationNotifier.value!.value1.subtract(Duration(days: notificationSetting!.value * 7));
+        _minReminderDateRoundUp = _textExpirationNotifier.value!.value1.subtract(Duration(days: notificationSetting!.maxValue * 7));
+        break;
+      case UnitTimeType.MONTH:
+        _initReminderDateRoundUp = _textExpirationNotifier.value!.value1.copyWith(month: _textExpirationNotifier.value!.value1.month - notificationSetting!.value);
+        _minReminderDateRoundUp = _textExpirationNotifier.value!.value1.copyWith(month: _textExpirationNotifier.value!.value1.month - notificationSetting!.maxValue);
+        break;
+      case null:
+        _initReminderDateRoundUp = _textExpirationNotifier.value!.value1;
+        _minReminderDateRoundUp = _textExpirationNotifier.value!.value1;
+        break;
+    }
+    _textReminderNotifier.value = dartz.Tuple2(_initReminderDateRoundUp, _initReminderDateRoundUp.getYMMMMdFormatWithJm());
+  }
+
+  void _initDefaultData() {
+    _maxFileSizeTypeNotifier.value = maxFileSize?.unit.toFileSizeType() ?? FileSizeType.GB;
+    _totalFileSizeTypeNotifier.value = totalFileSize?.unit.toFileSizeType() ?? FileSizeType.GB;
+    _notificationLanguageNotifier.value = notificationLanguage?.value.toNotificationLanguage() ?? NotificationLanguage.FRENCH;
+
+    _maxNumberFilesController.text = maxFileCount?.value.toString() ?? '0';
+    _maxFileSizeController.text = maxFileSize?.value.toString() ?? '0';
+    _totalFileSizeController.text = totalFileSize?.value.toString() ?? '0';
+
+    _passwordProtectNotifier.value = protectPassword?.value ?? false;
+    _allowDeletionNotifier.value = canDelete?.value ?? true;
+    _allowClosureNotifier.value = canClose?.value ?? true;
+  }
+
+  void _disposeValueNotifier() {
+    _typeAheadController.clear();
+    _emailSubjectController.clear();
+    _emailMessageController.clear();
+    _maxNumberFilesController.clear();
+    _maxFileSizeController.clear();
+    _totalFileSizeController.clear();
+
+    _textActivationNotifier.dispose();
+    _textExpirationNotifier.dispose();
+    _textReminderNotifier.dispose();
+    _maxFileSizeTypeNotifier.dispose();
+    _totalFileSizeTypeNotifier.dispose();
+    _notificationLanguageNotifier.dispose();
+    _advanceVisibilityNotifier.dispose();
+    _passwordProtectNotifier.dispose();
+    _allowDeletionNotifier.dispose();
+    _allowClosureNotifier.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       _arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestCreationArguments;
+      _initialize();
     });
-    _initDisplayData();
-  }
-
-  void _initDisplayData() {
-    _getRoundUpDate();
-
-    _textActivationNotifier.value =
-        dartz.Tuple2(_initActivationDateRoundUp, _initActivationDateRoundUp.getYMMMMdFormatWithJm());
-    _textExpirationNotifier.value =
-        dartz.Tuple2(_initExpirationDateRoundUp, _initExpirationDateRoundUp.getYMMMMdFormatWithJm());
-
-    _maxNumberFilesController.text = Constant.MAX_NUMBER_FILES_INIT.toString();
-    _maxFileSizeController.text = Constant.MAX_FILE_SIZE_INIT.toString();
-    _maxFileSizeTypeNotifier.value = FileSizeType.GB;
-  }
-
-  void _getRoundUpDate() {
-    _initActivationDateRoundUp = DateTime.now().roundUpHour(1);
-    _initExpirationDateRoundUp = DateTime.now().roundUpHour(1).add(Duration(days: Constant.EXPIRATION_DATE_INIT));
   }
 
   @override
   void dispose() {
-    _textActivationNotifier.dispose();
-    _textExpirationNotifier.dispose();
-    _maxFileSizeTypeNotifier.dispose();
+    _disposeValueNotifier();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    _arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestCreationArguments;
     final _bottom = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -182,6 +330,7 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
     _buildEmail(),
     _buildSettingSimple(),
     _buildSettingAdvance(),
+    SizedBox(height: 72.0)
   ];
 
   Widget _buildRecipients() {
@@ -361,20 +510,22 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
             Text(AppLocalizations.of(context).settings,
               style: TextStyle(fontSize: 16.0, color: AppColor.uploadRequestTitleTextColor)),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                _advanceVisibilityNotifier.value = !_advanceVisibilityNotifier.value;
+              },
               child: Text(AppLocalizations.of(context).advanced_options,
                 style: TextStyle(fontSize: 15.0, color: AppColor.uploadRequestTextClickableColor)),
             ),
           ],
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24),
+          padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 28),
           child: Column(
             children: [
               _buildActivationDateWidget(),
               _buildExpirationDateWidget(),
-              _buildMaxFilesWidget(),
-              _buildFileSizeWidget(),
+              _buildMaxNumberFilesWidget(),
+              _buildMaxFileSizeWidget(),
             ],
           )
         ),
@@ -390,16 +541,18 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
       GestureDetector(
         onTap: () {
           _getRoundUpDate();
+          _getActivationDate(isInitialize: false);
           DatePicker.showDateTimePicker(context,
               showTitleActions: true,
-              minTime: _initActivationDateRoundUp,
-              maxTime: _initActivationDateRoundUp.add(Duration(days: Constant.ACTIVATION_DATE_MAX)),
+              minTime: _creationDateRoundUp,
+              maxTime: _maxActivationDateRoundUp,
               onChanged: (date) {
               }, onConfirm: (date) {
                 _textActivationNotifier.value = dartz.Tuple2(date, date.getYMMMMdFormatWithJm());
+                _getExpirationDate();
+                _getReminderDate();
               },
-              currentTime: _textActivationNotifier.value?.value1,
-              locale: LocaleType.en);
+              currentTime: _textActivationNotifier.value?.value1);
         },
         child: ValueListenableBuilder(
           valueListenable: _textActivationNotifier,
@@ -422,14 +575,14 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
             _getRoundUpDate();
             DatePicker.showDateTimePicker(context,
                 showTitleActions: true,
-                minTime: _initExpirationDateRoundUp.subtract(Duration(days: Constant.EXPIRATION_DATE_MIN)),
-                maxTime: _initExpirationDateRoundUp.add(Duration(days: Constant.EXPIRATION_DATE_MAX)),
+                minTime: _textActivationNotifier.value!.value1,
+                maxTime: _maxExpirationDateRoundUp,
                 onChanged: (date) {
                 }, onConfirm: (date) {
                   _textExpirationNotifier.value = dartz.Tuple2(date, date.getYMMMMdFormatWithJm());
+                  _getReminderDate();
                 },
-                currentTime: _textExpirationNotifier.value?.value1,
-                locale: LocaleType.en);
+                currentTime: _textExpirationNotifier.value?.value1);
           },
           child: ValueListenableBuilder(
               valueListenable: _textExpirationNotifier,
@@ -440,7 +593,7 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
     ),
   );
 
-  Widget _buildMaxFilesWidget() => Container(
+  Widget _buildMaxNumberFilesWidget() => Container(
     margin: EdgeInsets.only(top: 28.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -470,85 +623,296 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
     ),
   );
 
-  Widget _buildFileSizeWidget() => Container(
+  Widget _buildMaxFileSizeWidget() {
+    final listFileSizeTypes = maxFileSize?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
+    return Container(
+      margin: EdgeInsets.only(top: 28.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(AppLocalizations.of(context).max_size_of_a_file,
+              style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
+          Row(
+            children: [
+              Container(
+                width: 40.0,
+                child: TextFormField(
+                    maxLength: 3,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    textAlign: TextAlign.right,
+                    style: CommonTextStyle.textStyleUploadRequestSettingsValue,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(0),
+                        isDense: true,
+                        hintText: '0',
+                        counterText: '',
+                        hintStyle: TextStyle(color: AppColor.uploadRequestHintTextColor)),
+                    controller: _maxFileSizeController
+                ),
+              ),
+              SizedBox(width: 16.0),
+              ValueListenableBuilder(
+                valueListenable: _maxFileSizeTypeNotifier,
+                builder: (context, FileSizeType value, child) => DropdownButtonHideUnderline(
+                    child: DropdownButton<FileSizeType>(
+                      iconEnabledColor: AppColor.uploadRequestTextClickableColor,
+                      items: <FileSizeType>[...listFileSizeTypes].map((FileSizeType value) {
+                        return DropdownMenuItem<FileSizeType>(
+                          value: value,
+                          child: Text(value.text,
+                              style: CommonTextStyle.textStyleNormal
+                                  .copyWith(color: AppColor.uploadRequestTextClickableColor)),
+                        );
+                      }).toList(),
+                      onChanged: (selectedItem) {
+                        _maxFileSizeTypeNotifier.value = selectedItem!;
+                      },
+                      value: value,
+                    )
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingAdvance() => ValueListenableBuilder(
+      valueListenable: _advanceVisibilityNotifier,
+      builder: (BuildContext context, bool visible, Widget? child) {
+        return visible
+            ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.0),
+                child: Column(
+                  children: [
+                    _buildReminderDateWidget(),
+                    _buildTotalFileSizeWidget(),
+                    _buildPasswordProtectedWidget(),
+                    _buildAllowDeletionWidget(),
+                    _buildAllowClosureWidget(),
+                    _buildNotificationLanguageWidget(),
+                  ],
+                ))
+            : SizedBox.shrink();
+      });
+
+  Widget _buildReminderDateWidget() => Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(AppLocalizations.of(context).reminder_date,
+          style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
+      GestureDetector(
+        onTap: () {
+          var minDateRemind = _minReminderDateRoundUp;
+          if(_minReminderDateRoundUp.compareTo(_textActivationNotifier.value!.value1) < 0) {
+            minDateRemind = _textActivationNotifier.value!.value1;
+          }
+          DatePicker.showDateTimePicker(context,
+              showTitleActions: true,
+              minTime: minDateRemind,
+              maxTime: _textExpirationNotifier.value!.value1,
+              onChanged: (date) {
+              }, onConfirm: (date) {
+                _textReminderNotifier.value = dartz.Tuple2(date, date.getYMMMMdFormatWithJm());
+              },
+              currentTime: _textReminderNotifier.value?.value1);
+        },
+        child: ValueListenableBuilder(
+            valueListenable: _textReminderNotifier,
+            builder: (BuildContext context, dartz.Tuple2? value, Widget? child) =>
+                Text(value?.value2 ?? '', style: CommonTextStyle.textStyleUploadRequestSettingsValue)),
+      ),
+    ],
+  );
+
+  Widget _buildTotalFileSizeWidget() {
+    final totalFileSizeTypes = totalFileSize?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
+    return Container(
+      margin: EdgeInsets.only(top: 28.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(AppLocalizations.of(context).total_size_of_files,
+              style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
+          Row(
+            children: [
+              Container(
+                width: 40.0,
+                child: TextFormField(
+                    maxLength: 3,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    textAlign: TextAlign.right,
+                    style: CommonTextStyle.textStyleUploadRequestSettingsValue,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(0),
+                        isDense: true,
+                        hintText: '0',
+                        counterText: '',
+                        hintStyle: TextStyle(color: AppColor.uploadRequestHintTextColor)),
+                    controller: _totalFileSizeController
+                ),
+              ),
+              SizedBox(width: 16.0),
+              ValueListenableBuilder(
+                valueListenable: _totalFileSizeTypeNotifier,
+                builder: (context, FileSizeType value, child) => DropdownButtonHideUnderline(
+                    child: DropdownButton<FileSizeType>(
+                      iconEnabledColor: AppColor.uploadRequestTextClickableColor,
+                      items: <FileSizeType>[...totalFileSizeTypes].map((FileSizeType value) {
+                        return DropdownMenuItem<FileSizeType>(
+                          value: value,
+                          child: Text(value.text,
+                              style: CommonTextStyle.textStyleNormal
+                                  .copyWith(color: AppColor.uploadRequestTextClickableColor)),
+                        );
+                      }).toList(),
+                      onChanged: (selectedItem) {
+                        _totalFileSizeTypeNotifier.value = selectedItem!;
+                      },
+                      value: value,
+                    )
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPasswordProtectedWidget() => Container(
     margin: EdgeInsets.only(top: 28.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(AppLocalizations.of(context).max_size_of_a_file,
+        Text(AppLocalizations.of(context).password_protected,
             style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
-        Row(
-          children: [
-            Container(
-              width: 40.0,
-              child: TextFormField(
-                  maxLength: 3,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  textAlign: TextAlign.right,
-                  style: CommonTextStyle.textStyleUploadRequestSettingsValue,
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(0),
-                      isDense: true,
-                      hintText: '0',
-                      counterText: '',
-                      hintStyle: TextStyle(color: AppColor.uploadRequestHintTextColor)),
-                  controller: _maxFileSizeController
-              ),
-            ),
-            SizedBox(width: 16.0),
-            ValueListenableBuilder(
-              valueListenable: _maxFileSizeTypeNotifier,
-              builder: (context, FileSizeType value, child) => DropdownButtonHideUnderline(
-                  child: DropdownButton<FileSizeType>(
-                    items: <FileSizeType>[FileSizeType.KB, FileSizeType.MB, FileSizeType.GB].map((FileSizeType value) {
-                      return DropdownMenuItem<FileSizeType>(
-                        value: value,
-                        child: Text(value.text),
-                      );
-                    }).toList(),
-                    onChanged: (selectedItem) {
-                      _maxFileSizeTypeNotifier.value = selectedItem!;
+        ValueListenableBuilder(
+          valueListenable: _passwordProtectNotifier,
+            builder: (BuildContext context, bool valueChange, Widget? child) =>
+                Checkbox(
+                    value: valueChange,
+                    onChanged: (bool? value) {
+                      _passwordProtectNotifier.value = value ?? false;
                     },
-                    value: value,
-                  )
-              ),
-            ),
-          ],
+                    activeColor: AppColor.primaryColor)
         )
       ],
     ),
   );
 
-  Widget _buildSettingAdvance() => Container(
-    margin: EdgeInsets.only(top: 40.0),
-    child: Column(
+  Widget _buildAllowDeletionWidget() => Container(
+    margin: EdgeInsets.only(top: 28.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Text(AppLocalizations.of(context).allow_deletion,
+            style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
+        ValueListenableBuilder(
+          valueListenable: _allowDeletionNotifier,
+          builder: (BuildContext context, bool valueChange, Widget? child) => Checkbox(
+            value: valueChange,
+            onChanged: (bool? value) {
+              _allowDeletionNotifier.value = value ?? true;
+            },
+            activeColor: AppColor.primaryColor))
+          ],
+    ),
+  );
 
+  Widget _buildAllowClosureWidget() => Container(
+    margin: EdgeInsets.only(top: 28.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(AppLocalizations.of(context).allow_closure,
+            style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
+        ValueListenableBuilder(
+          valueListenable: _allowClosureNotifier,
+          builder: (BuildContext context, bool valueChange, Widget? child) => Checkbox(
+            value: valueChange,
+            onChanged: (bool? value) {
+              _allowClosureNotifier.value = value ?? true;
+            },
+            activeColor: AppColor.primaryColor)
+        )
       ],
     ),
   );
 
+  Widget _buildNotificationLanguageWidget() {
+    final listNotificationLanguages =
+        notificationLanguage?.units.map((unit) => unit.toNotificationLanguage()).toList() ?? [];
+    return Container(
+      margin: EdgeInsets.only(top: 28.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(AppLocalizations.of(context).notification_language,
+              style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
+          ValueListenableBuilder(
+            valueListenable: _notificationLanguageNotifier,
+            builder: (context, NotificationLanguage value, child) => DropdownButtonHideUnderline(
+              child: DropdownButton<NotificationLanguage>(
+                iconEnabledColor: AppColor.uploadRequestTextClickableColor,
+                items: <NotificationLanguage>[...listNotificationLanguages].map((NotificationLanguage value) {
+                  return DropdownMenuItem<NotificationLanguage>(
+                    value: value,
+                    child: Text(value.text,
+                        style: CommonTextStyle.textStyleNormal
+                            .copyWith(color: AppColor.uploadRequestTextClickableColor)),
+                  );
+                }).toList(),
+                onChanged: (selectedItem) {
+                  _notificationLanguageNotifier.value = selectedItem ?? NotificationLanguage.FRENCH;
+                },
+                value: value,
+              )
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _validateFormData() {
     final numberFiles = int.tryParse(_maxNumberFilesController.text) ?? 0;
-    if (numberFiles <= 0 || numberFiles >= Constant.MAX_NUMBER_FILES_LIMIT) {
+    final maxFilesConfig = maxFileCount?.maxValue ?? 0;
+    if (numberFiles <= 0 || numberFiles >= maxFilesConfig) {
       _appToast.showErrorToast(AppLocalizations.of(context).max_number_files_error);
       return;
     }
 
     final inputSize = int.tryParse(_maxFileSizeController.text) ?? 0;
     final fileSizeInByte = _maxFileSizeTypeNotifier.value.toByte(inputSize);
+    final maxFileSizeConfig = maxFileSize?.maxValue ?? 0;
+    final maxFileSizeTypeConfig = maxFileSize?.maxUnit.toFileSizeType() ?? FileSizeType.GB;
     if (fileSizeInByte <= 0 ||
-        (inputSize >= Constant.MAX_FILE_SIZE_LIMIT && _maxFileSizeTypeNotifier.value == FileSizeType.GB)) {
+        (inputSize >= maxFileSizeConfig && _maxFileSizeTypeNotifier.value == maxFileSizeTypeConfig)) {
       _appToast.showErrorToast(AppLocalizations.of(context).max_file_size_error);
       return;
     }
 
-    // Note:
+    final totalSizeOfFiles = int.tryParse(_totalFileSizeController.text) ?? 0;
+    final totalSizeOfFilesInByte = _totalFileSizeTypeNotifier.value.toByte(totalSizeOfFiles);
+    final totalFileSizeConfig = totalFileSize?.maxValue ?? 0;
+    final totalFileSizeTypeConfig = totalFileSize?.maxUnit.toFileSizeType() ?? FileSizeType.GB;
+    if (totalSizeOfFilesInByte <= 0 ||
+        (totalSizeOfFiles >= totalFileSizeConfig && _maxFileSizeTypeNotifier.value == totalFileSizeTypeConfig)) {
+      _appToast.showErrorToast(AppLocalizations.of(context).total_file_size_error);
+      return;
+    }
+
+    // TODO:
     // Once user change the time, prefer to get picked time.
-    // Otherwise, get the exactly current time (not rounded time)
+    // Otherwise, passing null for server can handle by itself (temporary solution)
     var activateDate;
     if(_textActivationNotifier.value?.value1.compareTo(_initActivationDateRoundUp) != 0) {
       activateDate = _textActivationNotifier.value!.value1;
@@ -556,11 +920,18 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
 
     _model.performCreateUploadRequest(
         _arguments?.type ?? UploadRequestCreationType.COLLECTIVE,
-        numberFiles,
-        fileSizeInByte,
-        _textExpirationNotifier.value?.value1 ?? _initExpirationDateRoundUp,
+        maxFileCount: numberFiles,
+        maxFileSize: fileSizeInByte,
+        expirationDate: _textExpirationNotifier.value?.value1 ?? _initExpirationDateRoundUp,
         emailMessage: _emailMessageController.text,
-        activationDate: activateDate
+        activationDate: activateDate,
+        notificationDate: _textReminderNotifier.value?.value1 ?? _initReminderDateRoundUp,
+        maxDepositSize: totalSizeOfFilesInByte,
+        protectedByPassword: _passwordProtectNotifier.value,
+        canClose: _allowClosureNotifier.value,
+        canDelete: _allowDeletionNotifier.value,
+        enableNotification: enableReminderNotification?.enable ?? true,
+        locale: _notificationLanguageNotifier.value.text
     );
   }
 
