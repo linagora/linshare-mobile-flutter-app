@@ -32,18 +32,12 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-class DatetimeNullableConverter implements JsonConverter<DateTime?, int> {
+class DatetimeNullableConverter implements JsonConverter<DateTime?, int?> {
   const DatetimeNullableConverter();
 
   @override
-  DateTime? fromJson(int json) {
-    try {
-      return DateTime.fromMillisecondsSinceEpoch(json);
-    } catch (_) {
-      return null;
-    }
-  }
+  DateTime? fromJson(int? json) => json != null ? DateTime.fromMillisecondsSinceEpoch(json) : null;
 
   @override
-  int toJson(DateTime? object) => object!.millisecondsSinceEpoch;
+  int? toJson(DateTime? object) => object != null ? object.millisecondsSinceEpoch : null;
 }
