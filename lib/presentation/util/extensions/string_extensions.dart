@@ -29,12 +29,30 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
+import 'package:linshare_flutter_app/presentation/model/unit_time_type.dart';
+import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
 
-class UploadRequestCreationArguments extends RouterArguments {
-  final UploadRequestCreationType type;
-  final List<Functionality?> uploadRequestFunctionalities;
+extension UnitTimeStringExtension on String {
+  UnitTimeType toUnitTimeType() {
+    return UnitTimeType.values.firstWhere((e) => describeEnum(e) == this);
+  }
+}
 
-  UploadRequestCreationArguments(this.type, this.uploadRequestFunctionalities);
+extension FileSizeStringExtension on String {
+  FileSizeType toFileSizeType() {
+    switch(this) {
+      case 'KILO': return FileSizeType.KB;
+      case 'MEGA': return FileSizeType.MB;
+      case 'GIGA': return FileSizeType.GB;
+    }
+    return FileSizeType.GB;
+  }
+}
+
+extension NotificationLanguageStringExtension on String {
+  NotificationLanguage toNotificationLanguage() {
+    return NotificationLanguage.values.firstWhere((e) => describeEnum(e) == this);
+  }
 }

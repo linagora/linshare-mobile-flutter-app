@@ -29,18 +29,23 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class Constant {
-  static const MAX_NUMBER_FILES_INIT = 400;
-  static const MAX_NUMBER_FILES_LIMIT = 1000;
+import 'package:flutter/widgets.dart';
+import 'package:dartz/dartz.dart' as dartz;
+import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
+import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
 
-  static const MAX_FILE_SIZE_INIT = 50;
-  static const MAX_FILE_SIZE_LIMIT = 100;
+class DateTimeTextValueNotifier extends ValueNotifier<dartz.Tuple2<DateTime, String>?> {
+  DateTimeTextValueNotifier() : super(null);
+}
 
-  static const MAX_DEPOSIT_SIZE_INIT = 50;
-  static const MAX_DEPOSIT_SIZE_LIMIT = 100;
+class DateTimeValueNotifier extends ValueNotifier<DateTime?> {
+  DateTimeValueNotifier() : super(null);
+}
 
-  static const EXPIRATION_DATE_INIT = 2;
-  static const ACTIVATION_DATE_MAX = 2;
-  static const EXPIRATION_DATE_MIN = 2;
-  static const EXPIRATION_DATE_MAX = 3;
+class FileSizeValueNotifier extends ValueNotifier<FileSizeType> {
+  FileSizeValueNotifier() : super(FileSizeType.GB);
+}
+
+class NotificationLanguageValueNotifier extends ValueNotifier<NotificationLanguage> {
+  NotificationLanguageValueNotifier() : super(NotificationLanguage.FRENCH);
 }

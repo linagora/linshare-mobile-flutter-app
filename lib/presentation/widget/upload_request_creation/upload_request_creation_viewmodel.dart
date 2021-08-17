@@ -33,8 +33,6 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
-import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -88,20 +86,19 @@ class UploadRequestCreationViewModel extends BaseViewModel {
     _appNavigation.popBack();
   }
 
-  void performCreateUploadRequest(
-      UploadRequestCreationType creationType,
-      int maxFileCount,
-      int maxFileSize,
-      DateTime expirationDate,
-      {String? emailMessage,
-      DateTime? activationDate,
-      DateTime? notificationDate,
-      int? maxDepositSize,
-      bool? canDelete,
-      bool? canClose,
-      String? locale,
-      bool? protectedByPassword,
-      bool? enableNotification}) {
+  void performCreateUploadRequest(UploadRequestCreationType creationType,
+      {required int maxFileCount,
+      required int maxFileSize,
+      required DateTime expirationDate,
+      required String emailMessage,
+      required DateTime? activationDate,
+      required DateTime notificationDate,
+      required int maxDepositSize,
+      required bool canDelete,
+      required bool canClose,
+      required String locale,
+      required bool protectedByPassword,
+      required bool enableNotification}) {
     final listEmails = _autoCompleteResultListObservable.value?.map((e) => e.getSuggestionMail()).toList() ?? [];
     final emailSubject = _emailSubjectObservable.value.toString();
     final addUploadRequest = AddUploadRequest(
@@ -113,12 +110,12 @@ class UploadRequestCreationViewModel extends BaseViewModel {
         maxFileCount,
         maxFileSize,
         notificationDate,
-        maxDepositSize = FileSizeType.GB.toByte(50),
-        canDelete = true,
-        canClose = true,
-        locale = NotificationLanguage.FRENCH.text,
-        protectedByPassword = true,
-        enableNotification = true);
+        maxDepositSize,
+        canDelete,
+        canClose,
+        locale,
+        protectedByPassword,
+        enableNotification);
     store.dispatch(_addNewUploadRequest(creationType, addUploadRequest));
   }
 

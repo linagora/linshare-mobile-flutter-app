@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-08-05T16:49:48.474867",
+  "@@last_modified": "2021-08-16T11:14:04.557903",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -2117,6 +2117,25 @@
   "search_in_upload_request_groups": "Search in Upload Request Groups",
   "@search_in_upload_request_groups": {
     "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "total_size_of_files": "Total size of files",
+  "@total_size_of_files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_protected": "Password protected",
+  "@password_protected": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "total_file_size_error": "Total size of files must be set and smaller than 100 GB",
+  "@total_file_size_error": {
+    "type": "text",
+    "placeholders_order": [],
     "placeholders": {}
   }
 }
