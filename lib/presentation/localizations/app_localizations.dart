@@ -2038,6 +2038,28 @@ class AppLocalizations {
       name: 'search_in_upload_request_groups',
     );
   }
+
+  String get total_size_of_files {
+    return Intl.message(
+        'Total size of files',
+        name: 'total_size_of_files'
+    );
+  }
+
+  String get password_protected {
+    return Intl.message(
+        'Password protected',
+        name: 'password_protected'
+    );
+  }
+
+  String get total_file_size_error {
+    return Intl.message(
+        'Total size of files must be set and smaller than 100 GB',
+        name: 'total_file_size_error'
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

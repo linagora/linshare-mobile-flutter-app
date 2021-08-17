@@ -29,12 +29,22 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
+enum UnitTimeType {
+  DAY, MONTH, WEEK
+}
 
-class UploadRequestCreationArguments extends RouterArguments {
-  final UploadRequestCreationType type;
-  final List<Functionality?> uploadRequestFunctionalities;
+extension UnitTimeTypeExtension on UnitTimeType {
+  String get text {
+    switch(this) {
+      case UnitTimeType.DAY:
+        return 'DAY';
+      case UnitTimeType.MONTH:
+        return 'MONTH';
+      case UnitTimeType.WEEK:
+        return 'WEEK';
+      default:
+        return toString();
+    }
+  }
 
-  UploadRequestCreationArguments(this.type, this.uploadRequestFunctionalities);
 }
