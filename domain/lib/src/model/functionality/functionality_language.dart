@@ -36,13 +36,17 @@ import 'package:domain/src/model/functionality/functionality_identifier.dart';
 import 'package:equatable/equatable.dart';
 
 class FunctionalityLanguage extends Functionality implements EquatableMixin {
+  final String value;
+  final List<String> units;
 
   FunctionalityLanguage(
       FunctionalityIdentifier identifier,
       bool enable,
-      bool canOverride)
+      bool canOverride,
+      this.value,
+      this.units)
       : super(identifier, enable, canOverride);
 
   @override
-  List<Object> get props => [...super.props];
+  List<Object> get props => [...super.props, value, units];
 }

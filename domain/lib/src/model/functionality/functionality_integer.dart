@@ -36,15 +36,17 @@ import 'package:equatable/equatable.dart';
 
 class FunctionalityInteger extends Functionality implements EquatableMixin {
   final int value;
+  final int maxValue;
 
   FunctionalityInteger(
       FunctionalityIdentifier identifier,
       bool enable,
       bool canOverride,
-      this.value)
+      this.value,
+      this.maxValue)
       : super(identifier, enable, canOverride);
 
   @override
-  List<Object> get props => [...super.props, value];
+  List<Object> get props => [...super.props, value, maxValue];
 }
 
