@@ -39,11 +39,15 @@ part 'functionality_language_dto.g.dart';
 
 @JsonSerializable()
 class FunctionalityLanguageDto extends FunctionalityDto with EquatableMixin {
+  final String? value;
+  final List<String> units;
 
   FunctionalityLanguageDto(
       FunctionalityIdentifier identifier,
       bool? enable,
-      bool? canOverride)
+      bool? canOverride,
+      this.value,
+      this.units)
       : super(identifier, enable, canOverride);
 
   factory FunctionalityLanguageDto.fromJson(Map<String, dynamic> json) => _$FunctionalityLanguageDtoFromJson(json);
@@ -51,10 +55,10 @@ class FunctionalityLanguageDto extends FunctionalityDto with EquatableMixin {
   Map<String, dynamic> toJson() => _$FunctionalityLanguageDtoToJson(this);
 
   @override
-  List<Object?> get props => [...super.props];
+  List<Object?> get props => [...super.props, value, units];
 }
 
 extension FunctionalityLanguageDtoExtension on FunctionalityLanguageDto {
   FunctionalityLanguage toFunctionalityLanguage() =>
-      FunctionalityLanguage(identifier, enable ?? false, canOverride ?? false);
+      FunctionalityLanguage(identifier, enable ?? false, canOverride ?? false, value ?? '', units);
 }
