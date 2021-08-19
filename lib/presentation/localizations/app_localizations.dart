@@ -2144,6 +2144,11 @@ class AppLocalizations {
       name: 'copy_before_archiving',
     );
   }
+
+  String get close {
+    return Intl.message('Close',
+        name: 'close');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
