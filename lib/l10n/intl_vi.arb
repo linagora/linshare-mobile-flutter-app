@@ -1733,5 +1733,11 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "close": "Close",
+  "@close": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
