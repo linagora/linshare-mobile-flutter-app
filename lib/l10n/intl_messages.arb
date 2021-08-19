@@ -2197,5 +2197,21 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "archive": "Archive",
+  "@archive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_archive": "Are you sure you want to archive {itemName}",
+  "@are_you_sure_you_want_to_archive": {
+    "type": "text",
+    "placeholders_order": [
+      "itemName"
+    ],
+    "placeholders": {
+      "itemName": {}
+    }
   }
 }
