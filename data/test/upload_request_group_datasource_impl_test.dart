@@ -42,6 +42,7 @@ import 'fixture/mock/mock_fixtures.dart';
 void main() {
   getAllUploadRequestGroupsTest();
   addRecipientsTest();
+  cancelUploadRequestGroupTest();
 }
 
 void getAllUploadRequestGroupsTest() {
@@ -117,7 +118,6 @@ void getAllUploadRequestGroupsTest() {
   });
 }
 
-
 void addRecipientsTest() {
   group('upload_request_group_datasource_impl addRecipients test', () {
     late MockLinShareHttpClient _linShareHttpClient;
@@ -172,3 +172,42 @@ void addRecipientsTest() {
   });
 }
 
+void cancelUploadRequestGroupTest() {
+  group('cancel upload_request_group test', () {
+    late MockLinShareHttpClient _linShareHttpClient;
+    late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _uploadRequestGroupDataSourceImpl = UploadRequestGroupDataSourceImpl(
+          _linShareHttpClient,
+          _remoteExceptionThrower);
+    });
+
+    test('cancel upload_request_group should return success with valid data', () async {
+      when(_linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup1.uploadRequestGroupId, UploadRequestStatus.CANCELED))
+          .thenAnswer((_) async => uploadRequestGroupResponseCanceled1);
+
+      final result = await _uploadRequestGroupDataSourceImpl.updateUploadRequestGroupState(
+          uploadRequestGroup1, UploadRequestStatus.CANCELED);
+      expect(result, uploadRequestGroupResponseCanceled1.toUploadRequestGroup());
+    });
+
+    test('cancel upload_request_group should throw UploadRequestGroupsNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
+      );
+      when(_linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup1.uploadRequestGroupId, UploadRequestStatus.CANCELED))
+          .thenThrow(error);
+
+      await _uploadRequestGroupDataSourceImpl.updateUploadRequestGroupState(
+          uploadRequestGroup1, UploadRequestStatus.CANCELED).catchError((error) {
+            expect(error, isA<UploadRequestGroupsNotFound>());
+      });
+    });
+
+  });
+}
