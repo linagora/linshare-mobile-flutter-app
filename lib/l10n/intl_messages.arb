@@ -2155,5 +2155,47 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "confirm_cancel_multiple_upload_request": "{numberOfItems,plural, =1{Are you sure you want to cancel \"{singleItemName}\"?}other{Are you sure you want to cancel {numberOfItems} items?}}",
+  "@confirm_cancel_multiple_upload_request": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "upload_request_cancel_proceed_button": "Proceed",
+  "@upload_request_cancel_proceed_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_request_has_been_canceled": "Upload request has been canceled",
+  "@upload_request_has_been_canceled": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "some_upload_requests_have_been_canceled": "Some upload requests have been canceled",
+  "@some_upload_requests_have_been_canceled": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_request_could_not_be_canceled": "Upload request could not be canceled",
+  "@upload_request_could_not_be_canceled": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "some_upload_requests_could_not_be_canceled": "Some upload requests could not be canceled",
+  "@some_upload_requests_could_not_be_canceled": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }

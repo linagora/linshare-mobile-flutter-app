@@ -2076,6 +2076,52 @@ class AppLocalizations {
       name: 'recipients_have_been_successfully_added'
     );
   }
+
+  String confirm_cancel_multiple_upload_request(int numberOfItems, String singleItemName) {
+    return Intl.message(
+      '''${Intl.plural(numberOfItems,
+          one: 'Are you sure you want to cancel \"$singleItemName\"?',
+          other: 'Are you sure you want to cancel $numberOfItems items?')}''',
+      name: 'confirm_cancel_multiple_upload_request',
+      args: [numberOfItems, singleItemName],
+    );
+  }
+
+  String get upload_request_cancel_proceed_button {
+    return Intl.message(
+      'Proceed',
+      name: 'upload_request_cancel_proceed_button',
+    );
+  }
+
+  String get upload_request_has_been_canceled {
+    return Intl.message(
+      'Upload request has been canceled',
+      name: 'upload_request_has_been_canceled',
+    );
+  }
+
+  String get some_upload_requests_have_been_canceled {
+    return Intl.message(
+      'Some upload requests have been canceled',
+      name: 'some_upload_requests_have_been_canceled',
+    );
+  }
+
+  String get upload_request_could_not_be_canceled {
+    return Intl.message(
+      'Upload request could not be canceled',
+      name: 'upload_request_could_not_be_canceled',
+    );
+  }
+
+  String get some_upload_requests_could_not_be_canceled {
+    return Intl.message(
+      'Some upload requests could not be canceled',
+      name: 'some_upload_requests_could_not_be_canceled',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
