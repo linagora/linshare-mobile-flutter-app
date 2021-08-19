@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -31,13 +31,41 @@
 //
 
 import 'package:domain/domain.dart';
+import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/fixture/upload_request_group_fixture.dart';
 
-abstract class UploadRequestGroupRepository {
-  Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status);
+import '../../mock/repository/mock_upload_request_group_repository.dart';
 
-  Future<UploadRequestGroup> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest);
+void main() {
+  group('cancel_upload_request_group_interactor', () {
+    late MockUploadRequestGroupRepository uploadRequestGroupRepository;
+    late UpdateUploadRequestGroupStateInteractor uploadRequestGroupStateInteractor;
 
-  Future<UploadRequestGroup> addRecipients(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients);
+    setUp(() {
+      uploadRequestGroupRepository = MockUploadRequestGroupRepository();
+      uploadRequestGroupStateInteractor = UpdateUploadRequestGroupStateInteractor(uploadRequestGroupRepository);
+    });
 
-  Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status);
+    test('cancel upload_request_group should return success with valid data', () async {
+      when(uploadRequestGroupRepository.updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.CANCELED))
+          .thenAnswer((_) async => uploadRequestGroupCanceled1);
+      final result = await uploadRequestGroupStateInteractor.execute(uploadRequestGroup1, UploadRequestStatus.CANCELED);
+      result.fold(
+        (failure) => null,
+        (success) {
+          expect(success, isA<UpdateUploadRequestGroupStateViewState>());
+          expect(uploadRequestGroupCanceled1, (success as UpdateUploadRequestGroupStateViewState).uploadRequestGroup);
+      });
+    });
+
+    test('cancel upload_request_group should return failure', () async {
+      when(uploadRequestGroupRepository.updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.CANCELED))
+         .thenThrow(Exception());
+      final result = await uploadRequestGroupStateInteractor.execute(uploadRequestGroup1, UploadRequestStatus.CANCELED);
+      result.fold(
+        (failure) => expect(failure, isA<UpdateUploadRequestGroupStateFailure>()),
+        (success) => null);
+    });
+  });
 }
