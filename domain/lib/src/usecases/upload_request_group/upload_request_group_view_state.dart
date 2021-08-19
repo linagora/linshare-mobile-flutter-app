@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class UploadRequestGroupViewState extends ViewState {
@@ -91,4 +92,49 @@ class UploadRequestGroupContextMenuItemViewState extends ViewState {
 
   @override
   List<Object> get props => [uploadRequestGroup];
+}
+
+
+class UpdateUploadRequestGroupStateViewState extends ViewState {
+  final UploadRequestGroup uploadRequestGroup;
+  UpdateUploadRequestGroupStateViewState(this.uploadRequestGroup);
+
+  @override
+  List<Object?> get props => [uploadRequestGroup];
+}
+
+class UpdateUploadRequestGroupStateFailure extends FeatureFailure {
+  final exception;
+
+  UpdateUploadRequestGroupStateFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class UpdateUploadRequestGroupAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  UpdateUploadRequestGroupAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class UpdateUploadRequestGroupAllFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  UpdateUploadRequestGroupAllFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class UpdateUploadRequestGroupHasSomeGroupsFailedViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  UpdateUploadRequestGroupHasSomeGroupsFailedViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
 }
