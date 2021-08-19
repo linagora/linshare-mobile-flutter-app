@@ -381,6 +381,8 @@ class AppModule {
     getIt.registerFactory(() => DownloadMultipleUploadRequestEntryIOSInteractor(
         getIt<DownloadUploadRequestEntryIOSInteractor>()));
     getIt.registerFactory(() => AddRecipientsToUploadRequestGroupInteractor(getIt<UploadRequestGroupRepository>()));
+    getIt.registerFactory(() => UpdateUploadRequestGroupStateInteractor(getIt<UploadRequestGroupRepository>()));
+    getIt.registerFactory(() => UpdateMultipleUploadRequestGroupStateInteractor(getIt<UpdateUploadRequestGroupStateInteractor>()));
   }
 
   void _provideSharePreference() {
