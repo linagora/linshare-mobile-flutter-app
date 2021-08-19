@@ -352,6 +352,8 @@ export 'src/usecases/upload_request/get_all_upload_requests_interactor.dart';
 export 'src/usecases/upload_request_entry/get_all_upload_request_entries_interactor.dart';
 export 'src/usecases/upload_request_group/upload_request_group_view_state.dart';
 export 'src/usecases/upload_request_group/add_new_upload_request_interactor.dart';
+export 'src/usecases/upload_request_group/update_upload_request_group_status_interactor.dart';
+export 'src/usecases/upload_request_group/update_upload_request_multiple_group_status_interactor.dart';
 export 'src/usecases/upload_request/upload_request_view_state.dart';
 export 'src/usecases/upload_request_entry/upload_request_entry_view_state.dart';
 export 'src/usecases/search_upload_request_groups/search_upload_request_groups_interactor.dart';
