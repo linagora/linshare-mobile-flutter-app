@@ -33,13 +33,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/material/list_tile.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
 class SimpleContextMenuActionBuilder extends ContextMenuActionBuilder<void> {
   SimpleContextMenuActionBuilder(
       Key key,
-      SvgPicture actionIcon,
+      Widget actionIcon,
       String actionName)
       : super(key, actionIcon, actionName);
 

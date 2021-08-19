@@ -36,14 +36,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:meta/meta.dart';
 typedef OnContextMenuActionClick<T> = void Function(T data);
 
 abstract class ContextMenuActionBuilder<T> {
   @protected final Key key;
-  @protected final SvgPicture actionIcon;
+  @protected final Widget actionIcon;
   @protected final String actionName;
   @protected late OnContextMenuActionClick<T> onContextMenuActionClick;
 
