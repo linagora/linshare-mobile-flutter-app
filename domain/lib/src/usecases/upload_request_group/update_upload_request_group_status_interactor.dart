@@ -28,16 +28,21 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class UploadRequestGroupRepository {
-  Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status);
+class UpdateUploadRequestGroupStateInteractor {
+  final UploadRequestGroupRepository _uploadRequestGroupRepository;
 
-  Future<UploadRequestGroup> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest);
+  UpdateUploadRequestGroupStateInteractor(this._uploadRequestGroupRepository);
 
-  Future<UploadRequestGroup> addRecipients(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients);
-
-  Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status);
+  Future<Either<Failure, Success>> execute(UploadRequestGroup group, UploadRequestStatus status) async {
+    try {
+      final resultGroup = await _uploadRequestGroupRepository.updateUploadRequestGroupState(group, status);
+      return Right<Failure, Success>(UpdateUploadRequestGroupStateViewState(resultGroup));
+    } catch (exception) {
+      return Left<Failure, Success>(UpdateUploadRequestGroupStateFailure(exception));
+    }
+  }
 }

@@ -28,16 +28,34 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class UploadRequestGroupRepository {
-  Future<List<UploadRequestGroup>> getUploadRequestGroups(List<UploadRequestStatus> status);
+class UpdateMultipleUploadRequestGroupStateInteractor {
 
-  Future<UploadRequestGroup> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest);
+  final UpdateUploadRequestGroupStateInteractor updateUploadRequestGroupStateInteractor;
 
-  Future<UploadRequestGroup> addRecipients(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients);
+  UpdateMultipleUploadRequestGroupStateInteractor(this.updateUploadRequestGroupStateInteractor);
 
-  Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status);
+  Future<Either<Failure, Success>> execute(List<UploadRequestGroup> groups, UploadRequestStatus status) async {
+    final listResult =
+        await Future.wait(groups.map((group) => updateUploadRequestGroupStateInteractor.execute(group, status)));
+    if (listResult.length == 1) {
+      return listResult.first;
+    } else {
+      var failedFileCount = 0;
+      listResult.forEach((element) {
+        if (element is Left) {
+          failedFileCount++;
+        }
+      });
+      if (failedFileCount == 0) {
+        return Right(UpdateUploadRequestGroupAllSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(UpdateUploadRequestGroupAllFailureViewState(listResult));
+      }
+      return Right(UpdateUploadRequestGroupHasSomeGroupsFailedViewState(listResult));
+    }
+  }
 }
