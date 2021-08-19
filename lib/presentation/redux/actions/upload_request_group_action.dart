@@ -33,6 +33,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
