@@ -2122,6 +2122,19 @@ class AppLocalizations {
     );
   }
 
+
+  String get archive {
+    return Intl.message('Archive',
+        name: 'archive');
+  }
+
+  String are_you_sure_you_want_to_archive(String itemName) {
+    return Intl.message(
+        'Are you sure you want to archive $itemName',
+        name: 'are_you_sure_you_want_to_archive',
+        args: [itemName]
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
