@@ -84,6 +84,56 @@ final uploadRequestGroup2 = UploadRequestGroup(
   1
 );
 
+final uploadRequestGroupCanceled1 = UploadRequestGroup(
+    UploadRequestGroupId('upload_request_group_1'),
+    'uploadRequestGroup1',
+    'uploadRequestGroupBody1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    23232323,
+    232332323232,
+    23232323232323,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    true,
+    true,
+    true,
+    true,
+    'mailmessageId1',
+    false,
+    true,
+    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+    UploadRequestStatus.CANCELED,
+    2323872,
+    1
+);
+
+final uploadRequestGroupCanceled2 = UploadRequestGroup(
+    UploadRequestGroupId('upload_request_group_2'),
+    'uploadRequestGroup2',
+    'uploadRequestGroupBody2',
+    DateTime.fromMillisecondsSinceEpoch(1604482349834),
+    DateTime.fromMillisecondsSinceEpoch(1619349271000),
+    23232323,
+    232332323232,
+    23232323232323,
+    DateTime.fromMillisecondsSinceEpoch(1604482124944),
+    DateTime.fromMillisecondsSinceEpoch(1604482984244),
+    DateTime.fromMillisecondsSinceEpoch(1604482298044),
+    true,
+    true,
+    true,
+    true,
+    'mailmessageId2',
+    false,
+    true,
+    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+    UploadRequestStatus.CANCELED,
+    2323872,
+    1
+);
+
 final uploadRequestGroupResponse1 = UploadRequestGroupResponse(
   UploadRequestGroupId('upload_request_group_1'),
   'uploadRequestGroup1',
@@ -107,6 +157,31 @@ final uploadRequestGroupResponse1 = UploadRequestGroupResponse(
   UploadRequestStatus.CREATED,
   2323872,
   1
+);
+
+final uploadRequestGroupResponseCanceled1 = UploadRequestGroupResponse(
+    UploadRequestGroupId('upload_request_group_1'),
+    'uploadRequestGroup1',
+    'uploadRequestGroupBody1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    23232323,
+    232332323232,
+    23232323232323,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    true,
+    true,
+    true,
+    true,
+    'mailmessageId1',
+    false,
+    true,
+    GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+    UploadRequestStatus.CANCELED,
+    2323872,
+    1
 );
 
 final addUploadRequest1 = AddUploadRequest(
