@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,46 +28,21 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+enum UploadRequestGroupTab { PENDING, ACTIVE_CLOSED, ARCHIVED }
 
-class UploadRequestGroupPresentationFile extends Equatable implements PresentationFile {
-  final imagePath = getIt<AppImagePaths>();
-
-  final String label;
-  final bool collective;
-  final double usedSpace;
-
-  UploadRequestGroupPresentationFile(this.label, this.collective, {this.usedSpace = 0});
-
-  static UploadRequestGroupPresentationFile fromUploadRequestGroup(UploadRequestGroup uploadRequestGroup) {
-    return UploadRequestGroupPresentationFile(
-      uploadRequestGroup.label, uploadRequestGroup.collective,
-      usedSpace: uploadRequestGroup.usedSpace ?? 0
-    );
+extension UploadRequestGroupTabExtension on UploadRequestGroupTab {
+  int get index {
+    switch (this) {
+      case UploadRequestGroupTab.PENDING:
+        return 0;
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        return 1;
+      case UploadRequestGroupTab.ARCHIVED:
+        return 2;
+      default:
+        return 0;
+    }
   }
-
-  @override
-  String fileName() => label;
-
-  @override
-  int fileSize() => usedSpace.toInt();
-
-  @override
-  Widget fileIcon() {
-    return SvgPicture.asset(
-        collective ? imagePath.icUploadRequestCollective : imagePath.icUploadRequestIndividual,
-        width: 20,
-        height: 24,
-        fit: BoxFit.fill);
-  }
-
-  @override
-  List<Object> get props => [label, collective, usedSpace];
 }

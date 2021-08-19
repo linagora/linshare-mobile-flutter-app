@@ -17,7 +17,8 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+//
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -25,49 +26,47 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
-//  the Additional Terms applicable to LinShare software.
+// <http://www.gnu.org/licenses
+// for the GNU Affero General Public License version
+//
+// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
+// for
+//
+// the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/material/list_tile.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
-import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
-class UploadRequestGroupPresentationFile extends Equatable implements PresentationFile {
-  final imagePath = getIt<AppImagePaths>();
+class UploadRequestGroupContextMenuTileBuilder extends ContextMenuActionBuilder<UploadRequestGroup> {
+  final UploadRequestGroup _uploadRequestGroup;
+  Widget? _trailing;
 
-  final String label;
-  final bool collective;
-  final double usedSpace;
+  UploadRequestGroupContextMenuTileBuilder(
+    Key key,
+    SvgPicture actionIcon,
+    String actionName,
+    this._uploadRequestGroup
+  ) : super(key, actionIcon, actionName);
 
-  UploadRequestGroupPresentationFile(this.label, this.collective, {this.usedSpace = 0});
+  UploadRequestGroupContextMenuTileBuilder trailing(Widget trailing) {
+    _trailing = trailing;
+    return this;
+  }
 
-  static UploadRequestGroupPresentationFile fromUploadRequestGroup(UploadRequestGroup uploadRequestGroup) {
-    return UploadRequestGroupPresentationFile(
-      uploadRequestGroup.label, uploadRequestGroup.collective,
-      usedSpace: uploadRequestGroup.usedSpace ?? 0
+  @override
+  ListTile build() {
+    return ListTile(
+      key: key,
+      leading: actionIcon,
+      trailing: _trailing ?? SizedBox.shrink(),
+      title: Text(
+        actionName,
+        style: actionTextStyle()),
+      onTap: () => onContextMenuActionClick(_uploadRequestGroup)
     );
   }
-
-  @override
-  String fileName() => label;
-
-  @override
-  int fileSize() => usedSpace.toInt();
-
-  @override
-  Widget fileIcon() {
-    return SvgPicture.asset(
-        collective ? imagePath.icUploadRequestCollective : imagePath.icUploadRequestIndividual,
-        width: 20,
-        height: 24,
-        fit: BoxFit.fill);
-  }
-
-  @override
-  List<Object> get props => [label, collective, usedSpace];
 }
