@@ -107,7 +107,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
                           .key(Key('logout_confirm_modal'))
                           .title(AppLocalizations.of(context).confirm_remove_account_title)
                           .cancelText(AppLocalizations.of(context).cancel)
-                          .onConfirmAction(AppLocalizations.of(context).logout, () => accountDetailsViewModel.logout())
+                          .onConfirmAction(AppLocalizations.of(context).logout, (_) => accountDetailsViewModel.logout())
                           .show(context)
                     )
                   ]
