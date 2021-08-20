@@ -39,16 +39,27 @@ import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 
-typedef OnConfirmActionClick = void Function();
+typedef OnConfirmActionClick = void Function(bool?);
 
 class ConfirmModalSheetBuilder {
-  @protected final AppNavigation _appNavigation;
+  @protected
+  final AppNavigation _appNavigation;
 
-  @protected late Key _key;
-  @protected String _title = '';
-  @protected String _cancelText = '';
-  @protected String _confirmText = '';
-  @protected late OnConfirmActionClick _onConfirmActionClick;
+  @protected
+  late Key _key;
+  @protected
+  String _title = '';
+  @protected
+  String _cancelText = '';
+  @protected
+  String _confirmText = '';
+  @protected
+  late OnConfirmActionClick _onConfirmActionClick;
+
+  @protected
+  String _optionalCheckboxString = '';
+
+  var isOptionalCheckboxChecked = false;
 
   ConfirmModalSheetBuilder(this._appNavigation);
 
@@ -67,58 +78,78 @@ class ConfirmModalSheetBuilder {
     return this;
   }
 
-  ConfirmModalSheetBuilder onConfirmAction(String confirmText, OnConfirmActionClick onConfirmActionClick) {
+  ConfirmModalSheetBuilder onConfirmAction(
+      String confirmText, OnConfirmActionClick onConfirmActionClick) {
     _onConfirmActionClick = onConfirmActionClick;
     _confirmText = confirmText;
     return this;
+  }
+
+  ConfirmModalSheetBuilder optionalCheckbox(String checkboxName) {
+    _optionalCheckboxString = checkboxName;
+    return this;
+  }
+
+  Widget _buildCheckboxRow() {
+    return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      return CheckboxListTile(
+          dense: true,
+          activeColor: AppColor.primaryColor,
+          contentPadding: EdgeInsets.symmetric(horizontal: 36),
+          title: Text(_optionalCheckboxString, style: TextStyle(
+            color: AppColor.deleteMemberIconColor,
+            fontSize: 12
+          )),
+          value: isOptionalCheckboxChecked,
+          controlAffinity: ListTileControlAffinity.leading,
+          onChanged: (bool? value) => setState(() {
+                isOptionalCheckboxChecked = value!;
+              }));
+    });
   }
 
   void show(context) {
     showModalBottomSheet(
         useRootNavigator: true,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20)
-          ),
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         ),
         context: context,
         builder: (BuildContext bc) {
           return Container(
             key: _key,
-            height: 208.0,
+            height: _optionalCheckboxString.isEmpty ? 208.0 : 240.0,
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(left: 50, right: 50, top: 48, bottom: 19),
-                  child: Text(_title, style: TextStyle(fontSize: 16, color: AppColor.confirmDialogTitleTextColor), textAlign: TextAlign.center,)),
+                    padding: EdgeInsets.only(left: 50, right: 50, top: 48, bottom: 19),
+                    child: Text(
+                      _title,
+                      style: TextStyle(fontSize: 16, color: AppColor.confirmDialogTitleTextColor),
+                      textAlign: TextAlign.center,
+                    )),
+                if (_optionalCheckboxString.isNotEmpty) _buildCheckboxRow(),
                 Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
+                    padding: EdgeInsets.only(top: 20),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          primary: AppColor.documentNameItemTextColor,
-                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                          shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                          )
-                        ),
+                            primary: AppColor.documentNameItemTextColor,
+                            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
                         onPressed: () => _appNavigation.popBack(),
                         child: Text(_cancelText, style: TextStyle(fontSize: 14)),
                       ),
                       OutlinedButton(
-                        onPressed: () => _onConfirmActionClick(),
-                        style: OutlinedButton.styleFrom(
-                          primary: Colors.white,
-                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                          backgroundColor: AppColor.toastErrorBackgroundColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                          )
-                        ),
-                        child: Text(_confirmText))
+                          onPressed: () => _onConfirmActionClick(isOptionalCheckboxChecked),
+                          style: OutlinedButton.styleFrom(
+                              primary: Colors.white,
+                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                              backgroundColor: AppColor.toastErrorBackgroundColor,
+                              shape:
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                          child: Text(_confirmText))
                     ])),
               ],
             ),
