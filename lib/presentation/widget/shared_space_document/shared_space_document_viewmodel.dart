@@ -291,7 +291,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     final canPreviewDocument = Platform.isIOS
         ? workGroupDocument.mediaType.isIOSSupportedPreview()
         : workGroupDocument.mediaType.isAndroidSupportedPreview();
-    if (canPreviewDocument || (workGroupDocument.hasThumbnail != null && workGroupDocument.hasThumbnail)) {
+    if (canPreviewDocument || (workGroupDocument.hasThumbnail)) {
       final cancelToken = CancelToken();
       store.dispatch(_showPrepareToPreviewFileDialog(context, workGroupDocument, cancelToken));
 
@@ -725,14 +725,14 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
       cancelSelection();
     }
 
-    if (workGroupNodes != null && workGroupNodes.isNotEmpty) {
+    if (workGroupNodes.isNotEmpty) {
       final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(workGroupNodes.length, workGroupNodes.first.name);
 
       ConfirmModalSheetBuilder(_appNavigation)
           .key(Key('delete_work_group_node_confirm_modal'))
           .title(deleteTitle)
           .cancelText(AppLocalizations.of(context).cancel)
-          .onConfirmAction(AppLocalizations.of(context).delete, () {
+          .onConfirmAction(AppLocalizations.of(context).delete, (_) {
         _appNavigation.popBack();
         if (itemSelectionType == ItemSelectionType.multiple) {
           cancelSelection();
