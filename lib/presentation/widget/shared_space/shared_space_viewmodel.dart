@@ -256,7 +256,7 @@ class SharedSpaceViewModel extends BaseViewModel {
       .key(Key('delete_shared_space_confirm_modal'))
       .title(deleteTitle)
       .cancelText(AppLocalizations.of(context).cancel)
-      .onConfirmAction(AppLocalizations.of(context).delete, () {
+      .onConfirmAction(AppLocalizations.of(context).delete, (_) {
         _appNavigation.popBack();
         if (itemSelectionType == ItemSelectionType.multiple) {
           cancelSelection();

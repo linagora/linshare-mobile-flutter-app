@@ -291,7 +291,7 @@ class MySpaceViewModel extends BaseViewModel {
       cancelSelection();
     }
 
-    if (documents != null && documents.isNotEmpty) {
+    if (documents.isNotEmpty) {
       final deleteTitle = AppLocalizations.of(context)
           .are_you_sure_you_want_to_delete_multiple(documents.length, documents.first.name);
 
@@ -299,7 +299,7 @@ class MySpaceViewModel extends BaseViewModel {
           .key(Key('delete_document_confirm_modal'))
           .title(deleteTitle)
           .cancelText(AppLocalizations.of(context).cancel)
-          .onConfirmAction(AppLocalizations.of(context).delete, () {
+          .onConfirmAction(AppLocalizations.of(context).delete, (_) {
         _appNavigation.popBack();
         if (itemSelectionType == ItemSelectionType.multiple) {
           cancelSelection();
@@ -442,7 +442,7 @@ class MySpaceViewModel extends BaseViewModel {
   void _previewDocument(BuildContext context, Document document) {
     _appNavigation.popBack();
     final canPreviewDocument = Platform.isIOS ? document.mediaType.isIOSSupportedPreview() : document.mediaType.isAndroidSupportedPreview();
-    if (canPreviewDocument || (document.hasThumbnail != null && document.hasThumbnail)) {
+    if (canPreviewDocument || (document.hasThumbnail)) {
       final cancelToken = CancelToken();
       _showPrepareToPreviewFileDialog(context, document, cancelToken);
 

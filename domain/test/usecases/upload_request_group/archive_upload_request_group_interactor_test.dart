@@ -50,11 +50,11 @@ void main() {
 
     test('archiveUploadRequestGroupInteractor should return success with one valid data', () async {
       when(uploadRequestGroupRepository.archiveUploadRequestGroup(
-        uploadRequestGroup1.uploadRequestGroupId)
+        uploadRequestGroup1.uploadRequestGroupId, true)
       ).thenAnswer((_) async => uploadRequestGroup1);
 
       final result = await archiveUploadRequestGroupInteractor.execute(
-        uploadRequestGroup1.uploadRequestGroupId,
+        uploadRequestGroup1.uploadRequestGroupId, true,
       );
 
       final uploadRequestGroup = result
@@ -68,11 +68,11 @@ void main() {
       final exception = Exception();
 
       when(uploadRequestGroupRepository.archiveUploadRequestGroup(
-        uploadRequestGroup1.uploadRequestGroupId),
+        uploadRequestGroup1.uploadRequestGroupId, true),
       ).thenThrow(exception);
 
       final result = await archiveUploadRequestGroupInteractor.execute(
-        uploadRequestGroup1.uploadRequestGroupId,
+        uploadRequestGroup1.uploadRequestGroupId, true,
       );
 
       expect(result, Left<Failure, Success>(ArchiveUploadRequestGroupFailure(exception)));

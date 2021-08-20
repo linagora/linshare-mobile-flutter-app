@@ -227,11 +227,11 @@ void archiveUploadRequestGroupTest() {
     });
 
     test('archiveUploadRequestGroup should return success with valid data', () async {
-      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId))
+      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true))
           .thenAnswer((_) async => uploadRequestGroupResponse1);
 
       final result = await _uploadRequestGroupDataSourceImpl
-          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId);
+          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true);
       expect(result, uploadRequestGroupResponse1.toUploadRequestGroup());
     });
 
@@ -241,11 +241,11 @@ void archiveUploadRequestGroupTest() {
           response: Response(statusCode: 400, requestOptions: RequestOptions(path: '')),
           requestOptions: RequestOptions(path: ''));
 
-      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId))
+      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true))
           .thenThrow(error);
 
       await _uploadRequestGroupDataSourceImpl
-          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId).catchError((error) {
+          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true).catchError((error) {
         expect(error, isA<MissingRequiredFields>());
       });
     });
@@ -256,11 +256,11 @@ void archiveUploadRequestGroupTest() {
           response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')),
           requestOptions: RequestOptions(path: ''));
 
-      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId))
+      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true))
           .thenThrow(error);
 
       await _uploadRequestGroupDataSourceImpl
-          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId).catchError((error) {
+          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true).catchError((error) {
         expect(error, isA<ServerNotFound>());
       });
     });

@@ -255,7 +255,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
       .cancelText(AppLocalizations.of(context).cancel)
       .onConfirmAction(
         AppLocalizations.of(context).delete,
-        () => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
+        (_) => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
       .show(context);
   }
 
