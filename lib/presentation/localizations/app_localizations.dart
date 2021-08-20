@@ -2135,6 +2135,13 @@ class AppLocalizations {
         args: [itemName]
     );
   }
+
+  String get copy_before_archiving {
+    return Intl.message(
+      'Copy all files to my personal space before archiving',
+      name: 'copy_before_archiving',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
