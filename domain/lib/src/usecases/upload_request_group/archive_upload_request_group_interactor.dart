@@ -38,9 +38,9 @@ class ArchiveUploadRequestGroupInteractor {
 
   ArchiveUploadRequestGroupInteractor(this._uploadRequestGroupRepository);
 
-  Future<Either<Failure, Success>> execute(UploadRequestGroupId uploadRequestGroupId) async {
+  Future<Either<Failure, Success>> execute(UploadRequestGroupId uploadRequestGroupId, bool copyToMySpace) async {
     try {
-      final uploadRequestGroup = await _uploadRequestGroupRepository.archiveUploadRequestGroup(uploadRequestGroupId);
+      final uploadRequestGroup = await _uploadRequestGroupRepository.archiveUploadRequestGroup(uploadRequestGroupId, copyToMySpace);
       return Right<Failure, Success>(ArchiveUploadRequestGroupViewState(uploadRequestGroup));
     } catch (exception) {
       return Left<Failure, Success>(ArchiveUploadRequestGroupFailure(exception));
