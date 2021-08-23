@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
 import 'package:redux/redux.dart';
@@ -38,44 +37,5 @@ import 'package:redux/redux.dart';
 final uploadRequestGroupReducer = combineReducers<UploadRequestGroupState>([
   TypedReducer<UploadRequestGroupState, StartUploadRequestGroupLoadingAction>((UploadRequestGroupState state, _) => state.startLoadingState()),
   TypedReducer<UploadRequestGroupState, UploadRequestGroupAction>((UploadRequestGroupState state, UploadRequestGroupAction action) => state.sendViewState(viewState: action.viewState)),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllCreatedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllCreatedAction action) =>
-      state.setUploadRequestsCreatedList(
-          newUploadRequestsList: action.viewState.fold(
-                  (failure) => [],
-                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
-          viewState: action.viewState)),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllActiveClosedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllActiveClosedAction action) =>
-      state.setUploadRequestsActiveClosedList(
-          newUploadRequestsList: action.viewState.fold(
-                  (failure) => [],
-                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
-          viewState: action.viewState)),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetAllArchivedAction>((UploadRequestGroupState state, UploadRequestGroupGetAllArchivedAction action) =>
-      state.setUploadRequestsArchivedList(
-          newUploadRequestsList: action.viewState.fold(
-                  (failure) => [],
-                  (success) => (success is UploadRequestGroupViewState) ? success.uploadRequestGroups : []),
-          viewState: action.viewState)),
-
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupSortPendingAction>((UploadRequestGroupState state, UploadRequestGroupSortPendingAction action) =>
-      state.setUploadRequestsCreatedListWithSort(
-          action.sorter,
-          newUploadRequestsList: action.uploadRequestGroups)),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupSortActiveClosedAction>((UploadRequestGroupState state, UploadRequestGroupSortActiveClosedAction action) =>
-      state.setUploadRequestsActiveClosedListWithSort(
-          action.sorter,
-          newUploadRequestsList: action.uploadRequestGroups)),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupSortArchivedAction>((UploadRequestGroupState state, UploadRequestGroupSortArchivedAction action) =>
-      state.setUploadRequestsArchivedListWithSort(
-          action.sorter,
-          newUploadRequestsList: action.uploadRequestGroups)),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetSorterCreatedAction>((UploadRequestGroupState state, UploadRequestGroupGetSorterCreatedAction action) =>
-      state.setSorterCreated(newSorter: action.sorter)),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetSorterActiveClosedAction>((UploadRequestGroupState state, UploadRequestGroupGetSorterActiveClosedAction action) =>
-      state.setSorterActiveClosed(newSorter: action.sorter)),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupGetSorterArchivedAction>((UploadRequestGroupState state, UploadRequestGroupGetSorterArchivedAction action) =>
-      state.setSorterArchived(newSorter: action.sorter)),
-  TypedReducer<UploadRequestGroupState, CleanUploadRequestGroupAction>((UploadRequestGroupState state, _) => state.clearViewState()),
-  TypedReducer<UploadRequestGroupState, UploadRequestGroupSetSearchResultAction>((UploadRequestGroupState state, UploadRequestGroupSetSearchResultAction action) =>
-      state.setSearchResult(newSearchResult: action.uploadRequestGroupsList)),
+	TypedReducer<UploadRequestGroupState, CleanUploadRequestGroupAction>((UploadRequestGroupState state, _) => state.clearViewState()),
 ]);
