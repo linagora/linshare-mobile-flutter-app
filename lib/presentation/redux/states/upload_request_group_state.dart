@@ -40,245 +40,40 @@ import 'package:equatable/equatable.dart';
 
 @immutable
 class UploadRequestGroupState extends LinShareState with EquatableMixin {
-  final List<UploadRequestGroup> uploadRequestsCreatedList;
-  final List<UploadRequestGroup> uploadRequestsActiveClosedList;
-  final List<UploadRequestGroup> uploadRequestsArchivedList;
-  final List<UploadRequestGroup> searchResult;
-
-  final Sorter pendingSorter;
-  final Sorter activeClosedSorter;
-  final Sorter archivedSorter;
 
   UploadRequestGroupState(
-    Either<Failure, Success> viewState,
-    this.uploadRequestsCreatedList,
-    this.uploadRequestsActiveClosedList,
-    this.uploadRequestsArchivedList,
-    this.searchResult,
-    this.pendingSorter,
-    this.activeClosedSorter,
-    this.archivedSorter
+    Either<Failure, Success> viewState
   ) : super(viewState);
 
   factory UploadRequestGroupState.initial() {
     return UploadRequestGroupState(
-      Right(IdleState()),
-      [],
-      [],
-      [],
-      [],
-      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsCreated),
-      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsActiveClosed),
-      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsArchived)
+      Right(IdleState())
     );
   }
 
   @override
   UploadRequestGroupState clearViewState() {
     return UploadRequestGroupState(
-      Right(IdleState()),
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      searchResult,
-      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsCreated),
-      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsActiveClosed),
-      Sorter.fromOrderScreen(OrderScreen.uploadRequestGroupsArchived)
+      Right(IdleState())
     );
   }
 
   @override
   UploadRequestGroupState sendViewState({required Either<Failure, Success> viewState}) {
     return UploadRequestGroupState(
-      viewState,
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      searchResult,
-      pendingSorter,
-      activeClosedSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setUploadRequestsCreatedList(
-    {
-      required Either<Failure, Success> viewState,
-      required List<UploadRequestGroup> newUploadRequestsList
-    }) {
-    return UploadRequestGroupState(
-      viewState,
-      newUploadRequestsList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      searchResult,
-      pendingSorter,
-      activeClosedSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setUploadRequestsActiveClosedList(
-    {
-      required Either<Failure, Success> viewState,
-      required List<UploadRequestGroup> newUploadRequestsList
-  }) {
-    return UploadRequestGroupState(
-      viewState,
-      uploadRequestsCreatedList,
-      newUploadRequestsList,
-      uploadRequestsArchivedList,
-      searchResult,
-      pendingSorter,
-      activeClosedSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setUploadRequestsArchivedList(
-    {
-      required Either<Failure, Success> viewState,
-      required List<UploadRequestGroup> newUploadRequestsList
-    }) {
-    return UploadRequestGroupState(
-      viewState,
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      newUploadRequestsList,
-      searchResult,
-      pendingSorter,
-      activeClosedSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setUploadRequestsCreatedListWithSort(
-    Sorter newSorter,
-    {
-      Either<Failure, Success>? viewState,
-      required List<UploadRequestGroup> newUploadRequestsList
-    }) {
-    return UploadRequestGroupState(
-      viewState ?? this.viewState,
-      newUploadRequestsList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      searchResult,
-      newSorter,
-      activeClosedSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setUploadRequestsActiveClosedListWithSort(
-    Sorter newSorter,
-    {
-      Either<Failure, Success>? viewState,
-      required List<UploadRequestGroup> newUploadRequestsList
-  }) {
-    return UploadRequestGroupState(
-      viewState ?? this.viewState,
-      uploadRequestsCreatedList,
-      newUploadRequestsList,
-      uploadRequestsArchivedList,
-      searchResult,
-      pendingSorter,
-      newSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setUploadRequestsArchivedListWithSort(
-    Sorter newSorter,
-    {
-      Either<Failure, Success>? viewState,
-      required List<UploadRequestGroup> newUploadRequestsList
-    }) {
-    return UploadRequestGroupState(
-      viewState ?? this.viewState,
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      newUploadRequestsList,
-      searchResult,
-      pendingSorter,
-      activeClosedSorter,
-      newSorter
+      viewState
     );
   }
 
   @override
   UploadRequestGroupState startLoadingState() {
     return UploadRequestGroupState(
-      Right(LoadingState()),
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      searchResult,
-      pendingSorter,
-      activeClosedSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setSorterCreated({Either<Failure, Success>? viewState, required Sorter newSorter}) {
-    return UploadRequestGroupState(
-      viewState ?? this.viewState,
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      searchResult,
-      newSorter,
-      activeClosedSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setSorterActiveClosed({Either<Failure, Success>? viewState, required Sorter newSorter}) {
-    return UploadRequestGroupState(
-      viewState ?? this.viewState,
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      searchResult,
-      pendingSorter,
-      newSorter,
-      archivedSorter
-    );
-  }
-
-  UploadRequestGroupState setSorterArchived({Either<Failure, Success>? viewState, required Sorter newSorter}) {
-    return UploadRequestGroupState(
-      viewState ?? this.viewState,
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      searchResult,
-      pendingSorter,
-      activeClosedSorter,
-      newSorter
-    );
-  }
-
-  UploadRequestGroupState setSearchResult({required List<UploadRequestGroup> newSearchResult}) {
-    return UploadRequestGroupState(
-      viewState,
-      uploadRequestsCreatedList,
-      uploadRequestsActiveClosedList,
-      uploadRequestsArchivedList,
-      newSearchResult,
-      pendingSorter,
-      activeClosedSorter,
-      archivedSorter
+      Right(LoadingState())
     );
   }
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        uploadRequestsCreatedList,
-        uploadRequestsActiveClosedList,
-        uploadRequestsArchivedList,
-        searchResult,
-        pendingSorter
-      ];
+    ...super.props
+  ];
 }

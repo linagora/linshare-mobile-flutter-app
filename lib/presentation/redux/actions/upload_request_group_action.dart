@@ -46,27 +46,6 @@ class UploadRequestGroupAction extends ActionOffline {
 }
 
 @immutable
-class UploadRequestGroupGetAllCreatedAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  UploadRequestGroupGetAllCreatedAction(this.viewState);
-}
-
-@immutable
-class UploadRequestGroupGetAllActiveClosedAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  UploadRequestGroupGetAllActiveClosedAction(this.viewState);
-}
-
-@immutable
-class UploadRequestGroupGetAllArchivedAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  UploadRequestGroupGetAllArchivedAction(this.viewState);
-}
-
-@immutable
 class UploadRequestCreationAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
@@ -76,56 +55,4 @@ class UploadRequestCreationAction extends ActionOnline {
 @immutable
 class CleanUploadRequestGroupAction extends ActionOffline {
   CleanUploadRequestGroupAction();
-}
-
-@immutable
-class UploadRequestGroupGetSorterCreatedAction extends ActionOffline {
-  final Sorter sorter;
-
-  UploadRequestGroupGetSorterCreatedAction(this.sorter);
-}
-
-@immutable
-class UploadRequestGroupGetSorterActiveClosedAction extends ActionOffline {
-  final Sorter sorter;
-
-  UploadRequestGroupGetSorterActiveClosedAction(this.sorter);
-}
-
-@immutable
-class UploadRequestGroupGetSorterArchivedAction extends ActionOffline {
-  final Sorter sorter;
-
-  UploadRequestGroupGetSorterArchivedAction(this.sorter);
-}
-
-@immutable
-class UploadRequestGroupSortPendingAction extends ActionOffline {
-  final List<UploadRequestGroup> uploadRequestGroups;
-  final Sorter sorter;
-
-  UploadRequestGroupSortPendingAction(this.uploadRequestGroups, this.sorter);
-}
-
-@immutable
-class UploadRequestGroupSortActiveClosedAction extends ActionOffline {
-  final List<UploadRequestGroup> uploadRequestGroups;
-  final Sorter sorter;
-
-  UploadRequestGroupSortActiveClosedAction(this.uploadRequestGroups, this.sorter);
-}
-
-@immutable
-class UploadRequestGroupSortArchivedAction extends ActionOffline {
-  final List<UploadRequestGroup> uploadRequestGroups;
-  final Sorter sorter;
-
-  UploadRequestGroupSortArchivedAction(this.uploadRequestGroups, this.sorter);
-}
-
-@immutable
-class UploadRequestGroupSetSearchResultAction extends ActionOffline {
-  final List<UploadRequestGroup> uploadRequestGroupsList;
-
-  UploadRequestGroupSetSearchResultAction(this.uploadRequestGroupsList);
 }

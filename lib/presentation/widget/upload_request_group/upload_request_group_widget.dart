@@ -36,6 +36,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
@@ -45,11 +46,11 @@ import 'package:linshare_flutter_app/presentation/view/background_widgets/backgr
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_horizontal_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/active_closed/active_closed_upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/archived/archived_upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/created/created_upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
-import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 
 class UploadRequestGroupWidget extends StatefulWidget {
   UploadRequestGroupWidget({Key? key}) : super(key: key);
@@ -78,13 +79,6 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, bool>(
-        converter: (store) => store.state.uiState.isInSearchState(),
-        builder: (context, isInSearchState) =>
-            isInSearchState ? _buildSearchViewWidget(context) : _buildDefaultViewWidget());
-  }
-
-  Widget _buildDefaultViewWidget() {
     return DefaultTabController(
         initialIndex: _model.store.state.uiState.uploadRequestGroupTabIndex,
         length: 3,
@@ -95,7 +89,10 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
               labelStyle: TextStyle(fontSize: 16),
               labelColor: AppColor.primaryColor,
               indicatorColor: AppColor.primaryColor,
-              onTap: (index) => _model.setTabIndex(index),
+              onTap: (index) {
+                _model.setTabIndex(index);
+                _model.cancelSelection();
+              },
               tabs: [
                 FittedBox(
                   fit: BoxFit.contain,
@@ -120,404 +117,67 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
             converter: (store) => store.state.uploadRequestGroupState,
             builder: (_, state) => TabBarView(
               children: [
-                _buildPendingUploadRequestListWidget(context, state.uploadRequestsCreatedList),
-                _buildActiveClosedListWidget(context, state.uploadRequestsActiveClosedList),
-                _buildArchivedUploadRequestListWidget(context, state.uploadRequestsArchivedList)
+                getIt<CreatedUploadRequestGroupWidget>(),
+                getIt<ActiveClosedUploadRequestGroupWidget>(),
+                getIt<ArchivedUploadRequestGroupWidget>(),
               ],
             ),
           ),
-          bottomNavigationBar:
-              SearchBottomBarBuilder().key(Key('search_bottom_bar')).onSearchActionClick(() {
-            _model.openSearchState();
-          }).build(),
-          floatingActionButton: StoreConnector<AppState, FunctionalityState>(
-            converter: (Store<AppState> store) => store.state.functionalityState,
-            builder: (context, state) => FloatingActionButton(
-              key: Key('upload_request_add_button'),
-              onPressed: () => _model.openUploadRequestAddMenu(
-                context, _addNewUploadRequestMenuActionTiles(context, state)),
-              backgroundColor: AppColor.primaryColor,
-              child: SvgPicture.asset(
-                imagePath.icPlus,
-                width: 24,
-                height: 24,
-              ),
-            ),
-          ),
+          bottomNavigationBar: StoreConnector<AppState, AppState>(
+              converter: (store) => store.state,
+              builder: (context, appState) {
+                final isInMultipleSelectMode = (appState.activeClosedUploadRequestGroupState.selectMode == SelectMode.ACTIVE ||
+                    appState.createdUploadRequestGroupState.selectMode == SelectMode.ACTIVE ||
+                    appState.archivedUploadRequestGroupState.selectMode == SelectMode.ACTIVE);
+                if (!appState.uiState.isInSearchState() && !isInMultipleSelectMode) {
+                  return SearchBottomBarBuilder().key(Key('search_bottom_bar')).onSearchActionClick(() {
+                    _model.openSearchState();
+                  }).build();
+                }
+                return SizedBox.shrink();
+              }),
+          floatingActionButton: StoreConnector<AppState, AppState>(
+              converter: (store) => store.state,
+              builder: (context, appState) {
+                final isInMultipleSelectMode = (appState.activeClosedUploadRequestGroupState.selectMode == SelectMode.ACTIVE ||
+                    appState.createdUploadRequestGroupState.selectMode == SelectMode.ACTIVE ||
+                    appState.archivedUploadRequestGroupState.selectMode == SelectMode.ACTIVE);
+                if (!appState.uiState.isInSearchState() && !isInMultipleSelectMode) {
+                  return FloatingActionButton(
+                    key: Key('upload_request_add_button'),
+                    onPressed: () => _model.openUploadRequestAddMenu(context, _addNewUploadRequestMenuActionTiles(context, appState.functionalityState)),
+                    backgroundColor: AppColor.primaryColor,
+                    child: SvgPicture.asset(
+                      imagePath.icPlus,
+                      width: 24,
+                      height: 24,
+                    ),
+                  );
+                }
+                return SizedBox.shrink();
+              }),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ));
   }
 
-  Widget _buildArchivedUploadRequestListWidget(
-      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return Column(children: [
-      _buildMenuSorterArchived(),
-      Expanded(
-          child: RefreshIndicator(
-              onRefresh: () async => _model.getUploadRequestArchivedStatus(),
-              child: uploadRequestList.isEmpty
-                  ? _buildCreateUploadRequestsHere(context)
-                  : ListView.builder(
-                      itemCount: uploadRequestList.length,
-                      itemBuilder: (context, index) =>
-                          _buildArchivedUploadTile(uploadRequestList[index]))))
-    ]);
-  }
-
-  Widget _buildPendingUploadRequestListWidget(
-      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return Column(children: [
-      _buildMenuSorterPending(),
-      Expanded(
-          child: RefreshIndicator(
-              onRefresh: () async => _model.getUploadRequestCreatedStatus(),
-              child: uploadRequestList.isEmpty
-                  ? _buildCreateUploadRequestsHere(context)
-                  : ListView.builder(
-                      itemCount: uploadRequestList.length,
-                      itemBuilder: (context, index) =>
-                          _buildPendingUploadTile(uploadRequestList[index]))))
-    ]);
-  }
-
-  Widget _buildActiveClosedListWidget(
-      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return Column(children: [
-      _buildMenuSorterActiveClosed(),
-      Expanded(
-          child: RefreshIndicator(
-              onRefresh: () async => _model.getUploadRequestActiveClosedStatus(),
-              child: uploadRequestList.isEmpty
-                  ? _buildCreateUploadRequestsHere(context)
-                  : ListView.builder(
-                      itemCount: uploadRequestList.length,
-                      itemBuilder: (context, index) =>
-                          _buildActiveClosedUploadTile(uploadRequestList[index]))))
-    ]);
-  }
-
-  ListTile _buildPendingUploadTile(UploadRequestGroup request) {
-    return ListTile(
-      onTap: () => _model.getListUploadRequests(request),
-      dense: true,
-      leading: _getTileIcon(request.collective),
-      title: Text(request.label,
-          style: TextStyle(fontSize: 14, color: AppColor.uploadRequestLabelsColor)),
-      subtitle: Text(
-          AppLocalizations.of(context)
-              .activated_date(request.activationDate.getMMMddyyyyFormatString()),
-          style: TextStyle(fontSize: 14, color: AppColor.uploadFileFileSizeTextColor)),
-      trailing: IconButton(
-          icon: SvgPicture.asset(
-            imagePath.icContextMenu,
-            width: 24,
-            height: 24,
-            fit: BoxFit.fill,
-          ),
-          onPressed: () => _model.openContextMenu(context, request, _contextMenuActionTiles(context, request))),
-    );
-  }
-
-  ListTile _buildArchivedUploadTile(UploadRequestGroup request) {
-    return ListTile(
-      onTap: () => _model.getListUploadRequests(request),
-      dense: true,
-      leading: _getTileIcon(request.collective),
-      title: Text(request.label,
-          style: TextStyle(fontSize: 14, color: AppColor.uploadRequestLabelsColor)),
-      subtitle: Text(
-          AppLocalizations.of(context)
-              .archived_date(request.activationDate.getMMMddyyyyFormatString()),
-          style: TextStyle(fontSize: 14, color: AppColor.uploadFileFileSizeTextColor)),
-      trailing: IconButton(
-          icon: SvgPicture.asset(
-            imagePath.icContextMenu,
-            width: 24,
-            height: 24,
-            fit: BoxFit.fill,
-          ),
-          onPressed: () => _model.openContextMenu(context, request, _contextMenuActionTiles(context, request))),
-    );
-  }
-
-  ListTile _buildActiveClosedUploadTile(UploadRequestGroup request) {
-    return ListTile(
-      onTap: () => _model.getListUploadRequests(request),
-      dense: true,
-      leading: _getTileIcon(request.collective),
-      title: Text(request.label,
-          style: TextStyle(fontSize: 14, color: AppColor.uploadRequestLabelsColor)),
-      subtitle: _buildActiveClosedSubtitleWidget(request.status),
-      trailing: IconButton(
-          icon: SvgPicture.asset(
-            imagePath.icContextMenu,
-            width: 24,
-            height: 24,
-            fit: BoxFit.fill,
-          ),
-          onPressed: () => _model.openContextMenu(context, request, _contextMenuActionTiles(context, request))),
-    );
-  }
-
-  Widget _buildActiveClosedSubtitleWidget(UploadRequestStatus status) {
-    if (status == UploadRequestStatus.ENABLED) {
-      return Row(children: [
-        Container(
-          margin: EdgeInsets.only(right: 4),
-          width: 7.0,
-          height: 7.0,
-          decoration: BoxDecoration(
-            color: AppColor.primaryColor,
-            shape: BoxShape.circle,
-          ),
-        ),
-        Text(AppLocalizations.of(context).active,
-            style: TextStyle(fontSize: 14, color: AppColor.uploadFileFileSizeTextColor))
-      ]);
-    }
-
-    if (status == UploadRequestStatus.CLOSED) {
-      return Row(children: [
-        Container(
-          margin: EdgeInsets.only(right: 4),
-          width: 7.0,
-          height: 7.0,
-          decoration: BoxDecoration(
-            color: AppColor.uploadRequestLabelsColor,
-            shape: BoxShape.circle,
-          ),
-        ),
-        Text(AppLocalizations.of(context).expired_closed,
-            style: TextStyle(fontSize: 14, color: AppColor.uploadFileFileSizeTextColor))
-      ]);
-    }
-
-    return SizedBox.shrink();
-  }
-
-  Widget _buildCreateUploadRequestsHere(BuildContext context) {
-    return BackgroundWidgetBuilder()
-        .key(Key('create_upload_request_here'))
-        .image(SvgPicture.asset(imagePath.icCreateUploadRequest,
-            width: 120, height: 120, fit: BoxFit.fill))
-        .text(AppLocalizations.of(context).create_upload_requests_here)
-        .build();
-  }
-
-  Widget _getTileIcon(bool collective) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SvgPicture.asset(
-          collective ? imagePath.icUploadRequestCollective : imagePath.icUploadRequestIndividual,
-          width: 20,
-          height: 24,
-          fit: BoxFit.fill)
-    ]);
-  }
-
   List<Widget> _addNewUploadRequestMenuActionTiles(BuildContext context, FunctionalityState state) {
     final uploadRequestFunctionality = state.getAllEnabledUploadRequest();
-    return [
-      _addCollectiveAction(context, uploadRequestFunctionality),
-      _addIndividualAction(context, uploadRequestFunctionality)
-    ];
+    return [_addCollectiveAction(context, uploadRequestFunctionality), _addIndividualAction(context, uploadRequestFunctionality)];
   }
 
-  Widget _addCollectiveAction(BuildContext context, List<Functionality?> uploadRequestFunctionalities) =>
-    SimpleHorizontalContextMenuActionBuilder(
-      Key('add_collective_ur_context_menu_action'),
-      SvgPicture.asset(imagePath.icUploadRequestCollective,
-        width: 24, height: 24, fit: BoxFit.fill, color: AppColor.uploadRequestAddNewIconColor),
-      AppLocalizations.of(context).collective_upload)
-    .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.COLLECTIVE, uploadRequestFunctionalities))
-    .build();
+  Widget _addCollectiveAction(BuildContext context, List<Functionality?> uploadRequestFunctionalities) => SimpleHorizontalContextMenuActionBuilder(
+          Key('add_collective_ur_context_menu_action'),
+          SvgPicture.asset(imagePath.icUploadRequestCollective, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.uploadRequestAddNewIconColor),
+          AppLocalizations.of(context).collective_upload)
+      .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.COLLECTIVE, uploadRequestFunctionalities))
+      .build();
 
-  Widget _addIndividualAction(BuildContext context, List<Functionality?> uploadRequestFunctionalities) =>
-    SimpleHorizontalContextMenuActionBuilder(
-      Key('add_individual_ur_context_menu_action'),
-      SvgPicture.asset(imagePath.icUploadRequestIndividual,
-        width: 24, height: 24, fit: BoxFit.fill, color: AppColor.uploadRequestAddNewIconColor),
-      AppLocalizations.of(context).individual_upload)
-    .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, uploadRequestFunctionalities))
-    .build();
-
-  Widget _buildMenuSorterPending() {
-    return StoreConnector<AppState, AppState>(
-      converter: (Store<AppState> store) => store.state,
-      builder: (context, appState) {
-        return !appState.uiState.isInSearchState()
-            ? OrderByButtonBuilder(context, appState.uploadRequestGroupState.pendingSorter)
-                .onOpenOrderMenuAction(
-                    (currentSorter) => _model.openPopupMenuSorterPending(context, currentSorter))
-                .build()
-            : SizedBox.shrink();
-      },
-    );
-  }
-
-  Widget _buildMenuSorterArchived() {
-    return StoreConnector<AppState, AppState>(
-        converter: (Store<AppState> store) => store.state,
-        builder: (context, appState) =>
-            OrderByButtonBuilder(context, appState.uploadRequestGroupState.archivedSorter)
-                .onOpenOrderMenuAction(
-                    (currentSorter) => _model.openPopupMenuSorterArchived(context, currentSorter))
-                .build());
-  }
-
-  Widget _buildMenuSorterActiveClosed() {
-    return StoreConnector<AppState, AppState>(
-      converter: (Store<AppState> store) => store.state,
-      builder: (context, appState) {
-        return !appState.uiState.isInSearchState()
-            ? OrderByButtonBuilder(context, appState.uploadRequestGroupState.activeClosedSorter)
-                .onOpenOrderMenuAction((currentSorter) =>
-                    _model.openPopupMenuSorterActiveClosed(context, currentSorter))
-                .build()
-            : SizedBox.shrink();
-      },
-    );
-  }
-
-  // Search Widgets
-  Widget _buildSearchViewWidget(BuildContext context) {
-    return DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: TabBar(
-              unselectedLabelColor: AppColor.uploadRequestLabelsColor,
-              unselectedLabelStyle: TextStyle(fontSize: 16),
-              labelStyle: TextStyle(fontSize: 16),
-              labelColor: AppColor.primaryColor,
-              indicatorColor: AppColor.primaryColor,
-              tabs: [
-                FittedBox(
-                  fit: BoxFit.contain,
-                  child: Tab(
-                    text: AppLocalizations.of(context).pending,
-                  ),
-                ),
-                FittedBox(
-                  fit: BoxFit.none,
-                  child: Tab(
-                    text: AppLocalizations.of(context).active_closed,
-                  ),
-                ),
-                FittedBox(
-                  fit: BoxFit.contain,
-                  child: Tab(
-                    text: AppLocalizations.of(context).archived,
-                  ),
-                ),
-              ]),
-          body: StoreConnector<AppState, UploadRequestGroupState>(
-            converter: (store) => store.state.uploadRequestGroupState,
-            builder: (_, state) => TabBarView(
-              children: [
-                _buildPendingUploadRequestSearchListWidget(
-                    context,
-                    state.searchResult
-                        .where((element) => element.status == UploadRequestStatus.CREATED)
-                        .toList()),
-                _buildActiveClosedSearchListWidget(
-                    context,
-                    state.searchResult
-                        .where((element) =>
-                            element.status == UploadRequestStatus.ENABLED ||
-                            element.status == UploadRequestStatus.CLOSED)
-                        .toList()),
-                _buildArchivedUploadRequestSearchListWidget(
-                    context,
-                    state.searchResult
-                        .where((element) => element.status == UploadRequestStatus.ARCHIVED)
-                        .toList())
-              ],
-            ),
-          ),
-        ));
-  }
-
-  Widget _buildNoResultFound() {
-    return BackgroundWidgetBuilder()
-        .key(Key('search_no_result_found'))
-        .text(AppLocalizations.of(context).no_results_found)
-        .build();
-  }
-
-  Widget _buildResultCount(int count) {
-    return StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (context, appState) {
-          if (_model.searchQuery.value.isNotEmpty) {
-            return _buildResultCountRow(count);
-          }
-          return SizedBox.shrink();
-        });
-  }
-
-  Widget _buildResultCountRow(int count) {
-    return Container(
-      color: AppColor.topBarBackgroundColor,
-      height: 40.0,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            AppLocalizations.of(context).results_count(count),
-            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildArchivedUploadRequestSearchListWidget(
-      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return Column(children: [
-      _buildResultCount(uploadRequestList.length),
-      Expanded(
-          child: RefreshIndicator(
-              onRefresh: () async => _model.getUploadRequestArchivedStatus(),
-              child: uploadRequestList.isEmpty
-                  ? _buildNoResultFound()
-                  : ListView.builder(
-                      itemCount: uploadRequestList.length,
-                      itemBuilder: (context, index) =>
-                          _buildArchivedUploadTile(uploadRequestList[index]))))
-    ]);
-  }
-
-  Widget _buildPendingUploadRequestSearchListWidget(
-      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return Column(children: [
-      _buildResultCount(uploadRequestList.length),
-      Expanded(
-          child: RefreshIndicator(
-              onRefresh: () async => _model.getUploadRequestCreatedStatus(),
-              child: uploadRequestList.isEmpty
-                  ? _buildNoResultFound()
-                  : ListView.builder(
-                      itemCount: uploadRequestList.length,
-                      itemBuilder: (context, index) =>
-                          _buildPendingUploadTile(uploadRequestList[index]))))
-    ]);
-  }
-
-  Widget _buildActiveClosedSearchListWidget(
-      BuildContext context, List<UploadRequestGroup> uploadRequestList) {
-    return Column(children: [
-      _buildResultCount(uploadRequestList.length),
-      Expanded(
-          child: RefreshIndicator(
-              onRefresh: () async => _model.getUploadRequestActiveClosedStatus(),
-              child: uploadRequestList.isEmpty
-                  ? _buildNoResultFound()
-                  : ListView.builder(
-                      itemCount: uploadRequestList.length,
-                      itemBuilder: (context, index) =>
-                          _buildActiveClosedUploadTile(uploadRequestList[index]))))
-    ]);
-  }
+  Widget _addIndividualAction(BuildContext context, List<Functionality?> uploadRequestFunctionalities) => SimpleHorizontalContextMenuActionBuilder(
+          Key('add_individual_ur_context_menu_action'),
+          SvgPicture.asset(imagePath.icUploadRequestIndividual, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.uploadRequestAddNewIconColor),
+          AppLocalizations.of(context).individual_upload)
+      .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, uploadRequestFunctionalities))
+      .build();
 
   List<Widget> _contextMenuActionTiles(BuildContext context, UploadRequestGroup uploadRequestGroup) {
     return [
@@ -527,10 +187,10 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
 
   Widget _AddRecipientsAction(BuildContext context, UploadRequestGroup uploadRequestGroup) {
     return SimpleContextMenuActionBuilder(
-            Key('add_recipients_context_menu_action'),
-            SvgPicture.asset(imagePath.icAddMember,
-                width: 24, height: 24, fit: BoxFit.fill),
-            AppLocalizations.of(context).add_recipients)
+        Key('add_recipients_context_menu_action'),
+        SvgPicture.asset(imagePath.icAddMember,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).add_recipients)
         .onActionClick((_) => _model.goToAddRecipients(uploadRequestGroup))
         .build();
   }
