@@ -33,6 +33,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
@@ -43,6 +44,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/common/upload_request_group_common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/common/upload_request_group_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/active_closed/active_closed_upload_request_group_viewmodel.dart';
 import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -130,7 +132,7 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
       uploadRequestGroup: request.element,
       subTitleWidget: _buildActiveClosedSubtitleWidget(request.element.status),
       onTileTapCallback: () => _model.getListUploadRequests(request.element),
-      onMenuOptionPressCallback: () {},
+      onMenuOptionPressCallback: () => _model.openContextMenu(context, request.element, _contextMenuActionTiles(request.element)),
       onTileLongPressCallback: () {}
     ).build();
   }
@@ -186,4 +188,19 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
       });
   }
 
+  List<Widget> _contextMenuActionTiles(UploadRequestGroup uploadRequestGroup) {
+    return [
+      if(uploadRequestGroup.status == UploadRequestStatus.ENABLED) _addRecipientsAction(uploadRequestGroup)
+    ];
+  }
+
+  Widget _addRecipientsAction(UploadRequestGroup uploadRequestGroup) {
+    return SimpleContextMenuActionBuilder(
+        Key('add_recipients_context_menu_action'),
+        SvgPicture.asset(imagePath.icAddMember,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).add_recipients)
+        .onActionClick((_) => _model.goToAddRecipients(uploadRequestGroup))
+        .build();
+  }
 }

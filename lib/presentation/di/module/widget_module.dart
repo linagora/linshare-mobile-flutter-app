@@ -91,8 +91,6 @@ import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group/add_recipient_upload_request_group/add_recipients_upload_request_group_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group/add_recipient_upload_request_group/add_recipients_upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/active_closed/active_closed_upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/active_closed/active_closed_upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/archived/archived_upload_request_group_viewmodel.dart';
@@ -101,6 +99,8 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_group/cr
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/created/created_upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
 import 'package:redux/redux.dart';
 

@@ -122,7 +122,6 @@ class AppState with EquatableMixin {
       required this.uploadRequestInsideState,
       required this.receivedShareDetailsState,
       required this.addRecipientsUploadRequestGroupState,
-      required this.receivedShareDetailsState,
       required this.createdUploadRequestGroupState,
       required this.activeClosedUploadRequestGroupState,
       required this.archivedUploadRequestGroupState});
