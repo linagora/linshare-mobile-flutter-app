@@ -96,7 +96,6 @@ AppState appStateReducer(AppState state, action) {
         uploadRequestInsideState: uploadRequestInsideReducer(state.uploadRequestInsideState, action),
         receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action),
         addRecipientsUploadRequestGroupState: addRecipientUploadRequestGroupReducer(state.addRecipientsUploadRequestGroupState, action),
-        receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action),
         createdUploadRequestGroupState: createdUploadRequestGroupReducer(state.createdUploadRequestGroupState, action),
         archivedUploadRequestGroupState: archivedUploadRequestGroupReducer(state.archivedUploadRequestGroupState, action),
         activeClosedUploadRequestGroupState: activeClosedUploadRequestGroupReducer(state.activeClosedUploadRequestGroupState, action));
@@ -132,7 +131,6 @@ AppState appStateReducer(AppState state, action) {
       uploadRequestInsideState: state.uploadRequestInsideState,
       receivedShareDetailsState: state.receivedShareDetailsState,
       addRecipientsUploadRequestGroupState: state.addRecipientsUploadRequestGroupState,
-      receivedShareDetailsState: state.receivedShareDetailsState,
       createdUploadRequestGroupState: state.createdUploadRequestGroupState,
       activeClosedUploadRequestGroupState: state.activeClosedUploadRequestGroupState,
       archivedUploadRequestGroupState: state.archivedUploadRequestGroupState,

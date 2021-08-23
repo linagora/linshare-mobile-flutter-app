@@ -42,8 +42,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/functionality_sta
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_horizontal_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/active_closed/active_closed_upload_request_group_widget.dart';
@@ -179,19 +177,4 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
       .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, uploadRequestFunctionalities))
       .build();
 
-  List<Widget> _contextMenuActionTiles(BuildContext context, UploadRequestGroup uploadRequestGroup) {
-    return [
-      if (uploadRequestGroup.status == UploadRequestStatus.CREATED || uploadRequestGroup.status == UploadRequestStatus.ENABLED) _AddRecipientsAction(context, uploadRequestGroup),
-    ];
-  }
-
-  Widget _AddRecipientsAction(BuildContext context, UploadRequestGroup uploadRequestGroup) {
-    return SimpleContextMenuActionBuilder(
-        Key('add_recipients_context_menu_action'),
-        SvgPicture.asset(imagePath.icAddMember,
-            width: 24, height: 24, fit: BoxFit.fill),
-        AppLocalizations.of(context).add_recipients)
-        .onActionClick((_) => _model.goToAddRecipients(uploadRequestGroup))
-        .build();
-  }
 }
