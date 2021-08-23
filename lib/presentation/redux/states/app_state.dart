@@ -53,6 +53,9 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_active_closed_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_archived_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_created_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 
@@ -84,6 +87,9 @@ class AppState with EquatableMixin {
   final SharedSpaceNodeVersionsState sharedSpaceNodeVersionsState;
   final BiometricAuthenticationLoginState biometricAuthenticationLoginState;
   final UploadRequestGroupState uploadRequestGroupState;
+  final CreatedUploadRequestGroupState createdUploadRequestGroupState;
+  final ActiveClosedUploadRequestGroupState activeClosedUploadRequestGroupState;
+  final ArchivedUploadRequestGroupState archivedUploadRequestGroupState;
   final UploadRequestInsideState uploadRequestInsideState;
   final ReceivedShareDetailsState receivedShareDetailsState;
   final AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState;
@@ -115,7 +121,11 @@ class AppState with EquatableMixin {
       required this.uploadRequestGroupState,
       required this.uploadRequestInsideState,
       required this.receivedShareDetailsState,
-      required this.addRecipientsUploadRequestGroupState});
+      required this.addRecipientsUploadRequestGroupState,
+      required this.receivedShareDetailsState,
+      required this.createdUploadRequestGroupState,
+      required this.activeClosedUploadRequestGroupState,
+      required this.archivedUploadRequestGroupState});
 
   factory AppState.initial() {
     return AppState(
@@ -143,6 +153,9 @@ class AppState with EquatableMixin {
         biometricAuthenticationLoginState: BiometricAuthenticationLoginState.initial(),
         sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
         uploadRequestGroupState: UploadRequestGroupState.initial(),
+        createdUploadRequestGroupState: CreatedUploadRequestGroupState.initial(),
+        activeClosedUploadRequestGroupState: ActiveClosedUploadRequestGroupState.initial(),
+        archivedUploadRequestGroupState: ArchivedUploadRequestGroupState.initial(),
         uploadRequestInsideState: UploadRequestInsideState.initial(),
         receivedShareDetailsState: ReceivedShareDetailsState.initial(),
         addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial()
@@ -174,6 +187,9 @@ class AppState with EquatableMixin {
         biometricAuthenticationLoginState,
         sharedSpaceNodeVersionsState,
         uploadRequestGroupState,
+        createdUploadRequestGroupState,
+        activeClosedUploadRequestGroupState,
+        archivedUploadRequestGroupState,
         uploadRequestInsideState,
         receivedShareDetailsState,
         addRecipientsUploadRequestGroupState

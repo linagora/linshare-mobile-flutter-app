@@ -38,6 +38,9 @@ import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:redux/redux.dart';
@@ -91,7 +94,10 @@ class HomeAppBarViewModel extends BaseViewModel {
     viewState.fold((failure) => null, (success) {
       if (success is DisableSearchViewState) {
         _typeAheadController.clear();
-        store.dispatch(CleanUploadRequestGroupAction());
+				store.dispatch(CleanUploadRequestGroupAction());
+				store.dispatch(CleanCreatedUploadRequestGroupAction());
+				store.dispatch(CleanArchivedUploadRequestGroupAction());
+				store.dispatch(CleanActiveClosedUploadRequestGroupAction());
       }
     });
   }

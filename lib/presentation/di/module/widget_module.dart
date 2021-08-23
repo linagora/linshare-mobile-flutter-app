@@ -39,6 +39,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
+import 'package:linshare_flutter_app/presentation/view/common/upload_request_group_common_view.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_viewmodel.dart';
@@ -91,6 +93,12 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_creation
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/add_recipient_upload_request_group/add_recipients_upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/add_recipient_upload_request_group/add_recipients_upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/active_closed/active_closed_upload_request_group_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/active_closed/active_closed_upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/archived/archived_upload_request_group_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/archived/archived_upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/created/created_upload_request_group_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/created/created_upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
@@ -126,6 +134,7 @@ class WidgetModule {
     _provideHomeAppBarComponent();
     _provideReceivedShareDetailsComponent();
     _provideAddRecipientsUploadRequestGroupComponent();
+    _provideWidgetCommonView();
   }
 
   void _provideLoginComponent() {
@@ -422,9 +431,15 @@ class WidgetModule {
   }
 
   void _provideUploadRequestGroupComponent() {
+    getIt.registerFactory(() => CreatedUploadRequestGroupWidget());
+    getIt.registerFactory(() => ActiveClosedUploadRequestGroupWidget());
+    getIt.registerFactory(() => ArchivedUploadRequestGroupWidget());
     getIt.registerFactory(() => UploadRequestGroupWidget());
-    getIt.registerFactory(() =>
-      UploadRequestGroupViewModel(
+		getIt.registerFactory(() => UploadRequestGroupViewModel(
+				getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>()
+		));
+    getIt.registerFactory(() => CreatedUploadRequestGroupViewModel(
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
         getIt.get<GetAllUploadRequestGroupsInteractor>(),
@@ -432,7 +447,25 @@ class WidgetModule {
         getIt<SaveSorterInteractor>(),
         getIt<SortInteractor>(),
         getIt<SearchUploadRequestGroupsInteractor>()
-      ));
+    ));
+		getIt.registerFactory(() => ActiveClosedUploadRequestGroupViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAllUploadRequestGroupsInteractor>(),
+        getIt<GetSorterInteractor>(),
+        getIt<SaveSorterInteractor>(),
+        getIt<SortInteractor>(),
+        getIt<SearchUploadRequestGroupsInteractor>()
+    ));
+		getIt.registerFactory(() => ArchivedUploadRequestGroupViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAllUploadRequestGroupsInteractor>(),
+        getIt<GetSorterInteractor>(),
+        getIt<SaveSorterInteractor>(),
+        getIt<SortInteractor>(),
+        getIt<SearchUploadRequestGroupsInteractor>()
+    ));
   }
 
   void _provideUploadRequestCreationComponent() {
@@ -486,5 +519,10 @@ class WidgetModule {
         getIt.get<AddRecipientsToUploadRequestGroupInteractor>(),
         getIt.get<GetAllUploadRequestsInteractor>()
     ));
+  }
+
+  void _provideWidgetCommonView() {
+    getIt.registerFactory(() => UploadRequestGroupCommonView());
+    getIt.registerFactory(() => CommonView());
   }
 }
