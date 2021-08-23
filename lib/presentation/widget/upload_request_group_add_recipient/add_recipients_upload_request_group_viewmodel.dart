@@ -37,7 +37,6 @@ import 'package:linshare_flutter_app/presentation/redux/actions/add_recipients_u
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
@@ -114,8 +113,8 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
         .title(addRecipientTitle)
         .cancelText(AppLocalizations.of(context).cancel)
         .onConfirmAction(AppLocalizations.of(context).add, () {
-      store.dispatch(_sendRecipientsAction(uploadRequestGroupId, recipientsList));
-      _appNavigation.push(RoutePaths.homeRoute);
+            store.dispatch(_sendRecipientsAction(uploadRequestGroupId, recipientsList));
+            _appNavigation.popBack();
     }).show(context);
   }
 
@@ -125,10 +124,14 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
       await _addRecipientsToUploadRequestGroupInteractor
           .execute(uploadRequestGroupId, recipientsList)
           .then((result) => result.fold(
-              (failure) =>
-                  store.dispatch(AddRecipientsUploadRequestGroupViewStateAction(Left(failure))),
-              (success) =>
-                  store.dispatch(AddRecipientsUploadRequestGroupViewStateAction(Right(success)))));
+              (failure) {
+                store.dispatch(AddRecipientsUploadRequestGroupViewStateAction(Left(failure)));
+                backToUploadRequest();
+              },
+              (success) {
+                store.dispatch(AddRecipientsUploadRequestGroupViewStateAction(Right(success)));
+                backToUploadRequest();
+              }));
 
       store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
     });
