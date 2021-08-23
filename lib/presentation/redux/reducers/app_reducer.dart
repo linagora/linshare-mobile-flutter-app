@@ -55,6 +55,9 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_re
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/update_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_active_closed_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_archived_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_created_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -92,7 +95,11 @@ AppState appStateReducer(AppState state, action) {
         uploadRequestGroupState: uploadRequestGroupReducer(state.uploadRequestGroupState, action),
         uploadRequestInsideState: uploadRequestInsideReducer(state.uploadRequestInsideState, action),
         receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action),
-        addRecipientsUploadRequestGroupState: addRecipientUploadRequestGroupReducer(state.addRecipientsUploadRequestGroupState, action));
+        addRecipientsUploadRequestGroupState: addRecipientUploadRequestGroupReducer(state.addRecipientsUploadRequestGroupState, action),
+        receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action),
+        createdUploadRequestGroupState: createdUploadRequestGroupReducer(state.createdUploadRequestGroupState, action),
+        archivedUploadRequestGroupState: archivedUploadRequestGroupReducer(state.archivedUploadRequestGroupState, action),
+        activeClosedUploadRequestGroupState: activeClosedUploadRequestGroupReducer(state.activeClosedUploadRequestGroupState, action));
   }
 
   return AppState(
@@ -124,7 +131,12 @@ AppState appStateReducer(AppState state, action) {
       uploadRequestGroupState: state.uploadRequestGroupState,
       uploadRequestInsideState: state.uploadRequestInsideState,
       receivedShareDetailsState: state.receivedShareDetailsState,
-      addRecipientsUploadRequestGroupState: state.addRecipientsUploadRequestGroupState);
+      addRecipientsUploadRequestGroupState: state.addRecipientsUploadRequestGroupState,
+      receivedShareDetailsState: state.receivedShareDetailsState,
+      createdUploadRequestGroupState: state.createdUploadRequestGroupState,
+      activeClosedUploadRequestGroupState: state.activeClosedUploadRequestGroupState,
+      archivedUploadRequestGroupState: state.archivedUploadRequestGroupState,
+  );
 }
 
 bool canExecuteAction(AppState state, action) {
