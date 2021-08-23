@@ -32,7 +32,6 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/model/file/upload_request_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
@@ -42,11 +41,9 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group/add_recipient_upload_request_group/add_recipients_upload_request_group_arguments.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -100,36 +97,6 @@ class UploadRequestGroupViewModel extends BaseViewModel {
 		store.dispatch(UploadRequestGroupActiveClosedClearSelectedAction());
 		store.dispatch(UploadRequestGroupArchivedClearSelectedAction());
 	}
-
-  void openContextMenu(BuildContext context, UploadRequestGroup uploadRequestGroup, List<Widget> actionTiles, {Widget? footerAction}) {
-    store.dispatch(_handleContextMenuAction(context, uploadRequestGroup, actionTiles, footerAction: footerAction));
-  }
-
-  ThunkAction<AppState> _handleContextMenuAction(
-      BuildContext context,
-      UploadRequestGroup uploadRequestGroup,
-      List<Widget> actionTiles,
-      {Widget? footerAction}) {
-    return (Store<AppState> store) async {
-      ContextMenuBuilder(context)
-          .addHeader(ContextMenuHeaderBuilder(
-            Key('context_menu_header'),
-            UploadRequestGroupPresentationFile.fromUploadRequestGroup(uploadRequestGroup)).build())
-          .addTiles(actionTiles)
-          .addFooter(footerAction ?? SizedBox.shrink())
-          .build();
-      store.dispatch(UploadRequestGroupAction(Right(UploadRequestGroupContextMenuItemViewState(uploadRequestGroup))));
-    };
-  }
-
-  void goToAddRecipients(UploadRequestGroup request) {
-    _appNavigation.popBack();
-    _appNavigation.push(
-      RoutePaths.addRecipientsUploadRequestGroup,
-      arguments: AddRecipientsUploadRequestGroupArgument(request),
-    );
-    store.dispatch(UIStateSetUploadRequestGroupIndexAction(_tabIndex));
-  }
 
   @override
   void onDisposed() {
