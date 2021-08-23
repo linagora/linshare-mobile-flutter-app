@@ -34,6 +34,8 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -135,7 +137,7 @@ class UploadRequestCreationViewModel extends BaseViewModel {
 
   void getUploadRequestCreatedStatus() {
     store.dispatch(OnlineThunkAction((Store<AppState> store) async {
-      store.dispatch(StartUploadRequestGroupLoadingAction());
+      store.dispatch(StartCreatedUploadRequestGroupLoadingAction());
       store.dispatch(UploadRequestGroupGetAllCreatedAction(
           await _getAllUploadRequestGroupsInteractor.execute([UploadRequestStatus.CREATED])));
     }));
@@ -143,7 +145,7 @@ class UploadRequestCreationViewModel extends BaseViewModel {
 
   void getUploadRequestActiveClosedStatus() {
     store.dispatch(OnlineThunkAction((Store<AppState> store) async {
-      store.dispatch(StartUploadRequestGroupLoadingAction());
+      store.dispatch(StartActiveClosedUploadRequestGroupLoadingAction());
       store.dispatch(UploadRequestGroupGetAllActiveClosedAction(
           await _getAllUploadRequestGroupsInteractor
               .execute([UploadRequestStatus.ENABLED, UploadRequestStatus.CLOSED])));
