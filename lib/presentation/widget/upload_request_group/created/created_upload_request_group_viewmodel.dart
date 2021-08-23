@@ -63,7 +63,7 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
 		this._getSorterInteractor,
     this._saveSorterInteractor, 
 		this._sortInteractor, 
-		this._searchUploadRequestGroupsInteractor) : super(store) {
+		this._searchUploadRequestGroupsInteractor) : super(store, _appNavigation) {
 			_storeStreamSubscription = store.onChange.listen((event) {
 				event.uploadRequestGroupState.viewState.fold((failure) => null, (success) {
 					if (success is SearchUploadRequestGroupsNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
