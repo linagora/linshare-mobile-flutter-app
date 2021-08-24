@@ -30,12 +30,19 @@
 //  the Additional Terms applicable to LinShare software.
 
 
+import 'package:domain/domain.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_group_multiple_selection_action_builder.dart';
 
 class UploadRequestGroupCommonView {
+
+  final imagePath = getIt<AppImagePaths>();
 
   Widget buildCreateUploadRequestsHere(BuildContext context, String icon) {
     return BackgroundWidgetBuilder()
@@ -45,4 +52,19 @@ class UploadRequestGroupCommonView {
       .build();
   }
 
+  Widget buildMultipleSelectionBottomBar(BuildContext context,
+    {required List<UploadRequestGroup> allSelectedGroups,
+    required List<Widget> actionWidgets}) => MultipleSelectionBarBuilder()
+      .key(Key('multiple_upload_request_group_selection_bar'))
+      .text(AppLocalizations.of(context).items(allSelectedGroups.length))
+      .actions(actionWidgets)
+      .build();
+
+  Widget moreActionMultipleSelection(List<UploadRequestGroup> groups, Function onActionClick) =>
+    UploadRequestGroupMultipleSelectionActionBuilder(
+      Key('upload_request_group_multiple_selection_more_action'),
+      SvgPicture.asset(imagePath.icMoreVertical, width: 24, height: 24, fit: BoxFit.fill),
+      groups)
+    .onActionClick((entries) => onActionClick.call())
+    .build();
 }

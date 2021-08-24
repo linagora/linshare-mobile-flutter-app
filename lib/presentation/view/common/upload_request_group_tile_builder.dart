@@ -34,32 +34,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 
 typedef OnTileTapCallback = void Function();
 typedef OnMenuOptionPressCallback = void Function();
 typedef OnTileLongPressCallback = void Function();
+typedef OnSelectModeChangeCallback = void Function();
 
 class UploadRequestGroupTileBuilder {
   final imagePath = getIt<AppImagePaths>();
 
   final Key key;
   final BuildContext context;
-  final UploadRequestGroup uploadRequestGroup;
+  final SelectableElement<UploadRequestGroup> uploadRequestGroup;
   final Widget subTitleWidget;
+  final SelectMode selectMode;
   final OnTileTapCallback? onTileTapCallback;
   final OnMenuOptionPressCallback? onMenuOptionPressCallback;
   final OnTileLongPressCallback? onTileLongPressCallback;
+  final OnSelectModeChangeCallback? onSelectModeChangeCallback;
 
   UploadRequestGroupTileBuilder(
     this.key,
     this.context,
     {required this.uploadRequestGroup,
     required this.subTitleWidget,
+    required this.selectMode,
     this.onTileTapCallback,
     this.onMenuOptionPressCallback,
-    this.onTileLongPressCallback});
+    this.onTileLongPressCallback,
+    this.onSelectModeChangeCallback});
 
   Widget build() {
     return ListTile(
@@ -67,17 +73,22 @@ class UploadRequestGroupTileBuilder {
         onTileTapCallback?.call();
       },
       dense: true,
-      leading: getUploadRequestTileIcon(uploadRequestGroup.collective),
-      title: Text(uploadRequestGroup.label, style: TextStyle(fontSize: 14, color: AppColor.uploadRequestLabelsColor)),
+      leading: getUploadRequestTileIcon(uploadRequestGroup.element.collective),
+      title: Text(uploadRequestGroup.element.label, style: TextStyle(fontSize: 14, color: AppColor.uploadRequestLabelsColor)),
       subtitle: subTitleWidget,
-      trailing: IconButton(
-        icon: SvgPicture.asset(
-          imagePath.icContextMenu,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
-        ),
-        onPressed: () => onMenuOptionPressCallback?.call()),
+      trailing: selectMode == SelectMode.ACTIVE
+        ? Checkbox(
+          value: uploadRequestGroup.selectMode == SelectMode.ACTIVE,
+          onChanged: (bool? value) => onSelectModeChangeCallback?.call(),
+          activeColor: AppColor.primaryColor)
+        : IconButton(
+          icon: SvgPicture.asset(
+            imagePath.icContextMenu,
+            width: 24,
+            height: 24,
+            fit: BoxFit.fill,
+          ),
+          onPressed: () => onMenuOptionPressCallback?.call()),
       onLongPress: () => onTileLongPressCallback?.call());
   }
 
