@@ -33,9 +33,19 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/upload_request_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_created_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_active_closed_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_archived_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -43,7 +53,9 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_arguments.dart';
@@ -54,10 +66,12 @@ typedef OnSelectedSorter = void Function(Sorter sorter);
 
 abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
+  final UpdateMultipleUploadRequestGroupStateInteractor _multipleUploadRequestGroupStateInteractor;
 
   UploadRequestGroupTabViewModel(
     Store<AppState> store,
-    this._appNavigation) : super(store);
+    this._appNavigation,
+    this._multipleUploadRequestGroupStateInteractor) : super(store);
 
   void openPopupMenuSorter(BuildContext context, Sorter currentSorter, OnSelectedSorter selectSorterAction) {
     ContextMenuBuilder(context)
@@ -91,7 +105,7 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
           .addHeader(ContextMenuHeaderBuilder(
-          Key('context_menu_header'),
+          Key('upload_request_group_context_menu_header'),
           UploadRequestGroupPresentationFile.fromUploadRequestGroup(uploadRequestGroup)).build())
           .addTiles(actionTiles)
           .addFooter(footerAction ?? SizedBox.shrink())
@@ -106,6 +120,123 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
       RoutePaths.addRecipientsUploadRequestGroup,
       arguments: AddRecipientsUploadRequestGroupArgument(request),
     );
+  }
+
+  void openMoreActionBottomMenu(BuildContext context,
+    {required List<UploadRequestGroup> allSelectedGroups,
+    required List<Widget> actionTiles,
+    required Widget footerAction}) => ContextMenuBuilder(context)
+      .addHeader(MoreActionBottomSheetHeaderBuilder(
+          context,
+          Key('more_action_menu_header'),
+          allSelectedGroups
+            .map<PresentationFile>(
+              (element) => UploadRequestGroupPresentationFile.fromUploadRequestGroup(element))
+            .toList())
+        .build())
+      .addTiles(actionTiles)
+      .addFooter(footerAction)
+      .build();
+
+  void updateUploadRequestGroupStatus(
+      BuildContext context,
+      {required List<UploadRequestGroup> listUploadRequest,
+      required UploadRequestStatus status,
+      required String title,
+      required UploadRequestGroupTab currentTab,
+      ItemSelectionType itemSelectionType = ItemSelectionType.single,
+      Function? onUpdateSuccess,
+      Function? onUpdateFailed}) {
+    _appNavigation.popBack();
+    if (listUploadRequest.isNotEmpty) {
+      ConfirmModalSheetBuilder(_appNavigation)
+          .key(Key('cancel_upload_request_group_confirm_modal'))
+          .title(title)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .onConfirmAction(AppLocalizations.of(context).upload_request_cancel_proceed_button, () {
+        _appNavigation.popBack();
+        if (itemSelectionType == ItemSelectionType.multiple) {
+          cancelSelection(currentTab);
+        }
+        store.dispatch(_updateUploadRequestGroupStatusAction(listUploadRequest, status,
+            onUpdateSuccess: onUpdateSuccess, onUpdateFailed: onUpdateFailed));
+      }).show(context);
+    }
+  }
+
+  OnlineThunkAction _updateUploadRequestGroupStatusAction(
+    List<UploadRequestGroup> groups,
+    UploadRequestStatus status,
+    {Function? onUpdateSuccess,
+    Function? onUpdateFailed}) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _multipleUploadRequestGroupStateInteractor
+          .execute(groups, status)
+          .then((result) => result.fold(
+              (failure) {
+                store.dispatch(UploadRequestGroupAction(Left(failure)));
+                onUpdateFailed?.call();
+              },
+              (success) {
+                store.dispatch(UploadRequestGroupAction(Right(success)));
+                //getUploadRequestCreatedStatus();
+                onUpdateSuccess?.call();
+          }));
+    });
+  }
+
+  void cancelSelection(UploadRequestGroupTab currentTab) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(UploadRequestGroupCreatedClearSelectedAction());
+      break;
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(UploadRequestGroupActiveClosedClearSelectedAction());
+      break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(UploadRequestGroupArchivedClearSelectedAction());
+      break;
+    }
+  }
+
+  void selectItem(SelectableElement<UploadRequestGroup> selectedGroup, UploadRequestGroupTab currentTab) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(UploadRequestGroupCreatedSelectAction(selectedGroup));
+        break;
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(UploadRequestGroupActiveClosedSelectAction(selectedGroup));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(UploadRequestGroupArchivedSelectAction(selectedGroup));
+        break;
+    }
+  }
+
+  void toggleSelectAllGroups(UploadRequestGroupTab currentTab) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.PENDING:
+        if (store.state.createdUploadRequestGroupState.isAllCreatedGroupsSelected()) {
+          store.dispatch(UploadRequestGroupCreatedUnSelectAllAction());
+        } else {
+          store.dispatch(UploadRequestGroupCreatedSelectAllAction());
+        }
+        break;
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        if (store.state.activeClosedUploadRequestGroupState.isAllActiveClosedGroupsSelected()) {
+          store.dispatch(UploadRequestGroupActiveClosedUnSelectAllAction());
+        } else {
+          store.dispatch(UploadRequestGroupActiveClosedSelectAllAction());
+        }
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        if (store.state.archivedUploadRequestGroupState.isAllArchivedGroupsSelected()) {
+          store.dispatch(UploadRequestGroupArchivedUnSelectAllAction());
+        } else {
+          store.dispatch(UploadRequestGroupArchivedSelectAllAction());
+        }
+        break;
+    }
   }
 
 }
