@@ -49,6 +49,9 @@ import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_doc
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
@@ -427,6 +430,9 @@ class ToastMessageHandler {
 
   void _cleanUploadRequestGroupViewState() {
     _store.dispatch(CleanUploadRequestGroupAction());
+    _store.dispatch(CleanCreatedUploadRequestGroupAction());
+    _store.dispatch(CleanArchivedUploadRequestGroupAction());
+    _store.dispatch(CleanActiveClosedUploadRequestGroupAction());
   }
 
   void cancelSubscription() {
