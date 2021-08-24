@@ -37,6 +37,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_active_closed_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -94,12 +95,46 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
     return StoreConnector<AppState, ActiveClosedUploadRequestGroupState>(
       converter: (store) => store.state.activeClosedUploadRequestGroupState,
       builder: (_, state) => Column(children: [
+        _buildMultipleSelectionTopBar(),
         _buildMenuSorterActiveClosed(),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async => _model.getUploadRequestActiveClosedStatus(),
-            child: _buildListData(state.uploadRequestsActiveClosedList))),
+            child: _buildListData(state.uploadRequestsActiveClosedList, state.selectMode))),
+        (state.selectMode == SelectMode.ACTIVE && state.getAllSelectedActiveClosedGroups().isNotEmpty)
+            ? _uploadRequestWidgetCommon.buildMultipleSelectionBottomBar(
+            context,
+            allSelectedGroups: state.getAllSelectedActiveClosedGroups(),
+            actionWidgets: _multipleSelectionActions(state.getAllSelectedActiveClosedGroups()))
+            : SizedBox.shrink()
       ]));
+  }
+
+  Widget _buildMultipleSelectionTopBar() {
+    return StoreConnector<AppState, ActiveClosedUploadRequestGroupState>(
+        converter: (store) => store.state.activeClosedUploadRequestGroupState,
+        builder: (context, state) {
+          final isAllItemSelected = state.isAllActiveClosedGroupsSelected();
+          return state.selectMode == SelectMode.ACTIVE
+              ? ListTile(
+              leading: SvgPicture.asset(imagePath.icSelectAll,
+                  width: 28, height: 28, fit: BoxFit.fill, color: isAllItemSelected ? AppColor.unselectedElementColor : AppColor.primaryColor),
+              title: Transform(
+                  transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                  child: isAllItemSelected
+                      ? Text(AppLocalizations.of(context).unselect_all,
+                      maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))
+                      : Text(AppLocalizations.of(context).select_all,
+                      maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+              tileColor: AppColor.topBarBackgroundColor,
+              onTap: () {
+                return _model.toggleSelectAllGroups(UploadRequestGroupTab.ACTIVE_CLOSED);
+              },
+              trailing: TextButton(
+                  onPressed: () => _model.cancelSelection(UploadRequestGroupTab.ACTIVE_CLOSED),
+                  child: Text(AppLocalizations.of(context).cancel, maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.primaryColor))))
+              : SizedBox.shrink();
+        });
   }
 
   Widget _buildMenuSorterActiveClosed() {
@@ -115,25 +150,37 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
     );
   }
 
-  Widget _buildListData(List<SelectableElement<UploadRequestGroup>> uploadRequestList) {
+  Widget _buildListData(List<SelectableElement<UploadRequestGroup>> uploadRequestList, SelectMode selectMode) {
     if (uploadRequestList.isEmpty) {
       return _uploadRequestWidgetCommon.buildCreateUploadRequestsHere(context, imagePath.icCreateUploadRequest);
     } else {
       return ListView.builder(
         itemCount: uploadRequestList.length,
-        itemBuilder: (context, index) => _buildActiveClosedUploadTile(uploadRequestList[index]));
+        itemBuilder: (context, index) => _buildActiveClosedUploadTile(uploadRequestList[index], selectMode));
     }
   }
 
-  Widget _buildActiveClosedUploadTile(SelectableElement<UploadRequestGroup> request) {
+  Widget _buildActiveClosedUploadTile(SelectableElement<UploadRequestGroup> request, SelectMode selectMode) {
     return UploadRequestGroupTileBuilder(
       Key('active_closed_upload_request_tile'),
       context,
-      uploadRequestGroup: request.element,
+      uploadRequestGroup: request,
+      selectMode: selectMode,
       subTitleWidget: _buildActiveClosedSubtitleWidget(request.element.status),
-      onTileTapCallback: () => _model.getListUploadRequests(request.element),
-      onMenuOptionPressCallback: () => _model.openContextMenu(context, request.element, _contextMenuActionTiles(request.element)),
-      onTileLongPressCallback: () {}
+      onSelectModeChangeCallback: () => _model.selectItem(request, UploadRequestGroupTab.ACTIVE_CLOSED),
+      onTileLongPressCallback: () => _model.selectItem(request, UploadRequestGroupTab.ACTIVE_CLOSED),
+      onTileTapCallback: () {
+        if (selectMode == SelectMode.ACTIVE) {
+          _model.selectItem(request, UploadRequestGroupTab.ACTIVE_CLOSED);
+        } else {
+          _model.getListUploadRequests(request.element);
+        }
+      },
+      onMenuOptionPressCallback: () => _model.openContextMenu(
+          context,
+          request.element,
+          _contextMenuActionTiles(request.element),
+          footerAction: SizedBox.shrink())
     ).build();
   }
 
@@ -182,8 +229,15 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
           return _widgetCommon.buildNoResultFound(context);
         }
         return Column(children: [
+          _buildMultipleSelectionTopBar(),
           _widgetCommon.buildResultCountRow(context, state.uploadRequestsActiveClosedList.length),
-          Expanded(child: _buildListData(state.uploadRequestsActiveClosedList)),
+          Expanded(child: _buildListData(state.uploadRequestsActiveClosedList, state.selectMode)),
+          (state.selectMode == SelectMode.ACTIVE && state.getAllSelectedActiveClosedGroups().isNotEmpty)
+              ? _uploadRequestWidgetCommon.buildMultipleSelectionBottomBar(
+              context,
+              allSelectedGroups: state.getAllSelectedActiveClosedGroups(),
+              actionWidgets: _multipleSelectionActions(state.getAllSelectedActiveClosedGroups()))
+              : SizedBox.shrink()
         ]);
       });
   }
@@ -192,6 +246,21 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
     return [
       if(uploadRequestGroup.status == UploadRequestStatus.ENABLED) _addRecipientsAction(uploadRequestGroup)
     ];
+  }
+
+  List<Widget> _multipleSelectionActions(List<UploadRequestGroup> allSelectedGroups) {
+    return [
+      _uploadRequestWidgetCommon.moreActionMultipleSelection(allSelectedGroups, () {
+        _model.openMoreActionBottomMenu(context,
+            allSelectedGroups: allSelectedGroups,
+            actionTiles: _moreActionList(allSelectedGroups),
+            footerAction: SizedBox.shrink());
+      }),
+    ];
+  }
+
+  List<Widget> _moreActionList(List<UploadRequestGroup> groups) {
+    return [];
   }
 
   Widget _addRecipientsAction(UploadRequestGroup uploadRequestGroup) {
@@ -203,4 +272,5 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
         .onActionClick((_) => _model.goToAddRecipients(uploadRequestGroup))
         .build();
   }
+
 }
