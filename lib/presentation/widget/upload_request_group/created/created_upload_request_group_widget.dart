@@ -37,6 +37,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_created_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -45,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/common/upload_request_group_common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/common/upload_request_group_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_group_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/created/created_upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:redux/redux.dart';
@@ -95,12 +98,46 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
     return StoreConnector<AppState, CreatedUploadRequestGroupState>(
       converter: (store) => store.state.createdUploadRequestGroupState,
       builder: (_, state) => Column(children: [
+        _buildMultipleSelectionTopBar(),
         _buildMenuSorterPending(),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async => _model.getUploadRequestCreatedStatus(),
-            child: _buildListData(state.uploadRequestsCreatedList)))
+            child: _buildListData(state.uploadRequestsCreatedList, state.selectMode))),
+        (state.selectMode == SelectMode.ACTIVE && state.getAllSelectedCreatedGroups().isNotEmpty)
+            ? _uploadRequestWidgetCommon.buildMultipleSelectionBottomBar(
+                context,
+                allSelectedGroups: state.getAllSelectedCreatedGroups(),
+                actionWidgets: _multipleSelectionActions(state.getAllSelectedCreatedGroups()))
+            : SizedBox.shrink()
       ]));
+  }
+
+  Widget _buildMultipleSelectionTopBar() {
+    return StoreConnector<AppState, CreatedUploadRequestGroupState>(
+        converter: (store) => store.state.createdUploadRequestGroupState,
+        builder: (context, state) {
+          final isAllItemSelected = state.isAllCreatedGroupsSelected();
+          return state.selectMode == SelectMode.ACTIVE
+            ? ListTile(
+              leading: SvgPicture.asset(imagePath.icSelectAll,
+                  width: 28, height: 28, fit: BoxFit.fill, color: isAllItemSelected ? AppColor.unselectedElementColor : AppColor.primaryColor),
+              title: Transform(
+                transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                child: isAllItemSelected
+                  ? Text(AppLocalizations.of(context).unselect_all,
+                    maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))
+                  : Text(AppLocalizations.of(context).select_all,
+                    maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
+              tileColor: AppColor.topBarBackgroundColor,
+              onTap: () {
+                return _model.toggleSelectAllGroups(UploadRequestGroupTab.PENDING);
+              },
+              trailing: TextButton(
+                onPressed: () => _model.cancelSelection(UploadRequestGroupTab.PENDING),
+                child: Text(AppLocalizations.of(context).cancel, maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.primaryColor))))
+            : SizedBox.shrink();
+        });
   }
 
   Widget _buildMenuSorterPending() {
@@ -116,27 +153,39 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
     );
   }
 
-  Widget _buildListData(List<SelectableElement<UploadRequestGroup>> uploadRequestList) {
+  Widget _buildListData(List<SelectableElement<UploadRequestGroup>> uploadRequestList, SelectMode selectMode) {
     if (uploadRequestList.isEmpty) {
       return _uploadRequestWidgetCommon.buildCreateUploadRequestsHere(context, imagePath.icCreateUploadRequest);
     } else {
       return ListView.builder(
         itemCount: uploadRequestList.length,
-        itemBuilder: (context, index) => _buildPendingUploadTile(uploadRequestList[index]));
+        itemBuilder: (context, index) => _buildPendingUploadTile(uploadRequestList[index], selectMode));
     }
   }
 
-  Widget _buildPendingUploadTile(SelectableElement<UploadRequestGroup> request) {
+  Widget _buildPendingUploadTile(SelectableElement<UploadRequestGroup> request, SelectMode selectMode) {
     return UploadRequestGroupTileBuilder(
       Key('pending_upload_request_tile'),
       context,
-      uploadRequestGroup: request.element,
+      uploadRequestGroup: request,
+      selectMode: selectMode,
       subTitleWidget: Text(
         AppLocalizations.of(context).activated_date(request.element.activationDate.getMMMddyyyyFormatString()),
         style: TextStyle(fontSize: 14, color: AppColor.uploadFileFileSizeTextColor)),
-      onTileTapCallback: () => _model.getListUploadRequests(request.element),
-      onMenuOptionPressCallback: () => _model.openContextMenu(context, request.element, _contextMenuActionTiles(request.element)),
-      onTileLongPressCallback: () {}
+      onSelectModeChangeCallback: () => _model.selectItem(request, UploadRequestGroupTab.PENDING),
+      onTileLongPressCallback: () => _model.selectItem(request, UploadRequestGroupTab.PENDING),
+      onTileTapCallback: () {
+        if (selectMode == SelectMode.ACTIVE) {
+          _model.selectItem(request, UploadRequestGroupTab.PENDING);
+        } else {
+          _model.getListUploadRequests(request.element);
+        }
+      },
+      onMenuOptionPressCallback: () => _model.openContextMenu(
+          context,
+          request.element,
+          _contextMenuActionTiles(request.element),
+          footerAction: _buildFooterContextMenuActions(request.element))
     ).build();
   }
 
@@ -151,8 +200,15 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
           return _widgetCommon.buildNoResultFound(context);
         }
         return Column(children: [
+          _buildMultipleSelectionTopBar(),
           _widgetCommon.buildResultCountRow(context, state.uploadRequestsCreatedList.length),
-          Expanded(child: _buildListData(state.uploadRequestsCreatedList))
+          Expanded(child: _buildListData(state.uploadRequestsCreatedList, state.selectMode)),
+          (state.selectMode == SelectMode.ACTIVE && state.getAllSelectedCreatedGroups().isNotEmpty)
+              ? _uploadRequestWidgetCommon.buildMultipleSelectionBottomBar(
+                context,
+                allSelectedGroups: state.getAllSelectedCreatedGroups(),
+                actionWidgets: _multipleSelectionActions(state.getAllSelectedCreatedGroups()))
+              : SizedBox.shrink()
         ]);
       });
   }
@@ -163,13 +219,52 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
     ];
   }
 
+  Widget _buildFooterContextMenuActions(UploadRequestGroup uploadRequestGroup) {
+    return Column(children: [
+      _cancelUploadRequestGroupAction([uploadRequestGroup])
+    ]);
+  }
+
+  List<Widget> _multipleSelectionActions(List<UploadRequestGroup> allSelectedGroups) {
+    return [
+      _uploadRequestWidgetCommon.moreActionMultipleSelection(allSelectedGroups, () {
+        _model.openMoreActionBottomMenu(context,
+            allSelectedGroups: allSelectedGroups,
+            actionTiles: _moreActionList(allSelectedGroups),
+            footerAction: SizedBox.shrink());
+      }),
+    ];
+  }
+
+  List<Widget> _moreActionList(List<UploadRequestGroup> groups) {
+    return [_cancelUploadRequestGroupAction(groups, itemSelectionType: ItemSelectionType.multiple)];
+  }
+
   Widget _addRecipientsAction(UploadRequestGroup uploadRequestGroup) {
     return SimpleContextMenuActionBuilder(
-      Key('add_recipients_context_menu_action'),
-      SvgPicture.asset(imagePath.icAddMember,
-          width: 24, height: 24, fit: BoxFit.fill),
-      AppLocalizations.of(context).add_recipients)
-      .onActionClick((_) => _model.goToAddRecipients(uploadRequestGroup))
-      .build();
+        Key('add_recipients_context_menu_action'),
+        SvgPicture.asset(imagePath.icAddMember,
+            width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).add_recipients)
+        .onActionClick((_) => _model.goToAddRecipients(uploadRequestGroup))
+        .build();
   }
+
+  Widget _cancelUploadRequestGroupAction(List<UploadRequestGroup> groups,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return UploadRequestGroupContextMenuTileBuilder(
+        Key('upload_request_group_menu_tile_cancel'),
+        SvgPicture.asset(imagePath.icUploadRequestCancel, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).cancel, groups.first)
+            .onActionClick((data) => _model.updateUploadRequestGroupStatus(
+              context,
+              listUploadRequest: groups,
+              status: UploadRequestStatus.CANCELED,
+              title: AppLocalizations.of(context).confirm_cancel_multiple_upload_request(groups.length, groups.first.label),
+              currentTab: UploadRequestGroupTab.PENDING,
+              itemSelectionType: itemSelectionType,
+              onUpdateSuccess: () => _model.getUploadRequestCreatedStatus()))
+            .build();
+  }
+
 }
