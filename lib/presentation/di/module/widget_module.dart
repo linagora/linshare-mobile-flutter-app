@@ -446,7 +446,8 @@ class WidgetModule {
         getIt<GetSorterInteractor>(),
         getIt<SaveSorterInteractor>(),
         getIt<SortInteractor>(),
-        getIt<SearchUploadRequestGroupsInteractor>()
+        getIt<SearchUploadRequestGroupsInteractor>(),
+        getIt.get<UpdateMultipleUploadRequestGroupStateInteractor>(),
     ));
 		getIt.registerFactory(() => ActiveClosedUploadRequestGroupViewModel(
         getIt.get<Store<AppState>>(),
@@ -455,7 +456,8 @@ class WidgetModule {
         getIt<GetSorterInteractor>(),
         getIt<SaveSorterInteractor>(),
         getIt<SortInteractor>(),
-        getIt<SearchUploadRequestGroupsInteractor>()
+        getIt<SearchUploadRequestGroupsInteractor>(),
+        getIt.get<UpdateMultipleUploadRequestGroupStateInteractor>(),
     ));
 		getIt.registerFactory(() => ArchivedUploadRequestGroupViewModel(
         getIt.get<Store<AppState>>(),
