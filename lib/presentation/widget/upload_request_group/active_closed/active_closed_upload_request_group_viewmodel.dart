@@ -46,6 +46,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel {
   final AppNavigation _appNavigation;
   final GetAllUploadRequestGroupsInteractor _getAllUploadRequestGroupsInteractor;
+  final UpdateMultipleUploadRequestGroupStateInteractor _multipleUploadRequestGroupStateInteractor;
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final SortInteractor _sortInteractor;
@@ -63,7 +64,11 @@ class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewM
 		this._getSorterInteractor,
     this._saveSorterInteractor, 
 		this._sortInteractor, 
-		this._searchUploadRequestGroupsInteractor) : super(store, _appNavigation) {
+		this._searchUploadRequestGroupsInteractor,
+    this._multipleUploadRequestGroupStateInteractor) : super(
+      store,
+      _appNavigation,
+      _multipleUploadRequestGroupStateInteractor) {
 			_storeStreamSubscription = store.onChange.listen((event) {
 				event.uploadRequestGroupState.viewState.fold((failure) => null, (success) {
 					if (success is SearchUploadRequestGroupsNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
