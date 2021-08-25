@@ -38,9 +38,9 @@ class UpdateMultipleUploadRequestGroupStateInteractor {
 
   UpdateMultipleUploadRequestGroupStateInteractor(this.updateUploadRequestGroupStateInteractor);
 
-  Future<Either<Failure, Success>> execute(List<UploadRequestGroup> groups, UploadRequestStatus status) async {
+  Future<Either<Failure, Success>> execute(List<UploadRequestGroup> groups, UploadRequestStatus status, {bool? copyToMySpace}) async {
     final listResult =
-        await Future.wait(groups.map((group) => updateUploadRequestGroupStateInteractor.execute(group, status)));
+        await Future.wait(groups.map((group) => updateUploadRequestGroupStateInteractor.execute(group, status, copyToMySpace: copyToMySpace)));
     if (listResult.length == 1) {
       return listResult.first;
     } else {
