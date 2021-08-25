@@ -112,7 +112,7 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
         .key(Key('add_recipients_confirm_modal'))
         .title(addRecipientTitle)
         .cancelText(AppLocalizations.of(context).cancel)
-        .onConfirmAction(AppLocalizations.of(context).add, () {
+        .onConfirmAction(AppLocalizations.of(context).add, (_) {
             store.dispatch(_sendRecipientsAction(uploadRequestGroupId, recipientsList));
             _appNavigation.popBack();
     }).show(context);

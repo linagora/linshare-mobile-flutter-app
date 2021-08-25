@@ -372,21 +372,21 @@ class ToastMessageHandler {
   void _handleUploadRequestGroupToastMessage(BuildContext context, UploadRequestGroupState requestGroupState) {
     requestGroupState.viewState.fold((failure) {
       if (failure is UpdateUploadRequestGroupStateFailure) {
-        appToast.showErrorToast(AppLocalizations.of(context).upload_request_could_not_be_canceled);
+        appToast.showErrorToast(AppLocalizations.of(context).upload_request_could_not_be_updated);
         _cleanUploadRequestGroupViewState();
       } else if (failure is UpdateUploadRequestGroupAllFailureViewState) {
-        appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_canceled);
+        appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
         _cleanUploadRequestGroupViewState();
       }
     }, (success) {
       if (success is UpdateUploadRequestGroupStateViewState) {
-        appToast.showToast(AppLocalizations.of(context).upload_request_has_been_canceled);
+        appToast.showToast(AppLocalizations.of(context).upload_request_has_been_updated);
         _cleanUploadRequestGroupViewState();
       } else if (success is UpdateUploadRequestGroupAllSuccessViewState) {
-        appToast.showToast(AppLocalizations.of(context).some_upload_requests_have_been_canceled);
+        appToast.showToast(AppLocalizations.of(context).some_upload_requests_have_been_updated);
         _cleanUploadRequestGroupViewState();
       } else if (success is UpdateUploadRequestGroupHasSomeGroupsFailedViewState) {
-        appToast.showToast(AppLocalizations.of(context).some_upload_requests_could_not_be_canceled);
+        appToast.showToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
         _cleanUploadRequestGroupViewState();
       }
     });
