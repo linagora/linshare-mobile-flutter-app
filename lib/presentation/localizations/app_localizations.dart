@@ -2094,31 +2094,31 @@ class AppLocalizations {
     );
   }
 
-  String get upload_request_has_been_canceled {
+  String get upload_request_has_been_updated {
     return Intl.message(
-      'Upload request has been canceled',
-      name: 'upload_request_has_been_canceled',
+      'Upload request has been updated',
+      name: 'upload_request_has_been_updated',
     );
   }
 
-  String get some_upload_requests_have_been_canceled {
+  String get some_upload_requests_have_been_updated {
     return Intl.message(
-      'Some upload requests have been canceled',
-      name: 'some_upload_requests_have_been_canceled',
+      'Some upload requests have been updated',
+      name: 'some_upload_requests_have_been_updated',
     );
   }
 
-  String get upload_request_could_not_be_canceled {
+  String get upload_request_could_not_be_updated {
     return Intl.message(
-      'Upload request could not be canceled',
-      name: 'upload_request_could_not_be_canceled',
+      'Upload request could not be updated',
+      name: 'upload_request_could_not_be_updated',
     );
   }
 
-  String get some_upload_requests_could_not_be_canceled {
+  String get some_upload_requests_could_not_be_updated {
     return Intl.message(
-      'Some upload requests could not be canceled',
-      name: 'some_upload_requests_could_not_be_canceled',
+      'Some upload requests could not be updated',
+      name: 'some_upload_requests_could_not_be_updated',
     );
   }
 
@@ -2128,11 +2128,13 @@ class AppLocalizations {
         name: 'archive');
   }
 
-  String are_you_sure_you_want_to_archive(String itemName) {
+  String confirm_archive_multiple_upload_request(int numberOfItems, String singleItemName) {
     return Intl.message(
-        'Are you sure you want to archive $itemName',
-        name: 'are_you_sure_you_want_to_archive',
-        args: [itemName]
+      '''${Intl.plural(numberOfItems,
+          one: 'Are you sure you want to archive \"$singleItemName\"?',
+          other: 'Are you sure you want to archive $numberOfItems items?')}''',
+      name: 'confirm_archive_multiple_upload_request',
+      args: [numberOfItems, singleItemName],
     );
   }
 

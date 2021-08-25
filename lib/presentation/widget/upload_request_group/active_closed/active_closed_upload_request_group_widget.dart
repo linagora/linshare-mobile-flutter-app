@@ -37,6 +37,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_active_closed_state.dart';
@@ -180,7 +181,7 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
           context,
           request.element,
           _contextMenuActionTiles(request.element),
-          footerAction: SizedBox.shrink())
+          footerAction: _buildFooterContextMenuActions(request.element))
     ).build();
   }
 
@@ -248,6 +249,12 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
     ];
   }
 
+  Widget _buildFooterContextMenuActions(UploadRequestGroup uploadRequestGroup) {
+    return Column(children: [
+      if (uploadRequestGroup.status == UploadRequestStatus.CLOSED) _archiveUploadRequestGroupAction([uploadRequestGroup])
+    ]);
+  }
+
   List<Widget> _multipleSelectionActions(List<UploadRequestGroup> allSelectedGroups) {
     return [
       _uploadRequestWidgetCommon.moreActionMultipleSelection(allSelectedGroups, () {
@@ -260,7 +267,10 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
   }
 
   List<Widget> _moreActionList(List<UploadRequestGroup> groups) {
-    return [];
+    final isAllSelectedGroupClosed = groups.where((element) => element.status != UploadRequestStatus.CLOSED).isEmpty;
+    return [
+      if (isAllSelectedGroupClosed) _archiveUploadRequestGroupAction(groups, itemSelectionType: ItemSelectionType.multiple)
+    ];
   }
 
   Widget _addRecipientsAction(UploadRequestGroup uploadRequestGroup) {
@@ -273,4 +283,23 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
         .build();
   }
 
+  Widget _archiveUploadRequestGroupAction(List<UploadRequestGroup> groups,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return SimpleContextMenuActionBuilder(
+        Key('upload_request_group_menu_tile_archived'),
+        Icon(Icons.archive, size: 24.0, color: AppColor.unselectedElementColor),
+        AppLocalizations.of(context).archive)
+            .onActionClick((_) => _model.updateUploadRequestGroupStatus(
+                context,
+                listUploadRequest: groups,
+                status: UploadRequestStatus.ARCHIVED,
+                title: AppLocalizations.of(context).confirm_archive_multiple_upload_request(groups.length, groups.first.label),
+                titleButtonConfirm: AppLocalizations.of(context).archive,
+                optionalCheckbox: true,
+                optionalTitle: AppLocalizations.of(context).copy_before_archiving,
+                currentTab: UploadRequestGroupTab.ACTIVE_CLOSED,
+                itemSelectionType: itemSelectionType,
+                onUpdateSuccess: () => _model.getUploadRequestActiveClosedStatus()))
+            .build();
+  }
 }
