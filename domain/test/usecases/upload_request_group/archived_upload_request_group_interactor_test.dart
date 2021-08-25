@@ -30,52 +30,42 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
 
 import '../../mock/repository/mock_upload_request_group_repository.dart';
 
 void main() {
-  group('archive_upload_request_group_interactor test', () {
+  group('archived_upload_request_group_interactor', () {
     late MockUploadRequestGroupRepository uploadRequestGroupRepository;
-    late ArchiveUploadRequestGroupInteractor archiveUploadRequestGroupInteractor;
+    late UpdateUploadRequestGroupStateInteractor uploadRequestGroupStateInteractor;
 
     setUp(() {
       uploadRequestGroupRepository = MockUploadRequestGroupRepository();
-      archiveUploadRequestGroupInteractor = ArchiveUploadRequestGroupInteractor(uploadRequestGroupRepository);
+      uploadRequestGroupStateInteractor = UpdateUploadRequestGroupStateInteractor(uploadRequestGroupRepository);
     });
 
-    test('archiveUploadRequestGroupInteractor should return success with one valid data', () async {
-      when(uploadRequestGroupRepository.archiveUploadRequestGroup(
-        uploadRequestGroup1.uploadRequestGroupId, true)
-      ).thenAnswer((_) async => uploadRequestGroup1);
-
-      final result = await archiveUploadRequestGroupInteractor.execute(
-        uploadRequestGroup1.uploadRequestGroupId, true,
-      );
-
-      final uploadRequestGroup = result
-          .map((success) => (success as ArchiveUploadRequestGroupViewState).uploadRequestGroup)
-          .getOrElse((() => null) as UploadRequestGroup Function());
-
-      expect(uploadRequestGroup, uploadRequestGroup1);
+    test('archive upload_request_group should return success with valid data', () async {
+      when(uploadRequestGroupRepository.updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.ARCHIVED))
+          .thenAnswer((_) async => uploadRequestGroupArchived1);
+      final result = await uploadRequestGroupStateInteractor.execute(uploadRequestGroup1, UploadRequestStatus.ARCHIVED);
+      result.fold(
+        (failure) => null,
+        (success) {
+          expect(success, isA<UpdateUploadRequestGroupStateViewState>());
+          expect(uploadRequestGroupArchived1, (success as UpdateUploadRequestGroupStateViewState).uploadRequestGroup);
+      });
     });
 
-    test('archiveUploadRequestGroupInteractor should fail when archiveUploadRequestGroup fail', () async {
-      final exception = Exception();
-
-      when(uploadRequestGroupRepository.archiveUploadRequestGroup(
-        uploadRequestGroup1.uploadRequestGroupId, true),
-      ).thenThrow(exception);
-
-      final result = await archiveUploadRequestGroupInteractor.execute(
-        uploadRequestGroup1.uploadRequestGroupId, true,
-      );
-
-      expect(result, Left<Failure, Success>(ArchiveUploadRequestGroupFailure(exception)));
+    test('archive upload_request_group should return failure', () async {
+      when(uploadRequestGroupRepository.updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.ARCHIVED))
+         .thenThrow(Exception());
+      final result = await uploadRequestGroupStateInteractor.execute(uploadRequestGroup1, UploadRequestStatus.ARCHIVED);
+      result.fold(
+        (failure) => expect(failure, isA<UpdateUploadRequestGroupStateFailure>()),
+        (success) => null);
     });
   });
 }
