@@ -257,13 +257,14 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
         SvgPicture.asset(imagePath.icUploadRequestCancel, width: 24, height: 24, fit: BoxFit.fill),
         AppLocalizations.of(context).cancel, groups.first)
             .onActionClick((data) => _model.updateUploadRequestGroupStatus(
-              context,
-              listUploadRequest: groups,
-              status: UploadRequestStatus.CANCELED,
-              title: AppLocalizations.of(context).confirm_cancel_multiple_upload_request(groups.length, groups.first.label),
-              currentTab: UploadRequestGroupTab.PENDING,
-              itemSelectionType: itemSelectionType,
-              onUpdateSuccess: () => _model.getUploadRequestCreatedStatus()))
+                context,
+                listUploadRequest: groups,
+                status: UploadRequestStatus.CANCELED,
+                title: AppLocalizations.of(context).confirm_cancel_multiple_upload_request(groups.length, groups.first.label),
+                titleButtonConfirm: AppLocalizations.of(context).upload_request_cancel_proceed_button,
+                currentTab: UploadRequestGroupTab.PENDING,
+                itemSelectionType: itemSelectionType,
+                onUpdateSuccess: () => _model.getUploadRequestCreatedStatus()))
             .build();
   }
 
