@@ -37,9 +37,9 @@ class UpdateUploadRequestGroupStateInteractor {
 
   UpdateUploadRequestGroupStateInteractor(this._uploadRequestGroupRepository);
 
-  Future<Either<Failure, Success>> execute(UploadRequestGroup group, UploadRequestStatus status) async {
+  Future<Either<Failure, Success>> execute(UploadRequestGroup group, UploadRequestStatus status, {bool? copyToMySpace}) async {
     try {
-      final resultGroup = await _uploadRequestGroupRepository.updateUploadRequestGroupState(group, status);
+      final resultGroup = await _uploadRequestGroupRepository.updateUploadRequestGroupState(group, status, copyToMySpace: copyToMySpace);
       return Right<Failure, Success>(UpdateUploadRequestGroupStateViewState(resultGroup));
     } catch (exception) {
       return Left<Failure, Success>(UpdateUploadRequestGroupStateFailure(exception));
