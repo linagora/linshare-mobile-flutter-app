@@ -143,35 +143,62 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
       {required List<UploadRequestGroup> listUploadRequest,
       required UploadRequestStatus status,
       required String title,
+      required String titleButtonConfirm,
       required UploadRequestGroupTab currentTab,
       ItemSelectionType itemSelectionType = ItemSelectionType.single,
+      bool? optionalCheckbox,
+      String? optionalTitle,
       Function? onUpdateSuccess,
       Function? onUpdateFailed}) {
     _appNavigation.popBack();
     if (listUploadRequest.isNotEmpty) {
-      ConfirmModalSheetBuilder(_appNavigation)
-          .key(Key('cancel_upload_request_group_confirm_modal'))
+      if(optionalCheckbox != null) {
+        ConfirmModalSheetBuilder(_appNavigation)
+          .key(Key('update_upload_request_group_confirm_modal'))
           .title(title)
           .cancelText(AppLocalizations.of(context).cancel)
-          .onConfirmAction(AppLocalizations.of(context).upload_request_cancel_proceed_button, () {
-        _appNavigation.popBack();
-        if (itemSelectionType == ItemSelectionType.multiple) {
-          cancelSelection(currentTab);
-        }
-        store.dispatch(_updateUploadRequestGroupStatusAction(listUploadRequest, status,
-            onUpdateSuccess: onUpdateSuccess, onUpdateFailed: onUpdateFailed));
-      }).show(context);
+          .optionalCheckbox(optionalTitle ?? '')
+          .onConfirmAction(titleButtonConfirm, (optionalCheckboxValue) {
+              _appNavigation.popBack();
+              if (itemSelectionType == ItemSelectionType.multiple) {
+                cancelSelection(currentTab);
+              }
+              store.dispatch(_updateUploadRequestGroupStatusAction(
+                  listUploadRequest,
+                  status,
+                  copyToMySpace: optionalCheckboxValue,
+                  onUpdateSuccess: onUpdateSuccess,
+                  onUpdateFailed: onUpdateFailed));
+        }).show(context);
+      } else {
+        ConfirmModalSheetBuilder(_appNavigation)
+          .key(Key('update_upload_request_group_confirm_modal'))
+          .title(title)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .onConfirmAction(titleButtonConfirm, (_) {
+              _appNavigation.popBack();
+              if (itemSelectionType == ItemSelectionType.multiple) {
+                cancelSelection(currentTab);
+              }
+              store.dispatch(_updateUploadRequestGroupStatusAction(
+                  listUploadRequest,
+                  status,
+                  onUpdateSuccess: onUpdateSuccess,
+                  onUpdateFailed: onUpdateFailed));
+        }).show(context);
+      }
     }
   }
 
   OnlineThunkAction _updateUploadRequestGroupStatusAction(
     List<UploadRequestGroup> groups,
     UploadRequestStatus status,
-    {Function? onUpdateSuccess,
+    {bool? copyToMySpace,
+    Function? onUpdateSuccess,
     Function? onUpdateFailed}) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _multipleUploadRequestGroupStateInteractor
-          .execute(groups, status)
+          .execute(groups, status, copyToMySpace: copyToMySpace)
           .then((result) => result.fold(
               (failure) {
                 store.dispatch(UploadRequestGroupAction(Left(failure)));
@@ -179,7 +206,6 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
               },
               (success) {
                 store.dispatch(UploadRequestGroupAction(Right(success)));
-                //getUploadRequestCreatedStatus();
                 onUpdateSuccess?.call();
           }));
     });
