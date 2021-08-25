@@ -214,7 +214,7 @@ void cancelUploadRequestGroupTest() {
 }
 
 void archiveUploadRequestGroupTest() {
-  group('upload_request_group_datasource_impl archiveUploadRequestGroup test', () {
+  group('archive upload_request_group test', () {
     late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
     late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
@@ -226,42 +226,27 @@ void archiveUploadRequestGroupTest() {
           UploadRequestGroupDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
     });
 
-    test('archiveUploadRequestGroup should return success with valid data', () async {
-      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true))
+    test('archive upload_request_group should return success with valid data', () async {
+      when(_linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup1.uploadRequestGroupId, UploadRequestStatus.ARCHIVED))
           .thenAnswer((_) async => uploadRequestGroupResponse1);
 
       final result = await _uploadRequestGroupDataSourceImpl
-          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true);
+          .updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.ARCHIVED);
       expect(result, uploadRequestGroupResponse1.toUploadRequestGroup());
     });
 
-    test('archiveUploadRequestGroup should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
-      final error = DioError(
-          type: DioErrorType.response,
-          response: Response(statusCode: 400, requestOptions: RequestOptions(path: '')),
-          requestOptions: RequestOptions(path: ''));
-
-      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true))
-          .thenThrow(error);
-
-      await _uploadRequestGroupDataSourceImpl
-          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true).catchError((error) {
-        expect(error, isA<MissingRequiredFields>());
-      });
-    });
-
-    test('archiveUploadRequestGroup should throw exception when linShareHttpClient response error with 404', () async {
+    test('archive upload_request_group should throw exception when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
           response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')),
           requestOptions: RequestOptions(path: ''));
 
-      when(_linShareHttpClient.archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true))
+      when(_linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup1.uploadRequestGroupId, UploadRequestStatus.ARCHIVED))
           .thenThrow(error);
 
       await _uploadRequestGroupDataSourceImpl
-          .archiveUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, true).catchError((error) {
-        expect(error, isA<ServerNotFound>());
+          .updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.ARCHIVED).catchError((error) {
+        expect(error, isA<UploadRequestGroupsNotFound>());
       });
     });
   });
