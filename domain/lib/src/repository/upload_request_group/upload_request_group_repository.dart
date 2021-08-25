@@ -39,5 +39,5 @@ abstract class UploadRequestGroupRepository {
 
   Future<UploadRequestGroup> addRecipients(UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipients);
 
-  Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status);
+  Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status, {bool? copyToMySpace});
 }
