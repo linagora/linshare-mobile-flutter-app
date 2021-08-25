@@ -93,10 +93,10 @@ class UploadRequestGroupDataSourceImpl implements UploadRequestGroupDataSource {
   }
 
   @override
-  Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status) {
+  Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status, {bool? copyToMySpace}) {
     return Future.sync(() async {
       final uploadRequestGroupResponse =
-          await _linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup.uploadRequestGroupId, status);
+          await _linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup.uploadRequestGroupId, status, copyToMySpace: copyToMySpace);
       return uploadRequestGroupResponse.toUploadRequestGroup();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {

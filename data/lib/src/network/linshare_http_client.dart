@@ -597,13 +597,25 @@ class LinShareHttpClient {
 
   Future<UploadRequestGroupResponse> updateUploadRequestGroupStatus(
       UploadRequestGroupId uploadRequestGroupId,
-      UploadRequestStatus status) async {
-    final resultJson = await _dioClient.put(Endpoint.uploadRequestGroups
-        .withPathParameter(uploadRequestGroupId.uuid)
-        .withPathParameter(Endpoint.status)
-        .withPathParameter(status.value)
-        .generateEndpointPath());
-    return UploadRequestGroupResponse.fromJson(resultJson);
+      UploadRequestStatus status,
+      {bool? copyToMySpace}) async {
+    if(copyToMySpace != null) {
+      final resultJson = await _dioClient.put(Endpoint.uploadRequestGroups
+          .withPathParameter(uploadRequestGroupId.uuid)
+          .withPathParameter(Endpoint.status)
+          .withPathParameter(status.value)
+          .withQueryParameters([BooleanQueryParameter('copy', copyToMySpace)])
+          .generateEndpointPath());
+      return UploadRequestGroupResponse.fromJson(resultJson);
+    } else {
+      final resultJson = await _dioClient.put(
+          Endpoint.uploadRequestGroups
+              .withPathParameter(uploadRequestGroupId.uuid)
+              .withPathParameter(Endpoint.status)
+              .withPathParameter(status.value)
+              .generateEndpointPath());
+      return UploadRequestGroupResponse.fromJson(resultJson);
+    }
   }
 
 }
