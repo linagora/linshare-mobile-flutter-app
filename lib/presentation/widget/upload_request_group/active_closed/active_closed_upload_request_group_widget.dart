@@ -251,7 +251,8 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
 
   Widget _buildFooterContextMenuActions(UploadRequestGroup uploadRequestGroup) {
     return Column(children: [
-      if (uploadRequestGroup.status == UploadRequestStatus.CLOSED) _archiveUploadRequestGroupAction([uploadRequestGroup])
+      if (uploadRequestGroup.status == UploadRequestStatus.CLOSED) _archiveUploadRequestGroupAction([uploadRequestGroup]),
+      if (uploadRequestGroup.status == UploadRequestStatus.ENABLED) _closeUploadRequestGroupAction([uploadRequestGroup])
     ]);
   }
 
@@ -268,8 +269,10 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
 
   List<Widget> _moreActionList(List<UploadRequestGroup> groups) {
     final isAllSelectedGroupClosed = groups.where((element) => element.status != UploadRequestStatus.CLOSED).isEmpty;
+    final isAllSelectedGroupActive = groups.where((element) => element.status != UploadRequestStatus.ENABLED).isEmpty;
     return [
-      if (isAllSelectedGroupClosed) _archiveUploadRequestGroupAction(groups, itemSelectionType: ItemSelectionType.multiple)
+      if (isAllSelectedGroupClosed) _archiveUploadRequestGroupAction(groups, itemSelectionType: ItemSelectionType.multiple),
+      if (isAllSelectedGroupActive) _closeUploadRequestGroupAction(groups, itemSelectionType: ItemSelectionType.multiple)
     ];
   }
 
@@ -300,6 +303,24 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
                 currentTab: UploadRequestGroupTab.ACTIVE_CLOSED,
                 itemSelectionType: itemSelectionType,
                 onUpdateSuccess: () => _model.getUploadRequestActiveClosedStatus()))
+            .build();
+  }
+
+  Widget _closeUploadRequestGroupAction(List<UploadRequestGroup> groups,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return SimpleContextMenuActionBuilder(
+        Key('upload_request_group_menu_tile_closed'),
+        Icon(Icons.cancel, size: 24.0, color: AppColor.unselectedElementColor),
+        AppLocalizations.of(context).close)
+        .onActionClick((_) => _model.updateUploadRequestGroupStatus(
+            context,
+            listUploadRequest: groups,
+            status: UploadRequestStatus.CLOSED,
+            title: AppLocalizations.of(context).confirm_close_multiple_upload_request(groups.length, groups.first.label),
+            titleButtonConfirm: AppLocalizations.of(context).upload_request_proceed_button,
+            currentTab: UploadRequestGroupTab.ACTIVE_CLOSED,
+            itemSelectionType: itemSelectionType,
+            onUpdateSuccess: () => _model.getUploadRequestActiveClosedStatus()))
             .build();
   }
 }
