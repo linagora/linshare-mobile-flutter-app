@@ -2087,10 +2087,10 @@ class AppLocalizations {
     );
   }
 
-  String get upload_request_cancel_proceed_button {
+  String get upload_request_proceed_button {
     return Intl.message(
       'Proceed',
-      name: 'upload_request_cancel_proceed_button',
+      name: 'upload_request_proceed_button',
     );
   }
 
@@ -2149,6 +2149,17 @@ class AppLocalizations {
     return Intl.message('Close',
         name: 'close');
   }
+
+  String confirm_close_multiple_upload_request(int numberOfItems, String singleItemName) {
+    return Intl.message(
+      '''${Intl.plural(numberOfItems,
+          one: 'Are you sure you want to close \"$singleItemName\"?',
+          other: 'Are you sure you want to close $numberOfItems items?')}''',
+      name: 'confirm_close_multiple_upload_request',
+      args: [numberOfItems, singleItemName],
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
