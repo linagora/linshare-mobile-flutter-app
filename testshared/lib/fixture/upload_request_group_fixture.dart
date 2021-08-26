@@ -183,6 +183,57 @@ final uploadRequestGroupArchived2 = UploadRequestGroup(
     2323872,
     1
 );
+
+final uploadRequestGroupClosed1 = UploadRequestGroup(
+    UploadRequestGroupId('upload_request_group_1'),
+    'uploadRequestGroup1',
+    'uploadRequestGroupBody1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    23232323,
+    232332323232,
+    23232323232323,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    true,
+    true,
+    true,
+    true,
+    'mailmessageId1',
+    false,
+    true,
+    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+    UploadRequestStatus.CLOSED,
+    2323872,
+    1
+);
+
+final uploadRequestGroupClosed2 = UploadRequestGroup(
+    UploadRequestGroupId('upload_request_group_1'),
+    'uploadRequestGroup1',
+    'uploadRequestGroupBody1',
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    23232323,
+    232332323232,
+    23232323232323,
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    DateTime.fromMillisecondsSinceEpoch(1604482138188),
+    true,
+    true,
+    true,
+    true,
+    'mailmessageId1',
+    false,
+    true,
+    GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
+    UploadRequestStatus.CLOSED,
+    2323872,
+    1
+);
+
 final uploadRequestGroupResponse1 = UploadRequestGroupResponse(
   UploadRequestGroupId('upload_request_group_1'),
   'uploadRequestGroup1',

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-08-26T09:34:38.112770",
+  "@@last_modified": "2021-08-26T17:27:34.221951",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -2168,8 +2168,8 @@
       "singleItemName": {}
     }
   },
-  "upload_request_cancel_proceed_button": "Proceed",
-  "@upload_request_cancel_proceed_button": {
+  "upload_request_proceed_button": "Proceed",
+  "@upload_request_proceed_button": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
@@ -2227,5 +2227,17 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "confirm_close_multiple_upload_request": "{numberOfItems,plural, =1{Are you sure you want to close \"{singleItemName}\"?}other{Are you sure you want to close {numberOfItems} items?}}",
+  "@confirm_close_multiple_upload_request": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
   }
 }
