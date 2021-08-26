@@ -365,26 +365,6 @@ class ToastMessageHandler {
       });
   }
 
-  void _handleUploadRequestGroupToastMessage(BuildContext context, UploadRequestGroupState uploadRequestGroupState) {
-    uploadRequestGroupState.viewState.fold(
-      (failure) {
-        if (failure is CloseUploadRequestGroupFailure) {
-          appToast.showToast(AppLocalizations.of(context).upload_request_could_not_be_closed);
-          _cleanUploadRequestGroupViewState();
-        }
-      },
-      (success) {
-        if (success is CloseUploadRequestGroupViewState) {
-          appToast.showToast(AppLocalizations.of(context).upload_request_has_been_successfully_closed);
-          _cleanUploadRequestGroupViewState();
-        }
-      });
-  }
-
-  void _cleanUploadRequestGroupViewState() {
-    _store.dispatch(CleanUploadRequestGroupAction());
-  }
-
   void _cleanAddRecipientUploadRequestGroupViewState() {
     _store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
   }
