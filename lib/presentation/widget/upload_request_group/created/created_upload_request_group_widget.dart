@@ -261,7 +261,7 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
                 listUploadRequest: groups,
                 status: UploadRequestStatus.CANCELED,
                 title: AppLocalizations.of(context).confirm_cancel_multiple_upload_request(groups.length, groups.first.label),
-                titleButtonConfirm: AppLocalizations.of(context).upload_request_cancel_proceed_button,
+                titleButtonConfirm: AppLocalizations.of(context).upload_request_proceed_button,
                 currentTab: UploadRequestGroupTab.PENDING,
                 itemSelectionType: itemSelectionType,
                 onUpdateSuccess: () => _model.getUploadRequestCreatedStatus()))
