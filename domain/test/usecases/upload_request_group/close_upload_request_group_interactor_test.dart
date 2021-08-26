@@ -30,52 +30,42 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
 
 import '../../mock/repository/mock_upload_request_group_repository.dart';
 
 void main() {
-  group('close_upload_request_group_interactor test', () {
+  group('close_upload_request_group_interactor', () {
     late MockUploadRequestGroupRepository uploadRequestGroupRepository;
-    late CloseUploadRequestGroupInteractor closeUploadRequestGroupInteractor;
+    late UpdateUploadRequestGroupStateInteractor uploadRequestGroupStateInteractor;
 
     setUp(() {
       uploadRequestGroupRepository = MockUploadRequestGroupRepository();
-      closeUploadRequestGroupInteractor = CloseUploadRequestGroupInteractor(uploadRequestGroupRepository);
+      uploadRequestGroupStateInteractor = UpdateUploadRequestGroupStateInteractor(uploadRequestGroupRepository);
     });
 
-    test('closeUploadRequestGroupInteractor should return success with one valid data', () async {
-      when(uploadRequestGroupRepository.closeUploadRequestGroup(
-        uploadRequestGroup1.uploadRequestGroupId)
-      ).thenAnswer((_) async => uploadRequestGroup1);
-
-      final result = await closeUploadRequestGroupInteractor.execute(
-        uploadRequestGroup1.uploadRequestGroupId,
-      );
-
-      final uploadRequestGroup = result
-          .map((success) => (success as CloseUploadRequestGroupViewState).uploadRequestGroup)
-          .getOrElse((() => null) as UploadRequestGroup Function());
-
-      expect(uploadRequestGroup, uploadRequestGroup1);
+    test('close upload_request_group should return success with valid data', () async {
+      when(uploadRequestGroupRepository.updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.CLOSED))
+          .thenAnswer((_) async => uploadRequestGroupClosed1);
+      final result = await uploadRequestGroupStateInteractor.execute(uploadRequestGroup1, UploadRequestStatus.CLOSED);
+      result.fold(
+        (failure) => null,
+        (success) {
+          expect(success, isA<UpdateUploadRequestGroupStateViewState>());
+          expect(uploadRequestGroupClosed1, (success as UpdateUploadRequestGroupStateViewState).uploadRequestGroup);
+      });
     });
 
-    test('closeUploadRequestGroupInteractor should fail when closeUploadRequestGroup fail', () async {
-      final exception = Exception();
-
-      when(uploadRequestGroupRepository.closeUploadRequestGroup(
-        uploadRequestGroup1.uploadRequestGroupId),
-      ).thenThrow(exception);
-
-      final result = await closeUploadRequestGroupInteractor.execute(
-        uploadRequestGroup1.uploadRequestGroupId,
-      );
-
-      expect(result, Left<Failure, Success>(CloseUploadRequestGroupFailure(exception)));
+    test('close upload_request_group should return failure', () async {
+      when(uploadRequestGroupRepository.updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.CLOSED))
+         .thenThrow(Exception());
+      final result = await uploadRequestGroupStateInteractor.execute(uploadRequestGroup1, UploadRequestStatus.CLOSED);
+      result.fold(
+        (failure) => expect(failure, isA<UpdateUploadRequestGroupStateFailure>()),
+        (success) => null);
     });
   });
 }
