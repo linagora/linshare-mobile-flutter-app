@@ -481,14 +481,14 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
 
   List<Widget> _moreActionList(BuildContext context, List<UploadRequestEntry> entries) {
     return [
-      if (Platform.isIOS) _exportFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
+      _exportFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadFilesAction(entries, itemSelectionType: ItemSelectionType.multiple),
     ];
   }
 
   List<Widget> _contextMenuActiveCloseActionTiles(BuildContext context, UploadRequestEntry entry) {
     return [
-      if (Platform.isIOS) _exportFileAction([entry]),
+      _exportFileAction([entry]),
       if (Platform.isAndroid) _downloadFilesAction([entry])
     ];
   }
