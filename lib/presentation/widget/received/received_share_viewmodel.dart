@@ -219,7 +219,7 @@ class ReceivedShareViewModel extends BaseViewModel {
 
   OnlineThunkAction _handleDownloadFile(List<ShareId> shareIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final status = await Permission.storage.status;
+      final status = await Permission.manageExternalStorage.status;
       switch (status) {
         case PermissionStatus.granted: _download(shareIds, itemSelectionType: itemSelectionType);
         break;
@@ -227,7 +227,7 @@ class ReceivedShareViewModel extends BaseViewModel {
           _appNavigation.popBack();
           break;
         default: {
-          final requested = await Permission.storage.request();
+          final requested = await Permission.manageExternalStorage.request();
           switch (requested) {
             case PermissionStatus.granted: _download(shareIds, itemSelectionType: itemSelectionType);
             break;

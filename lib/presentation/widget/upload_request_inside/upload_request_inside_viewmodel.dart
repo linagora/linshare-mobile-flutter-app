@@ -237,7 +237,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
 
   OnlineThunkAction _downloadEntriesAction(List<UploadRequestEntry> entries) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final status = await Permission.storage.status;
+      final status = await Permission.manageExternalStorage.status;
       switch (status) {
         case PermissionStatus.granted:
           _dispatchHandleDownloadAction(entries);
@@ -247,7 +247,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
           break;
         default:
           {
-            final requested = await Permission.storage.request();
+            final requested = await Permission.manageExternalStorage.request();
             switch (requested) {
               case PermissionStatus.granted:
                 _dispatchHandleDownloadAction(entries);

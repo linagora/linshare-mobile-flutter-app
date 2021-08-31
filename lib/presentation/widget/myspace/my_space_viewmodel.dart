@@ -186,7 +186,7 @@ class MySpaceViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _handleDownloadFile(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return (Store<AppState> store) async {
-      final status = await Permission.storage.status;
+      final status = await Permission.manageExternalStorage.status;
       switch (status) {
         case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
         break;
@@ -194,7 +194,7 @@ class MySpaceViewModel extends BaseViewModel {
           _appNavigation.popBack();
           break;
         default: {
-          final requested = await Permission.storage.request();
+          final requested = await Permission.manageExternalStorage.request();
           switch (requested) {
             case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
             break;
