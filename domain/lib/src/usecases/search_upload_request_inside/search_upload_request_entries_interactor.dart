@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,56 +30,22 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/domain.dart';
-import 'package:data/data.dart';
 import 'package:dartz/dartz.dart';
-import 'package:http_parser/http_parser.dart';
+import 'package:domain/domain.dart';
 
-final uploadRequestEntryResponse1 = UploadRequestEntryResponse(
-    UploadRequestEntryId('uploadRequestEntry1'),
-    UploadRequestEntryOwnerResponse(UploadRequestEntryOwnerId('uploadRequestEntryOwnerId'),
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    null,
-    null,
-    'dd2b70d0-6193-4980-8d5f-035a1e3c3da7'),
-    GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  'android-12-2.jpeg',
-  '',
-  '',
-  false,
-  30223,
-  MediaType.parse('image/jpeg'),
-  'd14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f',
-  true,
-  true
-);
+class SearchUploadRequestEntriesInteractor {
 
-final uploadRequestEntryResponse2 = UploadRequestEntryResponse(
-    UploadRequestEntryId('uploadRequestEntry2'),
-    UploadRequestEntryOwnerResponse(UploadRequestEntryOwnerId('uploadRequestEntryOwnerId'),
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    DateTime.fromMillisecondsSinceEpoch(1604482138188),
-    null,
-    null,
-    'dd2b70d0-6193-4980-8d5f-035a1e3c3da7'),
-    GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  DateTime.fromMillisecondsSinceEpoch(1604482138188),
-  'android-32-2.jpeg',
-  '',
-  '',
-  false,
-  30223,
-  MediaType.parse('image/jpeg'),
-  'd14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f',
-  true,
-  true
-);
+  Future<Either<Failure, Success>> execute(List<UploadRequestEntry> uploadRequestEntries, SearchQuery searchQuery) async {
+    try {
+      final resultList = uploadRequestEntries
+          .where((element) => element.name
+              .toLowerCase()
+              .contains(searchQuery.value.toLowerCase()))
+          .toList();
 
-final uploadRequestEntry1 = uploadRequestEntryResponse1.toUploadRequestEntry();
-final uploadRequestEntry2 = uploadRequestEntryResponse2.toUploadRequestEntry();
+      return Right<Failure, Success>(SearchUploadRequestEntriesSuccess(resultList));
+    } catch (exception) {
+      return Left<Failure, Success>(SearchUploadRequestEntriesFailure(exception));
+    }
+  }
+}
