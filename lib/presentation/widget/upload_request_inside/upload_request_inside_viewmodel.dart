@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,9 +40,11 @@ import 'package:linshare_flutter_app/presentation/model/file/presentation_file.d
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/upload_request_entry_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -63,6 +67,12 @@ class UploadRequestInsideViewModel extends BaseViewModel {
   late UploadRequestArguments _arguments;
   final DownloadUploadRequestEntriesInteractor _downloadEntriesInteractor;
   final DownloadMultipleUploadRequestEntryIOSInteractor _downloadMultipleEntryIOSInteractor;
+  final SearchUploadRequestEntriesInteractor _searchUploadRequestEntriesInteractor;
+  late StreamSubscription _storeStreamSubscription;
+
+  SearchQuery _searchQuery = SearchQuery('');
+  SearchQuery get searchQuery => _searchQuery;
+  List<UploadRequestEntry> _uploadRequestEntriesList = [];
 
   UploadRequestInsideViewModel(
       Store<AppState> store,
@@ -71,7 +81,19 @@ class UploadRequestInsideViewModel extends BaseViewModel {
       this._getAllUploadRequestEntriesInteractor,
       this._downloadEntriesInteractor,
       this._downloadMultipleEntryIOSInteractor,
-  ) : super(store);
+      this._searchUploadRequestEntriesInteractor
+  ) : super(store) {
+    _storeStreamSubscription = store.onChange.listen((event) {
+        event.uploadRequestInsideState.viewState.fold((failure) => null, (success) {
+          if (success is SearchUploadRequestEntriesNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
+            _search(success.searchQuery);
+          } else if (success is DisableSearchViewState) {
+            store.dispatch((UploadRequestEntrySetSearchResultAction(_uploadRequestEntriesList)));
+            _searchQuery = SearchQuery('');
+          }
+        });
+      });
+  }
 
   void initState(UploadRequestArguments arguments) {
     _arguments = arguments;
@@ -135,12 +157,14 @@ class UploadRequestInsideViewModel extends BaseViewModel {
       await _getAllUploadRequestEntriesInteractor.execute(uploadRequest.uploadRequestId).then(
         (result) => result.fold(
           (failure) {
-            if(failure is UploadRequestEntryFailure) {
+            _uploadRequestEntriesList = [];
+            if (failure is UploadRequestEntryFailure) {
               _handleFailedAction(failure);
             }
           },
           (success) {
-            if(success is UploadRequestEntryViewState) {
+            _uploadRequestEntriesList = success is UploadRequestEntryViewState ? success.uploadRequestEntries : [];
+            if (success is UploadRequestEntryViewState) {
               store.dispatch(GetAllUploadRequestEntriesAction(Right(success)));
             }
           })
@@ -328,8 +352,42 @@ class UploadRequestInsideViewModel extends BaseViewModel {
     };
   }
 
+  // Search
+  void openSearchState() {
+    store.dispatch(EnableSearchStateAction(SearchDestination.uploadRequestInside));
+    store.dispatch((UploadRequestEntrySetSearchResultAction([])));
+  }
+
+  void _search(SearchQuery searchQuery) {
+    _searchQuery = searchQuery;
+    if (searchQuery.value.isNotEmpty) {
+      store.dispatch(_searchUploadRequestEntriesAction(_uploadRequestEntriesList, searchQuery));
+    } else {
+      store.dispatch(UploadRequestEntrySetSearchResultAction([]));
+    }
+  }
+
+  ThunkAction<AppState> _searchUploadRequestEntriesAction(List<UploadRequestEntry> entries, SearchQuery searchQuery) {
+    return (Store<AppState> store) async {
+        await _searchUploadRequestEntriesInteractor.execute(entries, searchQuery).then((result) => result.fold((failure) {
+            if (isInSearchState()) {
+              store.dispatch(UploadRequestEntrySetSearchResultAction([]));
+            }
+          }, (success) {
+            if (isInSearchState()) {
+              store.dispatch(UploadRequestEntrySetSearchResultAction(success is SearchUploadRequestEntriesSuccess ? success.uploadRequestEntriesList : []));
+            }
+          }));
+    };
+  }
+
+  bool isInSearchState() {
+    return store.state.uiState.isInSearchState();
+  }
+
   @override
   void onDisposed() {
+    _storeStreamSubscription.cancel();
     cancelSelection();
     clearUploadRequestListAction();
     super.onDisposed();
