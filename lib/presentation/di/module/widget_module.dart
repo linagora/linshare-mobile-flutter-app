@@ -492,6 +492,7 @@ class WidgetModule {
           getIt.get<GetAllUploadRequestEntriesInteractor>(),
           getIt<DownloadUploadRequestEntriesInteractor>(),
           getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
+          getIt<SearchUploadRequestEntriesInteractor>()
         ));
   }
 

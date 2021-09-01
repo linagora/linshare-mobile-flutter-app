@@ -65,7 +65,7 @@ class UIState with EquatableMixin {
   }
 
   UIState setSearchState(SearchState searchState) {
-    return UIState(routePath, searchState, uploadRequestGroupTabIndex: uploadRequestGroupTabIndex, selectedSharedSpace: selectedSharedSpace);
+    return UIState(routePath, searchState, uploadRequestGroupTabIndex: uploadRequestGroupTabIndex, selectedSharedSpace: selectedSharedSpace, uploadRequestGroup: uploadRequestGroup);
   }
 
   UIState setUploadRequestGroupIndexTab(int newIndex) {
@@ -112,5 +112,6 @@ enum SearchDestination {
   sharedSpace,
   allSharedSpaces,
   receivedShares,
-  uploadRequestGroups
+  uploadRequestGroups,
+  uploadRequestInside
 }
