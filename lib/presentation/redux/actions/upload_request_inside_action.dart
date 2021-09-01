@@ -105,3 +105,15 @@ class UploadRequestSelectAllEntryAction extends ActionOffline {
 class UploadRequestUnSelectAllEntryAction extends ActionOffline {
   UploadRequestUnSelectAllEntryAction();
 }
+
+@immutable
+class UploadRequestEntrySetSearchResultAction extends ActionOffline {
+  final List<UploadRequestEntry> uploadRequestEntries;
+
+  UploadRequestEntrySetSearchResultAction(this.uploadRequestEntries);
+}
+
+@immutable
+class CleanUploadRequestInsideAction extends ActionOffline {
+  CleanUploadRequestInsideAction();
+}

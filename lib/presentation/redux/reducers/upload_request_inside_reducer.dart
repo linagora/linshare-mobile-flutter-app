@@ -37,6 +37,7 @@ import 'package:redux/redux.dart';
 
 final uploadRequestInsideReducer = combineReducers<UploadRequestInsideState>([
   TypedReducer<UploadRequestInsideState, StartUploadRequestInsideLoadingAction>((UploadRequestInsideState state, _) => state.startLoadingState()),
+  TypedReducer<UploadRequestInsideState, UploadRequestInsideAction>((UploadRequestInsideState state, UploadRequestInsideAction action) => state.sendViewState(viewState: action.viewState)),
   TypedReducer<UploadRequestInsideState, SetUploadRequestsArgumentsAction>((UploadRequestInsideState state, SetUploadRequestsArgumentsAction action) =>
       state.setUploadRequestArgument(newUploadRequestArguments: action.arguments)),
   TypedReducer<UploadRequestInsideState, GetAllUploadRequestsAction>((UploadRequestInsideState state, GetAllUploadRequestsAction action) =>
@@ -67,4 +68,7 @@ final uploadRequestInsideReducer = combineReducers<UploadRequestInsideState>([
       state.selectAllUploadRequestEntry()),
   TypedReducer<UploadRequestInsideState, UploadRequestUnSelectAllEntryAction>((UploadRequestInsideState state, UploadRequestUnSelectAllEntryAction action) =>
       state.unSelectAllUploadRequestEntry()),
+  TypedReducer<UploadRequestInsideState, UploadRequestEntrySetSearchResultAction>((UploadRequestInsideState state, UploadRequestEntrySetSearchResultAction action) =>
+      state.setSearchResult(newSearchResult: action.uploadRequestEntries)),
+  TypedReducer<UploadRequestInsideState, CleanUploadRequestInsideAction>((UploadRequestInsideState state, _) => state.clearViewState()),
 ]);
