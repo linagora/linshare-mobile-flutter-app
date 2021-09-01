@@ -364,3 +364,5 @@ export 'src/usecases/upload_request_entry/download_upload_request_entry_interact
 export 'src/usecases/upload_request_entry/download_upload_request_entry_ios_interactor.dart';
 export 'src/usecases/upload_request_entry/download_multiple_upload_request_entry_ios_interactor.dart';
 export 'src/usecases/upload_request_group/add_recipients_upload_request_group_interactor.dart';
+export 'src/usecases/search_upload_request_inside/search_upload_request_entries_interactor.dart';
+export 'src/usecases/search_upload_request_inside/search_upload_request_entries_view_state.dart';
