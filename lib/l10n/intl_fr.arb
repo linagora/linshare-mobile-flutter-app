@@ -1751,5 +1751,11 @@
       "numberOfItems": {},
       "singleItemName": {}
     }
+  },
+  "search_in_upload_request_entries": "Search in Upload Requests Entries",
+  "@search_in_upload_request_entries": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }

@@ -51,9 +51,11 @@ import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.d
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_entry_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_entry_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
@@ -75,6 +77,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
   final imagePath = getIt<AppImagePaths>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
   UploadRequestArguments? _arguments;
+  final _widgetCommon = getIt<CommonView>();
 
   @override
   void initState() {
@@ -95,6 +98,36 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return StoreConnector<AppState, bool>(
+      converter: (store) => store.state.uiState.isInSearchState(),
+      builder: (context, isInSearchState) =>
+        isInSearchState ? _buildSearchViewWidget(context) : _buildDefaultViewWidget());
+  }
+
+  Widget _buildSearchViewWidget(BuildContext context) {
+    return StoreConnector<AppState, UploadRequestInsideState>(
+      converter: (store) => store.state.uploadRequestInsideState,
+      builder: (_, state) {
+        if (_viewModel.searchQuery.value.isEmpty) {
+          return SizedBox.shrink();
+        }
+        if (state.uploadRequestEntries.isEmpty) {
+          return _widgetCommon.buildNoResultFound(context);
+        }
+        return Column(children: [
+          _buildMultipleSelectionTopBar(),
+          _widgetCommon.buildResultCountRow(context, state.uploadRequestEntries.length),
+          Expanded(child: _buildUploadRequestEntriesListView(state.uploadRequestEntries, state.selectMode)),
+          (state.selectMode == SelectMode.ACTIVE && state.getAllSelectedEntries().isNotEmpty)
+              ? _buildMultipleSelectionBottomBar(
+              context,
+              state.getAllSelectedEntries())
+              : SizedBox.shrink()
+        ]);
+      });
+  }
+
+  Widget _buildDefaultViewWidget() {
     return Scaffold(
       body: Column(
         children: [
@@ -104,12 +137,24 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
           Expanded(child: _buildUploadRequestList()),
           StoreConnector<AppState, UploadRequestInsideState>(
               converter: (store) => store.state.uploadRequestInsideState,
-              builder: (context, state) => (state.selectMode == SelectMode.ACTIVE && state.getAllSelectedEntries().isNotEmpty)
+              builder: (context, state) => (state.selectMode == SelectMode.ACTIVE &&
+                      state.getAllSelectedEntries().isNotEmpty)
                   ? _buildMultipleSelectionBottomBar(context, state.getAllSelectedEntries())
-                  : SizedBox.shrink()
-          )
+                  : SizedBox.shrink())
         ],
       ),
+      bottomNavigationBar: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (context, appState) {
+            if (!appState.uiState.isInSearchState() &&
+                appState.uploadRequestInsideState.selectMode != SelectMode.ACTIVE &&
+                appState.uploadRequestInsideState.uploadRequestEntries.isNotEmpty) {
+              return SearchBottomBarBuilder().key(Key('search_bottom_bar')).onSearchActionClick(() {
+                _viewModel.openSearchState();
+              }).build();
+            }
+            return SizedBox.shrink();
+          }),
     );
   }
 
@@ -244,19 +289,18 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
                   child: _buildEmptyListIndicator()),
                 (success) => RefreshIndicator(
                   onRefresh: () async => _viewModel.requestToGetUploadRequestAndEntries(),
-                    child: _buildLayoutCorrespondingWithState(success, uploadRequestInsideState)))
+                  child: _buildLayoutCorrespondingWithState(uploadRequestInsideState)))
     );
   }
 
-  Widget _buildLayoutCorrespondingWithState(state, uploadRequestInsideState) {
-    if(state is UploadRequestEntryViewState) {
-      return _buildUploadRequestEntriesListView(
-          uploadRequestInsideState.uploadRequestEntries,
-          uploadRequestInsideState.selectMode);
-    } else if(state is UploadRequestViewState) {
-      return _buildUploadRequestListView(state.uploadRequests);
+  Widget _buildLayoutCorrespondingWithState(UploadRequestInsideState uploadRequestInsideState) {
+    switch (uploadRequestInsideState.uploadRequestDocumentType) {
+      case UploadRequestDocumentType.recipients:
+        return _buildUploadRequestListView(uploadRequestInsideState.uploadRequests);
+      case UploadRequestDocumentType.files:
+        return _buildUploadRequestEntriesListView(
+            uploadRequestInsideState.uploadRequestEntries, uploadRequestInsideState.selectMode);
     }
-    return SizedBox.shrink();
   }
 
   Widget _buildEmptyListIndicator() {
@@ -274,9 +318,10 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
   Widget _buildUploadRequestEntriesListView(
       List<SelectableElement<UploadRequestEntry>> uploadRequestEntries,
       SelectMode selectMode) {
-    if(uploadRequestEntries.isEmpty) {
+    if (uploadRequestEntries.isEmpty) {
       return _buildEmptyListIndicator();
     }
+
     return ListView.builder(
       itemCount: uploadRequestEntries.length,
       itemBuilder: (BuildContext context, int index) {
@@ -356,7 +401,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
   }
 
   Widget _buildUploadRequestListView(List<UploadRequest> uploadRequests) {
-    if(uploadRequests.isEmpty) {
+    if (uploadRequests.isEmpty) {
       return _buildEmptyListIndicator();
     }
     return ListView.builder(
@@ -514,5 +559,4 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
       .onActionClick((data) => _viewModel.downloadEntries(entries, itemSelectionType: itemSelectionType))
       .build();
   }
-
 }

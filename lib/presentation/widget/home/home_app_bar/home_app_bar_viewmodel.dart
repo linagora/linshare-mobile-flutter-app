@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_g
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:redux/redux.dart';
@@ -56,6 +57,7 @@ class HomeAppBarViewModel extends BaseViewModel {
       _handleReceivedShareViewState(_typeAheadController, event.receivedShareState.viewState);
       _handleSharedSpaceViewState(_typeAheadController, event.sharedSpaceState.viewState);
       _handleUploadRequestGroupsViewState(_typeAheadController, event.uploadRequestGroupState.viewState);
+      _handleUploadRequestInsideViewState(_typeAheadController, event.uploadRequestInsideState.viewState);
     });
   }
 
@@ -98,6 +100,16 @@ class HomeAppBarViewModel extends BaseViewModel {
 				store.dispatch(CleanCreatedUploadRequestGroupAction());
 				store.dispatch(CleanArchivedUploadRequestGroupAction());
 				store.dispatch(CleanActiveClosedUploadRequestGroupAction());
+      }
+    });
+  }
+
+  void _handleUploadRequestInsideViewState(
+      TextEditingController _typeAheadController, Either<Failure, Success> viewState) {
+    viewState.fold((failure) => null, (success) {
+      if (success is DisableSearchViewState) {
+        _typeAheadController.clear();
+        store.dispatch(CleanUploadRequestInsideAction());
       }
     });
   }
