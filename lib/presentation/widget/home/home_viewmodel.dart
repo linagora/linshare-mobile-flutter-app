@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_g
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -158,9 +159,12 @@ class HomeViewModel extends BaseViewModel {
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.uploadRequestGroups) {
       store.dispatch(UploadRequestGroupAction(Right(DisableSearchViewState())));
       store.dispatch(CleanUploadRequestGroupAction());
-			store.dispatch(CleanCreatedUploadRequestGroupAction());
-			store.dispatch(CleanArchivedUploadRequestGroupAction());
-			store.dispatch(CleanActiveClosedUploadRequestGroupAction());
+      store.dispatch(CleanCreatedUploadRequestGroupAction());
+      store.dispatch(CleanArchivedUploadRequestGroupAction());
+      store.dispatch(CleanActiveClosedUploadRequestGroupAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.uploadRequestInside) {
+      store.dispatch(UploadRequestInsideAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanUploadRequestInsideAction());
     }
   }
 
@@ -183,6 +187,9 @@ class HomeViewModel extends BaseViewModel {
 			store.dispatch(CleanCreatedUploadRequestGroupAction());
 			store.dispatch(CleanArchivedUploadRequestGroupAction());
 			store.dispatch(CleanActiveClosedUploadRequestGroupAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.uploadRequestInside) {
+      store.dispatch(UploadRequestInsideAction(Right(SearchUploadRequestEntriesNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanUploadRequestInsideAction());
     }
   }
 

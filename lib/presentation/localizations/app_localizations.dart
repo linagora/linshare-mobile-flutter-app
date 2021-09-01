@@ -2160,6 +2160,12 @@ class AppLocalizations {
     );
   }
 
+  String get search_in_upload_request_entries {
+    return Intl.message(
+      'Search in Upload Requests Entries',
+      name: 'search_in_upload_request_entries',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -58,12 +58,12 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
   SearchQuery get searchQuery => _searchQuery;
 
   CreatedUploadRequestGroupViewModel(
-		Store<AppState> store, 
-		this._appNavigation, 
-		this._getAllUploadRequestGroupsInteractor, 
+		Store<AppState> store,
+		this._appNavigation,
+		this._getAllUploadRequestGroupsInteractor,
 		this._getSorterInteractor,
-    this._saveSorterInteractor, 
-		this._sortInteractor, 
+    this._saveSorterInteractor,
+		this._sortInteractor,
 		this._searchUploadRequestGroupsInteractor,
     this._multipleUploadRequestGroupStateInteractor) : super(
       store,
