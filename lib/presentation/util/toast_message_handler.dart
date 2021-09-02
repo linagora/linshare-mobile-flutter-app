@@ -52,6 +52,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_g
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
@@ -64,6 +65,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:redux/redux.dart';
 
@@ -85,6 +87,7 @@ class ToastMessageHandler {
       _handleSharedSpaceNodeVersionsToastMessage(context, event.sharedSpaceNodeVersionsState);
       _handleAddRecipientUploadRequestGroupToastMessage(context, event.addRecipientsUploadRequestGroupState);
       _handleUploadRequestGroupToastMessage(context, event.uploadRequestGroupState);
+      _handleUploadRequestInsideToastMessage(context, event.uploadRequestInsideState);
     });
   }
 
@@ -365,10 +368,6 @@ class ToastMessageHandler {
       });
   }
 
-  void _cleanAddRecipientUploadRequestGroupViewState() {
-    _store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
-  }
-
   void _handleUploadRequestGroupToastMessage(BuildContext context, UploadRequestGroupState requestGroupState) {
     requestGroupState.viewState.fold((failure) {
       if (failure is UpdateUploadRequestGroupStateFailure) {
@@ -391,6 +390,38 @@ class ToastMessageHandler {
       }
     });
   }
+
+  void _handleUploadRequestInsideToastMessage(BuildContext context, UploadRequestInsideState uploadRequestInsideState) {
+    uploadRequestInsideState.viewState.fold((failure) {
+      if (failure is CopyToMySpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
+        _cleanUploadRequestInsideViewState();
+      } else if (failure is CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
+        _cleanUploadRequestInsideViewState();
+      }
+    }, (success) {
+      if (success is CopyToMySpaceViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
+        _cleanUploadRequestInsideViewState();
+      } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).all_items_have_been_copied_to_my_space);
+        _cleanUploadRequestInsideViewState();
+      } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesHasSomeFilesViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
+        _cleanUploadRequestInsideViewState();
+      }
+    });
+  }
+
+  void _cleanAddRecipientUploadRequestGroupViewState() {
+    _store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
+  }
+
+  void _cleanUploadRequestInsideViewState() {
+    _store.dispatch(CleanUploadRequestInsideAction());
+  }
+
 
   void _cleanMySpaceViewState() {
     _store.dispatch(CleanMySpaceStateAction());
