@@ -366,3 +366,4 @@ export 'src/usecases/upload_request_entry/download_multiple_upload_request_entry
 export 'src/usecases/upload_request_group/add_recipients_upload_request_group_interactor.dart';
 export 'src/usecases/search_upload_request_inside/search_upload_request_entries_interactor.dart';
 export 'src/usecases/search_upload_request_inside/search_upload_request_entries_view_state.dart';
+export 'src/usecases/upload_request_entry/copy_multiple_files_from_upload_request_entries_to_my_space_interactor.dart';
