@@ -113,3 +113,29 @@ class DownloadEntryIOSAllFailureViewState extends FeatureFailure {
   List<Object> get props => [resultList];
 }
 
+class CopyMultipleToMySpaceFromUploadRequestEntriesAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceFromUploadRequestEntriesAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class CopyMultipleToMySpaceFromUploadRequestEntriesHasSomeFilesViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceFromUploadRequestEntriesHasSomeFilesViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
