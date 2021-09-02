@@ -74,6 +74,8 @@ class UploadRequestInsideViewModel extends BaseViewModel {
   SearchQuery get searchQuery => _searchQuery;
   List<UploadRequestEntry> _uploadRequestEntriesList = [];
 
+  final CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor;
+
   UploadRequestInsideViewModel(
       Store<AppState> store,
       this._appNavigation,
@@ -81,7 +83,8 @@ class UploadRequestInsideViewModel extends BaseViewModel {
       this._getAllUploadRequestEntriesInteractor,
       this._downloadEntriesInteractor,
       this._downloadMultipleEntryIOSInteractor,
-      this._searchUploadRequestEntriesInteractor
+      this._searchUploadRequestEntriesInteractor,
+      this._copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
         event.uploadRequestInsideState.viewState.fold((failure) => null, (success) {
@@ -381,8 +384,25 @@ class UploadRequestInsideViewModel extends BaseViewModel {
     };
   }
 
-  bool isInSearchState() {
-    return store.state.uiState.isInSearchState();
+  bool isInSearchState()
+    => store.state.uiState.isInSearchState();
+
+  void copyToMySpace(List<UploadRequestEntry> entries, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    store.dispatch(_copyToMySpaceAction(entries));
+  }
+
+  OnlineThunkAction _copyToMySpaceAction(List<UploadRequestEntry> entries) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor.execute(entries)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
+          (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
+    });
   }
 
   @override

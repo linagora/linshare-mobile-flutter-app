@@ -70,5 +70,6 @@ final uploadRequestInsideReducer = combineReducers<UploadRequestInsideState>([
       state.unSelectAllUploadRequestEntry()),
   TypedReducer<UploadRequestInsideState, UploadRequestEntrySetSearchResultAction>((UploadRequestInsideState state, UploadRequestEntrySetSearchResultAction action) =>
       state.setSearchResult(newSearchResult: action.uploadRequestEntries)),
-  TypedReducer<UploadRequestInsideState, CleanUploadRequestInsideAction>((UploadRequestInsideState state, _) => state.clearViewState()),
+  TypedReducer<UploadRequestInsideState, CleanUploadRequestInsideAction>((UploadRequestInsideState state, _) =>
+      state.clearViewState()),
 ]);
