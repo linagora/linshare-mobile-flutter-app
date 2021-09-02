@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,22 +28,32 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-enum SpaceType { PERSONAL_SPACE, RECEIVED_SHARE, SHARED_SPACE, UPLOAD_REQUEST }
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
 
-extension SpaceTypeExtension on SpaceType {
-  String get value {
-    switch (this) {
-      case SpaceType.PERSONAL_SPACE:
-        return 'PERSONAL_SPACE';
-      case SpaceType.RECEIVED_SHARE:
-        return 'RECEIVED_SHARE';
-      case SpaceType.SHARED_SPACE:
-        return 'SHARED_SPACE';
-      case SpaceType.UPLOAD_REQUEST:
-        return 'UPLOAD_REQUEST';
-      default:
-        return 'PERSONAL_SPACE';
+class CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor {
+  final CopyToMySpaceInteractor _copyToMySpaceInteractor;
+
+  CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor(this._copyToMySpaceInteractor);
+
+  Future<Either<Failure, Success>> execute(List<UploadRequestEntry> entries) async {
+    final copyRequestsList = entries.map((entry) =>
+        CopyRequest(entry.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)).toList();
+    final listResult = await Future.wait(copyRequestsList.map((element) =>
+        _copyToMySpaceInteractor.execute(element)));
+    if (listResult.length == 1) {
+      return listResult.first;
+    } else {
+      var failedFileCount = listResult.whereType<Left>().length;
+
+      if (failedFileCount == 0) {
+        return Right(CopyMultipleToMySpaceFromUploadRequestEntriesAllSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure(listResult));
+      }
+      return Right(CopyMultipleToMySpaceFromUploadRequestEntriesHasSomeFilesViewState(listResult));
     }
   }
 }
