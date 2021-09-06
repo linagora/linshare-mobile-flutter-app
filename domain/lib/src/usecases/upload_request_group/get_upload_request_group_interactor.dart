@@ -30,34 +30,20 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
 
-abstract class UploadRequestGroupException extends RemoteException {
-  static final UploadRequestGroupsNotFound = 'Upload Request Groups not found';
-  static final UploadRequestCreationFailed = 'Upload Request Create Failed';
-  static final UploadRequestEditFailed = 'Upload Request Edit Failed';
+class GetUploadRequestGroupInteractor {
+  final UploadRequestGroupRepository _uploadRequestGroupRepository;
 
-  UploadRequestGroupException(String message) : super(message);
-}
+  GetUploadRequestGroupInteractor(this._uploadRequestGroupRepository);
 
-class UploadRequestGroupsNotFound extends UploadRequestGroupException {
-  UploadRequestGroupsNotFound() : super(UploadRequestGroupException.UploadRequestGroupsNotFound);
-
-  @override
-  List<Object> get props => [];
-}
-
-
-class UploadRequestCreateFailed extends UploadRequestGroupException {
-  UploadRequestCreateFailed() : super(UploadRequestGroupException.UploadRequestCreationFailed);
-
-  @override
-  List<Object> get props => [];
-}
-
-class UploadRequestEditFailed extends UploadRequestGroupException {
-  UploadRequestEditFailed() : super(UploadRequestGroupException.UploadRequestEditFailed);
-
-  @override
-  List<Object> get props => [];
+  Future<Either<Failure, Success>> execute(UploadRequestGroupId uploadRequestGroupId) async {
+    try {
+      final uploadRequestGroup = await _uploadRequestGroupRepository.getUploadRequestGroup(uploadRequestGroupId);
+      return Right<Failure, Success>(SingleUploadRequestGroupViewState(uploadRequestGroup));
+    } catch (exception) {
+      return Left<Failure, Success>(SingleUploadRequestGroupFailure(exception));
+    }
+  }
 }

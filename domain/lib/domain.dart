@@ -177,6 +177,7 @@ export 'src/model/upload_request_group/add_upload_request.dart';
 export 'src/model/upload_request_entry/upload_request_entry.dart';
 export 'src/model/upload_request_entry/upload_request_entry_owner.dart';
 export 'src/model/upload_request_entry/upload_request_entry_owner_id.dart';
+export 'src/model/upload_request_group/edit_upload_request.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -364,3 +365,5 @@ export 'src/usecases/upload_request_entry/download_upload_request_entry_interact
 export 'src/usecases/upload_request_entry/download_upload_request_entry_ios_interactor.dart';
 export 'src/usecases/upload_request_entry/download_multiple_upload_request_entry_ios_interactor.dart';
 export 'src/usecases/upload_request_group/add_recipients_upload_request_group_interactor.dart';
+export 'src/usecases/upload_request_group/get_upload_request_group_interactor.dart';
+export 'src/usecases/upload_request_group/edit_upload_request_interactor.dart';

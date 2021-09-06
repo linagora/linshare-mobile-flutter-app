@@ -383,6 +383,8 @@ class AppModule {
     getIt.registerFactory(() => AddRecipientsToUploadRequestGroupInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => UpdateUploadRequestGroupStateInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => UpdateMultipleUploadRequestGroupStateInteractor(getIt<UpdateUploadRequestGroupStateInteractor>()));
+    getIt.registerFactory(() => GetUploadRequestGroupInteractor(getIt<UploadRequestGroupRepository>()));
+    getIt.registerFactory(() => EditUploadRequestInteractor(getIt<UploadRequestGroupRepository>()));
   }
 
   void _provideSharePreference() {
