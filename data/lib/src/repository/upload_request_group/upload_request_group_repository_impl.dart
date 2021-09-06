@@ -44,6 +44,11 @@ class UploadRequestGroupRepositoryImpl implements UploadRequestGroupRepository {
   }
 
   @override
+  Future<UploadRequestGroup> getUploadRequestGroup(UploadRequestGroupId uploadRequestGroupId) {
+    return _uploadRequestGroupDataSource.getUploadRequestGroup(uploadRequestGroupId);
+  }
+
+  @override
   Future<UploadRequestGroup> addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest) {
     return _uploadRequestGroupDataSource.addNewUploadRequest(creationType, addUploadRequest);
   }
@@ -56,5 +61,10 @@ class UploadRequestGroupRepositoryImpl implements UploadRequestGroupRepository {
   @override
   Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status, {bool? copyToMySpace}) {
     return _uploadRequestGroupDataSource.updateUploadRequestGroupState(uploadRequestGroup, status, copyToMySpace: copyToMySpace);
+  }
+
+  @override
+  Future<UploadRequestGroup> editNewUploadRequest(UploadRequestGroupId uploadRequestGroupId, EditUploadRequest request) {
+    return _uploadRequestGroupDataSource.editUploadRequest(uploadRequestGroupId, request);
   }
 }

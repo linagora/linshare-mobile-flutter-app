@@ -78,6 +78,7 @@ import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
+import 'package:data/src/network/model/request/edit_upload_request_body_request.dart';
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -618,4 +619,22 @@ class LinShareHttpClient {
     }
   }
 
+  Future<UploadRequestGroupResponse> getUploadRequestGroup(UploadRequestGroupId uploadRequestGroupId) async {
+    final resultJson = await _dioClient.get(Endpoint.uploadRequestGroups
+        .withPathParameter(uploadRequestGroupId.uuid)
+        .generateEndpointPath());
+    return UploadRequestGroupResponse.fromJson(resultJson);
+  }
+
+  Future<UploadRequestGroupResponse> editUploadRequest(
+    UploadRequestGroupId uploadRequestGroupId,
+    EditUploadRequest request
+  ) async {
+      final resultJson = await _dioClient.put(
+          Endpoint.uploadRequestGroups
+            .withPathParameter(uploadRequestGroupId.uuid)
+            .generateEndpointPath(),
+          data: request.toBodyRequest().toJson().toString());
+      return UploadRequestGroupResponse.fromJson(resultJson);
+  }
 }
