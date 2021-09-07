@@ -109,6 +109,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final GetAllSharedSpaceDocumentOfflineInteractor _getAllSharedSpaceDocumentOfflineInteractor;
   final AutoSyncOfflineManager _autoSyncOfflineManager;
   final EnableAvailableOfflineSharedSpaceDocumentInteractor _enableAvailableOfflineSharedSpaceDocumentInteractor;
+  final DeviceManager _deviceManager;
 
   late StreamSubscription _storeStreamSubscription;
 
@@ -143,6 +144,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     this._getAllSharedSpaceDocumentOfflineInteractor,
     this._autoSyncOfflineManager,
     this._enableAvailableOfflineSharedSpaceDocumentInteractor,
+    this._deviceManager,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold((failure) => null, (success) {
@@ -552,26 +554,31 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   OnlineThunkAction _downloadNodeAction(List<WorkGroupNode> nodes,
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final status = await Permission.storage.status;
-      switch (status) {
-        case PermissionStatus.granted:
-          _dispatchHandleDownloadAction(nodes, itemSelectionType: itemSelectionType);
-          break;
-        case PermissionStatus.permanentlyDenied:
-          _appNavigation.popBack();
-          break;
-        default:
-          {
-            final requested = await Permission.storage.request();
-            switch (requested) {
-              case PermissionStatus.granted:
-                _dispatchHandleDownloadAction(nodes, itemSelectionType: itemSelectionType);
-                break;
-              default:
-                _appNavigation.popBack();
-                break;
+      final needRequestPermission = await _deviceManager.isNeedRequestStoragePermissionOnAndroid();
+      if(Platform.isAndroid && needRequestPermission) {
+        final status = await Permission.storage.status;
+        switch (status) {
+          case PermissionStatus.granted:
+            _dispatchHandleDownloadAction(nodes, itemSelectionType: itemSelectionType);
+            break;
+          case PermissionStatus.permanentlyDenied:
+            _appNavigation.popBack();
+            break;
+          default:
+            {
+              final requested = await Permission.storage.request();
+              switch (requested) {
+                case PermissionStatus.granted:
+                  _dispatchHandleDownloadAction(nodes, itemSelectionType: itemSelectionType);
+                  break;
+                default:
+                  _appNavigation.popBack();
+                  break;
+              }
             }
-          }
+        }
+      } else {
+        _dispatchHandleDownloadAction(nodes, itemSelectionType: itemSelectionType);
       }
     });
   }

@@ -62,4 +62,10 @@ class DeviceManager {
     }
     return 'Android-App';
   }
+
+  Future<bool> isNeedRequestStoragePermissionOnAndroid() async {
+    final androidInfo = await _deviceInfoPlugin.androidInfo;
+    return androidInfo.version.sdkInt <= 28;
+  }
+
 }
