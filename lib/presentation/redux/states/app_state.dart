@@ -38,6 +38,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/biometric_authent
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/document_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/edit_upload_request_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
@@ -93,6 +94,7 @@ class AppState with EquatableMixin {
   final UploadRequestInsideState uploadRequestInsideState;
   final ReceivedShareDetailsState receivedShareDetailsState;
   final AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState;
+  final EditUploadRequestState editUploadRequestState;
 
   AppState(
       {required this.uiState,
@@ -124,7 +126,8 @@ class AppState with EquatableMixin {
       required this.addRecipientsUploadRequestGroupState,
       required this.createdUploadRequestGroupState,
       required this.activeClosedUploadRequestGroupState,
-      required this.archivedUploadRequestGroupState});
+      required this.archivedUploadRequestGroupState,
+      required this.editUploadRequestState});
 
   factory AppState.initial() {
     return AppState(
@@ -157,7 +160,8 @@ class AppState with EquatableMixin {
         archivedUploadRequestGroupState: ArchivedUploadRequestGroupState.initial(),
         uploadRequestInsideState: UploadRequestInsideState.initial(),
         receivedShareDetailsState: ReceivedShareDetailsState.initial(),
-        addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial()
+        addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial(),
+        editUploadRequestState: EditUploadRequestState.initial()
     );
   }
 
@@ -191,6 +195,7 @@ class AppState with EquatableMixin {
         archivedUploadRequestGroupState,
         uploadRequestInsideState,
         receivedShareDetailsState,
-        addRecipientsUploadRequestGroupState
+        addRecipientsUploadRequestGroupState,
+        editUploadRequestState
       ];
 }

@@ -176,5 +176,4 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
           AppLocalizations.of(context).individual_upload)
       .onActionClick((_) => _model.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, uploadRequestFunctionalities))
       .build();
-
 }

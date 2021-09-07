@@ -252,7 +252,8 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
   Widget _buildFooterContextMenuActions(UploadRequestGroup uploadRequestGroup) {
     return Column(children: [
       if (uploadRequestGroup.status == UploadRequestStatus.CLOSED) _archiveUploadRequestGroupAction([uploadRequestGroup]),
-      if (uploadRequestGroup.status == UploadRequestStatus.ENABLED) _closeUploadRequestGroupAction([uploadRequestGroup])
+      if (uploadRequestGroup.status == UploadRequestStatus.ENABLED) _closeUploadRequestGroupAction([uploadRequestGroup]),
+      if (uploadRequestGroup.status == UploadRequestStatus.ENABLED) _editUploadRequestGroupAction(uploadRequestGroup)
     ]);
   }
 
@@ -323,4 +324,12 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
             onUpdateSuccess: () => _model.getUploadRequestActiveClosedStatus()))
             .build();
   }
+
+  Widget _editUploadRequestGroupAction(UploadRequestGroup group) =>
+    SimpleContextMenuActionBuilder(
+      Key('upload_request_group_active_edit'),
+      Icon(Icons.edit, size: 24.0, color: AppColor.unselectedElementColor),
+      AppLocalizations.of(context).edit)
+      .onActionClick((_) => _model.editUploadRequest(group))
+          .build();
 }

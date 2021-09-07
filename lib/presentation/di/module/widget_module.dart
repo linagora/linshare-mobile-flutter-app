@@ -53,6 +53,8 @@ import 'package:linshare_flutter_app/presentation/widget/current_uploads/current
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_app_bar/home_app_bar_viewmodel.dart';
@@ -135,6 +137,7 @@ class WidgetModule {
     _provideReceivedShareDetailsComponent();
     _provideAddRecipientsUploadRequestGroupComponent();
     _provideWidgetCommonView();
+    _provideEditUploadRequestComponent();
   }
 
   void _provideLoginComponent() {
@@ -527,5 +530,15 @@ class WidgetModule {
   void _provideWidgetCommonView() {
     getIt.registerFactory(() => UploadRequestGroupCommonView());
     getIt.registerFactory(() => CommonView());
+  }
+
+  void _provideEditUploadRequestComponent() {
+    getIt.registerFactory(() => EditUploadRequestWidget());
+    getIt.registerFactory(() => EditUploadRequestViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetUploadRequestGroupInteractor>(),
+        getIt.get<EditUploadRequestInteractor>(),
+    ));
   }
 }

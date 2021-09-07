@@ -215,7 +215,8 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
 
   List<Widget> _contextMenuActionTiles(UploadRequestGroup uploadRequestGroup) {
     return [
-      _addRecipientsAction(uploadRequestGroup)
+      _addRecipientsAction(uploadRequestGroup),
+      _editUploadRequestGroupAction(uploadRequestGroup)
     ];
   }
 
@@ -268,4 +269,11 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
             .build();
   }
 
+  Widget _editUploadRequestGroupAction(UploadRequestGroup group) =>
+    SimpleContextMenuActionBuilder(
+      Key('upload_request_group_created_edit'),
+      Icon(Icons.edit, size: 24.0, color: AppColor.unselectedElementColor),
+      AppLocalizations.of(context).rename)
+      .onActionClick((_) => _model.editUploadRequest(group))
+          .build();
 }

@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authe
 import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_setting_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/edit_upload_request_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/network_connectivity_reducer.dart';
@@ -98,7 +99,8 @@ AppState appStateReducer(AppState state, action) {
         addRecipientsUploadRequestGroupState: addRecipientUploadRequestGroupReducer(state.addRecipientsUploadRequestGroupState, action),
         createdUploadRequestGroupState: createdUploadRequestGroupReducer(state.createdUploadRequestGroupState, action),
         archivedUploadRequestGroupState: archivedUploadRequestGroupReducer(state.archivedUploadRequestGroupState, action),
-        activeClosedUploadRequestGroupState: activeClosedUploadRequestGroupReducer(state.activeClosedUploadRequestGroupState, action));
+        activeClosedUploadRequestGroupState: activeClosedUploadRequestGroupReducer(state.activeClosedUploadRequestGroupState, action),
+        editUploadRequestState: editUploadRequestReducer(state.editUploadRequestState, action));
   }
 
   return AppState(
@@ -134,6 +136,7 @@ AppState appStateReducer(AppState state, action) {
       createdUploadRequestGroupState: state.createdUploadRequestGroupState,
       activeClosedUploadRequestGroupState: state.activeClosedUploadRequestGroupState,
       archivedUploadRequestGroupState: state.archivedUploadRequestGroupState,
+      editUploadRequestState: state.editUploadRequestState
   );
 }
 

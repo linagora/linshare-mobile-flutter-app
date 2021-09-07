@@ -2160,6 +2160,12 @@ class AppLocalizations {
     );
   }
 
+  String get edit {
+    return Intl.message(
+      'Edit',
+      name: 'edit',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
