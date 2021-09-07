@@ -79,7 +79,7 @@ dependencies:
   flutter_svg: 0.22.0
 
   # flutter_downloader
-  flutter_downloader: 1.6.0
+  flutter_downloader: 1.7.0
 
   #filesize
   filesize: 2.0.1
