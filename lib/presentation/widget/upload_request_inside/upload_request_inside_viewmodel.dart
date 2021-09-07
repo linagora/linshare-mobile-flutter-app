@@ -30,8 +30,10 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -73,6 +75,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
   SearchQuery _searchQuery = SearchQuery('');
   SearchQuery get searchQuery => _searchQuery;
   List<UploadRequestEntry> _uploadRequestEntriesList = [];
+  final DeviceManager _deviceManager;
 
   final CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor;
 
@@ -84,7 +87,8 @@ class UploadRequestInsideViewModel extends BaseViewModel {
       this._downloadEntriesInteractor,
       this._downloadMultipleEntryIOSInteractor,
       this._searchUploadRequestEntriesInteractor,
-      this._copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor
+      this._copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor,
+      this._deviceManager
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
         event.uploadRequestInsideState.viewState.fold((failure) => null, (success) {
@@ -264,26 +268,31 @@ class UploadRequestInsideViewModel extends BaseViewModel {
 
   OnlineThunkAction _downloadEntriesAction(List<UploadRequestEntry> entries) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final status = await Permission.storage.status;
-      switch (status) {
-        case PermissionStatus.granted:
-          _dispatchHandleDownloadAction(entries);
-          break;
-        case PermissionStatus.permanentlyDenied:
-          _appNavigation.popBack();
-          break;
-        default:
-          {
-            final requested = await Permission.storage.request();
-            switch (requested) {
-              case PermissionStatus.granted:
-                _dispatchHandleDownloadAction(entries);
-                break;
-              default:
-                _appNavigation.popBack();
-                break;
+      final needRequestPermission = await _deviceManager.isNeedRequestStoragePermissionOnAndroid();
+      if(Platform.isAndroid && needRequestPermission) {
+        final status = await Permission.storage.status;
+        switch (status) {
+          case PermissionStatus.granted:
+            _dispatchHandleDownloadAction(entries);
+            break;
+          case PermissionStatus.permanentlyDenied:
+            _appNavigation.popBack();
+            break;
+          default:
+            {
+              final requested = await Permission.storage.request();
+              switch (requested) {
+                case PermissionStatus.granted:
+                  _dispatchHandleDownloadAction(entries);
+                  break;
+                default:
+                  _appNavigation.popBack();
+                  break;
+              }
             }
-          }
+        }
+      } else {
+        _dispatchHandleDownloadAction(entries);
       }
     });
   }
