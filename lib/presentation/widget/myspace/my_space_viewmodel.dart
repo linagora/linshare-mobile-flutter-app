@@ -101,6 +101,7 @@ class MySpaceViewModel extends BaseViewModel {
   final GetAllDocumentOfflineInteractor _getAllDocumentOfflineInteractor;
   final EnableAvailableOfflineDocumentInteractor _enableAvailableOfflineDocumentInteractor;
   final AutoSyncOfflineManager _autoSyncOfflineManager;
+  final DeviceManager _deviceManager;
   List<Document> _documentList = [];
 
   SearchQuery _searchQuery = SearchQuery('');
@@ -127,6 +128,7 @@ class MySpaceViewModel extends BaseViewModel {
       this._getAllDocumentOfflineInteractor,
       this._enableAvailableOfflineDocumentInteractor,
       this._autoSyncOfflineManager,
+      this._deviceManager
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.mySpaceState.viewState.fold(
@@ -186,22 +188,27 @@ class MySpaceViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _handleDownloadFile(List<DocumentId> documentIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return (Store<AppState> store) async {
-      final status = await Permission.storage.status;
-      switch (status) {
-        case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
-        break;
-        case PermissionStatus.permanentlyDenied:
-          _appNavigation.popBack();
+      final needRequestPermission = await _deviceManager.isNeedRequestStoragePermissionOnAndroid();
+      if(Platform.isAndroid && needRequestPermission) {
+        final status = await Permission.storage.status;
+        switch (status) {
+          case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
           break;
-        default: {
-          final requested = await Permission.storage.request();
-          switch (requested) {
-            case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
+          case PermissionStatus.permanentlyDenied:
+            _appNavigation.popBack();
             break;
-            default: _appNavigation.popBack();
-            break;
+          default: {
+            final requested = await Permission.storage.request();
+            switch (requested) {
+              case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
+              break;
+              default: _appNavigation.popBack();
+              break;
+            }
           }
         }
+      } else {
+        _download(documentIds, itemSelectionType: itemSelectionType);
       }
     };
   }

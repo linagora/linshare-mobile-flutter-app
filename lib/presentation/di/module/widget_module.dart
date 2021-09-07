@@ -186,6 +186,7 @@ class WidgetModule {
       getIt<GetAllDocumentOfflineInteractor>(),
       getIt<EnableAvailableOfflineDocumentInteractor>(),
       getIt<AutoSyncOfflineManager>(),
+      getIt<DeviceManager>()
     ));
   }
 
@@ -268,6 +269,7 @@ class WidgetModule {
         getIt.get<GetAllSharedSpaceDocumentOfflineInteractor>(),
         getIt.get<AutoSyncOfflineManager>(),
         getIt.get<EnableAvailableOfflineSharedSpaceDocumentInteractor>(),
+        getIt<DeviceManager>()
     ));
   }
 
@@ -312,7 +314,8 @@ class WidgetModule {
         getIt<GetSorterInteractor>(),
         getIt<SaveSorterInteractor>(),
         getIt<SortInteractor>(),
-        getIt.get<SearchReceivedSharesInteractor>()
+        getIt.get<SearchReceivedSharesInteractor>(),
+        getIt<DeviceManager>()
     ));
   }
 
@@ -493,7 +496,8 @@ class WidgetModule {
           getIt<DownloadUploadRequestEntriesInteractor>(),
           getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
           getIt<SearchUploadRequestEntriesInteractor>(),
-          getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>()
+          getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
+          getIt<DeviceManager>()
         ));
   }
 

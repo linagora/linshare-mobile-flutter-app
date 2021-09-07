@@ -35,6 +35,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,6 +73,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final SortInteractor _sortInteractor;
+  final DeviceManager _deviceManager;
 
   List<ReceivedShare> _receivedSharesList = [];
   final SearchReceivedSharesInteractor _searchReceivedSharesInteractor;
@@ -91,7 +93,8 @@ class ReceivedShareViewModel extends BaseViewModel {
       this._getSorterInteractor,
       this._saveSorterInteractor,
       this._sortInteractor,
-      this._searchReceivedSharesInteractor
+      this._searchReceivedSharesInteractor,
+      this._deviceManager
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.receivedShareState.viewState.fold(
@@ -219,22 +222,31 @@ class ReceivedShareViewModel extends BaseViewModel {
 
   OnlineThunkAction _handleDownloadFile(List<ShareId> shareIds, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final status = await Permission.storage.status;
-      switch (status) {
-        case PermissionStatus.granted: _download(shareIds, itemSelectionType: itemSelectionType);
-        break;
-        case PermissionStatus.permanentlyDenied:
-          _appNavigation.popBack();
-          break;
-        default: {
-          final requested = await Permission.storage.request();
-          switch (requested) {
-            case PermissionStatus.granted: _download(shareIds, itemSelectionType: itemSelectionType);
+      final needRequestPermission = await _deviceManager.isNeedRequestStoragePermissionOnAndroid();
+      if(Platform.isAndroid && needRequestPermission) {
+        final status = await Permission.storage.status;
+        switch (status) {
+          case PermissionStatus.granted:
+            _download(shareIds, itemSelectionType: itemSelectionType);
             break;
-            default: _appNavigation.popBack();
+          case PermissionStatus.permanentlyDenied:
+            _appNavigation.popBack();
             break;
-          }
+          default:
+            {
+              final requested = await Permission.storage.request();
+              switch (requested) {
+                case PermissionStatus.granted:
+                  _download(shareIds, itemSelectionType: itemSelectionType);
+                  break;
+                default:
+                  _appNavigation.popBack();
+                  break;
+              }
+            }
         }
+      } else {
+        _download(shareIds, itemSelectionType: itemSelectionType);
       }
     });
   }
