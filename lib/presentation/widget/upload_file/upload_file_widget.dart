@@ -39,6 +39,7 @@ import 'package:flutter_tags/flutter_tags.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selected_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -85,10 +86,13 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     if (arguments.documents != null) {
       uploadFileViewModel.setDocumentsArgument(arguments.documents);
     }
+    if (arguments.entries != null) {
+      uploadFileViewModel.setEntriesArgument(arguments.entries);
+    }
     if (arguments.workGroupDocumentUploadInfo != null) {
       uploadFileViewModel.setWorkGroupDocumentUploadInfoArgument(arguments.workGroupDocumentUploadInfo);
     }
-
+    print(uploadFileViewModel.filesInfos);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -99,7 +103,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
         ),
         centerTitle: true,
         title: Text(
-            uploadFileViewModel.shareTypeArgument == ShareType.quickShare
+            uploadFileViewModel.shareTypeArgument == ShareType.quickShare || uploadFileViewModel.shareTypeArgument == ShareType.quickShareUploadRequestEntry
                 ? AppLocalizations.of(context).title_quick_share
                 : AppLocalizations.of(context).upload_file_title,
             key: Key('upload_file_title'),
@@ -110,115 +114,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
         child: Container(
           child: Column(
             children: [
-              (uploadFileViewModel.filesInfos != null)
-                ? (uploadFileViewModel.filesInfos!.length > 1)
-                    ? ExpansionPanelList(
-                        elevation: 1,
-                        expandedHeaderPadding: EdgeInsets.all(0),
-                        expansionCallback: (int index, bool isExpanded) {
-                          setState(() {
-                            isHeaderExpanded = !isHeaderExpanded;
-                          });
-                        },
-                        children: [
-                            ExpansionPanel(
-                                headerBuilder: (BuildContext context, bool isExpanded) {
-                                  return ListTile(
-                                    title: Text(
-                                        AppLocalizations.of(context)
-                                            .items_selected(uploadFileViewModel.filesInfos!.length),
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: AppColor.multipleSelectionBarTextColor)),
-                                  );
-                                },
-                                body: Padding(
-                                  padding: const EdgeInsets.only(bottom: 11.0),
-                                  child: ConstrainedBox(
-                                      constraints: BoxConstraints(maxHeight: 209),
-                                      child: ListView.builder(
-                                          padding: EdgeInsets.only(left: 16),
-                                          shrinkWrap: true,
-                                          itemExtent: 38,
-                                          itemCount: uploadFileViewModel.filesInfos!.length,
-                                          itemBuilder: (BuildContext context, int index) {
-                                            final fileInfo = uploadFileViewModel.filesInfos![index];
-                                            return ListTile(
-                                                dense: true,
-                                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                                leading: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      fileInfo.mediaType
-                                                          .getFileTypeImagePath(
-                                                              imagePath),
-                                                      width: 20,
-                                                      height: 24,
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                  ],
-                                                ),
-                                                title: Transform(
-                                                  transform: Matrix4.translationValues(-20, 0.0, 0.0),
-                                                  child: Text(fileInfo.fileName,
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: AppColor.multipleSelectionBarTextColor)),
-                                                ),
-                                                trailing: Text(
-                                                  '${filesize(fileInfo.fileSize)}',
-                                                  key: Key('upload_file_size'),
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: AppColor.uploadFileFileSizeTextColor),
-                                                ));
-                                          })),
-                                ),
-                                isExpanded: isHeaderExpanded),
-                          ])
-                    : SizedBox(
-                        width: double.maxFinite,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: ListTile(
-                            dense: true,
-                            leading: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  uploadFileViewModel.filesInfos![0].mediaType.getFileTypeImagePath(imagePath),
-                                  width: 20,
-                                  height: 24,
-                                  fit: BoxFit.fill,
-                                ),
-                              ],
-                            ),
-                            title: Transform(
-                                transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
-                                child: CustomPaint(
-                                  size: Size(double.infinity, 14),
-                                  painter: EllipsisTextPainter(
-                                    text: TextSpan(text: uploadFileViewModel.filesInfos![0].fileName, style: TextStyle(
-                                        fontSize: 14,
-                                        color: AppColor.multipleSelectionBarTextColor),
-                                    ),
-                                    ellipsis: uploadFileViewModel.filesInfos![0].fileName.toMiddleEllipsis(),
-                                    maxLines: 1,
-                                  ),
-                                )
-                            ),
-                            trailing: Text(
-                              '${filesize(uploadFileViewModel.filesInfos![0].fileSize)}',
-                              key: Key('upload_file_size'),
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.uploadFileFileSizeTextColor),
-                            ),
-                          ),
-                        )
-                      )
-                : SizedBox.shrink(),
+              if (uploadFileViewModel.filesInfos != null) _buildFilesInfos(uploadFileViewModel.filesInfos!) else SizedBox.shrink(),
               StreamBuilder<DestinationType>(
                 stream: uploadFileViewModel.uploadDestinationTypeObservable,
                 builder: (_, snapshot) {
@@ -272,6 +168,109 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  Widget _buildFilesInfos(List<SelectedPresentationFile> files) {
+    if (files.length > 1) {
+      return ExpansionPanelList(
+          elevation: 1,
+          expandedHeaderPadding: EdgeInsets.all(0),
+          expansionCallback: (int index, bool isExpanded) {
+            setState(() {
+              isHeaderExpanded = !isHeaderExpanded;
+            });
+          },
+          children: [
+            ExpansionPanel(
+                headerBuilder: (BuildContext context, bool isExpanded) {
+                  return ListTile(
+                    title: Text(AppLocalizations.of(context).items_selected(files.length),
+                        style:
+                            TextStyle(fontSize: 14, color: AppColor.multipleSelectionBarTextColor)),
+                  );
+                },
+                body: Padding(
+                  padding: const EdgeInsets.only(bottom: 11.0),
+                  child: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 209),
+                      child: ListView.builder(
+                          padding: EdgeInsets.only(left: 16),
+                          shrinkWrap: true,
+                          itemExtent: 38,
+                          itemCount: files.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final fileInfo = files[index];
+                            return ListTile(
+                                dense: true,
+                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                leading: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      fileInfo.mediaType.getFileTypeImagePath(imagePath),
+                                      width: 20,
+                                      height: 24,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ],
+                                ),
+                                title: Transform(
+                                  transform: Matrix4.translationValues(-20, 0.0, 0.0),
+                                  child: Text(fileInfo.fileName,
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: AppColor.multipleSelectionBarTextColor)),
+                                ),
+                                trailing: Text(
+                                  '${filesize(fileInfo.fileSize)}',
+                                  key: Key('upload_file_size'),
+                                  style: TextStyle(
+                                      fontSize: 14, color: AppColor.uploadFileFileSizeTextColor),
+                                ));
+                          })),
+                ),
+                isExpanded: isHeaderExpanded),
+          ]);
+    } else {
+      return SizedBox(
+          width: double.maxFinite,
+          child: Align(
+            alignment: Alignment.center,
+            child: ListTile(
+              dense: true,
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    files[0].mediaType.getFileTypeImagePath(imagePath),
+                    width: 20,
+                    height: 24,
+                    fit: BoxFit.fill,
+                  ),
+                ],
+              ),
+              title: Transform(
+                  transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
+                  child: CustomPaint(
+                    size: Size(double.infinity, 14),
+                    painter: EllipsisTextPainter(
+                      text: TextSpan(
+                        text: files[0].fileName,
+                        style:
+                            TextStyle(fontSize: 14, color: AppColor.multipleSelectionBarTextColor),
+                      ),
+                      ellipsis: files[0].fileName.toMiddleEllipsis(),
+                      maxLines: 1,
+                    ),
+                  )),
+              trailing: Text(
+                '${filesize(files[0].fileSize)}',
+                key: Key('upload_file_size'),
+                style: TextStyle(fontSize: 14, color: AppColor.uploadFileFileSizeTextColor),
+              ),
+            ),
+          ));
+    }
   }
 
   Widget _buildUploadDestinationPicker() {

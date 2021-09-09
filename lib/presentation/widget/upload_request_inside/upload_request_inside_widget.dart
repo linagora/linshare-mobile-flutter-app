@@ -529,6 +529,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
       _exportFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
       _copyToMySpaceAction(entries, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadFilesAction(entries, itemSelectionType: ItemSelectionType.multiple),
+      _shareAction(entries)
     ];
   }
 
@@ -536,7 +537,8 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
     return [
       _exportFileAction([entry]),
       _copyToMySpaceAction([entry]),
-      if (Platform.isAndroid) _downloadFilesAction([entry])
+      if (Platform.isAndroid) _downloadFilesAction([entry]),
+      _shareAction([entry])
     ];
   }
 
@@ -570,6 +572,18 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
             AppLocalizations.of(context).copy_to_my_space,
             entries.first)
         .onActionClick((data) => _viewModel.copyToMySpace(entries, itemSelectionType: itemSelectionType))
+        .build();
+  }
+
+
+  Widget _shareAction(List<UploadRequestEntry> entries,
+    {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return UploadRequestEntryContextMenuTileBuilder(
+            Key('share_context_menu_action'),
+            SvgPicture.asset(imagePath.icContextItemShare, width: 24, height: 24, fit: BoxFit.fill),
+            AppLocalizations.of(context).share,
+            entries.first)
+        .onActionClick((data) => _viewModel.goToShareView(entries, itemSelectionType: itemSelectionType))
         .build();
   }
 }

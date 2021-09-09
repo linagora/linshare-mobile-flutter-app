@@ -49,11 +49,13 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -412,6 +414,19 @@ class UploadRequestInsideViewModel extends BaseViewModel {
           (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
           (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
     });
+  }
+
+  // Share
+  void goToShareView(List<UploadRequestEntry> entries, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+    _appNavigation.push(RoutePaths.uploadDocumentRoute,
+        arguments: UploadFileArguments(
+            [],
+            shareType: ShareType.quickShareUploadRequestEntry,
+            entries: entries));
   }
 
   @override

@@ -72,6 +72,7 @@ class UploadFileViewModel extends BaseViewModel {
   ShareType get shareTypeArgument => _shareTypeArgument;
 
   List<Document>? _documentsArgument;
+  List<UploadRequestEntry>? _entriesArgument;
   WorkGroupDocumentUploadInfo? _workGroupDocumentUploadInfoArgument;
   WorkGroupDocumentUploadInfo? get workGroupDocumentUploadInfoArgument => _workGroupDocumentUploadInfoArgument;
 
@@ -156,9 +157,14 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   List<SelectedPresentationFile>? get filesInfos {
-    return (_shareTypeArgument == ShareType.quickShare)
-        ? _convertDocumentsToPresentationFile(_documentsArgument!)
-        : _convertFilesToPresentationFile(_uploadFilesArgument!);
+    switch (_shareTypeArgument) {
+      case ShareType.quickShare:
+        return _convertDocumentsToPresentationFile(_documentsArgument!);
+      case ShareType.quickShareUploadRequestEntry:
+        return _convertUploadRequestEntriesToPresentationFile(_entriesArgument!);
+      default:
+        return _convertFilesToPresentationFile(_uploadFilesArgument!);
+    }
   }
 
   void onPickUploadDestinationPressed(BuildContext context) {
@@ -300,7 +306,7 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   List<SelectedPresentationFile>? _convertDocumentsToPresentationFile(List<Document>? documents) {
-    if(documents == null) {
+    if (documents == null) {
       return null;
     }
     return documents.map((document) {
@@ -309,11 +315,20 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   List<SelectedPresentationFile>? _convertFilesToPresentationFile(List<FileInfo>? filesInfo) {
-    if(filesInfo == null) {
+    if (filesInfo == null) {
       return null;
     }
     return filesInfo.map((uploadFiles) {
       return SelectedPresentationFile(uploadFiles.fileName, uploadFiles.fileSize, mediaType: uploadFiles.fileName.getMediaType());
+    }).toList();
+  }
+
+  List<SelectedPresentationFile>? _convertUploadRequestEntriesToPresentationFile(List<UploadRequestEntry>? entries) {
+    if (entries == null) {
+      return null;
+    }
+    return entries.map((entry) {
+      return SelectedPresentationFile(entry.name, entry.size, mediaType: entry.mediaType);
     }).toList();
   }
 
@@ -331,6 +346,11 @@ class UploadFileViewModel extends BaseViewModel {
           ? ContactSuggestionSource.all
           : _contactSuggestionSource;
     }
+  }
+
+  // Upload Request Entry
+  void setEntriesArgument(List<UploadRequestEntry>? entries) {
+    _entriesArgument = entries;
   }
 
   @override
