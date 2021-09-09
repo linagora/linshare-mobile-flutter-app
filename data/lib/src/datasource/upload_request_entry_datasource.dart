@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/network/model/request/share_upload_request_entry_body_request.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
@@ -38,4 +39,6 @@ abstract class UploadRequestEntryDataSource {
   Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl);
 
   Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
+
+  Future<List<Share>> share(ShareUploadRequestEntryBodyRequest request);
 }

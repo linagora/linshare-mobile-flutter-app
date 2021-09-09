@@ -71,6 +71,7 @@ import 'model/request/add_shared_space_member_body_request.dart';
 import 'model/request/add_upload_body_request.dart';
 import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
+import 'model/request/share_upload_request_entry_body_request.dart';
 import 'model/request/update_shared_space_member_body_request.dart';
 import 'model/response/document_details_response.dart';
 import 'model/response/upload_request_response.dart';
@@ -618,4 +619,10 @@ class LinShareHttpClient {
     }
   }
 
+  Future<List<ShareDto>> shareUploadRequestEntry(ShareUploadRequestEntryBodyRequest bodyRequest) async {
+    final List resultJson = await _dioClient.post(
+        Endpoint.shares.generateEndpointPath(),
+        data: bodyRequest.toJson().toString());
+    return resultJson.map((data) => ShareDto.fromJson(data)).toList();
+  }
 }

@@ -1,0 +1,98 @@
+// LinShare is an open source filesharing software, part of the LinPKI software
+// suite, developed by Linagora.
+//
+// Copyright (C) 2020 LINAGORA
+//
+// This program is free software: you can redistribute it and/or modify it under the
+// terms of the GNU Affero General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later version,
+// provided you comply with the Additional Terms applicable for LinShare software by
+// Linagora pursuant to Section 7 of the GNU Affero General Public License,
+// subsections (b), (c), and (e), pursuant to which you must notably (i) retain the
+// display in the interface of the “LinShare™” trademark/logo, the "Libre & Free" mention,
+// the words “You are using the Free and Open Source version of LinShare™, powered by
+// Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
+// offer!”. You must also retain the latter notice in all asynchronous messages such as
+// e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
+// http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
+// infringing Linagora intellectual property rights over its trademarks and commercial
+// brands. Other Additional Terms apply, see
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// for more details.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
+// more details.
+// You should have received a copy of the GNU Affero General Public License and its
+// applicable Additional Terms for LinShare along with this program. If not, see
+// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+//  the Additional Terms applicable to LinShare software.
+//
+
+import 'dart:convert';
+
+import 'package:data/src/local/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/mailing_list_id_dto_converter.dart';
+import 'package:data/src/network/model/converter/share_id_dto_converter.dart';
+import 'package:data/src/network/model/generic_user_dto.dart';
+import 'package:data/src/network/model/request/share_document_body_request.dart';
+import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
+import 'package:data/src/network/model/share/share_id_dto.dart';
+import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+@DatetimeConverter()
+@JsonSerializable()
+class ShareUploadRequestEntryBodyRequest extends ShareDocumentBodyRequest {
+  ShareUploadRequestEntryBodyRequest(
+    List<ShareIdDto> documents,
+    List<MailingListIdDto> mailingListUuid,
+    List<GenericUserDto> recipients,
+    this.enableUSDA,
+    this.expirationDate,
+    this.message,
+    this.notificationDateForUSDA,
+    this.secured,
+    this.sharingNote,
+    this.subject
+  ) : super(documents, mailingListUuid, recipients);
+
+  final bool enableUSDA;
+  final DateTime expirationDate;
+  final String message;
+  final DateTime notificationDateForUSDA;
+  final bool secured;
+  final String sharingNote;
+  final String subject;
+
+
+  @override
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        jsonEncode('documents'): documents.map(const ShareIdDtoConverter().toJson).toList(),
+        jsonEncode('mailingListUuid'): mailingListUuid.map(const MailingListIdDtoConverter().toJson).toList(),
+        jsonEncode('recipients'): recipients.map((data) => data.toJson()).toList(),
+        jsonEncode('enableUSDA'): jsonEncode(enableUSDA),
+        jsonEncode('expirationDate'): jsonEncode(const DatetimeConverter().toJson(expirationDate)),
+        jsonEncode('message'): jsonEncode(message),
+        jsonEncode('notificationDateForUSDA'): jsonEncode(const DatetimeConverter().toJson(notificationDateForUSDA)),
+        jsonEncode('secured'): jsonEncode(secured),
+        jsonEncode('sharingNote'): jsonEncode(sharingNote),
+        jsonEncode('subject'): jsonEncode(subject),
+      };
+}
+
+extension ShareUploadRequestEntryBodyRequestExtension on ShareUploadRequestEntryRequest {
+  ShareUploadRequestEntryBodyRequest toBodyRequest() => ShareUploadRequestEntryBodyRequest(
+    documents,
+    mailingListUuid,
+    recipients,
+    enableUSDA,
+    expirationDate,
+    message,
+    notificationDateForUSDA,
+    secured,
+    sharingNote,
+    subject
+  );
+}

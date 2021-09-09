@@ -36,6 +36,7 @@ import 'package:data/src/datasource/upload_request_entry_datasource.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_download_manager.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/request/share_upload_request_entry_body_request.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
@@ -44,6 +45,7 @@ import 'package:data/src/network/model/response/upload_request_entry_response.da
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:data/src/network/model/share/share_dto.dart';
 
 class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -109,5 +111,21 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
         uploadRequestEntry.name,
         token,
         cancelToken: cancelToken);
+  }
+
+  @override
+  Future<List<Share>> share(ShareUploadRequestEntryBodyRequest request) {
+    return Future.sync(() async {
+      final shareList = await _linShareHttpClient.shareUploadRequestEntry(request);
+      return shareList.map<Share>((data) => data.toShare()).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestGroupsNotFound();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
   }
 }

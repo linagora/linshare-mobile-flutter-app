@@ -32,6 +32,7 @@
 import 'package:data/src/datasource/upload_request_entry_datasource.dart';
 import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
+import 'package:data/src/network/model/request/share_upload_request_entry_body_request.dart';
 
 class UploadRequestEntryRepositoryImpl implements UploadRequestEntryRepository {
   final UploadRequestEntryDataSource _uploadRequestEntryDataSource;
@@ -53,4 +54,8 @@ class UploadRequestEntryRepositoryImpl implements UploadRequestEntryRepository {
     return _uploadRequestEntryDataSource.downloadUploadRequestEntryIOS(uploadRequestEntry, token, baseUrl, cancelToken);
   }
 
+  @override
+  Future<List<Share>> share(ShareUploadRequestEntryRequest request) {
+    return _uploadRequestEntryDataSource.share(request.toBodyRequest());
+  }
 }
