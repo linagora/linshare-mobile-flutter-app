@@ -139,3 +139,21 @@ class CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure extends FeatureFai
   @override
   List<Object> get props => [resultList];
 }
+
+class ShareUploadRequestEntryViewState extends ViewState {
+  final List shares;
+
+  ShareUploadRequestEntryViewState(this.shares);
+
+  @override
+  List<Object> get props => [shares];
+}
+
+class ShareUploadRequestEntryFailure extends FeatureFailure {
+  final exception;
+
+  ShareUploadRequestEntryFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

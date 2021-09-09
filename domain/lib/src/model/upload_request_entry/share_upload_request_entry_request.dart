@@ -30,15 +30,47 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dio/dio.dart';
-import 'package:domain/domain.dart';
+import 'package:data/src/network/model/generic_user_dto.dart';
+import 'package:data/src/network/model/share/mailing_list_id_dto.dart';
+import 'package:data/src/network/model/share/share_id_dto.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class UploadRequestEntryRepository {
-  Future<List<UploadRequestEntry>> getAllUploadRequestEntries(UploadRequestId uploadRequestId);
+class ShareUploadRequestEntryRequest with EquatableMixin{
+  ShareUploadRequestEntryRequest(
+    this.documents,
+    this.mailingListUuid,
+    this.recipients,
+    this.enableUSDA,
+    this.expirationDate,
+    this.message,
+    this.notificationDateForUSDA,
+    this.secured,
+    this.sharingNote,
+    this.subject
+  );
 
-  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl);
+  final List<ShareIdDto> documents;
+  final List<MailingListIdDto> mailingListUuid;
+  final List<GenericUserDto> recipients;
+  final bool enableUSDA;
+  final DateTime expirationDate;
+  final String message;
+  final DateTime notificationDateForUSDA;
+  final bool secured;
+  final String sharingNote;
+  final String subject;
 
-  Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<List<Share>> share(ShareUploadRequestEntryRequest request);
+  @override
+  List<Object?> get props => [
+    documents,
+    mailingListUuid,
+    recipients,
+    enableUSDA,
+    expirationDate,
+    message,
+    notificationDateForUSDA,
+    secured,
+    sharingNote,
+    subject
+  ];
 }

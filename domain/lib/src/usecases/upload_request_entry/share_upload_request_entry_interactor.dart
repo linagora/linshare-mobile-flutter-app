@@ -30,15 +30,20 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class UploadRequestEntryRepository {
-  Future<List<UploadRequestEntry>> getAllUploadRequestEntries(UploadRequestId uploadRequestId);
+class ShareUploadRequestEntryInteractor {
+  final UploadRequestEntryRepository _uploadRequestEntryRepository;
 
-  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl);
+  ShareUploadRequestEntryInteractor(this._uploadRequestEntryRepository);
 
-  Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<List<Share>> share(ShareUploadRequestEntryRequest request);
+  Future<Either<Failure, Success>> execute(ShareUploadRequestEntryRequest request) async {
+    try {
+      final shares = await _uploadRequestEntryRepository.share(request);
+      return Right<Failure, Success>(ShareUploadRequestEntryViewState(shares));
+    } catch (exception) {
+      return Left<Failure, Success>(ShareUploadRequestEntryFailure(exception));
+    }
+  }
 }

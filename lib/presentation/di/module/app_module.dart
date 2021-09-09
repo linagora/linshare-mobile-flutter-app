@@ -385,6 +385,7 @@ class AppModule {
     getIt.registerFactory(() => UpdateMultipleUploadRequestGroupStateInteractor(getIt<UpdateUploadRequestGroupStateInteractor>()));
     getIt.registerFactory(() => SearchUploadRequestEntriesInteractor());
     getIt.registerFactory(() => CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
+    getIt.registerFactory(() => ShareUploadRequestEntryInteractor(getIt<UploadRequestEntryRepository>()));
   }
 
   void _provideSharePreference() {
