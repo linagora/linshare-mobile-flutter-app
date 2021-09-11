@@ -629,16 +629,15 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               width: 24,
               height: 24,
               fit: BoxFit.fill),
-            onPressed: () =>  node.element.type == WorkGroupNodeType.FOLDER
-                ? sharedSpaceDocumentViewModel.openWorkGroupNodeContextMenu(
-                    context,
-                    node.element,
-                    _contextMenuFolderActionTiles(context, node.element as WorkGroupFolder))
-                : sharedSpaceDocumentViewModel.openWorkGroupNodeContextMenu(
-                    context,
-                    node.element,
-                    _contextMenuDocumentActionTiles(context, node.element as WorkGroupDocument, indexWorkGroupDocument),
-                    footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name) ? _removeWorkGroupNodeAction([node.element]) : SizedBox.shrink())),
+            onPressed: () => sharedSpaceDocumentViewModel.openWorkGroupNodeContextMenu(
+              context,
+              node.element,
+              node.element.type == WorkGroupNodeType.FOLDER 
+                ? _contextMenuFolderActionTiles(context, node.element as WorkGroupFolder)
+                : _contextMenuDocumentActionTiles(context, node.element as WorkGroupDocument, indexWorkGroupDocument),
+              footerAction: SharedSpaceOperationRole.deleteNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)
+                ? _removeWorkGroupNodeAction([node.element])
+                : SizedBox.shrink())),
       onTap: () {
         if (currentSelectMode == SelectMode.ACTIVE) {
           sharedSpaceDocumentViewModel.selectItem(node);
