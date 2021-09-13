@@ -251,7 +251,7 @@ class ToastMessageHandler {
         appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
         _cleanSharedSpaceDocumentViewState();
       } else if (failure is CopyMultipleToMySpaceAllFailure) {
-        appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
+        appToast.showErrorToast(AppLocalizations.of(context).the_files_could_not_be_copied_to_my_space);
         _cleanSharedSpaceDocumentViewState();
       } else if (failure is CopyToSharedSpaceFailure || failure is CopyMultipleFilesToSharedSpaceAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
@@ -313,7 +313,7 @@ class ToastMessageHandler {
         appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
         _cleanReceivedShareViewState();
       } else if (failure is CopyMultipleToMySpaceFromReceivedSharesAllFailure) {
-        appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
+        appToast.showErrorToast(AppLocalizations.of(context).the_files_could_not_be_copied_to_my_space);
         _cleanReceivedShareViewState();
       } else if (failure is NoReceivedSharePreviewAvailable) {
         appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
@@ -397,7 +397,7 @@ class ToastMessageHandler {
         appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
         _cleanUploadRequestInsideViewState();
       } else if (failure is CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure) {
-        appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_files_to_my_space);
+        appToast.showErrorToast(AppLocalizations.of(context).the_files_could_not_be_copied_to_my_space);
         _cleanUploadRequestInsideViewState();
       }
     }, (success) {
