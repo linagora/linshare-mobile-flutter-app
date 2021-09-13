@@ -500,11 +500,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "cannot_copy_files_to_my_space": "Can not copy files to My Space",
-  "@cannot_copy_files_to_my_space": {
-    "type": "text",
-    "placeholders": {}
-  },
   "some_items_have_been_copied_to_my_space": "Some items have been copied to My Space",
   "@some_items_have_been_copied_to_my_space": {
     "type": "text",
@@ -1756,6 +1751,11 @@
   "@search_in_upload_request_entries": {
     "type": "text",
     "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_files_could_not_be_copied_to_my_space": "The files could not be copied to My Space",
+  "@the_files_could_not_be_copied_to_my_space": {
+    "type": "text",
     "placeholders": {}
   }
 }

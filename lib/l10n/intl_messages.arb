@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-09-01T12:26:19.414501",
+  "@@last_modified": "2021-09-13T16:05:57.936773",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -624,8 +624,8 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "cannot_copy_files_to_my_space": "Can not copy files to My Space",
-  "@cannot_copy_files_to_my_space": {
+  "the_files_could_not_be_copied_to_my_space": "The files could not be copied to My Space",
+  "@the_files_could_not_be_copied_to_my_space": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
