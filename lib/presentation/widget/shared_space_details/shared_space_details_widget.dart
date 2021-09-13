@@ -155,7 +155,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           ));
     }
 
-    return Column(
+    return SingleChildScrollView(child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
@@ -215,7 +215,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
               ],
             ))
       ],
-    );
+    ));
   }
 
   ListTile _sharedSpaceInformationTile(String category, String value) {
