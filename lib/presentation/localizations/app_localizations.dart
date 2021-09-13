@@ -653,10 +653,10 @@ class AppLocalizations {
     );
   }
 
-  String get cannot_copy_files_to_my_space {
+  String get the_files_could_not_be_copied_to_my_space {
     return Intl.message(
-      'Can not copy files to My Space',
-      name: 'cannot_copy_files_to_my_space',
+      'The files could not be copied to My Space',
+      name: 'the_files_could_not_be_copied_to_my_space',
     );
   }
 
