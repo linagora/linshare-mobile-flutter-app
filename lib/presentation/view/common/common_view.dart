@@ -44,6 +44,10 @@ class CommonView {
   }
 
   Widget buildResultCountRow(BuildContext context, int count) {
+    if (count == 0) {
+      return SizedBox.shrink();
+    }
+
     return Container(
       color: AppColor.topBarBackgroundColor,
       height: 40.0,

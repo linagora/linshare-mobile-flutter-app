@@ -48,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/datetime_exten
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
@@ -66,6 +67,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   final sharedSpaceViewModel = getIt<SharedSpaceViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
+  final _widgetCommon = getIt<CommonView>();
 
   @override
   void initState() {
@@ -208,26 +210,10 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         converter: (store) => store.state,
         builder: (context, appState) {
           if (appState.uiState.isInSearchState() && sharedSpaceViewModel.searchQuery.value.isNotEmpty) {
-            return _buildResultCountRow(appState.sharedSpaceState.sharedSpacesList);
+            return _widgetCommon.buildResultCountRow(context, appState.sharedSpaceState.sharedSpacesList.length);
           }
           return SizedBox.shrink();
         });
-  }
-
-  Widget _buildResultCountRow(List<SelectableElement<SharedSpaceNodeNested>> resultList) {
-    return Container(
-      color: AppColor.topBarBackgroundColor,
-      height: 40.0,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            AppLocalizations.of(context).results_count(resultList.length),
-            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
-          ),
-        ),
-      ));
   }
 
   Widget _buildSearchResultSharedSpacesList(SharedSpaceState state) {
@@ -235,16 +221,10 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       return SizedBox.shrink();
     } else {
       if (state.sharedSpacesList.isEmpty) {
-        return _buildNoResultFound();
+        return _widgetCommon.buildNoResultFound(context);
       }
       return _buildSharedSpacesListView(state.sharedSpacesList);
     }
-  }
-
-  Widget _buildNoResultFound() {
-    return BackgroundWidgetBuilder()
-        .key(Key('search_no_result_found'))
-        .text(AppLocalizations.of(context).no_results_found).build();
   }
 
   Widget _buildNormalSharedSpacesList(SharedSpaceState state) {
