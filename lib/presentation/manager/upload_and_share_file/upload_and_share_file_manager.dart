@@ -42,6 +42,8 @@ import 'package:linshare_flutter_app/presentation/manager/quota/verify_quota_man
 import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_file_state_list.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_model.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
@@ -194,6 +196,7 @@ class UploadShareFileManager {
           },
         );
       }
+      _store.dispatch(UploadFileAction(Right(uploadSuccess)));
     }
   }
 
