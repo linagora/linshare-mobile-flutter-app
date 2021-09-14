@@ -54,6 +54,7 @@ import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.d
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_horizontal_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_node_context_menu_action_builder.dart';
@@ -91,6 +92,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   final appNavigation = getIt<AppNavigation>();
   final imagePath = getIt<AppImagePaths>();
   final sharedSpaceDocumentViewModel = getIt<SharedSpaceDocumentNodeViewModel>();
+  final _widgetCommon = getIt<CommonView>();
 
   SharedSpaceDocumentArguments? _arguments;
 
@@ -324,25 +326,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, appState) => (appState.uiState.isInSearchState() && sharedSpaceDocumentViewModel.searchQuery.value.isNotEmpty)
-        ? _buildResultCountRow(appState.sharedSpaceDocumentState.workGroupNodeList)
+        ? _widgetCommon.buildResultCountRow(context, appState.sharedSpaceDocumentState.workGroupNodeList.length)
         : SizedBox.shrink()
-    );
-  }
-
-  Widget _buildResultCountRow(List<SelectableElement<WorkGroupNode>> resultList) {
-    return Container(
-      color: AppColor.topBarBackgroundColor,
-      height: 40.0,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            AppLocalizations.of(context).results_count(resultList.length),
-            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor)
-          )
-        )
-      )
     );
   }
 
@@ -436,16 +421,9 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       return SizedBox.shrink();
     } else {
       return sharedSpaceDocumentState.workGroupNodeList.isEmpty
-        ? _buildNoResultFound()
+        ? _widgetCommon.buildNoResultFound(context)
         : _buildSharedSpaceDocumentList();
     }
-  }
-
-  Widget _buildNoResultFound() {
-    return BackgroundWidgetBuilder()
-      .key(Key('shared_space_document_search_no_result_found'))
-      .text(AppLocalizations.of(context).no_results_found)
-      .build();
   }
 
   Widget _buildSharedSpaceDocumentList() {
