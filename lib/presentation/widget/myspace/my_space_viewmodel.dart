@@ -148,6 +148,13 @@ class MySpaceViewModel extends BaseViewModel {
               store.dispatch(_enableAvailableOfflineDocument(_documentList));
             }
       });
+
+      event.uploadFileState.viewState.fold((failure) => null, (success) {
+        if (success is FileUploadSuccess) {
+          getAllDocument();
+          store.dispatch(CleanUploadStateAction());
+        }
+      });
     });
   }
 
