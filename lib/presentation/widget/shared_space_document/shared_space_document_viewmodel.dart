@@ -158,6 +158,13 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
           store.dispatch(_enableAvailableOfflineSharedSpaceDocument(_workGroupNodesList));
         }
       });
+
+      event.uploadFileState.viewState.fold((failure) => null, (success) {
+        if (success is FileUploadSuccess) {
+          getAllWorkGroupNode(needToGetOldSorter: true);
+          store.dispatch(CleanUploadStateAction());
+        }
+      });
     });
   }
 
