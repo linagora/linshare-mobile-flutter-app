@@ -87,11 +87,3 @@ Follow official guideline: [https://dart.dev/null-safety/migration-guide](https:
             Check the issue [#162](https://github.com/fluttercommunity/flutter_uploader/issues/162)
         
             &rarr; Solution: Use `flutter_uploader: 1.2.1`
-        
-        - **receive_sharing_intent: 1.4.5**
-            Check the issue [#116](https://github.com/KasemJaffer/receive_sharing_intent/issues/116)
-            
-            &rarr; Solution: Use `receive_sharing_intent: 1.4.1`
-
-...
-(TBD)
