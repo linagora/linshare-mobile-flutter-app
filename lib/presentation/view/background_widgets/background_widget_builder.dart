@@ -57,7 +57,7 @@ class BackgroundWidgetBuilder {
     return Center(
         key: _key ?? Key('BackgroundWidgetBuilder'),
         child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
