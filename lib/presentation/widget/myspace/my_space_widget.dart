@@ -54,6 +54,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/media_type_ext
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/document_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/document_multiple_selection_action_builder.dart';
@@ -73,6 +74,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   final imagePath = getIt<AppImagePaths>();
   final appToast = getIt<AppToast>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
+  final _widgetCommon = getIt<CommonView>();
 
   @override
   void initState() {
@@ -220,16 +222,10 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       return SizedBox.shrink();
     } else {
       if (mySpaceState.documentList.isEmpty) {
-        return _buildNoResultFound();
+        return _widgetCommon.buildNoResultFound(context);
       }
       return _buildMySpaceListView(context, mySpaceState.documentList);
     }
-  }
-
-  Widget _buildNoResultFound() {
-    return BackgroundWidgetBuilder()
-        .key(Key('search_no_result_found'))
-        .text(AppLocalizations.of(context).no_results_found).build();
   }
 
   Widget _buildResultCount() {
@@ -237,27 +233,10 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         converter: (store) => store.state,
         builder: (context, appState) {
           if (appState.uiState.isInSearchState() && mySpaceViewModel.searchQuery.value.isNotEmpty) {
-            return _buildResultCountRow(appState.mySpaceState.documentList);
+            return _widgetCommon.buildResultCountRow(context, appState.mySpaceState.documentList.length);
           }
           return SizedBox.shrink();
         });
-  }
-
-  Widget _buildResultCountRow(List<SelectableElement<Document>> resultList) {
-    return Container(
-      color: AppColor.topBarBackgroundColor,
-      height: 40.0,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            AppLocalizations.of(context).results_count(resultList.length),
-            style: TextStyle(fontSize: 16.0, color: AppColor.searchResultsCountTextColor),
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildNormalMySpaceList(MySpaceState mySpaceState) {
