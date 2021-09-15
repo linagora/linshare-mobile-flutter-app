@@ -467,6 +467,8 @@ class MySpaceViewModel extends BaseViewModel {
         downloadPreviewType = DownloadPreviewType.thumbnail;
       }
       store.dispatch(_handleDownloadPreviewDocument(document, downloadPreviewType, cancelToken));
+    } else {
+      store.dispatch(MySpaceAction(Left(NoDocumentPreviewAvailable())));
     }
   }
 
