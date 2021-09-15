@@ -288,7 +288,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   void _previewReceivedShare(BuildContext context, ReceivedShare receivedShare) {
     _appNavigation.popBack();
     final canPreviewReceivedShare = Platform.isIOS ? receivedShare.mediaType.isIOSSupportedPreview() : receivedShare.mediaType.isAndroidSupportedPreview();
-    if (canPreviewReceivedShare || (receivedShare.hasThumbnail != null && receivedShare.hasThumbnail)) {
+    if (canPreviewReceivedShare || (receivedShare.hasThumbnail)) {
       final cancelToken = CancelToken();
       _showPrepareToPreviewFileDialog(context, receivedShare, cancelToken);
 
@@ -299,6 +299,8 @@ class ReceivedShareViewModel extends BaseViewModel {
         downloadPreviewType = DownloadPreviewType.thumbnail;
       }
       store.dispatch(_handleDownloadPreviewReceivedShare(receivedShare, downloadPreviewType, cancelToken));
+    } else {
+      store.dispatch(ReceivedShareAction(Left(NoReceivedSharePreviewAvailable())));
     }
   }
 

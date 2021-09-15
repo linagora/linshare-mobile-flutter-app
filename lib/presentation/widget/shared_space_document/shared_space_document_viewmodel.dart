@@ -312,6 +312,8 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
       }
 
       store.dispatch(_handleDownloadPreviewWorkGroupDocument(workGroupDocument, downloadPreviewType, cancelToken));
+    } else {
+      store.dispatch(SharedSpaceDocumentAction(Left(NoWorkGroupDocumentPreviewAvailable())));
     }
   }
 
