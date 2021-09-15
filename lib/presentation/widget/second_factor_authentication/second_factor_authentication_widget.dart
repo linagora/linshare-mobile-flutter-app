@@ -37,6 +37,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/view/toolbar/toolbar_builder.dart' as toolbar;
 
 class SecondFactorAuthenticationWidget extends StatelessWidget {
   final imagePath = getIt<AppImagePaths>();
@@ -53,33 +54,39 @@ class SecondFactorAuthenticationWidget extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     return SafeArea(
-      bottom: false,
       child: Stack(
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: IconButton(
-              onPressed: () => viewModel.onBackPressed(),
-              icon: Image(
-                  image: AssetImage(imagePath.icArrowBack),
-                  alignment: Alignment.center),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 100),
-              child: Column(
-                children: [
-                  ..._buildLinShareLogo(context),
-                  SizedBox(height: 80),
-                  _buildSetup2FA(context)
-                ],
+          LayoutBuilder(
+          builder: (context, constraint) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(top: 100),
+                      child: Column(
+                        children: [
+                          ..._buildLinShareLogo(context),
+                          SizedBox(height: 80),
+                          _buildSetup2FA(context)
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
+            );
+          }
           ),
+          toolbar.ToolbarBuilder(
+              Key('two_fa_setup_arrow_back_button'),
+              contentPadding: EdgeInsets.only(left: 10),
+              actionIcon: imagePath.icArrowBack,
+              onButtonActionClick: () => viewModel.onBackPressed())
+              .build(),
         ],
       ),
     );
