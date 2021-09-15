@@ -47,6 +47,7 @@ class ResponsiveUtils {
   static const double _orderByButtonHorizontalPaddingDefault = 16.0;
 
   static const double _contextMenuHorizontalMargin = 144.0;
+  static const double _contextMenuTopMargin = 32.0;
 
   static const double _loginTextBuilderWidthSmallScreen = 280.0;
   static const double _loginTextBuilderWidthLargeScreen = 320.0;
@@ -128,8 +129,8 @@ class ResponsiveUtils {
 
   EdgeInsets getMarginContextMenuForScreen(BuildContext context) {
     return isSmallScreen(context)
-        ? EdgeInsets.zero
-        : EdgeInsets.symmetric(horizontal: _contextMenuHorizontalMargin);
+        ? EdgeInsets.only(top: _contextMenuTopMargin)
+        : EdgeInsets.only(top: _contextMenuTopMargin, left: _contextMenuHorizontalMargin, right: _contextMenuHorizontalMargin);
   }
 
   double getWidthLoginTextBuilder(BuildContext context) => isSmallScreen(context)
