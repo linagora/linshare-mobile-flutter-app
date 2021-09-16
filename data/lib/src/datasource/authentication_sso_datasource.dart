@@ -88,11 +88,11 @@ class AuthenticationSSODataSource {
 
   Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenSSO tokenSSO, {OTPCode? otpCode}) async {
     return Future.sync(() async {
-      final deviceUUID = await deviceManager.getDeviceUUID();
+      final deviceName = await deviceManager.getDeviceName();
       final permanentToken = await linShareHttpClient.createPermanentTokenWithOIDC(
           baseUrl,
           tokenSSO.token,
-          PermanentTokenBodyRequest('LinShare-${deviceManager.getPlatformString()}-$deviceUUID'),
+          PermanentTokenBodyRequest('Token-${deviceManager.getPlatformString()}-$deviceName'),
           otpCode: otpCode);
       return permanentToken.toToken();
     }).catchError((error) {
