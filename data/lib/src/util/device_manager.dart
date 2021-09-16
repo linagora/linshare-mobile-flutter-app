@@ -56,11 +56,27 @@ class DeviceManager {
     return deviceUUID;
   }
 
+  Future<String> getDeviceName() async {
+    var deviceName = 'unknown device name';
+    try {
+      if (Platform.isIOS) {
+        var info = await _deviceInfoPlugin.iosInfo;
+        deviceName = info.name;
+      } else if (Platform.isAndroid) {
+        var info = await _deviceInfoPlugin.androidInfo;
+        deviceName = info.model;
+      }
+    } catch (exception) {
+      print(exception.toString());
+    }
+    return deviceName;
+  }
+
   String getPlatformString() {
     if (Platform.isIOS) {
-      return 'IOS-App';
+      return 'IOS';
     }
-    return 'Android-App';
+    return 'Android';
   }
 
   Future<bool> isNeedRequestStoragePermissionOnAndroid() async {

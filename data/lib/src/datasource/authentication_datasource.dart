@@ -48,12 +48,12 @@ class AuthenticationDataSource {
 
   Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
     return Future.sync(() async {
-      final deviceUUID = await deviceManager.getDeviceUUID();
+      final deviceName = await deviceManager.getDeviceName();
       final permanentToken = await linShareHttpClient.createPermanentToken(
           baseUrl,
           userName.userName,
           password.value,
-          PermanentTokenBodyRequest('LinShare-${deviceManager.getPlatformString()}-$deviceUUID'),
+          PermanentTokenBodyRequest('Token-${deviceManager.getPlatformString()}-$deviceName'),
           otpCode: otpCode);
       return permanentToken.toToken();
     }).catchError((error) {
