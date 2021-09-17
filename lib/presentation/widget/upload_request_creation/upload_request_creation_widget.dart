@@ -536,9 +536,15 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
   Widget _buildActivationDateWidget() => Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(AppLocalizations.of(context).activation_date,
-          style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
-      GestureDetector(
+      Expanded(
+        flex: 2,
+        child: Text(AppLocalizations.of(context).activation_date,
+          style: CommonTextStyle.textStyleUploadRequestSettingsTitle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1
+        )
+      ),
+      Expanded(flex: 8, child: GestureDetector(
         onTap: () {
           _getRoundUpDate();
           _getActivationDate(isInitialize: false);
@@ -557,9 +563,13 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
         child: ValueListenableBuilder(
           valueListenable: _textActivationNotifier,
           builder: (BuildContext context, dartz.Tuple2? value, Widget? child) =>
-              Text(value?.value2 ?? '', style: CommonTextStyle.textStyleUploadRequestSettingsValue),
+            Text(
+              value?.value2 ?? '',
+              style: CommonTextStyle.textStyleUploadRequestSettingsValue,
+              textAlign: TextAlign.right
+            )
         ),
-      ),
+      )),
     ],
   );
 
@@ -568,27 +578,40 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(AppLocalizations.of(context).expiration_date,
-            style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
-        GestureDetector(
-          onTap: () {
-            _getRoundUpDate();
-            DatePicker.showDateTimePicker(context,
-                showTitleActions: true,
-                minTime: _textActivationNotifier.value!.value1,
-                maxTime: _maxExpirationDateRoundUp,
-                onChanged: (date) {
-                }, onConfirm: (date) {
-                  _textExpirationNotifier.value = dartz.Tuple2(date, date.getYMMMMdFormatWithJm());
-                  _getReminderDate();
-                },
-                currentTime: _textExpirationNotifier.value?.value1);
-          },
-          child: ValueListenableBuilder(
+        Expanded(
+          flex: 2,
+          child: Text(AppLocalizations.of(context).expiration_date,
+            style: CommonTextStyle.textStyleUploadRequestSettingsTitle,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          )
+        ),
+        Expanded(
+          flex: 8,
+          child: GestureDetector(
+            onTap: () {
+              _getRoundUpDate();
+              DatePicker.showDateTimePicker(context,
+                  showTitleActions: true,
+                  minTime: _textActivationNotifier.value!.value1,
+                  maxTime: _maxExpirationDateRoundUp,
+                  onChanged: (date) {
+                  }, onConfirm: (date) {
+                    _textExpirationNotifier.value = dartz.Tuple2(date, date.getYMMMMdFormatWithJm());
+                    _getReminderDate();
+                  },
+                  currentTime: _textExpirationNotifier.value?.value1);
+            },
+            child: ValueListenableBuilder(
               valueListenable: _textExpirationNotifier,
               builder: (BuildContext context, dartz.Tuple2? value, Widget? child) =>
-                  Text(value?.value2 ?? '', style: CommonTextStyle.textStyleUploadRequestSettingsValue)),
-        ),
+                Text(
+                  value?.value2 ?? '',
+                  style: CommonTextStyle.textStyleUploadRequestSettingsValue,
+                  textAlign: TextAlign.right
+                )
+            ),
+        )),
       ],
     ),
   );
@@ -703,29 +726,43 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
   Widget _buildReminderDateWidget() => Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(AppLocalizations.of(context).reminder_date,
-          style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
-      GestureDetector(
-        onTap: () {
-          var minDateRemind = _minReminderDateRoundUp;
-          if(_minReminderDateRoundUp.compareTo(_textActivationNotifier.value!.value1) < 0) {
-            minDateRemind = _textActivationNotifier.value!.value1;
-          }
-          DatePicker.showDateTimePicker(context,
-              showTitleActions: true,
-              minTime: minDateRemind,
-              maxTime: _textExpirationNotifier.value!.value1,
-              onChanged: (date) {
-              }, onConfirm: (date) {
-                _textReminderNotifier.value = dartz.Tuple2(date, date.getYMMMMdFormatWithJm());
-              },
-              currentTime: _textReminderNotifier.value?.value1);
-        },
-        child: ValueListenableBuilder(
-            valueListenable: _textReminderNotifier,
-            builder: (BuildContext context, dartz.Tuple2? value, Widget? child) =>
-                Text(value?.value2 ?? '', style: CommonTextStyle.textStyleUploadRequestSettingsValue)),
+      Expanded(
+        flex: 2,
+        child: Text(
+          AppLocalizations.of(context).reminder_date,
+          style: CommonTextStyle.textStyleUploadRequestSettingsTitle,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis
+        )
       ),
+      Expanded(
+        flex: 8,
+        child: GestureDetector(
+          onTap: () {
+            var minDateRemind = _minReminderDateRoundUp;
+            if(_minReminderDateRoundUp.compareTo(_textActivationNotifier.value!.value1) < 0) {
+              minDateRemind = _textActivationNotifier.value!.value1;
+            }
+            DatePicker.showDateTimePicker(context,
+                showTitleActions: true,
+                minTime: minDateRemind,
+                maxTime: _textExpirationNotifier.value!.value1,
+                onChanged: (date) {
+                }, onConfirm: (date) {
+                  _textReminderNotifier.value = dartz.Tuple2(date, date.getYMMMMdFormatWithJm());
+                },
+                currentTime: _textReminderNotifier.value?.value1);
+          },
+          child: ValueListenableBuilder(
+              valueListenable: _textReminderNotifier,
+              builder: (BuildContext context, dartz.Tuple2? value, Widget? child) =>
+                  Text(
+                    value?.value2 ?? '',
+                    style: CommonTextStyle.textStyleUploadRequestSettingsValue,
+                    textAlign: TextAlign.right
+                  )
+          ),
+      )),
     ],
   );
 
