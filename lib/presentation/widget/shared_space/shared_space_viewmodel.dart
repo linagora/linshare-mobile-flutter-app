@@ -48,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/input_formatters_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -368,31 +369,32 @@ class SharedSpaceViewModel extends BaseViewModel {
                 )
               ),
             ))
+          .setInputFormattersList([InputFormattersUtils.noSpecialCharactersRegex])
           .show(context);
     };
   }
 
-  String getErrorString(BuildContext context, String value) {
+  String? getErrorString(BuildContext context, String value) {
     return _verifyNameInteractor
         .execute(
           value,
           [EmptyNameValidator(), DuplicateNameValidator(_sharedSpaceNodes.map((node) => node.name).toList()), SpecialCharacterValidator()]
         )
         .fold((failure) {
-      if (failure is VerifyNameFailure) {
-        if (failure.exception is EmptyNameException) {
-          return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).workgroup);
-        } else if (failure.exception is DuplicatedNameException) {
-          return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workgroup);
-        } else if (failure.exception is SpecialCharacterException) {
-          return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
-        } else {
-          return '';
-        }
-      } else {
-        return '';
-      }
-    }, (success) => '');
+          if (failure is VerifyNameFailure) {
+            if (failure.exception is EmptyNameException) {
+              return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).workgroup);
+            } else if (failure.exception is DuplicatedNameException) {
+              return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workgroup);
+            } else if (failure.exception is SpecialCharacterException) {
+              return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
+            } else {
+              return null;
+            }
+          } else {
+            return null;
+          }
+    }, (success) => null);
   }
 
   OnlineThunkAction _createNewWorkGroupAction(String newName) {
@@ -419,6 +421,7 @@ class SharedSpaceViewModel extends BaseViewModel {
       .setTextSelection(
         TextSelection(baseOffset: 0, extentOffset: sharedSpace.name.length),
         value: sharedSpace.name)
+      .setInputFormattersList([InputFormattersUtils.noSpecialCharactersRegex])
       .show(context);
   }
 
