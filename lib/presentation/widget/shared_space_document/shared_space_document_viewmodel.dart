@@ -57,6 +57,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/input_formatters_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -390,6 +391,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
               }
             })
         .setErrorString((value) => _getErrorString(context, getWorkGroupNode(), value))
+        .setInputFormattersList([InputFormattersUtils.noSpecialCharactersRegex])
         .show(context);
   }
 
@@ -687,10 +689,11 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
               text: workGroupNode.name,
               selection: TextSelection(baseOffset: 0, extentOffset: workGroupNode.name.length)),
         ))
+        .setInputFormattersList([InputFormattersUtils.noSpecialCharactersRegex])
         .show(context);
   }
 
-  String _getErrorString(BuildContext context, WorkGroupNode? workGroupNode, String value) {
+  String? _getErrorString(BuildContext context, WorkGroupNode? workGroupNode, String value) {
     if(workGroupNode == null) {
       return '';
     }
@@ -717,12 +720,12 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         } else if (failure.exception is LastDotException) {
           return AppLocalizations.of(context).node_name_contain_last_dot(nodeName);
         } else {
-          return '';
+          return null;
         }
       } else {
-        return '';
+        return null;
       }
-    }, (success) => '');
+    }, (success) => null);
   }
 
   OnlineThunkAction _renameWorkGroupNodeAction(BuildContext context, String newName, WorkGroupNode workGroupNode) {
