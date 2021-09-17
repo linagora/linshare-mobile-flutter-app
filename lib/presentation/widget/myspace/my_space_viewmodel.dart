@@ -53,6 +53,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/input_formatters_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -351,6 +352,7 @@ class MySpaceViewModel extends BaseViewModel {
                 )
             ),
           ))
+        .setInputFormattersList([InputFormattersUtils.noSpecialCharactersRegex])
         .show(context);
   }
 
@@ -397,7 +399,7 @@ class MySpaceViewModel extends BaseViewModel {
     });
   }
 
-  String _getErrorString(BuildContext context, Document document, String value) {
+  String? _getErrorString(BuildContext context, Document document, String value) {
     final listName = _documentList.map((doc) => doc.name).toList();
 
     return _verifyNameInteractor.execute(value, [
@@ -411,9 +413,9 @@ class MySpaceViewModel extends BaseViewModel {
               if (failure is VerifyNameFailure) {
                 return failure.getMessage(context);
               } else {
-                return '';
+                return null;
               }},
-            (success) => ''
+            (success) => null
     );
   }
 
