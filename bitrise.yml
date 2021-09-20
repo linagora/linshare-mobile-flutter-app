@@ -7,6 +7,7 @@ trigger_map:
   workflow: primary
 - pull_request_source_branch: "*"
   workflow: primary
+  pull_request_target_branch: master
 workflows:
   deploy:
     steps:
@@ -38,14 +39,17 @@ workflows:
         - configuration: Release
     - deploy-to-bitrise-io@1: {}
     - cache-push@2: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
   primary:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@5: {}
+    - git-clone@6: {}
     - flutter-installer@0:
         inputs:
-        - installation_bundle_url: https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_2.0.6-stable.zip
+        - installation_bundle_url: https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.22.1-stable.zip
         - is_update: 'false'
     - cache-pull@2: {}
     - script@1:
@@ -66,9 +70,9 @@ workflows:
             flutter pub get && pod install
 
             cd ..
-            flutter pub get && flutter pub run intl_translation:extract_to_arb --output-dir=./lib/l10n lib/presentation/localizations/app_localizations.dart
+            flutter pub get && flutter pub run intl_generator:extract_to_arb --output-dir=./lib/l10n lib/presentation/localizations/app_localizations.dart
 
-            flutter pub get && flutter pub run intl_translation:generate_from_arb --output-dir=lib/l10n --no-use-deferred-loading lib/presentation/localizations/app_localizations.dart lib/l10n/intl*.arb
+            flutter pub get && flutter pub run intl_generator:generate_from_arb --output-dir=lib/l10n --no-use-deferred-loading lib/presentation/localizations/app_localizations.dart lib/l10n/intl*.arb
         is_always_run: true
     - flutter-analyze@0:
         inputs:
@@ -87,15 +91,15 @@ workflows:
         is_always_run: true
     - set-xcode-build-number@1:
         inputs:
-          - build_short_version_string: 1.0.0
-          - build_version_offset: alpha$BITRISE_BUILD_NUMBER
-          - plist_path: $BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/Info.plist
-    - sign-apk@1: {}
+        - build_version_offset: alpha$BITRISE_BUILD_NUMBER
+        - build_short_version_string: 1.0.0
+        - plist_path: "$BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/Info.plist"
     - flutter-build@0:
         inputs:
         - is_debug_mode: 'true'
         - ios_additional_params: "--release"
         - ios_codesign_identity: 'Apple Development: Tung Tran (D62M3529UP)'
+    - sign-apk@1: {}
     - xcode-archive@3:
         inputs:
         - team_id: 6Z27TKCGWF
@@ -104,7 +108,7 @@ workflows:
         - force_provisioning_profile: 9ab856e2-3906-4537-8ebc-00ac1f0dd25d
         - force_provisioning_profile_specifier: ''
         - export_method: development
-    - deploy-to-bitrise-io@1: {}
+    - deploy-to-bitrise-io@2: {}
     - slack@3:
         inputs:
         - channel: 'channel: #ft-mobile '
@@ -178,6 +182,11 @@ workflows:
         - additional_params: domain
     - certificate-and-profile-installer@1:
         is_always_run: true
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: 1.0.0
+        - build_version_offset: alpha$BITRISE_BUILD_NUMBER
+        - plist_path: "$BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/Info.plist"
     - flutter-build@0:
         inputs:
         - platform: ios
