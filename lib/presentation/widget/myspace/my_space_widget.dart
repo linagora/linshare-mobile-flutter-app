@@ -295,23 +295,27 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
               width: 20, height: 24, fit: BoxFit.fill)
         ]),
         title: ResponsiveWidget(
+          smallScreen: Transform(
+              transform: Matrix4.translationValues(-16, 0.0, 0.0),
+              child: _buildDocumentName(document.element.name)),
           mediumScreen: Transform(
             transform: Matrix4.translationValues(-16, 0.0, 0.0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Row(children: [
-                _buildDocumentName(document.element.name),
-                _buildSharedIcon(document.element.isShared()),
-                _buildOfflineModeIcon(document.element.syncOfflineState),
-              ]),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
-                      document.element.modificationDate.getMMMddyyyyFormatString())))
-            ]),
-          ),
-          smallScreen: Transform(
-            transform: Matrix4.translationValues(-16, 0.0, 0.0),
-            child: _buildDocumentName(document.element.name)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      Flexible(child: _buildDocumentName(document.element.name)),
+                      _buildSharedIcon(document.element.isShared()),
+                      _buildOfflineModeIcon(document.element.syncOfflineState),
+                    ])),
+                SizedBox(width: 8.0),
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: _buildModifiedDocumentText(AppLocalizations.of(context).item_last_modified(
+                        document.element.modificationDate.getMMMddyyyyFormatString())))
+              ])),
           responsiveUtil: _responsiveUtils,
         ),
         subtitle: _responsiveUtils.isSmallScreen(context)
@@ -349,6 +353,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   Widget _buildDocumentName(String documentName) {
     return Text(
       documentName,
+      overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
     );
