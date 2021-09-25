@@ -52,8 +52,8 @@ class BiometricRepositoryImpl extends BiometricRepository {
   }
 
   @override
-  Future saveBiometricSetting(BiometricState state) {
-    return _biometricDataSource.saveBiometricSetting(state);
+  Future saveBiometricSetting(BiometricAuthenticationSettings settings) {
+    return _biometricDataSource.saveBiometricSetting(settings);
   }
 
   @override
@@ -61,8 +61,8 @@ class BiometricRepositoryImpl extends BiometricRepository {
     return _biometricDataSource.getAvailableBiometrics();
   }
   @override
-  Future<BiometricState> getBiometricSetting() {
-    return _biometricDataSource.getBiometricSetting();
+  Future<BiometricAuthenticationSettings> getBiometricSettings() {
+    return _biometricDataSource.getBiometricSettings();
   }
 
   @override

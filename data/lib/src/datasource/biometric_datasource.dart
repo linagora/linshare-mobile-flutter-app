@@ -36,11 +36,11 @@ abstract class BiometricDataSource {
 
   Future<bool> authenticate(String localizedReason, {AndroidSettingArgument? androidSettingArgument, IOSSettingArgument? iosSettingArgument});
 
-  Future saveBiometricSetting(BiometricState state);
+  Future saveBiometricSetting(BiometricAuthenticationSettings settings);
 
   Future<List<BiometricKind>> getAvailableBiometrics();
 
-  Future<BiometricState> getBiometricSetting();
+  Future<BiometricAuthenticationSettings> getBiometricSettings();
 
   Future resetBiometricSetting();
 }

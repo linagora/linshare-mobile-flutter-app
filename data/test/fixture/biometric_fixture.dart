@@ -28,15 +28,7 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class Constant {
-  static const jSessionId = 'JSESSIONID';
-  static const fileSizeDataForm = 'filesize';
-  static const authorization = 'Authorization';
-  static const accept = 'accept';
-  static const linShareAuthErrorCode = 'X-Linshare-Auth-Error-Code';
-  static const linShare2FAPin = 'x-linShare-2fa-pin';
-  static const biometricSettingState = 'biometric_setting_state';
-  static const biometricSettingTimeoutMilliseconds = 'biometric_setting_timeout_milliseconds';
-  static const defaultBiometricAuthenticationTimeoutInMilliseconds = 3 * 60 * 1000;
-}
+const timeoutTest1 = 3 * 60 * 1000;
+
