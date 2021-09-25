@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/file_path_util.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
+import 'package:linshare_flutter_app/presentation/util/lifecycle_event_handler.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
@@ -73,6 +74,7 @@ class AppModule {
     _provideLocalAuthentication();
     _provideBiometric();
     _provideOfflineMode();
+    _provideObservers();
   }
 
   void _provideDataSourceImpl() {
@@ -458,5 +460,9 @@ class AppModule {
 
   void _provideAppAuth() {
     getIt.registerLazySingleton(() => FlutterAppAuth());
+  }
+
+  void _provideObservers() {
+    getIt.registerLazySingleton(() => LifecycleEventHandler());
   }
 }

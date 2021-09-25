@@ -40,11 +40,15 @@ class UIState with EquatableMixin {
   final SharedSpaceNodeNested? selectedSharedSpace;
   final UploadRequestGroup? uploadRequestGroup;
   final SearchState searchState;
+  final ActionOutsideAppState actionOutsideAppState;
+  final ActionInsideAppState actionInsideAppState;
   final int uploadRequestGroupTabIndex;
 
   UIState(
     this.routePath,
     this.searchState,
+    this.actionOutsideAppState,
+    this.actionInsideAppState,
     {
       this.uploadRequestGroupTabIndex = 0,
       this.selectedSharedSpace,
@@ -53,11 +57,17 @@ class UIState with EquatableMixin {
   );
 
   factory UIState.initial() {
-    return UIState(RoutePaths.initializeRoute, SearchState.initial());
+    return UIState(RoutePaths.initializeRoute, SearchState.initial(), ActionOutsideAppState.initial(), ActionInsideAppState.initial());
   }
 
   UIState setCurrentView(String routePath, {SharedSpaceNodeNested? sharedSpace, UploadRequestGroup? uploadRequestGroup}) {
-    return UIState(routePath, searchState, uploadRequestGroupTabIndex: uploadRequestGroupTabIndex, selectedSharedSpace: sharedSpace, uploadRequestGroup: uploadRequestGroup);
+    return UIState(routePath,
+        searchState,
+        actionOutsideAppState,
+        actionInsideAppState,
+        uploadRequestGroupTabIndex: uploadRequestGroupTabIndex,
+        selectedSharedSpace: sharedSpace,
+        uploadRequestGroup: uploadRequestGroup);
   }
 
   UIState clearCurrentView() {
@@ -65,22 +75,64 @@ class UIState with EquatableMixin {
   }
 
   UIState setSearchState(SearchState searchState) {
-    return UIState(routePath, searchState, uploadRequestGroupTabIndex: uploadRequestGroupTabIndex, selectedSharedSpace: selectedSharedSpace, uploadRequestGroup: uploadRequestGroup);
+    return UIState(routePath,
+        searchState,
+        actionOutsideAppState,
+        actionInsideAppState,
+        uploadRequestGroupTabIndex: uploadRequestGroupTabIndex,
+        selectedSharedSpace: selectedSharedSpace,
+        uploadRequestGroup: uploadRequestGroup);
   }
 
   UIState setUploadRequestGroupIndexTab(int newIndex) {
-    return UIState(routePath, searchState, uploadRequestGroupTabIndex: newIndex, selectedSharedSpace: selectedSharedSpace, uploadRequestGroup: uploadRequestGroup);
+    return UIState(routePath,
+        searchState,
+        actionOutsideAppState,
+        actionInsideAppState,
+        uploadRequestGroupTabIndex: newIndex,
+        selectedSharedSpace: selectedSharedSpace,
+        uploadRequestGroup: uploadRequestGroup);
+  }
+
+  UIState setActionOutsideAppState(ActionOutsideAppState actionOutsideAppState) {
+    return UIState(routePath,
+        searchState,
+        actionOutsideAppState,
+        actionInsideAppState,
+        uploadRequestGroupTabIndex: uploadRequestGroupTabIndex,
+        selectedSharedSpace: selectedSharedSpace,
+        uploadRequestGroup: uploadRequestGroup);
+  }
+
+  UIState setActionInsideAppState(ActionInsideAppState actionInsideAppState) {
+    return UIState(routePath,
+        searchState,
+        actionOutsideAppState,
+        actionInsideAppState,
+        uploadRequestGroupTabIndex: uploadRequestGroupTabIndex,
+        selectedSharedSpace: selectedSharedSpace,
+        uploadRequestGroup: uploadRequestGroup);
   }
 
   @override
-  List<Object?> get props => [routePath, selectedSharedSpace, uploadRequestGroup, uploadRequestGroupTabIndex];
+  List<Object?> get props => [
+    routePath,
+    searchState,
+    actionOutsideAppState,
+    actionInsideAppState,
+    selectedSharedSpace,
+    uploadRequestGroup,
+    uploadRequestGroupTabIndex
+  ];
 }
 
 extension UIStateExtension on UIState {
   bool isInSearchState() => searchState.searchStatus == SearchStatus.ACTIVE;
+  bool isInOutsideAppState() => actionOutsideAppState.actionOutsideAppType != ActionOutsideAppType.NONE;
+  bool isInInsideAppState() => actionInsideAppState.actionInsideAppType != ActionInsideAppType.NONE;
 }
 
-class SearchState {
+class SearchState with EquatableMixin {
   final SearchStatus searchStatus;
   final SearchDestination searchDestination;
 
@@ -101,10 +153,63 @@ class SearchState {
   SearchState enableSearchState(SearchDestination searchDestination) {
     return SearchState(SearchStatus.ACTIVE, searchDestination);
   }
+
+  @override
+  List<Object?> get props => [searchStatus, searchDestination];
+}
+
+class ActionOutsideAppState with EquatableMixin {
+  final ActionOutsideAppType actionOutsideAppType;
+
+  ActionOutsideAppState(this.actionOutsideAppType);
+
+  factory ActionOutsideAppState.initial() {
+    return ActionOutsideAppState(ActionOutsideAppType.NONE);
+  }
+
+  ActionOutsideAppState disableActionOutsideAppState() {
+    return ActionOutsideAppState(ActionOutsideAppType.NONE);
+  }
+
+  ActionOutsideAppState enableActionOutsideAppState(ActionOutsideAppType outsideAppType) {
+    return ActionOutsideAppState(outsideAppType);
+  }
+
+  @override
+  List<Object?> get props => [actionOutsideAppType];
+}
+
+class ActionInsideAppState with EquatableMixin {
+  final ActionInsideAppType actionInsideAppType;
+
+  ActionInsideAppState(this.actionInsideAppType);
+
+  factory ActionInsideAppState.initial() {
+    return ActionInsideAppState(ActionInsideAppType.NONE);
+  }
+
+  ActionInsideAppState disableInsideAppState() {
+    return ActionInsideAppState(ActionInsideAppType.NONE);
+  }
+
+  ActionInsideAppState enableInsideAppState(ActionInsideAppType insideAppActionType) {
+    return ActionInsideAppState(insideAppActionType);
+  }
+
+  @override
+  List<Object?> get props => [actionInsideAppType];
 }
 
 enum SearchStatus {
   ACTIVE, INACTIVE
+}
+
+enum ActionOutsideAppType {
+  NONE, PICKING_FILE
+}
+
+enum ActionInsideAppType {
+  NONE, AUTHENTICATING_BIOMETRIC
 }
 
 enum SearchDestination {
