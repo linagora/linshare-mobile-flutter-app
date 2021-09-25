@@ -37,6 +37,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'fixture/biometric_fixture.dart';
 import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
@@ -140,7 +141,8 @@ void getBiometricSetting() {
 
     Future _initDataSource() async {
       SharedPreferences.setMockInitialValues({
-        Constant.biometricSettingState: BiometricState.enabled.value
+        Constant.biometricSettingState: BiometricState.enabled.value,
+        Constant.biometricSettingTimeoutMilliseconds: timeoutTest1
       });
 
       _sharedPreferences = await SharedPreferences.getInstance();
@@ -149,12 +151,16 @@ void getBiometricSetting() {
       _biometricDataSourceImpl = BiometricDataSourceImpl(_localBiometricService, _biometricExceptionThrower, _sharedPreferences);
     }
 
-    test('getBiometricSetting return success with BiometricState is saved', () async {
+    test('getBiometricSetting return success with BiometricSettings is saved', () async {
       await _initDataSource();
 
-      final biometricState = await _biometricDataSourceImpl.getBiometricSetting();
+      final biometricSettings = await _biometricDataSourceImpl.getBiometricSettings();
 
-      expect(biometricState.value, _sharedPreferences.getString(Constant.biometricSettingState));
+      var timeout = _sharedPreferences.getInt(Constant.biometricSettingTimeoutMilliseconds)
+            ?? Constant.defaultBiometricAuthenticationTimeoutInMilliseconds;
+
+      expect(biometricSettings.biometricState.value, _sharedPreferences.getString(Constant.biometricSettingState));
+      expect(biometricSettings.biometricTimeout, timeout.convertMillisecondsToBiometricTimeout);
     });
   });
 }
@@ -175,14 +181,17 @@ void saveBiometricSetting() {
       _biometricDataSourceImpl = BiometricDataSourceImpl(_localBiometricService, _biometricExceptionThrower, _sharedPreferences);
     }
 
-    test('saveBiometricSetting return success with BiometricState is saved', () async {
+    test('saveBiometricSetting return success with BiometricSettings is saved', () async {
       await _initDataSource();
 
       await _sharedPreferences.setString(Constant.biometricSettingState, BiometricState.enabled.value);
-      
-      await _biometricDataSourceImpl.saveBiometricSetting(BiometricState.enabled);
+      await _sharedPreferences.setInt(Constant.biometricSettingTimeoutMilliseconds, timeoutTest1);
+
+      await _biometricDataSourceImpl.saveBiometricSetting(
+          BiometricAuthenticationSettings(BiometricState.enabled, timeoutTest1.convertMillisecondsToBiometricTimeout));
 
       expect(BiometricState.enabled.value, _sharedPreferences.getString(Constant.biometricSettingState));
+      expect(timeoutTest1, _sharedPreferences.getInt(Constant.biometricSettingTimeoutMilliseconds));
     });
   });
 }
