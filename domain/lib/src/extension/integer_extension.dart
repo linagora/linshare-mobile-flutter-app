@@ -28,9 +28,15 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+
 import 'package:domain/domain.dart';
 
 extension IntegerExtension on int {
   int compareToSort(int value, OrderType orderType) =>
       compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+
+  BiometricAuthenticationTimeout get convertMillisecondsToBiometricTimeout {
+    final duration = Duration(milliseconds: this);
+    return BiometricAuthenticationTimeout(timeout: duration);
+  }
 }

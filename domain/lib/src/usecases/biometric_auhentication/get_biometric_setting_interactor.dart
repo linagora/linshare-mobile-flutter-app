@@ -40,8 +40,8 @@ class GetBiometricSettingInteractor {
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final biometricState = await _biometricRepository.getBiometricSetting();
-      return Right<Failure, Success>(GetBiometricSettingViewState(biometricState));
+      final settings = await _biometricRepository.getBiometricSettings();
+      return Right<Failure, Success>(GetBiometricSettingViewState(settings));
     } catch (exception) {
       return Left<Failure, Success>(GetBiometricSettingFailure(exception));
     }
