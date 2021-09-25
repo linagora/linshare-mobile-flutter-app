@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-08-05T16:49:48.474867",
+  "@@last_modified": "2021-09-27T17:10:52.997671",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -2245,5 +2245,41 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "biometric_timeout_title": "Set timeout",
+  "@biometric_timeout_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} second}other{{numberOfItems} seconds}}",
+  "@biometric_timeout_second": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} minute}other{{numberOfItems} minutes}}",
+  "@biometric_timeout_minute": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} hour}other{{numberOfItems} hours}}",
+  "@biometric_timeout_hour": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
   }
 }

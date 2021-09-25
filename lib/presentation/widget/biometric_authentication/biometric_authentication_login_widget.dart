@@ -67,11 +67,14 @@ class _BiometricAuthenticationLoginState extends State<BiometricAuthenticationLo
     var _arguments = ModalRoute.of(context)?.settings.arguments as BiometricAuthenticationArguments;
     _biometricAuthenticationLoginViewModel.setBiometricAuthenticationArguments(_arguments);
 
-    return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (context, biometricState) => Scaffold(
-        backgroundColor: AppColor.primaryColor,
-        body: _buildBody(context))
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, biometricState) => Scaffold(
+          backgroundColor: AppColor.primaryColor,
+          body: _buildBody(context))
+      ),
     );
   }
 
