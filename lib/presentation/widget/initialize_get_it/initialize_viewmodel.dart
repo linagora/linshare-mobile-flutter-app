@@ -134,8 +134,8 @@ class InitializeViewModel extends BaseViewModel {
           _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(baseUrl));
         },
         (right) {
-          if (right is GetBiometricSettingViewState && right.biometricState == BiometricState.enabled) {
-            _appNavigation.pushAndRemoveAll(RoutePaths.biometricAuthenticationLogin, arguments: BiometricAuthenticationArguments(baseUrl));
+          if (right is GetBiometricSettingViewState && right.biometricSettings.biometricState == BiometricState.enabled) {
+            _appNavigation.pushAndRemoveAll(RoutePaths.biometricAuthenticationLogin, arguments: BiometricAuthenticationArguments(baseUrl, isFromAppStart: true));
           } else {
             store.dispatch(_resetBiometricSetting());
             _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(baseUrl));

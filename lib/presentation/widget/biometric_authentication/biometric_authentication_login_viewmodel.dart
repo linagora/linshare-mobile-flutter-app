@@ -33,7 +33,9 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/biometric_authentication_login_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_arguments.dart';
@@ -87,6 +89,7 @@ class BiometricAuthenticationLoginViewModel extends BaseViewModel {
   }
 
   void authenticationBiometric(BuildContext context) {
+    store.dispatch(InsideAppAction(actionInsideAppType: ActionInsideAppType.AUTHENTICATING_BIOMETRIC));
     store.dispatch((Store<AppState> store) async {
       final localizedReason = AppLocalizations.of(context).biometric_authentication_localized_reason(
           store.state.biometricAuthenticationLoginState.biometricKindList.getBiometricKind(context));
@@ -95,20 +98,27 @@ class BiometricAuthenticationLoginViewModel extends BaseViewModel {
       final iosSetting = IOSSettingArgument(AppLocalizations.of(context).cancel);
 
       await _authenticationBiometricInteractor.execute(localizedReason, androidSettingArgument: androidSetting, iosSettingArgument: iosSetting)
-        .then((result) => result.fold(
+        .then((result) {
+          store.dispatch(InsideAppAction(actionInsideAppType: ActionInsideAppType.NONE));
+          result.fold(
             (failure) => store.dispatch(SetAuthenticationBiometricStateAction(AuthenticationBiometricState.unauthenticated)),
             (success) {
-          if (success is AuthenticationBiometricViewState) {
-            store.dispatch(SetAuthenticationBiometricStateAction(success.authenticationState));
-            if (success.authenticationState == AuthenticationBiometricState.authenticated) {
-              _appNavigation.pushAndRemoveAll(
-                  RoutePaths.authentication,
-                  arguments: AuthenticationArguments(_biometricAuthenticationArguments.baseUrl));
-            }
-          } else {
-            store.dispatch(SetAuthenticationBiometricStateAction(AuthenticationBiometricState.unauthenticated));
-          }
-        }));
+              if (success is AuthenticationBiometricViewState) {
+                store.dispatch(SetAuthenticationBiometricStateAction(success.authenticationState));
+                if (success.authenticationState == AuthenticationBiometricState.authenticated) {
+                  if(_biometricAuthenticationArguments.isFromAppStart) {
+                    _appNavigation.pushAndRemoveAll(
+                        RoutePaths.authentication,
+                        arguments: AuthenticationArguments(_biometricAuthenticationArguments.baseUrl));
+                  } else {
+                    _appNavigation.popBack();
+                  }
+                }
+              } else {
+                store.dispatch(SetAuthenticationBiometricStateAction(AuthenticationBiometricState.unauthenticated));
+              }
+            });
+        });
     });
   }
 }
