@@ -41,10 +41,13 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/lifecycle_event_handler.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/toast_message_handler.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_app_bar/home_app_bar_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/home/home_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/home/home_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
@@ -53,7 +56,6 @@ import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_wid
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
 
-import 'home_viewmodel.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -65,22 +67,32 @@ class _HomeWidgetState extends State<HomeWidget> {
   final homeViewModel = getIt<HomeViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final _toastMessageHandler = getIt<ToastMessageHandler>();
+  final _lifecycleEventHandler = getIt<LifecycleEventHandler>();
 
   @override
   void initState() {
     super.initState();
     _toastMessageHandler.setup(context);
+    _lifecycleEventHandler.setResumeCallback(() async {
+      homeViewModel.cancelBiometricAuthenticationTimer();
+    }).setPausedCallBack(() async {
+      homeViewModel.resetBiometricAuthenticationTimer();
+    });
+    WidgetsBinding.instance?.addObserver(_lifecycleEventHandler);
   }
 
   @override
   void dispose() {
     homeViewModel.onDisposed();
     _toastMessageHandler.cancelSubscription();
+    WidgetsBinding.instance?.removeObserver(_lifecycleEventHandler);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    var arguments = ModalRoute.of(context)?.settings.arguments as HomeArguments;
+    homeViewModel.setHomeArguments(arguments);
     return Scaffold(
       key: _scaffoldKey,
       appBar: HomeAppBarWidget(
