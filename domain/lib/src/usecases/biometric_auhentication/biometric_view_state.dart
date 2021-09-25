@@ -103,12 +103,12 @@ class GetAvailableBiometricFailure extends Failure {
 }
 
 class GetBiometricSettingViewState extends ViewState {
-  final BiometricState biometricState;
+  final BiometricAuthenticationSettings biometricSettings;
 
-  GetBiometricSettingViewState(this.biometricState);
+  GetBiometricSettingViewState(this.biometricSettings);
 
   @override
-  List<Object> get props => [biometricState];
+  List<Object> get props => [biometricSettings];
 }
 
 class GetBiometricSettingFailure extends Failure {
@@ -135,4 +135,14 @@ class DisableBiometricFailure extends Failure {
 
   @override
   List<Object> get props => [exception];
+}
+
+class UpdateBiometricSettingTimeoutViewState extends ViewState {
+
+  final BiometricAuthenticationTimeout biometricAuthenticationTimeout;
+
+  UpdateBiometricSettingTimeoutViewState(this.biometricAuthenticationTimeout);
+
+  @override
+  List<Object> get props => [biometricAuthenticationTimeout];
 }
