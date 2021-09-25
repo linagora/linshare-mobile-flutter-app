@@ -45,5 +45,15 @@ final biometricAuthenticationSettingReducer = combineReducers<BiometricAuthentic
   TypedReducer<BiometricAuthenticationSettingState, SetAuthenticationBiometricStateForBiometricSettingAction>(
     (BiometricAuthenticationSettingState state, SetAuthenticationBiometricStateForBiometricSettingAction action) => state.setAuthenticationState(action.authenticationBiometricState)),
   TypedReducer<BiometricAuthenticationSettingState, SetBiometricAuthenticationSettingAction>(
-    (BiometricAuthenticationSettingState state, SetBiometricAuthenticationSettingAction action) => state.setBiometricAuthenticationSetting(newBiometricState : action.biometricState, newBiometricKindList: action.biometricKinds))
+    (BiometricAuthenticationSettingState state, SetBiometricAuthenticationSettingAction action) =>
+        state.setBiometricAuthenticationSetting(
+            viewState: action.viewState,
+            newBiometricState : action.biometricState,
+            newBiometricKindList: action.biometricKinds,
+            newTimeout: action.biometricTimeout)),
+  TypedReducer<BiometricAuthenticationSettingState, SetAuthenticationBiometricTimeoutAction>(
+    (BiometricAuthenticationSettingState state, SetAuthenticationBiometricTimeoutAction action) =>
+        state.setBiometricAuthenticationTimeout(
+            viewState: action.viewState,
+            newTimeout: action.biometricTimeout))
 ]);

@@ -35,52 +35,70 @@ import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:linshare_flutter_app/presentation/util/constant.dart';
 
 @immutable
 class BiometricAuthenticationSettingState extends LinShareState {
   final BiometricState biometricState;
   final List<BiometricKind> biometricKindList;
   final AuthenticationBiometricState authenticationBiometricState;
+  final BiometricAuthenticationTimeout biometricTimeout;
 
   BiometricAuthenticationSettingState(
     Either<Failure, Success> viewState,
     this.biometricState,
     this.biometricKindList,
-    this.authenticationBiometricState
-    ) : super(viewState);
+    this.authenticationBiometricState,
+    this.biometricTimeout
+  ) : super(viewState);
 
   factory BiometricAuthenticationSettingState.initial() {
-    return BiometricAuthenticationSettingState(Right(IdleState()), BiometricState.disabled, [], AuthenticationBiometricState.unauthenticated);
+    return BiometricAuthenticationSettingState(
+      Right(IdleState()),
+      BiometricState.disabled,
+      [],
+      AuthenticationBiometricState.unauthenticated,
+      Constant.defaultBiometricAuthenticationTimeoutInMilliseconds.convertMillisecondsToBiometricTimeout);
   }
 
   @override
   BiometricAuthenticationSettingState clearViewState() {
-    return BiometricAuthenticationSettingState(Right(IdleState()), biometricState, biometricKindList, authenticationBiometricState);
+    return BiometricAuthenticationSettingState(Right(IdleState()), biometricState, biometricKindList, authenticationBiometricState, biometricTimeout);
   }
 
   @override
   BiometricAuthenticationSettingState sendViewState({required Either<Failure, Success> viewState}) {
-    return BiometricAuthenticationSettingState(viewState, biometricState, biometricKindList, authenticationBiometricState);
+    return BiometricAuthenticationSettingState(viewState, biometricState, biometricKindList, authenticationBiometricState, biometricTimeout);
   }
 
   @override
   BiometricAuthenticationSettingState startLoadingState() {
-    return BiometricAuthenticationSettingState(Right(LoadingState()), biometricState, biometricKindList, authenticationBiometricState);
+    return BiometricAuthenticationSettingState(Right(LoadingState()), biometricState, biometricKindList, authenticationBiometricState, biometricTimeout);
   }
 
   BiometricAuthenticationSettingState setBiometricState(BiometricState newBiometricState) {
-    return BiometricAuthenticationSettingState(viewState, newBiometricState, biometricKindList, authenticationBiometricState);
+    return BiometricAuthenticationSettingState(viewState, newBiometricState, biometricKindList, authenticationBiometricState, biometricTimeout);
   }
 
   BiometricAuthenticationSettingState setBiometricAvailableList(List<BiometricKind> newBiometricKindList) {
-    return BiometricAuthenticationSettingState(viewState, biometricState, newBiometricKindList, authenticationBiometricState);
+    return BiometricAuthenticationSettingState(viewState, biometricState, newBiometricKindList, authenticationBiometricState, biometricTimeout);
   }
 
   BiometricAuthenticationSettingState setAuthenticationState(AuthenticationBiometricState newAuthenticationBiometricState) {
-    return BiometricAuthenticationSettingState(viewState, biometricState, biometricKindList, newAuthenticationBiometricState);
+    return BiometricAuthenticationSettingState(viewState, biometricState, biometricKindList, newAuthenticationBiometricState, biometricTimeout);
   }
 
-  BiometricAuthenticationSettingState setBiometricAuthenticationSetting({required BiometricState newBiometricState, required List<BiometricKind> newBiometricKindList}) {
-    return BiometricAuthenticationSettingState(viewState, newBiometricState, newBiometricKindList, authenticationBiometricState);
+  BiometricAuthenticationSettingState setBiometricAuthenticationSetting({
+      required Either<Failure, Success> viewState,
+      required BiometricState newBiometricState,
+      required BiometricAuthenticationTimeout newTimeout,
+      required List<BiometricKind> newBiometricKindList}) {
+    return BiometricAuthenticationSettingState(viewState, newBiometricState, newBiometricKindList, authenticationBiometricState, newTimeout);
+  }
+
+  BiometricAuthenticationSettingState setBiometricAuthenticationTimeout({
+      required Either<Failure, Success> viewState,
+      required BiometricAuthenticationTimeout newTimeout}) {
+    return BiometricAuthenticationSettingState(viewState, biometricState, biometricKindList, authenticationBiometricState, newTimeout);
   }
 }

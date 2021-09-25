@@ -33,6 +33,7 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:linshare_flutter_app/presentation/model/biometric_boot_source.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -135,7 +136,9 @@ class InitializeViewModel extends BaseViewModel {
         },
         (right) {
           if (right is GetBiometricSettingViewState && right.biometricSettings.biometricState == BiometricState.enabled) {
-            _appNavigation.pushAndRemoveAll(RoutePaths.biometricAuthenticationLogin, arguments: BiometricAuthenticationArguments(baseUrl, isFromAppStart: true));
+            _appNavigation.pushAndRemoveAll(
+                RoutePaths.biometricAuthenticationLogin,
+                arguments: BiometricAuthenticationArguments(baseUrl, biometricBootSource: BiometricBootSource.APP_STARTING));
           } else {
             store.dispatch(_resetBiometricSetting());
             _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(baseUrl));

@@ -29,11 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/biometric_authentication_setting_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/constant.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:redux/redux.dart';
@@ -57,28 +59,51 @@ class BiometricAuthenticationSettingViewModel extends BaseViewModel {
     this._disableBiometricInteractor
   ) : super(store);
 
-  void getBiometricSetting() {
+  void getBiometricSettings(BuildContext context) {
     store.dispatch((Store<AppState> store) async {
 
       await Future.wait([
         _getBiometricSettingInteractor.execute(),
         _getAvailableBiometricInteractor.execute()
       ]).then((response) async {
+        final defaultTimeoutSettings =
+            Constant.defaultBiometricAuthenticationTimeoutInMilliseconds.convertMillisecondsToBiometricTimeout;
 
-        final biometricState = response[0]
-            .map((result) => result is GetBiometricSettingViewState ? result.biometricState : BiometricState.disabled)
-            .getOrElse(() => BiometricState.disabled);
+        final biometricSettings = response[0]
+            .map((result) => result is GetBiometricSettingViewState
+                ? result.biometricSettings
+                : BiometricAuthenticationSettings(BiometricState.disabled, defaultTimeoutSettings))
+            .getOrElse(() => BiometricAuthenticationSettings(BiometricState.disabled, defaultTimeoutSettings));
 
         response[1].fold(
-          (failure) => store.dispatch(SetBiometricAuthenticationSettingAction(biometricState, [])),
+          (failure) {
+            store.dispatch(SetBiometricAuthenticationSettingAction(
+              Right(UpdateBiometricSettingTimeoutViewState(biometricSettings.biometricTimeout)),
+              biometricSettings.biometricState,
+              [],
+              biometricSettings.biometricTimeout));
+            store.dispatch(CleanBiometricAuthenticationStateSettingAction());
+        },
           (success) {
             store.dispatch(SetBiometricAuthenticationSettingAction(
-              biometricState,
-              success is GetAvailableBiometricViewState ? success.biometricKinds : []));
+              Right(UpdateBiometricSettingTimeoutViewState(biometricSettings.biometricTimeout)),
+              biometricSettings.biometricState,
+              success is GetAvailableBiometricViewState ? success.biometricKinds : [],
+              biometricSettings.biometricTimeout
+            ));
+            store.dispatch(CleanBiometricAuthenticationStateSettingAction());
           }
         );
       });
     });
+  }
+
+  void setNewTimeout(BuildContext context, BiometricAuthenticationTimeout newTimeout) {
+    _appNavigation.popBack();
+    store.dispatch(SetAuthenticationBiometricTimeoutAction(Right(UpdateBiometricSettingTimeoutViewState(newTimeout)), newTimeout));
+    store.dispatch(CleanBiometricAuthenticationStateSettingAction());
+    _enableBiometricAuthentication(
+        BiometricAuthenticationSettings(store.state.biometricAuthenticationSettingState.biometricState, newTimeout));
   }
 
   void backToAccountDetail() {
@@ -117,8 +142,9 @@ class BiometricAuthenticationSettingViewModel extends BaseViewModel {
                   final newBiometricState = biometricState == BiometricState.disabled ? BiometricState.enabled : BiometricState.disabled;
 
                   newBiometricState == BiometricState.enabled
-                      ? _enableBiometricAuthentication(newBiometricState)
-                      : _disableBiometricAuthentication();
+                        ? _enableBiometricAuthentication(BiometricAuthenticationSettings(newBiometricState,
+                              store.state.biometricAuthenticationSettingState.biometricTimeout))
+                        : _disableBiometricAuthentication();
 
                   store.dispatch(SetBiometricStateForBiometricSettingAction(newBiometricState));
                 }
@@ -130,9 +156,9 @@ class BiometricAuthenticationSettingViewModel extends BaseViewModel {
     });
   }
 
-  void _enableBiometricAuthentication(BiometricState biometricState) {
+  void _enableBiometricAuthentication(BiometricAuthenticationSettings biometricSettings) {
     store.dispatch((Store<AppState> store) async {
-      await _enableBiometricInteractor.execute(biometricState);
+      await _enableBiometricInteractor.execute(biometricSettings);
     });
   }
 

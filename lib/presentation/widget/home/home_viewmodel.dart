@@ -34,6 +34,7 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/model/biometric_boot_source.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/functionality_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
@@ -49,13 +50,18 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_i
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/constant.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/home/home_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/biometric_authentication_timeout_extension.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:async/async.dart';
 
 class HomeViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
@@ -63,8 +69,12 @@ class HomeViewModel extends BaseViewModel {
   final Connectivity _connectivity;
   final GetAuthorizedInteractor _getAuthorizedInteractor;
   final GetAllFunctionalityInteractor _getAllFunctionalityInteractor;
+  final GetBiometricSettingInteractor _getBiometricSettingInteractor;
   late StreamSubscription _uploadFileManagerStreamSubscription;
   late StreamSubscription _connectivityStreamSubscription;
+  late RestartableTimer _biometricAuthenticationTimer;
+  late StreamSubscription _storeStreamSubscription;
+  HomeArguments? _homeArguments;
 
   HomeViewModel(
       Store<AppState> store,
@@ -72,12 +82,88 @@ class HomeViewModel extends BaseViewModel {
       this._getAuthorizedInteractor,
       this._uploadFileManager,
       this._connectivity,
-      this._getAllFunctionalityInteractor
+      this._getAllFunctionalityInteractor,
+      this._getBiometricSettingInteractor
   ) : super(store) {
+    _getBiometricAuthenticationTimerSetting();
     _registerPendingUploadFile();
     _registerNetworkConnectivityState();
+    _registerBiometricSettingState();
     _getAllFunctionality();
     _getAuthorizedUser();
+  }
+
+  void _registerBiometricSettingState() {
+    _storeStreamSubscription = store.onChange.listen((event) {
+      event.biometricAuthenticationSettingState.viewState.fold(
+        (failure) => null,
+        (success) {
+          if(success is UpdateBiometricSettingTimeoutViewState) {
+            final newTimeout = success.biometricAuthenticationTimeout;
+            final totalDuration = newTimeout.totalDurationInSeconds;
+            _initBiometricAuthenticationTimer(totalDuration);
+          }
+        });
+    });
+  }
+
+  void _getBiometricAuthenticationTimerSetting() {
+    _getBiometricSettingInteractor.execute().then((result) => result.fold(
+      (left) {
+        final defaultTimeoutSettings = Constant.defaultBiometricAuthenticationTimeoutInMilliseconds.convertMillisecondsToBiometricTimeout;
+        final totalDuration = defaultTimeoutSettings.totalDurationInSeconds;
+        _initBiometricAuthenticationTimer(totalDuration);
+      },
+      (right) {
+        if (right is GetBiometricSettingViewState && right.biometricSettings.biometricState == BiometricState.enabled) {
+          final totalDuration = right.biometricSettings.biometricTimeout.totalDurationInSeconds;
+          _initBiometricAuthenticationTimer(totalDuration);
+        }
+      }));
+  }
+
+  void _initBiometricAuthenticationTimer(int totalDuration) {
+    _biometricAuthenticationTimer = RestartableTimer(Duration(seconds: totalDuration), () {
+      _checkAndShowBiometricAuthentication();
+    });
+    _biometricAuthenticationTimer.cancel(); // To prevent timer auto started when initializing
+  }
+
+  void cancelBiometricAuthenticationTimer() {
+    _biometricAuthenticationTimer.cancel();
+  }
+
+  void resetBiometricAuthenticationTimer() {
+    _biometricAuthenticationTimer.reset();
+  }
+
+  void setHomeArguments(HomeArguments arguments) {
+    _homeArguments = arguments;
+  }
+
+  void _checkAndShowBiometricAuthentication() {
+    if(_isInOutsideAppState() || _isInsideBiometricAuthenticating()) {
+      return;
+    }
+    store.dispatch(_getBiometricSetting(_homeArguments!.baseUrl));
+  }
+
+  bool _isInOutsideAppState() => store.state.uiState.isInOutsideAppState();
+
+  bool _isInsideBiometricAuthenticating() => store.state.uiState.isInInsideAppState()
+      && store.state.uiState.actionInsideAppState.actionInsideAppType == ActionInsideAppType.AUTHENTICATING_BIOMETRIC;
+
+  ThunkAction<AppState> _getBiometricSetting(Uri baseUrl) {
+    return (Store<AppState> store) async {
+      await _getBiometricSettingInteractor.execute().then((result) => result.fold(
+        (left) {},
+        (right) {
+          if (right is GetBiometricSettingViewState && right.biometricSettings.biometricState == BiometricState.enabled) {
+            _appNavigation.push(RoutePaths.biometricAuthenticationLogin,
+                arguments: BiometricAuthenticationArguments(baseUrl, biometricBootSource: BiometricBootSource.APP_IN_FOREGROUND));
+          }
+        }));
+    };
   }
 
   void _getAllFunctionality() {
@@ -198,6 +284,10 @@ class HomeViewModel extends BaseViewModel {
     _uploadFileManager.closeUploadFileManagerStream();
     _uploadFileManagerStreamSubscription.cancel();
     _connectivityStreamSubscription.cancel();
+    if(_biometricAuthenticationTimer.isActive) {
+      _biometricAuthenticationTimer.cancel();
+    }
+    _storeStreamSubscription.cancel();
     super.onDisposed();
   }
 }

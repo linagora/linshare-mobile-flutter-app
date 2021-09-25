@@ -43,7 +43,8 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/list_biometric_kind_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/authentication_biometric_state_extension.dart';
-
+import 'package:linshare_flutter_app/presentation/util/extensions/biometric_authentication_timeout_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/biometric_timeout_modal_sheet_builder.dart';
 import 'biometric_authentication_setting_viewmodel.dart';
 
 class BiometricAuthenticationSettingWidget extends StatefulWidget {
@@ -59,7 +60,7 @@ class _BiometricAuthenticationSettingState extends State<BiometricAuthentication
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addObserver(this);
-    _biometricAuthenticationSettingViewModel.getBiometricSetting();
+    _biometricAuthenticationSettingViewModel.getBiometricSettings(context);
   }
 
   @override
@@ -129,12 +130,49 @@ class _BiometricAuthenticationSettingState extends State<BiometricAuthentication
                           _getTextBiometricAuthenticationNotEnrolled(biometricState),
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 16, color: AppColor.statusUploadFailedSubTitleColor))))
-                  : SizedBox.shrink()
+                  : SizedBox.shrink(),
+                _buildTimeoutSelection(biometricState)
               ])
           )
         )
       )
     );
+  }
+
+  Widget _buildTimeoutSelection(BiometricAuthenticationSettingState biometricState) => GestureDetector(
+    onTap: () {
+      if(biometricState.biometricState != BiometricState.enabled) return;
+      _selectTimeoutBottomSheet(
+        context,
+        biometricState.biometricTimeout,
+        onNewTimeoutUpdated: (newTimeout) {
+          _biometricAuthenticationSettingViewModel.setNewTimeout(context, newTimeout);
+        },
+      );
+    },
+    child: ListTile(
+      contentPadding: EdgeInsets.only(top: 24),
+      title: Text(
+        AppLocalizations.of(context).biometric_timeout_title,
+        style: biometricState.biometricState == BiometricState.enabled
+          ? TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor)
+          : TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)),
+      subtitle: Text(
+        biometricState.biometricTimeout.getDisplayTimeout(context),
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)),
+    ),
+  );
+
+  void _selectTimeoutBottomSheet(
+      BuildContext context,
+      BiometricAuthenticationTimeout selectedTimeout,
+      {Function(BiometricAuthenticationTimeout)? onNewTimeoutUpdated}) {
+    BiometricTimeoutModalSheetBuilder(
+        key: Key('select_timeout_on_biometric_authen_settings'),
+        selectedTimeout: selectedTimeout)
+        .onConfirmAction((timeout) => onNewTimeoutUpdated?.call(timeout))
+        .show(context);
   }
 
   void _onToggleBiometricStateAction(BiometricAuthenticationSettingState biometricAuthenticationSettingState) {
