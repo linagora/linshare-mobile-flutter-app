@@ -64,9 +64,10 @@ class BiometricDataSourceImpl implements BiometricDataSource {
   }
 
   @override
-  Future saveBiometricSetting(BiometricState state) {
+  Future saveBiometricSetting(BiometricAuthenticationSettings settings) {
     return Future.sync(() async {
-      return await _sharedPreferences.setString(Constant.biometricSettingState, state.value);
+      await _sharedPreferences.setString(Constant.biometricSettingState, settings.biometricState.value);
+      await _sharedPreferences.setInt(Constant.biometricSettingTimeoutMilliseconds, settings.biometricTimeout.totalDurationInMilliseconds);
     });
   }
 
@@ -80,13 +81,20 @@ class BiometricDataSourceImpl implements BiometricDataSource {
   }
 
   @override
-  Future<BiometricState> getBiometricSetting() {
+  Future<BiometricAuthenticationSettings> getBiometricSettings() {
     return Future.sync(() async {
+      var state = BiometricState.disabled;
       if (_sharedPreferences.containsKey(Constant.biometricSettingState)) {
         final biometricState = _sharedPreferences.getString(Constant.biometricSettingState) ?? BiometricState.disabled.value;
-        return biometricState == BiometricState.disabled.value ? BiometricState.disabled : BiometricState.enabled;
+        state = biometricState == BiometricState.disabled.value ? BiometricState.disabled : BiometricState.enabled;
       }
-      return BiometricState.disabled;
+
+      var timeout = Constant.defaultBiometricAuthenticationTimeoutInMilliseconds;
+      if (_sharedPreferences.containsKey(Constant.biometricSettingTimeoutMilliseconds)) {
+        timeout = _sharedPreferences.getInt(Constant.biometricSettingTimeoutMilliseconds)
+            ?? Constant.defaultBiometricAuthenticationTimeoutInMilliseconds;
+      }
+      return BiometricAuthenticationSettings(state, timeout.convertMillisecondsToBiometricTimeout);
     });
   }
 
