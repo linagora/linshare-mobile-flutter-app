@@ -158,7 +158,8 @@ class WidgetModule {
       getIt<GetAuthorizedInteractor>(),
       getIt<UploadFileManager>(),
       getIt<Connectivity>(),
-      getIt<GetAllFunctionalityInteractor>()
+      getIt<GetAllFunctionalityInteractor>(),
+      getIt<GetBiometricSettingInteractor>()
     ));
   }
 

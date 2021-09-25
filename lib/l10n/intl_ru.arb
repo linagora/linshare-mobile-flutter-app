@@ -1757,5 +1757,41 @@
   "@the_files_could_not_be_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "biometric_timeout_title": "Set timeout",
+  "@biometric_timeout_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} second}other{{numberOfItems} seconds}}",
+  "@biometric_timeout_second": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} minute}other{{numberOfItems} minutes}}",
+  "@biometric_timeout_minute": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} hour}other{{numberOfItems} hours}}",
+  "@biometric_timeout_hour": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
   }
 }
