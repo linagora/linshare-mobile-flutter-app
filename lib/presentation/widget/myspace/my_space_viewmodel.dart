@@ -711,8 +711,10 @@ class MySpaceViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _pickFileAction(BuildContext context, FileType fileType) {
     return (Store<AppState> store) async {
+      store.dispatch(OutsideAppAction(outsideAppType: ActionOutsideAppType.PICKING_FILE));
       await _localFilePicker.pickFiles(fileType: fileType)
          .then((result) {
+           store.dispatch(OutsideAppAction(outsideAppType: ActionOutsideAppType.NONE));
            result.fold(
               (failure) => store.dispatch(UploadFileAction(Left(failure))),
               (success) => store.dispatch(_pickFileSuccessAction(success)));

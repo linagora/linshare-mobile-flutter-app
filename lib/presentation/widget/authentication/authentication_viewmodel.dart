@@ -79,7 +79,7 @@ class AuthenticationViewModel extends BaseViewModel {
 
   void _getAuthorizedUserSuccess(GetAuthorizedUserViewState success) {
     store.dispatch(SetAccountInformationsAction(success.user));
-    store.dispatch(initializeHomeView(_appNavigation));
+    store.dispatch(initializeHomeView(_appNavigation, _authenticationArguments!.baseUrl));
   }
 
   void _getAuthorizedUserFailure(Failure failure) {
@@ -89,7 +89,7 @@ class AuthenticationViewModel extends BaseViewModel {
         RoutePaths.second_factor_authentication,
         arguments: SecondFactorAuthenticationArguments(_authenticationArguments!.baseUrl));
     } else {
-      store.dispatch(initializeHomeView(_appNavigation));
+      store.dispatch(initializeHomeView(_appNavigation, _authenticationArguments!.baseUrl));
     }
   }
 

@@ -37,6 +37,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/widget/home/home_arguments.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux/src/store.dart';
 
@@ -58,10 +59,10 @@ class ClearCurrentView extends ActionOffline {
   ClearCurrentView();
 }
 
-ThunkAction<AppState> initializeHomeView(AppNavigation appNavigation) {
+ThunkAction<AppState> initializeHomeView(AppNavigation appNavigation, Uri baseUrl) {
   return (Store<AppState> store) async {
     store.dispatch(SetCurrentView(RoutePaths.mySpace));
-    await appNavigation.pushAndRemoveAll(RoutePaths.homeRoute);
+    await appNavigation.pushAndRemoveAll(RoutePaths.homeRoute, arguments: HomeArguments(baseUrl));
   };
 }
 
@@ -86,4 +87,18 @@ class UIStateSetUploadRequestGroupIndexAction extends ActionOffline {
   final int newIndex;
 
   UIStateSetUploadRequestGroupIndexAction(this.newIndex);
+}
+
+@immutable
+class OutsideAppAction extends ActionOffline {
+  final ActionOutsideAppType outsideAppType;
+
+  OutsideAppAction({required this.outsideAppType});
+}
+
+@immutable
+class InsideAppAction extends ActionOffline {
+  final ActionInsideAppType actionInsideAppType;
+
+  InsideAppAction({required this.actionInsideAppType});
 }
