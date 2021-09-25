@@ -2166,6 +2166,44 @@ class AppLocalizations {
       name: 'search_in_upload_request_entries',
     );
   }
+
+  String get biometric_timeout_title {
+    return Intl.message(
+      'Set timeout',
+      name: 'biometric_timeout_title',
+    );
+  }
+
+  String biometric_timeout_second(int numberOfItems) {
+    return Intl.message(
+      '''${Intl.plural(numberOfItems,
+          one: '$numberOfItems second',
+          other: '$numberOfItems seconds')}''',
+      name: 'biometric_timeout_second',
+      args: [numberOfItems],
+    );
+  }
+
+  String biometric_timeout_minute(int numberOfItems) {
+    return Intl.message(
+      '''${Intl.plural(numberOfItems,
+          one: '$numberOfItems minute',
+          other: '$numberOfItems minutes')}''',
+      name: 'biometric_timeout_minute',
+      args: [numberOfItems],
+    );
+  }
+
+  String biometric_timeout_hour(int numberOfItems) {
+    return Intl.message(
+      '''${Intl.plural(numberOfItems,
+          one: '$numberOfItems hour',
+          other: '$numberOfItems hours')}''',
+      name: 'biometric_timeout_hour',
+      args: [numberOfItems],
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

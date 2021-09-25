@@ -32,6 +32,7 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/biometric_boot_source.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/biometric_authentication_login_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -106,7 +107,7 @@ class BiometricAuthenticationLoginViewModel extends BaseViewModel {
               if (success is AuthenticationBiometricViewState) {
                 store.dispatch(SetAuthenticationBiometricStateAction(success.authenticationState));
                 if (success.authenticationState == AuthenticationBiometricState.authenticated) {
-                  if(_biometricAuthenticationArguments.isFromAppStart) {
+                  if(_biometricAuthenticationArguments.biometricBootSource == BiometricBootSource.APP_STARTING) {
                     _appNavigation.pushAndRemoveAll(
                         RoutePaths.authentication,
                         arguments: AuthenticationArguments(_biometricAuthenticationArguments.baseUrl));

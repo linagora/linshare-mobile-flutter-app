@@ -29,12 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:linshare_flutter_app/presentation/model/biometric_boot_source.dart';
-import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-
-class BiometricAuthenticationArguments extends RouterArguments {
-  final Uri baseUrl;
-  final BiometricBootSource biometricBootSource;
-
-  BiometricAuthenticationArguments(this.baseUrl, {required this.biometricBootSource});
+enum BiometricBootSource {
+  APP_STARTING, APP_IN_FOREGROUND
 }
