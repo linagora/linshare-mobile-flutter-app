@@ -29,21 +29,13 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class EnableBiometricInteractor {
+class BiometricAuthenticationTimeout extends Equatable {
+  final Duration timeout;
 
-  final BiometricRepository _biometricRepository;
+  BiometricAuthenticationTimeout({required this.timeout});
 
-  EnableBiometricInteractor(this._biometricRepository);
-
-  Future<Either<Failure, Success>> execute(BiometricAuthenticationSettings settings) async {
-    try {
-      await _biometricRepository.saveBiometricSetting(settings);
-      return Right<Failure, Success>(EnableBiometricViewState());
-    } catch (exception) {
-      return Left<Failure, Success>(EnableBiometricFailure(exception));
-    }
-  }
+  @override
+  List<Object> get props => [timeout];
 }

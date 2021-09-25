@@ -25,6 +25,7 @@ export 'src/extension/work_group_document_extensions.dart';
 export 'src/extension/list_upload_request_group_extension.dart';
 export 'src/extension/upload_request_status_extension.dart';
 export 'src/extension/boolean_sort_extension.dart';
+export 'src/extension/biometric_authentication_timeout_extension.dart';
 
 // model
 export 'src/model/account/account.dart';
@@ -68,6 +69,8 @@ export 'src/model/biometric_authentication/biometric_kind.dart';
 export 'src/model/biometric_authentication/biometric_state.dart';
 export 'src/model/biometric_authentication/ios_setting_arguments.dart';
 export 'src/model/biometric_authentication/support_biometric_state.dart';
+export 'src/model/biometric_authentication/biometric_authen_timeout.dart';
+export 'src/model/biometric_authentication/biometric_authen_settings.dart';
 export 'src/model/contact/contact.dart';
 export 'src/model/contact/device_contact.dart';
 export 'src/model/copy/copy_request.dart';
