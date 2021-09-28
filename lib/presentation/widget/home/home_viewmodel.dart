@@ -72,8 +72,8 @@ class HomeViewModel extends BaseViewModel {
   final GetBiometricSettingInteractor _getBiometricSettingInteractor;
   late StreamSubscription _uploadFileManagerStreamSubscription;
   late StreamSubscription _connectivityStreamSubscription;
-  late RestartableTimer _biometricAuthenticationTimer;
   late StreamSubscription _storeStreamSubscription;
+  RestartableTimer? _biometricAuthenticationTimer;
   HomeArguments? _homeArguments;
 
   HomeViewModel(
@@ -126,15 +126,15 @@ class HomeViewModel extends BaseViewModel {
     _biometricAuthenticationTimer = RestartableTimer(Duration(seconds: totalDuration), () {
       _checkAndShowBiometricAuthentication();
     });
-    _biometricAuthenticationTimer.cancel(); // To prevent timer auto started when initializing
+    _biometricAuthenticationTimer?.cancel(); // To prevent timer auto started when initializing
   }
 
   void cancelBiometricAuthenticationTimer() {
-    _biometricAuthenticationTimer.cancel();
+    _biometricAuthenticationTimer?.cancel();
   }
 
   void resetBiometricAuthenticationTimer() {
-    _biometricAuthenticationTimer.reset();
+    _biometricAuthenticationTimer?.reset();
   }
 
   void setHomeArguments(HomeArguments arguments) {
@@ -284,8 +284,8 @@ class HomeViewModel extends BaseViewModel {
     _uploadFileManager.closeUploadFileManagerStream();
     _uploadFileManagerStreamSubscription.cancel();
     _connectivityStreamSubscription.cancel();
-    if(_biometricAuthenticationTimer.isActive) {
-      _biometricAuthenticationTimer.cancel();
+    if(_biometricAuthenticationTimer != null && _biometricAuthenticationTimer?.isActive == true) {
+      _biometricAuthenticationTimer?.cancel();
     }
     _storeStreamSubscription.cancel();
     super.onDisposed();
