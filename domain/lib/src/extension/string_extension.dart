@@ -59,6 +59,12 @@ extension StringExtension on String {
         return SharedSpaceRoleName.WRITER;
       case 'ADMIN':
         return SharedSpaceRoleName.ADMIN;
+      case 'DRIVE_READER':
+        return SharedSpaceRoleName.DRIVE_READER;
+      case 'DRIVE_WRITER':
+        return SharedSpaceRoleName.DRIVE_WRITER;
+      case 'DRIVE_ADMIN':
+        return SharedSpaceRoleName.DRIVE_ADMIN;
       default:
         return null;
     }
