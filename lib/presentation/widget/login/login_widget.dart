@@ -340,7 +340,8 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   Widget loginSSOButton(BuildContext context) {
-    return SizedBox(
+    return SizedBox.shrink();
+    /*return SizedBox(
       key: Key('login_sso_button'),
       width: _responsiveUtils.getWidthLoginButton(),
       height: 48,
@@ -359,7 +360,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         child: Text(AppLocalizations.of(context).login_sso_button,
             style: TextStyle(fontSize: 16, color: Colors.white)),
       ),
-    );
+    );*/
   }
 
 }
