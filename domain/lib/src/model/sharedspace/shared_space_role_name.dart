@@ -31,7 +31,7 @@
 //
 
 enum SharedSpaceRoleName {
-  READER, CONTRIBUTOR, WRITER, ADMIN
+  READER, CONTRIBUTOR, WRITER, ADMIN, DRIVE_READER, DRIVE_WRITER, DRIVE_ADMIN
 }
 
 extension SharedSpaceRoleNameExtension on SharedSpaceRoleName {
@@ -45,6 +45,12 @@ extension SharedSpaceRoleNameExtension on SharedSpaceRoleName {
         return 'WRITER';
       case SharedSpaceRoleName.ADMIN:
         return 'ADMIN';
+      case SharedSpaceRoleName.DRIVE_READER:
+        return 'DRIVE_READER';
+      case SharedSpaceRoleName.DRIVE_WRITER:
+        return 'DRIVE_WRITER';
+      case SharedSpaceRoleName.DRIVE_ADMIN:
+        return 'DRIVE_ADMIN';
       default:
         return toString();
     }
