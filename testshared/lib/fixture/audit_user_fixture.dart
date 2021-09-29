@@ -28,29 +28,12 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
+import 'package:data/data.dart';
 
-class GetAuthorizedInteractor {
-  final AuthenticationRepository authenticationRepository;
-  final CredentialRepository credentialRepository;
+final lastLogin1 = LastLogin('AUTHENTICATION', 'LOGIN', DateTime.fromMillisecondsSinceEpoch(1604482138188), 'SUCCESS');
 
-  GetAuthorizedInteractor(this.authenticationRepository, this.credentialRepository);
-
-  Future<Either<Failure, Success>> execute() async {
-    try {
-      final user = await authenticationRepository.getAuthorizedUser();
-      final baseUrl = (await credentialRepository.getBaseUrl()).toString();
-      if (_needSetup2FA(user)) {
-        return Left(NeedSetup2FA());
-      }
-      return Right(GetAuthorizedUserViewState(user, baseUrl));
-    } catch (exception) {
-      return Left(GetAuthorizedUserFailure(exception));
-    }
-  }
-
-  bool _needSetup2FA(User user) => !user.secondFAEnabled && user.secondFARequired;
-}
+final authenticationAuditLogEntryUserResponse1 = AuthenticationAuditLogEntryUserResponse('AUTHENTICATION', DateTime.fromMillisecondsSinceEpoch(1604482138188), 'LOGIN', 'SUCCESS');
+final authenticationAuditLogEntryUserResponse2 = AuthenticationAuditLogEntryUserResponse('AUTHENTICATION', DateTime.fromMillisecondsSinceEpoch(1604482133849), 'LOGIN', 'SUCCESS');
