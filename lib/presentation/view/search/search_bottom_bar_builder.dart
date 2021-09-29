@@ -65,12 +65,15 @@ class SearchBottomBarBuilder {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Align(
                 alignment: Alignment.centerRight,
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () => _onSearchActionClick != null ? _onSearchActionClick!() : null,
-                  child: SvgPicture.asset(
-                    _imagePath.icSearchBlue,
-                    width: 32,
-                    height: 32,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SvgPicture.asset(
+                      _imagePath.icSearchBlue,
+                      width: 32,
+                      height: 32,
+                    ),
                   ),
                 ),
               ),
