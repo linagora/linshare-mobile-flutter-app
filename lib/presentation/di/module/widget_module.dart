@@ -300,6 +300,8 @@ class WidgetModule {
       getIt.get<IsAvailableBiometricInteractor>(),
       getIt.get<GetAuthorizedInteractor>(),
       getIt.get<DisableBiometricInteractor>(),
+      getIt.get<GetLastLoginInteractor>(),
+      getIt.get<GetQuotaInteractor>(),
     ));
   }
 
