@@ -31,26 +31,18 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
 
-class GetAuthorizedInteractor {
-  final AuthenticationRepository authenticationRepository;
-  final CredentialRepository credentialRepository;
+class GetLastLoginInteractor {
+  final AuditUserRepository _auditUserRepository;
 
-  GetAuthorizedInteractor(this.authenticationRepository, this.credentialRepository);
+  GetLastLoginInteractor(this._auditUserRepository);
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final user = await authenticationRepository.getAuthorizedUser();
-      final baseUrl = (await credentialRepository.getBaseUrl()).toString();
-      if (_needSetup2FA(user)) {
-        return Left(NeedSetup2FA());
-      }
-      return Right(GetAuthorizedUserViewState(user, baseUrl));
+      final lastLogin = await _auditUserRepository.getLastLogin();
+      return Right<Failure, Success>(GetLastLoginViewState(lastLogin));
     } catch (exception) {
-      return Left(GetAuthorizedUserFailure(exception));
+      return Left<Failure, Success>(GetLastLoginFailure(exception));
     }
   }
-
-  bool _needSetup2FA(User user) => !user.secondFAEnabled && user.secondFARequired;
 }

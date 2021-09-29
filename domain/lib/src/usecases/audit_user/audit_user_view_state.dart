@@ -29,28 +29,22 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
 
-class GetAuthorizedInteractor {
-  final AuthenticationRepository authenticationRepository;
-  final CredentialRepository credentialRepository;
+class GetLastLoginViewState extends ViewState {
+  final LastLogin lastLogin;
 
-  GetAuthorizedInteractor(this.authenticationRepository, this.credentialRepository);
+  GetLastLoginViewState(this.lastLogin);
 
-  Future<Either<Failure, Success>> execute() async {
-    try {
-      final user = await authenticationRepository.getAuthorizedUser();
-      final baseUrl = (await credentialRepository.getBaseUrl()).toString();
-      if (_needSetup2FA(user)) {
-        return Left(NeedSetup2FA());
-      }
-      return Right(GetAuthorizedUserViewState(user, baseUrl));
-    } catch (exception) {
-      return Left(GetAuthorizedUserFailure(exception));
-    }
-  }
+  @override
+  List<Object> get props => [lastLogin];
+}
 
-  bool _needSetup2FA(User user) => !user.secondFAEnabled && user.secondFARequired;
+class GetLastLoginFailure extends Failure {
+  final exception;
+
+  GetLastLoginFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
 }
