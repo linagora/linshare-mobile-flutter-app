@@ -223,7 +223,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       if (state.sharedSpacesList.isEmpty) {
         return _widgetCommon.buildNoResultFound(context);
       }
-      return _buildSharedSpacesListView(state.sharedSpacesList);
+      return _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode);
     }
   }
 
@@ -241,18 +241,18 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                   height: 120,
                   fit: BoxFit.fill))
                 .text(AppLocalizations.of(context).common_error_occured_message)
-                .build() : _buildSharedSpacesListView(state.sharedSpacesList)
+                .build() : _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode)
         ),
       (success) => success is LoadingState ?
-        _buildSharedSpacesListView(state.sharedSpacesList) :
+        _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode) :
         RefreshIndicator(
           onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(needToGetOldSorter: false),
-          child: _buildSharedSpacesListView(state.sharedSpacesList)
+          child: _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode)
         )
     );
   }
 
-  Widget _buildSharedSpacesListView(List<SelectableElement<SharedSpaceNodeNested>> sharedSpacesList) {
+  Widget _buildSharedSpacesListView(List<SelectableElement<SharedSpaceNodeNested>> sharedSpacesList, SelectMode selectMode) {
     if (sharedSpacesList.isEmpty) {
       return _buildNoWorkgroupYet(context);
     } else {
@@ -261,7 +261,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         padding: _responsiveUtils.getPaddingListItemForScreen(context),
         itemCount: sharedSpacesList.length,
         itemBuilder: (context, index) {
-          return _buildSharedSpaceListItem(context, sharedSpacesList[index]);
+          return _buildSharedSpaceListItem(context, sharedSpacesList[index], selectMode);
         },
       );
     }
@@ -279,7 +279,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   }
 
   Widget _buildSharedSpaceListItem(
-      BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
+      BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace, SelectMode selectMode) {
     return ListTile(
         leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           SvgPicture.asset(imagePath.icSharedSpace, width: 20, height: 24, fit: BoxFit.fill)
@@ -330,7 +330,11 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
               ))
           : null,
         onTap: () {
-          sharedSpaceViewModel.openSharedSpace(sharedSpace.element);
+          if(selectMode == SelectMode.ACTIVE) {
+            sharedSpaceViewModel.selectItem(sharedSpace);
+          } else {
+            sharedSpaceViewModel.openSharedSpace(sharedSpace.element);
+          }
         },
         trailing: StoreConnector<AppState, SelectMode>(
             converter: (store) => store.state.sharedSpaceState.selectMode,
