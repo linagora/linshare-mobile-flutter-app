@@ -19,6 +19,7 @@ export 'src/datasource/biometric_datasource.dart';
 export 'src/datasource/upload_request_group_datasource.dart';
 export 'src/datasource/upload_request_datasource.dart';
 export 'src/datasource/upload_request_entry_datasource.dart';
+export 'src/datasource/audit_user_datasource.dart';
 
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
@@ -40,6 +41,7 @@ export 'src/datasource_impl/local_shared_space_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_group_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_entry_datasource_impl.dart';
+export 'src/datasource_impl/audit_user_datasource_impl.dart';
 
 // config
 export 'src/network/config/dynamic_url_interceptors.dart';
@@ -103,6 +105,7 @@ export 'src/network/model/response/upload_request_response.dart';
 export 'src/network/model/response/upload_request_entry_response.dart';
 export 'src/network/model/response/upload_request_entry_owner_response.dart';
 export 'src/network/model/share/received_share_dto.dart';
+export 'src/network/model/response/authentication_audit_log_entry_user_response.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
@@ -124,6 +127,7 @@ export 'src/repository/biometric_authentication/biometric_repository_impl.dart';
 export 'src/repository/upload_request_group/upload_request_group_repository_impl.dart';
 export 'src/repository/upload_request/upload_request_repository_impl.dart';
 export 'src/repository/upload_request_entry/upload_request_entry_repository_impl.dart';
+export 'src/repository/audit/audit_user_repository_impl.dart';
 
 // util
 export 'src/util/device_manager.dart';

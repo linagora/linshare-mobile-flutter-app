@@ -53,6 +53,7 @@ import 'package:data/src/network/model/request/create_work_group_body_request.da
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:data/src/network/model/response/account_quota_response.dart';
+import 'package:data/src/network/model/response/authentication_audit_log_entry_user_response.dart';
 import 'package:data/src/network/model/response/document_response.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/shared_space_member_response.dart';
@@ -618,4 +619,10 @@ class LinShareHttpClient {
     }
   }
 
+  Future<List<AuthenticationAuditLogEntryUserResponse>> getAuditAuthenticationEntryUser() async {
+    final List resultJson = await _dioClient.get(
+        Endpoint.audit.generateEndpointPath(),
+        queryParameters: [StringQueryParameter('type', 'AUTHENTICATION'), StringQueryParameter('action', 'SUCCESS')].toMap());
+    return resultJson.map((data) => AuthenticationAuditLogEntryUserResponse.fromJson(data)).toList();
+  }
 }

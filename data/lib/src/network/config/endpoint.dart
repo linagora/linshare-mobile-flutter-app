@@ -69,6 +69,7 @@ class Endpoint {
 
   static final ServicePath uploadRequestsEntriesRoute = ServicePath('/upload_request_entries');
 
+  static final ServicePath audit = ServicePath('/audit');
 }
 
 extension ServicePathExtension on ServicePath {
