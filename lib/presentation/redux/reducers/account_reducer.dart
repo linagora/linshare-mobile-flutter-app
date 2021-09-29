@@ -42,13 +42,20 @@ final accountReducer = combineReducers<AccountState>([
   TypedReducer<AccountState, GetAccountInformationAction>((AccountState state, GetAccountInformationAction action) =>
     state.setAccountInformation(
       newViewState: action.viewState,
+      newBaseUrl: action.viewState
+        .map((result) => result is GetAuthorizedUserViewState ? result.baseUrl : null)
+        .getOrElse(() => null),
       newUser: action.viewState
         .map((result) => result is GetAuthorizedUserViewState ? result.user : null)
         .getOrElse(() => null))),
   TypedReducer<AccountState, CleanAccountStateAction>(
       (AccountState state, _) => state.clearViewState()),
   TypedReducer<AccountState, SetAccountInformationsAction>(
-      (AccountState state, SetAccountInformationsAction action) => state.setCurrentUserInfo(action.newUser)),
+      (AccountState state, SetAccountInformationsAction action) => state.setCurrentUserInfo(action.newUser, action.baseUrl)),
   TypedReducer<AccountState, SetSupportBiometricStateAction>(
-      (AccountState state, SetSupportBiometricStateAction action) => state.setSupportBiometricState(action.supportBiometricState))
+      (AccountState state, SetSupportBiometricStateAction action) => state.setSupportBiometricState(action.supportBiometricState)),
+  TypedReducer<AccountState, SetLastLoginAction>(
+      (AccountState state, SetLastLoginAction action) => state.setLastLogin(action.lastLogin)),
+  TypedReducer<AccountState, SetAccountQuotaAction>(
+      (AccountState state, SetAccountQuotaAction action) => state.setAccountQuota(action.accountQuota))
 ]);

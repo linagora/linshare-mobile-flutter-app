@@ -31,6 +31,7 @@
 
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
+import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -45,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:redux/redux.dart';
 import 'account_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
 class AccountDetailsWidget extends StatefulWidget {
   @override
@@ -59,7 +61,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
   @override
   void initState() {
     super.initState();
-    accountDetailsViewModel.checkUserExists();
+    accountDetailsViewModel.getUserInformations();
     accountDetailsViewModel.getSupportBiometricState();
   }
 
@@ -67,55 +69,64 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AccountState>(
       converter: (store) => store.state.account,
-      builder: (context, state) => Column(
-        children: [
-          _buildLoadingView(),
-          ListTile(
-            leading: CircleAvatar(backgroundColor: Colors.blueGrey[900], child: Text(state.user != null ? state.user!.firstName[0] : '')),
-            isThreeLine: true,
-            subtitle: Text(
-              state.user != null ? state.user!.mail : '',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColor.documentModifiedDateItemTextColor
+      builder: (context, state) => SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildLoadingView(),
+            ListTile(
+              leading: CircleAvatar(backgroundColor: Colors.blueGrey[900], child: Text(state.user != null ? state.user!.firstName[0] : '')),
+              isThreeLine: true,
+              title: Text(state.baseUrl!,
+                style: TextStyle(color: AppColor.primaryColor, fontSize: 14),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(
+                state.user != null ? state.user!.mail : '',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColor.documentModifiedDateItemTextColor
+                )
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 24),
+              child: Column(
+                children: [
+                  _buildAccountDetailsTile(AppLocalizations.of(context).first_name, state.user != null ? state.user!.firstName : ''),
+                  _buildAccountDetailsTile(AppLocalizations.of(context).last_name, state.user != null ? state.user!.lastName : ''),
+                  _buildAccountDetailsDateTile(AppLocalizations.of(context).last_login, state.lastLogin != null ? state.lastLogin!.creationDate : null),
+                  _buildAccountDetailsQuotaTile(state.accountQuota),
+                  _buildBiometricAuthentication(),
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context).logout,
+                        style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.only(left: 24),
+                        icon: SvgPicture.asset(
+                          imagePath.icDelete,
+                          fit: BoxFit.none,
+                          color: AppColor.documentNameItemTextColor
+                          ),
+                          onPressed: () => ConfirmModalSheetBuilder(appNavigation)
+                            .key(Key('logout_confirm_modal'))
+                            .title(AppLocalizations.of(context).confirm_remove_account_title)
+                            .cancelText(AppLocalizations.of(context).cancel)
+                            .onConfirmAction(AppLocalizations.of(context).logout, (_) => accountDetailsViewModel.logout())
+                            .show(context)
+                      )
+                    ]
+                  )
+                ],
               )
             ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 24),
-            child: Column(
-              children: [
-                _buildAccountDetailsTile(AppLocalizations.of(context).first_name, state.user != null ? state.user!.firstName : ''),
-                _buildAccountDetailsTile(AppLocalizations.of(context).last_name, state.user != null ? state.user!.lastName : ''),
-                _buildBiometricAuthentication(),
-                Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context).logout,
-                      style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
-                    ),
-                    IconButton(
-                      padding: EdgeInsets.only(left: 24),
-                      icon: SvgPicture.asset(
-                        imagePath.icDelete,
-                        fit: BoxFit.none,
-                        color: AppColor.documentNameItemTextColor
-                        ),
-                        onPressed: () => ConfirmModalSheetBuilder(appNavigation)
-                          .key(Key('logout_confirm_modal'))
-                          .title(AppLocalizations.of(context).confirm_remove_account_title)
-                          .cancelText(AppLocalizations.of(context).cancel)
-                          .onConfirmAction(AppLocalizations.of(context).logout, (_) => accountDetailsViewModel.logout())
-                          .show(context)
-                    )
-                  ]
-                )
-              ],
-            )
-          ),
-        ]
+          ]
+        )
       )
     );
   }
@@ -150,6 +161,54 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
           ),
           Text(
             value,
+            style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
+          )
+        ]
+      )
+    );
+  }
+
+  Widget _buildAccountDetailsQuotaTile(AccountQuota? accountQuota) {
+    if (accountQuota == null) {
+      return SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            AppLocalizations.of(context).available_space,
+            style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
+          ),
+          Text(
+            AppLocalizations.of(context).available_space_value(filesize(accountQuota.quota.size), filesize(accountQuota.usedSpace.size)),
+            style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
+          )
+        ]
+      )
+    );
+  }
+
+  Widget _buildAccountDetailsDateTile(String categoryName, DateTime? date) {
+    print(date);
+
+    if (date == null) {
+      return SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            categoryName,
+            style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
+          ),
+          Text(
+            date.getMMMddyyyyFormatString(),
             style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
           )
         ]

@@ -197,7 +197,7 @@ class HomeViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _getAuthorizedUserSuccessAction(GetAuthorizedUserViewState success) {
     return (Store<AppState> store) async {
-      store.dispatch(SetAccountInformationsAction(success.user));
+      store.dispatch(SetAccountInformationsAction(success.user, success.baseUrl));
     };
   }
 
