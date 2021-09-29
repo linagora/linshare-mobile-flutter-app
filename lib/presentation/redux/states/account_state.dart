@@ -41,42 +41,55 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 class AccountState extends LinShareState {
   final User? user;
   final SupportBiometricState supportBiometricState;
+  final String? baseUrl;
+  final LastLogin? lastLogin;
+  final AccountQuota? accountQuota;
 
   AccountState(
     Either<Failure, Success> viewState,
     this.user,
-    this.supportBiometricState
+    this.supportBiometricState,
+    this.baseUrl,
+    this.lastLogin,
+    this.accountQuota
   ) : super(viewState);
 
   factory AccountState.initial() {
-    return AccountState(Right(IdleState()), null, SupportBiometricState.unavailable);
+    return AccountState(Right(IdleState()), null, SupportBiometricState.unavailable, '', null, null);
   }
 
   @override
   AccountState clearViewState() {
-    return AccountState(Right(IdleState()), user, supportBiometricState);
+    return AccountState(Right(IdleState()), user, supportBiometricState, baseUrl, lastLogin, accountQuota);
   }
 
   @override
   AccountState sendViewState({required Either<Failure, Success> viewState}) {
-    return AccountState(viewState, user, supportBiometricState);
+    return AccountState(viewState, user, supportBiometricState, baseUrl, lastLogin, accountQuota);
   }
 
-  @override
-  AccountState setAccountInformation({Either<Failure, Success>? newViewState, User? newUser}) {
-    return AccountState(newViewState ?? viewState, newUser ?? user, supportBiometricState);
+  AccountState setAccountInformation({Either<Failure, Success>? newViewState, User? newUser, String? newBaseUrl}) {
+    return AccountState(newViewState ?? viewState, newUser ?? user, supportBiometricState, newBaseUrl ?? baseUrl, lastLogin, accountQuota);
   }
 
-  AccountState setCurrentUserInfo(User newUser) {
-    return AccountState(viewState, newUser, supportBiometricState);
+  AccountState setCurrentUserInfo(User newUser, String newBaseUrl) {
+    return AccountState(viewState, newUser, supportBiometricState, newBaseUrl, lastLogin, accountQuota);
+  }
+
+  AccountState setLastLogin(LastLogin newLastLogin) {
+    return AccountState(viewState, user, supportBiometricState, baseUrl, newLastLogin, accountQuota);
   }
 
   AccountState setSupportBiometricState(SupportBiometricState newSupportBiometricState) {
-    return AccountState(viewState, user, newSupportBiometricState);
+    return AccountState(viewState, user, newSupportBiometricState, baseUrl, lastLogin, accountQuota);
+  }
+
+  AccountState setAccountQuota(AccountQuota newAccountQuota) {
+    return AccountState(viewState, user, supportBiometricState, baseUrl, lastLogin, newAccountQuota);
   }
 
   @override
   AccountState startLoadingState() {
-    return AccountState(Right(LoadingState()), user, supportBiometricState);
+    return AccountState(Right(LoadingState()), user, supportBiometricState, baseUrl, lastLogin, accountQuota);
   }
 }

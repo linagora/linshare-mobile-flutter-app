@@ -78,7 +78,7 @@ class AuthenticationViewModel extends BaseViewModel {
   }
 
   void _getAuthorizedUserSuccess(GetAuthorizedUserViewState success) {
-    store.dispatch(SetAccountInformationsAction(success.user));
+    store.dispatch(SetAccountInformationsAction(success.user, success.baseUrl));
     store.dispatch(initializeHomeView(_appNavigation, _authenticationArguments!.baseUrl));
   }
 
