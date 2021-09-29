@@ -128,6 +128,9 @@ class AppModule {
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>(),
         getIt<LinShareDownloadManager>()));
+    getIt.registerFactory(() => AuditUserDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -158,6 +161,7 @@ class AppModule {
     getIt.registerFactory<UploadRequestGroupDataSource>(() => getIt<UploadRequestGroupDataSourceImpl>());
     getIt.registerFactory<UploadRequestDataSource>(() => getIt<UploadRequestDataSourceImpl>());
     getIt.registerFactory<UploadRequestEntryDataSource>(() => getIt<UploadRequestEntryDataSourceImpl>());
+    getIt.registerFactory<AuditUserDataSource>(() => getIt<AuditUserDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -197,6 +201,7 @@ class AppModule {
     getIt.registerFactory(() => UploadRequestGroupRepositoryImpl(getIt<UploadRequestGroupDataSource>()));
     getIt.registerFactory(() => UploadRequestRepositoryImpl(getIt<UploadRequestDataSource>()));
     getIt.registerFactory(() => UploadRequestEntryRepositoryImpl(getIt<UploadRequestEntryDataSource>()));
+    getIt.registerFactory(() => AuditUserRepositoryImpl(getIt<AuditUserDataSource>()));
   }
 
   void _provideRepository() {
@@ -219,6 +224,7 @@ class AppModule {
     getIt.registerFactory<UploadRequestGroupRepository>(() => getIt<UploadRequestGroupRepositoryImpl>());
     getIt.registerFactory<UploadRequestRepository>(() => getIt<UploadRequestRepositoryImpl>());
     getIt.registerFactory<UploadRequestEntryRepository>(() => getIt<UploadRequestEntryRepositoryImpl>());
+    getIt.registerFactory<AuditUserRepository>(() => getIt<AuditUserRepositoryImpl>());
   }
 
   void _provideInteractor() {
@@ -266,7 +272,7 @@ class AppModule {
     getIt.registerFactory(() => RemoveSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => RemoveMultipleSharedSpaceNodesInteractor(getIt<RemoveSharedSpaceNodeInteractor>()));
     getIt.registerFactory(() => DownloadMultipleFileIOSInteractor(getIt<DownloadFileIOSInteractor>()));
-    getIt.registerFactory(() => GetAuthorizedInteractor(getIt<AuthenticationRepository>()));
+    getIt.registerFactory(() => GetAuthorizedInteractor(getIt<AuthenticationRepository>(), getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetAllReceivedSharesInteractor(getIt<ReceivedShareRepository>()));
     getIt.registerFactory(() => CopyToMySpaceInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => CopyMultipleFilesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
@@ -387,6 +393,7 @@ class AppModule {
     getIt.registerFactory(() => UpdateMultipleUploadRequestGroupStateInteractor(getIt<UpdateUploadRequestGroupStateInteractor>()));
     getIt.registerFactory(() => SearchUploadRequestEntriesInteractor());
     getIt.registerFactory(() => CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
+    getIt.registerFactory(() => GetLastLoginInteractor(getIt<AuditUserRepository>()));
   }
 
   void _provideSharePreference() {
