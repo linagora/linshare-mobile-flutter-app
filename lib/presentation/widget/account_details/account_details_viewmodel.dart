@@ -47,6 +47,8 @@ class AccountDetailsViewModel extends BaseViewModel {
   final IsAvailableBiometricInteractor _isAvailableBiometricInteractor;
   final GetAuthorizedInteractor _getAuthorizedInteractor;
   final DisableBiometricInteractor _disableBiometricInteractor;
+  final GetLastLoginInteractor _getLastLoginInteractor;
+  final GetQuotaInteractor _getQuotaInteractor;
 
   AccountDetailsViewModel(
     Store<AppState> store,
@@ -55,6 +57,8 @@ class AccountDetailsViewModel extends BaseViewModel {
     this._isAvailableBiometricInteractor,
     this._getAuthorizedInteractor,
     this._disableBiometricInteractor,
+    this._getLastLoginInteractor,
+    this._getQuotaInteractor
   ) : super(store);
 
   void logout() {
@@ -84,8 +88,35 @@ class AccountDetailsViewModel extends BaseViewModel {
     });
   }
 
-  void checkUserExists() {
-    store.state.account.user ?? store.dispatch(_getAuthorizedUserAction());
+  void getLastLogin() {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      await _getLastLoginInteractor.execute()
+        .then((result) => result.fold(
+          (failure) => store.dispatch(AccountAction(Left(failure))),
+          (success) => store.dispatch(SetLastLoginAction((success as GetLastLoginViewState).lastLogin)))
+        );
+    }));
+  }
+
+  void getUserInformations() {
+    final currentUser = store.state.account.user;
+
+    if (currentUser != null) {
+      getAccountQuota(currentUser.quotaUuid);
+    } else {
+      store.dispatch(_getAuthorizedUserAction());
+    }
+    getLastLogin();
+  }
+
+  void getAccountQuota(QuotaId quotaId) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      await _getQuotaInteractor.execute(quotaId)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(AccountAction(Left(failure))),
+          (success) => store.dispatch(SetAccountQuotaAction((success as AccountQuotaViewState).accountQuota)))
+        );
+    }));
   }
 
   OnlineThunkAction _getAuthorizedUserAction() {
