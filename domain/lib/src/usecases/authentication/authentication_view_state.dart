@@ -52,11 +52,12 @@ class AuthenticationFailure extends FeatureFailure {
 
 class GetAuthorizedUserViewState extends ViewState {
   final User user;
+  final String baseUrl;
 
-  GetAuthorizedUserViewState(this.user);
+  GetAuthorizedUserViewState(this.user, this.baseUrl);
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user, baseUrl];
 }
 
 class NeedSetup2FA extends FeatureFailure {

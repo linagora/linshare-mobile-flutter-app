@@ -37,25 +37,31 @@ import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
 import '../../mock/repository/authentication/mock_authentication_repository.dart';
+import '../../mock/repository/authentication/mock_credential_repository.dart';
 
 void main() {
 
   group('get_authorized_user_interactor_test', () {
     late GetAuthorizedInteractor getAuthorizedInteractor;
     late MockAuthenticationRepository authenticationRepository;
+    late MockCredentialRepository credentialRepository;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
-      getAuthorizedInteractor = GetAuthorizedInteractor(authenticationRepository);
+      credentialRepository = MockCredentialRepository();
+      getAuthorizedInteractor = GetAuthorizedInteractor(authenticationRepository, credentialRepository);
     });
 
     test('getAuthorizedInteractor should success if user is connected', () async {
       when(authenticationRepository.getAuthorizedUser())
         .thenAnswer((_) async => user1);
 
+      when(credentialRepository.getBaseUrl())
+        .thenAnswer((_) async => baseUri1);
+
       final result = await getAuthorizedInteractor.execute();
 
-      expect(result, Right<Failure, Success>(GetAuthorizedUserViewState(user1)));
+      expect(result, Right<Failure, Success>(GetAuthorizedUserViewState(user1, baseUri1.toString())));
     });
 
     test('getAuthorizedInteractor should fail if user is disconnected', () async {

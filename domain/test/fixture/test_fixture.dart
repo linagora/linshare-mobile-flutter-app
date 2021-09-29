@@ -108,3 +108,6 @@ final sharedSpaceModificationDateSorter = Sorter(OrderScreen.workGroup, OrderBy.
 final uploadRequestSorter1 = Sorter(OrderScreen.uploadRequestGroupsActiveClosed, OrderBy.modificationDate, OrderType.descending);
 final String validFilePath1 = './document/valid_file_path/file.png';
 final String validFilePath2 = './document/valid_file_path/file2.png';
+
+final baseUrl1 = 'https://user.linshare-4-1.integration-linshare.org/';
+final baseUri1 = Uri(path: 'https://user.linshare-4-1.integration-linshare.org/');

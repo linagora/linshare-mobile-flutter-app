@@ -180,6 +180,7 @@ export 'src/model/upload_request_group/add_upload_request.dart';
 export 'src/model/upload_request_entry/upload_request_entry.dart';
 export 'src/model/upload_request_entry/upload_request_entry_owner.dart';
 export 'src/model/upload_request_entry/upload_request_entry_owner_id.dart';
+export 'src/model/account/last_login.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -201,6 +202,7 @@ export 'src/repository/sort/sort_repository.dart';
 export 'src/repository/upload_request_group/upload_request_group_repository.dart';
 export 'src/repository/upload_request/upload_request_repository.dart';
 export 'src/repository/upload_request_entry/upload_request_entry_repository.dart';
+export 'src/repository/audit/audit_user_repository.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -215,6 +217,7 @@ export 'src/usecases/local_exception.dart';
 export 'src/usecases/upload_request_group/upload_request_group_exception.dart';
 export 'src/usecases/upload_request/upload_request_exception.dart';
 export 'src/usecases/upload_request_entry/upload_request_entry_exception.dart';
+export 'src/usecases/audit_user/audit_user_exception.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
@@ -370,3 +373,5 @@ export 'src/usecases/upload_request_group/add_recipients_upload_request_group_in
 export 'src/usecases/search_upload_request_inside/search_upload_request_entries_interactor.dart';
 export 'src/usecases/search_upload_request_inside/search_upload_request_entries_view_state.dart';
 export 'src/usecases/upload_request_entry/copy_multiple_files_from_upload_request_entries_to_my_space_interactor.dart';
+export 'src/usecases/audit_user/audit_user_view_state.dart';
+export 'src/usecases/audit_user/get_last_login_interactor.dart';
