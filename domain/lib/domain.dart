@@ -355,6 +355,7 @@ export 'src/usecases/shared_space_document/get_all_shared_space_document_offline
 export 'src/usecases/shared_space_document/auto_sync_available_offline_shared_space_document_interactor.dart';
 export 'src/usecases/shared_space_document/auto_sync_available_offline_multiple_shared_space_document_interactor.dart';
 export 'src/usecases/shared_space_document/enable_available_offline_shared_space_document_interactor.dart';
+export 'src/usecases/shared_space_document/delete_all_shared_spaces_offline_interactor.dart';
 export 'src/usecases/upload_request_group/get_all_upload_request_groups_interactor.dart';
 export 'src/usecases/upload_request/get_all_upload_requests_interactor.dart';
 export 'src/usecases/upload_request_entry/get_all_upload_request_entries_interactor.dart';
