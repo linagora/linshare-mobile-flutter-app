@@ -36,7 +36,7 @@ class SpecialCharacterValidator extends Validator<NewNameRequest> {
 
   @override
   Either<Failure, Success> validate(NewNameRequest newNameRequest) {
-    if (newNameRequest.value != null && newNameRequest.value!.isSpecialCharacterInName()) {
+    if (newNameRequest.value != null && newNameRequest.value!.hasSpecialCharactersInName()) {
       return Left<Failure, Success>(VerifyNameFailure(SpecialCharacterException()));
     }
     return Right<Failure, Success>(VerifyNameViewState());

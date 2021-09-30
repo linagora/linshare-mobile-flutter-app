@@ -35,19 +35,19 @@ void main() {
   group('name_validator_string_extension test', () {
 
     test('isSpecialCharacterInName should return true when input string contain special character', () {
-      expect(true, '123?qq'.isSpecialCharacterInName());
+      expect(true, '123?qq'.hasSpecialCharactersInName());
     });
 
     test('isSpecialCharacterInName should return false when input string not contain special character', () {
-      expect(false, '123'.isSpecialCharacterInName());
+      expect(false, '123'.hasSpecialCharactersInName());
     });
 
     test('isLastDotInName should return true when input string contain last dot', () {
-      expect(true, '123.'.isLastDotInName());
+      expect(true, '123.'.hasLastDotInName());
     });
 
     test('isLastDotInName should return false when input string contain last dot', () {
-      expect(false, '12.3'.isLastDotInName());
+      expect(false, '12.3'.hasLastDotInName());
     });
   });
 }
