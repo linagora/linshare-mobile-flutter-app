@@ -77,4 +77,6 @@ abstract class DocumentRepository {
   Future<List<Document>> getAllDocumentOffline();
 
   Future<String> downloadMakeOfflineDocument(DocumentId documentId, String documentName, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl);
+
+  Future<bool> deleteAllData();
 }
