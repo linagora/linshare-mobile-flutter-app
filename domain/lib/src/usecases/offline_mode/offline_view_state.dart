@@ -114,3 +114,22 @@ class DisableAvailableOfflineDocumentFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class DeleteAllOfflineDocumentViewState extends ViewState {
+
+  final OfflineModeActionResult result;
+
+  DeleteAllOfflineDocumentViewState(this.result);
+
+  @override
+  List<Object> get props => [result];
+}
+
+class DeleteAllOfflineDocumentFailure extends FeatureFailure {
+  final exception;
+
+  DeleteAllOfflineDocumentFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
