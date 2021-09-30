@@ -76,4 +76,19 @@ class DocumentDatabaseManager implements LinShareDatabaseManager<Document> {
       newDocument.toDocumentCache().toJson());
     return res > 0 ? true : false;
   }
+
+  @override
+  Future<bool> deleteAllData() async {
+    final documentCacheList = await getListData();
+    var failedFileCount = 0;
+    documentCacheList.forEach((document) async {
+      if(document.localPath != null) {
+        final result = await deleteData(document.documentId.uuid, document.localPath!);
+        if(!result) {
+          failedFileCount++;
+        }
+      }
+    });
+    return failedFileCount == 0;
+  }
 }

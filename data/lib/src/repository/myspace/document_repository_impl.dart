@@ -132,4 +132,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
   Future<String> downloadMakeOfflineDocument(DocumentId documentId, String documentName, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
     return _documentDataSources[DataSourceType.network]!.downloadMakeOfflineDocument(documentId, documentName, downloadPreviewType, permanentToken, baseUrl);
   }
+
+  @override
+  Future<bool> deleteAllData() {
+    return _documentDataSources[DataSourceType.local]!.deleteAllData();
+  }
 }
