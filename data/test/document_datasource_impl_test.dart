@@ -47,6 +47,7 @@ void main() {
   getDocumentTest();
   editDescriptionDocumentTest();
   makeAvailableOfflineDocumentTest();
+  deleteAllOfflineDocumentsTest();
 }
 
 void getAllDocumentTest() {
@@ -468,6 +469,35 @@ void makeAvailableOfflineDocumentTest() {
       final result = await _localDocumentDataSourceImpl.makeAvailableOffline(document1, '');
 
       expect(result, true);
+    });
+  });
+}
+
+void deleteAllOfflineDocumentsTest() {
+  group('delete all offline documents test', () {
+    late LocalDocumentDataSourceImpl _localDocumentDataSourceImpl;
+    late MockDocumentDatabaseManager _documentDatabaseManager;
+
+    setUp(() {
+      _documentDatabaseManager = MockDocumentDatabaseManager();
+      _localDocumentDataSourceImpl = LocalDocumentDataSourceImpl(_documentDatabaseManager);
+    });
+
+    test('deleteAllData should return success', () async {
+      when(_documentDatabaseManager.deleteAllData()).thenAnswer((_) async => true);
+
+      final result = await _localDocumentDataSourceImpl.deleteAllData();
+
+      expect(result, true);
+    });
+
+    test('deleteAllData should throw Exception when deleting failed', () async {
+      final error = SQLiteDatabaseException();
+      when(_documentDatabaseManager.deleteAllData()).thenThrow(error);
+
+      await _localDocumentDataSourceImpl.deleteAllData().catchError((error) {
+        expect(error, isA<SQLiteDatabaseException>());
+      });
     });
   });
 }
