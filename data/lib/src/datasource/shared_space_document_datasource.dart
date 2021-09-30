@@ -107,4 +107,6 @@ abstract class SharedSpaceDocumentDataSource {
   Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId);
 
   Future<bool> updateSharedSpaceDocumentOffline(WorkGroupDocument workGroupDocument, String localPath);
+
+  Future<bool> deleteAllData();
 }
