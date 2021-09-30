@@ -357,6 +357,7 @@ class AppModule {
     getIt.registerFactory(() => AutoSyncAvailableOfflineMultipleDocumentInteractor(
         getIt<AutoSyncAvailableOfflineDocumentInteractor>()));
     getIt.registerFactory(() => EnableAvailableOfflineDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => DeleteAllOfflineDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => MakeAvailableOfflineSharedSpaceDocumentInteractor(
         getIt<SharedSpaceDocumentRepository>(),
         getIt<TokenRepository>(),
@@ -372,6 +373,7 @@ class AppModule {
     ));
     getIt.registerFactory(() => AutoSyncAvailableOfflineMultipleSharedSpaceDocumentInteractor(getIt<AutoSyncAvailableOfflineSharedSpaceDocumentInteractor>()));
     getIt.registerFactory(() => EnableAvailableOfflineSharedSpaceDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
+    getIt.registerFactory(() => DeleteAllSharedSpaceOfflineInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestGroupsInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => AddNewUploadRequestInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestsInteractor(getIt<UploadRequestRepository>()));
