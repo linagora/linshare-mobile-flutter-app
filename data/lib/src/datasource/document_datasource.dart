@@ -71,4 +71,6 @@ abstract class DocumentDataSource {
   Future<bool> updateDocumentOffline(Document document, String localPath);
 
   Future<List<Document>> getAllDocumentOffline();
+
+  Future<bool> deleteAllData();
 }
