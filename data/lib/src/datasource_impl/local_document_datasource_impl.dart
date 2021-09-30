@@ -86,6 +86,19 @@ class LocalDocumentDataSourceImpl extends DocumentDataSource {
   }
 
   @override
+  Future<bool> deleteAllData() {
+    return Future.sync(() async {
+      return await _documentDatabaseManager.deleteAllData();
+    }).catchError((error) {
+      if (error is SQLiteDatabaseException) {
+        throw SQLiteDatabaseException();
+      } else {
+        throw LocalUnknownError(error);
+      }
+    });
+  }
+
+  @override
   Future<List<Document>> copyToMySpace(CopyRequest copyRequest) {
     throw UnimplementedError();
   }

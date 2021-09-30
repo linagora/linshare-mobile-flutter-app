@@ -296,4 +296,9 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   Future<List<Document>> getAllDocumentOffline() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> deleteAllData() {
+    throw UnimplementedError();
+  }
 }

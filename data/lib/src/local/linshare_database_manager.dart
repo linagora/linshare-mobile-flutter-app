@@ -39,4 +39,7 @@ abstract class LinShareDatabaseManager<T> {
   Future<T?> getData(String id);
 
   Future<List<T>> getListData();
+
+  Future<bool> deleteAllData();
+
 }
