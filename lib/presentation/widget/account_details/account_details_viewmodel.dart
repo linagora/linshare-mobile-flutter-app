@@ -49,6 +49,8 @@ class AccountDetailsViewModel extends BaseViewModel {
   final DisableBiometricInteractor _disableBiometricInteractor;
   final GetLastLoginInteractor _getLastLoginInteractor;
   final GetQuotaInteractor _getQuotaInteractor;
+  final DeleteAllOfflineDocumentInteractor _deleteAllOfflineDocumentInteractor;
+  final DeleteAllSharedSpaceOfflineInteractor _deleteAllSharedSpaceOfflineInteractor;
 
   AccountDetailsViewModel(
     Store<AppState> store,
@@ -58,7 +60,9 @@ class AccountDetailsViewModel extends BaseViewModel {
     this._getAuthorizedInteractor,
     this._disableBiometricInteractor,
     this._getLastLoginInteractor,
-    this._getQuotaInteractor
+    this._getQuotaInteractor,
+    this._deleteAllOfflineDocumentInteractor,
+    this._deleteAllSharedSpaceOfflineInteractor,
   ) : super(store);
 
   void logout() {
@@ -70,7 +74,11 @@ class AccountDetailsViewModel extends BaseViewModel {
 
   ThunkAction<AppState> logoutAction() {
     return (Store<AppState> store) async {
-      await deletePermanentTokenInteractor.execute();
+      await Future.wait([
+        deletePermanentTokenInteractor.execute(),
+        _deleteAllOfflineDocumentInteractor.execute(),
+        _deleteAllSharedSpaceOfflineInteractor.execute()
+      ]);
     };
   }
 
