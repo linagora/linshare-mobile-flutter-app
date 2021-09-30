@@ -302,6 +302,8 @@ class WidgetModule {
       getIt.get<DisableBiometricInteractor>(),
       getIt.get<GetLastLoginInteractor>(),
       getIt.get<GetQuotaInteractor>(),
+      getIt.get<DeleteAllOfflineDocumentInteractor>(),
+      getIt.get<DeleteAllSharedSpaceOfflineInteractor>()
     ));
   }
 
