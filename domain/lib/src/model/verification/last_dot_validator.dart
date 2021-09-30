@@ -36,7 +36,7 @@ class LastDotValidator extends Validator<NewNameRequest> {
 
   @override
   Either<Failure, Success> validate(NewNameRequest newNameRequest) {
-    if (newNameRequest.value != null && newNameRequest.value!.isLastDotInName()) {
+    if (newNameRequest.value != null && newNameRequest.value!.hasLastDotInName()) {
       return Left<Failure, Success>(VerifyNameFailure(LastDotException()));
     }
     return Right<Failure, Success>(VerifyNameViewState());
