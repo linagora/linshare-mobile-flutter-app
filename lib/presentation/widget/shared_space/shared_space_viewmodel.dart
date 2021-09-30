@@ -48,7 +48,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/helper/input_formatters_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -369,7 +368,6 @@ class SharedSpaceViewModel extends BaseViewModel {
                 )
               ),
             ))
-          .setInputFormattersList([InputFormattersUtils.noSpecialCharactersRegex])
           .show(context);
     };
   }
@@ -421,7 +419,6 @@ class SharedSpaceViewModel extends BaseViewModel {
       .setTextSelection(
         TextSelection(baseOffset: 0, extentOffset: sharedSpace.name.length),
         value: sharedSpace.name)
-      .setInputFormattersList([InputFormattersUtils.noSpecialCharactersRegex])
       .show(context);
   }
 
