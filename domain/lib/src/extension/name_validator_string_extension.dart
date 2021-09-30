@@ -31,11 +31,11 @@
 //
 
 extension NameValidatorStringExtension on String {
-  bool isSpecialCharacterInName() {
-    return RegExp(r'^(?=.*?[!#$%&"*/?^`{|}~><:,\\])').hasMatch(this);
+  bool hasSpecialCharactersInName() {
+    return RegExp(r'^(?=.*?[!#%"*/?^`{|}~><:,\\])').hasMatch(this);
   }
 
-  bool isLastDotInName() {
+  bool hasLastDotInName() {
     return length > 0 && lastIndexOf('.') == length - 1;
   }
 }
