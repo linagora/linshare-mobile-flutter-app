@@ -75,9 +75,6 @@ class EditTextModalSheetBuilder {
   @protected
   Timer? _debounce;
 
-  @protected
-  List<TextInputFormatter>? _inputFormattersList;
-
   EditTextModalSheetBuilder();
 
   EditTextModalSheetBuilder key(Key key) {
@@ -119,11 +116,6 @@ class EditTextModalSheetBuilder {
       String confirmText, OnConfirmActionClick onConfirmActionClick) {
     _onConfirmActionClick = onConfirmActionClick;
     _confirmText = confirmText;
-    return this;
-  }
-
-  EditTextModalSheetBuilder setInputFormattersList(List<TextInputFormatter> inputFormattersList) {
-    _inputFormattersList = inputFormattersList;
     return this;
   }
 
@@ -175,7 +167,6 @@ class EditTextModalSheetBuilder {
                           padding: EdgeInsets.only(top: 20),
                           child: TextFormField(
                             keyboardType: TextInputType.visiblePassword,
-                            inputFormatters: _inputFormattersList,
                             onChanged: (value) => _onTextChanged(value, setState),
                             autofocus: true,
                             controller: _textController,
