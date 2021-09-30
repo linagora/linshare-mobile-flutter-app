@@ -158,4 +158,9 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   Future<bool> updateSharedSpaceDocumentOffline(WorkGroupDocument workGroupDocument, String localPath) {
     return _sharedSpaceDocumentDataSources[DataSourceType.local]!.updateSharedSpaceDocumentOffline(workGroupDocument, localPath);
   }
+
+  @override
+  Future<bool> deleteAllData() {
+    return _sharedSpaceDocumentDataSources[DataSourceType.local]!.deleteAllData();
+  }
 }

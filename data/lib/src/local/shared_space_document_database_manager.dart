@@ -76,6 +76,37 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
     return res > 0 ? true : false;
   }
 
+  @override
+  Future<bool> deleteAllData() async {
+    final listWorkGroupDocument = await getListData();
+    var failedFileCount = 0;
+    listWorkGroupDocument.forEach((document) async {
+      if(document.localPath != null) {
+        final result = await deleteData(document.workGroupNodeId.uuid, document.localPath!);
+        if(!result) {
+          failedFileCount++;
+        }
+      }
+    });
+
+    final listSharedSpace = await getListSharedSpace();
+    listSharedSpace.forEach((sharedSpace) async {
+      final listWorkGroupNode = await getListWorkGroupCacheBySharedSpaceID(sharedSpace.sharedSpaceId);
+      listWorkGroupNode.forEach((node) async {
+        final result = await deleteWorkGroupNode(node.nodeId);
+        if(!result) {
+          failedFileCount++;
+        }
+      });
+      final result = await deleteSharedSpace(sharedSpace.sharedSpaceId);
+      if(!result) {
+        failedFileCount++;
+      }
+    });
+
+    return failedFileCount == 0;
+  }
+
   Future<bool> insertSharedSpace(SharedSpaceNodeNested sharedSpaceNodeNested) async {
     final sharedSpaceExist = await _databaseClient.getData(
         SharedSpaceTable.TABLE_NAME,
@@ -124,7 +155,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   Future<List<WorkGroupNodeCache>> getListWorkGroupCacheBySharedSpaceID(SharedSpaceId sharedSpaceId) async {
     final res = await _databaseClient.getListDataWithCondition(
         WorkGroupNodeTable.TABLE_NAME,
-        '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.LOCAL_PATH} IS NOT NULL',
+        '${WorkGroupNodeTable.SHARED_SPACE_ID} = ?',
         [sharedSpaceId.uuid]
     );
 

@@ -349,4 +349,9 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   Future<bool> updateSharedSpaceDocumentOffline(WorkGroupDocument workGroupDocument, String localPath) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> deleteAllData() {
+    throw UnimplementedError();
+  }
 }

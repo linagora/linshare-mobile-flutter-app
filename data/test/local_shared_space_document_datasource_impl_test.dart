@@ -128,5 +128,24 @@ void main() {
         expect(error, isA<SQLiteDatabaseException>());
       });
     });
+
+    test('deleteAllData Should Return Success TRUE', () async {
+      when(_sharedSpaceDocumentDatabaseManager.deleteAllData())
+          .thenAnswer((_) async => true);
+      final result = await _localSharedSpaceDocumentDataSourceImpl.deleteAllData();
+
+      expect(result, true);
+    });
+
+    test('deleteAllData Should Throw Exception When deleting data failed', () async {
+      final error = SQLiteDatabaseException();
+
+      when(_sharedSpaceDocumentDatabaseManager.deleteAllData()).thenThrow(error);
+
+      await _localSharedSpaceDocumentDataSourceImpl.deleteAllData().catchError((error) {
+        expect(error, isA<SQLiteDatabaseException>());
+      });
+    });
+
   });
 }
