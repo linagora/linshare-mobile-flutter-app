@@ -1130,7 +1130,14 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         .where((element) => element.isOfflineMode())
         .toList();
     if (listWorkGroupDocumentAvailableOffline.isNotEmpty) {
-      _autoSyncOfflineManager.syncOfflineSharedSpaceDocument(listWorkGroupDocumentAvailableOffline);
+      if(isRootFolder()) {
+        final nodeListToSaveOffline = listWorkGroupDocumentAvailableOffline.map((WorkGroupDocument node) {
+          return node.copyWith(parentWorkGroupNodeId: null);
+        }).toList();
+        _autoSyncOfflineManager.syncOfflineSharedSpaceDocument(nodeListToSaveOffline);
+      } else {
+        _autoSyncOfflineManager.syncOfflineSharedSpaceDocument(listWorkGroupDocumentAvailableOffline);
+      }
     }
   }
 
