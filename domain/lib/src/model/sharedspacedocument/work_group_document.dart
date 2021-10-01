@@ -75,6 +75,47 @@ class WorkGroupDocument extends WorkGroupNode {
       lastAuthor,
       listTreeNode);
 
+  WorkGroupDocument copyWith(
+      {WorkGroupNodeId? workGroupNodeId,
+      WorkGroupNodeId? parentWorkGroupNodeId,
+      WorkGroupNodeType? type,
+      SharedSpaceId? sharedSpaceId,
+      DateTime? creationDate,
+      DateTime? modificationDate,
+      String? description,
+      String? name,
+      Account? lastAuthor,
+      List<TreeNode>? listTreeNode,
+      int? size,
+      MediaType? mediaType,
+      bool? hasThumbnail,
+      DateTime? uploadDate,
+      bool? hasRevision,
+      String? sha256sum,
+      String? localPath,
+      SyncOfflineState? syncOfflineState}) {
+    return WorkGroupDocument(
+      workGroupNodeId ?? this.workGroupNodeId,
+      parentWorkGroupNodeId,
+      type,
+      sharedSpaceId ?? this.sharedSpaceId,
+      creationDate ?? this.creationDate,
+      modificationDate ?? this.modificationDate,
+      description,
+      name ?? this.name,
+      lastAuthor ?? this.lastAuthor,
+      listTreeNode ?? treePath,
+      size ?? this.size,
+      mediaType ?? this.mediaType,
+      hasThumbnail ?? this.hasThumbnail,
+      uploadDate ?? this.uploadDate,
+      hasRevision ?? this.hasRevision,
+      sha256sum ?? this.sha256sum,
+      localPath: localPath,
+      syncOfflineState: syncOfflineState ?? this.syncOfflineState
+    );
+  }
+
   bool isOfflineMode() => localPath != null && localPath!.isNotEmpty;
 
   @override
