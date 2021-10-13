@@ -183,8 +183,8 @@ class SharedSpaceViewModel extends BaseViewModel {
     store.dispatch(SharedSpaceInsideView(RoutePaths.sharedSpaceInside, sharedSpace));
   }
 
-  void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.allSharedSpaces));
+  void openSearchState(BuildContext context) {
+    store.dispatch(EnableSearchStateAction(SearchDestination.allSharedSpaces, AppLocalizations.of(context).search_in_shared_space));
     store.dispatch((SharedSpaceSetSearchResultAction([])));
   }
 

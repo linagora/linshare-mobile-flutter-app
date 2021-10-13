@@ -2204,6 +2204,14 @@ class AppLocalizations {
     );
   }
 
+  String search_in(String node) {
+    return Intl.message(
+      'Search in $node',
+      name: 'search_in',
+      args: [node]
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

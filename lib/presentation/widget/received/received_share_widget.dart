@@ -159,7 +159,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                   appState.mySpaceState.selectMode == SelectMode.INACTIVE) {
                 return SearchBottomBarBuilder()
                     .key(Key('search_bottom_bar'))
-                    .onSearchActionClick(() => receivedShareViewModel.openSearchState())
+                    .onSearchActionClick(() => receivedShareViewModel.openSearchState(context))
                     .build();
               }
               return SizedBox.shrink();

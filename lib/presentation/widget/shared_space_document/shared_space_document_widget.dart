@@ -148,7 +148,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                   && appState.sharedSpaceDocumentState.selectMode == SelectMode.INACTIVE)
                   ? SearchBottomBarBuilder()
                       .key(Key('shared_space_document_search_bottom_bar'))
-                      .onSearchActionClick(() => sharedSpaceDocumentViewModel.openSearchState())
+                      .onSearchActionClick(() => sharedSpaceDocumentViewModel.openSearchState(context))
                       .build()
                   : SizedBox.shrink())
           : SizedBox.shrink()

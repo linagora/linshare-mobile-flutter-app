@@ -85,8 +85,8 @@ class UploadRequestGroupViewModel extends BaseViewModel {
     );
   }
 
-  void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.uploadRequestGroups));
+  void openSearchState(BuildContext context) {
+    store.dispatch(EnableSearchStateAction(SearchDestination.uploadRequestGroups, AppLocalizations.of(context).search_in_upload_request_groups));
     store.dispatch(UploadRequestGroupCreatedSetSearchResultAction([]));
     store.dispatch(UploadRequestGroupArchivedSetSearchResultAction([]));
     store.dispatch(UploadRequestGroupActiveClosedSetSearchResultAction([]));

@@ -178,7 +178,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                         appState.mySpaceState.selectMode == SelectMode.INACTIVE) {
                       return SearchBottomBarBuilder()
                           .key(Key('search_bottom_bar'))
-                          .onSearchActionClick(() => mySpaceViewModel.openSearchState())
+                          .onSearchActionClick(() => mySpaceViewModel.openSearchState(context))
                           .build();
                     }
                     return SizedBox.shrink();
