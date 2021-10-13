@@ -167,7 +167,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                   state.sharedSpaceState.selectMode == SelectMode.INACTIVE) {
                 return SearchBottomBarBuilder()
                     .key(Key('search_bottom_bar_shared_space'))
-                    .onSearchActionClick(() => sharedSpaceViewModel.openSearchState())
+                    .onSearchActionClick(() => sharedSpaceViewModel.openSearchState(context))
                     .build();
               }
               return SizedBox.shrink();

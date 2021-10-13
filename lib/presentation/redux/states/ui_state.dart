@@ -135,27 +135,28 @@ extension UIStateExtension on UIState {
 class SearchState with EquatableMixin {
   final SearchStatus searchStatus;
   final SearchDestination searchDestination;
+  final String destinationName;
 
-  SearchState(this.searchStatus, this.searchDestination);
+  SearchState(this.searchStatus, this.searchDestination, this.destinationName);
 
   factory SearchState.initial() {
-    return SearchState(SearchStatus.INACTIVE, SearchDestination.mySpace);
+    return SearchState(SearchStatus.INACTIVE, SearchDestination.mySpace, '');
   }
 
   SearchState newSearchQuery(SearchQuery searchQuery) {
-    return SearchState(searchStatus, searchDestination);
+    return SearchState(searchStatus, searchDestination, destinationName);
   }
 
   SearchState disableSearchState() {
-    return SearchState(SearchStatus.INACTIVE, searchDestination);
+    return SearchState(SearchStatus.INACTIVE, searchDestination, destinationName);
   }
 
-  SearchState enableSearchState(SearchDestination searchDestination) {
-    return SearchState(SearchStatus.ACTIVE, searchDestination);
+  SearchState enableSearchState(SearchDestination searchDestination, String destinationName) {
+    return SearchState(SearchStatus.ACTIVE, searchDestination, destinationName);
   }
 
   @override
-  List<Object?> get props => [searchStatus, searchDestination];
+  List<Object?> get props => [searchStatus, searchDestination, destinationName];
 }
 
 class ActionOutsideAppState with EquatableMixin {

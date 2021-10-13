@@ -365,8 +365,16 @@ class UploadRequestInsideViewModel extends BaseViewModel {
   }
 
   // Search
-  void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.uploadRequestInside));
+  void openSearchState(BuildContext context) {
+    var destinationName = AppLocalizations.of(context).upload_requests;
+    if((getUploadRequestInsideState().uploadRequestGroup?.collective == false
+          && getUploadRequestInsideState().uploadRequestDocumentType == UploadRequestDocumentType.recipients)
+      || getUploadRequestInsideState().uploadRequestGroup?.collective == true) {
+      destinationName = store.state.uiState.uploadRequestGroup?.label ?? AppLocalizations.of(context).upload_requests;
+    } else {
+      destinationName = getUploadRequestInsideState().selectedUploadRequest?.recipients.first.mail ?? AppLocalizations.of(context).upload_requests;
+    }
+    store.dispatch(EnableSearchStateAction(SearchDestination.uploadRequestInside, AppLocalizations.of(context).search_in(destinationName)));
     store.dispatch((UploadRequestEntrySetSearchResultAction([])));
   }
 
