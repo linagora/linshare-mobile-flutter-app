@@ -1793,5 +1793,15 @@
     "placeholders": {
       "numberOfItems": {}
     }
+  },
+  "search_in": "Search in {node}",
+  "@search_in": {
+    "type": "text",
+    "placeholders_order": [
+      "node"
+    ],
+    "placeholders": {
+      "node": {}
+    }
   }
 }

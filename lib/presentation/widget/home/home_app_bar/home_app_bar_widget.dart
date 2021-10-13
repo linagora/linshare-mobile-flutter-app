@@ -85,14 +85,14 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
         converter: (store) => store.state.uiState,
         builder: (context, uiState) {
           if (uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
-            return _searchAppBar(context, uiState.searchState.searchDestination);
+            return _searchAppBar(context, uiState.searchState.searchDestination, uiState.searchState.destinationName);
           }
           return _homeAppBar(context);
         }
     );
   }
 
-  Widget _searchAppBar(BuildContext context, SearchDestination searchDestination) {
+  Widget _searchAppBar(BuildContext context, SearchDestination searchDestination, String destinationName) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Transform(
@@ -108,7 +108,7 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
                   fillColor: AppColor.searchBottomBarColor,
                   filled: true,
                   contentPadding: EdgeInsets.symmetric(vertical: 15),
-                  hintText: _getSearchHintText(context, searchDestination),
+                  hintText: destinationName,
                   hintStyle: TextStyle(
                       color: AppColor.uploadFileFileSizeTextColor,
                       fontSize: 16.0),
@@ -214,22 +214,4 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
     }
   }
 
-  String _getSearchHintText(BuildContext context, SearchDestination searchDestination) {
-    switch (searchDestination) {
-      case SearchDestination.mySpace:
-        return AppLocalizations.of(context).search_in_my_space;
-      case SearchDestination.sharedSpace:
-        return AppLocalizations.of(context).search_in_shared_space_files;
-      case SearchDestination.allSharedSpaces:
-        return AppLocalizations.of(context).search_in_shared_space;
-      case SearchDestination.receivedShares:
-        return AppLocalizations.of(context).search_in_my_received_shares;
-      case SearchDestination.uploadRequestGroups:
-        return AppLocalizations.of(context).search_in_upload_request_groups;
-      case SearchDestination.uploadRequestInside:
-        return AppLocalizations.of(context).search_in_upload_request_entries;
-      default:
-        return '';
-    }
-  }
 }

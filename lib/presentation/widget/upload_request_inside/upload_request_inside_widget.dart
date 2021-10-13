@@ -150,7 +150,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
                 appState.uploadRequestInsideState.selectMode != SelectMode.ACTIVE &&
                 appState.uploadRequestInsideState.uploadRequestEntries.isNotEmpty) {
               return SearchBottomBarBuilder().key(Key('search_bottom_bar')).onSearchActionClick(() {
-                _viewModel.openSearchState();
+                _viewModel.openSearchState(context);
               }).build();
             }
             return SizedBox.shrink();

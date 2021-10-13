@@ -69,8 +69,9 @@ ThunkAction<AppState> initializeHomeView(AppNavigation appNavigation, Uri baseUr
 @immutable
 class EnableSearchStateAction extends ActionOffline {
   final SearchDestination searchDestination;
+  final String destinationName;
 
-  EnableSearchStateAction(this.searchDestination);
+  EnableSearchStateAction(this.searchDestination, this.destinationName);
 }
 
 @immutable
