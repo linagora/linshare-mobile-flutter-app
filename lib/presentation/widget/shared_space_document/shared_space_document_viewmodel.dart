@@ -444,8 +444,14 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     };
   }
 
-  void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.sharedSpace));
+  void openSearchState(BuildContext context) {
+    var destinationName = AppLocalizations.of(context).shared_space;
+    if(isRootFolder()) {
+      destinationName = store.state.uiState.selectedSharedSpace?.name ?? AppLocalizations.of(context).shared_space;
+    } else {
+      destinationName = getSharedSpaceDocumentState().workGroupNode?.name ?? AppLocalizations.of(context).shared_space;
+    }
+    store.dispatch(EnableSearchStateAction(SearchDestination.sharedSpace, AppLocalizations.of(context).search_in(destinationName)));
     clearWorkGroupNodeListAction();
   }
 

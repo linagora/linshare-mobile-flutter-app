@@ -45,7 +45,7 @@ final uiReducer = combineReducers<UIState>([
           (UIState state, _) => state.clearCurrentView()),
   TypedReducer<UIState, EnableSearchStateAction>(
       (UIState state, EnableSearchStateAction action) => state.setSearchState(
-          state.searchState.enableSearchState(action.searchDestination))),
+          state.searchState.enableSearchState(action.searchDestination, action.destinationName))),
   TypedReducer<UIState, DisableSearchStateAction>(
           (UIState state, DisableSearchStateAction action) => state.setSearchState(
           state.searchState.disableSearchState())),

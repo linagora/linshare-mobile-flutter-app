@@ -401,8 +401,8 @@ class ReceivedShareViewModel extends BaseViewModel {
     store.dispatch(_sortFilesAction(newSorter));
   }
 
-  void openSearchState() {
-    store.dispatch(EnableSearchStateAction(SearchDestination.receivedShares));
+  void openSearchState(BuildContext context) {
+    store.dispatch(EnableSearchStateAction(SearchDestination.receivedShares, AppLocalizations.of(context).search_in_my_received_shares));
     store.dispatch((ReceivedShareSetSearchResultAction([])));
   }
 

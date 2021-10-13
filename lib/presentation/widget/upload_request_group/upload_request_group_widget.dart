@@ -129,7 +129,7 @@ class _UploadRequestGroupWidgetState extends State<UploadRequestGroupWidget> {
                     appState.archivedUploadRequestGroupState.selectMode == SelectMode.ACTIVE);
                 if (!appState.uiState.isInSearchState() && !isInMultipleSelectMode) {
                   return SearchBottomBarBuilder().key(Key('search_bottom_bar')).onSearchActionClick(() {
-                    _model.openSearchState();
+                    _model.openSearchState(context);
                   }).build();
                 }
                 return SizedBox.shrink();
