@@ -106,10 +106,13 @@ class ContextMenuBuilder {
                           ..._actionTiles,
                           _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
                         ])
-                      : Column(children: [
-                          ..._actionTiles,
-                          _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
-                        ]),
+                      : Padding(
+                          padding: _footer == null ? EdgeInsets.only(bottom: 10.0) : EdgeInsets.zero,
+                          child: Column(children: [
+                              ..._actionTiles,
+                              _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
+                            ]),
+                      ),
                     _footer != null
                       ? Padding(
                           padding: EdgeInsets.only(bottom: 10.0),
