@@ -81,28 +81,37 @@ class _BiometricAuthenticationLoginState extends State<BiometricAuthenticationLo
   Widget _buildBody(BuildContext context) {
     return SafeArea(
       bottom: false,
-      child: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 100),
-              child: Column(
-                children: [
-                  LinShareSloganBuilder()
-                    .setSloganText(AppLocalizations.of(context).login_text_slogan)
-                    .setSloganTextAlign(TextAlign.center)
-                    .setSloganTextStyle(TextStyle(color: Colors.white, fontSize: 16))
-                    .setLogo(_imagePath.icLoginLogo)
-                    .build(),
-                  SizedBox(height: 80),
-                  _buildSetupBiometric(context)
-                ],
+      child: LayoutBuilder(
+        builder: (context, constraint) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraint.maxHeight),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(top: 100),
+                    child: Column(
+                      children: [
+                        LinShareSloganBuilder()
+                            .setSloganText(AppLocalizations
+                            .of(context)
+                            .login_text_slogan)
+                            .setSloganTextAlign(TextAlign.center)
+                            .setSloganTextStyle(TextStyle(color: Colors.white, fontSize: 16))
+                            .setLogo(_imagePath.icLoginLogo)
+                            .build(),
+                        SizedBox(height: 80),
+                        _buildSetupBiometric(context)
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          );
+        }
       ),
     );
   }
