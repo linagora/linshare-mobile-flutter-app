@@ -176,19 +176,19 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
     switch(expirationSetting?.unit.toUnitTimeType()) {
       case UnitTimeType.DAY:
         _initExpirationDateRoundUp = _textActivationNotifier.value!.value1.add(Duration(days: expirationSetting!.value));
-        _maxExpirationDateRoundUp = _creationDateRoundUp.add(Duration(days: expirationSetting!.maxValue));
+        _maxExpirationDateRoundUp = _textActivationNotifier.value!.value1.add(Duration(days: expirationSetting!.maxValue));
         break;
       case UnitTimeType.WEEK:
         _initExpirationDateRoundUp = _textActivationNotifier.value!.value1.add(Duration(days: expirationSetting!.value * 7));
-        _maxExpirationDateRoundUp = _creationDateRoundUp.add(Duration(days: expirationSetting!.maxValue * 7));
+        _maxExpirationDateRoundUp = _textActivationNotifier.value!.value1.add(Duration(days: expirationSetting!.maxValue * 7));
         break;
       case UnitTimeType.MONTH:
         _initExpirationDateRoundUp = _textActivationNotifier.value!.value1.copyWith(month: _textActivationNotifier.value!.value1.month + expirationSetting!.value);
-        _maxExpirationDateRoundUp = _creationDateRoundUp.copyWith(month: _creationDateRoundUp.month + expirationSetting!.maxValue);
+        _maxExpirationDateRoundUp = _textActivationNotifier.value!.value1.copyWith(month: _creationDateRoundUp.month + expirationSetting!.maxValue);
         break;
       case null:
         _initExpirationDateRoundUp = _textActivationNotifier.value!.value1;
-        _maxExpirationDateRoundUp = _creationDateRoundUp;
+        _maxExpirationDateRoundUp = _textActivationNotifier.value!.value1;
         break;
     }
     _textExpirationNotifier.value = dartz.Tuple2(_initExpirationDateRoundUp, _initExpirationDateRoundUp.getYMMMMdFormatWithJm());
@@ -212,6 +212,12 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
         _initReminderDateRoundUp = _textExpirationNotifier.value!.value1;
         _minReminderDateRoundUp = _textExpirationNotifier.value!.value1;
         break;
+    }
+    if(_minReminderDateRoundUp.compareTo(_textActivationNotifier.value!.value1) < 0) {
+      _minReminderDateRoundUp = _textActivationNotifier.value!.value1;
+    }
+    if(_initReminderDateRoundUp.compareTo(_textActivationNotifier.value!.value1) < 0) {
+      _initReminderDateRoundUp = _textActivationNotifier.value!.value1;
     }
     _textReminderNotifier.value = dartz.Tuple2(_initReminderDateRoundUp, _initReminderDateRoundUp.getYMMMMdFormatWithJm());
   }
@@ -739,13 +745,9 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
         flex: 8,
         child: GestureDetector(
           onTap: () {
-            var minDateRemind = _minReminderDateRoundUp;
-            if(_minReminderDateRoundUp.compareTo(_textActivationNotifier.value!.value1) < 0) {
-              minDateRemind = _textActivationNotifier.value!.value1;
-            }
             DatePicker.showDateTimePicker(context,
                 showTitleActions: true,
-                minTime: minDateRemind,
+                minTime: _minReminderDateRoundUp,
                 maxTime: _textExpirationNotifier.value!.value1,
                 onChanged: (date) {
                 }, onConfirm: (date) {
