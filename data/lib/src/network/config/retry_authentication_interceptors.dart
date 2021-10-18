@@ -53,9 +53,8 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     if (_isAuthenticationError(dioError, retries)) {
       retries++;
 
-      requestOptions.headers.addAll({
-        AUTHORIZATION_KEY: _getTokenAsBearerHeader(_permanentToken?.token),
-        RETRY_KEY: retries});
+      requestOptions.headers.addAll({AUTHORIZATION_KEY: _getTokenAsBearerHeader(_permanentToken?.token)});
+      requestOptions.extra = {RETRY_KEY: retries};
 
       final response = await _dio.fetch(requestOptions);
       return handler.resolve(response);
