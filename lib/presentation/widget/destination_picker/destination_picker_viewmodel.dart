@@ -102,6 +102,9 @@ class DestinationPickerViewModel extends BaseViewModel {
                         } else if (operation == Operation.copyTo) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles
                               .contains(element.sharedSpaceRole.name);
+                        } else if (operation == Operation.move) {
+                          return SharedSpaceOperationRole.moveSharedSpaceNodeRoles
+                              .contains(element.sharedSpaceRole.name);
                         }
                         return true;
                       })
