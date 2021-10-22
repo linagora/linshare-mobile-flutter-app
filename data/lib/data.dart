@@ -72,6 +72,7 @@ export 'src/network/model/sharedspace/shared_space_role_dto.dart';
 export 'src/network/model/sharedspacedocument/work_group_document_dto.dart';
 export 'src/network/model/sharedspacedocument/work_group_folder_dto.dart';
 export 'src/network/model/sharedspacedocument/work_group_node_dto.dart';
+export 'src/network/model/sharedspacedocument/tree_node_dto.dart';
 export 'src/network/model/account/account_dto.dart';
 export 'src/network/model/autocomplete/mailing_list_autocomplete_result_dto.dart';
 export 'src/network/model/autocomplete/simple_autocomplete_result_dto.dart';

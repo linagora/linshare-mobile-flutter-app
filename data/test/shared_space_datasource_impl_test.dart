@@ -245,5 +245,6 @@ void main() {
         RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters, sharedSpace1.nodeType!)
       ).catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
     });
+
   });
 }
