@@ -30,33 +30,54 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-abstract class SharedSpaceException extends RemoteException {
-  static final SharedSpaceNotFound = 'SharedSpace not found';
-  static final SharedSpaceNodeNotFound = 'SharedSpaceNode not found';
-  static final SharedSpaceRolesNotFound = 'SharedSpace roles not found';
+import '../../mock/repository/mock_shared_space_document_repository.dart';
 
-  SharedSpaceException(String message) : super(message);
-}
+void main() {
+  group('get_shared_space_root_node_info_interactor test', () {
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late GetSharedSpacesRootNodeInfoInteractor getSharedSpacesRootNodeInfoInteractor;
 
-class SharedSpaceNotFound extends SharedSpaceException {
-  SharedSpaceNotFound() : super(SharedSpaceException.SharedSpaceNotFound);
+    setUp(() {
+      sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
+      getSharedSpacesRootNodeInfoInteractor = GetSharedSpacesRootNodeInfoInteractor(sharedSpaceDocumentRepository);
+    });
 
-  @override
-  List<Object> get props => [];
-}
+    test('get shared space root node info interactor should return success with one valid data', () async {
+      when(sharedSpaceDocumentRepository.getRealSharedSpaceRootNode(
+        sharedSpace1.sharedSpaceId,
+        hasTreePath: true))
+      .thenAnswer((_) async => workGroupNode1);
 
-class SharedSpaceRolesNotFound extends SharedSpaceException {
-  SharedSpaceRolesNotFound() : super(SharedSpaceException.SharedSpaceRolesNotFound);
+      final result = await getSharedSpacesRootNodeInfoInteractor.execute(
+          sharedSpace1.sharedSpaceId,
+          hasTreePath: true);
 
-  @override
-  List<Object> get props => [];
-}
+      result.fold((left) {
+        expect((left as SharedSpacesRootNodeInfoFailure).exception, Exception());
+      }, (right) {
+        expect((right as SharedSpacesRootNodeInfoViewState).workgroupNode, workGroupNode1);
+      });
+    });
 
-class SharedSpaceNodeNotFound extends SharedSpaceException {
-  SharedSpaceNodeNotFound() : super(SharedSpaceException.SharedSpaceNodeNotFound);
+    test('get shared space root node info interactor should fail when getSharedSpaceNode fail', () async {
+      final exception = Exception();
 
-  @override
-  List<Object> get props => [];
+      when(sharedSpaceDocumentRepository.getRealSharedSpaceRootNode(
+         sharedSpace1.sharedSpaceId,
+          hasTreePath: false))
+      .thenThrow(exception);
+
+      final result = await getSharedSpacesRootNodeInfoInteractor.execute(
+        sharedSpace1.sharedSpaceId,
+          hasTreePath: false);
+
+      expect(result, Left<Failure, Success>(SharedSpacesRootNodeInfoFailure(exception)));
+    });
+  });
 }

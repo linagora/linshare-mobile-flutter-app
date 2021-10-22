@@ -35,5 +35,6 @@ enum Operation {
   copyTo,
   copyFromMySpace,
   upload,
+  move,
   none
 }
