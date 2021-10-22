@@ -510,3 +510,48 @@ class RenameWorkGroupFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class MoveWorkgroupNodeViewState extends ViewState {
+  final WorkGroupNode workGroupNode;
+
+  MoveWorkgroupNodeViewState(this.workGroupNode);
+
+  @override
+  List<Object> get props => [workGroupNode];
+}
+
+class MoveWorkgroupNodeFailure extends FeatureFailure {
+  final exception;
+
+  MoveWorkgroupNodeFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class MoveAllWorkgroupNodesSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  MoveAllWorkgroupNodesSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class MoveSomeWorkgroupNodesSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  MoveSomeWorkgroupNodesSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class MoveAllWorkgroupNodesFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  MoveAllWorkgroupNodesFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
