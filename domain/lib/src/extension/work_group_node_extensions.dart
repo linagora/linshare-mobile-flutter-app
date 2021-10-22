@@ -31,6 +31,7 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'package:domain/domain.dart';
 import 'package:domain/src/model/copy/copy_request.dart';
 import 'package:domain/src/model/copy/space_type.dart';
 import 'package:domain/src/model/sharedspacedocument/tree_node.dart';
@@ -42,4 +43,9 @@ extension WorkGroupNodeExtensions on WorkGroupNode {
   }
 
   TreeNode toTreeNode() => TreeNode(workGroupNodeId, name);
+
+  MoveWorkGroupNodeRequest toMoveWorkGroupNodeRequest() {
+    return MoveWorkGroupNodeRequest(workGroupNodeId, parentWorkGroupNodeId, sharedSpaceId, type, creationDate,
+        modificationDate, description, name, lastAuthor);
+  }
 }

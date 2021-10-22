@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,56 +30,25 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/sharedspace/shared_space_id.dart';
+import 'package:domain/src/state/success.dart';
 
-class WorkGroupFolder extends WorkGroupNode {
+class MoveWorkgroupNodeInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
 
-  WorkGroupFolder(
-    WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId? parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String? description,
-    String name,
-    Account lastAuthor,
-    List<TreeNode> listTreeNode
-  ) : super(
-    workGroupNodeId,
-    parentWorkGroupNodeId,
-    type,
-    sharedSpaceId,
-    creationDate,
-    modificationDate,
-    description ?? '',
-    name,
-    lastAuthor,
-    listTreeNode,
-  );
+  MoveWorkgroupNodeInteractor(this._sharedSpaceDocumentRepository);
 
-  WorkGroupFolder copyWith(
-    {WorkGroupNodeId? workGroupNodeId,
-    WorkGroupNodeId? parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId? sharedSpaceId,
-    DateTime? creationDate,
-    DateTime? modificationDate,
-    String? description,
-    String? name,
-    Account? lastAuthor,
-    List<TreeNode>? listTreeNode}) {
-    return WorkGroupFolder(
-      workGroupNodeId ?? this.workGroupNodeId,
-      parentWorkGroupNodeId,
-      type ?? this.type,
-      sharedSpaceId ?? this.sharedSpaceId,
-      creationDate ?? this.creationDate,
-      modificationDate ?? this.modificationDate,
-      description ?? this.description,
-      name ?? this.name,
-      lastAuthor ?? this.lastAuthor,
-      listTreeNode ?? treePath,
-    );
+  Future<Either<Failure, Success>> execute(
+      MoveWorkGroupNodeRequest moveRequest,
+      SharedSpaceId sourceSharedSpaceId) async {
+    try {
+      final workGroupNode = await _sharedSpaceDocumentRepository.moveWorkgroupNode(moveRequest, sourceSharedSpaceId);
+      return Right<Failure, Success>(MoveWorkgroupNodeViewState(workGroupNode));
+    } catch (exception) {
+      return Left<Failure, Success>(MoveWorkgroupNodeFailure(exception));
+    }
   }
+
 }
