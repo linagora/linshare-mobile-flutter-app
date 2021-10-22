@@ -404,6 +404,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       if (Platform.isAndroid) _downloadFilesAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
       _copyToAction(context, workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
       if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _duplicateMultipleSelection(workGroupNodes),
+      if (SharedSpaceOperationRole.moveSharedSpaceNodeRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _moveAction(context, workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
     ];
   }
 
@@ -696,7 +697,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   List<Widget> _contextMenuFolderActionTiles(BuildContext context, WorkGroupFolder workGroupFolder) {
     return [
       if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _renameWorkGroupNodeAction(workGroupFolder),
-      _detailsAction(context, workGroupFolder)
+      _detailsAction(context, workGroupFolder),
+      if (SharedSpaceOperationRole.moveSharedSpaceNodeRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _moveAction(context, [workGroupFolder]),
     ];
   }
 
@@ -710,7 +712,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       _detailsAction(context, workGroupDocument),
       _manageVersionsAction(context, workGroupDocument),
       if (SharedSpaceOperationRole.renameNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _renameWorkGroupNodeAction(workGroupDocument),
-      if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _duplicateAction(context, [workGroupDocument])
+      if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _duplicateAction(context, [workGroupDocument]),
+      if (SharedSpaceOperationRole.moveSharedSpaceNodeRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _moveAction(context, [workGroupDocument]),
     ];
   }
 
@@ -911,4 +914,20 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
             })
             .build();
   }
+
+  Widget _moveAction(BuildContext context, List<WorkGroupNode> nodes,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('move_context_menu_action'),
+          SvgPicture.asset(imagePath.icMove, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).move,
+          nodes[0])
+      .onActionClick((data) {
+        sharedSpaceDocumentViewModel.moveWorkGroupNode(
+          context,
+          nodes,
+          itemSelectionType: itemSelectionType);
+      }).build();
+  }
+
 }

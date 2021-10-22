@@ -2212,6 +2212,20 @@ class AppLocalizations {
     );
   }
 
+  String get move {
+    return Intl.message(
+      'Move',
+      name: 'move',
+    );
+  }
+
+  String get move_here {
+    return Intl.message(
+      'Move here',
+      name: 'move_here',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

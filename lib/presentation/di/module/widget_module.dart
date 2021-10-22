@@ -270,7 +270,9 @@ class WidgetModule {
         getIt.get<GetAllSharedSpaceDocumentOfflineInteractor>(),
         getIt.get<AutoSyncOfflineManager>(),
         getIt.get<EnableAvailableOfflineSharedSpaceDocumentInteractor>(),
-        getIt<DeviceManager>()
+        getIt<DeviceManager>(),
+        getIt<GetSharedSpacesRootNodeInfoInteractor>(),
+        getIt<MoveMultipleWorkgroupNodesInteractor>()
     ));
   }
 

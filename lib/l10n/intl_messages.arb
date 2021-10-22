@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-10-13T15:22:22.278025",
+  "@@last_modified": "2021-10-21T13:09:21.881655",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -2291,5 +2291,17 @@
     "placeholders": {
       "node": {}
     }
+  },
+  "move": "Move",
+  "@move": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "move_here": "Move here",
+  "@move_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
