@@ -50,6 +50,7 @@ import 'package:data/src/network/model/functionality/functionality_string_dto.da
 import 'package:data/src/network/model/functionality/functionality_time_dto.dart';
 import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/network/model/request/create_work_group_body_request.dart';
+import 'package:data/src/network/model/request/move_work_group_node_body_request.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
 import 'package:data/src/network/model/response/account_quota_response.dart';
@@ -625,4 +626,20 @@ class LinShareHttpClient {
         queryParameters: [StringQueryParameter('type', 'AUTHENTICATION'), StringQueryParameter('action', 'SUCCESS')].toMap());
     return resultJson.map((data) => AuthenticationAuditLogEntryUserResponse.fromJson(data)).toList();
   }
+
+  Future<WorkGroupNodeDto> moveWorkgroupNode(MoveWorkGroupNodeBodyRequest moveRequest, SharedSpaceId sourceSharedSpaceId) async {
+    final workGroupNode = await _dioClient.put(
+        Endpoint.sharedSpaces
+            .withPathParameter(sourceSharedSpaceId.uuid)
+            .withPathParameter('nodes')
+            .withPathParameter(moveRequest.workGroupNodeId.uuid)
+            .generateEndpointPath(),
+        options: Options(headers: {
+          'Content-Type': 'application/json'
+        }),
+        data: moveRequest.toJson().toString(),
+    );
+    return _convertToWorkGroupNodeChild(workGroupNode);
+  }
+
 }
