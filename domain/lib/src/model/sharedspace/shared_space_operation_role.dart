@@ -88,4 +88,10 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.CONTRIBUTOR,
     SharedSpaceRoleName.READER
   ];
+
+  static const moveSharedSpaceNodeRoles = [
+    SharedSpaceRoleName.ADMIN,
+    SharedSpaceRoleName.WRITER
+  ];
+
 }

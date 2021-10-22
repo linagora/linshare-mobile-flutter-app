@@ -30,56 +30,50 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testshared/testshared.dart';
 
-class WorkGroupFolder extends WorkGroupNode {
+import '../../mock/repository/mock_shared_space_document_repository.dart';
 
-  WorkGroupFolder(
-    WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId? parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String? description,
-    String name,
-    Account lastAuthor,
-    List<TreeNode> listTreeNode
-  ) : super(
-    workGroupNodeId,
-    parentWorkGroupNodeId,
-    type,
-    sharedSpaceId,
-    creationDate,
-    modificationDate,
-    description ?? '',
-    name,
-    lastAuthor,
-    listTreeNode,
-  );
+void main() {
+  group('move_workgroup_node_interactor test', () {
+    late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+    late MoveWorkgroupNodeInteractor moveSharedSpaceNodeInteractor;
 
-  WorkGroupFolder copyWith(
-    {WorkGroupNodeId? workGroupNodeId,
-    WorkGroupNodeId? parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId? sharedSpaceId,
-    DateTime? creationDate,
-    DateTime? modificationDate,
-    String? description,
-    String? name,
-    Account? lastAuthor,
-    List<TreeNode>? listTreeNode}) {
-    return WorkGroupFolder(
-      workGroupNodeId ?? this.workGroupNodeId,
-      parentWorkGroupNodeId,
-      type ?? this.type,
-      sharedSpaceId ?? this.sharedSpaceId,
-      creationDate ?? this.creationDate,
-      modificationDate ?? this.modificationDate,
-      description ?? this.description,
-      name ?? this.name,
-      lastAuthor ?? this.lastAuthor,
-      listTreeNode ?? treePath,
-    );
-  }
+    setUp(() {
+      sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
+      moveSharedSpaceNodeInteractor = MoveWorkgroupNodeInteractor(sharedSpaceDocumentRepository);
+    });
+
+    test('move workgroup node interactor should return success with one valid data', () async {
+      when(sharedSpaceDocumentRepository.moveWorkgroupNode(
+          moveWorkGroupNodeRequest,
+          sharedSpaceId1
+      ))
+      .thenAnswer((_) async => workGroupFolder1);
+
+      final result = await moveSharedSpaceNodeInteractor.execute(
+          moveWorkGroupNodeRequest,
+          sharedSpaceId1);
+      expect(result, Right<Failure, Success>(MoveWorkgroupNodeViewState(workGroupFolder1)));
+    });
+
+    test('move workgroup node interactor should fail when move workgroup node fail', () async {
+      final exception = Exception();
+
+      when(sharedSpaceDocumentRepository.moveWorkgroupNode(
+          moveWorkGroupNodeRequest,
+          sharedSpaceId1
+      )).thenThrow(exception);
+
+      final result = await moveSharedSpaceNodeInteractor.execute(
+          moveWorkGroupNodeRequest,
+          sharedSpaceId1
+      );
+      expect(result, Left<Failure, Success>(MoveWorkgroupNodeFailure(exception)));
+    });
+  });
 }
