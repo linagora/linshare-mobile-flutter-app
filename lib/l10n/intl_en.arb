@@ -1803,5 +1803,17 @@
     "placeholders": {
       "node": {}
     }
+  },
+  "move": "Move",
+  "@move": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "move_here": "Move here",
+  "@move_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
