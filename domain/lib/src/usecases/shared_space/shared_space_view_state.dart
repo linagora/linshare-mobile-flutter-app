@@ -50,6 +50,24 @@ class SharedSpacesFailure extends FeatureFailure {
   List<Object> get props => [exception];
 }
 
+class SharedSpacesRootNodeInfoViewState extends ViewState {
+  final WorkGroupNode workgroupNode;
+
+  SharedSpacesRootNodeInfoViewState(this.workgroupNode);
+
+  @override
+  List<Object> get props => [workgroupNode];
+}
+
+class SharedSpacesRootNodeInfoFailure extends FeatureFailure {
+  final exception;
+
+  SharedSpacesRootNodeInfoFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
 class CopyToSharedSpaceViewState extends ViewState {
   final List<WorkGroupNode> workGroupNode;
 

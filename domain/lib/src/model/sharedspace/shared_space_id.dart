@@ -31,6 +31,7 @@
 //
 
 import 'package:equatable/equatable.dart';
+import 'package:domain/domain.dart';
 
 class SharedSpaceId extends Equatable {
   final String uuid;
@@ -39,4 +40,8 @@ class SharedSpaceId extends Equatable {
 
   @override
   List<Object> get props => [uuid];
+}
+
+extension SharedSpaceNodeIdExtension on SharedSpaceId {
+  WorkGroupNodeId toWorkGroupNodeId() => WorkGroupNodeId(uuid);
 }
