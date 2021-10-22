@@ -97,11 +97,11 @@ class WorkGroupDocument extends WorkGroupNode {
     return WorkGroupDocument(
       workGroupNodeId ?? this.workGroupNodeId,
       parentWorkGroupNodeId,
-      type,
+      type ?? this.type,
       sharedSpaceId ?? this.sharedSpaceId,
       creationDate ?? this.creationDate,
       modificationDate ?? this.modificationDate,
-      description,
+      description ?? this.description,
       name ?? this.name,
       lastAuthor ?? this.lastAuthor,
       listTreeNode ?? treePath,
@@ -111,7 +111,7 @@ class WorkGroupDocument extends WorkGroupNode {
       uploadDate ?? this.uploadDate,
       hasRevision ?? this.hasRevision,
       sha256sum ?? this.sha256sum,
-      localPath: localPath,
+      localPath: localPath ?? this.localPath,
       syncOfflineState: syncOfflineState ?? this.syncOfflineState
     );
   }

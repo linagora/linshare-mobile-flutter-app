@@ -28,58 +28,35 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class WorkGroupFolder extends WorkGroupNode {
+class MoveWorkGroupNodeRequest with EquatableMixin {
 
-  WorkGroupFolder(
-    WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId? parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String? description,
-    String name,
-    Account lastAuthor,
-    List<TreeNode> listTreeNode
-  ) : super(
+  final WorkGroupNodeId workGroupNodeId;
+  final WorkGroupNodeId? parentWorkGroupNodeId;
+  final SharedSpaceId sharedSpaceId;
+  final WorkGroupNodeType? type;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+  final String? description;
+  final String? name;
+  final Account? lastAuthor;
+
+  MoveWorkGroupNodeRequest(this.workGroupNodeId, this.parentWorkGroupNodeId, this.sharedSpaceId, this.type,
+      this.creationDate, this.modificationDate, this.description, this.name, this.lastAuthor);
+
+  @override
+  List<Object?> get props => [
     workGroupNodeId,
     parentWorkGroupNodeId,
-    type,
     sharedSpaceId,
+    type,
     creationDate,
     modificationDate,
-    description ?? '',
+    description,
     name,
-    lastAuthor,
-    listTreeNode,
-  );
-
-  WorkGroupFolder copyWith(
-    {WorkGroupNodeId? workGroupNodeId,
-    WorkGroupNodeId? parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId? sharedSpaceId,
-    DateTime? creationDate,
-    DateTime? modificationDate,
-    String? description,
-    String? name,
-    Account? lastAuthor,
-    List<TreeNode>? listTreeNode}) {
-    return WorkGroupFolder(
-      workGroupNodeId ?? this.workGroupNodeId,
-      parentWorkGroupNodeId,
-      type ?? this.type,
-      sharedSpaceId ?? this.sharedSpaceId,
-      creationDate ?? this.creationDate,
-      modificationDate ?? this.modificationDate,
-      description ?? this.description,
-      name ?? this.name,
-      lastAuthor ?? this.lastAuthor,
-      listTreeNode ?? treePath,
-    );
-  }
+    lastAuthor
+  ];
 }

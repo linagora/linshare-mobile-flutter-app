@@ -30,56 +30,28 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class WorkGroupFolder extends WorkGroupNode {
+class MoveMultipleWorkgroupNodesInteractor {
+  final MoveWorkgroupNodeInteractor _moveWorkgroupNodeInteractor;
 
-  WorkGroupFolder(
-    WorkGroupNodeId workGroupNodeId,
-    WorkGroupNodeId? parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId sharedSpaceId,
-    DateTime creationDate,
-    DateTime modificationDate,
-    String? description,
-    String name,
-    Account lastAuthor,
-    List<TreeNode> listTreeNode
-  ) : super(
-    workGroupNodeId,
-    parentWorkGroupNodeId,
-    type,
-    sharedSpaceId,
-    creationDate,
-    modificationDate,
-    description ?? '',
-    name,
-    lastAuthor,
-    listTreeNode,
-  );
+  MoveMultipleWorkgroupNodesInteractor(this._moveWorkgroupNodeInteractor);
 
-  WorkGroupFolder copyWith(
-    {WorkGroupNodeId? workGroupNodeId,
-    WorkGroupNodeId? parentWorkGroupNodeId,
-    WorkGroupNodeType? type,
-    SharedSpaceId? sharedSpaceId,
-    DateTime? creationDate,
-    DateTime? modificationDate,
-    String? description,
-    String? name,
-    Account? lastAuthor,
-    List<TreeNode>? listTreeNode}) {
-    return WorkGroupFolder(
-      workGroupNodeId ?? this.workGroupNodeId,
-      parentWorkGroupNodeId,
-      type ?? this.type,
-      sharedSpaceId ?? this.sharedSpaceId,
-      creationDate ?? this.creationDate,
-      modificationDate ?? this.modificationDate,
-      description ?? this.description,
-      name ?? this.name,
-      lastAuthor ?? this.lastAuthor,
-      listTreeNode ?? treePath,
-    );
+  Future<Either<Failure, Success>> execute(List<WorkGroupNode> workGroupNodes, {required SharedSpaceId sourceSharedSpaceId}) async {
+    final listResult = await Future.wait(workGroupNodes.map((workGroupNode) => _moveWorkgroupNodeInteractor.execute(
+        workGroupNode.toMoveWorkGroupNodeRequest(),
+        sourceSharedSpaceId)));
+    if (listResult.length == 1) {
+      return listResult.single;
+    } else {
+      var failedFileCount = listResult.whereType<Left>().length;
+      if (failedFileCount == 0) {
+        return Right(MoveAllWorkgroupNodesSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(MoveAllWorkgroupNodesFailureViewState(listResult));
+      }
+      return Right(MoveSomeWorkgroupNodesSuccessViewState(listResult));
+    }
   }
 }
