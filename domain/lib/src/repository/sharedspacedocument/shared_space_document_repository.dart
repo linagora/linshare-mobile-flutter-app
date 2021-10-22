@@ -120,4 +120,9 @@ abstract class SharedSpaceDocumentRepository {
   Future<bool> updateSharedSpaceDocumentOffline(WorkGroupDocument workGroupDocument, String localPath);
 
   Future<bool> deleteAllData();
+
+  Future<WorkGroupNode> getRealSharedSpaceRootNode(SharedSpaceId shareSpaceId, {bool hasTreePath = false});
+
+  Future<WorkGroupNode> moveWorkgroupNode(MoveWorkGroupNodeRequest moveRequest, SharedSpaceId sourceSharedSpaceId);
+
 }
