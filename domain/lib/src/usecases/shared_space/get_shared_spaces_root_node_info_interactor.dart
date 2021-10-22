@@ -30,33 +30,21 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/shared_space/shared_space_view_state.dart';
 
-abstract class SharedSpaceException extends RemoteException {
-  static final SharedSpaceNotFound = 'SharedSpace not found';
-  static final SharedSpaceNodeNotFound = 'SharedSpaceNode not found';
-  static final SharedSpaceRolesNotFound = 'SharedSpace roles not found';
+class GetSharedSpacesRootNodeInfoInteractor {
+  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
 
-  SharedSpaceException(String message) : super(message);
-}
+  GetSharedSpacesRootNodeInfoInteractor(this._sharedSpaceDocumentRepository);
 
-class SharedSpaceNotFound extends SharedSpaceException {
-  SharedSpaceNotFound() : super(SharedSpaceException.SharedSpaceNotFound);
-
-  @override
-  List<Object> get props => [];
-}
-
-class SharedSpaceRolesNotFound extends SharedSpaceException {
-  SharedSpaceRolesNotFound() : super(SharedSpaceException.SharedSpaceRolesNotFound);
-
-  @override
-  List<Object> get props => [];
-}
-
-class SharedSpaceNodeNotFound extends SharedSpaceException {
-  SharedSpaceNodeNotFound() : super(SharedSpaceException.SharedSpaceNodeNotFound);
-
-  @override
-  List<Object> get props => [];
+  Future<Either<Failure, Success>> execute(SharedSpaceId shareSpaceId, {bool hasTreePath = false}) async {
+    try {
+      final workgroupNode = await _sharedSpaceDocumentRepository.getRealSharedSpaceRootNode(shareSpaceId, hasTreePath: hasTreePath);
+      return Right<Failure, Success>(SharedSpacesRootNodeInfoViewState(workgroupNode));
+    } catch (exception) {
+      return Left<Failure, Success>(SharedSpacesRootNodeInfoFailure(exception));
+    }
+  }
 }
