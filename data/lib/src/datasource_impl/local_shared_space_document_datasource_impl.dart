@@ -177,4 +177,14 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   Future<WorkGroupNode> renameSharedSpaceNode(SharedSpaceId sharedSpaceId, WorkGroupNodeId sharedSpaceNodeId, RenameWorkGroupNodeRequest renameRequest) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<WorkGroupNode> getRealSharedSpaceRootNode(SharedSpaceId sharedSpaceId, {bool hasTreePath = false}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<WorkGroupNode> moveWorkgroupNode(MoveWorkGroupNodeRequest moveRequest, SharedSpaceId sourceSharedSpaceId) {
+    throw UnimplementedError();
+  }
 }

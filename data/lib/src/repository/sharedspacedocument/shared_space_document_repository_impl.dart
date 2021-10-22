@@ -163,4 +163,14 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   Future<bool> deleteAllData() {
     return _sharedSpaceDocumentDataSources[DataSourceType.local]!.deleteAllData();
   }
+
+  @override
+  Future<WorkGroupNode> getRealSharedSpaceRootNode(SharedSpaceId sharedSpaceId, {bool hasTreePath = false}) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.getRealSharedSpaceRootNode(sharedSpaceId, hasTreePath: hasTreePath);
+  }
+
+  @override
+  Future<WorkGroupNode> moveWorkgroupNode(MoveWorkGroupNodeRequest moveRequest, SharedSpaceId sourceSharedSpaceId) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.moveWorkgroupNode(moveRequest, sourceSharedSpaceId);
+  }
 }
