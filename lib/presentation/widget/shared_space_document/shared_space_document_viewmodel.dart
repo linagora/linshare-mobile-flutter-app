@@ -70,6 +70,7 @@ import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_mo
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/move_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
@@ -110,6 +111,8 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final AutoSyncOfflineManager _autoSyncOfflineManager;
   final EnableAvailableOfflineSharedSpaceDocumentInteractor _enableAvailableOfflineSharedSpaceDocumentInteractor;
   final DeviceManager _deviceManager;
+  final GetSharedSpacesRootNodeInfoInteractor _getSharedSpacesNodeInteractor;
+  final MoveMultipleWorkgroupNodesInteractor _moveMultipleWorkgroupNodesInteractor;
 
   late StreamSubscription _storeStreamSubscription;
 
@@ -145,6 +148,8 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     this._autoSyncOfflineManager,
     this._enableAvailableOfflineSharedSpaceDocumentInteractor,
     this._deviceManager,
+    this._getSharedSpacesNodeInteractor,
+    this._moveMultipleWorkgroupNodesInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold((failure) => null, (success) {
@@ -643,6 +648,40 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
             availableDestinationTypes: availableDestinationTypes));
   }
 
+  void moveWorkGroupNode(BuildContext context, List<WorkGroupNode> nodes, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    final cancelAction = NegativeDestinationPickerAction(context, label: AppLocalizations.of(context).cancel.toUpperCase());
+    cancelAction.onDestinationPickerActionClick((_) => _appNavigation.popBack());
+
+    final moveAction = MoveDestinationPickerAction(context);
+    moveAction.onDestinationPickerActionClick((data) async {
+      if((data is SharedSpaceDocumentArguments) && data.documentType == SharedSpaceDocumentType.root) {
+        await _getSharedSpacesNodeInteractor.execute(data.sharedSpaceNode.sharedSpaceId).then((result) {
+          _appNavigation.popBack();
+          result.fold(
+              (failure) {},
+              (success) {
+                if(success is SharedSpacesRootNodeInfoViewState) {
+                  store.dispatch(_moveToWorkgroupNodeAction(nodes, data, success.workgroupNode.workGroupNodeId));
+                }
+              });
+        });
+      } else {
+        _appNavigation.popBack();
+        store.dispatch(_moveToWorkgroupNodeAction(nodes, data, null));
+      }
+    });
+
+    _appNavigation.push(RoutePaths.destinationPicker,
+        arguments: DestinationPickerArguments(
+            actionList: [moveAction, cancelAction],
+            operator: Operation.move));
+  }
+
   void copyToMySpace(List<WorkGroupNode> workGroupNodes) {
     _appNavigation.popBack();
     store.dispatch(_copyToMySpaceAction(workGroupNodes));
@@ -669,6 +708,37 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
               nodes.map((node) => node.toCopyRequest()).toList(),
               sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
               destinationParentNodeId: parentNodeId)
+          .then((result) => result.fold(
+              (failure) => store.dispatch(SharedSpaceDocumentAction(Left(failure))),
+              (success) => store.dispatch(SharedSpaceDocumentAction(Right(success)))));
+
+      getAllWorkGroupNode(needToGetOldSorter: false);
+    });
+  }
+
+  OnlineThunkAction _moveToWorkgroupNodeAction(
+      List<WorkGroupNode> nodes,
+      SharedSpaceDocumentArguments sharedSpaceDocumentArguments,
+      WorkGroupNodeId? workGroupNodeId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final updateParentNodes = nodes.map((node) {
+        if(node is WorkGroupDocument) {
+          final newParentId = sharedSpaceDocumentArguments.workGroupFolder != null
+              ? sharedSpaceDocumentArguments.workGroupFolder?.workGroupNodeId
+              : workGroupNodeId;
+          final pickedSharedSpaceId = sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId;
+          return node.copyWith(parentWorkGroupNodeId: newParentId, sharedSpaceId: pickedSharedSpaceId);
+        } else if(node is WorkGroupFolder){
+          final newParentId = sharedSpaceDocumentArguments.workGroupFolder != null
+              ? sharedSpaceDocumentArguments.workGroupFolder?.workGroupNodeId
+              : workGroupNodeId;
+          final pickedSharedSpaceId = sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId;
+          return node.copyWith(parentWorkGroupNodeId: newParentId, sharedSpaceId: pickedSharedSpaceId);
+        }
+        return node;
+      }).toList();
+      await _moveMultipleWorkgroupNodesInteractor
+          .execute(updateParentNodes, sourceSharedSpaceId: _documentArguments.sharedSpaceNode.sharedSpaceId)
           .then((result) => result.fold(
               (failure) => store.dispatch(SharedSpaceDocumentAction(Left(failure))),
               (success) => store.dispatch(SharedSpaceDocumentAction(Right(success)))));
