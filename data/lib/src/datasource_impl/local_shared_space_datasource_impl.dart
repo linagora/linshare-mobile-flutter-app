@@ -84,4 +84,5 @@ class LocalSharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest) {
     throw UnimplementedError();
   }
+
 }

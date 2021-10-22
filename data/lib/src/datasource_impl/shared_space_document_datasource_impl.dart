@@ -326,6 +326,55 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
+  Future<WorkGroupNode> getRealSharedSpaceRootNode(SharedSpaceId sharedSpaceId, {bool hasTreePath = true}) {
+    return Future.sync(() async {
+      final workGroupNode = (await _linShareHttpClient.getWorkGroupNode(sharedSpaceId, sharedSpaceId.toWorkGroupNodeId(), hasTreePath: hasTreePath));
+
+      if (workGroupNode is WorkGroupDocumentDto) {
+        return workGroupNode.toWorkGroupDocument();
+      }
+
+      if (workGroupNode is WorkGroupNodeFolderDto) {
+        return workGroupNode.toWorkGroupFolder();
+      }
+
+      return workGroupNode as WorkGroupNode;
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw SharedSpaceNodeNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<WorkGroupNode> moveWorkgroupNode(MoveWorkGroupNodeRequest moveRequest, SharedSpaceId sourceSharedSpaceId) {
+    return Future.sync(() async {
+      final workGroupNode = await _linShareHttpClient.moveWorkgroupNode(moveRequest.toMoveWorkGroupNodeBodyRequest(), sourceSharedSpaceId);
+
+      if (workGroupNode is WorkGroupDocumentDto) return workGroupNode.toWorkGroupDocument();
+      if (workGroupNode is WorkGroupNodeFolderDto) return workGroupNode.toWorkGroupFolder();
+
+      return workGroupNode as WorkGroupNode;
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw WorkGroupNodeNotFoundException();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
+      });
+    });
+  }
+
+  @override
   Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
     throw UnimplementedError();
   }

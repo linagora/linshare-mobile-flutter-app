@@ -337,5 +337,87 @@ void main() {
         expect(error, isA<WorkGroupNodeNotFoundException>());
       });
     });
+
+    test('getRealSharedSpaceRootNode should return success with complete data', () async {
+      when(_linShareHttpClient.getWorkGroupNode(
+          sharedSpaceId1,
+          sharedSpaceId1.toWorkGroupNodeId(),
+          hasTreePath: true
+      )).thenAnswer((_) async => workGroupDocumentDto);
+
+      final result = await _sharedSpaceDataSourceImpl.getRealSharedSpaceRootNode(
+          sharedSpaceId1,
+          hasTreePath: true
+      );
+      expect(result, workGroupDocumentDto.toWorkGroupDocument());
+    });
+
+    test('getRealSharedSpaceRootNode should throw SharedSpacesNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
+      );
+      when(_linShareHttpClient.getWorkGroupNode(
+          sharedSpaceId1,
+          sharedSpaceId1.toWorkGroupNodeId(),
+          hasTreePath: true
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.getRealSharedSpaceRootNode(sharedSpaceId1)
+          .catchError((error) {
+        expect(error, isA<SharedSpaceNodeNotFound>());
+      });
+    });
+
+    test('getRealSharedSpaceRootNode should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
+      final error = DioError(
+          type: DioErrorType.response,
+          response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
+      );
+      when(_linShareHttpClient.getWorkGroupNode(
+          sharedSpaceId1,
+          sharedSpaceId1.toWorkGroupNodeId(),
+          hasTreePath: true
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.getRealSharedSpaceRootNode(sharedSpaceId1)
+          .catchError((error) {
+        expect(error, isA<NotAuthorized>());
+      });
+    });
+
+    test('Move Shared Space Node Should Return Success Node', () async {
+      when(_linShareHttpClient.moveWorkgroupNode(
+        moveWorkGroupNodeBodyRequest,
+        sharedSpaceId1
+      )).thenAnswer((_) async => workGroupDocumentDto);
+
+      final result = await _sharedSpaceDataSourceImpl.moveWorkgroupNode(
+          moveWorkGroupNodeRequest,
+          sharedSpaceId1
+      );
+
+      expect(result, workGroupDocumentDto.toWorkGroupDocument());
+    });
+
+    test('Move Shared Space Node Should Throw Exception When Get Failed', () async {
+      final error = DioError(
+          type: DioErrorType.response,
+          response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
+      );
+
+      when(_linShareHttpClient.moveWorkgroupNode(
+          moveWorkGroupNodeBodyRequest,
+          sharedSpaceId1
+      )).thenThrow(error);
+
+      await _sharedSpaceDataSourceImpl.moveWorkgroupNode(
+          moveWorkGroupNodeRequest,
+          sharedSpaceId1
+      ).catchError((error) {
+        expect(error, isA<WorkGroupNodeNotFoundException>());
+      });
+    });
+
   });
 }
