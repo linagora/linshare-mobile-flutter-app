@@ -375,6 +375,29 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
+  Future<List<WorkGroupNode?>> advanceSearchWorkgroupNode(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.advanceSearchWorkGroupNodes(sharedSpaceId, searchRequest))
+          .map<WorkGroupNode?>((workgroupNode) {
+        if (workgroupNode is WorkGroupDocumentDto) return workgroupNode.toWorkGroupDocument();
+        if (workgroupNode is WorkGroupNodeFolderDto) return workgroupNode.toWorkGroupFolder();
+        return null;
+      })
+      .where((node) => node != null)
+      .toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw AdvanceSearchWorkgroupNodeNotFoundException();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
+      });
+    });  }
+
+  @override
   Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
     throw UnimplementedError();
   }

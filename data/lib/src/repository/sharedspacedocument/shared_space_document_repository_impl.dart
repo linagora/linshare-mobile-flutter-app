@@ -131,6 +131,11 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
+  Future<List<WorkGroupNode?>> advanceSearchWorkgroupNode(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.advanceSearchWorkgroupNode(sharedSpaceId, searchRequest);
+  }
+
+  @override
   Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
     return _sharedSpaceDocumentDataSources[DataSourceType.local]!.makeAvailableOfflineSharedSpaceDocument(sharedSpaceNodeNested, workGroupDocument, localPath, treeNodes: treeNodes);
   }
