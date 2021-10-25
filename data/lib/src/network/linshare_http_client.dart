@@ -661,4 +661,46 @@ class LinShareHttpClient {
 
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
+
+  Future<List<WorkGroupNodeDto>> advanceSearchWorkGroupNodes(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) async {
+
+    final queryParameters = <QueryParameter>[];
+    if(searchRequest.kinds != null && searchRequest.kinds!.isNotEmpty) {
+      queryParameters.addAll(searchRequest.kinds!.map((kind) => StringQueryParameter('kinds', kind.name)).toList());
+    }
+    if(searchRequest.modificationDateAfter != null) {
+      queryParameters.add(StringQueryParameter('modificationDateAfter', searchRequest.modificationDateAfter!));
+    }
+    if(searchRequest.modificationDateBefore != null) {
+      queryParameters.add(StringQueryParameter('modificationDateBefore', searchRequest.modificationDateBefore!));
+    }
+    if(searchRequest.pattern != null && searchRequest.pattern!.isNotEmpty) {
+      queryParameters.add(StringQueryParameter('pattern', searchRequest.pattern!));
+    }
+    if(searchRequest.sortField != null) {
+      queryParameters.add(StringQueryParameter('sortField', searchRequest.sortField!.value));
+    }
+    if(searchRequest.sortOrder != null) {
+      queryParameters.add(StringQueryParameter('sortOrder', searchRequest.sortOrder!.value));
+    }
+    if(searchRequest.tree != null) {
+      queryParameters.add(BooleanQueryParameter('tree', searchRequest.tree!));
+    }
+    if(searchRequest.types != null && searchRequest.types!.isNotEmpty) {
+      queryParameters.addAll(searchRequest.types!.map((type) => StringQueryParameter('types', type.name)).toList());
+    }
+
+    final endpointPath = Endpoint.sharedSpaces
+        .withPathParameter(sharedSpaceId.uuid)
+        .withPathParameter(Endpoint.nodes)
+        .withPathParameter(Endpoint.search)
+        .withQueryParameters(queryParameters)
+        .generateEndpointPath();
+
+    final List nodesJsonResult = await _dioClient.get(endpointPath);
+
+    return nodesJsonResult
+        .map((data) => _convertToWorkGroupNodeChild(data))
+    .toList();
+  }
 }
