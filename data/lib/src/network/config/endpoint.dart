@@ -41,6 +41,7 @@ class Endpoint {
   static final String entries = '/entries';
   static final String recipents = '/recipients';
   static final String status = '/status';
+  static final String search = '/search';
 
   static final ServicePath authentication = ServicePath('/jwt');
 
