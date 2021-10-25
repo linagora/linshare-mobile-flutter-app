@@ -187,4 +187,9 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   Future<WorkGroupNode> moveWorkgroupNode(MoveWorkGroupNodeRequest moveRequest, SharedSpaceId sourceSharedSpaceId) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<WorkGroupNode?>> advanceSearchWorkgroupNode(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) {
+    throw UnimplementedError();
+  }
 }
