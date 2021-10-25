@@ -28,21 +28,13 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-enum OrderBy {
-  modificationDate,
-  creationDate,
-  expirationDate,
-  activationDate,
-  status,
-  type,
-  fileSize,
-  name,
-  shared,
-  sender
+
+enum AdvanceSearchRequestType {
+  DOCUMENT, FOLDER, DOCUMENT_REVISION
 }
 
-extension OrderByExtension on OrderBy {
-  String get value {
+extension AdvanceSearchRequestTypeExtension on AdvanceSearchRequestType {
+  String get name {
     return toString().split('.').last;
   }
 }

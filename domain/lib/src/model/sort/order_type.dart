@@ -32,3 +32,14 @@ enum OrderType {
   ascending,
   descending
 }
+
+extension OrderTypeExtension on OrderType {
+  String get value {
+    switch(this) {
+      case OrderType.ascending:
+        return 'ASC';
+      case OrderType.descending:
+        return 'DESC';
+    }
+  }
+}

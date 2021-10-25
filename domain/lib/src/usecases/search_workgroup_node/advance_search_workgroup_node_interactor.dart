@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,21 +28,23 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-enum OrderBy {
-  modificationDate,
-  creationDate,
-  expirationDate,
-  activationDate,
-  status,
-  type,
-  fileSize,
-  name,
-  shared,
-  sender
-}
+//
 
-extension OrderByExtension on OrderBy {
-  String get value {
-    return toString().split('.').last;
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+
+class AdvanceSearchWorkgroupNodeInteractor {
+
+  final SharedSpaceDocumentRepository sharedSpaceDocumentRepository;
+
+  AdvanceSearchWorkgroupNodeInteractor(this.sharedSpaceDocumentRepository);
+
+  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) async {
+    try {
+      final resultList = await sharedSpaceDocumentRepository.advanceSearchWorkgroupNode(sharedSpaceId, searchRequest);
+      return Right<Failure, Success>(SearchWorkGroupNodeSuccess(resultList));
+    } catch (exception) {
+      return Left<Failure, Success>(SearchWorkGroupNodeFailure(exception));
+    }
   }
 }

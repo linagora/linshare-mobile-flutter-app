@@ -33,4 +33,5 @@ import 'package:domain/domain.dart';
 extension DateTimeExtension on DateTime {
   int compareToSort(DateTime value, OrderType orderType) =>
       compareTo(value) * (orderType == OrderType.ascending ? -1 : 1);
+
 }

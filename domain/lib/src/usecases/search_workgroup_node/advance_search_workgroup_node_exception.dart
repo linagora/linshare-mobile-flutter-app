@@ -28,21 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-enum OrderBy {
-  modificationDate,
-  creationDate,
-  expirationDate,
-  activationDate,
-  status,
-  type,
-  fileSize,
-  name,
-  shared,
-  sender
+//
+
+import 'package:equatable/equatable.dart';
+
+abstract class AdvanceSearchWorkgroupNodeException extends Equatable implements Exception {
+  final String message;
+
+  AdvanceSearchWorkgroupNodeException(this.message);
+
+  @override
+  String toString() => message;
+
+  @override
+  List<Object> get props => [message];
 }
 
-extension OrderByExtension on OrderBy {
-  String get value {
-    return toString().split('.').last;
-  }
+class AdvanceSearchWorkgroupNodeNotFoundException extends AdvanceSearchWorkgroupNodeException {
+  AdvanceSearchWorkgroupNodeNotFoundException() : super('Advance search workgroup node result not found.');
 }
