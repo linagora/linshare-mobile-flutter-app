@@ -1815,5 +1815,95 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "advance_search_setting": "Advanced search settings",
+  "@advance_search_setting": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_document": "Document",
+  "@advance_search_type_document": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_pdf": "PDF",
+  "@advance_search_type_pdf": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_spreadsheet": "Spreadsheet",
+  "@advance_search_type_spreadsheet": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_image": "Image",
+  "@advance_search_type_image": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_audio": "Audio",
+  "@advance_search_type_audio": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_archive": "Archive",
+  "@advance_search_type_archive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_other": "Other",
+  "@advance_search_type_other": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_any_time": "Any time",
+  "@advance_search_date_any_time": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_day": "Past day",
+  "@advance_search_date_past_day": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_week": "Past week",
+  "@advance_search_date_past_week": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_month": "Past month",
+  "@advance_search_date_past_month": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_year": "Past year",
+  "@advance_search_date_past_year": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_button_reset": "Reset",
+  "@advance_search_button_reset": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_button_apply": "Apply",
+  "@advance_search_button_apply": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }

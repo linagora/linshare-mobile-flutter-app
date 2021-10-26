@@ -34,6 +34,7 @@ import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/transparent_page_route.dart';
+import 'package:linshare_flutter_app/presentation/widget/advance_search/advance_search_settings_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_login_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_setting_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_widget.dart';
@@ -91,6 +92,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<ReceivedShareDetailsWidget>(), settings: settings);
     case RoutePaths.addRecipientsUploadRequestGroup:
       return MaterialPageRoute(builder: (context) => getIt<AddRecipientsUploadRequestGroupWidget>(), settings: settings);
+    case RoutePaths.advanceSearchSettings:
+      return MaterialPageRoute(builder: (context) => getIt<AdvanceSearchSettingsWidget>(), settings: settings);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

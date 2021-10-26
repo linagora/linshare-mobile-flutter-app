@@ -43,6 +43,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
+import 'package:linshare_flutter_app/presentation/model/advance_search_setting.dart';
 import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
@@ -57,6 +58,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/advance_search_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -85,7 +88,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
-import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 
 class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
@@ -113,6 +115,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final DeviceManager _deviceManager;
   final GetSharedSpacesRootNodeInfoInteractor _getSharedSpacesNodeInteractor;
   final MoveMultipleWorkgroupNodesInteractor _moveMultipleWorkgroupNodesInteractor;
+  final AdvanceSearchWorkgroupNodeInteractor advanceSearchWorkgroupNodeInteractor;
 
   late StreamSubscription _storeStreamSubscription;
 
@@ -149,7 +152,8 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     this._enableAvailableOfflineSharedSpaceDocumentInteractor,
     this._deviceManager,
     this._getSharedSpacesNodeInteractor,
-    this._moveMultipleWorkgroupNodesInteractor
+    this._moveMultipleWorkgroupNodesInteractor,
+    this.advanceSearchWorkgroupNodeInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold((failure) => null, (success) {
@@ -955,7 +959,9 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   void _search(SearchQuery searchQuery) {
     _searchQuery = searchQuery;
     if (searchQuery.value.isNotEmpty) {
-      store.dispatch(_searchWorkGroupNodeAction(_workGroupNodesList, searchQuery));
+      store.dispatch(_advanceSearchOnSharedSpaceAction(
+          searchQuery.value.toLowerCase(),
+          store.state.advanceSearchSettingsWorkgroupNodeState.advanceSearchSetting));
     } else {
       store.dispatch(SharedSpaceDocumentSetSearchResultAction([]));
     }
@@ -964,20 +970,63 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   ThunkAction<AppState> _searchWorkGroupNodeAction(List<WorkGroupNode?> workGroupNodeList, SearchQuery searchQuery) {
     return (Store<AppState> store) async {
       await _searchWorkGroupNodeInteractor
-          .execute(workGroupNodeList, searchQuery)
-          .then((result) => result.fold((failure) {
-                if (isInSearchState()) {
-                  store.dispatch(SharedSpaceDocumentSetSearchResultAction([]));
-                }
-              }, (success) {
-                if (isInSearchState()) {
-                  store.dispatch(SharedSpaceDocumentSetSearchResultAction(
-                      success is SearchWorkGroupNodeSuccess
-                          ? success.workGroupNodesList
-                          : []));
-                }
-              }));
+        .execute(workGroupNodeList, searchQuery)
+        .then((result) =>
+          result.fold(
+            (failure) {
+              if (isInSearchState()) {
+                store.dispatch(SharedSpaceDocumentSetSearchResultAction([]));
+              }
+            },
+            (success) {
+              if (isInSearchState()) {
+                store.dispatch(SharedSpaceDocumentSetSearchResultAction(
+                  success is SearchWorkGroupNodeSuccess
+                    ? success.workGroupNodesList
+                    : []));
+              }
+            }
+          ));
     };
+  }
+
+  OnlineThunkAction _advanceSearchOnSharedSpaceAction(String query, AdvanceSearchSetting advanceSearchSetting) {
+    final searchRequest = AdvanceSearchRequest(
+      pattern: query,
+      kinds: advanceSearchSetting.listKindState?.where((kindState) => kindState.selected == true)
+          .map((e) => e.kind)
+          .toList(),
+      types: null,
+      modificationDateAfter: advanceSearchSetting.listModificationDate?.firstWhere((e) => e.selected == true).date.dateAfter,
+      modificationDateBefore: advanceSearchSetting.listModificationDate?.firstWhere((e) => e.selected == true).date.dateBefore,
+      sortField: store.state.sharedSpaceDocumentState.sorter?.orderBy,
+      sortOrder: store.state.sharedSpaceDocumentState.sorter?.orderType,
+      tree: null,
+    );
+    return OnlineThunkAction((Store<AppState> store) async {
+      await advanceSearchWorkgroupNodeInteractor.execute(_documentArguments.sharedSpaceNode.sharedSpaceId, searchRequest)
+        .then((result) => result.fold(
+          (failure) {
+            if (isInSearchState()) {
+              store.dispatch(_searchWorkGroupNodeAction(_workGroupNodesList, searchQuery));
+            }
+          },
+          (success) {
+            if (isInSearchState()) {
+              _handleAdvancedSearchSuccess(success);
+            }
+          }));
+    });
+  }
+
+  void _handleAdvancedSearchSuccess(Success success) {
+    if (success is SearchWorkGroupNodeSuccess) {
+      if (success.workGroupNodesList.isNotEmpty) {
+        store.dispatch(SharedSpaceDocumentSetSearchResultAction(success.workGroupNodesList));
+      } else {
+        store.dispatch(_searchWorkGroupNodeAction(_workGroupNodesList, searchQuery));
+      }
+    }
   }
 
   void openMoreActionBottomMenu(BuildContext context, List<WorkGroupNode> workGroupNodes, List<Widget> actionTiles, Widget footerAction) {

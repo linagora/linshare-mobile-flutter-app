@@ -40,7 +40,9 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/widget/advance_search/advance_search_settings_arguments.dart';
 
 import 'home_app_bar_viewmodel.dart';
 
@@ -66,6 +68,7 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
   final TextEditingController _typeAheadController = TextEditingController();
   final imagePath = getIt<AppImagePaths>();
   final _model = getIt<HomeAppBarViewModel>();
+  final _appNavigation = getIt.get<AppNavigation>();
 
     @override
   void initState() {
@@ -85,60 +88,101 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
         converter: (store) => store.state.uiState,
         builder: (context, uiState) {
           if (uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
-            return _searchAppBar(context, uiState.searchState.searchDestination, uiState.searchState.destinationName);
+            return _searchAppBar(context, uiState.searchState.searchDestination, uiState.searchState.destinationName, uiState);
           }
           return _homeAppBar(context);
         }
     );
   }
 
-  Widget _searchAppBar(BuildContext context, SearchDestination searchDestination, String destinationName) {
+  Widget _searchAppBar(BuildContext context, SearchDestination searchDestination, String destinationName, UIState uiState) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Transform(
         transform: Matrix4.translationValues(-5, 0.0, 0.0),
-        child: TypeAheadFormField(
-          textFieldConfiguration: TextFieldConfiguration(
-              controller: _typeAheadController,
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                  border: _searchBorder(),
-                  focusedBorder: _searchBorder(),
-                  enabledBorder: _searchBorder(),
-                  fillColor: AppColor.searchBottomBarColor,
-                  filled: true,
-                  contentPadding: EdgeInsets.symmetric(vertical: 15),
-                  hintText: destinationName,
-                  hintStyle: TextStyle(
-                      color: AppColor.uploadFileFileSizeTextColor,
-                      fontSize: 16.0),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 24.0,
+        child: Stack(
+          alignment: Alignment.centerRight,
+          children: [
+            TypeAheadFormField(
+              textFieldConfiguration: TextFieldConfiguration(
+                  controller: _typeAheadController,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                      border: _searchBorder(),
+                      focusedBorder: _searchBorder(),
+                      enabledBorder: _searchBorder(),
+                      fillColor: AppColor.searchBottomBarColor,
+                      filled: true,
+                      contentPadding: searchDestination == SearchDestination.sharedSpace
+                          ? EdgeInsets.fromLTRB(0, 15, 56, 15)
+                          : EdgeInsets.symmetric(vertical: 15),
+                      hintText: destinationName,
+                      hintStyle: TextStyle(
+                          color: AppColor.uploadFileFileSizeTextColor,
+                          fontSize: 16.0),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        size: 24.0,
+                      ),
+                      suffixIcon: searchDestination != SearchDestination.sharedSpace
+                        ? GestureDetector(
+                        onTap: () => _typeAheadController.clear(),
+                          child: Icon(
+                            Icons.cancel,
+                            size: 20.0,
+                          ))
+                        : null
+                  )),
+              debounceDuration: Duration(milliseconds: 300),
+              suggestionsCallback: (pattern) async {
+                if (widget.onNewSearchQuery != null) {
+                  widget.onNewSearchQuery!(pattern);
+                }
+                return [];
+              },
+              itemBuilder: (BuildContext context, itemData) {
+                return SizedBox.shrink();
+              },
+              onSuggestionSelected: (suggestion) {},
+              noItemsFoundBuilder: (context) => SizedBox(),
+              hideOnEmpty: true,
+              hideOnError: true,
+              hideOnLoading: true,
+              hideSuggestionsOnKeyboardHide: true,
+            ),
+            searchDestination == SearchDestination.sharedSpace
+              ? Container(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () => _typeAheadController.clear(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Icon(
+                            Icons.cancel,
+                            size: 20.0,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      (searchDestination == SearchDestination.sharedSpace)
+                        ? GestureDetector(
+                          onTap: () {
+                            _goToAdvanceSearchScreen(searchDestination, uiState);
+                          },
+                          child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: SvgPicture.asset(
+                                  imagePath.icSearchFilter, width: 20.0, height: 20.0)
+                          )
+                        )
+                        : SizedBox.shrink()
+                    ]
                   ),
-                  suffixIcon: GestureDetector(
-                    onTap: () => _typeAheadController.clear(),
-                    child: Icon(
-                      Icons.cancel,
-                      size: 20.0,
-                    ),
-                  ))),
-          debounceDuration: Duration(milliseconds: 300),
-          suggestionsCallback: (pattern) async {
-            if (widget.onNewSearchQuery != null) {
-              widget.onNewSearchQuery!(pattern);
-            }
-            return [];
-          },
-          itemBuilder: (BuildContext context, itemData) {
-            return SizedBox.shrink();
-          },
-          onSuggestionSelected: (suggestion) {},
-          noItemsFoundBuilder: (context) => SizedBox(),
-          hideOnEmpty: true,
-          hideOnError: true,
-          hideOnLoading: true,
-          hideSuggestionsOnKeyboardHide: true,
+            ) : SizedBox.shrink()
+          ],
         ),
       ),
       centerTitle: true,
@@ -211,6 +255,15 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
         return uiState.uploadRequestGroup?.label ?? AppLocalizations.of(context).upload_requests;
       default:
         return AppLocalizations.of(context).my_space_title;
+    }
+  }
+
+  void _goToAdvanceSearchScreen(SearchDestination searchDestination, UIState uiState) {
+    if(searchDestination == SearchDestination.sharedSpace) {
+      _appNavigation.push(
+          RoutePaths.advanceSearchSettings,
+          arguments: AdvanceSearchSettingsArguments(searchDestination, query: _typeAheadController.text, sharedSpaceId: uiState.selectedSharedSpace?.sharedSpaceId)
+      );
     }
   }
 

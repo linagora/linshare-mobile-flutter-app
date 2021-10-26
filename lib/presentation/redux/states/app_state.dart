@@ -32,6 +32,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_sso_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_login_state.dart';
@@ -93,6 +94,7 @@ class AppState with EquatableMixin {
   final UploadRequestInsideState uploadRequestInsideState;
   final ReceivedShareDetailsState receivedShareDetailsState;
   final AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState;
+  final AdvanceSearchSettingsWorkgroupNodeState advanceSearchSettingsWorkgroupNodeState;
 
   AppState(
       {required this.uiState,
@@ -124,7 +126,8 @@ class AppState with EquatableMixin {
       required this.addRecipientsUploadRequestGroupState,
       required this.createdUploadRequestGroupState,
       required this.activeClosedUploadRequestGroupState,
-      required this.archivedUploadRequestGroupState});
+      required this.archivedUploadRequestGroupState,
+      required this.advanceSearchSettingsWorkgroupNodeState});
 
   factory AppState.initial() {
     return AppState(
@@ -157,7 +160,8 @@ class AppState with EquatableMixin {
         archivedUploadRequestGroupState: ArchivedUploadRequestGroupState.initial(),
         uploadRequestInsideState: UploadRequestInsideState.initial(),
         receivedShareDetailsState: ReceivedShareDetailsState.initial(),
-        addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial()
+        addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial(),
+        advanceSearchSettingsWorkgroupNodeState: AdvanceSearchSettingsWorkgroupNodeState.initial()
     );
   }
 
@@ -191,6 +195,7 @@ class AppState with EquatableMixin {
         archivedUploadRequestGroupState,
         uploadRequestInsideState,
         receivedShareDetailsState,
-        addRecipientsUploadRequestGroupState
+        addRecipientsUploadRequestGroupState,
+        advanceSearchSettingsWorkgroupNodeState
       ];
 }
