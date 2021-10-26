@@ -700,7 +700,13 @@ class LinShareHttpClient {
     final List nodesJsonResult = await _dioClient.get(endpointPath);
 
     return nodesJsonResult
-        .map((data) => _convertToWorkGroupNodeChild(data))
-    .toList();
+      .where((element) => validateSearchResult(element))
+      .map((data) => _convertToWorkGroupNodeChild(data))
+      .toList();
+  }
+
+  bool validateSearchResult(Map<String, dynamic> jsonResult) {
+    return (jsonResult['type'] == WorkGroupNodeType.FOLDER.value)
+      || (jsonResult['type'] == WorkGroupNodeType.DOCUMENT.value);
   }
 }

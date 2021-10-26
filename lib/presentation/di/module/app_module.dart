@@ -416,6 +416,7 @@ class AppModule {
       getIt<ReceivedShareRepository>(),
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
+    getIt.registerFactory(() => AdvanceSearchWorkgroupNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
   void _provideSharePreference() {

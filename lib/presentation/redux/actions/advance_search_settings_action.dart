@@ -30,31 +30,46 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:intl/intl.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/advance_search_date_state.dart';
+import 'package:linshare_flutter_app/presentation/model/advance_search_kind_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-extension DateTimeExtension on DateTime {
+@immutable
+class StartAdvanceSearchSettingsLoadingAction extends ActionOnline {}
 
-  String getMMMddyyyyFormatString() => DateFormat.yMMMd().format(this);
+@immutable
+class AdvanceSearchSettingsAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
 
-  String getYMMMMdFormatWithJm() => DateFormat.yMMMMd().add_jm().format(this);
-
-  DateTime roundUpHour(int numberHourRoundUp) => add(Duration(hours: numberHourRoundUp))
-      .subtract(Duration(minutes: minute, seconds: second, milliseconds: millisecond, microseconds: microsecond));
-
-  DateTime copyWith(
-      {int? year, int? month, int? day, int? hour, int? minute, int? second, int? millisecond, int? microsecond}) {
-    return DateTime(
-      year ?? this.year,
-      month ?? this.month,
-      day ?? this.day,
-      hour ?? this.hour,
-      minute ?? this.minute,
-      second ?? this.second,
-      millisecond ?? this.millisecond,
-      microsecond ?? this.microsecond,
-    );
-  }
-
-  String get zuluDateFormat => DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(this);
-
+  AdvanceSearchSettingsAction(this.viewState);
 }
+
+@immutable
+class AdvanceSearchSettingsSetNewKindStateAction extends ActionOnline {
+  final Either<Failure, Success>? viewState;
+  final AdvanceSearchKindState newAdvanceSearchKindState;
+
+  AdvanceSearchSettingsSetNewKindStateAction(this.newAdvanceSearchKindState, {this.viewState});
+}
+
+@immutable
+class AdvanceSearchSettingsSetNewDateStateAction extends ActionOnline {
+  final Either<Failure, Success>? viewState;
+  final AdvanceSearchDateState newAdvanceSearchDateState;
+
+  AdvanceSearchSettingsSetNewDateStateAction(this.newAdvanceSearchDateState, {this.viewState});
+}
+
+@immutable
+class AdvanceSearchSettingsResetAllAction extends ActionOnline {
+  AdvanceSearchSettingsResetAllAction();
+}
+
+@immutable
+class AdvanceSearchSettingsApplyAction extends ActionOnline {
+  AdvanceSearchSettingsApplyAction();
+}
+
