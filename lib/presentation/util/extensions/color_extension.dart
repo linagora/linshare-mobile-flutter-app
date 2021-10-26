@@ -105,4 +105,7 @@ extension AppColor on Color {
   static const biometricAuthenTimeoutTileColor = Color(0xff7B7B7B);
   static const versioningTextColor = Color(0xff070707);
   static const versioningDisabledTextColor = Color(0xffbbbbbb);
+  static const advanceSearchAppbarBackgroundColor = Color(0xffF7F7F7);
+  static const advanceSearchAppbarTitleColor = Color(0xff404040);
+  static const advanceSearchButtonResetColor = Color(0xff757575);
 }

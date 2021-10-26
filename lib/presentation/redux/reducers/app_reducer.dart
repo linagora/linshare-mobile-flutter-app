@@ -34,6 +34,7 @@ import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/advance_search_settings_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_sso_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_login_reducer.dart';
@@ -98,7 +99,9 @@ AppState appStateReducer(AppState state, action) {
         addRecipientsUploadRequestGroupState: addRecipientUploadRequestGroupReducer(state.addRecipientsUploadRequestGroupState, action),
         createdUploadRequestGroupState: createdUploadRequestGroupReducer(state.createdUploadRequestGroupState, action),
         archivedUploadRequestGroupState: archivedUploadRequestGroupReducer(state.archivedUploadRequestGroupState, action),
-        activeClosedUploadRequestGroupState: activeClosedUploadRequestGroupReducer(state.activeClosedUploadRequestGroupState, action));
+        activeClosedUploadRequestGroupState: activeClosedUploadRequestGroupReducer(state.activeClosedUploadRequestGroupState, action),
+        advanceSearchSettingsWorkgroupNodeState: advanceSearchSettingsReducer(state.advanceSearchSettingsWorkgroupNodeState, action)
+    );
   }
 
   return AppState(
@@ -134,6 +137,7 @@ AppState appStateReducer(AppState state, action) {
       createdUploadRequestGroupState: state.createdUploadRequestGroupState,
       activeClosedUploadRequestGroupState: state.activeClosedUploadRequestGroupState,
       archivedUploadRequestGroupState: state.archivedUploadRequestGroupState,
+      advanceSearchSettingsWorkgroupNodeState: state.advanceSearchSettingsWorkgroupNodeState,
   );
 }
 

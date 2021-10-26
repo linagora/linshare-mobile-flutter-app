@@ -30,31 +30,31 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:intl/intl.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/advance_search_settings_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
+import 'package:redux/redux.dart';
 
-extension DateTimeExtension on DateTime {
+final advanceSearchSettingsReducer = combineReducers<AdvanceSearchSettingsWorkgroupNodeState>([
 
-  String getMMMddyyyyFormatString() => DateFormat.yMMMd().format(this);
+  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, StartAdvanceSearchSettingsLoadingAction>(
+      (AdvanceSearchSettingsWorkgroupNodeState state, _) => state.startLoadingState()),
 
-  String getYMMMMdFormatWithJm() => DateFormat.yMMMMd().add_jm().format(this);
+  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsAction>(
+      (AdvanceSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsAction action) =>
+          state.sendViewState(viewState: action.viewState)),
 
-  DateTime roundUpHour(int numberHourRoundUp) => add(Duration(hours: numberHourRoundUp))
-      .subtract(Duration(minutes: minute, seconds: second, milliseconds: millisecond, microseconds: microsecond));
+  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSetNewKindStateAction>(
+      (AdvanceSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsSetNewKindStateAction action) => state
+          .setNewKindState(viewState: action.viewState, newAdvanceSearchKindState: action.newAdvanceSearchKindState)),
 
-  DateTime copyWith(
-      {int? year, int? month, int? day, int? hour, int? minute, int? second, int? millisecond, int? microsecond}) {
-    return DateTime(
-      year ?? this.year,
-      month ?? this.month,
-      day ?? this.day,
-      hour ?? this.hour,
-      minute ?? this.minute,
-      second ?? this.second,
-      millisecond ?? this.millisecond,
-      microsecond ?? this.microsecond,
-    );
-  }
+  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSetNewDateStateAction>(
+      (AdvanceSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsSetNewDateStateAction action) => state
+          .setNewDateState(viewState: action.viewState, newAdvanceSearchDateState: action.newAdvanceSearchDateState)),
 
-  String get zuluDateFormat => DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(this);
+  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsResetAllAction>(
+          (AdvanceSearchSettingsWorkgroupNodeState state, _) => state.resetAllSettings()),
 
-}
+  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, StartAdvanceSearchSettingsLoadingAction>(
+          (AdvanceSearchSettingsWorkgroupNodeState state, _) => state.applySearch()),
+
+]);

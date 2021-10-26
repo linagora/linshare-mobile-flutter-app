@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/app_reducer.dar
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_sso_state.dart';
@@ -179,6 +180,7 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     archivedUploadRequestGroupState: ArchivedUploadRequestGroupState.initial(),
     uploadRequestInsideState: UploadRequestInsideState.initial(),
     receivedShareDetailsState: ReceivedShareDetailsState.initial(),
-    addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial()
+    addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial(),
+    advanceSearchSettingsWorkgroupNodeState: AdvanceSearchSettingsWorkgroupNodeState.initial()
   );
 }

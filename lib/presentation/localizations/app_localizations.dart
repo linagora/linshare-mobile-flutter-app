@@ -2237,6 +2237,111 @@ class AppLocalizations {
       name: 'are_you_sure_want_to_remove_this_version',
     );
   }
+
+  String advance_search_setting() {
+    return Intl.message(
+      'Advanced search settings',
+      name: 'advance_search_setting',
+    );
+  }
+
+  String advance_search_type_document() {
+    return Intl.message(
+      'Document',
+      name: 'advance_search_type_document',
+    );
+  }
+
+  String advance_search_type_pdf() {
+    return Intl.message(
+      'PDF',
+      name: 'advance_search_type_pdf',
+    );
+  }
+
+  String advance_search_type_spreadsheet() {
+    return Intl.message(
+      'Spreadsheet',
+      name: 'advance_search_type_spreadsheet',
+    );
+  }
+
+  String advance_search_type_image() {
+    return Intl.message(
+      'Image',
+      name: 'advance_search_type_image',
+    );
+  }
+
+  String advance_search_type_audio() {
+    return Intl.message(
+      'Audio',
+      name: 'advance_search_type_audio',
+    );
+  }
+
+  String advance_search_type_archive() {
+    return Intl.message(
+      'Archive',
+      name: 'advance_search_type_archive',
+    );
+  }
+
+  String advance_search_type_other() {
+    return Intl.message(
+      'Other',
+      name: 'advance_search_type_other',
+    );
+  }
+
+  String advance_search_date_any_time() {
+    return Intl.message(
+      'Any time',
+      name: 'advance_search_date_any_time',
+    );
+  }
+
+  String advance_search_date_past_day() {
+    return Intl.message(
+      'Past day',
+      name: 'advance_search_date_past_day',
+    );
+  }
+
+  String advance_search_date_past_week() {
+    return Intl.message(
+      'Past week',
+      name: 'advance_search_date_past_week',
+    );
+  }
+
+  String advance_search_date_past_month() {
+    return Intl.message(
+      'Past month',
+      name: 'advance_search_date_past_month',
+    );
+  }
+
+  String advance_search_date_past_year() {
+    return Intl.message(
+      'Past year',
+      name: 'advance_search_date_past_year',
+    );
+  }
+
+  String advance_search_button_reset() {
+    return Intl.message(
+      'Reset',
+      name: 'advance_search_button_reset',
+    );
+  }
+
+  String advance_search_button_apply() {
+    return Intl.message(
+      'Apply',
+      name: 'advance_search_button_apply',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

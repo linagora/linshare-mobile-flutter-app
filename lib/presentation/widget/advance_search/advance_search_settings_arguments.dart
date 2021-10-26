@@ -28,33 +28,15 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:intl/intl.dart';
+import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
-extension DateTimeExtension on DateTime {
+class AdvanceSearchSettingsArguments extends RouterArguments {
+  SearchDestination searchDestination;
+  String query;
+  SharedSpaceId? sharedSpaceId;
 
-  String getMMMddyyyyFormatString() => DateFormat.yMMMd().format(this);
-
-  String getYMMMMdFormatWithJm() => DateFormat.yMMMMd().add_jm().format(this);
-
-  DateTime roundUpHour(int numberHourRoundUp) => add(Duration(hours: numberHourRoundUp))
-      .subtract(Duration(minutes: minute, seconds: second, milliseconds: millisecond, microseconds: microsecond));
-
-  DateTime copyWith(
-      {int? year, int? month, int? day, int? hour, int? minute, int? second, int? millisecond, int? microsecond}) {
-    return DateTime(
-      year ?? this.year,
-      month ?? this.month,
-      day ?? this.day,
-      hour ?? this.hour,
-      minute ?? this.minute,
-      second ?? this.second,
-      millisecond ?? this.millisecond,
-      microsecond ?? this.microsecond,
-    );
-  }
-
-  String get zuluDateFormat => DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(this);
-
+  AdvanceSearchSettingsArguments(this.searchDestination, {required this.query, this.sharedSpaceId});
 }
