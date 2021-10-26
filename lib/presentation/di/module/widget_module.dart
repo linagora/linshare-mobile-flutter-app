@@ -43,6 +43,8 @@ import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/common/upload_request_group_common_view.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/account_details/account_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/advance_search/advance_search_settings_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/advance_search/advance_search_settings_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_login_viewmodel.dart';
@@ -135,6 +137,7 @@ class WidgetModule {
     _provideReceivedShareDetailsComponent();
     _provideAddRecipientsUploadRequestGroupComponent();
     _provideWidgetCommonView();
+    _provideAdvanceSearchWidgetComponent();
   }
 
   void _provideLoginComponent() {
@@ -272,7 +275,8 @@ class WidgetModule {
         getIt.get<EnableAvailableOfflineSharedSpaceDocumentInteractor>(),
         getIt<DeviceManager>(),
         getIt<GetSharedSpacesRootNodeInfoInteractor>(),
-        getIt<MoveMultipleWorkgroupNodesInteractor>()
+        getIt<MoveMultipleWorkgroupNodesInteractor>(),
+        getIt.get<AdvanceSearchWorkgroupNodeInteractor>()
     ));
   }
 
@@ -552,4 +556,14 @@ class WidgetModule {
     getIt.registerFactory(() => UploadRequestGroupCommonView());
     getIt.registerFactory(() => CommonView());
   }
+
+  void _provideAdvanceSearchWidgetComponent() {
+    getIt.registerFactory(() => AdvanceSearchSettingsWidget());
+    getIt.registerFactory(() => AdvanceSearchSettingsViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+      getIt.get<AdvanceSearchWorkgroupNodeInteractor>(),
+    ));
+  }
+
 }
