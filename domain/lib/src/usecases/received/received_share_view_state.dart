@@ -123,3 +123,48 @@ class GetReceivedShareFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class RemoveReceivedShareViewState extends ViewState {
+  final ReceivedShare receivedShare;
+
+  RemoveReceivedShareViewState(this.receivedShare);
+
+  @override
+  List<Object> get props => [receivedShare];
+}
+
+class RemoveReceivedShareFailure extends FeatureFailure {
+  final exception;
+
+  RemoveReceivedShareFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class RemoveMultipleReceivedSharesAllSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveMultipleReceivedSharesAllSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveMultipleReceivedSharesHasSomeFilesFailedViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveMultipleReceivedSharesHasSomeFilesFailedViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveMultipleReceivedSharesAllFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveMultipleReceivedSharesAllFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
