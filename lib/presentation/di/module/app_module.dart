@@ -401,6 +401,11 @@ class AppModule {
     getIt.registerFactory(() => SearchUploadRequestEntriesInteractor());
     getIt.registerFactory(() => CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
     getIt.registerFactory(() => GetLastLoginInteractor(getIt<AuditUserRepository>()));
+    getIt.registerFactory(() => ExportReceivedShareInteractor(
+      getIt<ReceivedShareRepository>(),
+      getIt<TokenRepository>(),
+      getIt<CredentialRepository>()));
+    getIt.registerFactory(() => ExportMultipleReceivedSharesInteractor(getIt<ExportReceivedShareInteractor>()));
   }
 
   void _provideSharePreference() {
