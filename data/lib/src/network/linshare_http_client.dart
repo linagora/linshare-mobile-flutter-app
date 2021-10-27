@@ -642,4 +642,10 @@ class LinShareHttpClient {
     return _convertToWorkGroupNodeChild(workGroupNode);
   }
 
+  Future<ReceivedShareDto> removeReceivedShare(ShareId shareId) async {
+    final resultJson = await _dioClient.delete(Endpoint.receivedShares
+      .withPathParameter(shareId.uuid)
+      .generateEndpointPath());
+    return ReceivedShareDto.fromJson(resultJson);
+  }
 }

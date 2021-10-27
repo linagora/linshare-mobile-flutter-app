@@ -59,4 +59,9 @@ class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
   Future<ReceivedShare> getReceivedShare(ShareId shareId) {
     return _receivedShareDataSource.getReceivedShare(shareId);
   }
+
+  @override
+  Future<ReceivedShare> remove(ShareId shareId) {
+    return _receivedShareDataSource.remove(shareId);
+  }
 }
