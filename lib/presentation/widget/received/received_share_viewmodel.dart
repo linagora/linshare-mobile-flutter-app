@@ -55,6 +55,7 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
@@ -64,6 +65,7 @@ import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:share/share.dart' as share_library;
 
 class ReceivedShareViewModel extends BaseViewModel {
   final GetAllReceivedSharesInteractor _getAllReceivedInteractor;
@@ -76,6 +78,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   final SortInteractor _sortInteractor;
   final DeviceManager _deviceManager;
   final RemoveMultipleReceivedSharesInteractor _removeMultipleReceivedShareInteractor;
+  final ExportMultipleReceivedSharesInteractor _exportMultipleReceivedSharesInteractor;
 
   List<ReceivedShare> _receivedSharesList = [];
   final SearchReceivedSharesInteractor _searchReceivedSharesInteractor;
@@ -98,6 +101,7 @@ class ReceivedShareViewModel extends BaseViewModel {
       this._searchReceivedSharesInteractor,
       this._deviceManager,
       this._removeMultipleReceivedShareInteractor,
+      this._exportMultipleReceivedSharesInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.receivedShareState.viewState.fold(
@@ -190,9 +194,13 @@ class ReceivedShareViewModel extends BaseViewModel {
     };
   }
 
-  void copyToMySpace(List<ReceivedShare> shares, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    if (itemSelectionType == ItemSelectionType.single) {
+  void copyToMySpace(List<ReceivedShare> shares, {bool fromMoreAction = false, ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    if (itemSelectionType == ItemSelectionType.single || fromMoreAction) {
       _appNavigation.popBack();
+    }
+
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
     }
 
     store.dispatch(_copyToMySpaceAction(shares));
@@ -444,6 +452,83 @@ class ReceivedShareViewModel extends BaseViewModel {
           (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
           (success) => store.dispatch(ReceivedShareAction(Right(success)))));
     });
+  }
+
+  void exportFile(BuildContext context, List<ReceivedShare> receivedShares, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+    final cancelToken = CancelToken();
+    _showDownloadingFileDialog(context, receivedShares, cancelToken);
+    store.dispatch(_exportFileAction(receivedShares, cancelToken));
+  }
+
+  void _showDownloadingFileDialog(BuildContext context, List<ReceivedShare> receivedShares, CancelToken cancelToken) {
+    final downloadMessage = receivedShares.length <= 1
+      ? AppLocalizations.of(context).downloading_file(receivedShares.first.name)
+      : AppLocalizations.of(context).downloading_files(receivedShares.length);
+
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+        .key(Key('downloading_file_dialog'))
+        .title(AppLocalizations.of(context).preparing_to_export)
+        .content(downloadMessage)
+        .actionText(AppLocalizations.of(context).cancel)
+        .build());
+  }
+
+  ThunkAction<AppState> _exportFileAction(List<ReceivedShare> receivedShares, CancelToken cancelToken) {
+    return (Store<AppState> store) async {
+      await _exportMultipleReceivedSharesInteractor.execute(
+          receivedShares: receivedShares,
+          cancelToken: cancelToken
+      ).then((result) => result.fold(
+        (failure) => store.dispatch(_exportFileFailureAction(failure)),
+        (success) => store.dispatch(_exportFileSuccessAction(success))));
+    };
+  }
+
+  ThunkAction<AppState> _exportFileSuccessAction(Success success) {
+    return (Store<AppState> store) async {
+      _appNavigation.popBack();
+      store.dispatch(ReceivedShareAction(Right(success)));
+      if (success is ExportReceivedShareViewState) {
+        await share_library.Share.shareFiles([success.filePath]);
+      } else if (success is ExportReceivedSharesAllSuccessViewState) {
+        await share_library.Share.shareFiles(success.resultList
+          .map((result) => ((result.getOrElse(() => IdleState()) as ExportReceivedShareViewState).filePath))
+          .toList());
+      } else if (success is ExportReceivedSharesHasSomeFilesFailureViewState) {
+        await share_library.Share.shareFiles(success.resultList
+          .map((result) => result.fold(
+            (failure) => '',
+            (success) => ((success as ExportReceivedShareViewState).filePath)))
+          .toList());
+      }
+    };
+  }
+
+  ThunkAction<AppState> _exportFileFailureAction(Failure failure) {
+    return (Store<AppState> store) async {
+      if (failure is ExportReceivedShareFailure && !(failure.exception is CancelDownloadFileException)) {
+        _appNavigation.popBack();
+      }
+      store.dispatch(ReceivedShareAction(Left(failure)));
+    };
+  }
+
+  void openMoreActionBottomMenu(BuildContext context, List<ReceivedShare> receivedShares, List<Widget> actionTiles, Widget footerAction) {
+    ContextMenuBuilder(context)
+      .addHeader(MoreActionBottomSheetHeaderBuilder(
+            context,
+            Key('more_action_menu_header'),
+            receivedShares.map((receivedShare) => SharePresentationFile.fromShare(receivedShare)).toList())
+         .build())
+      .addTiles(actionTiles)
+      .addFooter(footerAction)
+      .build();
   }
 
   void openSearchState(BuildContext context) {

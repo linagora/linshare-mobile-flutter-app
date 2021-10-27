@@ -156,7 +156,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
             converter: (store) => store.state,
             builder: (context, appState) {
               if (!appState.uiState.isInSearchState() &&
-                  appState.mySpaceState.selectMode == SelectMode.INACTIVE) {
+                  appState.receivedShareState.selectMode == SelectMode.INACTIVE) {
                 return SearchBottomBarBuilder()
                     .key(Key('search_bottom_bar'))
                     .onSearchActionClick(() => receivedShareViewModel.openSearchState(context))
@@ -369,38 +369,57 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
 
   List<Widget> _contextMenuActionTiles(BuildContext context, ReceivedShare receivedShare) {
     return [
-      if (Platform.isAndroid) _downloadAction(receivedShare),
-      _copyToMySpaceAction(context, receivedShare),
+      _exportFileAction([receivedShare]),
+      if (Platform.isAndroid) _downloadAction([receivedShare]),
+      _copyToMySpaceAction([receivedShare]),
       _previewReceivedShareAction(receivedShare),
       _detailsAction(receivedShare)
     ];
   }
 
-  Widget _downloadAction(ReceivedShare share) {
+  Widget _exportFileAction(List<ReceivedShare> receivedShares, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return ReceivedShareContextMenuTileBuilder(
+        Key('export_context_menu_action'),
+        SvgPicture.asset(imagePath.icExportFile, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).export_file,
+        receivedShares.first)
+    .onActionClick((_) => receivedShareViewModel.exportFile(context, receivedShares, itemSelectionType: itemSelectionType))
+    .build();
+  }
+
+  Widget _downloadAction(List<ReceivedShare> receivedShares, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return SimpleContextMenuActionBuilder(
             Key('download_context_menu_action'),
             SvgPicture.asset(imagePath.icFileDownload,
                 width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).download_to_device)
-        .onActionClick((_) => receivedShareViewModel.downloadFileClick([share.shareId]))
+        .onActionClick((_) => receivedShareViewModel.downloadFileClick(
+            receivedShares.map((share) => share.shareId).toList(),
+            itemSelectionType: itemSelectionType))
         .build();
   }
 
-  Widget _copyToMySpaceAction(BuildContext context, ReceivedShare receivedShare) {
+  Widget _copyToMySpaceAction(List<ReceivedShare> receivedShares,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return ShareContextMenuTileBuilder(
-            Key('copy_to_my_space_context_menu_action'),
-            SvgPicture.asset(imagePath.icCopy, width: 24, height: 24, fit: BoxFit.fill),
-            AppLocalizations.of(context).copy_to_my_space,
-            receivedShare)
-        .onActionClick((data) => receivedShareViewModel.copyToMySpace([receivedShare]))
-        .build();
+          Key('copy_to_my_space_context_menu_action'),
+          SvgPicture.asset(imagePath.icCopy, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).copy_to_my_space,
+          receivedShares.first)
+      .onActionClick((data) => receivedShareViewModel.copyToMySpace(
+          receivedShares,
+          fromMoreAction: true,
+          itemSelectionType: itemSelectionType))
+      .build();
   }
 
   List<Widget> _multipleSelectionActions(List<ReceivedShare> receivedShares) {
     return [
-      _downloadMultipleSelection(receivedShares),
+      if (Platform.isAndroid) _downloadMultipleSelection(receivedShares),
+      _exportMultipleSelection(receivedShares),
       _copyToMySpaceMultipleSelection(receivedShares),
-      _removeMultipleSelection(receivedShares)
+      _removeMultipleSelection(receivedShares),
+      _moreActionMultipleSelection(receivedShares)
     ];
   }
 
@@ -421,18 +440,24 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   Widget _downloadMultipleSelection(List<ReceivedShare> shares) {
     return ReceivedShareMultipleSelectionActionBuilder(
             Key('multiple_selection_download_action_received_share'),
-            SvgPicture.asset(
-              imagePath.icFileDownload,
-              width: 24,
-              height: 24,
-              fit: BoxFit.fill,
-            ),
+            SvgPicture.asset(imagePath.icFileDownload, width: 24, height: 24, fit: BoxFit.fill),
             shares)
-        .onActionClick((shares) =>
-          receivedShareViewModel.downloadFileClick(
+        .onActionClick((shares) => receivedShareViewModel.downloadFileClick(
             shares.map((share) => share.shareId).toList(),
             itemSelectionType: ItemSelectionType.multiple))
         .build();
+  }
+
+  Widget _exportMultipleSelection(List<ReceivedShare> shares) {
+    return ReceivedShareMultipleSelectionActionBuilder(
+          Key('multiple_selection_export_action_received_share'),
+          SvgPicture.asset(imagePath.icExportFile, width: 24, height: 24, fit: BoxFit.fill),
+          shares)
+      .onActionClick((shares) => receivedShareViewModel.exportFile(
+          context,
+          shares,
+          itemSelectionType: ItemSelectionType.multiple))
+      .build();
   }
 
   Widget _previewReceivedShareAction(ReceivedShare receivedShare) {
@@ -479,6 +504,10 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   }
 
   Widget _removeFileAction(List<ReceivedShare> receivedShares, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    if (receivedShares.isEmpty) {
+      return SizedBox.shrink();
+    }
+
     return ReceivedShareContextMenuTileBuilder(
       Key('delete_received_share_context_menu_action'),
       SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
@@ -497,5 +526,26 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
       .onActionClick((receivedShares) => receivedShareViewModel.removeReceivedShare(
           context, receivedShares, itemSelectionType: ItemSelectionType.multiple))
       .build();
+  }
+
+  Widget _moreActionMultipleSelection(List<ReceivedShare> receivedShares) {
+    return ReceivedShareMultipleSelectionActionBuilder(
+        Key('multiple_selection_more_action'),
+        SvgPicture.asset(imagePath.icMoreVertical, width: 24, height: 24, fit: BoxFit.fill,),
+        receivedShares)
+    .onActionClick((documents) => receivedShareViewModel.openMoreActionBottomMenu(
+        context,
+        documents,
+        _moreActionList(documents),
+        _removeFileAction(documents, itemSelectionType: ItemSelectionType.multiple)))
+    .build();
+  }
+
+  List<Widget> _moreActionList(List<ReceivedShare> receivedShares) {
+    return [
+      if (Platform.isAndroid) _downloadAction(receivedShares, itemSelectionType: ItemSelectionType.multiple),
+      _exportFileAction(receivedShares, itemSelectionType: ItemSelectionType.multiple),
+      _copyToMySpaceAction(receivedShares, itemSelectionType: ItemSelectionType.multiple),
+    ];
   }
 }
