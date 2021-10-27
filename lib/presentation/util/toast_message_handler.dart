@@ -318,6 +318,12 @@ class ToastMessageHandler {
       } else if (failure is NoReceivedSharePreviewAvailable) {
         appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
         _cleanReceivedShareViewState();
+      } else if (failure is RemoveReceivedShareFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
+        _cleanReceivedShareViewState();
+      } else if (failure is RemoveMultipleReceivedSharesAllFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+        _cleanReceivedShareViewState();
       }
     }, (success) {
       if (success is CopyToMySpaceViewState) {
@@ -328,6 +334,15 @@ class ToastMessageHandler {
         _cleanReceivedShareViewState();
       } else if (success is CopyMultipleToMySpaceFromReceivedSharesHasSomeFilesViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
+        _cleanReceivedShareViewState();
+      } else if (success is RemoveReceivedShareViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
+        _cleanReceivedShareViewState();
+      } else if (success is RemoveMultipleReceivedSharesAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_are_successfully_deleted);
+        _cleanReceivedShareViewState();
+      } else if (success is RemoveMultipleReceivedSharesHasSomeFilesFailedViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
         _cleanReceivedShareViewState();
       }
     });
