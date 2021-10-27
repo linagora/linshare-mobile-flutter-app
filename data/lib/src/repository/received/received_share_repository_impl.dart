@@ -64,4 +64,18 @@ class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
   Future<ReceivedShare> remove(ShareId shareId) {
     return _receivedShareDataSource.remove(shareId);
   }
+
+  @override
+  Future<String> exportReceivedShare(
+      ReceivedShare receivedShare,
+      Token permanentToken,
+      Uri baseUrl,
+      CancelToken cancelToken
+  ) {
+    return _receivedShareDataSource.exportReceivedShare(
+      receivedShare,
+      permanentToken,
+      baseUrl,
+      cancelToken);
+  }
 }
