@@ -381,5 +381,7 @@ export 'src/usecases/search_upload_request_inside/search_upload_request_entries_
 export 'src/usecases/upload_request_entry/copy_multiple_files_from_upload_request_entries_to_my_space_interactor.dart';
 export 'src/usecases/audit_user/audit_user_view_state.dart';
 export 'src/usecases/audit_user/get_last_login_interactor.dart';
+export 'src/usecases/received/export_received_share_interactor.dart';
+export 'src/usecases/received/export_multiple_received_shares_interactor.dart';
 export 'src/usecases/received/remove_received_share_interactor.dart';
 export 'src/usecases/received/remove_multiple_received_shares_interactor.dart';
