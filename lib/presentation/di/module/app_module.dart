@@ -271,6 +271,8 @@ class AppModule {
     getIt.registerFactory(() => RemoveMultipleDocumentsInteractor(getIt<RemoveDocumentInteractor>()));
     getIt.registerFactory(() => RemoveSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => RemoveMultipleSharedSpaceNodesInteractor(getIt<RemoveSharedSpaceNodeInteractor>()));
+    getIt.registerFactory(() => RemoveReceivedShareInteractor(getIt<ReceivedShareRepository>()));
+    getIt.registerFactory(() => RemoveMultipleReceivedSharesInteractor(getIt<RemoveReceivedShareInteractor>()));
     getIt.registerFactory(() => MoveWorkgroupNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => MoveMultipleWorkgroupNodesInteractor(getIt<MoveWorkgroupNodeInteractor>()));
     getIt.registerFactory(() => GetSharedSpacesRootNodeInfoInteractor(getIt<SharedSpaceDocumentRepository>()));

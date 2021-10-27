@@ -56,6 +56,7 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_arguments.dart';
@@ -74,6 +75,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   final SaveSorterInteractor _saveSorterInteractor;
   final SortInteractor _sortInteractor;
   final DeviceManager _deviceManager;
+  final RemoveMultipleReceivedSharesInteractor _removeMultipleReceivedShareInteractor;
 
   List<ReceivedShare> _receivedSharesList = [];
   final SearchReceivedSharesInteractor _searchReceivedSharesInteractor;
@@ -94,7 +96,8 @@ class ReceivedShareViewModel extends BaseViewModel {
       this._saveSorterInteractor,
       this._sortInteractor,
       this._searchReceivedSharesInteractor,
-      this._deviceManager
+      this._deviceManager,
+      this._removeMultipleReceivedShareInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.receivedShareState.viewState.fold(
@@ -105,6 +108,10 @@ class ReceivedShareViewModel extends BaseViewModel {
             } else if (success is DisableSearchViewState) {
               store.dispatch((ReceivedShareSetSearchResultAction(_receivedSharesList)));
               _searchQuery = SearchQuery('');
+            } else if (success is RemoveReceivedShareViewState ||
+                success is RemoveMultipleReceivedSharesAllSuccessViewState ||
+                success is RemoveMultipleReceivedSharesHasSomeFilesFailedViewState) {
+              getAllReceivedShare();
             }
       });
     });
@@ -399,6 +406,44 @@ class ReceivedShareViewModel extends BaseViewModel {
     final newSorter = store.state.receivedShareState.sorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
     _appNavigation.popBack();
     store.dispatch(_sortFilesAction(newSorter));
+  }
+
+  void removeReceivedShare(
+      BuildContext context,
+      List<ReceivedShare> receivedShares,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    if (receivedShares.isNotEmpty) {
+      final deleteTitle = AppLocalizations.of(context)
+        .are_you_sure_you_want_to_delete_multiple(receivedShares.length, receivedShares.first.name);
+
+      ConfirmModalSheetBuilder(_appNavigation)
+        .key(Key('delete_received_share_confirm_modal'))
+        .title(deleteTitle)
+        .cancelText(AppLocalizations.of(context).cancel)
+        .onConfirmAction(AppLocalizations.of(context).delete, (_) {
+            _appNavigation.popBack();
+            if (itemSelectionType == ItemSelectionType.multiple) {
+              cancelSelection();
+            }
+            store.dispatch(_removeReceivedShareAction(receivedShares.map((receivedShare) => receivedShare.shareId).toList()));
+          })
+        .show(context);
+    }
+  }
+
+  OnlineThunkAction _removeReceivedShareAction(List<ShareId> shareIds) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _removeMultipleReceivedShareInteractor.execute(shareIds: shareIds)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
+          (success) => store.dispatch(ReceivedShareAction(Right(success)))));
+    });
   }
 
   void openSearchState(BuildContext context) {
