@@ -49,4 +49,6 @@ abstract class ReceivedShareDataSource {
   );
 
   Future<ReceivedShare> getReceivedShare(ShareId shareId);
+
+  Future<ReceivedShare> remove(ShareId shareId);
 }

@@ -41,6 +41,7 @@ import 'fixture/mock/mock_fixtures.dart';
 void main() {
   getAllReceivedSharesTest();
   getReceivedShareTest();
+  _removeReceivedShareTest();
 }
 
 void getAllReceivedSharesTest() {
@@ -121,6 +122,49 @@ void getReceivedShareTest() {
           .catchError((error) {
             expect(error, isA<ReceivedShareNotFound>());
           });
+    });
+  });
+}
+
+void _removeReceivedShareTest() {
+  group('remove received share test', () {
+    late MockLinShareHttpClient _linShareHttpClient;
+    late ReceivedShareDataSourceImpl _receivedShareDataSourceImpl;
+    MockLinShareDownloadManager _linShareDownloadManager;
+    MockRemoteExceptionThrower _remoteExceptionThrower;
+
+    setUp(() {
+      _linShareHttpClient = MockLinShareHttpClient();
+      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _linShareDownloadManager = MockLinShareDownloadManager();
+      _receivedShareDataSourceImpl = ReceivedShareDataSourceImpl(
+        _linShareHttpClient,
+        _remoteExceptionThrower,
+        _linShareDownloadManager);
+    });
+
+    test('remove received share should return success with valid data', () async {
+      when(_linShareHttpClient.removeReceivedShare(receivedShare1.shareId))
+        .thenAnswer((_) async => receivedShareResponse1);
+
+      final result = await _receivedShareDataSourceImpl.remove(receivedShare1.shareId);
+
+      expect(result, receivedShareResponse1.toReceivedShare());
+    });
+
+    test('remove received share should throw ReceivedShareNotFound when linShareHttpClient response error with 404', () async {
+      final error = DioError(
+        type: DioErrorType.response,
+        response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: ''));
+
+      when(_linShareHttpClient.removeReceivedShare(receivedShare1.shareId))
+        .thenThrow(error);
+
+      await _receivedShareDataSourceImpl
+        .remove(receivedShare1.shareId)
+        .catchError((error) {
+          expect(error, isA<ReceivedShareNotFound>());
+        });
     });
   });
 }

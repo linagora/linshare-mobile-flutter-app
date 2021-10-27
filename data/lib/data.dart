@@ -116,7 +116,7 @@ export 'src/repository/authentication/credential_repository_impl.dart';
 export 'src/repository/authentication/token_repository_impl.dart';
 export 'src/repository/autocomplete/autocomplete_repository_impl.dart';
 export 'src/repository/myspace/document_repository_impl.dart';
-export 'src/repository/received/received_share_repository_imp.dart';
+export 'src/repository/received/received_share_repository_impl.dart';
 export 'src/repository/sharedspace/shared_space_repository_impl.dart';
 export 'src/repository/sharedspacedocument/shared_space_document_repository_impl.dart';
 export 'src/repository/quota/quota_repository_impl.dart';
