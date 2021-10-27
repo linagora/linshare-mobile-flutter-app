@@ -322,7 +322,8 @@ class WidgetModule {
         getIt<SaveSorterInteractor>(),
         getIt<SortInteractor>(),
         getIt.get<SearchReceivedSharesInteractor>(),
-        getIt<DeviceManager>()
+        getIt<DeviceManager>(),
+        getIt<RemoveMultipleReceivedSharesInteractor>()
     ));
   }
 
