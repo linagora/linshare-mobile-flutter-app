@@ -140,4 +140,22 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
       });
     });
   }
+
+  @override
+  Future<ReceivedShare> remove(ShareId shareId) {
+    return Future.sync(() async {
+      final receivedShareDto = await _linShareHttpClient.removeReceivedShare(shareId);
+      return receivedShareDto.toReceivedShare();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw ReceivedShareNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
 }
