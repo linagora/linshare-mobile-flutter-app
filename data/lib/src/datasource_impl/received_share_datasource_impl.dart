@@ -158,4 +158,21 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
       });
     });
   }
+
+  @override
+  Future<String> exportReceivedShare(
+      ReceivedShare receivedShare,
+      Token permanentToken,
+      Uri baseUrl,
+      CancelToken cancelToken
+  ) {
+    return _linShareDownloadManager.downloadFile(
+      Endpoint.receivedShares
+        .downloadServicePath(receivedShare.shareId.uuid)
+        .generateDownloadUrl(baseUrl),
+      getTemporaryDirectory(),
+      receivedShare.name,
+      permanentToken,
+      cancelToken: cancelToken);
+  }
 }
