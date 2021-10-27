@@ -306,8 +306,11 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                         height: 24,
                         fit: BoxFit.fill,
                       ),
-                      onPressed: () => receivedShareViewModel.openContextMenu(context,
-                          receivedShareItem.element, _contextMenuActionTiles(context, receivedShareItem.element)));
+                      onPressed: () => receivedShareViewModel.openContextMenu(
+                        context,
+                        receivedShareItem.element,
+                        _contextMenuActionTiles(context, receivedShareItem.element),
+                        footerAction: _removeFileAction([receivedShareItem.element])));
             }),
         onTap: () {
           if (currentSelectMode == SelectMode.ACTIVE) {
@@ -396,7 +399,8 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   List<Widget> _multipleSelectionActions(List<ReceivedShare> receivedShares) {
     return [
       _downloadMultipleSelection(receivedShares),
-      _copyToMySpaceMultipleSelection(receivedShares)
+      _copyToMySpaceMultipleSelection(receivedShares),
+      _removeMultipleSelection(receivedShares)
     ];
   }
 
@@ -472,5 +476,26 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
         }
         return SizedBox.shrink();
       });
+  }
+
+  Widget _removeFileAction(List<ReceivedShare> receivedShares, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return ReceivedShareContextMenuTileBuilder(
+      Key('delete_received_share_context_menu_action'),
+      SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+      AppLocalizations.of(context).delete,
+      receivedShares.first)
+      .onActionClick(
+          (data) => receivedShareViewModel.removeReceivedShare(context, receivedShares, itemSelectionType: itemSelectionType))
+      .build();
+  }
+
+  Widget _removeMultipleSelection(List<ReceivedShare> receivedShares) {
+    return ReceivedShareMultipleSelectionActionBuilder(
+          Key('multiple_selection_remove_action'),
+          SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+          receivedShares)
+      .onActionClick((receivedShares) => receivedShareViewModel.removeReceivedShare(
+          context, receivedShares, itemSelectionType: ItemSelectionType.multiple))
+      .build();
   }
 }
