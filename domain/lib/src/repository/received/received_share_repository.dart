@@ -53,4 +53,10 @@ abstract class ReceivedShareRepository {
   Future<ReceivedShare> getReceivedShare(ShareId shareId);
 
   Future<ReceivedShare> remove(ShareId shareId);
+
+  Future<String> exportReceivedShare(
+    ReceivedShare receivedShare,
+    Token permanentToken,
+    Uri baseUrl,
+    CancelToken cancelToken);
 }
