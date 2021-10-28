@@ -325,6 +325,7 @@ class WidgetModule {
         getIt<DeviceManager>(),
         getIt<RemoveMultipleReceivedSharesInteractor>(),
         getIt<ExportMultipleReceivedSharesInteractor>(),
+        getIt<CopyMultipleFilesToSharedSpaceInteractor>(),
     ));
   }
 
