@@ -27,6 +27,7 @@ export 'src/extension/upload_request_status_extension.dart';
 export 'src/extension/boolean_sort_extension.dart';
 export 'src/extension/biometric_authentication_timeout_extension.dart';
 export 'src/extension/received_share_extensions.dart';
+export 'src/extension/shared_space_node_nested_extensions.dart';
 
 // model
 export 'src/model/account/account.dart';
@@ -182,6 +183,7 @@ export 'src/model/upload_request_entry/upload_request_entry.dart';
 export 'src/model/upload_request_entry/upload_request_entry_owner.dart';
 export 'src/model/upload_request_entry/upload_request_entry_owner_id.dart';
 export 'src/model/account/last_login.dart';
+export 'src/model/sharedspace/enable_versioning_work_group_request.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
@@ -386,3 +388,4 @@ export 'src/usecases/received/export_received_share_interactor.dart';
 export 'src/usecases/received/export_multiple_received_shares_interactor.dart';
 export 'src/usecases/received/remove_received_share_interactor.dart';
 export 'src/usecases/received/remove_multiple_received_shares_interactor.dart';
+export 'src/usecases/shared_space/enable_versioning_workgroup_interactor.dart';
