@@ -103,4 +103,6 @@ extension AppColor on Color {
   static const uploadRequestStatusPendingColor = Color(0xff7B7B7B);
   static const uploadRequestStatusArchivedColor = Color(0xffACACAC);
   static const biometricAuthenTimeoutTileColor = Color(0xff7B7B7B);
+  static const versioningTextColor = Color(0xff070707);
+  static const versioningDisabledTextColor = Color(0xffbbbbbb);
 }

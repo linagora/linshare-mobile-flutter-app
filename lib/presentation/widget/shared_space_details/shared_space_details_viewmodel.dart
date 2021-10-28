@@ -31,6 +31,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/model/versioning_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_details_action.dart';
@@ -54,6 +55,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
   final UpdateSharedSpaceMemberInteractor _updateSharedSpaceMemberInteractor;
   final DeleteSharedSpaceMemberInteractor _deleteSharedSpaceMemberInteractor;
+  final EnableVersioningWorkgroupInteractor _enableVersioningWorkgroupInteractor;
 
   SharedSpaceDetailsViewModel(
     Store<AppState> store,
@@ -64,7 +66,8 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     this._sharedSpaceActivitiesInteractor,
     this._getAllSharedSpaceRolesInteractor,
     this._updateSharedSpaceMemberInteractor,
-    this._deleteSharedSpaceMemberInteractor
+    this._deleteSharedSpaceMemberInteractor,
+    this._enableVersioningWorkgroupInteractor,
   ) : super(store);
 
   void initState(SharedSpaceDetailsArguments arguments) {
@@ -182,6 +185,34 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
                 store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
                 store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
               }));
+    });
+  }
+
+  void enableVersioningForWorkgroup(SharedSpaceNodeNested sharedSpaceNodeNested, VersioningState versioningState) {
+    final newVersioningParameter = VersioningParameter(versioningState == VersioningState.ENABLE);
+    store.dispatch(_enableVersioningForWorkgroupAction(
+        sharedSpaceNodeNested.sharedSpaceId,
+        sharedSpaceNodeNested.sharedSpaceRole,
+        EnableVersioningWorkGroupRequest(
+          sharedSpaceNodeNested.name,
+          newVersioningParameter,
+          sharedSpaceNodeNested.nodeType)
+    ));
+  }
+
+  OnlineThunkAction _enableVersioningForWorkgroupAction(
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceRole sharedSpaceRole,
+      EnableVersioningWorkGroupRequest enableVersioningRequest
+  ) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _enableVersioningWorkgroupInteractor
+        .execute(sharedSpaceId, sharedSpaceRole, enableVersioningRequest)
+        .then((result) => result.fold(
+          (failure) => null,
+          (success) => success is EnableVersioningWorkGroupViewState
+            ? store.dispatch(SharedSpaceDetailsEnableVersioningAction(success.sharedSpaceNodeNested))
+            : null));
     });
   }
 

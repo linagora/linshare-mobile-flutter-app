@@ -2226,6 +2226,11 @@ class AppLocalizations {
     );
   }
 
+  String get versioning_enable {
+    return Intl.message('Versioning enable',
+        name: 'versioning_enable');
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
