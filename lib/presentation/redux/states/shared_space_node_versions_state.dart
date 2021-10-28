@@ -53,6 +53,10 @@ class SharedSpaceNodeVersionsState extends LinShareState with EquatableMixin {
     return SharedSpaceNodeVersionsState(Right(IdleState()), workgroupNodeVersions);
   }
 
+  SharedSpaceNodeVersionsState removeAllViewState() {
+    return SharedSpaceNodeVersionsState(Right(IdleState()), []);
+  }
+
   @override
   SharedSpaceNodeVersionsState sendViewState({required Either<Failure, Success> viewState}) {
     return SharedSpaceNodeVersionsState(viewState, workgroupNodeVersions);

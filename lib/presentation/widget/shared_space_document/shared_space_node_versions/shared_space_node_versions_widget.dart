@@ -150,8 +150,13 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
               trailing: IconButton(
                   icon: SvgPicture.asset(imagePath.icContextMenu,
                       width: 24, height: 24, fit: BoxFit.fill),
-                  onPressed: () => _model.openContextMenu(context, versionsList[index],
-                      _contextMenuActionTiles(context, versionsList[index], parentNode, index == 0))),
+                  onPressed: () => _model.openContextMenu(
+                      context,
+                      versionsList[index],
+                      _contextMenuActionTiles(context, versionsList[index], parentNode, index == 0),
+                      footerAction: _removeAction(
+                        versionsList[index],
+                        versionsList.length == 1 ? true : false))),
               onTap: () => SharedSpaceOperationRole.previewVersionDocumentSharedSpaceRoles.contains(_model.sharedSpaceRole.name)
                 ? _model.previewAction(context, versionsList[index])
                 : {}
@@ -186,6 +191,16 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
         _model.closeDialogMenuContext();
         _model.previewAction(context, document);
       })
+      .build();
+  }
+
+  Widget _removeAction(WorkGroupDocument document, bool finalVersion) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('remove_context_menu_action'),
+          SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).delete,
+          document)
+      .onActionClick((data) => _model.removeNodeVersion(context, document, finalVersion))
       .build();
   }
 }
