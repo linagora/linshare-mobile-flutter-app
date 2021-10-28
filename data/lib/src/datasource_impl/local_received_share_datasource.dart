@@ -32,61 +32,51 @@
  */
 
 import 'package:data/data.dart';
-import 'package:data/src/datasource/received_share_datasource.dart';
+import 'package:data/src/local/received_share_database_manager.dart';
 import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/authentication/token.dart';
+import 'package:domain/src/model/preview/download_preview_type.dart';
+import 'package:domain/src/model/share/received_share.dart';
+import 'package:domain/src/model/share/share_id.dart';
+import 'package:domain/src/usecases/download_file/download_task_id.dart';
 
-class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
-  final Map<DataSourceType, ReceivedShareDataSource> _receivedShareDataSources;
+class LocalReceivedShareDataSource extends ReceivedShareDataSource {
+  final ReceivedShareDatabaseManager _receivedShareDatabaseManager;
 
-  ReceivedShareRepositoryImpl(this._receivedShareDataSources);
+  LocalReceivedShareDataSource(this._receivedShareDatabaseManager);
 
   @override
-  Future<List<ReceivedShare>> getAllReceivedShares() {
-    return _receivedShareDataSources[DataSourceType.network]!.getAllReceivedShares();
+  Future<String> downloadPreviewReceivedShare(ReceivedShare receivedShare, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
+    throw UnimplementedError();
   }
 
   @override
   Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) {
-    return _receivedShareDataSources[DataSourceType.network]!.downloadReceivedShares(shareIds, token, baseUrl);
+    throw UnimplementedError();
   }
 
   @override
-  Future<String> downloadPreviewReceivedShare(ReceivedShare receivedShare, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
-    return _receivedShareDataSources[DataSourceType.network]!.downloadPreviewReceivedShare(receivedShare, downloadPreviewType, permanentToken, baseUrl, cancelToken);
+  Future<List<ReceivedShare>> getAllReceivedShares() {
+    throw UnimplementedError();
   }
 
   @override
   Future<ReceivedShare> getReceivedShare(ShareId shareId) {
-    return _receivedShareDataSources[DataSourceType.network]!.getReceivedShare(shareId);
+    throw UnimplementedError();
   }
 
   @override
-  Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath) {
-    return _receivedShareDataSources[DataSourceType.local]!.makeAvailableOffline(receivedShare, localPath);
+  Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath) async {
+    return Future.sync(() async {
+      return await _receivedShareDatabaseManager.insertData(receivedShare, localPath);
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
   }
 
   @override
   Future<String> downloadToMakeOffline(ShareId shareId, String name, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
-    return _receivedShareDataSources[DataSourceType.network]!.downloadToMakeOffline(shareId, name, downloadPreviewType, permanentToken, baseUrl);
-  }
-
-  @override
-  Future<ReceivedShare> remove(ShareId shareId) {
-    return _receivedShareDataSource.remove(shareId);
-  }
-
-  @override
-  Future<String> exportReceivedShare(
-      ReceivedShare receivedShare,
-      Token permanentToken,
-      Uri baseUrl,
-      CancelToken cancelToken
-  ) {
-    return _receivedShareDataSource.exportReceivedShare(
-      receivedShare,
-      permanentToken,
-      baseUrl,
-      cancelToken);
+    throw UnimplementedError();
   }
 }
