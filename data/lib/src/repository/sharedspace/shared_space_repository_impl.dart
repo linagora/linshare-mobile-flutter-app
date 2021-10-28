@@ -78,4 +78,16 @@ class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
   Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline() {
     return _sharedSpaceDataSources[DataSourceType.local]!.getAllSharedSpacesOffline();
   }
+
+  @override
+  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceRole sharedSpaceRole,
+      EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest
+  ) {
+    return _sharedSpaceDataSources[DataSourceType.network]!.enableVersioningWorkGroup(
+      sharedSpaceId,
+      sharedSpaceRole,
+      enableVersioningWorkGroupRequest);
+  }
 }
