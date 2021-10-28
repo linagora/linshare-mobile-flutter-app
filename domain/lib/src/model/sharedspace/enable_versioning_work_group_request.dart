@@ -30,30 +30,19 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class SharedSpaceRepository {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+class EnableVersioningWorkGroupRequest with EquatableMixin {
+  final String name;
+  final VersioningParameter versioningParameters;
+  final LinShareNodeType?nodeType;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
-
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId shareSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
+  EnableVersioningWorkGroupRequest(
+    this.name,
+    this.versioningParameters,
+    this.nodeType
   );
 
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
-
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles();
-
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
-
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
-
-  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
-    SharedSpaceId sharedSpaceId,
-    SharedSpaceRole sharedSpaceRole,
-    EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest);
+  @override
+  List<Object?> get props => [name, versioningParameters, nodeType];
 }

@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,32 +28,30 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/sharedspace/enable_versioning_work_group_request.dart';
 
-abstract class SharedSpaceRepository {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+class EnableVersioningWorkgroupInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+  EnableVersioningWorkgroupInteractor(this._sharedSpaceRepository);
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId shareSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
+  Future<Either<Failure, Success>> execute(
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceRole sharedSpaceRole,
+      EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest
+  ) async {
+    try {
+      final sharedSpaceNode = await _sharedSpaceRepository.enableVersioningWorkGroup(
+          sharedSpaceId,
+          sharedSpaceRole,
+          enableVersioningWorkGroupRequest);
+      return Right<Failure, Success>(EnableVersioningWorkGroupViewState(sharedSpaceNode));
+    } catch (exception) {
+      return Left<Failure, Success>(EnableVersioningWorkGroupFailure(exception));
     }
-  );
-
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
-
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles();
-
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
-
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
-
-  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
-    SharedSpaceId sharedSpaceId,
-    SharedSpaceRole sharedSpaceRole,
-    EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest);
+  }
 }
