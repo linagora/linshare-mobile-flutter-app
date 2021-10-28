@@ -555,3 +555,21 @@ class MoveAllWorkgroupNodesFailureViewState extends FeatureFailure {
   @override
   List<Object> get props => [resultList];
 }
+
+class EnableVersioningWorkGroupViewState extends ViewState {
+  final SharedSpaceNodeNested sharedSpaceNodeNested;
+
+  EnableVersioningWorkGroupViewState(this.sharedSpaceNodeNested);
+
+  @override
+  List<Object> get props => [sharedSpaceNodeNested];
+}
+
+class EnableVersioningWorkGroupFailure extends FeatureFailure {
+  final exception;
+
+  EnableVersioningWorkGroupFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
