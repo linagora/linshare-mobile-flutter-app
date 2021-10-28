@@ -31,36 +31,24 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/share/received_share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
 
-abstract class ReceivedShareRepository {
+class MakeAvailableOfflineReceivedShareViewState extends ViewState {
 
-  Future<List<ReceivedShare>> getAllReceivedShares();
+  final OfflineModeActionResult result;
+  final String localPath;
 
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
+  MakeAvailableOfflineReceivedShareViewState(this.result, this.localPath);
 
-  Future<String> downloadPreviewReceivedShare(
-    ReceivedShare receivedShare,
-    DownloadPreviewType downloadPreviewType,
-    Token permanentToken,
-    Uri baseUrl,
-    CancelToken cancelToken
-  );
+  @override
+  List<Object> get props => [result, localPath];
+}
 
-  Future<ReceivedShare> getReceivedShare(ShareId shareId);
+class MakeAvailableOfflineReceivedShareFailure extends FeatureFailure {
+  final exception;
 
-  Future<ReceivedShare> remove(ShareId shareId);
+  MakeAvailableOfflineReceivedShareFailure(this.exception);
 
-  Future<String> exportReceivedShare(
-    ReceivedShare receivedShare,
-    Token permanentToken,
-    Uri baseUrl,
-    CancelToken cancelToken);
-
-  Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath);
-
-  Future<String> downloadToMakeOffline(ShareId shareId, String name, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl);
+  @override
+  List<Object> get props => [exception];
 }

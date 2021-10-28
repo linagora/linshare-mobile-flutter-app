@@ -52,6 +52,8 @@ class ReceivedShare extends Equatable {
   final GenericUser sender;
   final int size;
   final bool hasThumbnail;
+  final String? localPath;
+  final SyncOfflineState? syncOfflineState;
 
   ReceivedShare(
     this.shareId,
@@ -65,7 +67,11 @@ class ReceivedShare extends Equatable {
     this.sender,
     this.downloaded,
     this.size,
-    this.hasThumbnail
+    this.hasThumbnail,
+    {
+      this.localPath,
+      this.syncOfflineState
+    }
   );
 
   @override
