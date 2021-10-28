@@ -189,7 +189,11 @@ class AppModule {
       },
       getIt<FileUploadDataSource>()));
     getIt.registerFactory(() => QuotaRepositoryImpl(getIt<QuotaDataSource>()));
-    getIt.registerFactory(() => ReceivedShareRepositoryImpl(getIt<ReceivedShareDataSource>()));
+    getIt.registerFactory(() => ReceivedShareRepositoryImpl(
+      {
+        DataSourceType.network : getIt<ReceivedShareDataSource>(),
+        DataSourceType.local : getIt<LocalReceivedShareDataSource>()
+      }));
     getIt.registerFactory(() => FunctionalityRepositoryImpl(getIt<FunctionalityDataSource>()));
     getIt.registerFactory(() => SortRepositoryImpl(getIt<SortDataSource>()));
     getIt.registerFactory(() => ContactRepositoryImpl(getIt<ContactDataSource>()));

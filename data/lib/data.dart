@@ -42,6 +42,7 @@ export 'src/datasource_impl/upload_request_group_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_entry_datasource_impl.dart';
 export 'src/datasource_impl/audit_user_datasource_impl.dart';
+export 'src/datasource_impl/local_received_share_datasource.dart';
 
 // config
 export 'src/network/config/dynamic_url_interceptors.dart';
