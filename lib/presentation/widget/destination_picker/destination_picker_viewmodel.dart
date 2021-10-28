@@ -93,7 +93,7 @@ class DestinationPickerViewModel extends BaseViewModel {
               (success) => store.dispatch(DestinationPickerGetAllSharedSpacesAction(
                   (success as SharedSpacesViewState).sharedSpacesList
                       .where((element) {
-                        if (operation == Operation.copyFromMySpace) {
+                        if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
                           return SharedSpaceOperationRole.copyToSharedSpaceRoles
                               .contains(element.sharedSpaceRole.name);
                         } else if (operation == Operation.upload) {
