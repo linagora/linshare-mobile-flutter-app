@@ -67,7 +67,7 @@ class LocalReceivedShareDataSource extends ReceivedShareDataSource {
   }
 
   @override
-  Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath) async {
+  Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath) {
     return Future.sync(() async {
       return await _receivedShareDatabaseManager.insertData(receivedShare, localPath);
     }).catchError((error) {
@@ -77,6 +77,34 @@ class LocalReceivedShareDataSource extends ReceivedShareDataSource {
 
   @override
   Future<String> downloadToMakeOffline(ShareId shareId, String name, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<ReceivedShare>> getAllReceivedShareOffline() {
+    return Future.sync(() async {
+      return await _receivedShareDatabaseManager.getListData();
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
+
+  @override
+  Future<ReceivedShare?> getReceivedShareOffline(ShareId shareId) {
+    return Future.sync(() async {
+      return await _receivedShareDatabaseManager.getData(shareId.uuid);
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
+
+  @override
+  Future<String> exportReceivedShare(ReceivedShare receivedShare, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ReceivedShare> remove(ShareId shareId) {
     throw UnimplementedError();
   }
 }

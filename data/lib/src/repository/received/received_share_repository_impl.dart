@@ -73,7 +73,7 @@ class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
 
   @override
   Future<ReceivedShare> remove(ShareId shareId) {
-    return _receivedShareDataSource.remove(shareId);
+    return _receivedShareDataSources[DataSourceType.network]!.remove(shareId);
   }
 
   @override
@@ -83,10 +83,20 @@ class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
       Uri baseUrl,
       CancelToken cancelToken
   ) {
-    return _receivedShareDataSource.exportReceivedShare(
+    return _receivedShareDataSources[DataSourceType.network]!.exportReceivedShare(
       receivedShare,
       permanentToken,
       baseUrl,
       cancelToken);
+  }
+
+  @override
+  Future<List<ReceivedShare>> getAllReceivedShareOffline() {
+    return _receivedShareDataSources[DataSourceType.local]!.getAllReceivedShareOffline();
+  }
+
+  @override
+  Future<ReceivedShare?> getReceivedShareOffline(ShareId shareId) {
+    return _receivedShareDataSources[DataSourceType.local]!.getReceivedShareOffline(shareId);
   }
 }

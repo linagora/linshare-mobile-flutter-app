@@ -63,4 +63,8 @@ abstract class ReceivedShareRepository {
   Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath);
 
   Future<String> downloadToMakeOffline(ShareId shareId, String name, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl);
+
+  Future<ReceivedShare?> getReceivedShareOffline(ShareId shareId);
+
+  Future<List<ReceivedShare>> getAllReceivedShareOffline();
 }
