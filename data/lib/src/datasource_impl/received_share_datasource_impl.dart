@@ -37,6 +37,7 @@ import 'package:data/src/datasource/received_share_datasource.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_download_manager.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/share/received_share_dto.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
@@ -44,7 +45,6 @@ import 'package:domain/domain.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:data/src/network/model/share/received_share_dto.dart';
 
 class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -167,12 +167,38 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
       CancelToken cancelToken
   ) {
     return _linShareDownloadManager.downloadFile(
-      Endpoint.receivedShares
-        .downloadServicePath(receivedShare.shareId.uuid)
-        .generateDownloadUrl(baseUrl),
-      getTemporaryDirectory(),
-      receivedShare.name,
-      permanentToken,
-      cancelToken: cancelToken);
+        Endpoint.receivedShares
+            .downloadServicePath(receivedShare.shareId.uuid)
+            .generateDownloadUrl(baseUrl),
+        getTemporaryDirectory(),
+        receivedShare.name,
+        permanentToken,
+        cancelToken: cancelToken);
+  }
+
+  @override
+  Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> downloadToMakeOffline(ShareId shareId, String name, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl) {
+    var downloadUrl;
+    if (downloadPreviewType == DownloadPreviewType.original) {
+      downloadUrl = Endpoint.receivedShares
+        .downloadServicePath(shareId.uuid)
+        .generateDownloadUrl(baseUrl);
+    } else {
+      downloadUrl = Endpoint.receivedShares
+        .withPathParameter(shareId.uuid)
+        .withPathParameter(Endpoint.thumbnail)
+        .withPathParameter(downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
+        .generateEndpointPath();
+    }
+    return _linShareDownloadManager.downloadFile(
+      downloadUrl,
+      getApplicationSupportDirectory(),
+      name,
+      permanentToken);
   }
 }
