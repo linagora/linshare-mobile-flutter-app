@@ -100,4 +100,17 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
       versioningParameters != null ? versioningParameters!.toVersioningParameter() : VersioningParameter.initial()
     );
   }
+
+  SharedSpaceNodeNested toSharedSpaceNodeNestedWithRole(SharedSpaceRole newRole) {
+    return SharedSpaceNodeNested(
+      sharedSpaceId,
+      newRole,
+      creationDate,
+      modificationDate,
+      name ?? '',
+      nodeType,
+      quotaId,
+      versioningParameters != null ? versioningParameters!.toVersioningParameter() : VersioningParameter.initial()
+    );
+  }
 }
