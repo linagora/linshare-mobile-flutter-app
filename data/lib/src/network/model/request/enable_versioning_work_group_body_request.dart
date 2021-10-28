@@ -29,68 +29,36 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
 import 'package:data/data.dart';
-import 'package:data/src/datasource/shared_space_datasource.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/sharedspace/shared_space_node_nested.dart';
+import 'package:equatable/equatable.dart';
 
-class LocalSharedSpaceDataSourceImpl implements SharedSpaceDataSource {
-  final SharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
+class EnableVersioningWorkGroupBodyRequest with EquatableMixin {
+  final String name;
+  final VersioningParameterDto versioningParameters;
+  final LinShareNodeType? nodeType;
 
-  LocalSharedSpaceDataSourceImpl(this._sharedSpaceDocumentDatabaseManager);
+  EnableVersioningWorkGroupBodyRequest(
+    this.name,
+    this.versioningParameters,
+    this.nodeType
+  );
 
-  @override
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline() {
-    return Future.sync(() async {
-      final result = await _sharedSpaceDocumentDatabaseManager.getListSharedSpace();
-      return result.isNotEmpty
-        ? result.map((node) => node.toSharedSpaceNodeNested()).toList()
-        : <SharedSpaceNodeNested>[];
-    }).catchError((error) {
-      if (error is SQLiteDatabaseException) {
-        throw SQLiteDatabaseException();
-      } else {
-        throw LocalUnknownError(error);
-      }
-    });
-  }
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('name'): jsonEncode(name),
+    jsonEncode('versioningParameters'): jsonEncode(versioningParameters.toJson()),
+    jsonEncode('nodeType'): jsonEncode(nodeType?.value)
+  };
 
   @override
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest) {
-    throw UnimplementedError();
-  }
+  List<Object?> get props => [name, versioningParameters, nodeType];
+}
 
-  @override
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<SharedSpaceNodeNested> getSharedSpace(SharedSpaceId sharedSpaceId, {MembersParameter membersParameter = MembersParameter.withoutMembers, RolesParameter rolesParameter = RolesParameter.withRole}) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<SharedSpaceRole>> getSharedSpaceRoles() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
-      SharedSpaceId sharedSpaceId,
-      SharedSpaceRole sharedSpaceRole,
-      EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest
-  ) {
-    throw UnimplementedError();
-  }
+extension EnableVersioningWorkGroupRequestExtension on EnableVersioningWorkGroupRequest {
+  EnableVersioningWorkGroupBodyRequest toEnableVersioningWorkGroupBodyRequest() => EnableVersioningWorkGroupBodyRequest(
+      name,
+      VersioningParameterDto(versioningParameters.enable),
+      nodeType);
 }
