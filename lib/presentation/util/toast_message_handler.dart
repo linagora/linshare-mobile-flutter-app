@@ -377,8 +377,17 @@ class ToastMessageHandler {
         if (failure is NoWorkGroupDocumentPreviewAvailable) {
           appToast.showErrorToast(AppLocalizations.of(context).no_preview_available);
           _cleanSharedSpaceNodeVersionsViewState();
-        }},
-      (success) => {});
+        } else if (failure is RemoveSharedSpaceNodeFailure) {
+          appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
+          _cleanSharedSpaceNodeVersionsViewState();
+        }
+      },
+      (success) {
+        if (success is RemoveSharedSpaceNodeViewState) {
+          appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
+          _cleanSharedSpaceNodeVersionsViewState();
+        }
+      });
   }
 
   void _handleAddRecipientUploadRequestGroupToastMessage(BuildContext context, AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState) {

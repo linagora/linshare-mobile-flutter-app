@@ -56,3 +56,8 @@ class SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction extends ActionOnline
 class CleanSharedSpaceNodeVersionsStateAction extends ActionOffline {
   CleanSharedSpaceNodeVersionsStateAction();
 }
+
+@immutable
+class RemoveAllSharedSpaceNodeVersionsStateAction extends ActionOffline {
+  RemoveAllSharedSpaceNodeVersionsStateAction();
+}

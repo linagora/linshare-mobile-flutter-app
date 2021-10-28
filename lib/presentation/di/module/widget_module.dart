@@ -428,6 +428,7 @@ class WidgetModule {
         getIt.get<GetAllChildNodesInteractor>(),
         getIt.get<RestoreWorkGroupDocumentVersionInteractor>(),
         getIt.get<DownloadPreviewWorkGroupDocumentInteractor>(),
+        getIt.get<RemoveSharedSpaceNodeInteractor>(),
     ));
   }
 

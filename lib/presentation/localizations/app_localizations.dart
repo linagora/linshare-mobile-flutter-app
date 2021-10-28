@@ -2231,6 +2231,12 @@ class AppLocalizations {
         name: 'versioning_enable');
   }
 
+  String get are_you_sure_want_to_remove_this_version {
+    return Intl.message(
+      'Are you sure want to remove this version? Beware, this action cannot be undone.',
+      name: 'are_you_sure_want_to_remove_this_version',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
