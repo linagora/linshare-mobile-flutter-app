@@ -38,6 +38,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -45,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_arguments.dart';
 import 'package:open_file/open_file.dart' as open_file;
@@ -56,8 +58,10 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
   final RestoreWorkGroupDocumentVersionInteractor _restoreWorkGroupDocumentVersionInteractor;
   final DownloadPreviewWorkGroupDocumentInteractor _downloadPreviewWorkGroupDocumentInteractor;
+  final RemoveSharedSpaceNodeInteractor _removeSharedSpaceNodeInteractor;
 
   late SharedSpaceRole sharedSpaceRole;
+  late SharedSpaceNodeVersionsArguments nodeVersionArguments;
 
   SharedSpaceNodeVersionsViewModel(
     Store<AppState> store,
@@ -65,9 +69,11 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     this._getAllChildNodesInteractor,
     this._restoreWorkGroupDocumentVersionInteractor,
     this._downloadPreviewWorkGroupDocumentInteractor,
+    this._removeSharedSpaceNodeInteractor,
   ) : super(store);
 
   void initState(SharedSpaceNodeVersionsArguments arguments) {
+    nodeVersionArguments = arguments;
     sharedSpaceRole = arguments.sharedSpaceRole;
     getAllVersions(arguments.workGroupNode);
   }
@@ -193,9 +199,52 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     }
   }
 
+  void removeNodeVersion(BuildContext context, WorkGroupDocument document, bool finalVersion) {
+    _appNavigation.popBack();
+
+    ConfirmModalSheetBuilder(_appNavigation)
+      .key(Key('delete_node_version_confirm_modal'))
+      .title(AppLocalizations.of(context).are_you_sure_want_to_remove_this_version)
+      .cancelText(AppLocalizations.of(context).cancel)
+      .onConfirmAction(AppLocalizations.of(context).delete, (_) {
+            _appNavigation.popBack();
+            if (finalVersion) {
+              store.dispatch(_removeFinalNodeVersionAction(nodeVersionArguments.workGroupNode));
+            } else {
+              store.dispatch(_removeNodeVersionAction(document));
+            }
+        })
+      .show(context);
+  }
+
+  ThunkAction<AppState> _removeNodeVersionAction(WorkGroupDocument document) {
+    return (Store<AppState> store) async {
+      await _removeSharedSpaceNodeInteractor
+        .execute(document.sharedSpaceId, document.workGroupNodeId)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceNodeVersionsAction(Left(failure))),
+          (success) => store.dispatch(SharedSpaceNodeVersionsAction(Right(success)))));
+
+      getAllVersions(nodeVersionArguments.workGroupNode);
+    };
+  }
+
+  ThunkAction<AppState> _removeFinalNodeVersionAction(WorkGroupNode workGroupNode) {
+    return (Store<AppState> store) async {
+      await _removeSharedSpaceNodeInteractor
+        .execute(workGroupNode.sharedSpaceId, workGroupNode.workGroupNodeId)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceNodeVersionsAction(Left(failure))),
+          (success) {
+            store.dispatch(SharedSpaceDocumentAction(Right(success)));
+            _appNavigation.popBack();
+          }));
+    };
+  }
+
   @override
   void onDisposed() {
-    store.dispatch(CleanSharedSpaceNodeVersionsStateAction());
+    store.dispatch(RemoveAllSharedSpaceNodeVersionsStateAction());
     super.onDisposed();
   }
 }

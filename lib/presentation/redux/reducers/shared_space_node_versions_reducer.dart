@@ -39,6 +39,7 @@ final sharedSpaceNodeVersionsReducer = combineReducers<SharedSpaceNodeVersionsSt
   TypedReducer<SharedSpaceNodeVersionsState, StartSharedSpaceNodeVersionsLoadingAction>((SharedSpaceNodeVersionsState state, _) => state.startLoadingState()),
   TypedReducer<SharedSpaceNodeVersionsState, SharedSpaceNodeVersionsAction>((SharedSpaceNodeVersionsState state, SharedSpaceNodeVersionsAction action) => state.sendViewState(viewState: action.viewState)),
   TypedReducer<SharedSpaceNodeVersionsState, CleanSharedSpaceNodeVersionsStateAction>((SharedSpaceNodeVersionsState state, _) => state.clearViewState()),
+  TypedReducer<SharedSpaceNodeVersionsState, RemoveAllSharedSpaceNodeVersionsStateAction>((SharedSpaceNodeVersionsState state, _) => state.removeAllViewState()),
   TypedReducer<SharedSpaceNodeVersionsState, SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction>((SharedSpaceNodeVersionsState state, SharedSpaceNodeVersionsSetWorkGroupNodeVersionsAction action) =>
     state.setWorkGroupNodeVersions(
       viewState: action.workGroupNodeVersionsViewState,
