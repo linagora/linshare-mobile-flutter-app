@@ -37,4 +37,22 @@ extension ReceivedShareExtensions on ReceivedShare {
   CopyRequest toCopyRequest() {
     return CopyRequest(shareId.uuid, SpaceType.RECEIVED_SHARE);
   }
+
+  ReceivedShare withLocalPath(String localPath) {
+    return ReceivedShare(
+      shareId,
+      name,
+      creationDate,
+      modificationDate,
+      expirationDate,
+      description,
+      recipient,
+      mediaType,
+      sender,
+      downloaded,
+      size,
+      hasThumbnail,
+      localPath: localPath,
+      syncOfflineState: SyncOfflineState.completed);
+  }
 }

@@ -36,14 +36,39 @@ import 'package:domain/domain.dart';
 
 extension ReceivedShareExtensions on ReceivedShare {
   ReceivedShareCache toReceivedShareCache() => ReceivedShareCache(
-    shareId, name, creationDate, modificationDate, expirationDate, description,
-    downloaded, recipient?.mail, recipient?.firstName?.toNullable(), recipient?.lastName?.toNullable(),
-    mediaType, sender.mail, sender.firstName?.toNullable(), sender.lastName?.toNullable(), size, hasThumbnail,
+    shareId,
+    name,
+    creationDate,
+    modificationDate,
+    expirationDate,
+    description,
+    downloaded,
+    recipient?.mail,
+    recipient?.firstName?.toNullable(),
+    recipient?.lastName?.toNullable(),
+    mediaType,
+    sender.mail,
+    sender.firstName?.toNullable(),
+    sender.lastName?.toNullable(),
+    size,
+    hasThumbnail,
     localPath);
 
   ReceivedShare toSyncOffline({String? localPath, SyncOfflineState? syncOfflineState}) {
-    return ReceivedShare(shareId, name, creationDate, modificationDate, expirationDate,
-      description, recipient, mediaType, sender, downloaded, size, hasThumbnail,
-      localPath: localPath, syncOfflineState: syncOfflineState);
+    return ReceivedShare(
+      shareId,
+      name,
+      creationDate,
+      modificationDate,
+      expirationDate,
+      description,
+      recipient,
+      mediaType,
+      sender,
+      downloaded,
+      size,
+      hasThumbnail,
+      localPath: localPath,
+      syncOfflineState: syncOfflineState);
   }
 }
