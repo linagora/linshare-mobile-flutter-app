@@ -57,4 +57,8 @@ abstract class ReceivedShareDataSource {
     Token permanentToken,
     Uri baseUrl,
     CancelToken cancelToken);
+
+  Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath);
+
+  Future<String> downloadToMakeOffline(ShareId shareId, String name, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl);
 }
