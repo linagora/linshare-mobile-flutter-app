@@ -159,4 +159,28 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceRole sharedSpaceRole,
+      EnableVersioningWorkGroupRequest enableVersioningRequest
+  ) {
+    return Future.sync(() async {
+      final sharedSpaceResponse = await _linShareHttpClient.enableVersioningWorkGroup(
+          sharedSpaceId,
+          enableVersioningRequest.toEnableVersioningWorkGroupBodyRequest());
+      return sharedSpaceResponse.toSharedSpaceNodeNestedWithRole(sharedSpaceRole);
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw SharedSpaceNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
 }

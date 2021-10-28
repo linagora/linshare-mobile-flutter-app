@@ -51,4 +51,9 @@ abstract class SharedSpaceDataSource {
   Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
 
   Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
+
+  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
+    SharedSpaceId sharedSpaceId,
+    SharedSpaceRole sharedSpaceRole,
+    EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest);
 }

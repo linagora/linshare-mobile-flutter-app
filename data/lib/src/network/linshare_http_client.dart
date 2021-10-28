@@ -50,6 +50,7 @@ import 'package:data/src/network/model/functionality/functionality_string_dto.da
 import 'package:data/src/network/model/functionality/functionality_time_dto.dart';
 import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/network/model/request/create_work_group_body_request.dart';
+import 'package:data/src/network/model/request/enable_versioning_work_group_body_request.dart';
 import 'package:data/src/network/model/request/move_work_group_node_body_request.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/request/share_document_body_request.dart';
@@ -647,5 +648,17 @@ class LinShareHttpClient {
       .withPathParameter(shareId.uuid)
       .generateEndpointPath());
     return ReceivedShareDto.fromJson(resultJson);
+  }
+
+  Future<SharedSpaceNodeNestedResponse> enableVersioningWorkGroup(
+      SharedSpaceId sharedSpaceId,
+      EnableVersioningWorkGroupBodyRequest enableVersioningBodyRequest
+  ) async {
+    final resultJson = await _dioClient.put(
+      Endpoint.sharedSpaces.withPathParameter(sharedSpaceId.uuid).generateEndpointPath(),
+      data: enableVersioningBodyRequest.toJson().toString(),
+    );
+
+    return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
 }
