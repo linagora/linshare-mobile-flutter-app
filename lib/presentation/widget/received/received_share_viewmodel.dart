@@ -60,7 +60,11 @@ import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_shee
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
@@ -79,6 +83,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   final DeviceManager _deviceManager;
   final RemoveMultipleReceivedSharesInteractor _removeMultipleReceivedShareInteractor;
   final ExportMultipleReceivedSharesInteractor _exportMultipleReceivedSharesInteractor;
+  final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
 
   List<ReceivedShare> _receivedSharesList = [];
   final SearchReceivedSharesInteractor _searchReceivedSharesInteractor;
@@ -102,6 +107,7 @@ class ReceivedShareViewModel extends BaseViewModel {
       this._deviceManager,
       this._removeMultipleReceivedShareInteractor,
       this._exportMultipleReceivedSharesInteractor,
+      this._copyMultipleFilesToSharedSpaceInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.receivedShareState.viewState.fold(
@@ -529,6 +535,67 @@ class ReceivedShareViewModel extends BaseViewModel {
       .addTiles(actionTiles)
       .addFooter(footerAction)
       .build();
+  }
+
+  void clickOnCopyToAWorkGroup(
+      BuildContext context,
+      List<ReceivedShare> receivedShares,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      _copyToAWorkgroup(context, receivedShares, itemSelectionType: itemSelectionType);
+    }));
+  }
+
+  void _copyToAWorkgroup(
+      BuildContext context,
+      List<ReceivedShare> receivedShares,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    final cancelAction = NegativeDestinationPickerAction(
+        context,
+        label: AppLocalizations.of(context).cancel.toUpperCase());
+    cancelAction.onDestinationPickerActionClick((_) => _appNavigation.popBack());
+
+    final copyAction = CopyDestinationPickerAction(context);
+    copyAction.onDestinationPickerActionClick((data) {
+      _appNavigation.popBack();
+      getAllReceivedShare();
+      store.dispatch(ReceivedShareAction(Right(DisableSearchViewState())));
+
+      if (data is SharedSpaceDocumentArguments) {
+        store.dispatch(_copyToWorkgroupAction(receivedShares, data));
+      }
+    });
+
+    _appNavigation.push(
+      RoutePaths.destinationPicker,
+      arguments: DestinationPickerArguments(
+        actionList: [copyAction, cancelAction],
+        operator: Operation.copyFromReceivedShare));
+  }
+
+  ThunkAction<AppState> _copyToWorkgroupAction(
+      List<ReceivedShare> receivedShares,
+      SharedSpaceDocumentArguments sharedSpaceDocumentArguments
+  ) {
+    return (Store<AppState> store) async {
+      final parentNodeId = sharedSpaceDocumentArguments.workGroupFolder != null
+          ? sharedSpaceDocumentArguments.workGroupFolder?.workGroupNodeId
+          : null;
+      await _copyMultipleFilesToSharedSpaceInteractor.execute(
+          receivedShares.map((receivedShare) => receivedShare.toCopyRequest()).toList(),
+          sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
+          destinationParentNodeId: parentNodeId
+      ).then((result) => result.fold(
+          (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
+          (success) => store.dispatch(ReceivedShareAction(Right(success)))));
+    };
   }
 
   void openSearchState(BuildContext context) {
