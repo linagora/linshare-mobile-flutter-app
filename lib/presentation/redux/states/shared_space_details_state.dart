@@ -82,4 +82,7 @@ class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
     return SharedSpaceDetailsState(viewState, sharedSpace, membersList, activitiesList, newQuota);
   }
 
+  SharedSpaceDetailsState setSharedSpaceNodeNested({SharedSpaceNodeNested? newSharedSpace}) {
+    return SharedSpaceDetailsState(viewState, newSharedSpace, membersList, activitiesList, quota);
+  }
 }

@@ -77,3 +77,10 @@ class SharedSpaceDetailsGetAccountQuotaAction extends ActionOnline {
 
   SharedSpaceDetailsGetAccountQuotaAction(this.getAccountQuotaViewState);
 }
+
+@immutable
+class SharedSpaceDetailsEnableVersioningAction extends ActionOnline {
+  final SharedSpaceNodeNested? sharedSpaceNodeNested;
+
+  SharedSpaceDetailsEnableVersioningAction(this.sharedSpaceNodeNested);
+}

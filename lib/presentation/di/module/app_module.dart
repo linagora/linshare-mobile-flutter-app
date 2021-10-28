@@ -406,6 +406,7 @@ class AppModule {
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
     getIt.registerFactory(() => ExportMultipleReceivedSharesInteractor(getIt<ExportReceivedShareInteractor>()));
+    getIt.registerFactory(() => EnableVersioningWorkgroupInteractor(getIt<SharedSpaceRepository>()));
   }
 
   void _provideSharePreference() {
