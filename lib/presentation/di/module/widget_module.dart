@@ -341,6 +341,7 @@ class WidgetModule {
         getIt.get<GetAllSharedSpaceRolesInteractor>(),
         getIt.get<UpdateSharedSpaceMemberInteractor>(),
         getIt.get<DeleteSharedSpaceMemberInteractor>(),
+        getIt.get<EnableVersioningWorkgroupInteractor>(),
     ));
   }
 

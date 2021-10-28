@@ -37,6 +37,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/versioning_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -195,7 +196,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
         ),
         Divider(),
         Container(
-            margin: EdgeInsets.only(left: 24, top: 10),
+            margin: EdgeInsets.only(left: 16, top: 10, bottom: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -213,7 +214,12 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                             fontWeight: FontWeight.normal,
                             fontSize: 16.0)))
               ],
-            ))
+            )),
+        if (state.sharedSpace != null)
+          Column(children: [
+            Divider(),
+            _sharedSpaceVersioningWidget(context, state.sharedSpace!)
+          ])
       ],
     ));
   }
@@ -235,6 +241,30 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           color: AppColor.searchResultsCountTextColor,
         ),
       ),
+    );
+  }
+
+  Widget _sharedSpaceVersioningWidget(BuildContext context, SharedSpaceNodeNested sharedSpace) {
+    return ListTile(
+      dense: true,
+      title: Text(
+        AppLocalizations.of(context).versioning_enable,
+        style: TextStyle(
+          color: sharedSpace.sharedSpaceRole.name == SharedSpaceRoleName.ADMIN
+            ? AppColor.versioningTextColor
+            : AppColor.versioningDisabledTextColor,
+          fontStyle: FontStyle.normal,
+          fontSize: 16.0)),
+      trailing: Checkbox(
+        value: sharedSpace.versioningParameters.enable,
+        onChanged: (bool? value) => sharedSpace.sharedSpaceRole.name == SharedSpaceRoleName.ADMIN
+          ? _model.enableVersioningForWorkgroup(
+              sharedSpace,
+              value == true ? VersioningState.ENABLE : VersioningState.DISABLE)
+          : null,
+        activeColor: sharedSpace.sharedSpaceRole.name == SharedSpaceRoleName.ADMIN
+          ? AppColor.primaryColor
+          : AppColor.versioningDisabledTextColor),
     );
   }
 
