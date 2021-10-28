@@ -170,6 +170,14 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
           store.dispatch(CleanUploadStateAction());
         }
       });
+
+      event.sharedSpaceDocumentState.viewState.fold((failure) => null, (success) {
+        if (success is RemoveSharedSpaceNodeViewState ||
+            success is RemoveAllSharedSpaceNodesSuccessViewState ||
+            success is RemoveSomeSharedSpaceNodesSuccessViewState) {
+          getAllWorkGroupNode(needToGetOldSorter: false);
+        }
+      });
     });
   }
 
@@ -845,8 +853,6 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
           .then((result) => result.fold(
               (failure) => store.dispatch(SharedSpaceDocumentAction(Left(failure))),
               (success) => store.dispatch(SharedSpaceDocumentAction(Right(success)))));
-
-      getAllWorkGroupNode(needToGetOldSorter: false);
     };
   }
 
