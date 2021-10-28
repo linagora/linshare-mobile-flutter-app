@@ -26,6 +26,7 @@ export 'src/extension/list_upload_request_group_extension.dart';
 export 'src/extension/upload_request_status_extension.dart';
 export 'src/extension/boolean_sort_extension.dart';
 export 'src/extension/biometric_authentication_timeout_extension.dart';
+export 'src/extension/received_share_extensions.dart';
 
 // model
 export 'src/model/account/account.dart';

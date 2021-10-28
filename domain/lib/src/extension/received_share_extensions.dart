@@ -31,11 +31,10 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-enum Operation {
-  copyTo,
-  copyFromMySpace,
-  copyFromReceivedShare,
-  upload,
-  move,
-  none
+import 'package:domain/domain.dart';
+
+extension ReceivedShareExtensions on ReceivedShare {
+  CopyRequest toCopyRequest() {
+    return CopyRequest(shareId.uuid, SpaceType.RECEIVED_SHARE);
+  }
 }
