@@ -31,36 +31,59 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:dio/dio.dart';
+import 'dart:io';
+
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/share/received_share.dart';
-import 'package:domain/src/usecases/download_file/download_task_id.dart';
+import 'package:domain/src/usecases/received/make_received_share_offline_view_state.dart';
 
-abstract class ReceivedShareRepository {
+class MakeReceivedShareOfflineInteractor {
+  final ReceivedShareRepository _receivedShareRepository;
+  final TokenRepository _tokenRepository;
+  final CredentialRepository _credentialRepository;
 
-  Future<List<ReceivedShare>> getAllReceivedShares();
-
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
-
-  Future<String> downloadPreviewReceivedShare(
-    ReceivedShare receivedShare,
-    DownloadPreviewType downloadPreviewType,
-    Token permanentToken,
-    Uri baseUrl,
-    CancelToken cancelToken
+  MakeReceivedShareOfflineInteractor(
+    this._receivedShareRepository,
+    this._tokenRepository,
+    this._credentialRepository
   );
 
-  Future<ReceivedShare> getReceivedShare(ShareId shareId);
+  Future<Either<Failure, Success>> execute(ReceivedShare receivedShare) async {
+    try {
+      final downloadPreviewType = receivedShare.mediaType.isImageFile()
+          ? DownloadPreviewType.image
+          : DownloadPreviewType.original;
 
-  Future<ReceivedShare> remove(ShareId shareId);
+      final filePath = await Future.wait([
+            _tokenRepository.getToken(),
+            _credentialRepository.getBaseUrl()
+          ],
+          eagerError: true)
+        .then((List responses) async {
+          return await _receivedShareRepository.downloadToMakeOffline(
+            receivedShare.shareId,
+            receivedShare.name,
+            downloadPreviewType,
+            responses[0],
+            responses[1]);
+        });
 
-  Future<String> exportReceivedShare(
-    ReceivedShare receivedShare,
-    Token permanentToken,
-    Uri baseUrl,
-    CancelToken cancelToken);
-
-  Future<bool> makeAvailableOffline(ReceivedShare receivedShare, String localPath);
-
-  Future<String> downloadToMakeOffline(ShareId shareId, String name, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl);
+      if (filePath.isNotEmpty) {
+        final result = await _receivedShareRepository.makeAvailableOffline(receivedShare, filePath);
+        if (result) {
+          return Right<Failure, Success>(MakeAvailableOfflineReceivedShareViewState(OfflineModeActionResult.successful, filePath));
+        } else {
+          final fileSaved = File(filePath);
+          if (fileSaved.existsSync()) {
+            fileSaved.deleteSync();
+          }
+          return Left<Failure, Success>(MakeAvailableOfflineReceivedShareFailure(OfflineModeActionResult.failure));
+        }
+      } else {
+        return Left<Failure, Success>(MakeAvailableOfflineReceivedShareFailure(OfflineModeActionResult.failure));
+      }
+    } catch (exception) {
+      return Left<Failure, Success>(MakeAvailableOfflineReceivedShareFailure(exception));
+    }
+  }
 }
