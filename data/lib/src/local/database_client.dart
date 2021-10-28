@@ -33,6 +33,7 @@ import 'dart:io';
 
 import 'package:data/src/local/config/database_config.dart';
 import 'package:data/src/local/config/document_table.dart';
+import 'package:data/src/local/config/received_share_table.dart';
 import 'package:data/src/local/config/shared_space_table.dart';
 import 'package:data/src/local/config/work_group_node_table.dart';
 import 'package:path/path.dart';
@@ -56,17 +57,20 @@ class DatabaseClient {
     final path = join(databasePath, DatabaseConfig.databaseName);
     return await openDatabase(
       path,
-      version: DatabaseConfig.databaseVersion,
+      version: DatabaseConfig.dbVersion2_0,
       onOpen: (db) {},
       onCreate: (db, version) async {
         final batch = db.batch();
         batch.execute(DocumentTable.CREATE);
         batch.execute(SharedSpaceTable.CREATE);
         batch.execute(WorkGroupNodeTable.CREATE);
+        batch.execute(ReceivedShareTable.CREATE);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-
+        if (newVersion == DatabaseConfig.dbVersion2_0) {
+          await db.execute(ReceivedShareTable.CREATE);
+        }
       });
   }
 

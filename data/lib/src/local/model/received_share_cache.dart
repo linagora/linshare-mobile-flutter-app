@@ -32,6 +32,7 @@
  */
 
 import 'package:dartz/dartz.dart';
+import 'package:data/src/local/config/received_share_table.dart';
 import 'package:data/src/local/converter/boolean_converter.dart';
 import 'package:data/src/local/converter/datetime_converter.dart';
 import 'package:data/src/local/converter/media_type_converter.dart';
@@ -45,26 +46,59 @@ part 'received_share_cache.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @ShareIdConverter()
+@BooleanConverter()
 @MediaTypeConverter()
 @DatetimeConverter()
-@BooleanConverter()
 class ReceivedShareCache with EquatableMixin {
+  @JsonKey(name: ReceivedShareTable.SHARE_ID)
   final ShareId shareId;
+
+  @JsonKey(name: ReceivedShareTable.NAME)
   final String name;
+
+  @JsonKey(name: ReceivedShareTable.CREATION_DATE)
   final DateTime creationDate;
+
+  @JsonKey(name: ReceivedShareTable.MODIFICATION_DATE)
   final DateTime modificationDate;
+
+  @JsonKey(name: ReceivedShareTable.EXPIRATION_DATE)
   final DateTime expirationDate;
+
+  @JsonKey(name: ReceivedShareTable.DESCRIPTION)
   final String description;
+
+  @JsonKey(name: ReceivedShareTable.DOWNLOADED)
   final int downloaded;
+
+  @JsonKey(name: ReceivedShareTable.MAIL_RECIPIENT)
   final String? recipientMail;
+
+  @JsonKey(name: ReceivedShareTable.FIRST_NAME_RECIPIENT)
   final String? recipientFirstName;
+
+  @JsonKey(name: ReceivedShareTable.LAST_NAME_RECIPIENT)
   final String? recipientLastName;
+
+  @JsonKey(name: ReceivedShareTable.MEDIA_TYPE)
   final MediaType mediaType;
+
+  @JsonKey(name: ReceivedShareTable.MAIL_SENDER)
   final String senderMail;
+
+  @JsonKey(name: ReceivedShareTable.FIRST_NAME_SENDER)
   final String? senderFirstName;
+
+  @JsonKey(name: ReceivedShareTable.LAST_NAME_SENDER)
   final String? senderLastName;
+
+  @JsonKey(name: ReceivedShareTable.SIZE)
   final int size;
-  final bool hasThumbnail;
+
+  @JsonKey(name: ReceivedShareTable.HAS_THUMBNAIL)
+  final bool? hasThumbnail;
+
+  @JsonKey(name: ReceivedShareTable.LOCAL_PATH)
   final String? localPath;
 
   ReceivedShareCache(
@@ -89,9 +123,23 @@ class ReceivedShareCache with EquatableMixin {
 
   @override
   List<Object?> get props => [
-    shareId, name, creationDate, modificationDate, expirationDate, description,
-    downloaded, recipientMail, recipientFirstName, recipientLastName, mediaType,
-    senderMail, senderFirstName, senderLastName, size, hasThumbnail, localPath
+    shareId,
+    name,
+    creationDate,
+    modificationDate,
+    expirationDate,
+    description,
+    downloaded,
+    recipientMail,
+    recipientFirstName,
+    recipientLastName,
+    mediaType,
+    senderMail,
+    senderFirstName,
+    senderLastName,
+    size,
+    hasThumbnail,
+    localPath
   ];
 
   factory ReceivedShareCache.fromJson(Map<String, dynamic> json) => _$ReceivedShareCacheFromJson(json);
@@ -112,7 +160,7 @@ extension ReceivedShareCacheExtensions on ReceivedShareCache {
     GenericUser(senderMail, lastName: optionOf(senderLastName), firstName: optionOf(senderFirstName)),
     downloaded,
     size,
-    hasThumbnail,
+    hasThumbnail ?? false,
     localPath: localPath,
     syncOfflineState: SyncOfflineState.completed,
   );

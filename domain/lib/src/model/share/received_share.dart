@@ -74,6 +74,8 @@ class ReceivedShare extends Equatable {
     }
   );
 
+  bool isAvailableOffline() => localPath != null ? localPath!.isNotEmpty : false;
+
   @override
   List<Object?> get props => [
     shareId,
