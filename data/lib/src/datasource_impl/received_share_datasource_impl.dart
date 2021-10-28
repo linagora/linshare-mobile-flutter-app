@@ -201,4 +201,14 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
       name,
       permanentToken);
   }
+
+  @override
+  Future<List<ReceivedShare>> getAllReceivedShareOffline() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ReceivedShare?> getReceivedShareOffline(ShareId shareId) {
+    throw UnimplementedError();
+  }
 }

@@ -32,6 +32,8 @@
  */
 
 import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'package:domain/src/extension/received_share_extensions.dart';
 import 'package:domain/src/repository/received/received_share_repository.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
@@ -44,8 +46,23 @@ class GetAllReceivedSharesInteractor {
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final receivedShares = await _receivedShareRepository.getAllReceivedShares();
-      return Right<Failure, Success>(GetAllReceivedShareSuccess(receivedShares));
+      final receivedShares = await _receivedShareRepository.getAllReceivedShares()
+        .onError((error, stackTrace) => _receivedShareRepository.getAllReceivedShareOffline());
+      final combinedReceivedShares = List<ReceivedShare>.empty(growable: true);
+
+      if (receivedShares.isNotEmpty) {
+        for (final received in receivedShares) {
+          final localReceivedShare = await _receivedShareRepository
+              .getReceivedShareOffline(received.shareId);
+          final combinedReceived = localReceivedShare?.localPath != null
+              ? received.withLocalPath(localReceivedShare!.localPath!)
+              : received;
+
+          combinedReceivedShares.add(combinedReceived);
+        }
+      }
+
+      return Right<Failure, Success>(GetAllReceivedShareSuccess(combinedReceivedShares));
     } catch(exception) {
       return Left<Failure, Success>(GetAllReceivedShareFailure(exception));
     }
