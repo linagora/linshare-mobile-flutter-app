@@ -429,6 +429,9 @@ class WidgetModule {
         getIt.get<RestoreWorkGroupDocumentVersionInteractor>(),
         getIt.get<DownloadPreviewWorkGroupDocumentInteractor>(),
         getIt.get<RemoveSharedSpaceNodeInteractor>(),
+        getIt.get<DownloadNodeIOSInteractor>(),
+        getIt.get<DeviceManager>(),
+        getIt.get<DownloadWorkGroupNodeInteractor>(),
     ));
   }
 
