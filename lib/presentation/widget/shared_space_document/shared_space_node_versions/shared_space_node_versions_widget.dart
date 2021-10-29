@@ -47,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/media_type_ext
 import 'package:linshare_flutter_app/presentation/view/context_menu/work_group_node_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 
 class SharedSpaceNodeVersionsWidget extends StatefulWidget {
   SharedSpaceNodeVersionsWidget({Key? key}) : super(key: key);
@@ -171,6 +172,7 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
       if (Platform.isAndroid) _downloadFileAction(document),
       if (SharedSpaceOperationRole.previewVersionDocumentSharedSpaceRoles.contains(_model.sharedSpaceRole.name))
         _previewAction(context, document),
+      _copyToAction(context, document),
       if (!isLatestVersion) _restoreAction(context, document, parentNode)
     ];
   }
@@ -225,6 +227,20 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
           AppLocalizations.of(context).download_to_device,
           document)
       .onActionClick((data) => _model.downloadFile(document))
+      .build();
+  }
+
+  Widget _copyToAction(BuildContext context, WorkGroupDocument document) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('copy_to_context_menu_action'),
+          SvgPicture.asset(imagePath.icSharedSpace, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).copy_to,
+          document)
+      .trailing(SvgPicture.asset(imagePath.icArrowRight, width: 24, height: 24, fit: BoxFit.fill))
+      .onActionClick((data) => _model.copyTo(
+          context,
+          document,
+          [DestinationType.mySpace]))
       .build();
   }
 }
