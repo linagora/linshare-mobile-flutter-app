@@ -326,6 +326,7 @@ class WidgetModule {
         getIt<RemoveMultipleReceivedSharesInteractor>(),
         getIt<ExportMultipleReceivedSharesInteractor>(),
         getIt<CopyMultipleFilesToSharedSpaceInteractor>(),
+        getIt<MakeReceivedShareOfflineInteractor>()
     ));
   }
 

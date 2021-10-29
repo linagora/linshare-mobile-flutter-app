@@ -65,7 +65,7 @@ class NetworkModule {
     getIt<Dio>().interceptors.add(getIt<CookieInterceptors>());
     getIt<Dio>().interceptors.add(getIt<RetryAuthenticationInterceptors>());
     if (kDebugMode) {
-      getIt<Dio>().interceptors.add(LogInterceptor(requestBody: true));
+      getIt<Dio>().interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
     };
   }
 
