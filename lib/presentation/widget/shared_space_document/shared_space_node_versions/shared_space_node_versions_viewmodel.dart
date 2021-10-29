@@ -32,6 +32,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,8 +51,10 @@ import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_moda
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_arguments.dart';
 import 'package:open_file/open_file.dart' as open_file;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:share/share.dart' as share_library;
 
 class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
@@ -59,6 +62,9 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
   final RestoreWorkGroupDocumentVersionInteractor _restoreWorkGroupDocumentVersionInteractor;
   final DownloadPreviewWorkGroupDocumentInteractor _downloadPreviewWorkGroupDocumentInteractor;
   final RemoveSharedSpaceNodeInteractor _removeSharedSpaceNodeInteractor;
+  final DownloadNodeIOSInteractor _downloadNodeIOSInteractor;
+  final DeviceManager _deviceManager;
+  final DownloadWorkGroupNodeInteractor _downloadWorkGroupNodeInteractor;
 
   late SharedSpaceRole sharedSpaceRole;
   late SharedSpaceNodeVersionsArguments nodeVersionArguments;
@@ -70,6 +76,9 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     this._restoreWorkGroupDocumentVersionInteractor,
     this._downloadPreviewWorkGroupDocumentInteractor,
     this._removeSharedSpaceNodeInteractor,
+    this._downloadNodeIOSInteractor,
+    this._deviceManager,
+    this._downloadWorkGroupNodeInteractor,
   ) : super(store);
 
   void initState(SharedSpaceNodeVersionsArguments arguments) {
@@ -240,6 +249,113 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
             _appNavigation.popBack();
           }));
     };
+  }
+
+  void exportFile(BuildContext context, WorkGroupDocument document) {
+    _appNavigation.popBack();
+    final cancelToken = CancelToken();
+    _showDownloadingFileDialog(context, document, cancelToken);
+    store.dispatch(_exportFileAction(document, cancelToken));
+  }
+
+  void _showDownloadingFileDialog(
+      BuildContext context,
+      WorkGroupDocument document,
+      CancelToken cancelToken
+  ) {
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+        .key(Key('downloading_file_dialog'))
+        .title(AppLocalizations.of(context).preparing_to_export)
+        .content(AppLocalizations.of(context).downloading_file(document.name))
+        .actionText(AppLocalizations.of(context).cancel)
+        .build());
+  }
+
+  OnlineThunkAction _exportFileAction(WorkGroupDocument document, CancelToken cancelToken) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadNodeIOSInteractor
+        .execute(document, cancelToken)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(_exportFileFailureAction(failure)),
+          (success) => store.dispatch(_exportFileSuccessAction(success))));
+    });
+  }
+
+  ThunkAction<AppState> _exportFileSuccessAction(Success success) {
+    return (Store<AppState> store) async {
+      _appNavigation.popBack();
+
+      if (success is DownloadNodeIOSViewState) {
+        await share_library.Share.shareFiles([success.filePath]);
+      } else if (success is DownloadNodeIOSAllSuccessViewState) {
+        await share_library.Share.shareFiles(success.resultList
+          .map((result) => ((result.getOrElse(() => IdleState()) as DownloadNodeIOSViewState).filePath))
+          .toList());
+      } else if (success is DownloadNodeIOSHasSomeFilesFailureViewState) {
+        await share_library.Share.shareFiles(success.resultList
+          .map((result) => result.fold(
+            (failure) => '',
+            (success) => ((success as DownloadNodeIOSViewState).filePath)))
+          .toList());
+      }
+    };
+  }
+
+  ThunkAction<AppState> _exportFileFailureAction(Failure failure) {
+    return (Store<AppState> store) async {
+      if (failure is DownloadNodeIOSFailure && !(failure.downloadFileException is CancelDownloadFileException)) {
+        _appNavigation.popBack();
+      }
+      store.dispatch(SharedSpaceNodeVersionsAction(Left(failure)));
+    };
+  }
+
+  void downloadFile(WorkGroupDocument document) {
+    _appNavigation.popBack();
+    store.dispatch(_downloadFileAction(document));
+  }
+
+  OnlineThunkAction _downloadFileAction(WorkGroupDocument document) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final needRequestPermission = await _deviceManager.isNeedRequestStoragePermissionOnAndroid();
+      if(Platform.isAndroid && needRequestPermission) {
+        final status = await Permission.storage.status;
+        switch (status) {
+          case PermissionStatus.granted:
+            store.dispatch(_handleDownloadFileAction(document));
+            break;
+          case PermissionStatus.permanentlyDenied:
+            _appNavigation.popBack();
+            break;
+          default:
+            {
+              final requested = await Permission.storage.request();
+              switch (requested) {
+                case PermissionStatus.granted:
+                  store.dispatch(_handleDownloadFileAction(document));
+                  break;
+                default:
+                  _appNavigation.popBack();
+                  break;
+              }
+            }
+        }
+      } else {
+        store.dispatch(_handleDownloadFileAction(document));
+      }
+    });
+  }
+
+  OnlineThunkAction _handleDownloadFileAction(WorkGroupDocument document) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _downloadWorkGroupNodeInteractor
+        .execute([document])
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceNodeVersionsAction(Left(failure))),
+          (success) => store.dispatch(SharedSpaceNodeVersionsAction(Right(success)))));
+    });
   }
 
   @override
