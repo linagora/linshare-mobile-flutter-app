@@ -380,11 +380,17 @@ class ToastMessageHandler {
         } else if (failure is RemoveSharedSpaceNodeFailure) {
           appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
           _cleanSharedSpaceNodeVersionsViewState();
+        } else if (failure is CopyToMySpaceFailure) {
+          appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
+          _cleanSharedSpaceNodeVersionsViewState();
         }
       },
       (success) {
         if (success is RemoveSharedSpaceNodeViewState) {
           appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
+          _cleanSharedSpaceNodeVersionsViewState();
+        } else if (success is CopyToMySpaceViewState) {
+          appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
           _cleanSharedSpaceNodeVersionsViewState();
         }
       });

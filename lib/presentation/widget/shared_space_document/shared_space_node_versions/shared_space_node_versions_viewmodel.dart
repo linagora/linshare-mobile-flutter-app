@@ -44,12 +44,17 @@ import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_nod
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 import 'package:open_file/open_file.dart' as open_file;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
@@ -65,6 +70,7 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
   final DownloadNodeIOSInteractor _downloadNodeIOSInteractor;
   final DeviceManager _deviceManager;
   final DownloadWorkGroupNodeInteractor _downloadWorkGroupNodeInteractor;
+  final CopyToMySpaceInteractor _copyToMySpaceInteractor;
 
   late SharedSpaceRole sharedSpaceRole;
   late SharedSpaceNodeVersionsArguments nodeVersionArguments;
@@ -79,6 +85,7 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     this._downloadNodeIOSInteractor,
     this._deviceManager,
     this._downloadWorkGroupNodeInteractor,
+    this._copyToMySpaceInteractor,
   ) : super(store);
 
   void initState(SharedSpaceNodeVersionsArguments arguments) {
@@ -352,6 +359,44 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       await _downloadWorkGroupNodeInteractor
         .execute([document])
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceNodeVersionsAction(Left(failure))),
+          (success) => store.dispatch(SharedSpaceNodeVersionsAction(Right(success)))));
+    });
+  }
+
+  void copyTo(BuildContext context, WorkGroupDocument document, List<DestinationType> availableDestinationTypes) {
+    _appNavigation.popBack();
+
+    final cancelAction = NegativeDestinationPickerAction(context, label: AppLocalizations.of(context).cancel.toUpperCase());
+    cancelAction.onDestinationPickerActionClick((_) => _appNavigation.popBack());
+
+    final copyAction = CopyDestinationPickerAction(context);
+    copyAction.onDestinationPickerActionClick((data) {
+      if (data == DestinationType.mySpace) {
+        copyToMySpace(document);
+      }
+    });
+
+    _appNavigation.push(RoutePaths.destinationPicker,
+      arguments: DestinationPickerArguments(
+        actionList: [copyAction, cancelAction],
+        operator: Operation.copyTo,
+        availableDestinationTypes: availableDestinationTypes));
+  }
+
+  void copyToMySpace(WorkGroupDocument document) {
+    _appNavigation.popBack();
+    store.dispatch(_copyToMySpaceAction(document));
+  }
+
+  OnlineThunkAction _copyToMySpaceAction(WorkGroupDocument document) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _copyToMySpaceInteractor
+        .execute(CopyRequest(
+            document.workGroupNodeId.uuid,
+            SpaceType.SHARED_SPACE,
+            contextUuid: document.sharedSpaceId.uuid))
         .then((result) => result.fold(
           (failure) => store.dispatch(SharedSpaceNodeVersionsAction(Left(failure))),
           (success) => store.dispatch(SharedSpaceNodeVersionsAction(Right(success)))));
