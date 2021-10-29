@@ -84,6 +84,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   final RemoveMultipleReceivedSharesInteractor _removeMultipleReceivedShareInteractor;
   final ExportMultipleReceivedSharesInteractor _exportMultipleReceivedSharesInteractor;
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
+  final MakeReceivedShareOfflineInteractor _makeReceivedShareOfflineInteractor;
 
   List<ReceivedShare> _receivedSharesList = [];
   final SearchReceivedSharesInteractor _searchReceivedSharesInteractor;
@@ -108,6 +109,7 @@ class ReceivedShareViewModel extends BaseViewModel {
       this._removeMultipleReceivedShareInteractor,
       this._exportMultipleReceivedSharesInteractor,
       this._copyMultipleFilesToSharedSpaceInteractor,
+      this._makeReceivedShareOfflineInteractor
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.receivedShareState.viewState.fold(
@@ -161,22 +163,22 @@ class ReceivedShareViewModel extends BaseViewModel {
     store.dispatch(_getAllReceivedShareAction());
   }
 
-  OnlineThunkAction _getAllReceivedShareAction() {
-    return OnlineThunkAction((Store<AppState> store) async {
+  ThunkAction<AppState> _getAllReceivedShareAction() {
+    return (Store<AppState> store) async {
       store.dispatch(StartReceivedShareLoadingAction());
       await _getAllReceivedInteractor.execute().then((result) => result.fold(
-              (failure) {
-                store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure)));
-                _receivedSharesList = [];
-                store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
-              },
-              (success) {
-                store.dispatch(ReceivedShareGetAllReceivedSharesAction(Right(success)));
-                _receivedSharesList = success is GetAllReceivedShareSuccess ? success.receivedShares : [];
-                store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
-              })
+        (failure) {
+          store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure)));
+          _receivedSharesList = [];
+          store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
+        },
+        (success) {
+          store.dispatch(ReceivedShareGetAllReceivedSharesAction(Right(success)));
+          _receivedSharesList = success is GetAllReceivedShareSuccess ? success.receivedShares : [];
+          store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
+        })
       );
-    });
+    };
   }
 
   void openContextMenu(BuildContext context, ReceivedShare share, List<Widget> actionTiles, {Widget? footerAction}) {
@@ -360,8 +362,8 @@ class ReceivedShareViewModel extends BaseViewModel {
     store.dispatch(_getSorterAndAllReceivedSharesAction());
   }
 
-  OnlineThunkAction _getSorterAndAllReceivedSharesAction() {
-    return OnlineThunkAction((Store<AppState> store) async {
+  ThunkAction<AppState> _getSorterAndAllReceivedSharesAction() {
+    return (Store<AppState> store) async {
       store.dispatch(StartReceivedShareLoadingAction());
 
       await Future.wait([
@@ -386,7 +388,7 @@ class ReceivedShareViewModel extends BaseViewModel {
       });
 
       store.dispatch(_sortFilesAction(store.state.receivedShareState.sorter));
-    });
+    };
   }
 
   ThunkAction<AppState> _sortFilesAction(Sorter sorter) {
@@ -596,6 +598,43 @@ class ReceivedShareViewModel extends BaseViewModel {
           (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
           (success) => store.dispatch(ReceivedShareAction(Right(success)))));
     };
+  }
+
+  void makeAvailableOffline(BuildContext context, ReceivedShare receivedShare, int position) {
+    _appNavigation.popBack();
+
+    _receivedSharesList[position] = receivedShare.toSyncOffline(syncOfflineState: SyncOfflineState.waiting);
+    store.dispatch(ReceivedShareSetSyncOfflineMode(_receivedSharesList));
+
+    store.dispatch(_makeAvailableOfflineAction(receivedShare, position));
+  }
+
+  OnlineThunkAction _makeAvailableOfflineAction(ReceivedShare receivedShare, int position) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _makeReceivedShareOfflineInteractor.execute(receivedShare)
+        .then((result) => result.fold(
+          (failure) {
+            _receivedSharesList[position] = receivedShare.toSyncOffline(syncOfflineState: SyncOfflineState.none);
+            store.dispatch(ReceivedShareSetSyncOfflineMode(_receivedSharesList));
+
+            store.dispatch(ReceivedShareAction(Left(failure)));
+          },
+          (success) {
+            if (success is MakeAvailableOfflineReceivedShareViewState && success.result == OfflineModeActionResult.successful) {
+              _receivedSharesList[position] = receivedShare.toSyncOffline(localPath: success.localPath, syncOfflineState: SyncOfflineState.completed);
+              store.dispatch(ReceivedShareSetSyncOfflineMode(_receivedSharesList));
+
+              store.dispatch(ReceivedShareAction(Right(success)));
+            } else {
+              _receivedSharesList[position] = receivedShare.toSyncOffline(syncOfflineState: SyncOfflineState.none);
+              store.dispatch(ReceivedShareSetSyncOfflineMode(_receivedSharesList));
+
+              store.dispatch(ReceivedShareAction(Left(CannotAvailableOfflineDocument())));
+            }
+          }
+        )
+      );
+    });
   }
 
   void openSearchState(BuildContext context) {
