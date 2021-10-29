@@ -55,4 +55,6 @@ final receivedSharesReducer = combineReducers<ReceivedShareState>([
       state.setReceivedSharesWithSorter(newReceivedShareList: action.receivedSharesList, newSorter: action.sorter)),
   TypedReducer<ReceivedShareState, ReceivedShareSetSearchResultAction>((ReceivedShareState state, ReceivedShareSetSearchResultAction action) =>
       state.setReceivedShareList(action.receivedSharesList)),
+  TypedReducer<ReceivedShareState, ReceivedShareSetSyncOfflineMode>((ReceivedShareState state, ReceivedShareSetSyncOfflineMode action) =>
+      state.setReceivedShareList(action.receivedShareList)),
 ]);

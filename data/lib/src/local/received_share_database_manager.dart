@@ -47,14 +47,15 @@ class ReceivedShareDatabaseManager extends LinShareDatabaseManager<ReceivedShare
   Future<bool> deleteAllData() async {
     final receivedShareCache = await getListData();
     var failedFileCount = 0;
-    receivedShareCache.forEach((receivedShare) async {
-      if(receivedShare.localPath != null) {
-        final result = await deleteData(receivedShare.shareId.uuid, receivedShare.localPath!);
+
+    for (final received in receivedShareCache) {
+      if(received.localPath != null) {
+        final result = await deleteData(received.shareId.uuid, received.localPath!);
         if(!result) {
           failedFileCount++;
         }
       }
-    });
+    }
     return failedFileCount == 0;
   }
 
