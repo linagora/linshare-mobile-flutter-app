@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:io';
+
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -165,6 +167,8 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
 
   List<Widget> _contextMenuActionTiles(BuildContext context, WorkGroupDocument document, WorkGroupNode parentNode, bool isLatestVersion) {
     return [
+      _exportFileAction(document),
+      if (Platform.isAndroid) _downloadFileAction(document),
       if (SharedSpaceOperationRole.previewVersionDocumentSharedSpaceRoles.contains(_model.sharedSpaceRole.name))
         _previewAction(context, document),
       if (!isLatestVersion) _restoreAction(context, document, parentNode)
@@ -201,6 +205,26 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
           AppLocalizations.of(context).delete,
           document)
       .onActionClick((data) => _model.removeNodeVersion(context, document, finalVersion))
+      .build();
+  }
+
+  Widget _exportFileAction(WorkGroupDocument document) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('export_file_context_menu_action'),
+          SvgPicture.asset(imagePath.icExportFile, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).export_file,
+          document)
+      .onActionClick((data) => _model.exportFile(context, document))
+      .build();
+  }
+
+  Widget _downloadFileAction(WorkGroupDocument document) {
+    return WorkGroupNodeContextMenuTileBuilder(
+          Key('download_file_context_menu_action'),
+          SvgPicture.asset(imagePath.icFileDownload, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).download_to_device,
+          document)
+      .onActionClick((data) => _model.downloadFile(document))
       .build();
   }
 }
