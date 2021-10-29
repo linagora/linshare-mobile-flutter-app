@@ -118,6 +118,7 @@ class AppModule {
         getIt<BiometricExceptionThrower>(),
         getIt<SharedPreferences>()));
     getIt.registerFactory(() => LocalDocumentDataSourceImpl(getIt<DocumentDatabaseManager>()));
+    getIt.registerFactory(() => LocalReceivedShareDataSource(getIt<ReceivedShareDatabaseManager>()));
     getIt.registerFactory(() => UploadRequestGroupDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
@@ -411,6 +412,10 @@ class AppModule {
       getIt<CredentialRepository>()));
     getIt.registerFactory(() => ExportMultipleReceivedSharesInteractor(getIt<ExportReceivedShareInteractor>()));
     getIt.registerFactory(() => EnableVersioningWorkgroupInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => MakeReceivedShareOfflineInteractor(
+      getIt<ReceivedShareRepository>(),
+      getIt<TokenRepository>(),
+      getIt<CredentialRepository>()));
   }
 
   void _provideSharePreference() {
@@ -475,6 +480,7 @@ class AppModule {
   void _provideOfflineMode() {
     getIt.registerSingleton(DatabaseClient());
     getIt.registerFactory(() => DocumentDatabaseManager(getIt<DatabaseClient>()));
+    getIt.registerFactory(() => ReceivedShareDatabaseManager(getIt<DatabaseClient>()));
     getIt.registerFactory(() => SharedSpaceDocumentDatabaseManager(getIt<DatabaseClient>()));
     getIt.registerLazySingleton(() => AutoSyncOfflineManager(
       getIt.get<Store<AppState>>(),

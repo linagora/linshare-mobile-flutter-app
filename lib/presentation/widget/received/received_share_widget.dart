@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
@@ -59,11 +60,10 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/simple_conte
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/received_share_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
+import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 import 'package:redux/redux.dart';
-import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 
 class ReceivedShareWidget extends StatefulWidget {
   @override
@@ -221,7 +221,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
         padding: _responsiveUtils.getPaddingListItemForScreen(context),
         itemCount: receivedList.length,
         itemBuilder: (context, index) {
-          return _buildReceivedShareListItem(context, receivedList[index], currentSelectMode);
+          return _buildReceivedShareListItem(context, receivedList[index], currentSelectMode, index);
         },
       );
     }
@@ -237,7 +237,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   }
 
   Widget _buildReceivedShareListItem(
-      BuildContext context, SelectableElement<ReceivedShare> receivedShareItem, SelectMode currentSelectMode) {
+      BuildContext context, SelectableElement<ReceivedShare> receivedShareItem, SelectMode currentSelectMode, int position) {
     return ListTile(
         leading: Transform.translate(
           offset: _responsiveUtils.isSmallScreen(context) ? Offset(0, -12) : Offset(0, 0),
@@ -260,14 +260,28 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
             offset: Offset(-16, 0),
             child: Row(
               children: [
-                Expanded(child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: _buildFileName(receivedShareItem.element.name))),
-                Center(child: _buildSenderName(receivedShareItem.element.sender.fullName())),
-                Expanded(child: Align(
-                  alignment: Alignment.centerRight,
-                  child: _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
-                      receivedShareItem.element.creationDate.getMMMddyyyyFormatString())))),
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(child:
+                        Align(alignment: Alignment.centerLeft,
+                          child: _buildFileName(receivedShareItem.element.name))),
+                      _buildOfflineModeIcon(receivedShareItem.element.syncOfflineState),
+                  ])),
+                Expanded(
+                  flex: 2,
+                  child: Align(alignment: Alignment.centerRight, child: _buildSenderName(receivedShareItem.element.sender.fullName()))),
+                Expanded(
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: _buildModifiedDateText(
+                      AppLocalizations.of(context)
+                        .item_created_date(receivedShareItem.element.creationDate.getMMMddyyyyFormatString()))
+                  )
+                ),
               ]
             ),
           ),
@@ -283,8 +297,11 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildSenderName(receivedShareItem.element.sender.fullName()),
-                      _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
-                          receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
+                      Row(children: [
+                        _buildModifiedDateText(AppLocalizations.of(context).item_created_date(
+                            receivedShareItem.element.creationDate.getMMMddyyyyFormatString())),
+                        _buildOfflineModeIcon(receivedShareItem.element.syncOfflineState)
+                      ])
                     ],
                   ),
                 )
@@ -310,7 +327,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                       onPressed: () => receivedShareViewModel.openContextMenu(
                         context,
                         receivedShareItem.element,
-                        _contextMenuActionTiles(context, receivedShareItem.element),
+                        _contextMenuActionTiles(context, receivedShareItem.element, position),
                         footerAction: _removeFileAction([receivedShareItem.element])));
             }),
         onTap: () {
@@ -342,16 +359,12 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   }
 
   Widget _buildModifiedDateText(String modificationDate) {
-    return Padding(
-      padding: _responsiveUtils.isSmallScreen(context)
-        ? EdgeInsets.only(bottom: 8)
-        : EdgeInsets.zero,
-      child: Text(
+    return Text(
         modificationDate,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 13, color: AppColor.documentModifiedDateItemTextColor),
-      ));
+      );
   }
 
   Widget _buildSenderName(String sender) {
@@ -368,9 +381,10 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
     );
   }
 
-  List<Widget> _contextMenuActionTiles(BuildContext context, ReceivedShare receivedShare) {
+  List<Widget> _contextMenuActionTiles(BuildContext context, ReceivedShare receivedShare, int position) {
     return [
       _exportFileAction([receivedShare]),
+      _makeAvailableOffline(receivedShare, position),
       if (Platform.isAndroid) _downloadAction([receivedShare]),
       _copyToMySpaceAction([receivedShare]),
       _copyToWorkGroupAction(context, [receivedShare]),
@@ -399,6 +413,19 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
             receivedShares.map((share) => share.shareId).toList(),
             itemSelectionType: itemSelectionType))
         .build();
+  }
+
+  Widget _makeAvailableOffline(ReceivedShare receivedShare, int position) {
+    return ReceivedShareContextMenuTileBuilder(
+        Key('make_available_offline_context_menu_action'),
+        SvgPicture.asset(receivedShare.isAvailableOffline() ? imagePath.icAvailableOfflineEnabled : imagePath.icAvailableOffline, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).available_offline,
+        receivedShare)
+      .onActionClick((data) {
+        if (!data.isAvailableOffline()) {
+          receivedShareViewModel.makeAvailableOffline(context, receivedShare, position);
+        }})
+      .build();
   }
 
   Widget _copyToMySpaceAction(List<ReceivedShare> receivedShares,
@@ -563,5 +590,29 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
               itemSelectionType: itemSelectionType))
           .build()
        : SizedBox.shrink());
+  }
+
+  Widget _buildOfflineModeIcon(SyncOfflineState? syncOfflineState) {
+    switch (syncOfflineState) {
+      case SyncOfflineState.waiting:
+        return Padding(
+            padding: EdgeInsets.only(left: 8),
+            child: SizedBox(
+                width: 16,
+                height: 16,
+                child: CupertinoActivityIndicator()
+            ));
+      case SyncOfflineState.completed:
+        return Padding(
+            padding: EdgeInsets.only(left: 8),
+            child: SvgPicture.asset(
+              imagePath.icAvailableOfflineEnabled,
+              width: 16,
+              height: 16,
+              fit: BoxFit.fill,
+            ));
+      default:
+        return SizedBox.shrink();
+    }
   }
 }

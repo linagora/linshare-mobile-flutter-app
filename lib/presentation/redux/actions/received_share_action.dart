@@ -103,3 +103,10 @@ class ReceivedShareSetSearchResultAction extends ActionOffline {
 
   ReceivedShareSetSearchResultAction(this.receivedSharesList);
 }
+
+@immutable
+class ReceivedShareSetSyncOfflineMode extends ActionOffline {
+  final List<ReceivedShare> receivedShareList;
+
+  ReceivedShareSetSyncOfflineMode(this.receivedShareList);
+}
