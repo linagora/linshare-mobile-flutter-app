@@ -53,6 +53,7 @@ import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dar
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 import 'package:open_file/open_file.dart' as open_file;
@@ -71,6 +72,7 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
   final DeviceManager _deviceManager;
   final DownloadWorkGroupNodeInteractor _downloadWorkGroupNodeInteractor;
   final CopyToMySpaceInteractor _copyToMySpaceInteractor;
+  final CopyDocumentsToSharedSpaceInteractor _copyDocumentsToSharedSpaceInteractor;
 
   late SharedSpaceRole sharedSpaceRole;
   late SharedSpaceNodeVersionsArguments nodeVersionArguments;
@@ -86,6 +88,7 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     this._deviceManager,
     this._downloadWorkGroupNodeInteractor,
     this._copyToMySpaceInteractor,
+    this._copyDocumentsToSharedSpaceInteractor,
   ) : super(store);
 
   void initState(SharedSpaceNodeVersionsArguments arguments) {
@@ -375,6 +378,9 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
     copyAction.onDestinationPickerActionClick((data) {
       if (data == DestinationType.mySpace) {
         copyToMySpace(document);
+      } else if (data is SharedSpaceDocumentArguments) {
+        _appNavigation.popBack();
+        store.dispatch(_copyToWorkgroupAction(document, data));
       }
     });
 
@@ -400,6 +406,22 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
         .then((result) => result.fold(
           (failure) => store.dispatch(SharedSpaceNodeVersionsAction(Left(failure))),
           (success) => store.dispatch(SharedSpaceNodeVersionsAction(Right(success)))));
+    });
+  }
+
+  OnlineThunkAction _copyToWorkgroupAction(WorkGroupDocument document, SharedSpaceDocumentArguments documentArguments) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final parentNodeId = documentArguments.workGroupFolder != null
+          ? documentArguments.workGroupFolder?.workGroupNodeId
+          : null;
+
+      await _copyDocumentsToSharedSpaceInteractor
+        .execute(document.toCopyRequest(), documentArguments.sharedSpaceNode.sharedSpaceId, destinationParentNodeId: parentNodeId)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceNodeVersionsAction(Left(failure))),
+          (success) => store.dispatch(SharedSpaceNodeVersionsAction(Right(success)))));
+
+      getAllVersions(nodeVersionArguments.workGroupNode);
     });
   }
 

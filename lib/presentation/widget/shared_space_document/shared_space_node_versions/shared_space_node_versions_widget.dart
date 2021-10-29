@@ -240,7 +240,7 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
       .onActionClick((data) => _model.copyTo(
           context,
           document,
-          [DestinationType.mySpace]))
+          [DestinationType.mySpace, DestinationType.workGroup]))
       .build();
   }
 }
