@@ -433,6 +433,7 @@ class WidgetModule {
         getIt.get<DeviceManager>(),
         getIt.get<DownloadWorkGroupNodeInteractor>(),
         getIt.get<CopyToMySpaceInteractor>(),
+        getIt.get<CopyDocumentsToSharedSpaceInteractor>(),
     ));
   }
 
