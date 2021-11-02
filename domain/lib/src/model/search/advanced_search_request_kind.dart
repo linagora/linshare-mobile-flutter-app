@@ -29,6 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-enum AdvanceSearchRequestDate {
-  ANY_TIME, PAST_DAY, PAST_WEEK, PAST_MONTH, PAST_YEAR
+enum AdvancedSearchRequestKind {
+  DOCUMENT, PDF, SPREADSHEET, IMAGE, AUDIO, ARCHIVE, OTHER
+}
+
+extension AdvanceSearchRequestKindExtension on AdvancedSearchRequestKind {
+  String get name {
+    return toString().split('.').last;
+  }
 }

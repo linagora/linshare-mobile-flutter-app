@@ -29,30 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
-
-class AdvanceSearchRequest with EquatableMixin {
-  final String? pattern;
-  final List<AdvanceSearchRequestKind>? kinds;
-  final List<AdvanceSearchRequestType>? types;
-  final String? modificationDateAfter;
-  final String? modificationDateBefore;
-  final OrderBy? sortField;
-  final OrderType? sortOrder;
-  final bool? tree;
-
-  AdvanceSearchRequest(
-      {this.pattern,
-      this.kinds,
-      this.types,
-      this.modificationDateAfter,
-      this.modificationDateBefore,
-      this.sortField,
-      this.sortOrder,
-      this.tree});
-
-  @override
-  List<Object?> get props =>
-      [pattern, kinds, types, modificationDateAfter, modificationDateBefore, sortField, sortOrder, tree];
+enum AdvancedSearchRequestDate {
+  ANY_TIME, PAST_DAY, PAST_WEEK, PAST_MONTH, PAST_YEAR
 }
