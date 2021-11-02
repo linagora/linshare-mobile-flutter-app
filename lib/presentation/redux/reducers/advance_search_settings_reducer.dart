@@ -34,27 +34,27 @@ import 'package:linshare_flutter_app/presentation/redux/actions/advance_search_s
 import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
 import 'package:redux/redux.dart';
 
-final advanceSearchSettingsReducer = combineReducers<AdvanceSearchSettingsWorkgroupNodeState>([
+final advanceSearchSettingsReducer = combineReducers<AdvancedSearchSettingsWorkgroupNodeState>([
 
-  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, StartAdvanceSearchSettingsLoadingAction>(
-      (AdvanceSearchSettingsWorkgroupNodeState state, _) => state.startLoadingState()),
+  TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, StartAdvanceSearchSettingsLoadingAction>(
+      (AdvancedSearchSettingsWorkgroupNodeState state, _) => state.startLoadingState()),
 
-  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsAction>(
-      (AdvanceSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsAction action) =>
+  TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsAction>(
+      (AdvancedSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsAction action) =>
           state.sendViewState(viewState: action.viewState)),
 
-  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSetNewKindStateAction>(
-      (AdvanceSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsSetNewKindStateAction action) => state
+  TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSetNewKindStateAction>(
+      (AdvancedSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsSetNewKindStateAction action) => state
           .setNewKindState(viewState: action.viewState, newAdvanceSearchKindState: action.newAdvanceSearchKindState)),
 
-  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSetNewDateStateAction>(
-      (AdvanceSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsSetNewDateStateAction action) => state
+  TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSetNewDateStateAction>(
+      (AdvancedSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsSetNewDateStateAction action) => state
           .setNewDateState(viewState: action.viewState, newAdvanceSearchDateState: action.newAdvanceSearchDateState)),
 
-  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsResetAllAction>(
-          (AdvanceSearchSettingsWorkgroupNodeState state, _) => state.resetAllSettings()),
+  TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsResetAllAction>(
+          (AdvancedSearchSettingsWorkgroupNodeState state, _) => state.resetAllSettings()),
 
-  TypedReducer<AdvanceSearchSettingsWorkgroupNodeState, StartAdvanceSearchSettingsLoadingAction>(
-          (AdvanceSearchSettingsWorkgroupNodeState state, _) => state.applySearch()),
+  TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, StartAdvanceSearchSettingsLoadingAction>(
+          (AdvancedSearchSettingsWorkgroupNodeState state, _) => state.applySearch()),
 
 ]);

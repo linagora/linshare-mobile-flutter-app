@@ -50,7 +50,7 @@ class AdvanceSearchSettingsAction extends ActionOnline {
 @immutable
 class AdvanceSearchSettingsSetNewKindStateAction extends ActionOnline {
   final Either<Failure, Success>? viewState;
-  final AdvanceSearchKindState newAdvanceSearchKindState;
+  final AdvancedSearchKindState newAdvanceSearchKindState;
 
   AdvanceSearchSettingsSetNewKindStateAction(this.newAdvanceSearchKindState, {this.viewState});
 }
@@ -58,7 +58,7 @@ class AdvanceSearchSettingsSetNewKindStateAction extends ActionOnline {
 @immutable
 class AdvanceSearchSettingsSetNewDateStateAction extends ActionOnline {
   final Either<Failure, Success>? viewState;
-  final AdvanceSearchDateState newAdvanceSearchDateState;
+  final AdvancedSearchDateState newAdvanceSearchDateState;
 
   AdvanceSearchSettingsSetNewDateStateAction(this.newAdvanceSearchDateState, {this.viewState});
 }

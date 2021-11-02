@@ -37,12 +37,12 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 
 class AdvanceSearchSetting extends Equatable {
 
-  final List<AdvanceSearchKindState>? listKindState;
-  final List<AdvanceSearchDateState>? listModificationDate;
+  final List<AdvancedSearchKindState>? listKindState;
+  final List<AdvancedSearchDateState>? listModificationDate;
 
   AdvanceSearchSetting({this.listKindState, this.listModificationDate});
 
-  AdvanceSearchSetting copyWith({List<AdvanceSearchKindState>? newListKindState, List<AdvanceSearchDateState>? newListModificationDate}) {
+  AdvanceSearchSetting copyWith({List<AdvancedSearchKindState>? newListKindState, List<AdvancedSearchDateState>? newListModificationDate}) {
     return AdvanceSearchSetting(
       listKindState: newListKindState ?? listKindState,
       listModificationDate: newListModificationDate ?? listModificationDate
@@ -59,20 +59,20 @@ class AdvanceSearchSetting extends Equatable {
       case SearchDestination.uploadRequestInside:
         return AdvanceSearchSetting(
             listKindState: [
-              AdvanceSearchKindState(AdvanceSearchRequestKind.DOCUMENT, false),
-              AdvanceSearchKindState(AdvanceSearchRequestKind.PDF, false),
-              AdvanceSearchKindState(AdvanceSearchRequestKind.SPREADSHEET, false),
-              AdvanceSearchKindState(AdvanceSearchRequestKind.IMAGE, false),
-              AdvanceSearchKindState(AdvanceSearchRequestKind.AUDIO, false),
-              AdvanceSearchKindState(AdvanceSearchRequestKind.ARCHIVE, false),
-              AdvanceSearchKindState(AdvanceSearchRequestKind.OTHER, false),
+              AdvancedSearchKindState(AdvancedSearchRequestKind.DOCUMENT, false),
+              AdvancedSearchKindState(AdvancedSearchRequestKind.PDF, false),
+              AdvancedSearchKindState(AdvancedSearchRequestKind.SPREADSHEET, false),
+              AdvancedSearchKindState(AdvancedSearchRequestKind.IMAGE, false),
+              AdvancedSearchKindState(AdvancedSearchRequestKind.AUDIO, false),
+              AdvancedSearchKindState(AdvancedSearchRequestKind.ARCHIVE, false),
+              AdvancedSearchKindState(AdvancedSearchRequestKind.OTHER, false),
             ], 
             listModificationDate: [
-              AdvanceSearchDateState(AdvanceSearchRequestDate.ANY_TIME, true),
-              AdvanceSearchDateState(AdvanceSearchRequestDate.PAST_DAY, false),
-              AdvanceSearchDateState(AdvanceSearchRequestDate.PAST_WEEK, false),
-              AdvanceSearchDateState(AdvanceSearchRequestDate.PAST_MONTH, false),
-              AdvanceSearchDateState(AdvanceSearchRequestDate.PAST_YEAR, false),
+              AdvancedSearchDateState(AdvancedSearchRequestDate.ANY_TIME, true),
+              AdvancedSearchDateState(AdvancedSearchRequestDate.PAST_DAY, false),
+              AdvancedSearchDateState(AdvancedSearchRequestDate.PAST_WEEK, false),
+              AdvancedSearchDateState(AdvancedSearchRequestDate.PAST_MONTH, false),
+              AdvancedSearchDateState(AdvancedSearchRequestDate.PAST_YEAR, false),
             ]
         );
     }

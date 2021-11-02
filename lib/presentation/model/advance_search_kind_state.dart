@@ -29,18 +29,18 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:equatable/equatable.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class AdvanceSearchKindState extends Equatable {
+class AdvancedSearchKindState extends Equatable {
 
-  final AdvanceSearchRequestKind kind;
+  final AdvancedSearchRequestKind kind;
   final bool selected;
 
-  AdvanceSearchKindState(this.kind, this.selected);
+  AdvancedSearchKindState(this.kind, this.selected);
 
-  AdvanceSearchKindState copyWith({AdvanceSearchRequestKind? kind, bool? selected}) {
-    return AdvanceSearchKindState(kind ?? this.kind, selected ?? this.selected);
+  AdvancedSearchKindState copyWith({AdvancedSearchRequestKind? kind, bool? selected}) {
+    return AdvancedSearchKindState(kind ?? this.kind, selected ?? this.selected);
   }
 
   @override

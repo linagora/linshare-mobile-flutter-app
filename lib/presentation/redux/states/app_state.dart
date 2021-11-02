@@ -94,7 +94,7 @@ class AppState with EquatableMixin {
   final UploadRequestInsideState uploadRequestInsideState;
   final ReceivedShareDetailsState receivedShareDetailsState;
   final AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState;
-  final AdvanceSearchSettingsWorkgroupNodeState advanceSearchSettingsWorkgroupNodeState;
+  final AdvancedSearchSettingsWorkgroupNodeState advanceSearchSettingsWorkgroupNodeState;
 
   AppState(
       {required this.uiState,
@@ -161,7 +161,7 @@ class AppState with EquatableMixin {
         uploadRequestInsideState: UploadRequestInsideState.initial(),
         receivedShareDetailsState: ReceivedShareDetailsState.initial(),
         addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial(),
-        advanceSearchSettingsWorkgroupNodeState: AdvanceSearchSettingsWorkgroupNodeState.initial()
+        advanceSearchSettingsWorkgroupNodeState: AdvancedSearchSettingsWorkgroupNodeState.initial()
     );
   }
 

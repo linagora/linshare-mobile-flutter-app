@@ -38,10 +38,10 @@ import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_doc
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/advance_search_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/advance_search/advance_search_settings_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/advance_search_extension.dart';
 import 'package:redux/src/store.dart';
 
 class AdvanceSearchSettingsViewModel extends BaseViewModel {
@@ -62,11 +62,11 @@ class AdvanceSearchSettingsViewModel extends BaseViewModel {
     _appNavigation.popBack();
   }
 
-  void setNewKindState(AdvanceSearchKindState advanceSearchKindState) {
+  void setNewKindState(AdvancedSearchKindState advanceSearchKindState) {
     store.dispatch(AdvanceSearchSettingsSetNewKindStateAction(advanceSearchKindState));
   }
 
-  void setNewDateState(AdvanceSearchDateState advanceSearchDateState) {
+  void setNewDateState(AdvancedSearchDateState advanceSearchDateState) {
     store.dispatch(AdvanceSearchSettingsSetNewDateStateAction(advanceSearchDateState));
   }
 
@@ -82,7 +82,7 @@ class AdvanceSearchSettingsViewModel extends BaseViewModel {
   }
 
   OnlineThunkAction _advanceSearchOnSharedSpaceAction(AdvanceSearchSetting advanceSearchSetting) {
-      final searchRequest = AdvanceSearchRequest(
+      final searchRequest = AdvancedSearchRequest(
         pattern: _arguments.query,
         kinds: advanceSearchSetting.listKindState?.where((kindState) => kindState.selected == true)
           .map((e) => e.kind)
