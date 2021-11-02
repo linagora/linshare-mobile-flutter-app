@@ -189,7 +189,7 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   }
 
   @override
-  Future<List<WorkGroupNode?>> advanceSearchWorkgroupNode(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) {
+  Future<List<WorkGroupNode?>> doAdvancedSearch(SharedSpaceId sharedSpaceId, AdvancedSearchRequest searchRequest) {
     throw UnimplementedError();
   }
 }

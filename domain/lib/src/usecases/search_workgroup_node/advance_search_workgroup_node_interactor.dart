@@ -39,9 +39,9 @@ class AdvanceSearchWorkgroupNodeInteractor {
 
   AdvanceSearchWorkgroupNodeInteractor(this.sharedSpaceDocumentRepository);
 
-  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) async {
+  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, AdvancedSearchRequest searchRequest) async {
     try {
-      final resultList = await sharedSpaceDocumentRepository.advanceSearchWorkgroupNode(sharedSpaceId, searchRequest);
+      final resultList = await sharedSpaceDocumentRepository.doAdvancedSearch(sharedSpaceId, searchRequest);
       return Right<Failure, Success>(SearchWorkGroupNodeSuccess(resultList));
     } catch (exception) {
       return Left<Failure, Success>(SearchWorkGroupNodeFailure(exception));

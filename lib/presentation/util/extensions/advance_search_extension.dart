@@ -34,70 +34,70 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
-extension AdvanceSearchRequestDateExtension on AdvanceSearchRequestDate {
+extension AdvanceSearchRequestDateExtension on AdvancedSearchRequestDate {
   String getDisplayName(BuildContext context) {
     switch(this) {
-      case AdvanceSearchRequestDate.ANY_TIME:
+      case AdvancedSearchRequestDate.ANY_TIME:
         return AppLocalizations.of(context).advance_search_date_any_time();
-      case AdvanceSearchRequestDate.PAST_DAY:
+      case AdvancedSearchRequestDate.PAST_DAY:
         return AppLocalizations.of(context).advance_search_date_past_day();
-      case AdvanceSearchRequestDate.PAST_WEEK:
+      case AdvancedSearchRequestDate.PAST_WEEK:
         return AppLocalizations.of(context).advance_search_date_past_week();
-      case AdvanceSearchRequestDate.PAST_MONTH:
+      case AdvancedSearchRequestDate.PAST_MONTH:
         return AppLocalizations.of(context).advance_search_date_past_month();
-      case AdvanceSearchRequestDate.PAST_YEAR:
+      case AdvancedSearchRequestDate.PAST_YEAR:
         return AppLocalizations.of(context).advance_search_date_past_year();
     }
   }
 
   String? get dateAfter {
     switch(this) {
-      case AdvanceSearchRequestDate.ANY_TIME:
+      case AdvancedSearchRequestDate.ANY_TIME:
         return null;
-      case AdvanceSearchRequestDate.PAST_DAY:
+      case AdvancedSearchRequestDate.PAST_DAY:
         return DateTime.now().subtract(Duration(days: 1)).zuluDateFormat;
-      case AdvanceSearchRequestDate.PAST_WEEK:
+      case AdvancedSearchRequestDate.PAST_WEEK:
         return DateTime.now().subtract(Duration(days: 7)).zuluDateFormat;
-      case AdvanceSearchRequestDate.PAST_MONTH:
+      case AdvancedSearchRequestDate.PAST_MONTH:
         return DateTime.now().copyWith(month: DateTime.now().month - 1).zuluDateFormat;
-      case AdvanceSearchRequestDate.PAST_YEAR:
+      case AdvancedSearchRequestDate.PAST_YEAR:
         return DateTime.now().copyWith(year: DateTime.now().year - 1).zuluDateFormat;
     }
   }
 
   String? get dateBefore {
     switch(this) {
-      case AdvanceSearchRequestDate.ANY_TIME:
+      case AdvancedSearchRequestDate.ANY_TIME:
         return null;
-      case AdvanceSearchRequestDate.PAST_DAY:
+      case AdvancedSearchRequestDate.PAST_DAY:
         return DateTime.now().zuluDateFormat;
-      case AdvanceSearchRequestDate.PAST_WEEK:
+      case AdvancedSearchRequestDate.PAST_WEEK:
         return DateTime.now().zuluDateFormat;
-      case AdvanceSearchRequestDate.PAST_MONTH:
+      case AdvancedSearchRequestDate.PAST_MONTH:
         return DateTime.now().zuluDateFormat;
-      case AdvanceSearchRequestDate.PAST_YEAR:
+      case AdvancedSearchRequestDate.PAST_YEAR:
         return DateTime.now().zuluDateFormat;
     }
   }
 
 }
 
-extension AdvanceSearchRequestKindExtension on AdvanceSearchRequestKind {
+extension AdvanceSearchRequestKindExtension on AdvancedSearchRequestKind {
   String getDisplayName(BuildContext context) {
     switch(this) {
-      case AdvanceSearchRequestKind.DOCUMENT:
+      case AdvancedSearchRequestKind.DOCUMENT:
         return AppLocalizations.of(context).advance_search_type_document();
-      case AdvanceSearchRequestKind.PDF:
+      case AdvancedSearchRequestKind.PDF:
         return AppLocalizations.of(context).advance_search_type_pdf();
-      case AdvanceSearchRequestKind.SPREADSHEET:
+      case AdvancedSearchRequestKind.SPREADSHEET:
         return AppLocalizations.of(context).advance_search_type_spreadsheet();
-      case AdvanceSearchRequestKind.IMAGE:
+      case AdvancedSearchRequestKind.IMAGE:
         return AppLocalizations.of(context).advance_search_type_image();
-      case AdvanceSearchRequestKind.AUDIO:
+      case AdvancedSearchRequestKind.AUDIO:
         return AppLocalizations.of(context).advance_search_type_audio();
-      case AdvanceSearchRequestKind.ARCHIVE:
+      case AdvancedSearchRequestKind.ARCHIVE:
         return AppLocalizations.of(context).advance_search_type_archive();
-      case AdvanceSearchRequestKind.OTHER:
+      case AdvancedSearchRequestKind.OTHER:
         return AppLocalizations.of(context).advance_search_type_other();
 
     }

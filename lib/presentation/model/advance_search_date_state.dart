@@ -29,18 +29,18 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:equatable/equatable.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class AdvanceSearchDateState extends Equatable {
+class AdvancedSearchDateState extends Equatable {
 
-  final AdvanceSearchRequestDate date;
+  final AdvancedSearchRequestDate date;
   final bool selected;
 
-  AdvanceSearchDateState(this.date, this.selected);
+  AdvancedSearchDateState(this.date, this.selected);
 
-  AdvanceSearchDateState copyWith({AdvanceSearchRequestDate? date, bool? selected}) {
-    return AdvanceSearchDateState(date ?? this.date, selected ?? this.selected);
+  AdvancedSearchDateState copyWith({AdvancedSearchRequestDate? date, bool? selected}) {
+    return AdvancedSearchDateState(date ?? this.date, selected ?? this.selected);
   }
 
   @override

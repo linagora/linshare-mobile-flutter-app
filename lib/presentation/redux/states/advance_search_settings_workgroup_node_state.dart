@@ -42,33 +42,33 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 
 @immutable
-class AdvanceSearchSettingsWorkgroupNodeState extends LinShareState with EquatableMixin {
+class AdvancedSearchSettingsWorkgroupNodeState extends LinShareState with EquatableMixin {
   final AdvanceSearchSetting advanceSearchSetting;
 
-  AdvanceSearchSettingsWorkgroupNodeState(Either<Failure, Success> viewState, this.advanceSearchSetting)
+  AdvancedSearchSettingsWorkgroupNodeState(Either<Failure, Success> viewState, this.advanceSearchSetting)
       : super(viewState);
 
-  factory AdvanceSearchSettingsWorkgroupNodeState.initial() {
-    return AdvanceSearchSettingsWorkgroupNodeState(
+  factory AdvancedSearchSettingsWorkgroupNodeState.initial() {
+    return AdvancedSearchSettingsWorkgroupNodeState(
         Right(IdleState()), AdvanceSearchSetting.fromSearchDestination(SearchDestination.sharedSpace));
   }
 
   @override
-  AdvanceSearchSettingsWorkgroupNodeState clearViewState() {
-    return AdvanceSearchSettingsWorkgroupNodeState(Right(IdleState()), advanceSearchSetting);
+  AdvancedSearchSettingsWorkgroupNodeState clearViewState() {
+    return AdvancedSearchSettingsWorkgroupNodeState(Right(IdleState()), advanceSearchSetting);
   }
 
   @override
-  AdvanceSearchSettingsWorkgroupNodeState sendViewState({required Either<Failure, Success> viewState}) {
-    return AdvanceSearchSettingsWorkgroupNodeState(viewState, advanceSearchSetting);
+  AdvancedSearchSettingsWorkgroupNodeState sendViewState({required Either<Failure, Success> viewState}) {
+    return AdvancedSearchSettingsWorkgroupNodeState(viewState, advanceSearchSetting);
   }
 
   @override
-  AdvanceSearchSettingsWorkgroupNodeState startLoadingState() {
-    return AdvanceSearchSettingsWorkgroupNodeState(Right(LoadingState()), advanceSearchSetting);
+  AdvancedSearchSettingsWorkgroupNodeState startLoadingState() {
+    return AdvancedSearchSettingsWorkgroupNodeState(Right(LoadingState()), advanceSearchSetting);
   }
 
-  AdvanceSearchSettingsWorkgroupNodeState setNewKindState({Either<Failure, Success>? viewState, required AdvanceSearchKindState? newAdvanceSearchKindState}) {
+  AdvancedSearchSettingsWorkgroupNodeState setNewKindState({Either<Failure, Success>? viewState, required AdvancedSearchKindState? newAdvanceSearchKindState}) {
     final updatedKindList = advanceSearchSetting.listKindState?.map((e) {
       if (e.kind == newAdvanceSearchKindState?.kind) {
         return e.copyWith(kind: e.kind, selected: newAdvanceSearchKindState?.selected);
@@ -76,10 +76,10 @@ class AdvanceSearchSettingsWorkgroupNodeState extends LinShareState with Equatab
       return e;
     }).toList();
     final updatedAdvanceSearchSetting = advanceSearchSetting.copyWith(newListKindState: updatedKindList);
-    return AdvanceSearchSettingsWorkgroupNodeState(viewState ?? this.viewState, updatedAdvanceSearchSetting);
+    return AdvancedSearchSettingsWorkgroupNodeState(viewState ?? this.viewState, updatedAdvanceSearchSetting);
   }
 
-  AdvanceSearchSettingsWorkgroupNodeState setNewDateState({Either<Failure, Success>? viewState, required AdvanceSearchDateState? newAdvanceSearchDateState}) {
+  AdvancedSearchSettingsWorkgroupNodeState setNewDateState({Either<Failure, Success>? viewState, required AdvancedSearchDateState? newAdvanceSearchDateState}) {
     final updatedDateList = advanceSearchSetting.listModificationDate?.map((e) {
       if (e.date == newAdvanceSearchDateState?.date) {
         return e.copyWith(date: e.date, selected: newAdvanceSearchDateState?.selected);
@@ -87,14 +87,14 @@ class AdvanceSearchSettingsWorkgroupNodeState extends LinShareState with Equatab
       return e.copyWith(date: e.date, selected: false);
     }).toList();
     final updatedAdvanceSearchSetting = advanceSearchSetting.copyWith(newListModificationDate: updatedDateList);
-    return AdvanceSearchSettingsWorkgroupNodeState(viewState ?? this.viewState, updatedAdvanceSearchSetting);
+    return AdvancedSearchSettingsWorkgroupNodeState(viewState ?? this.viewState, updatedAdvanceSearchSetting);
   }
 
-  AdvanceSearchSettingsWorkgroupNodeState resetAllSettings() {
-    return AdvanceSearchSettingsWorkgroupNodeState(viewState, AdvanceSearchSetting.fromSearchDestination(SearchDestination.sharedSpace));
+  AdvancedSearchSettingsWorkgroupNodeState resetAllSettings() {
+    return AdvancedSearchSettingsWorkgroupNodeState(viewState, AdvanceSearchSetting.fromSearchDestination(SearchDestination.sharedSpace));
   }
 
-  AdvanceSearchSettingsWorkgroupNodeState applySearch() {
-    return AdvanceSearchSettingsWorkgroupNodeState(viewState, AdvanceSearchSetting.fromSearchDestination(SearchDestination.sharedSpace));
+  AdvancedSearchSettingsWorkgroupNodeState applySearch() {
+    return AdvancedSearchSettingsWorkgroupNodeState(viewState, AdvanceSearchSetting.fromSearchDestination(SearchDestination.sharedSpace));
   }
 }

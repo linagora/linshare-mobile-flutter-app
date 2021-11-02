@@ -131,8 +131,8 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<List<WorkGroupNode?>> advanceSearchWorkgroupNode(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.advanceSearchWorkgroupNode(sharedSpaceId, searchRequest);
+  Future<List<WorkGroupNode?>> doAdvancedSearch(SharedSpaceId sharedSpaceId, AdvancedSearchRequest searchRequest) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.doAdvancedSearch(sharedSpaceId, searchRequest);
   }
 
   @override

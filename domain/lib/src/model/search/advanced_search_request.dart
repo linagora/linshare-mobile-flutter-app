@@ -29,12 +29,33 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-enum AdvanceSearchRequestType {
-  DOCUMENT, FOLDER, DOCUMENT_REVISION
-}
+import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-extension AdvanceSearchRequestTypeExtension on AdvanceSearchRequestType {
-  String get name {
-    return toString().split('.').last;
-  }
+import 'advanced_search_request_kind.dart';
+import 'advanced_search_request_type.dart';
+
+class AdvancedSearchRequest with EquatableMixin {
+  final String? pattern;
+  final List<AdvancedSearchRequestKind>? kinds;
+  final List<AdvancedSearchRequestType>? types;
+  final String? modificationDateAfter;
+  final String? modificationDateBefore;
+  final OrderBy? sortField;
+  final OrderType? sortOrder;
+  final bool? tree;
+
+  AdvancedSearchRequest(
+      {this.pattern,
+      this.kinds,
+      this.types,
+      this.modificationDateAfter,
+      this.modificationDateBefore,
+      this.sortField,
+      this.sortOrder,
+      this.tree});
+
+  @override
+  List<Object?> get props =>
+      [pattern, kinds, types, modificationDateAfter, modificationDateBefore, sortField, sortOrder, tree];
 }

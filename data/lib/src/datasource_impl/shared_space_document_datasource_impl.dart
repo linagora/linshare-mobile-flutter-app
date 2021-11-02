@@ -375,7 +375,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<List<WorkGroupNode?>> advanceSearchWorkgroupNode(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) {
+  Future<List<WorkGroupNode?>> doAdvancedSearch(SharedSpaceId sharedSpaceId, AdvancedSearchRequest searchRequest) {
     return Future.sync(() async {
       return (await _linShareHttpClient.advanceSearchWorkGroupNodes(sharedSpaceId, searchRequest))
           .map<WorkGroupNode?>((workgroupNode) {
