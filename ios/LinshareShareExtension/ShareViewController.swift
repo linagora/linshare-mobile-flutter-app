@@ -101,28 +101,60 @@ class ShareViewController: SLComposeServiceViewController {
     private func handleImages (content: NSExtensionItem, attachment: NSItemProvider, index: Int) {
         attachment.loadItem(forTypeIdentifier: imageContentType, options: nil) { [weak self] data, error in
 
-            if error == nil, let url = data as? URL, let this = self {
-
-                // Always copy
-                let fileName = this.getFileName(from: url, type: .image)
-                let newPath = FileManager.default
-                    .containerURL(forSecurityApplicationGroupIdentifier: "group.\(this.hostAppBundleIdentifier)")!
-                    .appendingPathComponent(fileName)
-                let copied = this.copyFile(at: url, to: newPath)
-                if(copied) {
+            if error == nil, let this = self {
+                if let url = data as? URL {
+                    // Always copy
+                    let fileName = this.getFileName(from: url, type: .image)
+                    let newPath = FileManager.default
+                        .containerURL(forSecurityApplicationGroupIdentifier: "group.\(this.hostAppBundleIdentifier)")!
+                        .appendingPathComponent(fileName)
+                    let copied = this.copyFile(at: url, to: newPath)
+                    if(copied) {
+                        this.sharedMedia.append(SharedMediaFile(path: newPath.absoluteString, thumbnail: nil, duration: nil, type: .image))
+                    }
+                    
+                    // If this is the last item, save imagesData in userDefaults and redirect to host app
+                    if index == (content.attachments?.count)! - 1 {
+                        let userDefaults = UserDefaults(suiteName: "group.\(this.hostAppBundleIdentifier)")
+                        userDefaults?.set(this.toData(data: this.sharedMedia), forKey: this.sharedKey)
+                        userDefaults?.synchronize()
+                        this.redirectToHostApp(type: .media)
+                    }
+                } else if let image = data as? UIImage, let pngData = image.pngData() {
+                    let fileName = "\(UUID().uuidString).png"
+                    
+                    let newPath = FileManager.default
+                        .containerURL(forSecurityApplicationGroupIdentifier: "group.\(this.hostAppBundleIdentifier)")!
+                        .appendingPathComponent(fileName)
+                    
+                    if FileManager.default.fileExists(atPath: newPath.path) {
+                        do {
+                            try FileManager.default.removeItem(atPath: newPath.path)
+                        } catch let removeError {
+                            print("couldn't remove file at path", removeError)
+                        }
+                    }
+                    
+                    do {
+                        try pngData.write(to: newPath)
+                    } catch let error {
+                        print("error saving file with error", error)
+                    }
+                    
                     this.sharedMedia.append(SharedMediaFile(path: newPath.absoluteString, thumbnail: nil, duration: nil, type: .image))
+                    
+                    // If this is the last item, save imagesData in userDefaults and redirect to host app
+                    if index == (content.attachments?.count)! - 1 {
+                        let userDefaults = UserDefaults(suiteName: "group.\(this.hostAppBundleIdentifier)")
+                        userDefaults?.set(this.toData(data: this.sharedMedia), forKey: this.sharedKey)
+                        userDefaults?.synchronize()
+                        this.redirectToHostApp(type: .media)
+                    }
+                } else {
+                    self?.dismissWithError()
                 }
-
-                // If this is the last item, save imagesData in userDefaults and redirect to host app
-                if index == (content.attachments?.count)! - 1 {
-                    let userDefaults = UserDefaults(suiteName: "group.\(this.hostAppBundleIdentifier)")
-                    userDefaults?.set(this.toData(data: this.sharedMedia), forKey: this.sharedKey)
-                    userDefaults?.synchronize()
-                    this.redirectToHostApp(type: .media)
-                }
-
             } else {
-                 self?.dismissWithError()
+                self?.dismissWithError()
             }
         }
     }
