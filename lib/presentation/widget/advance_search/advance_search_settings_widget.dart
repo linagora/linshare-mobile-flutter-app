@@ -39,11 +39,11 @@ import 'package:linshare_flutter_app/presentation/model/advance_search_setting.d
 import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/advance_search_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/styles.dart';
 import 'package:linshare_flutter_app/presentation/widget/advance_search/advance_search_settings_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/advance_search/advance_search_settings_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/advance_search_extension.dart';
 
 class AdvanceSearchSettingsWidget extends StatefulWidget {
   const AdvanceSearchSettingsWidget({Key? key}) : super(key: key);
@@ -85,7 +85,7 @@ class _AdvanceSearchSettingsWidgetState extends State<AdvanceSearchSettingsWidge
           style:
             TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColor.advanceSearchAppbarTitleColor)),
       ),
-      body: StoreConnector<AppState, AdvanceSearchSettingsWorkgroupNodeState>(
+      body: StoreConnector<AppState, AdvancedSearchSettingsWorkgroupNodeState>(
         converter: (store) => store.state.advanceSearchSettingsWorkgroupNodeState,
         builder: (context, state) => SingleChildScrollView(
           child: Column(
@@ -141,7 +141,7 @@ class _AdvanceSearchSettingsWidgetState extends State<AdvanceSearchSettingsWidge
       return _buildModificationDateListItem(advanceSearchSetting, dateState);
     }).toList() ?? [];
 
-  Widget _buildModificationDateListItem(AdvanceSearchSetting advanceSearchSetting, AdvanceSearchDateState dateState) => Row(
+  Widget _buildModificationDateListItem(AdvanceSearchSetting advanceSearchSetting, AdvancedSearchDateState dateState) => Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Expanded(

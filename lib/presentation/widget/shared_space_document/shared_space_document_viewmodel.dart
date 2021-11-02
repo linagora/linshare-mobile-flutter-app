@@ -991,7 +991,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   }
 
   OnlineThunkAction _advanceSearchOnSharedSpaceAction(String query, AdvanceSearchSetting advanceSearchSetting) {
-    final searchRequest = AdvanceSearchRequest(
+    final searchRequest = AdvancedSearchRequest(
       pattern: query,
       kinds: advanceSearchSetting.listKindState?.where((kindState) => kindState.selected == true)
           .map((e) => e.kind)

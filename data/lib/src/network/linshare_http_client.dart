@@ -662,7 +662,7 @@ class LinShareHttpClient {
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
 
-  Future<List<WorkGroupNodeDto>> advanceSearchWorkGroupNodes(SharedSpaceId sharedSpaceId, AdvanceSearchRequest searchRequest) async {
+  Future<List<WorkGroupNodeDto>> advanceSearchWorkGroupNodes(SharedSpaceId sharedSpaceId, AdvancedSearchRequest searchRequest) async {
 
     final queryParameters = <QueryParameter>[];
     if(searchRequest.kinds != null && searchRequest.kinds!.isNotEmpty) {
