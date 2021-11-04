@@ -71,6 +71,8 @@ class Endpoint {
   static final ServicePath uploadRequestsEntriesRoute = ServicePath('/upload_request_entries');
 
   static final ServicePath audit = ServicePath('/audit');
+
+  static final ServicePath oidcConfiguration = ServicePath('/config/config.js');
 }
 
 extension ServicePathExtension on ServicePath {
@@ -112,5 +114,9 @@ extension ServicePathExtension on ServicePath {
 
   ServicePath append(ServicePath other) {
     return ServicePath(path + other.path);
+  }
+
+  String generateOIDCConfigurationUrl(Uri baseUrl) {
+    return baseUrl.origin + '$path';
   }
 }
