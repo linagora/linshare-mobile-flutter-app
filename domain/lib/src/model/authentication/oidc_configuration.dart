@@ -29,25 +29,27 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'dart:core';
+import 'package:equatable/equatable.dart';
 
-class CreatePermanentTokenSSOInteractor {
-  final AuthenticationSSORepository authenticationSSORepository;
-  final TokenRepository tokenRepository;
-  final CredentialRepository credentialRepository;
+class OIDCConfiguration extends Equatable {
 
-  CreatePermanentTokenSSOInteractor(this.authenticationSSORepository, this.tokenRepository, this.credentialRepository);
+  final String authority;
+  final String clientId;
+  final String redirectUrl = 'linshare.mobile://oauthredirect';
+  final String logoutRedirectUri;
+  final String responseType;
+  final List<String> scopes;
 
-  Future<Either<Failure, Success>> execute(Uri baseUrl, TokenSSO tokenSSO, {OTPCode? otpCode}) async {
-    try {
-      final token = await authenticationSSORepository.createPermanentTokenWithOIDC(baseUrl, tokenSSO, otpCode: otpCode);
-      await tokenRepository.persistToken(token);
-      await credentialRepository.saveBaseUrl(baseUrl);
-      return Right(AuthenticationViewState(token));
-    } catch (e) {
-      return Left(AuthenticationFailure(e));
-    }
-  }
+  OIDCConfiguration({
+    required this.authority,
+    required this.clientId,
+    required this.logoutRedirectUri,
+    required this.responseType,
+    required this.scopes
+  });
+
+  String get discoveryUrl => authority + '.well-known/openid-configuration';
+
+  @override
+  List<Object?> get props => [authority, clientId, redirectUrl, scopes];
 }

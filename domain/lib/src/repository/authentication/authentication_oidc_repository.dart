@@ -29,38 +29,21 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
 
-class GetTokenSSOInteractor {
+abstract class AuthenticationOIDCRepository {
 
-  final AuthenticationSSORepository authenticationSSORepository;
+  Future<TokenOIDC?> getTokenOIDC(
+    String clientId,
+    String redirectUrl,
+    String discoveryUrl,
+    List<String> scopes,
+    bool preferEphemeralSessionIOS,
+    List<String>? promptValues,
+    bool allowInsecureConnections);
 
-  GetTokenSSOInteractor(this.authenticationSSORepository);
+  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
 
-  Future<Either<Failure, Success>> execute(
-      String clientId,
-      String redirectUrl,
-      SSOConfiguration configuration,
-      List<String> scopes,
-      bool preferEphemeralSessionIOS,
-      List<String>? promptValues,
-      bool allowInsecureConnections) async {
-        try {
-          final tokenSSO = await authenticationSSORepository.getTokenSSO(
-            clientId,
-            redirectUrl,
-            configuration,
-            scopes,
-            preferEphemeralSessionIOS,
-            promptValues,
-            allowInsecureConnections);
-          return (tokenSSO != null)
-            ? Right(AuthenticationSSOViewState(tokenSSO))
-            : Left(AuthenticationSSOFailure(NotAuthorized()));
-        } catch (e) {
-          return Left(AuthenticationSSOFailure(e));
-        }
-  }
+  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
 }
+

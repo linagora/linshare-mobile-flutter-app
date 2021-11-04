@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/src/repository/authentication/authentication_sso_repository.dart';
+import 'package:domain/src/repository/authentication/authentication_oidc_repository.dart';
 import 'package:mockito/mockito.dart';
 
-class MockAuthenticationSSORepository extends Mock implements AuthenticationSSORepository {}
+class MockAuthenticationOIDCRepository extends Mock implements AuthenticationOIDCRepository {}
