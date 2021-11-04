@@ -29,28 +29,28 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/authentication_sso_datasource.dart';
+import 'package:data/src/datasource/authentication_oidc_datasource.dart';
 import 'package:domain/domain.dart';
 
-class AuthenticationSSORepositoryImpl extends AuthenticationSSORepository {
+class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
 
-  AuthenticationSSODataSource authenticationSSODataSource;
+  AuthenticationOIDCDataSource authenticationOIDCDataSource;
 
-  AuthenticationSSORepositoryImpl(this.authenticationSSODataSource);
+  AuthenticationOIDCRepositoryImpl(this.authenticationOIDCDataSource);
 
   @override
-  Future<TokenSSO?> getTokenSSO(
+  Future<TokenOIDC?> getTokenOIDC(
       String clientId,
       String redirectUrl,
-      SSOConfiguration configuration,
+      String discoveryUrl,
       List<String> scopes,
       bool preferEphemeralSessionIOS,
       List<String>? promptValues,
       bool allowInsecureConnections) {
-    return authenticationSSODataSource.getTokenSSO(
+    return authenticationOIDCDataSource.getTokenOIDC(
         clientId,
         redirectUrl,
-        configuration,
+        discoveryUrl,
         scopes,
         preferEphemeralSessionIOS,
         promptValues,
@@ -58,7 +58,12 @@ class AuthenticationSSORepositoryImpl extends AuthenticationSSORepository {
   }
 
   @override
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenSSO tokenSSO, {OTPCode? otpCode}) {
-    return authenticationSSODataSource.createPermanentTokenWithOIDC(baseUrl, tokenSSO, otpCode: otpCode);
+  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode}) {
+    return authenticationOIDCDataSource.createPermanentTokenWithOIDC(baseUrl, tokenOIDC, otpCode: otpCode);
+  }
+
+  @override
+  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl) {
+    return authenticationOIDCDataSource.getOIDCConfiguration(baseUrl);
   }
 }
