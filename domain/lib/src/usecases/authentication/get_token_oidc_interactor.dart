@@ -29,30 +29,39 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
+import 'dart:core';
 
-class TokenSSO extends Equatable {
-  const TokenSSO(this.token, this.tokenId, this.expiredTime, this.refreshToken);
+class GetTokenOIDCInteractor {
 
-  final String token;
-  final TokenId tokenId;
-  final DateTime expiredTime;
-  final String refreshToken;
+  final AuthenticationOIDCRepository authenticationOIDCRepository;
 
-  @override
-  List<Object> get props => [token, tokenId, expiredTime, refreshToken];
+  GetTokenOIDCInteractor(this.authenticationOIDCRepository);
 
-  @override
-  bool get stringify => true;
-}
-
-extension TokenSSOExtension on TokenSSO {
-
-  bool isTokenValid() => token.isNotEmpty && tokenId.uuid.isNotEmpty;
-
-  Token toToken() {
-    return Token(token, tokenId);
+  Future<Either<Failure, Success>> execute(
+      String clientId,
+      String redirectUrl,
+      String discoveryUrl,
+      List<String> scopes,
+      bool preferEphemeralSessionIOS,
+      List<String>? promptValues,
+      bool allowInsecureConnections
+  ) async {
+    try {
+      final tokenOIDC = await authenticationOIDCRepository.getTokenOIDC(
+        clientId,
+        redirectUrl,
+        discoveryUrl,
+        scopes,
+        preferEphemeralSessionIOS,
+        promptValues,
+        allowInsecureConnections);
+      return tokenOIDC != null
+        ? Right(GetTokenOIDCViewState(tokenOIDC))
+        : Left(GetTokenOIDCFailure(NotAuthorized()));
+    } catch (e) {
+      return Left(GetTokenOIDCFailure(e));
+    }
   }
-
 }
