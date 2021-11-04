@@ -33,7 +33,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>ShareMedia-$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-				<string>linsharemobile.com</string>
+				<string>linshare.mobile</string>
 			</array>
 		</dict>
 		<dict/>
