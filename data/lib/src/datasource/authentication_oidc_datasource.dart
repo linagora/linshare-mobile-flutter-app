@@ -39,59 +39,62 @@ import 'package:domain/domain.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:data/src/extensions/authentication_token_extension.dart';
 
-class AuthenticationSSODataSource {
+class AuthenticationOIDCDataSource {
 
   final LinShareHttpClient linShareHttpClient;
   final RemoteExceptionThrower _remoteExceptionThrower;
   final FlutterAppAuth appAuth;
   final DeviceManager deviceManager;
+  final OIDCParser oidcParser;
 
-  AuthenticationSSODataSource(this.linShareHttpClient,
-      this._remoteExceptionThrower, this.appAuth, this.deviceManager);
+  AuthenticationOIDCDataSource(
+    this.linShareHttpClient,
+    this._remoteExceptionThrower,
+    this.appAuth,
+    this.deviceManager,
+    this.oidcParser
+  );
 
-  Future<TokenSSO?> getTokenSSO(
+  Future<TokenOIDC?> getTokenOIDC(
     String clientId,
     String redirectUrl,
-    SSOConfiguration configuration,
+    String discoveryUrl,
     List<String> scopes,
     bool preferEphemeralSessionIOS,
     List<String>? promptValues,
     bool allowInsecureConnections) async {
       return Future.sync(() async {
-        final result = await appAuth.authorizeAndExchangeCode(
-        AuthorizationTokenRequest(clientId, redirectUrl,
-          serviceConfiguration: AuthorizationServiceConfiguration(
-            configuration.authorizationEndpoint,
-            configuration.tokenEndpoint),
-          scopes: scopes,
-          preferEphemeralSession: preferEphemeralSessionIOS,
-          promptValues: promptValues,
-          allowInsecureConnections: allowInsecureConnections),
-        );
+        final result = await appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
+            clientId,
+            redirectUrl,
+            discoveryUrl: discoveryUrl,
+            scopes: scopes,
+            preferEphemeralSession: preferEphemeralSessionIOS,
+            promptValues: promptValues,
+            allowInsecureConnections: allowInsecureConnections));
         if(result != null) {
-          final tokenSSO = result.toTokenSSO();
-          if(tokenSSO.isTokenValid()) {
-              return tokenSSO;
+          final tokenOIDC = result.toTokenOIDC();
+          if (tokenOIDC.isTokenValid()) {
+              return tokenOIDC;
           } else {
-            throw BadSSOCredentials();
+            throw BadCredentials();
           }
         } else {
-          throw BadSSOCredentials();
+          throw BadCredentials();
         }
       }).catchError((error) {
-        print(error);
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
-          throw BadSSOCredentials();
+          throw BadCredentials();
         });
       });
   }
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenSSO tokenSSO, {OTPCode? otpCode}) async {
+  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode}) async {
     return Future.sync(() async {
       final deviceName = await deviceManager.getDeviceName();
       final permanentToken = await linShareHttpClient.createPermanentTokenWithOIDC(
           baseUrl,
-          tokenSSO.token,
+          tokenOIDC.token,
           PermanentTokenBodyRequest('Token-${deviceManager.getPlatformString()}-$deviceName'),
           otpCode: otpCode);
       return permanentToken.toToken();
@@ -113,4 +116,14 @@ class AuthenticationSSODataSource {
     });
   }
 
+  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl) {
+    return Future.sync(() async {
+      final result = await linShareHttpClient.getOIDCConfiguration(baseUrl);
+      return oidcParser.parseOIDCConfiguration(result);
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
+        throw BadCredentials();
+      });
+    });
+  }
 }
