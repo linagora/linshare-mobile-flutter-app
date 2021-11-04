@@ -36,8 +36,14 @@ import 'package:redux/redux.dart';
 final authenticationReducer = combineReducers<AuthenticationState>([
   TypedReducer<AuthenticationState, StartAuthenticationLoadingAction>(
       (AuthenticationState state, _) => state.startLoadingState()),
+  TypedReducer<AuthenticationState, StartAuthenticationSSOLoadingAction>(
+      (AuthenticationState state, _) => state.startAuthenticationSSOLoadingState()),
+  TypedReducer<AuthenticationState, StartAuthenticationSaaSLoadingAction>(
+      (AuthenticationState state, _) => state.startAuthenticationSaaSLoadingState()),
   TypedReducer<AuthenticationState, AuthenticationAction>(
       (AuthenticationState state, AuthenticationAction action) => state.sendViewState(viewState: action.viewState)),
   TypedReducer<AuthenticationState, CleanAuthenticationStateAction>(
       (AuthenticationState state, _) => state.clearViewState()),
+  TypedReducer<AuthenticationState, UpdateAuthenticationScreenStateAction>(
+      (AuthenticationState state, UpdateAuthenticationScreenStateAction action) => state.updateAuthenticationScreenState(formType: action.loginFormType)),
 ]);

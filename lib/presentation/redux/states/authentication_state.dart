@@ -31,31 +31,49 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:meta/meta.dart';
 
 import 'linshare_state.dart';
 
 @immutable
 class AuthenticationState extends LinShareState  {
-  AuthenticationState(Either<Failure, Success> viewState) : super(viewState);
+  final LoginFormType loginFormType;
+
+  AuthenticationState(
+      Either<Failure, Success> viewState,
+      this.loginFormType,
+  ) : super(viewState);
 
   factory AuthenticationState.initial() {
-    return AuthenticationState(Right(IdleState()));
+    return AuthenticationState(Right(IdleState()), LoginFormType.main);
   }
 
   @override
   AuthenticationState startLoadingState() {
-    return AuthenticationState(Right(LoadingState()));
+    return AuthenticationState(Right(LoadingState()), loginFormType);
+  }
+
+  AuthenticationState startAuthenticationSSOLoadingState() {
+    return AuthenticationState(Right(AuthenticationSSOLoadingState()), loginFormType);
+  }
+
+  AuthenticationState startAuthenticationSaaSLoadingState() {
+    return AuthenticationState(Right(AuthenticationSaaSLoadingState()), loginFormType);
   }
 
   @override
   AuthenticationState sendViewState({required Either<Failure, Success> viewState}) {
-    return AuthenticationState(viewState);
+    return AuthenticationState(viewState, loginFormType);
   }
 
   @override
   AuthenticationState clearViewState() {
     return AuthenticationState.initial();
+  }
+
+  AuthenticationState updateAuthenticationScreenState({required LoginFormType formType}) {
+    return AuthenticationState(Right(IdleState()), formType);
   }
 
   @override

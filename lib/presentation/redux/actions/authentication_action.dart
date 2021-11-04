@@ -32,10 +32,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class StartAuthenticationLoadingAction extends ActionOffline {}
+
+class StartAuthenticationSaaSLoadingAction extends ActionOffline {}
+
+class StartAuthenticationSSOLoadingAction extends ActionOffline {}
 
 @immutable
 class AuthenticationAction extends ActionOnline {
@@ -47,4 +52,11 @@ class AuthenticationAction extends ActionOnline {
 @immutable
 class CleanAuthenticationStateAction extends ActionOffline {
   CleanAuthenticationStateAction();
+}
+
+@immutable
+class UpdateAuthenticationScreenStateAction extends ActionOffline {
+  final LoginFormType loginFormType;
+
+  UpdateAuthenticationScreenStateAction(this.loginFormType);
 }

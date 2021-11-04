@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-10-27T16:10:40.244095",
+  "@@last_modified": "2021-11-05T11:27:21.294584",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -2304,6 +2304,18 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "versioning_enable": "Versioning enable",
+  "@versioning_enable": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_want_to_remove_this_version": "Are you sure want to remove this version? Beware, this action cannot be undone.",
+  "@are_you_sure_want_to_remove_this_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "advance_search_setting": "Advanced search settings",
   "@advance_search_setting": {
     "type": "text",
@@ -2390,6 +2402,54 @@
   },
   "advance_search_button_apply": "Apply",
   "@advance_search_button_apply": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_in_to_saas": "Sign in to SaaS",
+  "@sign_in_to_saas": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_in_to_self_hosted_instance": "Sign in to self-hosted instance",
+  "@sign_in_to_self_hosted_instance": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "do_not_have_an_account": "Don't have an account?",
+  "@do_not_have_an_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up": "Sign up",
+  "@sign_up": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_in_with_your_credentials": "Sign in with your credentials",
+  "@sign_in_with_your_credentials": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_in_with_your_sso": "Sign in with your SSO",
+  "@sign_in_with_your_sso": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "please_input_your_url": "Please input your URL",
+  "@please_input_your_url": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "this_feature_not_supported": "This feature is not currently supported",
+  "@this_feature_not_supported": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
