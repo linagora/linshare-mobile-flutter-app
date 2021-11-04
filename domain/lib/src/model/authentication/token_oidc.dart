@@ -30,23 +30,28 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token_sso.dart';
+import 'package:equatable/equatable.dart';
 
+class TokenOIDC extends Equatable {
+  const TokenOIDC(this.token, this.tokenId, this.expiredTime, this.refreshToken);
 
-class AuthenticationSSOViewState extends ViewState {
-  final TokenSSO tokenSSO;
-
-  AuthenticationSSOViewState(this.tokenSSO);
+  final String token;
+  final TokenId tokenId;
+  final DateTime expiredTime;
+  final String refreshToken;
 
   @override
-  List<Object> get props => [tokenSSO];
+  List<Object> get props => [token, tokenId, expiredTime, refreshToken];
+
+  @override
+  bool get stringify => true;
 }
 
-class AuthenticationSSOFailure extends FeatureFailure {
-  final authenticationException;
+extension TokenOIDCExtension on TokenOIDC {
 
-  AuthenticationSSOFailure(this.authenticationException);
+  bool isTokenValid() => token.isNotEmpty && tokenId.uuid.isNotEmpty;
 
-  @override
-  List<Object> get props => [authenticationException];
+  Token toToken() {
+    return Token(token, tokenId);
+  }
 }

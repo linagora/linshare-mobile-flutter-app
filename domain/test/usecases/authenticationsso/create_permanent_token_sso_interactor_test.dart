@@ -43,53 +43,53 @@ import '../../mock/repository/authenticationsso/mock_authentication_sso_reposito
 void main() {
 
   group('create_permanent_token_sso_interactor_test', () {
-    late CreatePermanentTokenSSOInteractor createPermanentTokenSSOInteractor;
-    late MockAuthenticationSSORepository authenticationSSORepository;
+    late CreatePermanentTokenOIDCInteractor createPermanentTokenOIDCInteractor;
+    late MockAuthenticationOIDCRepository authenticationOIDCRepository;
     MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
 
     setUp(() {
-      authenticationSSORepository = MockAuthenticationSSORepository();
+      authenticationOIDCRepository = MockAuthenticationOIDCRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
-      createPermanentTokenSSOInteractor = CreatePermanentTokenSSOInteractor(
-          authenticationSSORepository,
+      createPermanentTokenOIDCInteractor = CreatePermanentTokenOIDCInteractor(
+          authenticationOIDCRepository,
           tokenRepository,
           credentialRepository);
     });
 
-    test('createPermanentTokenSSOInteractor should return success with correct data', () async {
-      when(authenticationSSORepository.createPermanentTokenWithOIDC(linShareOIDCFilesBaseUrl, oidcToken))
+    test('createPermanentTokenOIDCInteractor should return success with correct data', () async {
+      when(authenticationOIDCRepository.createPermanentTokenWithOIDC(linShareOIDCFilesBaseUrl, oidcToken))
           .thenAnswer((_) async => permanentToken);
-      final result = await createPermanentTokenSSOInteractor.execute(linShareOIDCFilesBaseUrl, oidcToken);
+      final result = await createPermanentTokenOIDCInteractor.execute(linShareOIDCFilesBaseUrl, oidcToken);
       expect(result, Right<Failure, Success>(AuthenticationViewState(permanentToken)));
     });
 
-    test('createPermanentTokenSSOInteractor should failure with wrong url', () async {
-      when(authenticationSSORepository.createPermanentTokenWithOIDC(wrongUrl, oidcToken))
+    test('createPermanentTokenOIDCInteractor should failure with wrong url', () async {
+      when(authenticationOIDCRepository.createPermanentTokenWithOIDC(wrongUrl, oidcToken))
           .thenThrow(ServerNotFound());
-      final result = await createPermanentTokenSSOInteractor.execute(wrongUrl, oidcToken);
+      final result = await createPermanentTokenOIDCInteractor.execute(wrongUrl, oidcToken);
       expect(result, Left<Failure, Success>(AuthenticationFailure(ServerNotFound())));
     });
 
-    test('createPermanentTokenSSOInteractor should failure with wrong oidc token', () async {
-      when(authenticationSSORepository.createPermanentTokenWithOIDC(linShareOIDCFilesBaseUrl, oidcTokenWrong))
+    test('createPermanentTokenOIDCInteractor should failure with wrong oidc token', () async {
+      when(authenticationOIDCRepository.createPermanentTokenWithOIDC(linShareOIDCFilesBaseUrl, oidcTokenWrong))
           .thenThrow(BadCredentials());
-      final result = await createPermanentTokenSSOInteractor.execute(linShareOIDCFilesBaseUrl, oidcTokenWrong);
+      final result = await createPermanentTokenOIDCInteractor.execute(linShareOIDCFilesBaseUrl, oidcTokenWrong);
       expect(result, Left<Failure, Success>(AuthenticationFailure(BadCredentials())));
     });
 
-    test('createPermanentTokenSSOInteractor should failure with connection error', () async {
-      when(authenticationSSORepository.createPermanentTokenWithOIDC(linShareOIDCFilesBaseUrl, oidcToken))
+    test('createPermanentTokenOIDCInteractor should failure with connection error', () async {
+      when(authenticationOIDCRepository.createPermanentTokenWithOIDC(linShareOIDCFilesBaseUrl, oidcToken))
           .thenThrow(ConnectError());
-      final result = await createPermanentTokenSSOInteractor.execute(linShareOIDCFilesBaseUrl, oidcToken);
+      final result = await createPermanentTokenOIDCInteractor.execute(linShareOIDCFilesBaseUrl, oidcToken);
       expect(result, Left<Failure, Success>(AuthenticationFailure(ConnectError())));
     });
 
-    test('createPermanentTokenSSOInteractor should failure with unknown error', () async {
-      when(authenticationSSORepository.createPermanentTokenWithOIDC(linShareBaseUrl, oidcToken))
+    test('createPermanentTokenOIDCInteractor should failure with unknown error', () async {
+      when(authenticationOIDCRepository.createPermanentTokenWithOIDC(linShareBaseUrl, oidcToken))
           .thenThrow(UnknownError('unknown error'));
-      final result = await createPermanentTokenSSOInteractor.execute(linShareBaseUrl, oidcToken);
+      final result = await createPermanentTokenOIDCInteractor.execute(linShareBaseUrl, oidcToken);
       expect(result, Left<Failure, Success>(AuthenticationFailure(UnknownError('unknown error'))));
     });
   });
