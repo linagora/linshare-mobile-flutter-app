@@ -140,11 +140,12 @@ class AppModule {
       getIt<DeviceManager>(),
       getIt<RemoteExceptionThrower>()
     ));
-    getIt.registerFactory(() => AuthenticationSSODataSource(
+    getIt.registerFactory(() => AuthenticationOIDCDataSource(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>(),
         getIt<FlutterAppAuth>(),
-        getIt<DeviceManager>()
+        getIt<DeviceManager>(),
+        getIt<OIDCParser>()
     ));
     getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDataSource>(() => getIt<SharedSpaceDataSourceImpl>());
@@ -167,7 +168,7 @@ class AppModule {
 
   void _provideRepositoryImpl() {
     getIt.registerFactory(() => AuthenticationRepositoryImpl(getIt<AuthenticationDataSource>()));
-    getIt.registerFactory(() => AuthenticationSSORepositoryImpl(getIt<AuthenticationSSODataSource>()));
+    getIt.registerFactory(() => AuthenticationOIDCRepositoryImpl(getIt<AuthenticationOIDCDataSource>()));
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => DocumentRepositoryImpl(
@@ -211,7 +212,7 @@ class AppModule {
 
   void _provideRepository() {
     getIt.registerFactory<AuthenticationRepository>(() => getIt<AuthenticationRepositoryImpl>());
-    getIt.registerFactory<AuthenticationSSORepository>(() => getIt<AuthenticationSSORepositoryImpl>());
+    getIt.registerFactory<AuthenticationOIDCRepository>(() => getIt<AuthenticationOIDCRepositoryImpl>());
     getIt.registerFactory<TokenRepository>(() => getIt<TokenRepositoryImpl>());
     getIt.registerFactory<CredentialRepository>(() => getIt<CredentialRepositoryImpl>());
     getIt.registerFactory<DocumentRepository>(() => getIt<DocumentRepositoryImpl>());
@@ -237,10 +238,11 @@ class AppModule {
       getIt<AuthenticationRepository>(),
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
-    getIt.registerFactory(() => GetTokenSSOInteractor(
-      getIt<AuthenticationSSORepository>()));
-    getIt.registerFactory(() => CreatePermanentTokenSSOInteractor(
-        getIt<AuthenticationSSORepository>(),
+    getIt.registerFactory(() => GetOIDCConfigurationInteractor(getIt<AuthenticationOIDCRepository>()));
+    getIt.registerFactory(() => GetTokenOIDCInteractor(
+      getIt<AuthenticationOIDCRepository>()));
+    getIt.registerFactory(() => CreatePermanentTokenOIDCInteractor(
+        getIt<AuthenticationOIDCRepository>(),
         getIt<TokenRepository>(),
         getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetQuotaInteractor(getIt<QuotaRepository>()));
@@ -491,6 +493,7 @@ class AppModule {
 
   void _provideAppAuth() {
     getIt.registerLazySingleton(() => FlutterAppAuth());
+    getIt.registerLazySingleton(() => OIDCParser());
   }
 
   void _provideObservers() {

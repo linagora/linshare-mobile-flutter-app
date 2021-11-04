@@ -36,7 +36,7 @@ class EnterOTPArgument extends RouterArguments {
   final Uri baseUrl;
   final UserName? email;
   final Password? password;
-  final TokenSSO? tokenSSO;
+  final TokenOIDC? tokenOIDC;
 
-  EnterOTPArgument(this.baseUrl, {this.email, this.password, this.tokenSSO});
+  EnterOTPArgument(this.baseUrl, {this.email, this.password, this.tokenOIDC});
 }
