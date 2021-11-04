@@ -6,7 +6,7 @@ export 'package:data/src/network/model/response/shared_space_member_response.dar
 export 'src/datasource/audit_user_datasource.dart';
 // data source
 export 'src/datasource/authentication_datasource.dart';
-export 'src/datasource/authentication_sso_datasource.dart';
+export 'src/datasource/authentication_oidc_datasource.dart';
 export 'src/datasource/autocomplete_datasource.dart';
 export 'src/datasource/biometric_datasource.dart';
 export 'src/datasource/contact_datasource.dart';
@@ -150,7 +150,7 @@ export 'src/network/remote_exception_thrower.dart';
 export 'src/repository/audit/audit_user_repository_impl.dart';
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
-export 'src/repository/authentication/authentication_sso_repository_impl.dart';
+export 'src/repository/authentication/authentication_oidc_repository_impl.dart';
 export 'src/repository/authentication/credential_repository_impl.dart';
 export 'src/repository/authentication/token_repository_impl.dart';
 export 'src/repository/autocomplete/autocomplete_repository_impl.dart';
@@ -177,6 +177,7 @@ export 'src/util/biometric_service.dart';
 export 'src/util/device_manager.dart';
 export 'src/util/biometric_service.dart';
 export 'src/util/local_biometric_service.dart';
+export 'src/util/oidc_parser.dart';
 
 // exception
 export 'src/exception/biometric_exception_thrower.dart';

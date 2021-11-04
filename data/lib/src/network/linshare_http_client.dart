@@ -709,4 +709,10 @@ class LinShareHttpClient {
     return (jsonResult['type'] == WorkGroupNodeType.FOLDER.value)
       || (jsonResult['type'] == WorkGroupNodeType.DOCUMENT.value);
   }
+
+  Future<String> getOIDCConfiguration(Uri baseUrl) async {
+    final result = await _dioClient.get(
+        Endpoint.oidcConfiguration.generateOIDCConfigurationUrl(baseUrl));
+    return result;
+  }
 }
