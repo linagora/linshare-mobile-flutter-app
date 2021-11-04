@@ -36,7 +36,6 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/advance_search_settings_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_sso_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_login_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_setting_reducer.dart';
@@ -72,7 +71,6 @@ AppState appStateReducer(AppState state, action) {
     return AppState(
         uiState: uiReducer(state.uiState, action),
         authenticationState: authenticationReducer(state.authenticationState, action),
-        authenticationSSOState: authenticationSSOReducer(state.authenticationSSOState, action),
         uploadFileState: uploadFileReducer(state.uploadFileState, action),
         mySpaceState: mySpaceReducer(state.mySpaceState, action),
         shareState: shareReducer(state.shareState, action),
@@ -107,7 +105,6 @@ AppState appStateReducer(AppState state, action) {
   return AppState(
       uiState: state.uiState,
       authenticationState: state.authenticationState,
-      authenticationSSOState: state.authenticationSSOState,
       uploadFileState: state.uploadFileState,
       mySpaceState: state.mySpaceState,
       shareState: state.shareState,
