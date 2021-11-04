@@ -76,3 +76,49 @@ class GetAuthorizedUserFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class AuthenticationSSOLoadingState extends ViewState {
+  @override
+  List<Object> get props => [];
+}
+
+class AuthenticationSaaSLoadingState extends ViewState {
+  @override
+  List<Object> get props => [];
+}
+
+class GetOIDCConfigurationViewState extends ViewState {
+  final OIDCConfiguration oidcConfiguration;
+
+  GetOIDCConfigurationViewState(this.oidcConfiguration);
+
+  @override
+  List<Object> get props => [oidcConfiguration];
+}
+
+class GetOIDCConfigurationFailure extends FeatureFailure {
+  final exception;
+
+  GetOIDCConfigurationFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class GetTokenOIDCViewState extends ViewState {
+  final TokenOIDC tokenOIDC;
+
+  GetTokenOIDCViewState(this.tokenOIDC);
+
+  @override
+  List<Object> get props => [tokenOIDC];
+}
+
+class GetTokenOIDCFailure extends FeatureFailure {
+  final exception;
+
+  GetTokenOIDCFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

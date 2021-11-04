@@ -29,18 +29,25 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
+import 'dart:core';
 
-abstract class AuthenticationSSOException extends RemoteException {
-  static final wrongCredential = 'Credential is wrong';
+class CreatePermanentTokenOIDCInteractor {
+  final AuthenticationOIDCRepository authenticationOIDCRepository;
+  final TokenRepository tokenRepository;
+  final CredentialRepository credentialRepository;
 
-  AuthenticationSSOException(String message) : super(message);
+  CreatePermanentTokenOIDCInteractor(this.authenticationOIDCRepository, this.tokenRepository, this.credentialRepository);
+
+  Future<Either<Failure, Success>> execute(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode}) async {
+    try {
+      final token = await authenticationOIDCRepository.createPermanentTokenWithOIDC(baseUrl, tokenOIDC, otpCode: otpCode);
+      await tokenRepository.persistToken(token);
+      await credentialRepository.saveBaseUrl(baseUrl);
+      return Right(AuthenticationViewState(token));
+    } catch (e) {
+      return Left(AuthenticationFailure(e));
+    }
+  }
 }
-
-class BadSSOCredentials extends AuthenticationSSOException {
-  BadSSOCredentials() : super(AuthenticationSSOException.wrongCredential);
-
-  @override
-  List<Object> get props => [];
-}
-
