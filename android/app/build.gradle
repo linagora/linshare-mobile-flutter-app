@@ -44,7 +44,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders = [
-            'appAuthRedirectScheme': 'linsharemobile.com'
+            'appAuthRedirectScheme': 'linshare.mobile'
         ]
     }
 
