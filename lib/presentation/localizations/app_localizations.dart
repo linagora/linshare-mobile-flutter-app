@@ -2342,6 +2342,46 @@ class AppLocalizations {
       name: 'advance_search_button_apply',
     );
   }
+
+  String get sign_in_to_saas {
+    return Intl.message('Sign in to SaaS',
+        name: 'sign_in_to_saas');
+  }
+
+  String get sign_in_to_self_hosted_instance {
+    return Intl.message('Sign in to self-hosted instance',
+        name: 'sign_in_to_self_hosted_instance');
+  }
+
+  String get do_not_have_an_account {
+    return Intl.message('Don\'t have an account?',
+        name: 'do_not_have_an_account');
+  }
+
+  String get sign_up {
+    return Intl.message('Sign up',
+        name: 'sign_up');
+  }
+
+  String get sign_in_with_your_credentials {
+    return Intl.message('Sign in with your credentials',
+        name: 'sign_in_with_your_credentials');
+  }
+
+  String get sign_in_with_your_sso {
+    return Intl.message('Sign in with your SSO',
+        name: 'sign_in_with_your_sso');
+  }
+
+  String get please_input_your_url {
+    return Intl.message('Please input your URL',
+        name: 'please_input_your_url');
+  }
+
+  String get this_feature_not_supported {
+    return Intl.message('This feature is not currently supported',
+        name: 'this_feature_not_supported');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

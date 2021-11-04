@@ -108,4 +108,6 @@ extension AppColor on Color {
   static const advanceSearchAppbarBackgroundColor = Color(0xffF7F7F7);
   static const advanceSearchAppbarTitleColor = Color(0xff404040);
   static const advanceSearchButtonResetColor = Color(0xff757575);
+  static const doNotAccountMessageColor = Color(0xff435763);
+  static const orMessageLoginColor = Color(0xd7ffffff);
 }

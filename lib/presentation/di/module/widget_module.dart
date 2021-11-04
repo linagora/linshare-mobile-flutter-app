@@ -145,11 +145,12 @@ class WidgetModule {
     getIt.registerFactory(() => LoginViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<CreatePermanentTokenInteractor>(),
-      getIt.get<CreatePermanentTokenSSOInteractor>(),
-      getIt.get<GetTokenSSOInteractor>(),
+      getIt.get<CreatePermanentTokenOIDCInteractor>(),
+      getIt.get<GetTokenOIDCInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
-      getIt<AppToast>()
+      getIt<AppToast>(),
+      getIt<GetOIDCConfigurationInteractor>(),
     ));
   }
 
@@ -389,7 +390,7 @@ class WidgetModule {
         getIt<Store<AppState>>(),
         getIt<AppNavigation>(),
         getIt<CreatePermanentTokenInteractor>(),
-        getIt<CreatePermanentTokenSSOInteractor>(),
+        getIt<CreatePermanentTokenOIDCInteractor>(),
         getIt<DynamicUrlInterceptors>(),
         getIt<AppToast>()
     ));

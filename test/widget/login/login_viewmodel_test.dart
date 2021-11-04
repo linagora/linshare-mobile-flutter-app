@@ -47,19 +47,21 @@ void main() {
   final getIt = GetIt.instance;
   TestReduxModule(getIt);
   getIt.registerLazySingleton<CreatePermanentTokenInteractor>(() => MockCreatePermanentTokenInteractor());
-  getIt.registerLazySingleton<CreatePermanentTokenSSOInteractor>(() => MockCreatePermanentTokenSSOInteractor());
-  getIt.registerLazySingleton<GetTokenSSOInteractor>(() => MockGetTokenSSOInteractor());
+  getIt.registerLazySingleton<CreatePermanentTokenOIDCInteractor>(() => MockCreatePermanentTokenSSOInteractor());
+  getIt.registerLazySingleton<GetTokenOIDCInteractor>(() => MockGetTokenSSOInteractor());
   getIt.registerLazySingleton<AppNavigation>(() => MockAppNavigation());
   getIt.registerLazySingleton<DynamicUrlInterceptors>(() => MockDynamicUrlInterceptors());
   getIt.registerLazySingleton<AppToast>(() => MockAppToast());
+  getIt.registerLazySingleton<GetOIDCConfigurationInteractor>(() => MockGetOIDCConfigurationInteractor());
   getIt.registerLazySingleton<LoginViewModel>(() => LoginViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<CreatePermanentTokenInteractor>(),
-      getIt.get<CreatePermanentTokenSSOInteractor>(),
-      getIt.get<GetTokenSSOInteractor>(),
+      getIt.get<CreatePermanentTokenOIDCInteractor>(),
+      getIt.get<GetTokenOIDCInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
-      getIt<AppToast>()
+      getIt.get<AppToast>(),
+      getIt<GetOIDCConfigurationInteractor>(),
   ));
 
   group('test loginViewModel', () {
@@ -70,7 +72,7 @@ void main() {
         final store = getIt.get<Store<AppState>>();
 
         final authenticationState = AuthenticationViewState(Token('token', TokenId('123456')));
-        store.dispatch(viewModel.loginSuccessAction(authenticationState));
+        store.dispatch(viewModel.loginCredentialsSuccessAction(authenticationState));
 
         expect(
           store.state.authenticationState.viewState,

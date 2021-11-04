@@ -52,7 +52,7 @@ class ResponsiveUtils {
   static const double _loginTextBuilderWidthSmallScreen = 280.0;
   static const double _loginTextBuilderWidthLargeScreen = 320.0;
 
-  static const double _loginButtonWidth = 240.0;
+  static const double _loginButtonWidth = 280.0;
 
   static const double _radiusDestinationPickerView = 20.0;
 

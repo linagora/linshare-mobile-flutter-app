@@ -29,13 +29,29 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-class SSOConfiguration {
+class AuthenticationOIDCConfig {
+  static const baseUrlSaaS = 'https://user.linshare-4-3-on-commit.integration-linshare.org/';
 
-  final String authorizationEndpoint;
-  final String tokenEndpoint;
+  static const allowInsecureConnection = false;
 
-  const SSOConfiguration(
-    this.authorizationEndpoint,
-    this.tokenEndpoint,
-  );
+  /// Whether to perform credentials after has been done logout before
+  /// If it's true, the login form is displayed.
+  /// If it's false, going to use cached credential from browser. So, it does not need to fill form again.
+  static const requiredReAuth = true;
+
+  /// For iOS:
+  /// If is true, it will not share cookies each time prompting the login session. So it displays login form normally.
+  /// If is false, it will display dialog with message: "Linshare wants to use linagora.com to sign in. This allows the app and website to share information about you."
+  /// Then it prompts (blinking) to the login form with shared cookie from last session then back to app without credential action.
+  /// For more information:
+  /// https://github.com/MaikuB/flutter_appauth/pull/112
+  /// https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/3237231-prefersephemeralwebbrowsersessio
+  static final preferEphemeralSessionIOS = requiredReAuth;
+
+  /// For Android:
+  /// It works as preferEphemeralSessionIOS option. If it is `login`, it will ask for credentials again.
+  /// For more information:
+  /// https://github.com/MaikuB/flutter_appauth/issues/48
+  /// https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.1.2.1
+  static final List<String>? promptValues = requiredReAuth ? ['login'] : null;
 }
