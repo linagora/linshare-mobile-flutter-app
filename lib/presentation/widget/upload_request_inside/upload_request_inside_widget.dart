@@ -481,6 +481,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
   List<Widget> _multipleSelectionActions(BuildContext context, List<UploadRequestEntry> allSelectedEntries) {
     return [
       _downloadFileMultipleSelection(allSelectedEntries),
+      _removeFileMultipleSelection(allSelectedEntries),
       _moreActionMultipleSelection(context, allSelectedEntries)
     ];
   }
@@ -507,6 +508,18 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
         .build();
   }
 
+  Widget _removeFileMultipleSelection(List<UploadRequestEntry> uploadRequestEntries) {
+    return UploadRequestEntryMultipleSelectionActionBuilder(
+          Key('multiple_selection_remove_action'),
+          SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+          uploadRequestEntries)
+      .onActionClick((entries) => _viewModel.removeFiles(
+        context,
+        entries,
+        itemSelectionType: ItemSelectionType.multiple))
+      .build();
+  }
+
   Widget _moreActionMultipleSelection(BuildContext context, List<UploadRequestEntry> entries) {
     return UploadRequestEntryMultipleSelectionActionBuilder(
         Key('multiple_selection_more_action'),
@@ -527,6 +540,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
   List<Widget> _moreActionList(BuildContext context, List<UploadRequestEntry> entries) {
     return [
       _exportFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
+      _removeFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
       _copyToMySpaceAction(entries, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadFilesAction(entries, itemSelectionType: ItemSelectionType.multiple),
     ];
@@ -535,6 +549,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
   List<Widget> _contextMenuActiveCloseActionTiles(BuildContext context, UploadRequestEntry entry) {
     return [
       _exportFileAction([entry]),
+      _removeFileAction([entry]),
       _copyToMySpaceAction([entry]),
       if (Platform.isAndroid) _downloadFilesAction([entry])
     ];
@@ -571,5 +586,16 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
             entries.first)
         .onActionClick((data) => _viewModel.copyToMySpace(entries, itemSelectionType: itemSelectionType))
         .build();
+  }
+
+  Widget _removeFileAction(List<UploadRequestEntry> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return UploadRequestEntryContextMenuTileBuilder(
+        Key('remove_upload_request_entry_context_menu_action'),
+        SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).delete,
+        entries.first)
+      .onActionClick((data) => _viewModel.removeFiles(context, entries, itemSelectionType: itemSelectionType))
+      .build();
   }
 }

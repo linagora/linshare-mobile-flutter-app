@@ -407,6 +407,8 @@ class AppModule {
     getIt.registerFactory(() => UpdateMultipleUploadRequestGroupStateInteractor(getIt<UpdateUploadRequestGroupStateInteractor>()));
     getIt.registerFactory(() => SearchUploadRequestEntriesInteractor());
     getIt.registerFactory(() => CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
+    getIt.registerFactory(() => RemoveUploadRequestEntryInteractor(getIt<UploadRequestEntryRepository>()));
+    getIt.registerFactory(() => RemoveMultipleUploadRequestEntryInteractor(getIt<RemoveUploadRequestEntryInteractor>()));
     getIt.registerFactory(() => GetLastLoginInteractor(getIt<AuditUserRepository>()));
     getIt.registerFactory(() => ExportReceivedShareInteractor(
       getIt<ReceivedShareRepository>(),
