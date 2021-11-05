@@ -107,4 +107,13 @@ class LocalReceivedShareDataSource extends ReceivedShareDataSource {
   Future<ReceivedShare> remove(ShareId shareId) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> disableOffline(ShareId shareId, String localPath) {
+    return Future.sync(() async {
+      return await _receivedShareDatabaseManager.deleteData(shareId.uuid, localPath);
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
 }
