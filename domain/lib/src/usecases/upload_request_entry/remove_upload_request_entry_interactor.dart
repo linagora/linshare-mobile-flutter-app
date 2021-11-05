@@ -30,15 +30,20 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class UploadRequestEntryRepository {
-  Future<List<UploadRequestEntry>> getAllUploadRequestEntries(UploadRequestId uploadRequestId);
+class RemoveUploadRequestEntryInteractor {
+  final UploadRequestEntryRepository _uploadRequestEntryRepository;
 
-  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl);
+  RemoveUploadRequestEntryInteractor(this._uploadRequestEntryRepository);
 
-  Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
-
-  Future<UploadRequestEntry> removeUploadRequestEntry(UploadRequestEntryId entryId);
+  Future<Either<Failure, Success>> execute(UploadRequestEntryId entryId) async {
+    try {
+      final entry = await _uploadRequestEntryRepository.removeUploadRequestEntry(entryId);
+      return Right<Failure, Success>(RemoveUploadRequestEntryViewState(entry));
+    } catch (exception) {
+      return Left<Failure, Success>(RemoveUploadRequestEntryFailure(exception));
+    }
+  }
 }
