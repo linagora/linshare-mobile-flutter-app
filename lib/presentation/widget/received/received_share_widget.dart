@@ -424,6 +424,8 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
       .onActionClick((data) {
         if (!data.isAvailableOffline()) {
           receivedShareViewModel.makeAvailableOffline(context, receivedShare, position);
+        } else {
+          receivedShareViewModel.disableOffline(context, receivedShare);
         }})
       .build();
   }
