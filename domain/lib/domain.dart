@@ -341,6 +341,8 @@ export 'src/usecases/received/get_all_received_shares_interactor.dart';
 export 'src/usecases/received/get_received_share_interactor.dart';
 export 'src/usecases/received/make_received_share_offline_interactor.dart';
 export 'src/usecases/received/make_received_share_offline_view_state.dart';
+export 'src/usecases/received/disable_offline_received_share_interactor.dart';
+export 'src/usecases/received/disable_offline_received_share_view_state.dart';
 export 'src/usecases/received/received_share_exception.dart';
 export 'src/usecases/received/received_share_view_state.dart';
 export 'src/usecases/received/remove_multiple_received_shares_interactor.dart';
