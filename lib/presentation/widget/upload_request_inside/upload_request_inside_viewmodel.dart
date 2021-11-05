@@ -53,6 +53,7 @@ import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
@@ -70,6 +71,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
   final DownloadUploadRequestEntriesInteractor _downloadEntriesInteractor;
   final DownloadMultipleUploadRequestEntryIOSInteractor _downloadMultipleEntryIOSInteractor;
   final SearchUploadRequestEntriesInteractor _searchUploadRequestEntriesInteractor;
+  final RemoveMultipleUploadRequestEntryInteractor _removeMultipleUploadRequestEntryInteractor;
   late StreamSubscription _storeStreamSubscription;
 
   SearchQuery _searchQuery = SearchQuery('');
@@ -88,7 +90,8 @@ class UploadRequestInsideViewModel extends BaseViewModel {
       this._downloadMultipleEntryIOSInteractor,
       this._searchUploadRequestEntriesInteractor,
       this._copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor,
-      this._deviceManager
+      this._deviceManager,
+      this._removeMultipleUploadRequestEntryInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
         event.uploadRequestInsideState.viewState.fold((failure) => null, (success) {
@@ -97,6 +100,10 @@ class UploadRequestInsideViewModel extends BaseViewModel {
           } else if (success is DisableSearchViewState) {
             store.dispatch((UploadRequestEntrySetSearchResultAction(_uploadRequestEntriesList)));
             _searchQuery = SearchQuery('');
+          } else if (success is RemoveUploadRequestEntryViewState ||
+              success is RemoveAllUploadRequestEntriesSuccessViewState ||
+              success is RemoveSomeUploadRequestEntriesSuccessViewState) {
+            requestToGetUploadRequestAndEntries();
           }
         });
       });
@@ -420,6 +427,40 @@ class UploadRequestInsideViewModel extends BaseViewModel {
           (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
           (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
     });
+  }
+
+  void removeFiles(BuildContext context, List<UploadRequestEntry> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    _appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    if (entries.isNotEmpty) {
+      final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(entries.length, entries.first.name);
+
+      ConfirmModalSheetBuilder(_appNavigation)
+          .key(Key('remove_upload_request_entry_confirm_modal'))
+          .title(deleteTitle)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .onConfirmAction(AppLocalizations.of(context).delete, (_) {
+        _appNavigation.popBack();
+        if (itemSelectionType == ItemSelectionType.multiple) {
+          cancelSelection();
+        }
+        store.dispatch(_removeFileAction(entries));
+      }).show(context);
+    }
+  }
+
+  ThunkAction<AppState> _removeFileAction(List<UploadRequestEntry> entries) {
+    return (Store<AppState> store) async {
+      await _removeMultipleUploadRequestEntryInteractor
+        .execute(entries)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
+          (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
+    };
   }
 
   @override

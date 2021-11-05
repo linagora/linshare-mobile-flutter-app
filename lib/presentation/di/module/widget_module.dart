@@ -523,7 +523,8 @@ class WidgetModule {
           getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
           getIt<SearchUploadRequestEntriesInteractor>(),
           getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
-          getIt<DeviceManager>()
+          getIt<DeviceManager>(),
+          getIt<RemoveMultipleUploadRequestEntryInteractor>(),
         ));
   }
 
