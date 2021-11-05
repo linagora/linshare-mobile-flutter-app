@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,6 +44,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/advance_search/advance_search_settings_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 
 import 'home_app_bar_viewmodel.dart';
 
@@ -90,7 +92,7 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
           if (uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
             return _searchAppBar(context, uiState.searchState.searchDestination, uiState.searchState.destinationName, uiState);
           }
-          return _homeAppBar(context);
+          return _homeAppBar(context, uiState);
         }
     );
   }
@@ -219,7 +221,7 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
     );
   }
 
-  AppBar _homeAppBar(BuildContext context) {
+  AppBar _homeAppBar(BuildContext context, UIState uiState) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: StoreConnector<AppState, UIState>(
@@ -234,6 +236,14 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
       leading: IconButton(
           icon: SvgPicture.asset(imagePath.icLinShareMenu),
           onPressed: () => widget.scaffoldKey!.currentState!.openDrawer()),
+      actions: [
+        if (uiState.routePath == RoutePaths.sharedSpaceInside)
+          Padding(
+            padding: EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: SvgPicture.asset(imagePath.icInfo, width: 28, height: 28, color: Colors.white),
+              onPressed: () => _goToSharedSpaceDetails(uiState.selectedSharedSpace)))
+      ],
     );
   }
 
@@ -267,4 +277,12 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
     }
   }
 
+  void _goToSharedSpaceDetails(SharedSpaceNodeNested? sharedSpaceNodeNested) {
+    if (sharedSpaceNodeNested != null) {
+      _appNavigation.push(
+          RoutePaths.sharedSpaceDetails,
+          arguments: SharedSpaceDetailsArguments(sharedSpaceNodeNested)
+      );
+    }
+  }
 }
