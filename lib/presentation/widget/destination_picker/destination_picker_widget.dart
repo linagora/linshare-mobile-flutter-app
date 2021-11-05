@@ -128,7 +128,10 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                       child: Container(
                         color: AppColor.uploadLineDividerWorkGroupDestination,
                         height: 1.0))
-                    : null
+                    : null,
+                  actions: [
+                    _buildCreateFolderButton()
+                  ],
                 ),
                 backgroundColor: Colors.white,
                 body: Stack(
@@ -222,6 +225,21 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
           return IconButton(
               icon: SvgPicture.asset(_imagePath.icBackBlue),
               onPressed: () => _sharedSpaceDocumentNavigatorKey.currentState?.wantToBack());
+        }
+        return SizedBox.shrink();
+      });
+  }
+
+  Widget _buildCreateFolderButton() {
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, appState)  {
+        if (appState.destinationPickerState.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
+          return Padding(
+            padding: EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: SvgPicture.asset(_imagePath.icCreateFolder, width: 20, height: 20, fit: BoxFit.fill),
+              onPressed: () => _destinationPickerViewModel.openCreateFolderModal(context)));
         }
         return SizedBox.shrink();
       });

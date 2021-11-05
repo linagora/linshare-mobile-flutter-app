@@ -182,6 +182,14 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
           getAllWorkGroupNode(needToGetOldSorter: false);
         }
       });
+
+      event.sharedSpaceDocumentDestinationPickerState.viewState.fold(
+        (failure) => null,
+        (success) {
+          if (success is CreateSharedSpaceFolderViewState) {
+            getAllWorkGroupNode(needToGetOldSorter: false);
+          }
+        });
     });
   }
 

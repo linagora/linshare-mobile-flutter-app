@@ -294,7 +294,9 @@ class WidgetModule {
     getIt.registerFactory(() => DestinationPickerViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<GetAllSharedSpacesInteractor>(),
-      getIt.get<AppNavigation>()
+      getIt.get<AppNavigation>(),
+      getIt.get<VerifyNameInteractor>(),
+      getIt.get<CreateSharedSpaceFolderInteractor>(),
     ));
   }
 
