@@ -327,6 +327,10 @@ class ToastMessageHandler {
       } if (failure is CopyToSharedSpaceFailure || failure is CopyMultipleFilesToSharedSpaceAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
         _cleanReceivedShareViewState();
+      } else if (failure is MakeAvailableOfflineReceivedShareFailure || failure is CannotOfflineReceivedShare
+          || failure is DisableOfflineReceivedShareFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).file_cannot_be_switched_to_offline_mode);
+        _cleanReceivedShareViewState();
       }
     }, (success) {
       if (success is CopyToMySpaceViewState) {
@@ -352,6 +356,12 @@ class ToastMessageHandler {
         _cleanReceivedShareViewState();
       } else if (success is CopyMultipleFilesToSharedSpaceHasSomeFilesFailedViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_copied_to_shared_space);
+        _cleanReceivedShareViewState();
+      } else if (success is MakeAvailableOfflineReceivedShareViewState) {
+        appToast.showToast(AppLocalizations.of(context).files_will_be_made_available_for_offline_use);
+        _cleanReceivedShareViewState();
+      } else if (success is DisableOfflineReceivedShareViewState) {
+        appToast.showToast(AppLocalizations.of(context).files_will_no_longer_be_usable_without_be_network);
         _cleanReceivedShareViewState();
       }
     });

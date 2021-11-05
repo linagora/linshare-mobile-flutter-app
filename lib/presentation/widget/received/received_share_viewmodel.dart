@@ -85,6 +85,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   final ExportMultipleReceivedSharesInteractor _exportMultipleReceivedSharesInteractor;
   final CopyMultipleFilesToSharedSpaceInteractor _copyMultipleFilesToSharedSpaceInteractor;
   final MakeReceivedShareOfflineInteractor _makeReceivedShareOfflineInteractor;
+  final DisableOfflineReceivedShareInteractor _disableOfflineReceivedShareInteractor;
 
   List<ReceivedShare> _receivedSharesList = [];
   final SearchReceivedSharesInteractor _searchReceivedSharesInteractor;
@@ -109,7 +110,8 @@ class ReceivedShareViewModel extends BaseViewModel {
       this._removeMultipleReceivedShareInteractor,
       this._exportMultipleReceivedSharesInteractor,
       this._copyMultipleFilesToSharedSpaceInteractor,
-      this._makeReceivedShareOfflineInteractor
+      this._makeReceivedShareOfflineInteractor,
+      this._disableOfflineReceivedShareInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.receivedShareState.viewState.fold(
@@ -122,7 +124,8 @@ class ReceivedShareViewModel extends BaseViewModel {
               _searchQuery = SearchQuery('');
             } else if (success is RemoveReceivedShareViewState ||
                 success is RemoveMultipleReceivedSharesAllSuccessViewState ||
-                success is RemoveMultipleReceivedSharesHasSomeFilesFailedViewState) {
+                success is RemoveMultipleReceivedSharesHasSomeFilesFailedViewState ||
+                success is DisableOfflineReceivedShareViewState) {
               getAllReceivedShare();
             }
       });
@@ -629,12 +632,33 @@ class ReceivedShareViewModel extends BaseViewModel {
               _receivedSharesList[position] = receivedShare.toSyncOffline(syncOfflineState: SyncOfflineState.none);
               store.dispatch(ReceivedShareSetSyncOfflineMode(_receivedSharesList));
 
-              store.dispatch(ReceivedShareAction(Left(CannotAvailableOfflineDocument())));
+              store.dispatch(ReceivedShareAction(Left(CannotOfflineReceivedShare())));
             }
           }
         )
       );
     });
+  }
+
+  void disableOffline(BuildContext context, ReceivedShare receivedShare) {
+    _appNavigation.popBack();
+    store.dispatch(_disableOfflineAction(context, receivedShare));
+  }
+
+  ThunkAction<AppState> _disableOfflineAction(BuildContext context, ReceivedShare receivedShare) {
+    return (Store<AppState> store) async {
+      await _disableOfflineReceivedShareInteractor
+        .execute(receivedShare)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(ReceivedShareAction(Left(failure))),
+          (success) {
+            if (success is DisableOfflineReceivedShareViewState && success.result == OfflineModeActionResult.successful) {
+              store.dispatch(ReceivedShareAction(Right(success)));
+            } else {
+              store.dispatch(ReceivedShareAction(Left(CannotOfflineReceivedShare())));
+            }
+          }));
+    };
   }
 
   void openSearchState(BuildContext context) {
