@@ -110,4 +110,20 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
         token,
         cancelToken: cancelToken);
   }
+
+  @override
+  Future<UploadRequestEntry> removeUploadRequestEntry(UploadRequestEntryId entryId) {
+    return Future.sync(() async {
+      final entryResponse = await _linShareHttpClient.removeUploadRequestEntry(entryId);
+      return entryResponse.toUploadRequestEntry();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestEntryNotFound();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
 }

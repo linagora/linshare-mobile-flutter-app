@@ -715,4 +715,11 @@ class LinShareHttpClient {
         Endpoint.oidcConfiguration.generateOIDCConfigurationUrl(baseUrl));
     return result;
   }
+
+  Future<UploadRequestEntryResponse> removeUploadRequestEntry(UploadRequestEntryId entryId) async {
+    final resultJson = await _dioClient.delete(Endpoint.uploadRequestsEntriesRoute
+      .withPathParameter(entryId.uuid)
+      .generateEndpointPath());
+    return UploadRequestEntryResponse.fromJson(resultJson);
+  }
 }

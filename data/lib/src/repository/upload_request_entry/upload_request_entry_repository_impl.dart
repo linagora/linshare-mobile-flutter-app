@@ -53,4 +53,8 @@ class UploadRequestEntryRepositoryImpl implements UploadRequestEntryRepository {
     return _uploadRequestEntryDataSource.downloadUploadRequestEntryIOS(uploadRequestEntry, token, baseUrl, cancelToken);
   }
 
+  @override
+  Future<UploadRequestEntry> removeUploadRequestEntry(UploadRequestEntryId entryId) {
+    return _uploadRequestEntryDataSource.removeUploadRequestEntry(entryId);
+  }
 }

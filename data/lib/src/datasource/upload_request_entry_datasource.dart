@@ -38,4 +38,6 @@ abstract class UploadRequestEntryDataSource {
   Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl);
 
   Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
+
+  Future<UploadRequestEntry> removeUploadRequestEntry(UploadRequestEntryId entryId);
 }
