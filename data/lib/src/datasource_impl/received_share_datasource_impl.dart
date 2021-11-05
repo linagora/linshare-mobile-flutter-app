@@ -211,4 +211,9 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
   Future<ReceivedShare?> getReceivedShareOffline(ShareId shareId) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> disableOffline(ShareId shareId, String localPath) {
+    throw UnimplementedError();
+  }
 }

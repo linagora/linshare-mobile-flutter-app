@@ -65,4 +65,6 @@ abstract class ReceivedShareDataSource {
   Future<ReceivedShare?> getReceivedShareOffline(ShareId shareId);
 
   Future<List<ReceivedShare>> getAllReceivedShareOffline();
+
+  Future<bool> disableOffline(ShareId shareId, String localPath);
 }
