@@ -418,6 +418,7 @@ class AppModule {
       getIt<ReceivedShareRepository>(),
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
+    getIt.registerFactory(() => DisableOfflineReceivedShareInteractor(getIt<ReceivedShareRepository>()));
     getIt.registerFactory(() => AdvanceSearchWorkgroupNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
   }
 
