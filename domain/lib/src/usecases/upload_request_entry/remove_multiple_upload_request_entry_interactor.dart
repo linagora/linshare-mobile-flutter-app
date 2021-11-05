@@ -30,15 +30,29 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/upload_request_entry/remove_upload_request_entry_interactor.dart';
 
-abstract class UploadRequestEntryRepository {
-  Future<List<UploadRequestEntry>> getAllUploadRequestEntries(UploadRequestId uploadRequestId);
+class RemoveMultipleUploadRequestEntryInteractor {
+  final RemoveUploadRequestEntryInteractor _removeUploadRequestEntryInteractor;
 
-  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl);
+  RemoveMultipleUploadRequestEntryInteractor(this._removeUploadRequestEntryInteractor);
 
-  Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
+  Future<Either<Failure, Success>> execute(List<UploadRequestEntry> entries) async {
+    final listResult = await Future.wait(entries.map((entry) =>
+        _removeUploadRequestEntryInteractor.execute(entry.uploadRequestEntryId)));
 
-  Future<UploadRequestEntry> removeUploadRequestEntry(UploadRequestEntryId entryId);
+    if (listResult.length == 1) {
+      return listResult.single;
+    } else {
+      var failedFileCount = listResult.whereType<Left>().length;
+      if (failedFileCount == 0) {
+        return Right(RemoveAllUploadRequestEntriesSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(RemoveAllUploadRequestEntriesFailureViewState(listResult));
+      }
+      return Right(RemoveSomeUploadRequestEntriesSuccessViewState(listResult));
+    }
+  }
 }
