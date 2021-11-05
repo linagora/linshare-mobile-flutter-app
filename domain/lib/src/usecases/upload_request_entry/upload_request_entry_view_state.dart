@@ -139,3 +139,48 @@ class CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure extends FeatureFai
   @override
   List<Object> get props => [resultList];
 }
+
+class RemoveUploadRequestEntryViewState extends ViewState {
+  final UploadRequestEntry uploadRequestEntry;
+
+  RemoveUploadRequestEntryViewState(this.uploadRequestEntry);
+
+  @override
+  List<Object> get props => [uploadRequestEntry];
+}
+
+class RemoveUploadRequestEntryFailure extends FeatureFailure {
+  final exception;
+
+  RemoveUploadRequestEntryFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class RemoveAllUploadRequestEntriesSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveAllUploadRequestEntriesSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveSomeUploadRequestEntriesSuccessViewState extends ViewState {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveSomeUploadRequestEntriesSuccessViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}
+
+class RemoveAllUploadRequestEntriesFailureViewState extends FeatureFailure {
+  final List<Either<Failure, Success>> resultList;
+
+  RemoveAllUploadRequestEntriesFailureViewState(this.resultList);
+
+  @override
+  List<Object> get props => [resultList];
+}

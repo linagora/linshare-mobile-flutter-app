@@ -441,4 +441,6 @@ export 'src/usecases/upload_request_group/update_upload_request_group_status_int
 export 'src/usecases/upload_request_group/update_upload_request_multiple_group_status_interactor.dart';
 export 'src/usecases/upload_request_group/upload_request_group_exception.dart';
 export 'src/usecases/upload_request_group/upload_request_group_view_state.dart';
+export 'src/usecases/upload_request_entry/remove_multiple_upload_request_entry_interactor.dart';
+export 'src/usecases/upload_request_entry/remove_upload_request_entry_interactor.dart';
 export 'src/usecases/authentication/get_oidc_configuration_interactor.dart';
