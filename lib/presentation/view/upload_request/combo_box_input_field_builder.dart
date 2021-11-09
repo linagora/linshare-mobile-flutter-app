@@ -28,24 +28,63 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/styles.dart';
+import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
 
-@immutable
-class StartUploadRequestGroupLoadingAction extends ActionOnline {}
+class ComboBoxInputFieldBuilder {
 
-@immutable
-class UploadRequestGroupAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
+  Key? _key;
+  String? _title;
+  List<NotificationLanguage>? _listValue;
 
-  UploadRequestGroupAction(this.viewState);
-}
+  NotificationLanguageValueNotifier? _onNotifier;
 
-@immutable
-class CleanUploadRequestGroupAction extends ActionOffline {
-  CleanUploadRequestGroupAction();
+  ComboBoxInputFieldBuilder();
+
+  void setKey(Key? key) {
+    _key = key;
+  }
+
+  void setTitle(String title) {
+    _title = title;
+  }
+
+  void setListValue(List<NotificationLanguage>? listValue) {
+    _listValue = listValue;
+  }
+
+  void addOnNotifier(NotificationLanguageValueNotifier? onNotifier) {
+    _onNotifier = onNotifier;
+  }
+
+  Widget build() {
+    return Row(
+      key: _key,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(_title ?? '', style: CommonTextStyle.textStyleUploadRequestSettingsTitle),
+        ValueListenableBuilder(
+          valueListenable: _onNotifier ?? NotificationLanguageValueNotifier(),
+          builder: (context, NotificationLanguage value, child) => DropdownButtonHideUnderline(
+            child: DropdownButton<NotificationLanguage>(
+              iconEnabledColor: AppColor.uploadRequestTextClickableColor,
+              items: <NotificationLanguage>[..._listValue ?? []].map((NotificationLanguage value) {
+                  return DropdownMenuItem<NotificationLanguage>(
+                    value: value,
+                    child: Text(
+                      value.text,
+                      style: CommonTextStyle.textStyleNormal.copyWith(color: AppColor.uploadRequestTextClickableColor)),
+                  );
+                }).toList(),
+              onChanged: (selectedItem) => _onNotifier?.value = selectedItem ?? NotificationLanguage.FRENCH,
+              value: value,
+            ))
+          ),
+      ],
+    );
+  }
 }

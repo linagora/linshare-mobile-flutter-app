@@ -55,6 +55,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_re
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/update_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_creation_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_active_closed_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_archived_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_created_reducer.dart';
@@ -92,6 +93,7 @@ AppState appStateReducer(AppState state, action) {
         biometricAuthenticationLoginState: biometricAuthenticationLoginReducer(state.biometricAuthenticationLoginState, action),
         sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action),
         uploadRequestGroupState: uploadRequestGroupReducer(state.uploadRequestGroupState, action),
+        uploadRequestCreationState: uploadRequestCreationReducer(state.uploadRequestCreationState, action),
         uploadRequestInsideState: uploadRequestInsideReducer(state.uploadRequestInsideState, action),
         receivedShareDetailsState: receivedShareDetailsReducer(state.receivedShareDetailsState, action),
         addRecipientsUploadRequestGroupState: addRecipientUploadRequestGroupReducer(state.addRecipientsUploadRequestGroupState, action),
@@ -128,6 +130,7 @@ AppState appStateReducer(AppState state, action) {
       biometricAuthenticationLoginState: state.biometricAuthenticationLoginState,
       sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState,
       uploadRequestGroupState: state.uploadRequestGroupState,
+      uploadRequestCreationState: state.uploadRequestCreationState,
       uploadRequestInsideState: state.uploadRequestInsideState,
       receivedShareDetailsState: state.receivedShareDetailsState,
       addRecipientsUploadRequestGroupState: state.addRecipientsUploadRequestGroupState,
