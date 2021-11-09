@@ -32,20 +32,43 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_presentation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class StartUploadRequestGroupLoadingAction extends ActionOnline {}
+class UploadRequestCreationState extends LinShareState with EquatableMixin {
 
-@immutable
-class UploadRequestGroupAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
+  final UploadRequestPresentation? uploadRequestCreation;
 
-  UploadRequestGroupAction(this.viewState);
-}
+  UploadRequestCreationState(
+    Either<Failure, Success> viewState,
+    this.uploadRequestCreation
+  ) : super(viewState);
 
-@immutable
-class CleanUploadRequestGroupAction extends ActionOffline {
-  CleanUploadRequestGroupAction();
+  factory UploadRequestCreationState.initial() {
+    return UploadRequestCreationState(Right(IdleState()), null);
+  }
+
+  @override
+  UploadRequestCreationState clearViewState() {
+    return UploadRequestCreationState(Right(IdleState()), null);
+  }
+
+  @override
+  UploadRequestCreationState sendViewState({required Either<Failure, Success> viewState}) {
+    return UploadRequestCreationState(viewState, uploadRequestCreation);
+  }
+
+  UploadRequestCreationState updateUploadRequestCreation({required UploadRequestPresentation newCreation}) {
+    return UploadRequestCreationState(viewState, newCreation);
+  }
+
+  @override
+  UploadRequestCreationState startLoadingState() {
+    return UploadRequestCreationState(Right(LoadingState()), uploadRequestCreation);
+  }
 }
