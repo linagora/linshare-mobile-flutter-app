@@ -17,7 +17,7 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
+// <http://www.linshare.org/licenses/LinShare-LicenseAfferoGPL-v3.pdf>
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -26,26 +26,39 @@
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
-//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+//  3 and <http://www.linshare.org/licenses/LinShare-LicenseAfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
+import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
 
-@immutable
-class StartUploadRequestGroupLoadingAction extends ActionOnline {}
+class UploadRequestPresentation extends Equatable {
 
-@immutable
-class UploadRequestGroupAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
+  final UploadRequestStatus? status;
+  final String? activationDate;
+  final bool? passwordProtected;
+  final List<FileSizeType>? listMaxFileSizeType;
+  final List<FileSizeType>? listTotalFileSizeType;
+  final List<NotificationLanguage>? listNotificationLanguages;
 
-  UploadRequestGroupAction(this.viewState);
-}
+  UploadRequestPresentation({
+    this.status,
+    this.activationDate,
+    this.passwordProtected,
+    this.listMaxFileSizeType,
+    this.listTotalFileSizeType,
+    this.listNotificationLanguages,
+  });
 
-@immutable
-class CleanUploadRequestGroupAction extends ActionOffline {
-  CleanUploadRequestGroupAction();
+  @override
+  List<Object?> get props => [
+    status,
+    activationDate,
+    passwordProtected,
+    listMaxFileSizeType,
+    listTotalFileSizeType,
+    listNotificationLanguages,
+  ];
 }
