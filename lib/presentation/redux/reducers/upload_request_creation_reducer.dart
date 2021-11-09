@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -30,22 +30,17 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_creation_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_creation_state.dart';
+import 'package:redux/redux.dart';
 
-@immutable
-class StartUploadRequestGroupLoadingAction extends ActionOnline {}
-
-@immutable
-class UploadRequestGroupAction extends ActionOffline {
-  final Either<Failure, Success> viewState;
-
-  UploadRequestGroupAction(this.viewState);
-}
-
-@immutable
-class CleanUploadRequestGroupAction extends ActionOffline {
-  CleanUploadRequestGroupAction();
-}
+final uploadRequestCreationReducer = combineReducers<UploadRequestCreationState>([
+  TypedReducer<UploadRequestCreationState, StartUploadRequestCreationLoadingAction>((UploadRequestCreationState state, _) =>
+      state.startLoadingState()),
+  TypedReducer<UploadRequestCreationState, UploadRequestCreationAction>((UploadRequestCreationState state, UploadRequestCreationAction action) =>
+      state.sendViewState(viewState: action.viewState)),
+	TypedReducer<UploadRequestCreationState, CleanUploadRequestCreationAction>((UploadRequestCreationState state, _) =>
+      state.clearViewState()),
+	TypedReducer<UploadRequestCreationState, UpdateUploadRequestCreationAction>((UploadRequestCreationState state, UpdateUploadRequestCreationAction action) =>
+      state.updateUploadRequestCreation(newCreation: action.uploadRequestPresentation)),
+]);

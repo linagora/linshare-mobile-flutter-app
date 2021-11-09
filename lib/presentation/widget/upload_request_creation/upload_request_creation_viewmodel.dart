@@ -33,17 +33,29 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
+import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
+import 'package:linshare_flutter_app/presentation/model/unit_time_type.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_presentation.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_creation_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_arguments.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/string_extensions.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
 class UploadRequestCreationViewModel extends BaseViewModel {
 
@@ -52,6 +64,7 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   // main stuff
   final AddNewUploadRequestInteractor _addNewUploadRequestInteractor;
   final GetAllUploadRequestGroupsInteractor _getAllUploadRequestGroupsInteractor;
+  final AppToast _appToast;
 
   // auto complete
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
@@ -68,13 +81,56 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   final BehaviorSubject<String> _emailSubjectObservable = BehaviorSubject.seeded('');
   StreamView<String> get emailSubjectObservable => _emailSubjectObservable;
 
-  UploadRequestCreationViewModel(Store<AppState> store, this._appNavigation,
-      this._addNewUploadRequestInteractor,
-      this._getAllUploadRequestGroupsInteractor,
-      this._getAutoCompleteSharingInteractor,
-      this._getAutoCompleteSharingWithDeviceContactInteractor)
-      : super(store) {
+  final TextEditingController recipientsController = TextEditingController();
+  final TextEditingController emailSubjectController = TextEditingController();
+  final TextEditingController emailMessageController = TextEditingController();
+  final TextEditingController maxNumberFilesController = TextEditingController();
+  final TextEditingController maxFileSizeController = TextEditingController();
+  final TextEditingController totalFileSizeController = TextEditingController();
 
+  final DateTimeTextValueNotifier textActivationNotifier = DateTimeTextValueNotifier();
+  final DateTimeTextValueNotifier textExpirationNotifier = DateTimeTextValueNotifier();
+  final ValueNotifier<bool> advanceVisibilityNotifier = ValueNotifier<bool>(false);
+  final DateTimeTextValueNotifier textReminderNotifier = DateTimeTextValueNotifier();
+  final FileSizeValueNotifier maxFileSizeTypeNotifier = FileSizeValueNotifier();
+  final FileSizeValueNotifier totalFileSizeTypeNotifier = FileSizeValueNotifier();
+  final NotificationLanguageValueNotifier notificationLanguageNotifier = NotificationLanguageValueNotifier();
+  final ValueNotifier<bool> passwordProtectNotifier = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> allowDeletionNotifier = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> allowClosureNotifier = ValueNotifier<bool>(true);
+
+  late DateTime _creationDateRoundUp;
+  late DateTime _initActivationDateRoundUp;
+  late DateTime _initExpirationDateRoundUp;
+  late DateTime _initReminderDateRoundUp;
+
+  late DateTime _maxActivationDateRoundUp;
+  late DateTime _maxExpirationDateRoundUp;
+  late DateTime _minReminderDateRoundUp;
+
+  FunctionalityTime? _activationSetting;
+  FunctionalityTime? _expirationSetting;
+  FunctionalityTime? _notificationSetting;
+  FunctionalitySize? _totalFileSizeSetting;
+  FunctionalityInteger? _maxFileCountSetting;
+  FunctionalitySize? _maxFileSizeSetting;
+  FunctionalityBoolean? _canCloseSetting;
+  FunctionalityBoolean? _canDeleteSetting;
+  FunctionalityBoolean? _protectPasswordSetting;
+  FunctionalitySimple? _enableReminderNotificationSetting;
+  FunctionalityLanguage? _notificationLanguageSetting;
+
+  UploadRequestCreationArguments? arguments;
+
+  UploadRequestCreationViewModel(
+    Store<AppState> store,
+    this._appNavigation,
+    this._addNewUploadRequestInteractor,
+    this._getAllUploadRequestGroupsInteractor,
+    this._getAutoCompleteSharingInteractor,
+    this._getAutoCompleteSharingWithDeviceContactInteractor,
+    this._appToast,
+  ) : super(store) {
     _autoCompleteResultListSubscription = Rx.combineLatest2(_autoCompleteResultListObservable, _emailSubjectObservable, (List<AutoCompleteResult> shareMails, String emailSubject) {
       return (shareMails.isNotEmpty && emailSubject.isNotEmpty);
     }).listen((event) {
@@ -84,12 +140,270 @@ class UploadRequestCreationViewModel extends BaseViewModel {
     Future.delayed(Duration(milliseconds: 500), () => _checkContactPermission());
   }
 
+  void _disposeValueNotifier() {
+    recipientsController.clear();
+    emailSubjectController.clear();
+    emailMessageController.clear();
+    maxNumberFilesController.clear();
+    maxFileSizeController.clear();
+    totalFileSizeController.clear();
+
+    textActivationNotifier.dispose();
+    textExpirationNotifier.dispose();
+    textReminderNotifier.dispose();
+    advanceVisibilityNotifier.dispose();
+    maxFileSizeTypeNotifier.dispose();
+    totalFileSizeTypeNotifier.dispose();
+    notificationLanguageNotifier.dispose();
+    passwordProtectNotifier.dispose();
+    allowDeletionNotifier.dispose();
+    allowClosureNotifier.dispose();
+  }
+
+  void initialize(UploadRequestCreationArguments? creationArguments) {
+    arguments = creationArguments;
+    _getFunctionalityData();
+
+    _getRoundUpDate();
+    _getActivationDate(isInitialize: true);
+    _getExpirationDate();
+    _getReminderDate();
+
+    _initDefaultData();
+
+    final uploadRequestCreation = _generateUploadRequestCreation();
+    store.dispatch(UpdateUploadRequestCreationAction(uploadRequestCreation));
+  }
+
+  void _getFunctionalityData() {
+    final listFunctionalities = arguments?.uploadRequestFunctionalities ?? [];
+    _activationSetting = listFunctionalities.firstWhere((element) =>
+      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_ACTIVATION)) as FunctionalityTime?;
+    _expirationSetting = listFunctionalities.firstWhere((element) =>
+      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_EXPIRATION)) as FunctionalityTime?;
+    _notificationSetting = listFunctionalities.firstWhere((element) =>
+      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_NOTIFICATION)) as FunctionalityTime?;
+    _totalFileSizeSetting = listFunctionalities.firstWhere((element) =>
+      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_DEPOSIT_SIZE)) as FunctionalitySize?;
+    _maxFileCountSetting = listFunctionalities.firstWhere((element) =>
+      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_FILE_COUNT)) as FunctionalityInteger?;
+    _maxFileSizeSetting = listFunctionalities.firstWhere((element) =>
+     (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_FILE_SIZE)) as FunctionalitySize?;
+    _canCloseSetting = listFunctionalities.firstWhere(
+      (element) => (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__CAN_CLOSE)) as FunctionalityBoolean?;
+    _canDeleteSetting = listFunctionalities.firstWhere(
+      (element) => (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__CAN_DELETE)) as FunctionalityBoolean?;
+    _protectPasswordSetting = listFunctionalities.firstWhere((element) =>
+      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__PROTECTED_BY_PASSWORD)) as FunctionalityBoolean?;
+    _enableReminderNotificationSetting = listFunctionalities.firstWhere((element) =>
+      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__REMINDER_NOTIFICATION)) as FunctionalitySimple?;
+    _notificationLanguageSetting = listFunctionalities.firstWhere((element) =>
+      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__NOTIFICATION_LANGUAGE)) as FunctionalityLanguage?;
+  }
+
+  void _getRoundUpDate() {
+    _creationDateRoundUp = DateTime.now().roundUpHour(1);
+  }
+
+  void _getActivationDate({required bool isInitialize}) {
+    switch(_activationSetting?.unit.toUnitTimeType()) {
+      case UnitTimeType.DAY:
+        _initActivationDateRoundUp = _creationDateRoundUp.add(Duration(days: _activationSetting!.value));
+        _maxActivationDateRoundUp = _creationDateRoundUp.add(Duration(days: _activationSetting!.maxValue));
+        break;
+      case UnitTimeType.WEEK:
+        _initActivationDateRoundUp = _creationDateRoundUp.add(Duration(days: _activationSetting!.value * 7));
+        _maxActivationDateRoundUp = _creationDateRoundUp.add(Duration(days: _activationSetting!.maxValue * 7));
+        break;
+      case UnitTimeType.MONTH:
+        _initActivationDateRoundUp = _creationDateRoundUp.copyWith(month: _creationDateRoundUp.month + _activationSetting!.value);
+        _maxActivationDateRoundUp = _creationDateRoundUp.copyWith(month: _creationDateRoundUp.month + _activationSetting!.maxValue);
+        break;
+      case null:
+        _initActivationDateRoundUp = _creationDateRoundUp;
+        _maxActivationDateRoundUp = _creationDateRoundUp;
+        break;
+    }
+    if(isInitialize) {
+      textActivationNotifier.value = Tuple2(_initActivationDateRoundUp, _initActivationDateRoundUp.getYMMMMdFormatWithJm());
+    }
+  }
+
+  void _getExpirationDate() {
+    switch(_expirationSetting?.unit.toUnitTimeType()) {
+      case UnitTimeType.DAY:
+        _initExpirationDateRoundUp = textActivationNotifier.value!.value1.add(Duration(days: _expirationSetting!.value));
+        _maxExpirationDateRoundUp = textActivationNotifier.value!.value1.add(Duration(days: _expirationSetting!.maxValue));
+        break;
+      case UnitTimeType.WEEK:
+        _initExpirationDateRoundUp = textActivationNotifier.value!.value1.add(Duration(days: _expirationSetting!.value * 7));
+        _maxExpirationDateRoundUp = textActivationNotifier.value!.value1.add(Duration(days: _expirationSetting!.maxValue * 7));
+        break;
+      case UnitTimeType.MONTH:
+        _initExpirationDateRoundUp = textActivationNotifier.value!.value1.copyWith(month: textActivationNotifier.value!.value1.month + _expirationSetting!.value);
+        _maxExpirationDateRoundUp = textActivationNotifier.value!.value1.copyWith(month: _creationDateRoundUp.month + _expirationSetting!.maxValue);
+        break;
+      case null:
+        _initExpirationDateRoundUp = textActivationNotifier.value!.value1;
+        _maxExpirationDateRoundUp = textActivationNotifier.value!.value1;
+        break;
+    }
+    textExpirationNotifier.value = Tuple2(_initExpirationDateRoundUp, _initExpirationDateRoundUp.getYMMMMdFormatWithJm());
+  }
+
+  void _getReminderDate() {
+    switch(_notificationSetting?.unit.toUnitTimeType()) {
+      case UnitTimeType.DAY:
+        _initReminderDateRoundUp = textExpirationNotifier.value!.value1.subtract(Duration(days: _notificationSetting!.value));
+        _minReminderDateRoundUp = textExpirationNotifier.value!.value1.subtract(Duration(days: _notificationSetting!.maxValue));
+        break;
+      case UnitTimeType.WEEK:
+        _initReminderDateRoundUp = textExpirationNotifier.value!.value1.subtract(Duration(days: _notificationSetting!.value * 7));
+        _minReminderDateRoundUp = textExpirationNotifier.value!.value1.subtract(Duration(days: _notificationSetting!.maxValue * 7));
+        break;
+      case UnitTimeType.MONTH:
+        _initReminderDateRoundUp = textExpirationNotifier.value!.value1.copyWith(month: textExpirationNotifier.value!.value1.month - _notificationSetting!.value);
+        _minReminderDateRoundUp = textExpirationNotifier.value!.value1.copyWith(month: textExpirationNotifier.value!.value1.month - _notificationSetting!.maxValue);
+        break;
+      case null:
+        _initReminderDateRoundUp = textExpirationNotifier.value!.value1;
+        _minReminderDateRoundUp = textExpirationNotifier.value!.value1;
+        break;
+    }
+    if(_minReminderDateRoundUp.compareTo(textActivationNotifier.value!.value1) < 0) {
+      _minReminderDateRoundUp = textActivationNotifier.value!.value1;
+    }
+    if(_initReminderDateRoundUp.compareTo(textActivationNotifier.value!.value1) < 0) {
+      _initReminderDateRoundUp = textActivationNotifier.value!.value1;
+    }
+    textReminderNotifier.value = Tuple2(_initReminderDateRoundUp, _initReminderDateRoundUp.getYMMMMdFormatWithJm());
+  }
+
+  void _initDefaultData() {
+    maxFileSizeTypeNotifier.value = _maxFileSizeSetting?.unit.toFileSizeType() ?? FileSizeType.GB;
+    totalFileSizeTypeNotifier.value = _totalFileSizeSetting?.unit.toFileSizeType() ?? FileSizeType.GB;
+    notificationLanguageNotifier.value = _notificationLanguageSetting?.value.toNotificationLanguage() ?? NotificationLanguage.FRENCH;
+
+    maxNumberFilesController.text = _maxFileCountSetting?.value.toString() ?? '0';
+    maxFileSizeController.text = _maxFileSizeSetting?.value.toString() ?? '0';
+    totalFileSizeController.text = _totalFileSizeSetting?.value.toString() ?? '0';
+
+    passwordProtectNotifier.value = _protectPasswordSetting?.value ?? false;
+    allowDeletionNotifier.value = _canDeleteSetting?.value ?? true;
+    allowClosureNotifier.value = _canCloseSetting?.value ?? true;
+  }
+
+  UploadRequestPresentation _generateUploadRequestCreation() {
+    final _listMaxFileSizeType = _maxFileSizeSetting?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
+    final _listTotalFileSizeType = _totalFileSizeSetting?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
+    final _listNotificationLanguages = _notificationLanguageSetting?.units.map((unit) => unit.toNotificationLanguage()).toList() ?? [];
+
+    final uploadRequestCreation = UploadRequestPresentation(
+      listMaxFileSizeType: _listMaxFileSizeType,
+      listTotalFileSizeType: _listTotalFileSizeType,
+      listNotificationLanguages: _listNotificationLanguages,
+    );
+
+    return uploadRequestCreation;
+  }
+
+  void showDateTimeActivationAction(BuildContext context) {
+    _getRoundUpDate();
+    _getActivationDate(isInitialize: false);
+    DatePicker.showDateTimePicker(context,
+      showTitleActions: true,
+      minTime: _creationDateRoundUp,
+      maxTime: _maxActivationDateRoundUp,
+      onConfirm: (date) {
+        textActivationNotifier.value = Tuple2(date, date.getYMMMMdFormatWithJm());
+        _getExpirationDate();
+        _getReminderDate();
+      },
+      currentTime: textActivationNotifier.value?.value1);
+  }
+
+  void showDateTimeExpirationAction(BuildContext context) {
+    _getRoundUpDate();
+    DatePicker.showDateTimePicker(context,
+      showTitleActions: true,
+      minTime: textActivationNotifier.value!.value1,
+      maxTime: _maxExpirationDateRoundUp,
+      onConfirm: (date) {
+        textExpirationNotifier.value = Tuple2(date, date.getYMMMMdFormatWithJm());
+        _getReminderDate();
+      },
+      currentTime: textExpirationNotifier.value?.value1);
+  }
+
+  void showDateTimeReminderAction(BuildContext context) {
+    DatePicker.showDateTimePicker(context,
+      showTitleActions: true,
+      minTime: _minReminderDateRoundUp,
+      maxTime: textExpirationNotifier.value!.value1,
+      onChanged: (date) {},
+      onConfirm: (date) => textReminderNotifier.value = Tuple2(date, date.getYMMMMdFormatWithJm()),
+      currentTime: textReminderNotifier.value?.value1);
+  }
+
   void backToUploadRequestGroup() {
     _appNavigation.popBack();
   }
 
-  void performCreateUploadRequest(UploadRequestCreationType creationType,
-      {required int maxFileCount,
+  void validateFormData(BuildContext context) {
+    final numberFiles = int.tryParse(maxNumberFilesController.text) ?? 0;
+    final maxFilesConfig = _maxFileCountSetting?.maxValue ?? 0;
+    if (numberFiles <= 0 || numberFiles >= maxFilesConfig) {
+      _appToast.showErrorToast(AppLocalizations.of(context).max_number_files_error);
+      return;
+    }
+
+    final inputSize = int.tryParse(maxFileSizeController.text) ?? 0;
+    final fileSizeInByte = maxFileSizeTypeNotifier.value.toByte(inputSize);
+    final maxFileSizeConfig = _maxFileSizeSetting?.maxValue ?? 0;
+    final maxFileSizeTypeConfig = _maxFileSizeSetting?.maxUnit.toFileSizeType() ?? FileSizeType.GB;
+    if (fileSizeInByte <= 0 ||
+        (inputSize >= maxFileSizeConfig && maxFileSizeTypeNotifier.value == maxFileSizeTypeConfig)) {
+      _appToast.showErrorToast(AppLocalizations.of(context).max_file_size_error);
+      return;
+    }
+
+    final totalSizeOfFiles = int.tryParse(totalFileSizeController.text) ?? 0;
+    final totalSizeOfFilesInByte = totalFileSizeTypeNotifier.value.toByte(totalSizeOfFiles);
+    final totalFileSizeConfig = _totalFileSizeSetting?.maxValue ?? 0;
+    final totalFileSizeTypeConfig = _totalFileSizeSetting?.maxUnit.toFileSizeType() ?? FileSizeType.GB;
+    if (totalSizeOfFilesInByte <= 0 ||
+        (totalSizeOfFiles >= totalFileSizeConfig && maxFileSizeTypeNotifier.value == totalFileSizeTypeConfig)) {
+      _appToast.showErrorToast(AppLocalizations.of(context).total_file_size_error);
+      return;
+    }
+
+    // Once user change the time, prefer to get picked time.
+    // Otherwise, passing null for server can handle by itself (temporary solution)
+    var activateDate;
+    if(textActivationNotifier.value?.value1.compareTo(_initActivationDateRoundUp) != 0) {
+      activateDate = textActivationNotifier.value!.value1;
+    }
+
+    _createUploadRequestAction(
+      arguments?.type ?? UploadRequestCreationType.COLLECTIVE,
+      maxFileCount: numberFiles,
+      maxFileSize: fileSizeInByte,
+      expirationDate: textExpirationNotifier.value?.value1 ?? _initExpirationDateRoundUp,
+      emailMessage: emailMessageController.text,
+      activationDate: activateDate,
+      notificationDate: textReminderNotifier.value?.value1 ?? _initReminderDateRoundUp,
+      maxDepositSize: totalSizeOfFilesInByte,
+      protectedByPassword: passwordProtectNotifier.value,
+      canClose: allowClosureNotifier.value,
+      canDelete: allowDeletionNotifier.value,
+      enableNotification: _enableReminderNotificationSetting?.enable ?? true,
+      locale: notificationLanguageNotifier.value.text);
+  }
+
+  void _createUploadRequestAction(
+    UploadRequestCreationType creationType,
+    {
+      required int maxFileCount,
       required int maxFileSize,
       required DateTime expirationDate,
       required String emailMessage,
@@ -100,7 +414,9 @@ class UploadRequestCreationViewModel extends BaseViewModel {
       required bool canClose,
       required String locale,
       required bool protectedByPassword,
-      required bool enableNotification}) {
+      required bool enableNotification
+    }
+  ) {
     final listEmails = _autoCompleteResultListObservable.value?.map((e) => e.getSuggestionMail()).toList() ?? [];
     final emailSubject = _emailSubjectObservable.value.toString();
     final addUploadRequest = AddUploadRequest(
@@ -126,11 +442,11 @@ class UploadRequestCreationViewModel extends BaseViewModel {
       await _addNewUploadRequestInteractor.execute(creationType, addUploadRequest).then((result) =>
           result.fold(
               (failure) => store.dispatch(UploadRequestCreationAction(
-                  Left<Failure, Success>(AddNewUploadRequestFailure(UploadRequestCreateFailed())))),
+                  Left(AddNewUploadRequestFailure(UploadRequestCreateFailed())))),
               (success) {
-                  getUploadRequestCreatedStatus();
-                  getUploadRequestActiveClosedStatus();
-                  backToUploadRequestGroup();
+                getUploadRequestCreatedStatus();
+                getUploadRequestActiveClosedStatus();
+                backToUploadRequestGroup();
               }));
     });
   }
@@ -208,6 +524,7 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   @override
   void onDisposed() {
     _autoCompleteResultListSubscription.cancel();
+    _disposeValueNotifier();
     super.onDisposed();
   }
 }

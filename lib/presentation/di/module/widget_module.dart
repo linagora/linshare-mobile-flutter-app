@@ -508,7 +508,8 @@ class WidgetModule {
         getIt.get<AddNewUploadRequestInteractor>(),
         getIt.get<GetAllUploadRequestGroupsInteractor>(),
         getIt.get<GetAutoCompleteSharingInteractor>(),
-        getIt.get<GetAutoCompleteSharingWithDeviceContactInteractor>()
+        getIt.get<GetAutoCompleteSharingWithDeviceContactInteractor>(),
+        getIt.get<AppToast>(),
     ));
   }
 

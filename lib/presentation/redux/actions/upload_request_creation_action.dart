@@ -33,19 +33,27 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_presentation.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
-class StartUploadRequestGroupLoadingAction extends ActionOnline {}
+class StartUploadRequestCreationLoadingAction extends ActionOnline {}
 
 @immutable
-class UploadRequestGroupAction extends ActionOffline {
+class UploadRequestCreationAction extends ActionOffline {
   final Either<Failure, Success> viewState;
 
-  UploadRequestGroupAction(this.viewState);
+  UploadRequestCreationAction(this.viewState);
 }
 
 @immutable
-class CleanUploadRequestGroupAction extends ActionOffline {
-  CleanUploadRequestGroupAction();
+class CleanUploadRequestCreationAction extends ActionOffline {
+  CleanUploadRequestCreationAction();
+}
+
+@immutable
+class UpdateUploadRequestCreationAction extends ActionOffline {
+  final UploadRequestPresentation uploadRequestPresentation;
+
+  UpdateUploadRequestCreationAction(this.uploadRequestPresentation);
 }
