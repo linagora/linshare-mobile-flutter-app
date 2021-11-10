@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/widget/biometric_authenticatio
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/current_uploads/current_uploads_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/home/home_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart';
@@ -88,6 +89,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<BiometricAuthenticationLoginWidget>(), settings: settings);
     case RoutePaths.createUploadRequest:
       return MaterialPageRoute(builder: (context) => getIt<UploadRequestCreationWidget>(), settings: settings);
+    case RoutePaths.editUploadRequest:
+      return MaterialPageRoute(builder: (context) => getIt<EditUploadRequestWidget>(), settings: settings);
     case RoutePaths.receivedShareDetails:
       return MaterialPageRoute(builder: (context) => getIt<ReceivedShareDetailsWidget>(), settings: settings);
     case RoutePaths.addRecipientsUploadRequestGroup:
