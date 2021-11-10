@@ -388,6 +388,7 @@ class AppModule {
     getIt.registerFactory(() => DeleteAllSharedSpaceOfflineInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestGroupsInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => AddNewUploadRequestInteractor(getIt<UploadRequestGroupRepository>()));
+    getIt.registerFactory(() => EditUploadRequestInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestsInteractor(getIt<UploadRequestRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestEntriesInteractor(getIt<UploadRequestEntryRepository>()));
     getIt.registerFactory(() => SearchUploadRequestGroupsInteractor());
