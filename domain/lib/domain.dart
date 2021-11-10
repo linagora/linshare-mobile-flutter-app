@@ -152,18 +152,13 @@ export 'src/model/sharedspace/shared_space_member.dart';
 export 'src/model/sharedspace/shared_space_member_id.dart';
 export 'src/model/sharedspace/shared_space_member_node.dart';
 export 'src/model/sharedspace/shared_space_node_nested.dart';
-export 'src/model/sharedspace/shared_space_node_nested.dart';
-export 'src/model/sharedspace/shared_space_operation_role.dart';
 export 'src/model/sharedspace/shared_space_operation_role.dart';
 export 'src/model/sharedspace/shared_space_role.dart';
-export 'src/model/sharedspace/shared_space_role.dart';
-export 'src/model/sharedspace/shared_space_role_id.dart';
 export 'src/model/sharedspace/shared_space_role_id.dart';
 export 'src/model/sharedspace/shared_space_role_name.dart';
-export 'src/model/sharedspace/shared_space_role_name.dart';
-export 'src/model/sharedspace/thread_id.dart';
 export 'src/model/sharedspace/thread_id.dart';
 export 'src/model/sharedspace/versioning_parameter.dart';
+export 'src/model/workgroup/drive_id.dart';
 export 'src/model/sharedspacedocument/move_work_group_node_request.dart';
 export 'src/model/sharedspacedocument/rename_work_group_node_request.dart';
 export 'src/model/sharedspacedocument/tree_node.dart';
@@ -245,6 +240,7 @@ export 'src/repository/sort/sort_repository.dart';
 export 'src/repository/upload_request_group/upload_request_group_repository.dart';
 export 'src/repository/upload_request/upload_request_repository.dart';
 export 'src/repository/upload_request_entry/upload_request_entry_repository.dart';
+export 'src/repository/workgroup/drive_repository.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -446,3 +442,7 @@ export 'src/usecases/upload_request_entry/remove_multiple_upload_request_entry_i
 export 'src/usecases/upload_request_entry/remove_upload_request_entry_interactor.dart';
 export 'src/usecases/upload_request_group/edit_upload_request_interactor.dart';
 export 'src/usecases/authentication/get_oidc_configuration_interactor.dart';
+export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive_view_state.dart';
+export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive_interactor.dart';
+export 'src/usecases/workgroup/get_all_workgroups_interactor.dart';
+export 'src/usecases/workgroup/workgroup_view_state.dart';

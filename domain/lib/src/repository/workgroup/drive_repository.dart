@@ -28,13 +28,9 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-enum OrderScreen {
-  mySpace,
-  sharedSpaceDocument,
-  workGroup,
-  insideDrive,
-  receivedShares,
-  uploadRequestGroupsCreated,
-  uploadRequestGroupsActiveClosed,
-  uploadRequestGroupsArchived
+
+import 'package:domain/domain.dart';
+
+abstract class DriveRepository {
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId);
 }
