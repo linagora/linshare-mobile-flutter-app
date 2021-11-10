@@ -29,29 +29,35 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:convert';
-
+import 'package:data/data.dart';
+import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/remote_exception_thrower.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
+import 'package:domain/src/model/sharedspace/shared_space_node_nested.dart';
 
+class DriveDataSourceImpl implements DriveDataSource {
+  final LinShareHttpClient _linShareHttpClient;
+  final RemoteExceptionThrower _remoteExceptionThrower;
 
-class CreateWorkGroupBodyRequest with EquatableMixin {
-  final String name;
-  final LinShareNodeType nodeType;
-  final SharedSpaceId? parentId;
-
-  CreateWorkGroupBodyRequest(this.name, this.nodeType, {this.parentId});
-
-  Map<String, dynamic> toJson() => <String, dynamic>{
-    jsonEncode('name'): jsonEncode(name),
-    jsonEncode('nodeType'): jsonEncode(nodeType.value),
-    if (parentId != null) jsonEncode('parentUuid'): jsonEncode(parentId?.uuid)
-  };
+  DriveDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
 
   @override
-  List<Object> get props => [name, nodeType];
-}
-
-extension CreateWorkGroupRequestExtension on CreateWorkGroupRequest {
-  CreateWorkGroupBodyRequest toCreateWorkGroupBodyRequest() => CreateWorkGroupBodyRequest(name, nodeType, parentId: parentId);
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getAllWorkgroups(driveId))
+          .map((sharedSpaceResponse) => sharedSpaceResponse.toSharedSpaceNodeNested())
+          .toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw SharedSpaceNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
+      });
+    });
+  }
 }
