@@ -57,4 +57,9 @@ class UploadRequestGroupRepositoryImpl implements UploadRequestGroupRepository {
   Future<UploadRequestGroup> updateUploadRequestGroupState(UploadRequestGroup uploadRequestGroup, UploadRequestStatus status, {bool? copyToMySpace}) {
     return _uploadRequestGroupDataSource.updateUploadRequestGroupState(uploadRequestGroup, status, copyToMySpace: copyToMySpace);
   }
+
+  @override
+  Future<UploadRequestGroup> editUploadRequest(UploadRequestGroupId uploadRequestGroupId, EditUploadRequest request) {
+    return _uploadRequestGroupDataSource.editUploadRequest(uploadRequestGroupId, request);
+  }
 }
