@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/biometric_authent
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/document_details_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/edit_upload_request_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
@@ -175,6 +176,7 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
     uploadRequestGroupState: UploadRequestGroupState.initial(),
     uploadRequestCreationState: UploadRequestCreationState.initial(),
+    editUploadRequestState: EditUploadRequestState.initial(),
     createdUploadRequestGroupState: CreatedUploadRequestGroupState.initial(),
     activeClosedUploadRequestGroupState: ActiveClosedUploadRequestGroupState.initial(),
     archivedUploadRequestGroupState: ArchivedUploadRequestGroupState.initial(),
