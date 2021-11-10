@@ -731,4 +731,15 @@ class LinShareHttpClient {
       data: request.toBodyRequest().toJson().toString());
     return UploadRequestGroupResponse.fromJson(resultJson);
   }
+
+  Future<List<SharedSpaceNodeNestedResponse>> getAllWorkgroups(DriveId driveId) async {
+    final List resultJson = await _dioClient.get(
+      Endpoint.sharedSpaces
+        .withQueryParameters([
+            StringQueryParameter('parent', driveId.uuid),
+            BooleanQueryParameter('withRole', true)
+          ])
+        .generateEndpointPath());
+    return resultJson.map((data) => SharedSpaceNodeNestedResponse.fromJson(data)).toList();
+  }
 }

@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -29,29 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:convert';
-
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
 
-
-class CreateWorkGroupBodyRequest with EquatableMixin {
-  final String name;
-  final LinShareNodeType nodeType;
-  final SharedSpaceId? parentId;
-
-  CreateWorkGroupBodyRequest(this.name, this.nodeType, {this.parentId});
-
-  Map<String, dynamic> toJson() => <String, dynamic>{
-    jsonEncode('name'): jsonEncode(name),
-    jsonEncode('nodeType'): jsonEncode(nodeType.value),
-    if (parentId != null) jsonEncode('parentUuid'): jsonEncode(parentId?.uuid)
-  };
-
-  @override
-  List<Object> get props => [name, nodeType];
-}
-
-extension CreateWorkGroupRequestExtension on CreateWorkGroupRequest {
-  CreateWorkGroupBodyRequest toCreateWorkGroupBodyRequest() => CreateWorkGroupBodyRequest(name, nodeType, parentId: parentId);
+abstract class DriveDataSource {
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId);
 }
