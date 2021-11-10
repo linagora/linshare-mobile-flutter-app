@@ -35,9 +35,10 @@ import 'package:equatable/equatable.dart';
 class CreateWorkGroupRequest with EquatableMixin {
   final String name;
   final LinShareNodeType nodeType;
+  final SharedSpaceId? parentId;
 
-  CreateWorkGroupRequest(this.name, this.nodeType);
+  CreateWorkGroupRequest(this.name, this.nodeType, {this.parentId});
 
   @override
-  List<Object> get props => [name, nodeType];
+  List<Object?> get props => [name, nodeType, parentId];
 }
