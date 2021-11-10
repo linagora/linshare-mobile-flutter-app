@@ -2382,6 +2382,48 @@ class AppLocalizations {
     return Intl.message('This feature is not currently supported',
         name: 'this_feature_not_supported');
   }
+
+  String get edit {
+    return Intl.message(
+      'Edit',
+      name: 'edit',
+    );
+  }
+
+  String get save {
+    return Intl.message(
+      'Save',
+      name: 'save',
+    );
+  }
+
+  String get yes {
+    return Intl.message(
+      'Yes',
+      name: 'yes',
+    );
+  }
+
+  String get no {
+    return Intl.message(
+      'No',
+      name: 'no',
+    );
+  }
+
+  String get the_upload_request_has_been_updated_successfully {
+    return Intl.message(
+      'The upload request has been updated successfully!',
+      name: 'the_upload_request_has_been_updated_successfully',
+    );
+  }
+
+  String get the_upload_request_has_been_updated_failed {
+    return Intl.message(
+      'The upload request has been updated failed',
+      name: 'the_upload_request_has_been_updated_failed',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

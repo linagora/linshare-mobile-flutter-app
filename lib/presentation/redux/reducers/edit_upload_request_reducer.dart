@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,34 +28,19 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-class RoutePaths {
-  static const String initializeRoute = 'initialize';
-  static const String loginRoute = 'login';
-  static const String homeRoute = 'home';
-  static const String mySpace = 'my_space';
-  static const String uploadDocumentRoute = 'upload_document';
-  static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceInside = 'shared_space_inside';
-  static const String currentUploads = 'current_uploads';
-  static const String destinationPicker = 'destination_picker';
-  static const String account_details = 'account_details';
-  static const String received_shares = 'received_shares';
-  static const String sharedSpaceDetails = 'shared_space_details';
-  static const String authentication = 'authentication';
-  static const String enter_otp = 'enter_otp';
-  static const String second_factor_authentication = 'second_factor_authentication';
-  static const String addSharedSpaceMember = 'add_shared_space_member';
-  static const String documentDetails = 'document_details';
-  static const String sharedSpaceNodeDetails = 'shared_space_node_details';
-  static const String biometricAuthenticationSetting = 'biometricAuthenticationSetting';
-  static const String sharedSpaceNodeVersions = 'shared_space_node_versions';
-  static const String biometricAuthenticationLogin = 'biometric_authentication_login';
-  static const String uploadRequestGroup = 'upload_request_group';
-  static const String createUploadRequest = 'create_upload_request';
-  static const String editUploadRequest = 'edit_upload_request';
-  static const String uploadRequestInside = 'upload_request_inside';
-  static const String receivedShareDetails = 'received_share_details';
-  static const String addRecipientsUploadRequestGroup = 'add_recipients_upload_request_group';
-  static const String advanceSearchSettings = 'advance_search_settings';
-}
+import 'package:linshare_flutter_app/presentation/redux/actions/edit_upload_request_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/edit_upload_request_state.dart';
+import 'package:redux/redux.dart';
+
+final editUploadRequestReducer = combineReducers<EditUploadRequestState>([
+  TypedReducer<EditUploadRequestState, StartEditUploadRequestLoadingAction>((EditUploadRequestState state, _) =>
+      state.startLoadingState()),
+  TypedReducer<EditUploadRequestState, EditUploadRequestAction>((EditUploadRequestState state, EditUploadRequestAction action) =>
+      state.sendViewState(viewState: action.viewState)),
+	TypedReducer<EditUploadRequestState, CleanEditUploadRequestAction>((EditUploadRequestState state, _) =>
+      state.clearViewState()),
+	TypedReducer<EditUploadRequestState, UpdateUploadRequestPresentationAction>((EditUploadRequestState state, UpdateUploadRequestPresentationAction action) =>
+      state.updateUploadRequestPresentation(newUploadRequest: action.uploadRequestPresentation)),
+]);
