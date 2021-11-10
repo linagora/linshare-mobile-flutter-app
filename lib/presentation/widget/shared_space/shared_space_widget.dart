@@ -352,11 +352,23 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                         height: 24,
                         fit: BoxFit.fill,
                       ),
-                      onPressed: () => sharedSpaceViewModel.openContextMenu(context,
-                          sharedSpace.element, _contextMenuActionTiles(context, sharedSpace),
-                          footerAction: _contextMenuFooterAction(sharedSpace.element)));
+                      onPressed: () => _onPressContextMenu(context, sharedSpace));
             }),
         onLongPress: () => sharedSpaceViewModel.selectItem(sharedSpace));
+  }
+
+  void _onPressContextMenu(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
+    switch (sharedSpace.element.nodeType) {
+      case LinShareNodeType.DRIVE:
+        sharedSpaceViewModel.openDriveContextMenu(context, sharedSpace.element, []);
+        break;
+      default:
+        sharedSpaceViewModel.openContextMenu(
+          context,
+          sharedSpace.element,
+          _contextMenuActionTiles(context, sharedSpace),
+          footerAction: _contextMenuFooterAction(sharedSpace.element));
+    }
   }
 
   List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
