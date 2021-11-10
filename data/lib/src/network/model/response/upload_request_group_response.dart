@@ -65,7 +65,9 @@ class UploadRequestGroupResponse extends Equatable {
       this.owner,
       this.status,
       this.usedSpace,
-      this.nbrUploadedFiles);
+      this.nbrUploadedFiles,
+      this.locale,
+    );
 
   @JsonKey(name: Attribute.uuid)
   final UploadRequestGroupId uploadRequestGroupId;
@@ -91,6 +93,7 @@ class UploadRequestGroupResponse extends Equatable {
   final UploadRequestStatus status;
   final double? usedSpace;
   final int? nbrUploadedFiles;
+  final String? locale;
 
   factory UploadRequestGroupResponse.fromJson(Map<String, dynamic> json) =>
       _$UploadRequestGroupResponseFromJson(json);
@@ -119,7 +122,8 @@ class UploadRequestGroupResponse extends Equatable {
         owner,
         status,
         usedSpace,
-        nbrUploadedFiles
+        nbrUploadedFiles,
+        locale,
       ];
 }
 
@@ -147,6 +151,8 @@ extension UploadRequestGroupResponseExtension on UploadRequestGroupResponse {
         owner.toGenericUser(),
         status,
         usedSpace,
-        nbrUploadedFiles);
+        nbrUploadedFiles,
+        locale,
+    );
   }
 }
