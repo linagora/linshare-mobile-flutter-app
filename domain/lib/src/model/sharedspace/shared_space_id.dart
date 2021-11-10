@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:domain/src/model/workgroup/drive_id.dart';
 import 'package:equatable/equatable.dart';
 import 'package:domain/domain.dart';
 
@@ -44,4 +45,6 @@ class SharedSpaceId extends Equatable {
 
 extension SharedSpaceNodeIdExtension on SharedSpaceId {
   WorkGroupNodeId toWorkGroupNodeId() => WorkGroupNodeId(uuid);
+
+  DriveId toDriveId() => DriveId(uuid);
 }
