@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 enum NotificationLanguage {
-  ENGLISH, FRENCH, RUSSIAN
+  ENGLISH, FRENCH, RUSSIAN, VIETNAMESE
 }
 
 extension NotificationLanguageExtension on NotificationLanguage {
@@ -42,6 +42,8 @@ extension NotificationLanguageExtension on NotificationLanguage {
         return 'FRENCH';
       case NotificationLanguage.RUSSIAN:
         return 'RUSSIAN';
+      case NotificationLanguage.VIETNAMESE:
+        return 'VIETNAMESE';
       default:
         return toString();
     }
