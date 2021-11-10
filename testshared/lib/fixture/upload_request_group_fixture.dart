@@ -56,7 +56,8 @@ final uploadRequestGroup1 = UploadRequestGroup(
   GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
   UploadRequestStatus.CREATED,
   2323872,
-  1
+  1,
+  'ENGLISH'
 );
 
 final uploadRequestGroup2 = UploadRequestGroup(
@@ -81,7 +82,8 @@ final uploadRequestGroup2 = UploadRequestGroup(
   GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
   UploadRequestStatus.CREATED,
   2323872,
-  1
+  1,
+  'ENGLISH'
 );
 
 final uploadRequestGroupCanceled1 = UploadRequestGroup(
@@ -106,7 +108,8 @@ final uploadRequestGroupCanceled1 = UploadRequestGroup(
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     UploadRequestStatus.CANCELED,
     2323872,
-    1
+    1,
+    'ENGLISH'
 );
 
 final uploadRequestGroupArchived1 = UploadRequestGroup(
@@ -131,7 +134,8 @@ final uploadRequestGroupArchived1 = UploadRequestGroup(
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     UploadRequestStatus.ARCHIVED,
     2323872,
-    1
+    1,
+    'ENGLISH'
 );
 
 final uploadRequestGroupCanceled2 = UploadRequestGroup(
@@ -156,7 +160,8 @@ final uploadRequestGroupCanceled2 = UploadRequestGroup(
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     UploadRequestStatus.CANCELED,
     2323872,
-    1
+    1,
+    'ENGLISH'
 );
 
 final uploadRequestGroupArchived2 = UploadRequestGroup(
@@ -181,7 +186,8 @@ final uploadRequestGroupArchived2 = UploadRequestGroup(
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     UploadRequestStatus.ARCHIVED,
     2323872,
-    1
+    1,
+    'ENGLISH'
 );
 
 final uploadRequestGroupClosed1 = UploadRequestGroup(
@@ -206,7 +212,8 @@ final uploadRequestGroupClosed1 = UploadRequestGroup(
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     UploadRequestStatus.CLOSED,
     2323872,
-    1
+    1,
+    'ENGLISH'
 );
 
 final uploadRequestGroupClosed2 = UploadRequestGroup(
@@ -231,7 +238,8 @@ final uploadRequestGroupClosed2 = UploadRequestGroup(
     GenericUser('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     UploadRequestStatus.CLOSED,
     2323872,
-    1
+    1,
+    'ENGLISH'
 );
 
 final uploadRequestGroupResponse1 = UploadRequestGroupResponse(
@@ -256,7 +264,8 @@ final uploadRequestGroupResponse1 = UploadRequestGroupResponse(
   GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
   UploadRequestStatus.CREATED,
   2323872,
-  1
+  1,
+  'ENGLISH'
 );
 
 final uploadRequestGroupResponseCanceled1 = UploadRequestGroupResponse(
@@ -281,7 +290,8 @@ final uploadRequestGroupResponseCanceled1 = UploadRequestGroupResponse(
     GenericUserDto('user1@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane')),
     UploadRequestStatus.CANCELED,
     2323872,
-    1
+    1,
+    'ENGLISH'
 );
 
 final addUploadRequest1 = AddUploadRequest(

@@ -28,36 +28,51 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:domain/src/usecases/remote_exception.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class UploadRequestGroupException extends RemoteException {
-  static final UploadRequestGroupsNotFound = 'Upload Request Groups not found';
-  static final UploadRequestCreationFailed = 'Upload Request Create Failed';
-  static final UploadRequestEditFailed = 'Upload Request Edit Failed';
+class EditUploadRequest extends Equatable {
+  final DateTime? activationDate;
+  final DateTime notificationDate;
+  final bool enableNotification;
+  final String? body;
+  final bool canClose;
+  final bool canDelete;
+  final DateTime expirationDate;
+  final String label;
+  final String locale;
+  final int maxDepositSize;
+  final int maxFileCount;
+  final int maxFileSize;
 
-  UploadRequestGroupException(String message) : super(message);
-}
-
-class UploadRequestGroupsNotFound extends UploadRequestGroupException {
-  UploadRequestGroupsNotFound() : super(UploadRequestGroupException.UploadRequestGroupsNotFound);
+  EditUploadRequest(
+    this.activationDate,
+    this.notificationDate,
+    this.enableNotification,
+    this.body,
+    this.canClose,
+    this.canDelete,
+    this.expirationDate,
+    this.label,
+    this.locale,
+    this.maxDepositSize,
+    this.maxFileCount,
+    this.maxFileSize,
+  );
 
   @override
-  List<Object> get props => [];
-}
-
-
-class UploadRequestCreateFailed extends UploadRequestGroupException {
-  UploadRequestCreateFailed() : super(UploadRequestGroupException.UploadRequestCreationFailed);
-
-  @override
-  List<Object> get props => [];
-}
-
-class UploadRequestEditFailed extends UploadRequestGroupException {
-  UploadRequestEditFailed() : super(UploadRequestGroupException.UploadRequestEditFailed);
-
-  @override
-  List<Object> get props => [];
+  List<Object?> get props => [
+    activationDate,
+    notificationDate,
+    enableNotification,
+    body,
+    canClose,
+    canDelete,
+    expirationDate,
+    label,
+    locale,
+    maxDepositSize,
+    maxFileCount,
+    maxFileSize,
+  ];
 }
