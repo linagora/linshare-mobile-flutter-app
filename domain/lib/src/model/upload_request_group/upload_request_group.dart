@@ -55,7 +55,8 @@ class UploadRequestGroup with EquatableMixin {
       this.owner,
       this.status,
       this.usedSpace,
-      this.nbrUploadedFiles
+      this.nbrUploadedFiles,
+      this.locale,
   );
 
   final UploadRequestGroupId uploadRequestGroupId;
@@ -80,6 +81,7 @@ class UploadRequestGroup with EquatableMixin {
   final UploadRequestStatus status;
   final double? usedSpace;
   final int? nbrUploadedFiles;
+  final String? locale;
 
   @override
   List<Object?> get props => [
@@ -104,6 +106,7 @@ class UploadRequestGroup with EquatableMixin {
       owner,
       status,
       usedSpace,
-      nbrUploadedFiles
+      nbrUploadedFiles,
+      locale,
   ];
 }
