@@ -108,4 +108,20 @@ class UploadRequestGroupDataSourceImpl implements UploadRequestGroupDataSource {
       });
     });
   }
+
+  @override
+  Future<UploadRequestGroup> editUploadRequest(UploadRequestGroupId uploadRequestGroupId, EditUploadRequest request) {
+    return Future.sync(() async {
+      final uploadRequestGroupResponse = await _linShareHttpClient.editUploadRequest(uploadRequestGroupId, request);
+      return uploadRequestGroupResponse.toUploadRequestGroup();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestEditFailed();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
 }

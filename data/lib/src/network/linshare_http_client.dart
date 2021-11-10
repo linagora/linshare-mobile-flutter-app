@@ -722,4 +722,13 @@ class LinShareHttpClient {
       .generateEndpointPath());
     return UploadRequestEntryResponse.fromJson(resultJson);
   }
+
+  Future<UploadRequestGroupResponse> editUploadRequest(UploadRequestGroupId uploadRequestGroupId, EditUploadRequest request) async {
+    final resultJson = await _dioClient.put(
+      Endpoint.uploadRequestGroups
+        .withPathParameter(uploadRequestGroupId.uuid)
+        .generateEndpointPath(),
+      data: request.toBodyRequest().toJson().toString());
+    return UploadRequestGroupResponse.fromJson(resultJson);
+  }
 }
