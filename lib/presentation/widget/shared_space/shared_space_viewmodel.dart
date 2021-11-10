@@ -241,6 +241,32 @@ class SharedSpaceViewModel extends BaseViewModel {
     };
   }
 
+  void openDriveContextMenu(BuildContext context, SharedSpaceNodeNested nodeNested, List<Widget> actionTiles, {Widget? footerAction}) {
+    store.dispatch(
+      _handleDriveContextMenuAction(
+        context,
+        nodeNested,
+        actionTiles,
+        footerAction: footerAction));
+  }
+
+  ThunkAction<AppState> _handleDriveContextMenuAction(
+      BuildContext context,
+      SharedSpaceNodeNested nodeNested,
+      List<Widget> actionTiles,
+      {Widget? footerAction}
+  ) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context)
+        .addHeader(ContextMenuHeaderBuilder(
+          Key('drive_context_menu_header'),
+          SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(nodeNested))
+        .build())
+        .addTiles(actionTiles)
+        .build();
+    };
+  }
+
   void removeSharedSpaces(
     BuildContext context,
     List<SharedSpaceNodeNested> sharedSpaces,
