@@ -215,37 +215,58 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   Widget _buildTitleTopBar() {
     return StoreConnector<AppState, SharedSpaceDocumentState>(
       converter: (store) => store.state.sharedSpaceDocumentState,
-      builder: (context, documentState) => documentState.documentType == SharedSpaceDocumentType.root
-        ? GestureDetector(
-            onTap: widget.onBackSharedSpaceClickedCallback,
-            child: Container(
-              child: Align(
-                alignment: Alignment.center,
+      builder: (context, documentState) {
+        if (documentState.documentType == SharedSpaceDocumentType.root) {
+          if (documentState.sharedSpaceDrive != null) {
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5.0, right: 45.0),
                 child: Text(
-                    AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: AppColor.workgroupNodesSurfingBackTitleColor,
-                        fontWeight: FontWeight.w400
-                    )
-                ),
-              ),
-            )
-          )
-        : Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 5.0, right: 45.0),
-              child: Text(
-                documentState.workGroupNode?.name ?? '',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: AppColor.workgroupNodesSurfingFolderNameColor
+                  documentState.sharedSpaceNodeNested?.name ?? '',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: AppColor.workgroupNodesSurfingFolderNameColor
+                  )
                 )
               )
-            )
-          )
+            );
+          } else {
+            return GestureDetector(
+              onTap: widget.onBackSharedSpaceClickedCallback,
+              child: Container(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                      AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: AppColor.workgroupNodesSurfingBackTitleColor,
+                          fontWeight: FontWeight.w400
+                      )
+                  ),
+                ),
+              )
+            );
+          }
+        } else {
+          return Expanded(
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 5.0, right: 45.0),
+                  child: Text(
+                      documentState.workGroupNode?.name ?? '',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.workgroupNodesSurfingFolderNameColor
+                      )
+                  )
+              )
+          );
+        }
+      }
     );
   }
 

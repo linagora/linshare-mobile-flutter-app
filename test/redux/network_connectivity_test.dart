@@ -59,6 +59,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart'
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_drive_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
@@ -157,6 +158,7 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     mySpaceState: mySpaceState ?? MySpaceState.initial(),
     shareState: ShareState.initial(),
     sharedSpaceState: SharedSpaceState.initial(),
+    sharedSpaceDriveState: SharedSpaceDriveState.initial(),
     sharedSpaceDocumentState: SharedSpaceDocumentState.initial(),
     uiState: UIState.initial(),
     account: AccountState.initial(),

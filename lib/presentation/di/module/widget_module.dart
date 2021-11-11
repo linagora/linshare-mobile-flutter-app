@@ -88,6 +88,8 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_drive/shared_space_drive_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_drive/shared_space_drive_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
@@ -117,6 +119,7 @@ class WidgetModule {
     _provideInitializeComponent();
     _provideSideMenuComponent();
     _provideSharedSpaceComponent();
+    _provideSharedSpaceDriveComponent();
     _provideSharedSpaceDocumentComponent();
     _provideCurrentUploadsComponent();
     _provideDestinationPickerComponent();
@@ -247,8 +250,24 @@ class WidgetModule {
       getIt<GetSorterInteractor>(),
       getIt<SaveSorterInteractor>(),
       getIt<RenameWorkGroupInteractor>(),
-      getIt<GetSharedSpaceInteractor>(),
       getIt<GetAllSharedSpaceOfflineInteractor>(),
+    ));
+  }
+
+  void _provideSharedSpaceDriveComponent() {
+    getIt.registerFactory(() => SharedSpaceDriveWidget());
+    getIt.registerFactory(() => SharedSpaceDriveViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+      getIt<GetAllSharedSpaceDriveInteractor>(),
+      getIt<SearchSharedSpaceDriveInteractor>(),
+      getIt<RemoveMultipleSharedSpacesInteractor>(),
+      getIt<CreateWorkGroupInteractor>(),
+      getIt<VerifyNameInteractor>(),
+      getIt<SortInteractor>(),
+      getIt<GetSorterInteractor>(),
+      getIt<SaveSorterInteractor>(),
+      getIt<RenameWorkGroupInteractor>(),
     ));
   }
 

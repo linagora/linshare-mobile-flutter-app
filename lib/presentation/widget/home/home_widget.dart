@@ -52,6 +52,7 @@ import 'package:linshare_flutter_app/presentation/widget/myspace/my_space_widget
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_navigator_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_drive/shared_space_drive_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
@@ -129,11 +130,17 @@ class _HomeWidgetState extends State<HomeWidget> {
         return getIt<MySpaceWidget>();
       case RoutePaths.sharedSpace:
         return getIt<SharedSpaceWidget>();
+      case RoutePaths.sharedSpaceDrive:
+        return getIt<SharedSpaceDriveWidget>();
       case RoutePaths.sharedSpaceInside:
         return SharedSpaceDocumentNavigatorWidget(
           Key('shared_space_document_navigator_widget_key'),
           uiState.selectedSharedSpace!,
-          onBackSharedSpaceClickedCallback: () => homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace))
+          sharedSpaceDrive: uiState.selectedSharedSpaceDrive,
+          onBackSharedSpaceClickedCallback: () =>
+              homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace)),
+          onBackDriveClickedCallback: (sharedSpaceDrive) =>
+              homeViewModel.store.dispatch(SharedSpaceDriveView(RoutePaths.sharedSpaceDrive, sharedSpaceDrive))
         );
       case RoutePaths.account_details:
         return getIt<AccountDetailsWidget>();
