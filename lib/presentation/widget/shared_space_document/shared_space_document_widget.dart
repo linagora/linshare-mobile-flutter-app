@@ -217,7 +217,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
       converter: (store) => store.state.sharedSpaceDocumentState,
       builder: (context, documentState) {
         if (documentState.documentType == SharedSpaceDocumentType.root) {
-          if (documentState.sharedSpaceDrive != null) {
+          if (documentState.drive != null) {
             return Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 5.0, right: 45.0),

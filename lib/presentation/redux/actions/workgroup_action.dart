@@ -37,83 +37,83 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
-class StartSharedSpaceDriveLoadingAction extends ActionOnline {}
+class StartWorkgroupLoadingAction extends ActionOnline {}
 
 @immutable
-class SharedSpaceDriveAction extends ActionOnline {
+class WorkgroupAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
-  SharedSpaceDriveAction(this.viewState);
+  WorkgroupAction(this.viewState);
 }
 
 @immutable
-class SharedSpaceDriveGetAllSharedSpacesAction extends ActionOnline {
+class GetAllWorkgroupsAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
-  SharedSpaceDriveGetAllSharedSpacesAction(this.viewState);
+  GetAllWorkgroupsAction(this.viewState);
 }
 
 @immutable
-class CleanSharedSpaceDriveStateAction extends ActionOffline {
-  CleanSharedSpaceDriveStateAction();
+class CleanWorkgroupStateAction extends ActionOffline {
+  CleanWorkgroupStateAction();
 }
 
 @immutable
-class EnableCreateWorkGroupButtonAction extends ActionOffline {
-  EnableCreateWorkGroupButtonAction();
+class EnableCreateWorkGroupButtonInsideDriveAction extends ActionOffline {
+  EnableCreateWorkGroupButtonInsideDriveAction();
 }
 
 @immutable
-class DisableCreateWorkGroupButtonAction extends ActionOffline {
-  DisableCreateWorkGroupButtonAction();
+class DisableCreateWorkGroupButtonInsideDriveAction extends ActionOffline {
+  DisableCreateWorkGroupButtonInsideDriveAction();
 }
 
 @immutable
-class SharedSpaceDriveSetSearchResultAction extends ActionOffline {
+class WorkgroupInsideDriveSetSearchResultAction extends ActionOffline {
   final List<SharedSpaceNodeNested> sharedSpaceNodes;
 
-  SharedSpaceDriveSetSearchResultAction(this.sharedSpaceNodes);
+  WorkgroupInsideDriveSetSearchResultAction(this.sharedSpaceNodes);
 }
 
-class SharedSpaceDriveSelectSharedSpaceAction extends ActionOffline {
+class SelectWorkgroupInsideDriveAction extends ActionOffline {
   final SelectableElement<SharedSpaceNodeNested> selectedSharedSpace;
 
-  SharedSpaceDriveSelectSharedSpaceAction(this.selectedSharedSpace);
+  SelectWorkgroupInsideDriveAction(this.selectedSharedSpace);
 }
 
 @immutable
-class SharedSpaceDriveClearSelectedSharedSpacesAction extends ActionOffline {
-  SharedSpaceDriveClearSelectedSharedSpacesAction();
+class ClearSelectedWorkgroupsInsideDriveAction extends ActionOffline {
+  ClearSelectedWorkgroupsInsideDriveAction();
 }
 
 @immutable
-class SharedSpaceDriveSelectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceDriveSelectAllSharedSpacesAction();
+class SelectAllWorkgroupsInsideDriveAction extends ActionOffline {
+  SelectAllWorkgroupsInsideDriveAction();
 }
 
 @immutable
-class SharedSpaceDriveUnselectAllSharedSpacesAction extends ActionOffline {
-  SharedSpaceDriveUnselectAllSharedSpacesAction();
+class UnselectAllWorkgroupsInsideDriveAction extends ActionOffline {
+  UnselectAllWorkgroupsInsideDriveAction();
 }
 
 @immutable
-class SharedSpaceDriveGetSharedSpaceRolesListAction extends ActionOffline {
+class GetSharedSpaceRolesListInsideDriveAction extends ActionOffline {
   final List<SharedSpaceRole> rolesList;
 
-  SharedSpaceDriveGetSharedSpaceRolesListAction(this.rolesList);
+  GetSharedSpaceRolesListInsideDriveAction(this.rolesList);
 }
 
 @immutable
-class SharedSpaceDriveGetSorterAction extends ActionOffline {
+class GetSorterInsideDriveAction extends ActionOffline {
   final Sorter sorter;
 
-  SharedSpaceDriveGetSorterAction(this.sorter);
+  GetSorterInsideDriveAction(this.sorter);
 }
 
 @immutable
-class SharedSpaceDriveSortWorkGroupAction extends ActionOffline {
-  final List<SharedSpaceNodeNested> sharedSpaceWorkGroup;
+class SortAllWorkgroupsInsideDriveAction extends ActionOffline {
+  final List<SharedSpaceNodeNested> workgroups;
   final Sorter sorter;
 
-  SharedSpaceDriveSortWorkGroupAction(this.sharedSpaceWorkGroup, this.sorter);
+  SortAllWorkgroupsInsideDriveAction(this.workgroups, this.sorter);
 }

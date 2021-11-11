@@ -40,40 +40,40 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
 @immutable
-class SharedSpaceDriveState extends LinShareState  with EquatableMixin {
-  final List<SelectableElement<SharedSpaceNodeNested>> sharedSpacesList;
-  final bool showUploadButton;
+class WorkgroupState extends LinShareState  with EquatableMixin {
+  final List<SelectableElement<SharedSpaceNodeNested>> selectableWorkgroups;
+  final bool showCreateButton;
   final SelectMode selectMode;
   final List<SharedSpaceRole> rolesList;
   final Sorter sorter;
 
-  SharedSpaceDriveState(
+  WorkgroupState(
     Either<Failure, Success> viewState,
-    this.sharedSpacesList,
+    this.selectableWorkgroups,
     this.rolesList,
     this.selectMode,
     this.sorter,
-    {this.showUploadButton = true}
+    {this.showCreateButton = true}
   ) : super(viewState);
 
-  factory SharedSpaceDriveState.initial() {
-    return SharedSpaceDriveState(Right(IdleState()), [], [], SelectMode.INACTIVE, Sorter.fromOrderScreen(OrderScreen.sharedSpaceDrive));
+  factory WorkgroupState.initial() {
+    return WorkgroupState(Right(IdleState()), [], [], SelectMode.INACTIVE, Sorter.fromOrderScreen(OrderScreen.insideDrive));
   }
 
   @override
-  SharedSpaceDriveState clearViewState() {
-    return SharedSpaceDriveState(Right(IdleState()), sharedSpacesList, rolesList, selectMode, sorter, showUploadButton: showUploadButton);
+  WorkgroupState clearViewState() {
+    return WorkgroupState(Right(IdleState()), selectableWorkgroups, rolesList, selectMode, sorter, showCreateButton: showCreateButton);
   }
 
   @override
-  SharedSpaceDriveState sendViewState({required Either<Failure, Success> viewState}) {
-    return SharedSpaceDriveState(viewState, sharedSpacesList, rolesList, selectMode, sorter, showUploadButton: showUploadButton);
+  WorkgroupState sendViewState({required Either<Failure, Success> viewState}) {
+    return WorkgroupState(viewState, selectableWorkgroups, rolesList, selectMode, sorter, showCreateButton: showCreateButton);
   }
 
-  SharedSpaceDriveState setSharedSpaces({Either<Failure, Success>? viewState, required List<SharedSpaceNodeNested> newSharedSpacesList, Sorter? newSorter}) {
-    final selectedElements = sharedSpacesList.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
+  WorkgroupState setSharedSpaces({Either<Failure, Success>? viewState, required List<SharedSpaceNodeNested> newSharedSpacesList, Sorter? newSorter}) {
+    final selectedElements = selectableWorkgroups.where((element) => element.selectMode == SelectMode.ACTIVE).map((element) => element.element).toList();
 
-    return SharedSpaceDriveState(viewState ?? this.viewState,
+    return WorkgroupState(viewState ?? this.viewState,
       {for (var sharedSpace in newSharedSpacesList)
           if (selectedElements.contains(sharedSpace))
             SelectableElement<SharedSpaceNodeNested>(sharedSpace, SelectMode.ACTIVE)
@@ -83,62 +83,62 @@ class SharedSpaceDriveState extends LinShareState  with EquatableMixin {
       newSorter ?? sorter);
   }
 
-  SharedSpaceDriveState setNewSorter({Either<Failure, Success>? viewState, required Sorter newSorter}) {
-    return SharedSpaceDriveState(viewState ?? this.viewState, sharedSpacesList, rolesList, selectMode, newSorter);
+  WorkgroupState setNewSorter({Either<Failure, Success>? viewState, required Sorter newSorter}) {
+    return WorkgroupState(viewState ?? this.viewState, selectableWorkgroups, rolesList, selectMode, newSorter);
   }
 
-  SharedSpaceDriveState disableUploadButton() {
-    return SharedSpaceDriveState(viewState, sharedSpacesList, rolesList, selectMode, sorter, showUploadButton: false);
+  WorkgroupState disableUploadButton() {
+    return WorkgroupState(viewState, selectableWorkgroups, rolesList, selectMode, sorter, showCreateButton: false);
   }
 
-  SharedSpaceDriveState enableUploadButton() {
-    return SharedSpaceDriveState(viewState, sharedSpacesList, rolesList, selectMode, sorter, showUploadButton: true);
+  WorkgroupState enableUploadButton() {
+    return WorkgroupState(viewState, selectableWorkgroups, rolesList, selectMode, sorter, showCreateButton: true);
   }
 
   @override
-  SharedSpaceDriveState startLoadingState() {
-    return SharedSpaceDriveState(Right(LoadingState()), sharedSpacesList, rolesList, selectMode, sorter);
+  WorkgroupState startLoadingState() {
+    return WorkgroupState(Right(LoadingState()), selectableWorkgroups, rolesList, selectMode, sorter);
   }
 
-  SharedSpaceDriveState selectSharedSpace(SelectableElement<SharedSpaceNodeNested> selectedSharedSpace) {
-    sharedSpacesList.firstWhere((sharedSpace) => sharedSpace == selectedSharedSpace).toggleSelect();
-    return SharedSpaceDriveState(viewState, sharedSpacesList, rolesList, SelectMode.ACTIVE, sorter);
+  WorkgroupState selectSharedSpace(SelectableElement<SharedSpaceNodeNested> selectedSharedSpace) {
+    selectableWorkgroups.firstWhere((sharedSpace) => sharedSpace == selectedSharedSpace).toggleSelect();
+    return WorkgroupState(viewState, selectableWorkgroups, rolesList, SelectMode.ACTIVE, sorter);
   }
 
-  SharedSpaceDriveState cancelSelectedSharedSpaces() {
-    return SharedSpaceDriveState(
+  WorkgroupState cancelSelectedSharedSpaces() {
+    return WorkgroupState(
       viewState,
-      sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(),
+      selectableWorkgroups.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(),
       rolesList,
       SelectMode.INACTIVE,
       sorter
     );
   }
 
-  SharedSpaceDriveState selectAllSharedSpaces() {
-    return SharedSpaceDriveState(
+  WorkgroupState selectAllSharedSpaces() {
+    return WorkgroupState(
       viewState,
-      sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.ACTIVE)).toList(),
+      selectableWorkgroups.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.ACTIVE)).toList(),
       rolesList,
       SelectMode.ACTIVE,
       sorter
     );
   }
 
-  SharedSpaceDriveState unSelectAllSharedSpaces() {
-    return SharedSpaceDriveState(
+  WorkgroupState unSelectAllSharedSpaces() {
+    return WorkgroupState(
       viewState, 
-      sharedSpacesList.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(),
+      selectableWorkgroups.map((document) => SelectableElement<SharedSpaceNodeNested>(document.element, SelectMode.INACTIVE)).toList(),
       rolesList,
       SelectMode.ACTIVE,
       sorter
     );
   }
 
-  SharedSpaceDriveState setSharedSpaceRolesList(List<SharedSpaceRole> roles) {
-    return SharedSpaceDriveState(
+  WorkgroupState setSharedSpaceRolesList(List<SharedSpaceRole> roles) {
+    return WorkgroupState(
       viewState,
-      sharedSpacesList,
+      selectableWorkgroups,
       roles,
       selectMode,
       sorter
@@ -148,18 +148,18 @@ class SharedSpaceDriveState extends LinShareState  with EquatableMixin {
   @override
   List<Object?> get props => [
     ...super.props,
-    sharedSpacesList,
+    selectableWorkgroups,
     rolesList,
-    showUploadButton
+    showCreateButton
   ];
 }
 
-extension SharedSpaceDriveExtension on SharedSpaceDriveState {
-  bool isAllSharedSpacesSelected() {
-    return sharedSpacesList.every((value) => value.selectMode == SelectMode.ACTIVE);
+extension WorkgroupStateExtension on WorkgroupState {
+  bool isAllWorkgroupsSelected() {
+    return selectableWorkgroups.every((value) => value.selectMode == SelectMode.ACTIVE);
   }
 
-  List<SharedSpaceNodeNested> getAllSelectedSharedSpaces() {
-    return sharedSpacesList.where((element) => element.selectMode == SelectMode.ACTIVE).map((sharedSpace) => sharedSpace.element).toList();
+  List<SharedSpaceNodeNested> getAllSelectedWorkgroups() {
+    return selectableWorkgroups.where((element) => element.selectMode == SelectMode.ACTIVE).map((sharedSpace) => sharedSpace.element).toList();
   }
 }

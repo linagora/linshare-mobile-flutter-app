@@ -37,10 +37,10 @@ import 'package:redux/redux.dart';
 final uiReducer = combineReducers<UIState>([
   TypedReducer<UIState, SetCurrentView>(
           (UIState state, SetCurrentView action) => state.setCurrentView(action.routePath)),
-  TypedReducer<UIState, SharedSpaceDriveView>(
-          (UIState state, SharedSpaceDriveView action) => state.setCurrentView(action.routePath, sharedSpaceDrive: action.sharedSpace)),
+  TypedReducer<UIState, WorkgroupView>(
+          (UIState state, WorkgroupView action) => state.setCurrentView(action.routePath, drive: action.drive)),
   TypedReducer<UIState, SharedSpaceInsideView>(
-          (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, sharedSpaceDrive: action.sharedSpaceDrive, sharedSpace: action.sharedSpace)),
+          (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, drive: action.drive, sharedSpace: action.sharedSpace)),
   TypedReducer<UIState, UploadRequestInsideView>(
           (UIState state, UploadRequestInsideView action) => state.setCurrentView(action.routePath, uploadRequestGroup: action.uploadRequestGroup)),
   TypedReducer<UIState, ClearCurrentView>(

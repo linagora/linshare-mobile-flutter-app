@@ -35,6 +35,9 @@ import 'package:domain/domain.dart';
 class SharedSpaceOperationRole {
   static const copyToSharedSpaceRoles = [
     SharedSpaceRoleName.ADMIN,
+    SharedSpaceRoleName.DRIVE_ADMIN,
+    SharedSpaceRoleName.DRIVE_READER,
+    SharedSpaceRoleName.DRIVE_WRITER,
     SharedSpaceRoleName.CONTRIBUTOR,
     SharedSpaceRoleName.WRITER
   ];
