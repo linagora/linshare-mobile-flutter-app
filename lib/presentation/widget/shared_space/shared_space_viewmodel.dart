@@ -181,13 +181,13 @@ class SharedSpaceViewModel extends BaseViewModel {
     store.dispatch(SharedSpaceInsideView(RoutePaths.sharedSpaceInside, sharedSpace));
   }
 
-  void openDrive(SharedSpaceNodeNested sharedSpace) {
+  void openDrive(SharedSpaceNodeNested drive) {
     if (_isInSearchState()) {
       store.dispatch(DisableSearchStateAction());
       store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
       _searchQuery = SearchQuery('');
     }
-    store.dispatch(SharedSpaceDriveView(RoutePaths.sharedSpaceDrive, sharedSpace));
+    store.dispatch(WorkgroupView(RoutePaths.insideDrive, drive));
   }
 
   void openSearchState(BuildContext context) {

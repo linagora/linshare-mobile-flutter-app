@@ -132,6 +132,9 @@ class AppModule {
     getIt.registerFactory(() => AuditUserDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => DriveDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>()));
   }
 
   void _provideDataSource() {
@@ -164,6 +167,7 @@ class AppModule {
     getIt.registerFactory<UploadRequestDataSource>(() => getIt<UploadRequestDataSourceImpl>());
     getIt.registerFactory<UploadRequestEntryDataSource>(() => getIt<UploadRequestEntryDataSourceImpl>());
     getIt.registerFactory<AuditUserDataSource>(() => getIt<AuditUserDataSourceImpl>());
+    getIt.registerFactory<DriveDataSource>(() => getIt<DriveDataSourceImpl>());
   }
 
   void _provideRepositoryImpl() {
@@ -208,6 +212,7 @@ class AppModule {
     getIt.registerFactory(() => UploadRequestRepositoryImpl(getIt<UploadRequestDataSource>()));
     getIt.registerFactory(() => UploadRequestEntryRepositoryImpl(getIt<UploadRequestEntryDataSource>()));
     getIt.registerFactory(() => AuditUserRepositoryImpl(getIt<AuditUserDataSource>()));
+    getIt.registerFactory(() => DriveRepositoryImpl(getIt<DriveDataSource>()));
   }
 
   void _provideRepository() {
@@ -231,6 +236,7 @@ class AppModule {
     getIt.registerFactory<UploadRequestRepository>(() => getIt<UploadRequestRepositoryImpl>());
     getIt.registerFactory<UploadRequestEntryRepository>(() => getIt<UploadRequestEntryRepositoryImpl>());
     getIt.registerFactory<AuditUserRepository>(() => getIt<AuditUserRepositoryImpl>());
+    getIt.registerFactory<DriveRepository>(() => getIt<DriveRepositoryImpl>());
   }
 
   void _provideInteractor() {
@@ -298,7 +304,7 @@ class AppModule {
     getIt.registerFactory(() => DownloadMultipleNodeIOSInteractor(getIt<DownloadNodeIOSInteractor>()));
     getIt.registerFactory(() => SearchWorkGroupNodeInteractor());
     getIt.registerFactory(() => SearchSharedSpaceNodeNestedInteractor());
-    getIt.registerFactory(() => SearchSharedSpaceDriveInteractor());
+    getIt.registerFactory(() => SearchWorkgroupInsideDriveInteractor());
     getIt.registerFactory(() => RemoveSharedSpaceInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RemoveMultipleSharedSpacesInteractor(getIt<RemoveSharedSpaceInteractor>()));
     getIt.registerFactory(() => DownloadWorkGroupNodeInteractor(
@@ -337,7 +343,7 @@ class AppModule {
     getIt.registerFactory(() => GetAllSharedSpaceMembersInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => SharedSpaceActivitiesInteractor(getIt<SharedSpaceActivitiesRepository>()));
     getIt.registerFactory(() => CreateWorkGroupInteractor(getIt<SharedSpaceRepository>()));
-    getIt.registerFactory(() => GetAllSharedSpaceDriveInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => GetAllWorkgroupsInteractor(getIt<DriveRepository>()));
     getIt.registerFactory(() => RenameSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => AddSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => UpdateSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));

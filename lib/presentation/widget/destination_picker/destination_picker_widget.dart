@@ -107,18 +107,21 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
                   elevation: _responsiveUtils.isSmallScreen(context) ? 1.0 : 0.0,
-                  title: StreamBuilder(
-                      stream: _destinationPickerViewModel.currentNodeObservable.stream,
-                      builder: (context, AsyncSnapshot<SharedSpaceDocumentArguments> snapshot) {
-                        return Column(
-                          crossAxisAlignment: (snapshot.data != null && _isTitleCenter(snapshot.data!)) ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
-                          mainAxisAlignment: (snapshot.data != null && _isTitleCenter(snapshot.data!)) ? MainAxisAlignment.center : MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _buildTitleAppBar(snapshot)
-                          ],
-                        );
-                      }
+                  title: StoreConnector<AppState, DestinationPickerState>(
+                      converter: (store) => store.state.destinationPickerState,
+                      builder: (context, state) => StreamBuilder(
+                          stream: _destinationPickerViewModel.currentNodeObservable.stream,
+                          builder: (context, AsyncSnapshot<SharedSpaceDocumentArguments> snapshot) {
+                            return Column(
+                              crossAxisAlignment: _getCrossAxisAlignmentAppBar(snapshot.data, state),
+                              mainAxisAlignment: _getMainAxisAlignmentAppBar(snapshot.data, state),
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildTitleAppBar(snapshot, state)
+                              ],
+                            );
+                          }
+                      )
                   ),
                   backgroundColor: Colors.white,
                   leading: _buildLeadingAppBar(),
@@ -145,10 +148,14 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                             return _buildSharedSpacesList(context, state);
                           } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.chooseSpaceDestination) {
                             return _buildChooseSpaceDestination(state.operation);
+                          } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.drive) {
+                            return _buildDriveList(context, state);
                           } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
                             return SharedSpaceDocumentNavigatorWidget(
                               _sharedSpaceDocumentNavigatorKey,
                               state.routeData.sharedSpaceNodeNested!,
+                              drive: state.routeData.drive,
+                              onBackToInsideDriveClickedCallback: (drive) => _destinationPickerViewModel.backToInsideDriveDestination(drive),
                               onBackSharedSpaceClickedCallback: () => _destinationPickerViewModel.backToSharedSpace(),
                               sharedSpaceDocumentUIType: SharedSpaceDocumentUIType.destinationPicker,
                               currentNodeObservable: _destinationPickerViewModel.currentNodeObservable
@@ -177,30 +184,68 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     );
   }
 
-  bool _isTitleCenter(SharedSpaceDocumentArguments? arguments) => arguments != null;
+  CrossAxisAlignment _getCrossAxisAlignmentAppBar(SharedSpaceDocumentArguments? arguments, DestinationPickerState destinationPickerState) {
+    if (arguments != null) {
+      return CrossAxisAlignment.center;
+    } else {
+      if (destinationPickerState.routeData.drive != null) {
+        return CrossAxisAlignment.center;
+      } else {
+        return CrossAxisAlignment.stretch;
+      }
+    }
+  }
 
-  Widget _buildTitleAppBar(AsyncSnapshot<SharedSpaceDocumentArguments> snapshot) {
-    if (snapshot.data == null) {
+  MainAxisAlignment _getMainAxisAlignmentAppBar(SharedSpaceDocumentArguments? arguments, DestinationPickerState destinationPickerState) {
+    if (arguments != null) {
+      return MainAxisAlignment.center;
+    } else {
+      if (destinationPickerState.routeData.drive != null) {
+        return MainAxisAlignment.center;
+      } else {
+        return MainAxisAlignment.start;
+      }
+    }
+  }
+
+  Widget _buildTitleAppBar(AsyncSnapshot<SharedSpaceDocumentArguments> snapshot, DestinationPickerState destinationPickerState) {
+    if (destinationPickerState.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.drive) {
+      return Text(
+        destinationPickerState.routeData.drive?.name ?? '',
+        style: TextStyle(
+            fontSize: 20.0,
+            color: AppColor.destinationPickerAppBarTitleColor),
+      );
+    } else if (destinationPickerState.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpace) {
       return Text(
         AppLocalizations.of(context).pick_the_destination,
         style: TextStyle(
-          fontSize: 20.0,
-          color: AppColor.destinationPickerAppBarTitleColor),
-      );
-    } else if (snapshot.data!.documentType == SharedSpaceDocumentType.children) {
-      return Text(
-        snapshot.data!.workGroupFolder?.name ?? '',
-        style: TextStyle(
-          fontSize: 20.0,
-          color: AppColor.destinationPickerAppBarTitleColor),
+            fontSize: 20.0,
+            color: AppColor.destinationPickerAppBarTitleColor),
       );
     } else {
-      return Text(
-        snapshot.data!.sharedSpaceNode.name,
-        style: TextStyle(
-          fontSize: 20.0,
-          color: AppColor.destinationPickerAppBarTitleColor),
-      );
+      if (snapshot.data == null) {
+        return Text(
+          AppLocalizations.of(context).pick_the_destination,
+          style: TextStyle(
+            fontSize: 20.0,
+            color: AppColor.destinationPickerAppBarTitleColor),
+        );
+      } else if (snapshot.data!.documentType == SharedSpaceDocumentType.children) {
+        return Text(
+          snapshot.data!.workGroupFolder?.name ?? '',
+          style: TextStyle(
+            fontSize: 20.0,
+            color: AppColor.destinationPickerAppBarTitleColor),
+        );
+      } else {
+        return Text(
+          snapshot.data!.sharedSpaceNode.name,
+          style: TextStyle(
+            fontSize: 20.0,
+            color: AppColor.destinationPickerAppBarTitleColor),
+        );
+      }
     }
   }
 
@@ -221,6 +266,15 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
           return IconButton(
               icon: SvgPicture.asset(_imagePath.icClose),
               onPressed: () => _destinationPickerViewModel.handleOnSharedSpaceBackPress());
+        } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.drive) {
+          if (_destinationPickerArguments?.operator == Operation.upload) {
+            return IconButton(
+                icon: SvgPicture.asset(_imagePath.icBackBlue),
+                onPressed: () => _destinationPickerViewModel.backToChooseSpaceDestination());
+          }
+          return IconButton(
+              icon: SvgPicture.asset(_imagePath.icBackBlue),
+              onPressed: () => _destinationPickerViewModel.backToSharedSpace(drive: state.routeData.drive));
         } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
           return IconButton(
               icon: SvgPicture.asset(_imagePath.icBackBlue),
@@ -374,6 +428,33 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                     context, state)));
   }
 
+  Widget _buildDriveList(BuildContext context, DestinationPickerState state) {
+    return state.viewState.fold(
+        (failure) => RefreshIndicator(
+          onRefresh: () async => _destinationPickerViewModel.getAllDrive(state.operation, state.routeData.drive!),
+          child: failure is GetAllWorkgroupsFailure
+              ? BackgroundWidgetBuilder()
+                    .key(Key('shared_space_error_background'))
+                    .image(SvgPicture.asset(_imagePath.icUnexpectedError, width: 120, height: 120, fit: BoxFit.fill))
+                    .text(AppLocalizations.of(context).common_error_occured_message)
+                    .build()
+              : _buildSharedSpacesListView(context, state)),
+        (success) => success is LoadingState
+            ?   Column(children: [
+                  Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor)),
+                      )),
+                  Expanded(child: _buildSharedSpacesListView(context, state))
+                ])
+            : RefreshIndicator(
+                onRefresh: () async => _destinationPickerViewModel.getAllDrive(state.operation, state.routeData.drive!),
+                child: _buildSharedSpacesListView(context, state)));
+  }
+
   Widget _buildSharedSpacesListView(
       BuildContext context, DestinationPickerState state) {
     if (state.sharedSpacesList.isEmpty) {
@@ -386,7 +467,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         padding: EdgeInsets.zero,
         itemCount: state.sharedSpacesList.length,
         itemBuilder: (context, index) {
-          return _buildSharedSpaceListItem(context, state.sharedSpacesList[index]);
+          return _buildSharedSpaceListItem(context, state.sharedSpacesList[index], state.routeData.drive);
         },
       );
     }
@@ -402,7 +483,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   }
 
   Widget _buildSharedSpaceListItem(
-      BuildContext context, SharedSpaceNodeNested sharedSpace) {
+      BuildContext context, SharedSpaceNodeNested sharedSpace, SharedSpaceNodeNested? drive) {
     return ListTile(
       leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         SvgPicture.asset(_imagePath.icSharedSpace,
@@ -413,7 +494,11 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         child: _buildSharedSpaceName(sharedSpace.name),
       ),
       onTap: () {
-        _destinationPickerViewModel.openSharedSpaceInside(sharedSpace);
+        if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
+          _destinationPickerViewModel.openDrive(sharedSpace);
+        } else {
+          _destinationPickerViewModel.openSharedSpaceInside(sharedSpace, drive);
+        }
       },
     );
   }

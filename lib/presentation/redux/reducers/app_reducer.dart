@@ -50,7 +50,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.d
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_drive_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/workgroup_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_versions_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
@@ -78,7 +78,7 @@ AppState appStateReducer(AppState state, action) {
         mySpaceState: mySpaceReducer(state.mySpaceState, action),
         shareState: shareReducer(state.shareState, action),
         sharedSpaceState: sharedSpaceReducer(state.sharedSpaceState, action),
-        sharedSpaceDriveState: sharedSpaceDriveReducer(state.sharedSpaceDriveState, action),
+        workgroupState: workgroupReducer(state.workgroupState, action),
         sharedSpaceDocumentState: sharedSpaceDocumentReducer(state.sharedSpaceDocumentState, action),
         sharedSpaceDocumentDestinationPickerState: sharedSpaceDocumentDestinationPickerReducer(state.sharedSpaceDocumentDestinationPickerState, action),
         receivedShareState: receivedSharesReducer(state.receivedShareState, action),
@@ -115,7 +115,7 @@ AppState appStateReducer(AppState state, action) {
       mySpaceState: state.mySpaceState,
       shareState: state.shareState,
       sharedSpaceState: state.sharedSpaceState,
-      sharedSpaceDriveState: state.sharedSpaceDriveState,
+      workgroupState: state.workgroupState,
       sharedSpaceDocumentState: state.sharedSpaceDocumentState,
       sharedSpaceDocumentDestinationPickerState: state.sharedSpaceDocumentDestinationPickerState,
       receivedShareState: state.receivedShareState,

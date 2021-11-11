@@ -34,6 +34,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/destination_picker_state.dart';
 
 @immutable
 class StartDestinationPickerLoadingAction extends ActionOnline {}
@@ -48,8 +49,9 @@ class DestinationPickerAction extends ActionOnline {
 @immutable
 class DestinationPickerGoInsideSharedSpaceAction extends ActionOnline {
   final SharedSpaceNodeNested sharedSpace;
+  final SharedSpaceNodeNested? drive;
 
-  DestinationPickerGoInsideSharedSpaceAction(this.sharedSpace);
+  DestinationPickerGoInsideSharedSpaceAction(this.sharedSpace, {this.drive});
 }
 
 @immutable
@@ -77,6 +79,30 @@ class DestinationPickerGetAllSharedSpacesAction extends ActionOnline {
   final List<SharedSpaceNodeNested> sharedSpacesList;
 
   DestinationPickerGetAllSharedSpacesAction(this.sharedSpacesList);
+}
+
+@immutable
+class DestinationPickerGetAllDriveAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+  final SharedSpaceNodeNested drive;
+  final List<SharedSpaceNodeNested> sharedSpacesList;
+
+  DestinationPickerGetAllDriveAction(this.viewState, this.drive, this.sharedSpacesList);
+}
+
+@immutable
+class ClearAllSharedSpaceListStateAction extends ActionOffline {
+  final SharedSpaceNodeNested? drive;
+  final DestinationPickerCurrentView currentView;
+
+  ClearAllSharedSpaceListStateAction(this.currentView, {this.drive});
+}
+
+@immutable
+class BackToInsideDriveDestinationAction extends ActionOffline {
+  final SharedSpaceNodeNested drive;
+
+  BackToInsideDriveDestinationAction(this.drive);
 }
 
 @immutable
