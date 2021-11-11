@@ -31,7 +31,6 @@
 
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +40,11 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/file/shared_space_node_nested_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_drive_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_drive_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -61,9 +60,9 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/sh
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-class SharedSpaceViewModel extends BaseViewModel {
-  final GetAllSharedSpacesInteractor _getAllSharedSpacesInteractor;
-  final SearchSharedSpaceNodeNestedInteractor _searchSharedSpaceNodeNestedInteractor;
+class SharedSpaceDriveViewModel extends BaseViewModel {
+  final GetAllSharedSpaceDriveInteractor _getAllSharedSpaceDriveInteractor;
+  final SearchSharedSpaceDriveInteractor _searchSharedSpaceDriveInteractor;
   final RemoveMultipleSharedSpacesInteractor _removeMultipleSharedSpacesInteractor;
   final CreateWorkGroupInteractor _createWorkGroupInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
@@ -72,7 +71,6 @@ class SharedSpaceViewModel extends BaseViewModel {
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final RenameWorkGroupInteractor _renameWorkGroupInteractor;
-  final GetAllSharedSpaceOfflineInteractor _getAllSharedSpaceOfflineInteractor;
 
   late StreamSubscription _storeStreamSubscription;
   late List<SharedSpaceNodeNested> _sharedSpaceNodes;
@@ -80,11 +78,13 @@ class SharedSpaceViewModel extends BaseViewModel {
   SearchQuery _searchQuery = SearchQuery('');
   SearchQuery get searchQuery  => _searchQuery;
 
-  SharedSpaceViewModel(
+  SharedSpaceNodeNested? get sharedSpaceDrive => store.state.uiState.selectedSharedSpaceDrive;
+
+  SharedSpaceDriveViewModel(
     Store<AppState> store,
     this._appNavigation,
-    this._getAllSharedSpacesInteractor,
-    this._searchSharedSpaceNodeNestedInteractor,
+    this._getAllSharedSpaceDriveInteractor,
+    this._searchSharedSpaceDriveInteractor,
     this._removeMultipleSharedSpacesInteractor,
     this._createWorkGroupInteractor,
     this._verifyNameInteractor,
@@ -92,82 +92,74 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._getSorterInteractor,
     this._saveSorterInteractor,
     this._renameWorkGroupInteractor,
-    this._getAllSharedSpaceOfflineInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
-      event.sharedSpaceState.viewState.fold(
-              (failure) => null,
-              (success) {
-                if (success is SearchSharedSpaceNodeNestedNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
-                  _search(success.searchQuery);
-                } else if (success is DisableSearchViewState) {
-                  store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
-                  _searchQuery = SearchQuery('');
-                } else if (success is CreateWorkGroupViewState) {
-                  getAllSharedSpaces(needToGetOldSorter: false);
-                }
-              });
+      event.sharedSpaceDriveState.viewState.fold((failure) => null, (success) {
+          if (success is SearchSharedSpaceDriveNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
+            _search(success.searchQuery);
+          } else if (success is DisableSearchViewState) {
+            store.dispatch((SharedSpaceDriveSetSearchResultAction(_sharedSpaceNodes)));
+            _searchQuery = SearchQuery('');
+          } else if (success is CreateWorkGroupViewState) {
+            getAllSharedSpaces(needToGetOldSorter: false);
+          }
+        });
     });
   }
 
   void getAllSharedSpaces({required bool needToGetOldSorter}) {
-    if (store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
-      needToGetOldSorter
-        ? store.dispatch(_getAllSharedSpaceOfflineActionAndSort())
-        : store.dispatch(_getAllSharedSpaceOfflineAction());
+    if (needToGetOldSorter) {
+      store.dispatch(_getAllSharedSpacesActionAndSort());
     } else {
-      needToGetOldSorter
-        ? store.dispatch(_getAllSharedSpacesActionAndSort())
-        : store.dispatch(_getAllSharedSpacesAction());
+      store.dispatch(_getAllSharedSpacesAction());
     }
   }
 
   OnlineThunkAction _getAllSharedSpacesActionAndSort() {
     return OnlineThunkAction((Store<AppState> store) async {
-      store.dispatch(StartSharedSpaceLoadingAction());
+      store.dispatch(StartSharedSpaceDriveLoadingAction());
 
       await Future.wait([
-        _getSorterInteractor.execute(OrderScreen.workGroup),
-        _getAllSharedSpacesInteractor.execute()
+        _getSorterInteractor.execute(OrderScreen.sharedSpaceDrive),
+        _getAllSharedSpaceDriveInteractor.execute(sharedSpaceDrive!.sharedSpaceId)
       ]).then((response) async {
         response[0].fold((failure) {
-          store.dispatch(SharedSpaceGetSorterAction(
-              Sorter.fromOrderScreen(OrderScreen.workGroup)));
+          store.dispatch(SharedSpaceDriveGetSorterAction(Sorter.fromOrderScreen(OrderScreen.sharedSpaceDrive)));
         }, (success) {
-          store.dispatch(SharedSpaceGetSorterAction(success is GetSorterSuccess
-              ? success.sorter
-              : Sorter.fromOrderScreen(OrderScreen.workGroup)));
+          store.dispatch(SharedSpaceDriveGetSorterAction(success is GetSorterSuccess
+            ? success.sorter
+            : Sorter.fromOrderScreen(OrderScreen.sharedSpaceDrive)));
         });
         response[1].fold((failure) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
+          store.dispatch(SharedSpaceDriveGetAllSharedSpacesAction(Left(failure)));
           _sharedSpaceNodes = [];
         }, (success) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpacesViewState)
+          store.dispatch(SharedSpaceDriveGetAllSharedSpacesAction(Right(success)));
+          _sharedSpaceNodes = (success is GetAllSharedSpaceDriveViewState)
               ? success.sharedSpacesList
               : [];
         });
       });
 
-      store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
+      store.dispatch(_sortFilesAction(store.state.sharedSpaceDriveState.sorter));
 
     });
   }
 
   OnlineThunkAction _getAllSharedSpacesAction() {
     return OnlineThunkAction((Store<AppState> store) async {
-      store.dispatch(StartSharedSpaceLoadingAction());
-      await _getAllSharedSpacesInteractor.execute().then((result) => result.fold(
+      store.dispatch(StartSharedSpaceDriveLoadingAction());
+      await _getAllSharedSpaceDriveInteractor.execute(sharedSpaceDrive!.sharedSpaceId).then((result) => result.fold(
         (failure) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
+          store.dispatch(SharedSpaceDriveGetAllSharedSpacesAction(Left(failure)));
           _sharedSpaceNodes = [];
         },
         (success) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+          store.dispatch(SharedSpaceDriveGetAllSharedSpacesAction(Right(success)));
+          _sharedSpaceNodes = (success is GetAllSharedSpaceDriveViewState) ? success.sharedSpacesList : [];
         }));
 
-      store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
+      store.dispatch(_sortFilesAction(store.state.sharedSpaceDriveState.sorter));
 
     });
   }
@@ -175,24 +167,16 @@ class SharedSpaceViewModel extends BaseViewModel {
   void openSharedSpace(SharedSpaceNodeNested sharedSpace) {
     if (_isInSearchState()) {
       store.dispatch(DisableSearchStateAction());
-      store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
+      store.dispatch((SharedSpaceDriveSetSearchResultAction(_sharedSpaceNodes)));
       _searchQuery = SearchQuery('');
     }
-    store.dispatch(SharedSpaceInsideView(RoutePaths.sharedSpaceInside, sharedSpace));
-  }
-
-  void openDrive(SharedSpaceNodeNested sharedSpace) {
-    if (_isInSearchState()) {
-      store.dispatch(DisableSearchStateAction());
-      store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
-      _searchQuery = SearchQuery('');
-    }
-    store.dispatch(SharedSpaceDriveView(RoutePaths.sharedSpaceDrive, sharedSpace));
+    store.dispatch(SharedSpaceInsideView(RoutePaths.sharedSpaceInside, sharedSpace, sharedSpaceDrive: sharedSpaceDrive));
   }
 
   void openSearchState(BuildContext context) {
-    store.dispatch(EnableSearchStateAction(SearchDestination.allSharedSpaces, AppLocalizations.of(context).search_in_shared_space));
-    store.dispatch((SharedSpaceSetSearchResultAction([])));
+    final destinationName = sharedSpaceDrive?.name ?? AppLocalizations.of(context).shared_space;
+    store.dispatch(EnableSearchStateAction(SearchDestination.sharedSpaceDrive, AppLocalizations.of(context).search_in(destinationName)));
+    store.dispatch((SharedSpaceDriveSetSearchResultAction([])));
   }
 
   void _search(SearchQuery searchQuery) {
@@ -200,26 +184,23 @@ class SharedSpaceViewModel extends BaseViewModel {
     if (searchQuery.value.isNotEmpty) {
       store.dispatch(_searchSharedSpaceAction(_sharedSpaceNodes, searchQuery));
     } else {
-      store.dispatch(SharedSpaceSetSearchResultAction([]));
+      store.dispatch(SharedSpaceDriveSetSearchResultAction([]));
     }
   }
 
   ThunkAction<AppState> _searchSharedSpaceAction(List<SharedSpaceNodeNested> sharedSpaceNodes, SearchQuery searchQuery) {
     return (Store<AppState> store) async {
-      await _searchSharedSpaceNodeNestedInteractor.execute(sharedSpaceNodes, searchQuery).then((result) => result.fold(
-              (failure) {
-                if (_isInSearchState()) {
-                  store.dispatch(SharedSpaceSetSearchResultAction([]));
-                }
-          },
-              (success) {
-                if (_isInSearchState()) {
-                  store.dispatch(SharedSpaceSetSearchResultAction(
-                      success is SearchSharedSpaceNodeNestedSuccess
-                          ? success.sharedSpaceNodes
-                          : []));
-                }
-              })
+      await _searchSharedSpaceDriveInteractor.execute(sharedSpaceNodes, searchQuery)
+        .then((result) => result.fold(
+          (failure) {
+            if (_isInSearchState()) {
+              store.dispatch(SharedSpaceDriveSetSearchResultAction([]));
+            }},
+          (success) {
+            if (_isInSearchState()) {
+              store.dispatch(SharedSpaceDriveSetSearchResultAction(success is SearchSharedSpaceDriveSuccess ? success.sharedSpaceNodes : []));
+            }
+          })
       );
     };
   }
@@ -240,36 +221,10 @@ class SharedSpaceViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
         .addHeader(ContextMenuHeaderBuilder(
-          Key('shared_space_context_menu_header'),
-          SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(sharedSpace)).build())
+            Key('shared_space_context_menu_header'),
+            SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(sharedSpace)).build())
         .addTiles(actionTiles)
         .addFooter(footerAction ?? SizedBox.shrink())
-        .build();
-    };
-  }
-
-  void openDriveContextMenu(BuildContext context, SharedSpaceNodeNested nodeNested, List<Widget> actionTiles, {Widget? footerAction}) {
-    store.dispatch(
-      _handleDriveContextMenuAction(
-        context,
-        nodeNested,
-        actionTiles,
-        footerAction: footerAction));
-  }
-
-  ThunkAction<AppState> _handleDriveContextMenuAction(
-      BuildContext context,
-      SharedSpaceNodeNested nodeNested,
-      List<Widget> actionTiles,
-      {Widget? footerAction}
-  ) {
-    return (Store<AppState> store) async {
-      ContextMenuBuilder(context)
-        .addHeader(ContextMenuHeaderBuilder(
-          Key('drive_context_menu_header'),
-          SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(nodeNested))
-        .build())
-        .addTiles(actionTiles)
         .build();
     };
   }
@@ -301,29 +256,29 @@ class SharedSpaceViewModel extends BaseViewModel {
   ThunkAction<AppState> _removeSharedSpacesAction(List<SharedSpaceId> sharedSpaceIds) {
     return (Store<AppState> store) async {
       await _removeMultipleSharedSpacesInteractor.execute(sharedSpaceIds)
-        .then((result) => result.fold(
-          (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
-          (success) => {
-            store.dispatch(SharedSpaceAction(Right(success))),
-            getAllSharedSpaces(needToGetOldSorter: false)
-          }));
+          .then((result) => result.fold(
+              (failure) => store.dispatch(SharedSpaceDriveAction(Left(failure))),
+              (success) => {
+                store.dispatch(SharedSpaceDriveAction(Right(success))),
+                getAllSharedSpaces(needToGetOldSorter: false)
+              }));
     };
   }
 
   void selectItem(SelectableElement<SharedSpaceNodeNested> selectedSharedSpace) {
-    store.dispatch(SharedSpaceSelectSharedSpaceAction(selectedSharedSpace));
+    store.dispatch(SharedSpaceDriveSelectSharedSpaceAction(selectedSharedSpace));
   }
 
   void toggleSelectAllSharedSpaces() {
-    if (store.state.sharedSpaceState.isAllSharedSpacesSelected()) {
-      store.dispatch(SharedSpaceUnselectAllSharedSpacesAction());
+    if (store.state.sharedSpaceDriveState.isAllSharedSpacesSelected()) {
+      store.dispatch(SharedSpaceDriveUnselectAllSharedSpacesAction());
     } else {
-      store.dispatch(SharedSpaceSelectAllSharedSpacesAction());
+      store.dispatch(SharedSpaceDriveSelectAllSharedSpacesAction());
     }
   }
 
   void cancelSelection() {
-    store.dispatch(SharedSpaceClearSelectedSharedSpacesAction());
+    store.dispatch(SharedSpaceDriveClearSelectedSharedSpacesAction());
   }
 
   void clickOnDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
@@ -347,16 +302,16 @@ class SharedSpaceViewModel extends BaseViewModel {
   void openPopupMenuSorter(BuildContext context, Sorter currentSorter) {
     ContextMenuBuilder(context)
       .addHeader(SimpleBottomSheetHeaderBuilder(Key('order_by_menu_header'))
-        .addLabel(AppLocalizations.of(context).order_by)
-        .build())
+          .addLabel(AppLocalizations.of(context).order_by)
+          .build())
       .addTiles(OrderByDialogBottomSheetBuilder(context, currentSorter)
-        .onSelectSorterAction((sorterSelected) => _sortFiles(sorterSelected))
-        .build())
+          .onSelectSorterAction((sorterSelected) => _sortFiles(sorterSelected))
+          .build())
       .build();
   }
 
   void _sortFiles(Sorter sorter) {
-    final newSorter = store.state.sharedSpaceState.sorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
+    final newSorter = store.state.sharedSpaceDriveState.sorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
     _appNavigation.popBack();
     store.dispatch(_sortFilesAction(newSorter));
   }
@@ -368,27 +323,26 @@ class SharedSpaceViewModel extends BaseViewModel {
         _sortInteractor.execute(_sharedSpaceNodes, sorter)
       ]).then((response) => response[1].fold((failure) {
         _sharedSpaceNodes = [];
-        store.dispatch(SharedSpaceSortWorkGroupAction(_sharedSpaceNodes, sorter));
+        store.dispatch(SharedSpaceDriveSortWorkGroupAction(_sharedSpaceNodes, sorter));
       }, (success) {
         _sharedSpaceNodes =
-        success is SharedSpacesViewState ? success.sharedSpacesList : [];
-        store.dispatch(SharedSpaceSortWorkGroupAction(_sharedSpaceNodes, sorter));
+        success is GetAllSharedSpaceDriveViewState ? success.sharedSpacesList : [];
+        store.dispatch(SharedSpaceDriveSortWorkGroupAction(_sharedSpaceNodes, sorter));
       }));
     };
   }
 
   ThunkAction<AppState> _handleCreateNewWorkgroupModalAction(BuildContext context) {
-    final suggestName = SuggestNameType.WORKGROUP
-        .suggestNewName(
-          context,
-          _sharedSpaceNodes.map((sharedSpaced) => sharedSpaced.name).toList()
-        );
+    final suggestName = SuggestNameType.WORKGROUP.suggestNewName(
+        context,
+        _sharedSpaceNodes.map((sharedSpaced) => sharedSpaced.name).toList());
     return (Store<AppState> store) async {
       EditTextModalSheetBuilder()
           .key(Key('create_new_workgroup_modal'))
           .title(AppLocalizations.of(context).create_new_workgroup)
           .cancelText(AppLocalizations.of(context).cancel)
-          .onConfirmAction(AppLocalizations.of(context).create,
+          .onConfirmAction(
+              AppLocalizations.of(context).create,
               (value) => this.store.dispatch(_createNewWorkGroupAction(value)))
           .setErrorString((value) => getErrorString(context, value))
           .setTextController(
@@ -407,34 +361,38 @@ class SharedSpaceViewModel extends BaseViewModel {
 
   String? getErrorString(BuildContext context, String value) {
     return _verifyNameInteractor
-        .execute(
-          value,
-          [EmptyNameValidator(), DuplicateNameValidator(_sharedSpaceNodes.map((node) => node.name).toList()), SpecialCharacterValidator()]
-        )
-        .fold((failure) {
-          if (failure is VerifyNameFailure) {
-            if (failure.exception is EmptyNameException) {
-              return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).workgroup);
-            } else if (failure.exception is DuplicatedNameException) {
-              return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workgroup);
-            } else if (failure.exception is SpecialCharacterException) {
-              return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
-            } else {
-              return null;
-            }
+      .execute(
+        value,
+        [
+          EmptyNameValidator(),
+          DuplicateNameValidator(_sharedSpaceNodes.map((node) => node.name).toList()),
+          SpecialCharacterValidator()
+        ]
+      )
+      .fold((failure) {
+        if (failure is VerifyNameFailure) {
+          if (failure.exception is EmptyNameException) {
+            return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).workgroup);
+          } else if (failure.exception is DuplicatedNameException) {
+            return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workgroup);
+          } else if (failure.exception is SpecialCharacterException) {
+            return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
           } else {
             return null;
           }
+        } else {
+          return null;
+        }
     }, (success) => null);
   }
 
   OnlineThunkAction _createNewWorkGroupAction(String newName) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _createWorkGroupInteractor
-          .execute(CreateWorkGroupRequest(newName, LinShareNodeType.WORK_GROUP))
+          .execute(CreateWorkGroupRequest(newName, LinShareNodeType.WORK_GROUP, parentId: sharedSpaceDrive?.sharedSpaceId))
           .then((result) => result.fold(
-              (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
-              (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+              (failure) => store.dispatch(SharedSpaceDriveAction(Left(failure))),
+              (success) => store.dispatch(SharedSpaceDriveAction(Right(success)))));
     });
   }
 
@@ -445,13 +403,13 @@ class SharedSpaceViewModel extends BaseViewModel {
       .key(Key('rename_work_group_modal'))
       .title(AppLocalizations.of(context).rename_node(AppLocalizations.of(context).workgroup.toLowerCase()))
       .cancelText(AppLocalizations.of(context).cancel)
-      .onConfirmAction(AppLocalizations.of(context).rename,
-        (value) => store.dispatch(_renameWorkGroupAction(context, value, sharedSpace)))
-      .setErrorString(
-        (value) => getErrorString(context, value))
+      .onConfirmAction(
+          AppLocalizations.of(context).rename,
+          (value) => store.dispatch(_renameWorkGroupAction(context, value, sharedSpace)))
+      .setErrorString((value) => getErrorString(context, value))
       .setTextSelection(
-        TextSelection(baseOffset: 0, extentOffset: sharedSpace.name.length),
-        value: sharedSpace.name)
+          TextSelection(baseOffset: 0, extentOffset: sharedSpace.name.length),
+          value: sharedSpace.name)
       .show(context);
   }
 
@@ -465,50 +423,8 @@ class SharedSpaceViewModel extends BaseViewModel {
     });
   }
 
-  ThunkAction<AppState> _getAllSharedSpaceOfflineAction() {
-    return (Store<AppState> store) async {
-      store.dispatch(StartSharedSpaceLoadingAction());
-
-      await _getAllSharedSpaceOfflineInteractor.execute().then((result) => result.fold(
-        (failure) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
-          _sharedSpaceNodes = [];
-        },
-        (success) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
-        }));
-
-      store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
-    };
-  }
-
-   ThunkAction<AppState> _getAllSharedSpaceOfflineActionAndSort() {
-    return (Store<AppState> store) async {
-      store.dispatch(StartSharedSpaceLoadingAction());
-
-      await Future.wait([
-        _getSorterInteractor.execute(OrderScreen.workGroup),
-        _getAllSharedSpaceOfflineInteractor.execute()
-      ]).then((response) async {
-        response[0].fold((failure) {
-          store.dispatch(SharedSpaceGetSorterAction(Sorter.fromOrderScreen(OrderScreen.workGroup)));
-        }, (success) {
-          store.dispatch(SharedSpaceGetSorterAction(success is GetSorterSuccess
-            ? success.sorter
-            : Sorter.fromOrderScreen(OrderScreen.workGroup)));
-        });
-        response[1].fold((failure) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
-          _sharedSpaceNodes = [];
-        }, (success) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
-        });
-      });
-
-      store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
-    };
+  void backToSharedSpace() {
+    store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
   }
 
   @override

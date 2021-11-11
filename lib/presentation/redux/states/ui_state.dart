@@ -38,6 +38,7 @@ import 'package:equatable/equatable.dart';
 class UIState with EquatableMixin {
   final String routePath;
   final SharedSpaceNodeNested? selectedSharedSpace;
+  final SharedSpaceNodeNested? selectedSharedSpaceDrive;
   final UploadRequestGroup? uploadRequestGroup;
   final SearchState searchState;
   final ActionOutsideAppState actionOutsideAppState;
@@ -52,6 +53,7 @@ class UIState with EquatableMixin {
     {
       this.uploadRequestGroupTabIndex = 0,
       this.selectedSharedSpace,
+      this.selectedSharedSpaceDrive,
       this.uploadRequestGroup
     }
   );
@@ -60,13 +62,20 @@ class UIState with EquatableMixin {
     return UIState(RoutePaths.initializeRoute, SearchState.initial(), ActionOutsideAppState.initial(), ActionInsideAppState.initial());
   }
 
-  UIState setCurrentView(String routePath, {SharedSpaceNodeNested? sharedSpace, UploadRequestGroup? uploadRequestGroup}) {
+  UIState setCurrentView(
+      String routePath,
+      {
+        SharedSpaceNodeNested? sharedSpace,
+        SharedSpaceNodeNested? sharedSpaceDrive,
+        UploadRequestGroup? uploadRequestGroup
+  }) {
     return UIState(routePath,
         searchState,
         actionOutsideAppState,
         actionInsideAppState,
         uploadRequestGroupTabIndex: uploadRequestGroupTabIndex,
         selectedSharedSpace: sharedSpace,
+        selectedSharedSpaceDrive: sharedSpaceDrive,
         uploadRequestGroup: uploadRequestGroup);
   }
 
@@ -81,6 +90,7 @@ class UIState with EquatableMixin {
         actionInsideAppState,
         uploadRequestGroupTabIndex: uploadRequestGroupTabIndex,
         selectedSharedSpace: selectedSharedSpace,
+        selectedSharedSpaceDrive: selectedSharedSpaceDrive,
         uploadRequestGroup: uploadRequestGroup);
   }
 
@@ -91,6 +101,7 @@ class UIState with EquatableMixin {
         actionInsideAppState,
         uploadRequestGroupTabIndex: newIndex,
         selectedSharedSpace: selectedSharedSpace,
+        selectedSharedSpaceDrive: selectedSharedSpaceDrive,
         uploadRequestGroup: uploadRequestGroup);
   }
 
@@ -101,6 +112,7 @@ class UIState with EquatableMixin {
         actionInsideAppState,
         uploadRequestGroupTabIndex: uploadRequestGroupTabIndex,
         selectedSharedSpace: selectedSharedSpace,
+        selectedSharedSpaceDrive: selectedSharedSpaceDrive,
         uploadRequestGroup: uploadRequestGroup);
   }
 
@@ -111,6 +123,7 @@ class UIState with EquatableMixin {
         actionInsideAppState,
         uploadRequestGroupTabIndex: uploadRequestGroupTabIndex,
         selectedSharedSpace: selectedSharedSpace,
+        selectedSharedSpaceDrive: selectedSharedSpaceDrive,
         uploadRequestGroup: uploadRequestGroup);
   }
 
@@ -121,6 +134,7 @@ class UIState with EquatableMixin {
     actionOutsideAppState,
     actionInsideAppState,
     selectedSharedSpace,
+    selectedSharedSpaceDrive,
     uploadRequestGroup,
     uploadRequestGroupTabIndex
   ];
@@ -216,6 +230,7 @@ enum ActionInsideAppType {
 enum SearchDestination {
   mySpace,
   sharedSpace,
+  sharedSpaceDrive,
   allSharedSpaces,
   receivedShares,
   uploadRequestGroups,

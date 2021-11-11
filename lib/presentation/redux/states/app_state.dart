@@ -48,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart'
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_drive_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
@@ -71,6 +72,7 @@ class AppState with EquatableMixin {
   final MySpaceState mySpaceState;
   final ShareState shareState;
   final SharedSpaceState sharedSpaceState;
+  final SharedSpaceDriveState sharedSpaceDriveState;
   final SharedSpaceDocumentState sharedSpaceDocumentState;
   final SharedSpaceDocumentDestinationPickerState sharedSpaceDocumentDestinationPickerState;
   final ReceivedShareState receivedShareState;
@@ -105,6 +107,7 @@ class AppState with EquatableMixin {
       required this.mySpaceState,
       required this.shareState,
       required this.sharedSpaceState,
+      required this.sharedSpaceDriveState,
       required this.sharedSpaceDocumentState,
       required this.sharedSpaceDocumentDestinationPickerState,
       required this.receivedShareState,
@@ -140,6 +143,7 @@ class AppState with EquatableMixin {
         mySpaceState: MySpaceState.initial(),
         shareState: ShareState.initial(),
         sharedSpaceState: SharedSpaceState.initial(),
+        sharedSpaceDriveState: SharedSpaceDriveState.initial(),
         sharedSpaceDocumentState: SharedSpaceDocumentState.initial(),
         sharedSpaceDocumentDestinationPickerState: SharedSpaceDocumentDestinationPickerState.initial(),
         receivedShareState: ReceivedShareState.initial(),
@@ -177,6 +181,7 @@ class AppState with EquatableMixin {
         mySpaceState,
         shareState,
         sharedSpaceState,
+        sharedSpaceDriveState,
         sharedSpaceDocumentState,
         sharedSpaceDocumentDestinationPickerState,
         receivedShareState,

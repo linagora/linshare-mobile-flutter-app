@@ -39,13 +39,15 @@ class SharedSpaceDocumentArguments extends RouterArguments {
   final SharedSpaceDocumentType documentType;
   final WorkGroupFolder? workGroupFolder;
   final SharedSpaceNodeNested sharedSpaceNode;
+  final SharedSpaceNodeNested? sharedSpaceDrive;
   final SharedSpaceDocumentUIType documentUIType;
 
   SharedSpaceDocumentArguments(
     this.documentType, 
     this.sharedSpaceNode, 
     {
-      this.workGroupFolder, 
+      this.sharedSpaceDrive,
+      this.workGroupFolder,
       this.documentUIType = SharedSpaceDocumentUIType.sharedSpace
     }
   );
