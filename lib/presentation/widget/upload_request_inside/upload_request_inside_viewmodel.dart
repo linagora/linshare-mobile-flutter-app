@@ -34,6 +34,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -51,7 +52,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_request_in
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/header/context_menu_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
@@ -59,12 +59,11 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/u
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
-import 'package:dio/dio.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
 
-class UploadRequestInsideViewModel extends BaseViewModel {
-  final AppNavigation _appNavigation;
+abstract class UploadRequestInsideViewModel extends BaseViewModel {
+  final AppNavigation appNavigation;
   final GetAllUploadRequestsInteractor _getAllUploadRequestsInteractor;
   final GetAllUploadRequestEntriesInteractor _getAllUploadRequestEntriesInteractor;
   late UploadRequestArguments _arguments;
@@ -83,7 +82,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
 
   UploadRequestInsideViewModel(
       Store<AppState> store,
-      this._appNavigation,
+      this.appNavigation,
       this._getAllUploadRequestsInteractor,
       this._getAllUploadRequestEntriesInteractor,
       this._downloadEntriesInteractor,
@@ -194,18 +193,6 @@ class UploadRequestInsideViewModel extends BaseViewModel {
     store.dispatch(StartUploadRequestInsideLoadingAction());
   }
 
-  void openActiveCloseContextMenu(BuildContext context, UploadRequestEntry entry, List<Widget> actionTiles,
-      {Widget? footerAction}) {
-    ContextMenuBuilder(context)
-        .addHeader(ContextMenuHeaderBuilder(
-        Key('upload_request_entry_context_menu_header'),
-        UploadRequestEntryPresentationFile.fromUploadRequestEntry(entry))
-        .build())
-        .addTiles(actionTiles)
-        .addFooter(footerAction ?? SizedBox.shrink())
-        .build();
-  }
-
   UploadRequestInsideState getUploadRequestInsideState() {
     return store.state.uploadRequestInsideState;
   }
@@ -256,7 +243,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
   void downloadEntries(List<UploadRequestEntry> entries,
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     store.dispatch(_downloadEntriesAction(entries));
-    _appNavigation.popBack();
+    appNavigation.popBack();
     if (itemSelectionType == ItemSelectionType.multiple) {
       cancelSelection();
     }
@@ -264,7 +251,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
 
   void exportFiles(BuildContext context, List<UploadRequestEntry> entries,
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    _appNavigation.popBack();
+    appNavigation.popBack();
     if (itemSelectionType == ItemSelectionType.multiple) {
       cancelSelection();
     }
@@ -283,7 +270,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
             _dispatchHandleDownloadAction(entries);
             break;
           case PermissionStatus.permanentlyDenied:
-            _appNavigation.popBack();
+            appNavigation.popBack();
             break;
           default:
             {
@@ -293,7 +280,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
                   _dispatchHandleDownloadAction(entries);
                   break;
                 default:
-                  _appNavigation.popBack();
+                  appNavigation.popBack();
                   break;
               }
             }
@@ -323,7 +310,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
       : AppLocalizations.of(context).downloading_files(entries.length);
     showCupertinoDialog(
       context: context,
-      builder: (_) => DownloadingFileBuilder(cancelToken, _appNavigation)
+      builder: (_) => DownloadingFileBuilder(cancelToken, appNavigation)
         .key(Key('downloading_file_dialog'))
         .title(AppLocalizations.of(context).preparing_to_export)
         .content(downloadMessage)
@@ -343,7 +330,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _exportFileSuccessAction(Success success) {
     return (Store<AppState> store) async {
-      _appNavigation.popBack();
+      appNavigation.popBack();
       if (success is DownloadEntryIOSViewState) {
         await share_library.Share.shareFiles(
             [success.filePath]);
@@ -365,7 +352,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       if (failure is DownloadEntryIOSFailure
           && !(failure.downloadFileException is CancelDownloadFileException)) {
-        _appNavigation.popBack();
+        appNavigation.popBack();
       }
       store.dispatch(UploadRequestInsideAction(Left(failure)));
     };
@@ -412,7 +399,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
     => store.state.uiState.isInSearchState();
 
   void copyToMySpace(List<UploadRequestEntry> entries, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    _appNavigation.popBack();
+    appNavigation.popBack();
     if (itemSelectionType == ItemSelectionType.multiple) {
       cancelSelection();
     }
@@ -431,7 +418,7 @@ class UploadRequestInsideViewModel extends BaseViewModel {
 
   void removeFiles(BuildContext context, List<UploadRequestEntry> entries,
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    _appNavigation.popBack();
+    appNavigation.popBack();
     if (itemSelectionType == ItemSelectionType.multiple) {
       cancelSelection();
     }
@@ -439,12 +426,12 @@ class UploadRequestInsideViewModel extends BaseViewModel {
     if (entries.isNotEmpty) {
       final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(entries.length, entries.first.name);
 
-      ConfirmModalSheetBuilder(_appNavigation)
+      ConfirmModalSheetBuilder(appNavigation)
           .key(Key('remove_upload_request_entry_confirm_modal'))
           .title(deleteTitle)
           .cancelText(AppLocalizations.of(context).cancel)
           .onConfirmAction(AppLocalizations.of(context).delete, (_) {
-        _appNavigation.popBack();
+        appNavigation.popBack();
         if (itemSelectionType == ItemSelectionType.multiple) {
           cancelSelection();
         }
