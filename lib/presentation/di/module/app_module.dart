@@ -298,6 +298,7 @@ class AppModule {
     getIt.registerFactory(() => DownloadMultipleNodeIOSInteractor(getIt<DownloadNodeIOSInteractor>()));
     getIt.registerFactory(() => SearchWorkGroupNodeInteractor());
     getIt.registerFactory(() => SearchSharedSpaceNodeNestedInteractor());
+    getIt.registerFactory(() => SearchSharedSpaceDriveInteractor());
     getIt.registerFactory(() => RemoveSharedSpaceInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RemoveMultipleSharedSpacesInteractor(getIt<RemoveSharedSpaceInteractor>()));
     getIt.registerFactory(() => DownloadWorkGroupNodeInteractor(
@@ -336,6 +337,7 @@ class AppModule {
     getIt.registerFactory(() => GetAllSharedSpaceMembersInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => SharedSpaceActivitiesInteractor(getIt<SharedSpaceActivitiesRepository>()));
     getIt.registerFactory(() => CreateWorkGroupInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => GetAllSharedSpaceDriveInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RenameSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => AddSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => UpdateSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));

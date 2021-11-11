@@ -52,6 +52,7 @@ class AdvanceSearchSetting extends Equatable {
   static AdvanceSearchSetting fromSearchDestination(SearchDestination searchDestination) {
     switch(searchDestination) {
       case SearchDestination.sharedSpace:
+      case SearchDestination.sharedSpaceDrive:
       case SearchDestination.allSharedSpaces:
       case SearchDestination.mySpace:
       case SearchDestination.receivedShares:

@@ -42,13 +42,16 @@ import 'package:rxdart/rxdart.dart';
 import '../../util/data_structure/stack.dart' as structure;
 
 typedef OnBackSharedSpaceClickedCallback = void Function();
+typedef OnBackDriveClickedCallback = void Function(SharedSpaceNodeNested);
 typedef OnNodeClickedCallback = void Function(WorkGroupNode clickedNode);
 
 class SharedSpaceDocumentNavigatorWidget extends StatefulWidget {
 
   final SharedSpaceNodeNested sharedSpaceNodeNested;
+  final SharedSpaceNodeNested? sharedSpaceDrive;
   final SharedSpaceDocumentUIType sharedSpaceDocumentUIType;
   final OnBackSharedSpaceClickedCallback? onBackSharedSpaceClickedCallback;
+  final OnBackDriveClickedCallback? onBackDriveClickedCallback;
 
   final BehaviorSubject<SharedSpaceDocumentArguments>? currentNodeObservable;
 
@@ -57,6 +60,8 @@ class SharedSpaceDocumentNavigatorWidget extends StatefulWidget {
     this.sharedSpaceNodeNested,
     {
       this.onBackSharedSpaceClickedCallback,
+      this.onBackDriveClickedCallback,
+      this.sharedSpaceDrive,
       this.sharedSpaceDocumentUIType = SharedSpaceDocumentUIType.sharedSpace,
       this.currentNodeObservable
     }
@@ -86,6 +91,7 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
           final rootArgs = SharedSpaceDocumentArguments(
               SharedSpaceDocumentType.root,
               widget.sharedSpaceNodeNested,
+              sharedSpaceDrive: widget.sharedSpaceDrive,
               documentUIType: widget.sharedSpaceDocumentUIType
           );
 
@@ -118,6 +124,7 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
       SharedSpaceDocumentType.children,
       widget.sharedSpaceNodeNested,
       workGroupFolder: workGroupNode as WorkGroupFolder,
+      sharedSpaceDrive: widget.sharedSpaceDrive,
       documentUIType: widget.sharedSpaceDocumentUIType);
 
     argumentStack.push(newArgs);
@@ -140,8 +147,16 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
         _generateSharedSpaceDocumentNode(context, currentPageData!),
         (Route<dynamic> route) => false
       );
-    } else if(widget.onBackSharedSpaceClickedCallback != null) {
-      widget.onBackSharedSpaceClickedCallback!();
+    } else {
+      if (widget.sharedSpaceDrive != null) {
+        if (widget.onBackDriveClickedCallback != null) {
+          widget.onBackDriveClickedCallback!(widget.sharedSpaceDrive!);
+        }
+      } else {
+        if (widget.onBackSharedSpaceClickedCallback != null) {
+          widget.onBackSharedSpaceClickedCallback!();
+        }
+      }
     }
   }
 }

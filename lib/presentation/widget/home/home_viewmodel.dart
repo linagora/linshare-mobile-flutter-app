@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_drive_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
@@ -239,6 +240,9 @@ class HomeViewModel extends BaseViewModel {
         store.state.uiState.searchState.searchDestination == SearchDestination.allSharedSpaces) {
       store.dispatch(SharedSpaceAction(Right(DisableSearchViewState())));
       store.dispatch(CleanSharedSpaceStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.sharedSpaceDrive) {
+      store.dispatch(SharedSpaceDriveAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanSharedSpaceDriveStateAction());
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.receivedShares) {
       store.dispatch(ReceivedShareAction(Right(DisableSearchViewState())));
       store.dispatch(CleanReceivedShareStateAction());
@@ -261,6 +265,9 @@ class HomeViewModel extends BaseViewModel {
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.sharedSpace) {
       store.dispatch(SharedSpaceAction(Right(SearchWorkGroupNodeNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanSharedSpaceStateAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.sharedSpaceDrive) {
+      store.dispatch(SharedSpaceDriveAction(Right(SearchSharedSpaceDriveNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanSharedSpaceDriveStateAction());
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.allSharedSpaces) {
       store.dispatch(SharedSpaceAction(Right(SearchSharedSpaceNodeNestedNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanSharedSpaceStateAction());

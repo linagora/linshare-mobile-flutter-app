@@ -47,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/received_share_a
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_drive_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
@@ -63,6 +64,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/network_connectiv
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_drive_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
@@ -82,6 +84,7 @@ class ToastMessageHandler {
       _handleUploadToastMessage(context, event.uploadFileState);
       _handleShareDocumentToastMessage(context, event.shareState);
       _handleSharedSpaceToastMessage(context, event.sharedSpaceState);
+      _handleSharedSpaceDriveToastMessage(context, event.sharedSpaceDriveState);
       _handleSharedSpaceDocumentToastMessage(context, event.sharedSpaceDocumentState);
       _handleNetworkStateToastMessage(context, event.networkConnectivityState);
       _handleReceivedShareToastMessage(context, event.receivedShareState);
@@ -238,6 +241,31 @@ class ToastMessageHandler {
       } else if (success is RemoveSomeSharedSpacesSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
         _cleanSharedSpaceViewState();
+      }
+    });
+  }
+
+  void _handleSharedSpaceDriveToastMessage(BuildContext context, SharedSpaceDriveState sharedSpaceDriveState) {
+    sharedSpaceDriveState.viewState.fold((failure) {
+      if (failure is RemoveSharedSpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).shared_spaces_could_not_be_deleted(1));
+        _cleanSharedSpaceDriveViewState();
+      } else if (failure is RemoveAllSharedSpacesFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).shared_spaces_could_not_be_deleted(2));
+        _cleanSharedSpaceDriveViewState();
+      } else if (failure is RemoveSharedSpaceNotFoundFailure) {
+        _cleanSharedSpaceDriveViewState();
+      }
+    }, (success) {
+      if (success is RemoveSharedSpaceViewState) {
+        appToast.showToast(AppLocalizations.of(context).shared_space_has_been_deleted);
+        _cleanSharedSpaceDriveViewState();
+      } else if (success is RemoveAllSharedSpacesSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).all_shared_spaces_have_been_deleted);
+        _cleanSharedSpaceDriveViewState();
+      } else if (success is RemoveSomeSharedSpacesSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+        _cleanSharedSpaceDriveViewState();
       }
     });
   }
@@ -530,6 +558,10 @@ class ToastMessageHandler {
 
   void _cleanSharedSpaceViewState() {
     _store.dispatch(CleanSharedSpaceStateAction());
+  }
+
+  void _cleanSharedSpaceDriveViewState() {
+    _store.dispatch(CleanSharedSpaceDriveStateAction());
   }
 
   void _cleanSharedSpaceDocumentViewState() {

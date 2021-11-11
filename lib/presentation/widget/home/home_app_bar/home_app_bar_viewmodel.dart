@@ -37,6 +37,7 @@ import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_drive_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
@@ -56,6 +57,7 @@ class HomeAppBarViewModel extends BaseViewModel {
       _handleMySpaceViewState(_typeAheadController, event.mySpaceState.viewState);
       _handleReceivedShareViewState(_typeAheadController, event.receivedShareState.viewState);
       _handleSharedSpaceViewState(_typeAheadController, event.sharedSpaceState.viewState);
+      _handleSharedSpaceDriveViewState(_typeAheadController, event.sharedSpaceDriveState.viewState);
       _handleUploadRequestGroupsViewState(_typeAheadController, event.uploadRequestGroupState.viewState);
       _handleUploadRequestInsideViewState(_typeAheadController, event.uploadRequestInsideState.viewState);
     });
@@ -87,6 +89,16 @@ class HomeAppBarViewModel extends BaseViewModel {
       if (success is DisableSearchViewState) {
         _typeAheadController.clear();
         store.dispatch(CleanSharedSpaceStateAction());
+      }
+    });
+  }
+
+  void _handleSharedSpaceDriveViewState(
+      TextEditingController _typeAheadController, Either<Failure, Success> viewState) {
+    viewState.fold((failure) => null, (success) {
+      if (success is DisableSearchViewState) {
+        _typeAheadController.clear();
+        store.dispatch(CleanSharedSpaceDriveStateAction());
       }
     });
   }
