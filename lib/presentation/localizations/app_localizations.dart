@@ -2424,6 +2424,11 @@ class AppLocalizations {
       name: 'the_upload_request_has_been_updated_failed',
     );
   }
+
+  String get drive {
+    return Intl.message('Drive',
+        name: 'drive');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

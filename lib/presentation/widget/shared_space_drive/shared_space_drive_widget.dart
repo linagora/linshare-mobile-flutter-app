@@ -40,7 +40,7 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_drive_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -55,16 +55,16 @@ import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/mu
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/shared_space_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_drive/shared_space_drive_viewmodel.dart';
 import 'package:redux/redux.dart';
 
-class SharedSpaceWidget extends StatefulWidget {
+class SharedSpaceDriveWidget extends StatefulWidget {
   @override
-  _SharedSpaceWidgetState createState() => _SharedSpaceWidgetState();
+  _SharedSpaceDriveWidgetState createState() => _SharedSpaceDriveWidgetState();
 }
 
-class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
-  final sharedSpaceViewModel = getIt<SharedSpaceViewModel>();
+class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
+  final _model = getIt<SharedSpaceDriveViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
   final _widgetCommon = getIt<CommonView>();
@@ -72,13 +72,13 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   @override
   void initState() {
     super.initState();
-    sharedSpaceViewModel.getAllSharedSpaces(needToGetOldSorter: true);
+    _model.getAllSharedSpaces(needToGetOldSorter: true);
   }
 
   @override
   void dispose() {
     super.dispose();
-    sharedSpaceViewModel.onDisposed();
+    _model.onDisposed();
   }
 
   @override
@@ -86,47 +86,46 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     return Scaffold(
         body: Column(
           children: [
-            StoreConnector<AppState, SharedSpaceState>(
-              converter: (store) => store.state.sharedSpaceState,
+            _buildTopBar(),
+            StoreConnector<AppState, SharedSpaceDriveState>(
+              converter: (store) => store.state.sharedSpaceDriveState,
               builder: (context, state) {
                 return state.selectMode == SelectMode.ACTIVE
-                    ? ListTile(
-                        leading: SvgPicture.asset(imagePath.icSelectAll,
-                            width: 28,
-                            height: 28,
-                            fit: BoxFit.fill,
-                            color: state.isAllSharedSpacesSelected()
-                                ? AppColor.unselectedElementColor
-                                : AppColor.primaryColor),
-                        title: Transform(
-                            transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                            child: state.isAllSharedSpacesSelected()
-                                ? Text(AppLocalizations.of(context).unselect_all,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 14, color: AppColor.documentNameItemTextColor))
-                                : Text(
-                                    AppLocalizations.of(context).select_all,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 14, color: AppColor.documentNameItemTextColor),
-                                  )),
-                        tileColor: AppColor.topBarBackgroundColor,
-                        onTap: () => sharedSpaceViewModel.toggleSelectAllSharedSpaces(),
-                        trailing: TextButton(
-                            onPressed: () => sharedSpaceViewModel.cancelSelection(),
-                            child: Text(
-                              AppLocalizations.of(context).cancel,
-                              maxLines: 1,
-                              style: TextStyle(fontSize: 14, color: AppColor.primaryColor),
-                            )),
-                      )
-                    : SizedBox.shrink();
+                  ? ListTile(
+                      leading: SvgPicture.asset(imagePath.icSelectAll,
+                          width: 28,
+                          height: 28,
+                          fit: BoxFit.fill,
+                          color: state.isAllSharedSpacesSelected()
+                              ? AppColor.unselectedElementColor
+                              : AppColor.primaryColor),
+                      title: Transform(
+                          transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                          child: state.isAllSharedSpacesSelected()
+                              ? Text(AppLocalizations.of(context).unselect_all,
+                                  maxLines: 1,
+                                  style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))
+                              : Text(
+                                  AppLocalizations.of(context).select_all,
+                                  maxLines: 1,
+                                  style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
+                                )),
+                      tileColor: AppColor.topBarBackgroundColor,
+                      onTap: () => _model.toggleSelectAllSharedSpaces(),
+                      trailing: TextButton(
+                          onPressed: () => _model.cancelSelection(),
+                          child: Text(
+                            AppLocalizations.of(context).cancel,
+                            maxLines: 1,
+                            style: TextStyle(fontSize: 14, color: AppColor.primaryColor),
+                          )),
+                    )
+                  : SizedBox.shrink();
               },
             ),
             _buildMenuSorter(),
             StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                converter: (store) => store.state.sharedSpaceState.viewState,
+                converter: (store) => store.state.sharedSpaceDriveState.viewState,
                 distinct: true,
                 builder: (context, viewState) {
                   return viewState.fold(
@@ -145,15 +144,13 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                 }),
             _buildResultCount(),
             Expanded(child: buildSharedSpaceListBySearchState()),
-            StoreConnector<AppState, SharedSpaceState>(
-                converter: (store) => store.state.sharedSpaceState,
+            StoreConnector<AppState, SharedSpaceDriveState>(
+                converter: (store) => store.state.sharedSpaceDriveState,
                 builder: (context, state) {
-                  return state.selectMode == SelectMode.ACTIVE &&
-                          state.getAllSelectedSharedSpaces().isNotEmpty
+                  return state.selectMode == SelectMode.ACTIVE && state.getAllSelectedSharedSpaces().isNotEmpty
                       ? MultipleSelectionBarBuilder()
                           .key(Key('multiple_shared_space_selection_bar'))
-                          .text(AppLocalizations.of(context)
-                              .items(state.getAllSelectedSharedSpaces().length))
+                          .text(AppLocalizations.of(context).items(state.getAllSelectedSharedSpaces().length))
                           .actions(_multipleSelectionActions(state.getAllSelectedSharedSpaces()))
                           .build()
                       : SizedBox.shrink();
@@ -164,10 +161,10 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             converter: (store) => store.state,
             builder: (context, state) {
               if (!state.uiState.isInSearchState() &&
-                  state.sharedSpaceState.selectMode == SelectMode.INACTIVE) {
+                  state.sharedSpaceDriveState.selectMode == SelectMode.INACTIVE) {
                 return SearchBottomBarBuilder()
                     .key(Key('search_bottom_bar_shared_space'))
-                    .onSearchActionClick(() => sharedSpaceViewModel.openSearchState(context))
+                    .onSearchActionClick(() => _model.openSearchState(context))
                     .build();
               }
               return SizedBox.shrink();
@@ -176,16 +173,12 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
           converter: (store) => store.state,
           builder: (context, appState) {
             if (!appState.uiState.isInSearchState() &&
-                appState.sharedSpaceState.selectMode == SelectMode.INACTIVE) {
+                appState.sharedSpaceDriveState.selectMode == SelectMode.INACTIVE) {
               return FloatingActionButton(
                 key: Key('shared_space_create_new_workgroup_button'),
-                onPressed: () => sharedSpaceViewModel.openCreateNewWorkGroupModal(context),
+                onPressed: () => _model.openCreateNewWorkGroupModal(context),
                 backgroundColor: AppColor.primaryColor,
-                child: SvgPicture.asset(
-                  imagePath.icPlus,
-                  width: 24,
-                  height: 24,
-                ),
+                child: SvgPicture.asset(imagePath.icPlus, width: 24, height: 24,),
               );
             }
             return SizedBox.shrink();
@@ -194,14 +187,60 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     );
   }
 
+  Widget _buildTopBar() {
+    return StoreConnector<AppState, SearchStatus>(
+      converter: (store) => store.state.uiState.searchState.searchStatus,
+      builder: (context, searchStatus) => searchStatus == SearchStatus.ACTIVE
+        ? SizedBox.shrink()
+        : Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 20, offset: Offset(0, 4))]),
+            child: Row(children: [
+                GestureDetector(
+                  onTap: () => _model.backToSharedSpace(),
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    child: Align(
+                      alignment: Alignment.center,
+                      heightFactor: 24,
+                      widthFactor: 24,
+                      child: SvgPicture.asset(imagePath.icBackBlue, width: 24, height: 24),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => _model.backToSharedSpace(),
+                  child: Container(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                          AppLocalizations.of(context).workgroup_nodes_surfing_root_back_title,
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: AppColor.workgroupNodesSurfingBackTitleColor,
+                              fontWeight: FontWeight.w400
+                          )
+                      ),
+                    ),
+                  )
+                )
+              ]
+            )
+      )
+    );
+  }
+
   Widget buildSharedSpaceListBySearchState() {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, appState) {
           if (appState.uiState.isInSearchState()) {
-            return _buildSearchResultSharedSpacesList(appState.sharedSpaceState);
+            return _buildSearchResultSharedSpacesList(appState.sharedSpaceDriveState);
           }
-          return _buildNormalSharedSpacesList(appState.sharedSpaceState);
+          return _buildNormalSharedSpacesList(appState.sharedSpaceDriveState);
         });
   }
 
@@ -209,15 +248,15 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, appState) {
-          if (appState.uiState.isInSearchState() && sharedSpaceViewModel.searchQuery.value.isNotEmpty) {
-            return _widgetCommon.buildResultCountRow(context, appState.sharedSpaceState.sharedSpacesList.length);
+          if (appState.uiState.isInSearchState() && _model.searchQuery.value.isNotEmpty) {
+            return _widgetCommon.buildResultCountRow(context, appState.sharedSpaceDriveState.sharedSpacesList.length);
           }
           return SizedBox.shrink();
         });
   }
 
-  Widget _buildSearchResultSharedSpacesList(SharedSpaceState state) {
-    if (sharedSpaceViewModel.searchQuery.value.isEmpty) {
+  Widget _buildSearchResultSharedSpacesList(SharedSpaceDriveState state) {
+    if (_model.searchQuery.value.isEmpty) {
       return SizedBox.shrink();
     } else {
       if (state.sharedSpacesList.isEmpty) {
@@ -227,11 +266,11 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     }
   }
 
-  Widget _buildNormalSharedSpacesList(SharedSpaceState state) {
+  Widget _buildNormalSharedSpacesList(SharedSpaceDriveState state) {
     return state.viewState.fold(
       (failure) =>
         RefreshIndicator(
-          onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(needToGetOldSorter: false),
+          onRefresh: () async => _model.getAllSharedSpaces(needToGetOldSorter: false),
           child: failure is SharedSpacesFailure ? 
             BackgroundWidgetBuilder()
                 .key(Key('shared_space_error_background'))
@@ -246,7 +285,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       (success) => success is LoadingState ?
         _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode) :
         RefreshIndicator(
-          onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(needToGetOldSorter: false),
+          onRefresh: () async => _model.getAllSharedSpaces(needToGetOldSorter: false),
           child: _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode)
         )
     );
@@ -270,11 +309,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   Widget _buildNoWorkgroupYet(BuildContext context) {
     return BackgroundWidgetBuilder()
       .key(Key('shared_space_no_workgroup_yet'))
-      .image(SvgPicture.asset(
-        imagePath.icSharedSpaceNoWorkGroup,
-        width: 120,
-        height: 120,
-        fit: BoxFit.fill))
+      .image(SvgPicture.asset(imagePath.icSharedSpaceNoWorkGroup, width: 120, height: 120, fit: BoxFit.fill))
       .text(AppLocalizations.of(context).do_not_have_any_workgroup).build();
   }
 
@@ -331,24 +366,19 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
           : null,
         onTap: () {
           if(selectMode == SelectMode.ACTIVE) {
-            sharedSpaceViewModel.selectItem(sharedSpace);
+            _model.selectItem(sharedSpace);
           } else {
-            if (sharedSpace.element.nodeType == LinShareNodeType.DRIVE) {
-              sharedSpaceViewModel.openDrive(sharedSpace.element);
-            } else {
-              sharedSpaceViewModel.openSharedSpace(sharedSpace.element);
-            }
+            _model.openSharedSpace(sharedSpace.element);
           }
         },
         trailing: StoreConnector<AppState, SelectMode>(
-            converter: (store) => store.state.sharedSpaceState.selectMode,
+            converter: (store) => store.state.sharedSpaceDriveState.selectMode,
             builder: (context, selectMode) {
               return selectMode == SelectMode.ACTIVE
                   ? Checkbox(
                       value: sharedSpace.selectMode == SelectMode.ACTIVE,
-                      onChanged: (bool? value) => sharedSpaceViewModel.selectItem(sharedSpace),
-                      activeColor: AppColor.primaryColor,
-                    )
+                      onChanged: (bool? value) => _model.selectItem(sharedSpace),
+                      activeColor: AppColor.primaryColor)
                   : IconButton(
                       icon: SvgPicture.asset(
                         imagePath.icContextMenu,
@@ -356,23 +386,13 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                         height: 24,
                         fit: BoxFit.fill,
                       ),
-                      onPressed: () => _onPressContextMenu(context, sharedSpace));
+                      onPressed: () => _model.openContextMenu(
+                          context,
+                          sharedSpace.element,
+                          _contextMenuActionTiles(context, sharedSpace),
+                          footerAction: _contextMenuFooterAction(sharedSpace.element)));
             }),
-        onLongPress: () => sharedSpaceViewModel.selectItem(sharedSpace));
-  }
-
-  void _onPressContextMenu(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
-    switch (sharedSpace.element.nodeType) {
-      case LinShareNodeType.DRIVE:
-        sharedSpaceViewModel.openDriveContextMenu(context, sharedSpace.element, []);
-        break;
-      default:
-        sharedSpaceViewModel.openContextMenu(
-          context,
-          sharedSpace.element,
-          _contextMenuActionTiles(context, sharedSpace),
-          footerAction: _contextMenuFooterAction(sharedSpace.element));
-    }
+        onLongPress: () => _model.selectItem(sharedSpace));
   }
 
   List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
@@ -389,7 +409,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                 Key('delete_shared_space_context_menu_action'),
                 SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
                 AppLocalizations.of(context).delete)
-            .onActionClick((data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
+            .onActionClick((data) => _model.removeSharedSpaces(context, [sharedSpace]))
             .build()
         : SizedBox.shrink();
   }
@@ -399,7 +419,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         Key('rename_workgroup_context_menu_action'),
         SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
         AppLocalizations.of(context).rename, sharedSpace)
-      .onActionClick((sharedSpace) => sharedSpaceViewModel.openRenameWorkGroupModal(context, sharedSpace))
+      .onActionClick((sharedSpace) => _model.openRenameWorkGroupModal(context, sharedSpace))
       .build();
   }
 
@@ -408,7 +428,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             Key('shared_space_details_context_menu_action'),
             SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).details)
-        .onActionClick((data) => sharedSpaceViewModel.clickOnDetails(sharedSpace))
+        .onActionClick((data) => _model.clickOnDetails(sharedSpace))
         .build();
   }
 
@@ -437,15 +457,10 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   Widget _removeMultipleSelection(List<SharedSpaceNodeNested> sharedSpaces) {
     return SharedSpaceMultipleSelectionActionBuilder(
         Key('multiple_selection_remove_action'),
-        SvgPicture.asset(
-          imagePath.icDelete,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
-        ),
+        SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill,),
         sharedSpaces)
-        .onActionClick((documents) => sharedSpaceViewModel.removeSharedSpaces(context, documents, itemSelectionType: ItemSelectionType.multiple))
-        .build();
+    .onActionClick((documents) => _model.removeSharedSpaces(context, documents, itemSelectionType: ItemSelectionType.multiple))
+    .build();
   }
 
   Widget _buildMenuSorter() {
@@ -453,8 +468,8 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       converter: (Store<AppState> store) => store.state,
       builder: (context, appState) {
         return !appState.uiState.isInSearchState()
-            ? OrderByButtonBuilder(context, appState.sharedSpaceState.sorter)
-                .onOpenOrderMenuAction((currentSorter) => sharedSpaceViewModel.openPopupMenuSorter(context, currentSorter))
+            ? OrderByButtonBuilder(context, appState.sharedSpaceDriveState.sorter)
+                .onOpenOrderMenuAction((currentSorter) => _model.openPopupMenuSorter(context, currentSorter))
                 .build()
             : SizedBox.shrink();
       },
