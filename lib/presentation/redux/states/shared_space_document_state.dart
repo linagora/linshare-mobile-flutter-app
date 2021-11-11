@@ -45,7 +45,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
   final List<SelectableElement<WorkGroupNode>> workGroupNodeList;
   final SharedSpaceNodeNested? sharedSpaceNodeNested;
-  final SharedSpaceNodeNested? sharedSpaceDrive;
+  final SharedSpaceNodeNested? drive;
   final SharedSpaceDocumentType documentType;
   final WorkGroupNode? workGroupNode;
   final SelectMode selectMode;
@@ -58,7 +58,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
     this.documentType,
     this.workGroupNode,
     this.sharedSpaceNodeNested,
-    this.sharedSpaceDrive,
+    this.drive,
     this.selectMode,
     this.sorter,
     this.workGroupFolder,
@@ -70,12 +70,12 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
 
   @override
   SharedSpaceDocumentState clearViewState() {
-    return SharedSpaceDocumentState(Right(IdleState()), workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, sharedSpaceDrive, selectMode, sorter, workGroupFolder);
+    return SharedSpaceDocumentState(Right(IdleState()), workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, drive, selectMode, sorter, workGroupFolder);
   }
 
   @override
   SharedSpaceDocumentState sendViewState({required Either<Failure, Success> viewState}) {
-    return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, sharedSpaceDrive, selectMode, sorter, workGroupFolder);
+    return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, drive, selectMode, sorter, workGroupFolder);
   }
 
   SharedSpaceDocumentState setSharedSpaceDocumentArgument({required SharedSpaceDocumentArguments newArguments}) {
@@ -85,7 +85,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
       newArguments.documentType,
       newArguments.workGroupFolder ?? workGroupNode,
       newArguments.sharedSpaceNode,
-      newArguments.sharedSpaceDrive,
+      newArguments.drive,
       selectMode,
       sorter,
       workGroupFolder
@@ -106,7 +106,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
       documentType,
       workGroupNode,
       sharedSpaceNodeNested,
-      sharedSpaceDrive,
+      drive,
       selectMode,
       newSorter ?? sorter,
       workGroupFolder
@@ -120,7 +120,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
       documentType,
       workGroupNode,
       sharedSpaceNodeNested,
-      sharedSpaceDrive,
+      drive,
       selectMode,
       sorter,
       newWorkGroupFolder
@@ -129,12 +129,12 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
 
   @override
   SharedSpaceDocumentState startLoadingState() {
-    return SharedSpaceDocumentState(Right(LoadingState()), workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, sharedSpaceDrive, selectMode, sorter, workGroupFolder);
+    return SharedSpaceDocumentState(Right(LoadingState()), workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, drive, selectMode, sorter, workGroupFolder);
   }
 
   SharedSpaceDocumentState selectSharedSpaceDocument(SelectableElement<WorkGroupNode> selectedWokGroupNode) {
     workGroupNodeList.firstWhere((sharedSpace) => sharedSpace == selectedWokGroupNode).toggleSelect();
-    return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, sharedSpaceDrive, SelectMode.ACTIVE, sorter, workGroupFolder);
+    return SharedSpaceDocumentState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, drive, SelectMode.ACTIVE, sorter, workGroupFolder);
   }
 
   SharedSpaceDocumentState cancelSelectedSharedSpaceDocument() {
@@ -146,7 +146,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
       documentType,
       workGroupNode,
       sharedSpaceNodeNested,
-      sharedSpaceDrive,
+      drive,
       SelectMode.INACTIVE,
       sorter,
       workGroupFolder
@@ -162,7 +162,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
       documentType,
       workGroupNode,
       sharedSpaceNodeNested,
-      sharedSpaceDrive,
+      drive,
       SelectMode.ACTIVE,
       sorter,
       workGroupFolder
@@ -178,7 +178,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
       documentType,
       workGroupNode,
       sharedSpaceNodeNested,
-      sharedSpaceDrive,
+      drive,
       SelectMode.ACTIVE,
       sorter,
       workGroupFolder
@@ -193,7 +193,7 @@ class SharedSpaceDocumentState extends LinShareState with EquatableMixin {
     documentType,
     workGroupNode,
     sharedSpaceNodeNested,
-    sharedSpaceDrive,
+    drive,
     sorter,
     workGroupFolder
   ];
