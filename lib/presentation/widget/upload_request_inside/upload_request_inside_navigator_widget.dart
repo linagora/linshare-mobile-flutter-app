@@ -29,15 +29,16 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/archived/archived_upload_request_inside_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/pending/pending_upload_request_inside_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_widget.dart';
 
 import '../../util/data_structure/stack.dart' as structure;
+import 'active_close/active_closed_upload_request_inside_widget.dart';
 
 typedef OnBackUploadRequestClickedCallback = void Function();
 typedef OnUploadRequestClickedCallback = void Function(UploadRequest uploadRequest);
@@ -83,18 +84,15 @@ class UploadRequestNavigatorWidgetState extends State<UploadRequestNavigatorWidg
           );
 
           argumentStack.push(rootArgs);
-          return _generateUploadRequestWidget(context, rootArgs);
+          return _generateUploadRequestPageRoute(context, rootArgs);
         }
       )
     );
   }
 
-  PageRoute _generateUploadRequestWidget(BuildContext context, UploadRequestArguments args) {
+  PageRoute _generateUploadRequestPageRoute(BuildContext context, UploadRequestArguments args) {
     return PageRouteBuilder(
-      pageBuilder: (context, _, __) => UploadRequestInsideWidget(
-        () => wantToBack(),
-        (uploadRequest) => _onClickUploadRequest(context, uploadRequest)
-      ),
+      pageBuilder: (context, _, __) => _generateUploadRequestWidget(context, args),
       settings: RouteSettings(arguments: args),
       transitionDuration: Duration(seconds: 0),
       reverseTransitionDuration: Duration(seconds: 0),
@@ -109,7 +107,7 @@ class UploadRequestNavigatorWidgetState extends State<UploadRequestNavigatorWidg
 
     argumentStack.push(newArgs);
     navigatorKey.currentState?.pushAndRemoveUntil(
-      _generateUploadRequestWidget(context, newArgs),
+      _generateUploadRequestPageRoute(context, newArgs),
       (Route<dynamic> route) => false
     );
   }
@@ -118,11 +116,42 @@ class UploadRequestNavigatorWidgetState extends State<UploadRequestNavigatorWidg
     argumentStack.pop();
     if (!argumentStack.isEmpty && currentPageData != null) {
       navigatorKey.currentState?.pushAndRemoveUntil(
-        _generateUploadRequestWidget(context, currentPageData!),
+        _generateUploadRequestPageRoute(context, currentPageData!),
         (Route<dynamic> route) => false
       );
     } else if(widget.onBackUploadRequestClickedCallback != null) {
       widget.onBackUploadRequestClickedCallback!();
     }
+  }
+
+  Widget _generateUploadRequestWidget(BuildContext context, UploadRequestArguments args) {
+    if (_validateActiveCloseUploadRequestInsideRoute(args.uploadRequestGroup.status)) {
+      return ActiveClosedUploadRequestInsideWidget(
+        wantToBack,
+        (uploadRequest) => _onClickUploadRequest(context, uploadRequest));
+    } else if (_validatePendingUploadRequestInsideRoute(args.uploadRequestGroup.status)) {
+      return PendingUploadRequestInsideWidget(
+        () => wantToBack(),
+        (uploadRequest) => _onClickUploadRequest(context, uploadRequest));
+    } else if (_validateArchivedUploadRequestInsideRoute(args.uploadRequestGroup.status)) {
+      return ArchivedUploadRequestInsideWidget(
+        () => wantToBack(),
+        (uploadRequest) => _onClickUploadRequest(context, uploadRequest));
+    } else {
+      return SizedBox.shrink();
+    }
+  }
+
+  bool _validateActiveCloseUploadRequestInsideRoute(UploadRequestStatus uploadRequestStatus) {
+    return (uploadRequestStatus == UploadRequestStatus.ENABLED
+      || uploadRequestStatus == UploadRequestStatus.CLOSED);
+  }
+
+  bool _validatePendingUploadRequestInsideRoute(UploadRequestStatus uploadRequestStatus) {
+    return uploadRequestStatus == UploadRequestStatus.CREATED;
+  }
+
+  bool _validateArchivedUploadRequestInsideRoute(UploadRequestStatus uploadRequestStatus) {
+    return uploadRequestStatus == UploadRequestStatus.ARCHIVED;
   }
 }
