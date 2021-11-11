@@ -29,7 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:io';
 
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
@@ -39,40 +38,40 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
-import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/upload_request_status_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/upload_request_status_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
-import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_entry_context_menu_action_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_entry_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_context_menu_mixin.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_context_menu_mixin.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
 
-class UploadRequestInsideWidget extends StatefulWidget {
+abstract class UploadRequestInsideWidget extends StatefulWidget {
   final OnBackUploadRequestClickedCallback onBackUploadRequestClickedCallback;
   final OnUploadRequestClickedCallback onUploadRequestClickedCallback;
 
   UploadRequestInsideWidget(this.onBackUploadRequestClickedCallback, this.onUploadRequestClickedCallback);
 
   @override
-  _UploadRequestInsideWidgetState createState() => _UploadRequestInsideWidgetState();
+  UploadRequestInsideWidgetState createState();
 }
 
-class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
-  final _viewModel = getIt<UploadRequestInsideViewModel>();
+abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget>
+    with FileContextMenuMixin, RecipientContextMenuMixin {
+
+  UploadRequestInsideViewModel get viewModel => getIt<UploadRequestInsideViewModel>();
   final appNavigation = getIt<AppNavigation>();
   final imagePath = getIt<AppImagePaths>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
@@ -85,14 +84,14 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestArguments;
       if (_arguments != null) {
-        _viewModel.initState(_arguments!);
+        viewModel.initState(_arguments!);
       }
     });
   }
 
   @override
   void dispose() {
-    _viewModel.onDisposed();
+    viewModel.onDisposed();
     super.dispose();
   }
 
@@ -108,7 +107,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
     return StoreConnector<AppState, UploadRequestInsideState>(
       converter: (store) => store.state.uploadRequestInsideState,
       builder: (_, state) {
-        if (_viewModel.searchQuery.value.isEmpty) {
+        if (viewModel.searchQuery.value.isEmpty) {
           return SizedBox.shrink();
         }
         if (state.uploadRequestEntries.isEmpty) {
@@ -119,9 +118,9 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
           _widgetCommon.buildResultCountRow(context, state.uploadRequestEntries.length),
           Expanded(child: _buildUploadRequestEntriesListView(state.uploadRequestEntries, state.selectMode)),
           (state.selectMode == SelectMode.ACTIVE && state.getAllSelectedEntries().isNotEmpty)
-              ? _buildMultipleSelectionBottomBar(
-              context,
-              state.getAllSelectedEntries())
+              ? buildFileMultipleSelectionBottomBar(
+                  context,
+                  state.getAllSelectedEntries())
               : SizedBox.shrink()
         ]);
       });
@@ -139,7 +138,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
               converter: (store) => store.state.uploadRequestInsideState,
               builder: (context, state) => (state.selectMode == SelectMode.ACTIVE &&
                       state.getAllSelectedEntries().isNotEmpty)
-                  ? _buildMultipleSelectionBottomBar(context, state.getAllSelectedEntries())
+                  ? buildFileMultipleSelectionBottomBar(context, state.getAllSelectedEntries())
                   : SizedBox.shrink())
         ],
       ),
@@ -150,7 +149,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
                 appState.uploadRequestInsideState.selectMode != SelectMode.ACTIVE &&
                 appState.uploadRequestInsideState.uploadRequestEntries.isNotEmpty) {
               return SearchBottomBarBuilder().key(Key('search_bottom_bar')).onSearchActionClick(() {
-                _viewModel.openSearchState(context);
+                viewModel.openSearchState(context);
               }).build();
             }
             return SizedBox.shrink();
@@ -251,9 +250,9 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
               : Text(AppLocalizations.of(context).select_all,
                   maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
           tileColor: AppColor.topBarBackgroundColor,
-          onTap: () => _viewModel.toggleSelectAllEntries(),
+          onTap: () => viewModel.toggleSelectAllEntries(),
           trailing: TextButton(
-            onPressed: () => _viewModel.cancelSelection(),
+            onPressed: () => viewModel.cancelSelection(),
             child: Text(AppLocalizations.of(context).cancel,
                 maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.primaryColor))))
         : SizedBox.shrink());
@@ -285,10 +284,10 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
         builder: (context, uploadRequestInsideState) =>
             uploadRequestInsideState.viewState.fold(
                 (failure) => RefreshIndicator(
-                  onRefresh: () async => _viewModel.requestToGetUploadRequestAndEntries(),
+                  onRefresh: () async => viewModel.requestToGetUploadRequestAndEntries(),
                   child: _buildEmptyListIndicator()),
                 (success) => RefreshIndicator(
-                  onRefresh: () async => _viewModel.requestToGetUploadRequestAndEntries(),
+                  onRefresh: () async => viewModel.requestToGetUploadRequestAndEntries(),
                   child: _buildLayoutCorrespondingWithState(uploadRequestInsideState)))
     );
   }
@@ -337,10 +336,10 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
     return ListTile(
       onTap: () {
         if (selectMode == SelectMode.ACTIVE) {
-          _viewModel.selectItem(entry);
+          viewModel.selectItem(entry);
         }
       },
-      onLongPress: () => _viewModel.selectItem(entry),
+      onLongPress: () => viewModel.selectItem(entry),
       leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         SvgPicture.asset(entry.element.mediaType.getFileTypeImagePath(imagePath), width: 20, height: 24, fit: BoxFit.fill)
       ]),
@@ -368,20 +367,18 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
           : null,
       trailing: selectMode == SelectMode.ACTIVE
           ? Checkbox(
-            value: entry.selectMode == SelectMode.ACTIVE,
-            onChanged: (bool? value) => _viewModel.selectItem(entry),
-            activeColor: AppColor.primaryColor)
+              value: entry.selectMode == SelectMode.ACTIVE,
+              onChanged: (bool? value) => viewModel.selectItem(entry),
+              activeColor: AppColor.primaryColor)
           : IconButton(
-          icon: SvgPicture.asset(
-            imagePath.icContextMenu,
-            width: 24,
-            height: 24,
-            fit: BoxFit.fill,
-          ),
-          onPressed: () => _viewModel.openActiveCloseContextMenu(
-              context,
-              entry.element,
-              _contextMenuActiveCloseActionTiles(context, entry.element))),
+              icon: SvgPicture.asset(
+                imagePath.icContextMenu,
+                width: 24,
+                height: 24,
+                fit: BoxFit.fill,
+              ),
+              onPressed: () => openFileContextMenu(context, entry.element)
+            ),
     );
   }
 
@@ -450,7 +447,7 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
             height: 24,
             fit: BoxFit.fill,
           ),
-          onPressed: () => {}),
+          onPressed: () => openRecipientContextMenu(context, uploadRequest)),
     );
   }
 
@@ -468,134 +465,5 @@ class _UploadRequestInsideWidgetState extends State<UploadRequestInsideWidget> {
       Text(status.displayValue(context),
           style: TextStyle(fontSize: 13, color: AppColor.uploadRequestHintTextColor))
     ]);
-  }
-
-  Widget _buildMultipleSelectionBottomBar(BuildContext context, List<UploadRequestEntry> allSelectedEntries) {
-    return MultipleSelectionBarBuilder()
-      .key(Key('multiple_upload_request_entry_selection_bar'))
-      .text(AppLocalizations.of(context).items(allSelectedEntries.length))
-      .actions(_multipleSelectionActions(context, allSelectedEntries))
-      .build();
-  }
-
-  List<Widget> _multipleSelectionActions(BuildContext context, List<UploadRequestEntry> allSelectedEntries) {
-    return [
-      _downloadFileMultipleSelection(allSelectedEntries),
-      _removeFileMultipleSelection(allSelectedEntries),
-      _moreActionMultipleSelection(context, allSelectedEntries)
-    ];
-  }
-
-  Widget _downloadFileMultipleSelection(List<UploadRequestEntry> uploadRequestEntries) {
-    return UploadRequestEntryMultipleSelectionActionBuilder(
-        Key('multiple_selection_download_action'),
-        SvgPicture.asset(
-          Platform.isAndroid
-              ? imagePath.icFileDownload
-              : imagePath.icExportFile,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
-        ),
-        uploadRequestEntries).onActionClick((entries) => Platform.isAndroid
-            ? _viewModel.downloadEntries(
-                entries,
-                itemSelectionType: ItemSelectionType.multiple)
-            : _viewModel.exportFiles(
-                context,
-                entries,
-                itemSelectionType: ItemSelectionType.multiple))
-        .build();
-  }
-
-  Widget _removeFileMultipleSelection(List<UploadRequestEntry> uploadRequestEntries) {
-    return UploadRequestEntryMultipleSelectionActionBuilder(
-          Key('multiple_selection_remove_action'),
-          SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
-          uploadRequestEntries)
-      .onActionClick((entries) => _viewModel.removeFiles(
-        context,
-        entries,
-        itemSelectionType: ItemSelectionType.multiple))
-      .build();
-  }
-
-  Widget _moreActionMultipleSelection(BuildContext context, List<UploadRequestEntry> entries) {
-    return UploadRequestEntryMultipleSelectionActionBuilder(
-        Key('multiple_selection_more_action'),
-        SvgPicture.asset(
-          imagePath.icMoreVertical,
-          width: 24,
-          height: 24,
-          fit: BoxFit.fill,
-        ),
-        entries).onActionClick((entries) => _viewModel.openMoreActionBottomMenu(
-            context,
-            entries,
-            _moreActionList(context, entries),
-            SizedBox.shrink()))
-        .build();
-  }
-
-  List<Widget> _moreActionList(BuildContext context, List<UploadRequestEntry> entries) {
-    return [
-      _exportFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
-      _removeFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
-      _copyToMySpaceAction(entries, itemSelectionType: ItemSelectionType.multiple),
-      if (Platform.isAndroid) _downloadFilesAction(entries, itemSelectionType: ItemSelectionType.multiple),
-    ];
-  }
-
-  List<Widget> _contextMenuActiveCloseActionTiles(BuildContext context, UploadRequestEntry entry) {
-    return [
-      _exportFileAction([entry]),
-      _removeFileAction([entry]),
-      _copyToMySpaceAction([entry]),
-      if (Platform.isAndroid) _downloadFilesAction([entry])
-    ];
-  }
-
-  Widget _exportFileAction(List<UploadRequestEntry> entries,
-      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    return UploadRequestEntryContextMenuTileBuilder(
-      Key('export_file_context_menu_action'),
-      SvgPicture.asset(imagePath.icExportFile, width: 24, height: 24, fit: BoxFit.fill),
-      AppLocalizations.of(context).export_file,
-      entries.first)
-      .onActionClick((data) => _viewModel.exportFiles(context, entries, itemSelectionType: itemSelectionType))
-      .build();
-  }
-
-  Widget _downloadFilesAction(List<UploadRequestEntry> entries,
-      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    return UploadRequestEntryContextMenuTileBuilder(
-      Key('download_file_context_menu_action'),
-      SvgPicture.asset(imagePath.icFileDownload, width: 24, height: 24, fit: BoxFit.fill),
-      AppLocalizations.of(context).download_to_device,
-      entries.first)
-      .onActionClick((data) => _viewModel.downloadEntries(entries, itemSelectionType: itemSelectionType))
-      .build();
-  }
-
-  Widget _copyToMySpaceAction(List<UploadRequestEntry> entries,
-    {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    return UploadRequestEntryContextMenuTileBuilder(
-            Key('copy_to_my_space_context_menu_action'),
-            SvgPicture.asset(imagePath.icCopy, width: 24, height: 24, fit: BoxFit.fill),
-            AppLocalizations.of(context).copy_to_my_space,
-            entries.first)
-        .onActionClick((data) => _viewModel.copyToMySpace(entries, itemSelectionType: itemSelectionType))
-        .build();
-  }
-
-  Widget _removeFileAction(List<UploadRequestEntry> entries,
-      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    return UploadRequestEntryContextMenuTileBuilder(
-        Key('remove_upload_request_entry_context_menu_action'),
-        SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
-        AppLocalizations.of(context).delete,
-        entries.first)
-      .onActionClick((data) => _viewModel.removeFiles(context, entries, itemSelectionType: itemSelectionType))
-      .build();
   }
 }

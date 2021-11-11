@@ -107,7 +107,9 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_group/up
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/active_close/active_closed_upload_request_inside_view_model.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/archived/archived_upload_request_inside_view_model.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/pending/pending_upload_request_inside_view_model.dart';
 import 'package:redux/redux.dart';
 
 class WidgetModule {
@@ -548,7 +550,7 @@ class WidgetModule {
 
   void _provideUploadRequestInsideComponent() {
     getIt.registerFactory(() =>
-        UploadRequestInsideViewModel(
+        PendingUploadRequestInsideViewModel(
           getIt.get<Store<AppState>>(),
           getIt.get<AppNavigation>(),
           getIt.get<GetAllUploadRequestsInteractor>(),
@@ -560,6 +562,34 @@ class WidgetModule {
           getIt<DeviceManager>(),
           getIt<RemoveMultipleUploadRequestEntryInteractor>(),
         ));
+
+    getIt.registerFactory(() =>
+      ActiveCloseUploadRequestInsideViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAllUploadRequestsInteractor>(),
+        getIt.get<GetAllUploadRequestEntriesInteractor>(),
+        getIt<DownloadUploadRequestEntriesInteractor>(),
+        getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
+        getIt<SearchUploadRequestEntriesInteractor>(),
+        getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
+        getIt<DeviceManager>(),
+        getIt<RemoveMultipleUploadRequestEntryInteractor>(),
+      ));
+
+    getIt.registerFactory(() =>
+      ArchivedUploadRequestInsideViewModel(
+        getIt.get<Store<AppState>>(),
+        getIt.get<AppNavigation>(),
+        getIt.get<GetAllUploadRequestsInteractor>(),
+        getIt.get<GetAllUploadRequestEntriesInteractor>(),
+        getIt<DownloadUploadRequestEntriesInteractor>(),
+        getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
+        getIt<SearchUploadRequestEntriesInteractor>(),
+        getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
+        getIt<DeviceManager>(),
+        getIt<RemoveMultipleUploadRequestEntryInteractor>(),
+      ));
   }
 
   void _provideHomeAppBarComponent() {
