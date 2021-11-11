@@ -40,7 +40,7 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_drive_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -55,30 +55,31 @@ import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/mu
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/shared_space_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_drive/shared_space_drive_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_viewmodel.dart';
 import 'package:redux/redux.dart';
 
-class SharedSpaceDriveWidget extends StatefulWidget {
+/// Display view for inside drive
+class WorkGroupWidget extends StatefulWidget {
   @override
-  _SharedSpaceDriveWidgetState createState() => _SharedSpaceDriveWidgetState();
+  _WorkGroupWidgetState createState() => _WorkGroupWidgetState();
 }
 
-class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
-  final _model = getIt<SharedSpaceDriveViewModel>();
-  final imagePath = getIt<AppImagePaths>();
+class _WorkGroupWidgetState extends State<WorkGroupWidget> {
+  final _viewModel = getIt<WorkGroupViewModel>();
+  final _imagePath = getIt<AppImagePaths>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
   final _widgetCommon = getIt<CommonView>();
 
   @override
   void initState() {
     super.initState();
-    _model.getAllSharedSpaces(needToGetOldSorter: true);
+    _viewModel.getAllWorkgroups(needToGetOldSorter: true);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _model.onDisposed();
+    _viewModel.onDisposed();
   }
 
   @override
@@ -87,21 +88,21 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
         body: Column(
           children: [
             _buildTopBar(),
-            StoreConnector<AppState, SharedSpaceDriveState>(
-              converter: (store) => store.state.sharedSpaceDriveState,
+            StoreConnector<AppState, WorkgroupState>(
+              converter: (store) => store.state.workgroupState,
               builder: (context, state) {
                 return state.selectMode == SelectMode.ACTIVE
                   ? ListTile(
-                      leading: SvgPicture.asset(imagePath.icSelectAll,
+                      leading: SvgPicture.asset(_imagePath.icSelectAll,
                           width: 28,
                           height: 28,
                           fit: BoxFit.fill,
-                          color: state.isAllSharedSpacesSelected()
+                          color: state.isAllWorkgroupsSelected()
                               ? AppColor.unselectedElementColor
                               : AppColor.primaryColor),
                       title: Transform(
                           transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                          child: state.isAllSharedSpacesSelected()
+                          child: state.isAllWorkgroupsSelected()
                               ? Text(AppLocalizations.of(context).unselect_all,
                                   maxLines: 1,
                                   style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))
@@ -111,9 +112,9 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
                                   style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor),
                                 )),
                       tileColor: AppColor.topBarBackgroundColor,
-                      onTap: () => _model.toggleSelectAllSharedSpaces(),
+                      onTap: () => _viewModel.toggleSelectAllSharedSpaces(),
                       trailing: TextButton(
-                          onPressed: () => _model.cancelSelection(),
+                          onPressed: () => _viewModel.cancelSelection(),
                           child: Text(
                             AppLocalizations.of(context).cancel,
                             maxLines: 1,
@@ -125,7 +126,7 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
             ),
             _buildMenuSorter(),
             StoreConnector<AppState, dartz.Either<Failure, Success>>(
-                converter: (store) => store.state.sharedSpaceDriveState.viewState,
+                converter: (store) => store.state.workgroupState.viewState,
                 distinct: true,
                 builder: (context, viewState) {
                   return viewState.fold(
@@ -144,14 +145,14 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
                 }),
             _buildResultCount(),
             Expanded(child: buildSharedSpaceListBySearchState()),
-            StoreConnector<AppState, SharedSpaceDriveState>(
-                converter: (store) => store.state.sharedSpaceDriveState,
+            StoreConnector<AppState, WorkgroupState>(
+                converter: (store) => store.state.workgroupState,
                 builder: (context, state) {
-                  return state.selectMode == SelectMode.ACTIVE && state.getAllSelectedSharedSpaces().isNotEmpty
+                  return state.selectMode == SelectMode.ACTIVE && state.getAllSelectedWorkgroups().isNotEmpty
                       ? MultipleSelectionBarBuilder()
-                          .key(Key('multiple_shared_space_selection_bar'))
-                          .text(AppLocalizations.of(context).items(state.getAllSelectedSharedSpaces().length))
-                          .actions(_multipleSelectionActions(state.getAllSelectedSharedSpaces()))
+                          .key(Key('multiple_workgroups_selection_bar'))
+                          .text(AppLocalizations.of(context).items(state.getAllSelectedWorkgroups().length))
+                          .actions(_multipleSelectionActions(state.getAllSelectedWorkgroups()))
                           .build()
                       : SizedBox.shrink();
                 })
@@ -161,10 +162,10 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
             converter: (store) => store.state,
             builder: (context, state) {
               if (!state.uiState.isInSearchState() &&
-                  state.sharedSpaceDriveState.selectMode == SelectMode.INACTIVE) {
+                  state.workgroupState.selectMode == SelectMode.INACTIVE) {
                 return SearchBottomBarBuilder()
-                    .key(Key('search_bottom_bar_shared_space'))
-                    .onSearchActionClick(() => _model.openSearchState(context))
+                    .key(Key('search_bottom_bar_inside_drive'))
+                    .onSearchActionClick(() => _viewModel.openSearchState(context))
                     .build();
               }
               return SizedBox.shrink();
@@ -173,12 +174,12 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
           converter: (store) => store.state,
           builder: (context, appState) {
             if (!appState.uiState.isInSearchState() &&
-                appState.sharedSpaceDriveState.selectMode == SelectMode.INACTIVE) {
+                appState.workgroupState.selectMode == SelectMode.INACTIVE) {
               return FloatingActionButton(
-                key: Key('shared_space_create_new_workgroup_button'),
-                onPressed: () => _model.openCreateNewWorkGroupModal(context),
+                key: Key('create_new_workgroup_inside_drive_button'),
+                onPressed: () => _viewModel.openCreateNewWorkGroupModal(context),
                 backgroundColor: AppColor.primaryColor,
-                child: SvgPicture.asset(imagePath.icPlus, width: 24, height: 24,),
+                child: SvgPicture.asset(_imagePath.icPlus, width: 24, height: 24,),
               );
             }
             return SizedBox.shrink();
@@ -199,7 +200,7 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 20, offset: Offset(0, 4))]),
             child: Row(children: [
                 GestureDetector(
-                  onTap: () => _model.backToSharedSpace(),
+                  onTap: () => _viewModel.backToSharedSpace(),
                   child: Container(
                     width: 48,
                     height: 48,
@@ -207,12 +208,12 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
                       alignment: Alignment.center,
                       heightFactor: 24,
                       widthFactor: 24,
-                      child: SvgPicture.asset(imagePath.icBackBlue, width: 24, height: 24),
+                      child: SvgPicture.asset(_imagePath.icBackBlue, width: 24, height: 24),
                     ),
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => _model.backToSharedSpace(),
+                  onTap: () => _viewModel.backToSharedSpace(),
                   child: Container(
                     child: Align(
                       alignment: Alignment.center,
@@ -238,9 +239,9 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
         converter: (store) => store.state,
         builder: (context, appState) {
           if (appState.uiState.isInSearchState()) {
-            return _buildSearchResultSharedSpacesList(appState.sharedSpaceDriveState);
+            return _buildSearchResultSharedSpacesList(appState.workgroupState);
           }
-          return _buildNormalSharedSpacesList(appState.sharedSpaceDriveState);
+          return _buildNormalSharedSpacesList(appState.workgroupState);
         });
   }
 
@@ -248,59 +249,55 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, appState) {
-          if (appState.uiState.isInSearchState() && _model.searchQuery.value.isNotEmpty) {
-            return _widgetCommon.buildResultCountRow(context, appState.sharedSpaceDriveState.sharedSpacesList.length);
+          if (appState.uiState.isInSearchState() && _viewModel.searchQuery.value.isNotEmpty) {
+            return _widgetCommon.buildResultCountRow(context, appState.workgroupState.selectableWorkgroups.length);
           }
           return SizedBox.shrink();
         });
   }
 
-  Widget _buildSearchResultSharedSpacesList(SharedSpaceDriveState state) {
-    if (_model.searchQuery.value.isEmpty) {
+  Widget _buildSearchResultSharedSpacesList(WorkgroupState state) {
+    if (_viewModel.searchQuery.value.isEmpty) {
       return SizedBox.shrink();
     } else {
-      if (state.sharedSpacesList.isEmpty) {
+      if (state.selectableWorkgroups.isEmpty) {
         return _widgetCommon.buildNoResultFound(context);
       }
-      return _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode);
+      return _buildSharedSpacesListView(state.selectableWorkgroups, state.selectMode);
     }
   }
 
-  Widget _buildNormalSharedSpacesList(SharedSpaceDriveState state) {
+  Widget _buildNormalSharedSpacesList(WorkgroupState state) {
     return state.viewState.fold(
       (failure) =>
         RefreshIndicator(
-          onRefresh: () async => _model.getAllSharedSpaces(needToGetOldSorter: false),
+          onRefresh: () async => _viewModel.getAllWorkgroups(needToGetOldSorter: false),
           child: failure is SharedSpacesFailure ? 
             BackgroundWidgetBuilder()
-                .key(Key('shared_space_error_background'))
-                .image(SvgPicture.asset(
-                  imagePath.icUnexpectedError,
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.fill))
+                .key(Key('workgroup_error_background'))
+                .image(SvgPicture.asset(_imagePath.icUnexpectedError, width: 120, height: 120, fit: BoxFit.fill))
                 .text(AppLocalizations.of(context).common_error_occured_message)
-                .build() : _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode)
+                .build() : _buildSharedSpacesListView(state.selectableWorkgroups, state.selectMode)
         ),
       (success) => success is LoadingState ?
-        _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode) :
+        _buildSharedSpacesListView(state.selectableWorkgroups, state.selectMode) :
         RefreshIndicator(
-          onRefresh: () async => _model.getAllSharedSpaces(needToGetOldSorter: false),
-          child: _buildSharedSpacesListView(state.sharedSpacesList, state.selectMode)
+          onRefresh: () async => _viewModel.getAllWorkgroups(needToGetOldSorter: false),
+          child: _buildSharedSpacesListView(state.selectableWorkgroups, state.selectMode)
         )
     );
   }
 
-  Widget _buildSharedSpacesListView(List<SelectableElement<SharedSpaceNodeNested>> sharedSpacesList, SelectMode selectMode) {
-    if (sharedSpacesList.isEmpty) {
+  Widget _buildSharedSpacesListView(List<SelectableElement<SharedSpaceNodeNested>> selectableWorkgroups, SelectMode selectMode) {
+    if (selectableWorkgroups.isEmpty) {
       return _buildNoWorkgroupYet(context);
     } else {
       return ListView.builder(
-        key: Key('shared_spaces_list'),
+        key: Key('workgroups_list'),
         padding: _responsiveUtils.getPaddingListItemForScreen(context),
-        itemCount: sharedSpacesList.length,
+        itemCount: selectableWorkgroups.length,
         itemBuilder: (context, index) {
-          return _buildSharedSpaceListItem(context, sharedSpacesList[index], selectMode);
+          return _buildSharedSpaceListItem(context, selectableWorkgroups[index], selectMode);
         },
       );
     }
@@ -308,21 +305,21 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
 
   Widget _buildNoWorkgroupYet(BuildContext context) {
     return BackgroundWidgetBuilder()
-      .key(Key('shared_space_no_workgroup_yet'))
-      .image(SvgPicture.asset(imagePath.icSharedSpaceNoWorkGroup, width: 120, height: 120, fit: BoxFit.fill))
+      .key(Key('drive_no_workgroup_yet'))
+      .image(SvgPicture.asset(_imagePath.icSharedSpaceNoWorkGroup, width: 120, height: 120, fit: BoxFit.fill))
       .text(AppLocalizations.of(context).do_not_have_any_workgroup).build();
   }
 
   Widget _buildSharedSpaceListItem(
-      BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace, SelectMode selectMode) {
+      BuildContext context, SelectableElement<SharedSpaceNodeNested> selectableWorkgroup, SelectMode selectMode) {
     return ListTile(
         leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(imagePath.icSharedSpace, width: 20, height: 24, fit: BoxFit.fill)
+          SvgPicture.asset(_imagePath.icSharedSpace, width: 20, height: 24, fit: BoxFit.fill)
         ]),
         title: ResponsiveWidget(
           smallScreen: Transform(
             transform: Matrix4.translationValues(-16, 0.0, 0.0),
-            child: _buildSharedSpaceName(sharedSpace.element.name),
+            child: _buildSharedSpaceName(selectableWorkgroup.element.name),
           ),
           mediumScreen: Transform(
             transform: Matrix4.translationValues(-16, 0.0, 0.0),
@@ -331,11 +328,11 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
               children: [
                 Expanded(
                     flex: 1,
-                    child: _buildSharedSpaceName(sharedSpace.element.name)),
+                    child: _buildSharedSpaceName(selectableWorkgroup.element.name)),
                 Align(
                   alignment: Alignment.centerRight,
                   child: _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
-                      sharedSpace.element.modificationDate.getMMMddyyyyFormatString())))
+                      selectableWorkgroup.element.modificationDate.getMMMddyyyyFormatString())))
               ]),
           ),
           largeScreen: Transform(
@@ -345,11 +342,11 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
               children: [
                 Expanded(
                     flex: 1,
-                    child: _buildSharedSpaceName(sharedSpace.element.name)),
+                    child: _buildSharedSpaceName(selectableWorkgroup.element.name)),
                 Align(
                     alignment: Alignment.centerRight,
                     child: _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
-                        sharedSpace.element.modificationDate.getMMMddyyyyFormatString())))
+                        selectableWorkgroup.element.modificationDate.getMMMddyyyyFormatString())))
               ]),
           ),
           responsiveUtil: _responsiveUtils,
@@ -360,39 +357,39 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
               child: Row(
                 children: [
                   _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
-                      sharedSpace.element.modificationDate.getMMMddyyyyFormatString()))
+                      selectableWorkgroup.element.modificationDate.getMMMddyyyyFormatString()))
                 ],
               ))
           : null,
         onTap: () {
           if(selectMode == SelectMode.ACTIVE) {
-            _model.selectItem(sharedSpace);
+            _viewModel.selectItem(selectableWorkgroup);
           } else {
-            _model.openSharedSpace(sharedSpace.element);
+            _viewModel.openWorkgroup(selectableWorkgroup.element);
           }
         },
         trailing: StoreConnector<AppState, SelectMode>(
-            converter: (store) => store.state.sharedSpaceDriveState.selectMode,
+            converter: (store) => store.state.workgroupState.selectMode,
             builder: (context, selectMode) {
               return selectMode == SelectMode.ACTIVE
                   ? Checkbox(
-                      value: sharedSpace.selectMode == SelectMode.ACTIVE,
-                      onChanged: (bool? value) => _model.selectItem(sharedSpace),
+                      value: selectableWorkgroup.selectMode == SelectMode.ACTIVE,
+                      onChanged: (bool? value) => _viewModel.selectItem(selectableWorkgroup),
                       activeColor: AppColor.primaryColor)
                   : IconButton(
                       icon: SvgPicture.asset(
-                        imagePath.icContextMenu,
+                        _imagePath.icContextMenu,
                         width: 24,
                         height: 24,
                         fit: BoxFit.fill,
                       ),
-                      onPressed: () => _model.openContextMenu(
+                      onPressed: () => _viewModel.openContextMenu(
                           context,
-                          sharedSpace.element,
-                          _contextMenuActionTiles(context, sharedSpace),
-                          footerAction: _contextMenuFooterAction(sharedSpace.element)));
+                          selectableWorkgroup.element,
+                          _contextMenuActionTiles(context, selectableWorkgroup),
+                          footerAction: _contextMenuFooterAction(selectableWorkgroup.element)));
             }),
-        onLongPress: () => _model.selectItem(sharedSpace));
+        onLongPress: () => _viewModel.selectItem(selectableWorkgroup));
   }
 
   List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
@@ -407,9 +404,9 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
     return SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name)
         ? SimpleContextMenuActionBuilder(
                 Key('delete_shared_space_context_menu_action'),
-                SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+                SvgPicture.asset(_imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
                 AppLocalizations.of(context).delete)
-            .onActionClick((data) => _model.removeSharedSpaces(context, [sharedSpace]))
+            .onActionClick((data) => _viewModel.removeSharedSpaces(context, [sharedSpace]))
             .build()
         : SizedBox.shrink();
   }
@@ -417,18 +414,18 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
   Widget _renameWorkgroupAction(BuildContext context, SharedSpaceNodeNested sharedSpace) {
     return WorkgroupContextMenuTileBuilder(
         Key('rename_workgroup_context_menu_action'),
-        SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
+        SvgPicture.asset(_imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
         AppLocalizations.of(context).rename, sharedSpace)
-      .onActionClick((sharedSpace) => _model.openRenameWorkGroupModal(context, sharedSpace))
+      .onActionClick((sharedSpace) => _viewModel.openRenameWorkGroupModal(context, sharedSpace))
       .build();
   }
 
   Widget _sharedSpaceDetailsAction(SharedSpaceNodeNested sharedSpace) {
     return SimpleContextMenuActionBuilder(
             Key('shared_space_details_context_menu_action'),
-            SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
+            SvgPicture.asset(_imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
             AppLocalizations.of(context).details)
-        .onActionClick((data) => _model.clickOnDetails(sharedSpace))
+        .onActionClick((data) => _viewModel.clickOnDetails(sharedSpace))
         .build();
   }
 
@@ -457,9 +454,9 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
   Widget _removeMultipleSelection(List<SharedSpaceNodeNested> sharedSpaces) {
     return SharedSpaceMultipleSelectionActionBuilder(
         Key('multiple_selection_remove_action'),
-        SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill,),
+        SvgPicture.asset(_imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill,),
         sharedSpaces)
-    .onActionClick((documents) => _model.removeSharedSpaces(context, documents, itemSelectionType: ItemSelectionType.multiple))
+    .onActionClick((documents) => _viewModel.removeSharedSpaces(context, documents, itemSelectionType: ItemSelectionType.multiple))
     .build();
   }
 
@@ -468,8 +465,8 @@ class _SharedSpaceDriveWidgetState extends State<SharedSpaceDriveWidget> {
       converter: (Store<AppState> store) => store.state,
       builder: (context, appState) {
         return !appState.uiState.isInSearchState()
-            ? OrderByButtonBuilder(context, appState.sharedSpaceDriveState.sorter)
-                .onOpenOrderMenuAction((currentSorter) => _model.openPopupMenuSorter(context, currentSorter))
+            ? OrderByButtonBuilder(context, appState.workgroupState.sorter)
+                .onOpenOrderMenuAction((currentSorter) => _viewModel.openPopupMenuSorter(context, currentSorter))
                 .build()
             : SizedBox.shrink();
       },

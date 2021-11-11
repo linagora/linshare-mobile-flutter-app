@@ -36,7 +36,7 @@ class RoutePaths {
   static const String mySpace = 'my_space';
   static const String uploadDocumentRoute = 'upload_document';
   static const String sharedSpace = 'shared_space';
-  static const String sharedSpaceDrive = 'shared_space_drive';
+  static const String insideDrive = 'inside_drive';
   static const String sharedSpaceInside = 'shared_space_inside';
   static const String currentUploads = 'current_uploads';
   static const String destinationPicker = 'destination_picker';

@@ -84,16 +84,17 @@ class DestinationPickerState extends LinShareState with EquatableMixin {
 class DestinationPickerRouteData with EquatableMixin {
   final DestinationPickerCurrentView? destinationPickerCurrentView;
   final SharedSpaceNodeNested? sharedSpaceNodeNested;
+  final SharedSpaceNodeNested? drive;
 
-  DestinationPickerRouteData(this.destinationPickerCurrentView, this.sharedSpaceNodeNested);
+  DestinationPickerRouteData(this.destinationPickerCurrentView, {this.sharedSpaceNodeNested, this.drive});
 
   factory DestinationPickerRouteData.initial() =>
-      DestinationPickerRouteData(null, null);
+      DestinationPickerRouteData(null);
 
   @override
-  List<Object?> get props => [destinationPickerCurrentView, sharedSpaceNodeNested];
+  List<Object?> get props => [destinationPickerCurrentView, sharedSpaceNodeNested, drive];
 }
 
 enum DestinationPickerCurrentView {
-  sharedSpace, sharedSpaceInside, chooseSpaceDestination
+  sharedSpace, drive, sharedSpaceInside, chooseSpaceDestination
 }

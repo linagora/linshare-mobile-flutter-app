@@ -38,6 +38,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/destination_pick
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
@@ -55,6 +56,7 @@ import 'package:rxdart/rxdart.dart';
 
 class DestinationPickerViewModel extends BaseViewModel {
   final GetAllSharedSpacesInteractor _getAllSharedSpacesInteractor;
+  final GetAllWorkgroupsInteractor _getAllWorkgroupsInteractor;
   final AppNavigation _appNavigation;
   final VerifyNameInteractor _verifyNameInteractor;
   final CreateSharedSpaceFolderInteractor _createSharedSpaceFolderInteractor;
@@ -84,6 +86,7 @@ class DestinationPickerViewModel extends BaseViewModel {
       this._appNavigation,
       this._verifyNameInteractor,
       this._createSharedSpaceFolderInteractor,
+      this._getAllWorkgroupsInteractor,
   ) : super(store);
 
   void setCurrentViewByOperation(Operation operation) {
@@ -146,16 +149,68 @@ class DestinationPickerViewModel extends BaseViewModel {
     };
   }
 
-  void openSharedSpaceInside(SharedSpaceNodeNested sharedSpace) {
-    store.dispatch(DestinationPickerGoInsideSharedSpaceAction(sharedSpace));
+  void getAllDrive(Operation? operation, SharedSpaceNodeNested sharedSpaceNodeNested) async {
+    store.dispatch(_getAllDriveAction(operation, sharedSpaceNodeNested));
   }
 
-  void backToSharedSpace() {
-    store.dispatch(DestinationPickerBackToSharedSpaceAction());
+  ThunkAction<AppState> _getAllDriveAction(Operation? operation, SharedSpaceNodeNested sharedSpaceNodeNested) {
+    return (Store<AppState> store) async {
+      store.dispatch(StartDestinationPickerLoadingAction());
+
+      await _getAllWorkgroupsInteractor.execute(sharedSpaceNodeNested.sharedSpaceId.toDriveId())
+          .then((result) => result.fold(
+              (failure) => store.dispatch(DestinationPickerGetAllDriveAction(result, sharedSpaceNodeNested, [])),
+              (success) {
+                 if (success is GetAllWorkgroupsViewState) {
+                   final sharedSpacesList = success.workgroups.where((element) {
+                      if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
+                      return SharedSpaceOperationRole.copyToSharedSpaceRoles
+                          .contains(element.sharedSpaceRole.name);
+                      } else if (operation == Operation.upload) {
+                      return SharedSpaceOperationRole.uploadToSharedSpaceRoles
+                          .contains(element.sharedSpaceRole.name);
+                      } else if (operation == Operation.copyTo) {
+                      return SharedSpaceOperationRole.copyToSharedSpaceRoles
+                          .contains(element.sharedSpaceRole.name);
+                      } else if (operation == Operation.move) {
+                      return SharedSpaceOperationRole.moveSharedSpaceNodeRoles
+                          .contains(element.sharedSpaceRole.name);
+                      }
+                      return true;
+                   }).toList();
+
+                   store.dispatch(DestinationPickerGetAllDriveAction(result, sharedSpaceNodeNested, sharedSpacesList));
+                 } else {
+                   store.dispatch(DestinationPickerGetAllDriveAction(result, sharedSpaceNodeNested, []));
+                 }
+              }));
+    };
+  }
+
+  void openSharedSpaceInside(SharedSpaceNodeNested sharedSpace, SharedSpaceNodeNested? drive) {
+    store.dispatch(DestinationPickerGoInsideSharedSpaceAction(sharedSpace, drive: drive));
+  }
+
+  void openDrive(SharedSpaceNodeNested sharedSpace) {
+    store.dispatch(ClearAllSharedSpaceListStateAction(DestinationPickerCurrentView.drive, drive: sharedSpace));
+    getAllDrive(store.state.destinationPickerState.operation, sharedSpace);
+  }
+
+  void backToSharedSpace({SharedSpaceNodeNested? drive}) {
+    if (drive != null) {
+      store.dispatch(ClearAllSharedSpaceListStateAction(DestinationPickerCurrentView.sharedSpace));
+      getAllSharedSpaces(store.state.destinationPickerState.operation);
+    } else {
+      store.dispatch(DestinationPickerBackToSharedSpaceAction());
+    }
   }
 
   void backToChooseSpaceDestination() {
     store.dispatch(GoToChooseSpaceAction(Operation.none));
+  }
+
+  void backToInsideDriveDestination(SharedSpaceNodeNested sharedSpace) {
+    store.dispatch(BackToInsideDriveDestinationAction(sharedSpace));
   }
 
   void handleOnSharedSpaceBackPress() {
