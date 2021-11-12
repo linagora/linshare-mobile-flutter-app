@@ -33,10 +33,10 @@ import 'dart:async';
 
 import 'package:data/src/datasource/upload_request_datasource.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/response/upload_request_response.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:data/src/network/model/response/upload_request_response.dart';
 
 class UploadRequestDataSourceImpl implements UploadRequestDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -49,6 +49,22 @@ class UploadRequestDataSourceImpl implements UploadRequestDataSource {
     return Future.sync(() async {
       final uploadRequestResponse = await _linShareHttpClient.getAllUploadRequests(uploadRequestGroupId);
       return uploadRequestResponse.map((uploadRequest) => uploadRequest.toUploadRequest()).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestNotFound();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<UploadRequest> updateUploadRequestState(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace}) {
+    return Future.sync(() async {
+      final uploadRequestResponse = await _linShareHttpClient.updateUploadRequestStatus(uploadRequestId, status, copyToMySpace: copyToMySpace);
+      return uploadRequestResponse.toUploadRequest();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response?.statusCode == 404) {

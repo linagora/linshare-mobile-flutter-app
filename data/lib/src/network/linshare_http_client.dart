@@ -579,6 +579,29 @@ class LinShareHttpClient {
     return resultJson.map((data) => UploadRequestEntryResponse.fromJson(data)).toList();
   }
 
+  Future<UploadRequestResponse> updateUploadRequestStatus(
+    UploadRequestId uploadRequestId,
+    UploadRequestStatus newStatus,
+    {bool? copyToMySpace}
+  ) async {
+    if (copyToMySpace != null) {
+      final resultJson = await _dioClient.put(
+        Endpoint.uploadRequestsRoute.withPathParameter(uploadRequestId.uuid)
+          .withPathParameter(Endpoint.status)
+          .withPathParameter(newStatus.value)
+          .withQueryParameters([BooleanQueryParameter('copy', copyToMySpace)])
+          .generateEndpointPath());
+      return UploadRequestResponse.fromJson(resultJson);
+    } else {
+      final resultJson = await _dioClient.put(
+        Endpoint.uploadRequestsRoute.withPathParameter(uploadRequestId.uuid)
+          .withPathParameter(Endpoint.status)
+          .withPathParameter(newStatus.value)
+          .generateEndpointPath());
+      return UploadRequestResponse.fromJson(resultJson);
+    }
+  }
+
   Future<ReceivedShareDto> getReceivedShare(ShareId receivedShareId) async {
     final endpointPath =
         Endpoint.receivedShares.withPathParameter(receivedShareId.uuid).generateEndpointPath();
