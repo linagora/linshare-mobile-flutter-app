@@ -215,12 +215,28 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
   void cancelSelection() {
     store.dispatch(UploadRequestClearSelectedEntryAction());
   }
+  
+  void selectRecipient(SelectableElement<UploadRequest> selectedRecipient) {
+    store.dispatch(SelectUploadRequestAction(selectedRecipient));
+  }
+
+  void cancelRecipientSelection() {
+    store.dispatch(ClearUploadRequestSelectionAction());
+  }
 
   void toggleSelectAllEntries() {
     if (getUploadRequestInsideState().isAllEntriesSelected()) {
       store.dispatch(UploadRequestUnSelectAllEntryAction());
     } else {
       store.dispatch(UploadRequestSelectAllEntryAction());
+    }
+  }
+
+  void toggleSelectAllRecipients() {
+    if (getUploadRequestInsideState().isAllRecipientSelected()) {
+      store.dispatch(UploadRequestUnSelectAllRecipientAction());
+    } else {
+      store.dispatch(UploadRequestSelectAllRecipientAction());
     }
   }
 

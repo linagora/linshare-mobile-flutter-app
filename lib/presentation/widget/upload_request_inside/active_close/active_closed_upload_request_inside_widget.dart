@@ -191,12 +191,21 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
   }
 
   @override
+  void openRecipientContextMenu(BuildContext context, UploadRequest uploadRequest) {
+  }
+
+  @override
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest entry) {
-    return [];
+    throw UnimplementedError();
   }
 
   @override
   Widget? recipientFooterActionTile() {
-    return null;
+    throw UnimplementedError();
+  }
+
+  @override
+  List<Widget> recipientMultipleSelectionActions(BuildContext context, List<UploadRequest> allSelected) {
+    throw UnimplementedError();
   }
 }

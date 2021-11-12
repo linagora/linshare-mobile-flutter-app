@@ -89,4 +89,9 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
   Widget? recipientFooterActionTile() {
     throw UnimplementedError();
   }
+
+  @override
+  List<Widget> recipientMultipleSelectionActions(BuildContext context, List<UploadRequest> allSelected) {
+    throw UnimplementedError();
+  }
 }
