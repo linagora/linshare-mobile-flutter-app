@@ -34,10 +34,10 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
-import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 
@@ -108,7 +108,7 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
       {Either<Failure, Success>? viewState, required List<UploadRequest> newUploadRequests}) {
     return UploadRequestInsideState(
         viewState ?? this.viewState,
-        newUploadRequests,
+        newUploadRequests.where((element) => element.status != UploadRequestStatus.DELETED).toList(),
         uploadRequestEntries,
         selectMode,
         UploadRequestDocumentType.recipients,

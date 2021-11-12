@@ -101,7 +101,11 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
             _searchQuery = SearchQuery('');
           } else if (success is RemoveUploadRequestEntryViewState ||
               success is RemoveAllUploadRequestEntriesSuccessViewState ||
-              success is RemoveSomeUploadRequestEntriesSuccessViewState) {
+              success is RemoveSomeUploadRequestEntriesSuccessViewState ||
+              success is UpdateUploadRequestStateViewState ||
+              success is UpdateUploadRequestAllSuccessViewState ||
+              success is UpdateUploadRequestHasSomeFailedViewState
+          ) {
             requestToGetUploadRequestAndEntries();
           }
         });
