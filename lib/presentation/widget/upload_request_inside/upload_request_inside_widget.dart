@@ -29,7 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -136,10 +135,7 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
           Expanded(child: _buildUploadRequestList()),
           StoreConnector<AppState, UploadRequestInsideState>(
               converter: (store) => store.state.uploadRequestInsideState,
-              builder: (context, state) => (state.selectMode == SelectMode.ACTIVE &&
-                      state.getAllSelectedEntries().isNotEmpty)
-                  ? buildFileMultipleSelectionBottomBar(context, state.getAllSelectedEntries())
-                  : SizedBox.shrink())
+              builder: (context, state) => _buildMultipleSelectionBottomBar(state))
         ],
       ),
       bottomNavigationBar: StoreConnector<AppState, AppState>(
@@ -241,21 +237,52 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
             width: 28,
             height: 28,
             fit: BoxFit.fill,
-            color: state.isAllEntriesSelected() ? AppColor.unselectedElementColor : AppColor.primaryColor),
+            color: _isSelectAll(state) ? AppColor.unselectedElementColor : AppColor.primaryColor),
           title: Transform(
             transform: Matrix4.translationValues(-16, 0.0, 0.0),
-            child: state.isAllEntriesSelected()
+            child: _isSelectAll(state)
               ? Text(AppLocalizations.of(context).unselect_all,
                   maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))
               : Text(AppLocalizations.of(context).select_all,
                   maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.documentNameItemTextColor))),
           tileColor: AppColor.topBarBackgroundColor,
-          onTap: () => viewModel.toggleSelectAllEntries(),
+          onTap: () => _toggleSelectAll(state),
           trailing: TextButton(
-            onPressed: () => viewModel.cancelSelection(),
+            onPressed: () => _cancelSelection(state),
             child: Text(AppLocalizations.of(context).cancel,
                 maxLines: 1, style: TextStyle(fontSize: 14, color: AppColor.primaryColor))))
         : SizedBox.shrink());
+  }
+  
+  bool _isSelectAll(UploadRequestInsideState uploadRequestInsideState) {
+    switch (uploadRequestInsideState.uploadRequestDocumentType) {
+      case UploadRequestDocumentType.recipients:
+        return uploadRequestInsideState.isAllRecipientSelected();
+      case UploadRequestDocumentType.files:
+        return uploadRequestInsideState.isAllEntriesSelected();
+    }
+  }
+  
+  void _toggleSelectAll(UploadRequestInsideState uploadRequestInsideState) {
+    switch (uploadRequestInsideState.uploadRequestDocumentType) {
+      case UploadRequestDocumentType.recipients:
+        viewModel.toggleSelectAllRecipients();
+        break;
+      case UploadRequestDocumentType.files:
+        viewModel.toggleSelectAllEntries();
+        break;
+    }
+  }
+  
+  void _cancelSelection(UploadRequestInsideState uploadRequestInsideState) {
+    switch (uploadRequestInsideState.uploadRequestDocumentType) {
+      case UploadRequestDocumentType.recipients:
+        viewModel.cancelRecipientSelection();
+        break;
+      case UploadRequestDocumentType.files:
+        viewModel.cancelSelection();
+        break;
+    }
   }
 
   Widget _buildLoadingLayout() {
@@ -295,7 +322,7 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
   Widget _buildLayoutCorrespondingWithState(UploadRequestInsideState uploadRequestInsideState) {
     switch (uploadRequestInsideState.uploadRequestDocumentType) {
       case UploadRequestDocumentType.recipients:
-        return _buildUploadRequestListView(uploadRequestInsideState.uploadRequests);
+        return _buildUploadRequestListView(uploadRequestInsideState.uploadRequests, uploadRequestInsideState.selectMode);
       case UploadRequestDocumentType.files:
         return _buildUploadRequestEntriesListView(
             uploadRequestInsideState.uploadRequestEntries, uploadRequestInsideState.selectMode);
@@ -397,23 +424,28 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
     );
   }
 
-  Widget _buildUploadRequestListView(List<UploadRequest> uploadRequests) {
+  Widget _buildUploadRequestListView(List<SelectableElement<UploadRequest>> uploadRequests, SelectMode selectMode) {
     if (uploadRequests.isEmpty) {
       return _buildEmptyListIndicator();
     }
     return ListView.builder(
       itemCount: uploadRequests.length,
       itemBuilder: (BuildContext context, int index) {
-        return _buildRecipientListItem(context, uploadRequests[index]);
+        return _buildRecipientListItem(context, uploadRequests[index], selectMode);
       },
     );
   }
 
-  Widget _buildRecipientListItem(BuildContext context, UploadRequest uploadRequest) {
+  Widget _buildRecipientListItem(BuildContext context, SelectableElement<UploadRequest> uploadRequest, SelectMode selectMode) {
     return ListTile(
       onTap: () {
-        widget.onUploadRequestClickedCallback(uploadRequest);
+        if (selectMode == SelectMode.ACTIVE) {
+          viewModel.selectRecipient(uploadRequest);
+        } else {
+          widget.onUploadRequestClickedCallback(uploadRequest);
+        }
       },
+      onLongPress: () => viewModel.selectRecipient(uploadRequest),
       leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [SvgPicture.asset(imagePath.icUploadRequestIndividual, width: 20, height: 24, fit: BoxFit.fill)]),
@@ -421,13 +453,13 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
         mediumScreen: Transform(
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            _buildItemTitle(uploadRequest.recipients.first.mail),
-            Align(alignment: Alignment.centerRight, child: _buildRecipientStatus(uploadRequest.status))
+            _buildItemTitle(uploadRequest.element.recipients.first.mail),
+            Align(alignment: Alignment.centerRight, child: _buildRecipientStatus(uploadRequest.element.status))
           ]),
         ),
         smallScreen: Transform(
             transform: Matrix4.translationValues(-16, 0.0, 0.0),
-            child: _buildItemTitle(uploadRequest.recipients.first.mail)),
+            child: _buildItemTitle(uploadRequest.element.recipients.first.mail)),
         responsiveUtil: _responsiveUtils,
       ),
       subtitle: _responsiveUtils.isSmallScreen(context)
@@ -435,19 +467,24 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
               transform: Matrix4.translationValues(-16, 0.0, 0.0),
               child: Row(
                 children: [
-                  _buildRecipientStatus(uploadRequest.status),
+                  _buildRecipientStatus(uploadRequest.element.status),
                 ],
               ),
             )
           : null,
-      trailing: IconButton(
-          icon: SvgPicture.asset(
-            imagePath.icContextMenu,
-            width: 24,
-            height: 24,
-            fit: BoxFit.fill,
-          ),
-          onPressed: () => openRecipientContextMenu(context, uploadRequest)),
+      trailing: selectMode == SelectMode.ACTIVE
+          ? Checkbox(
+              value: uploadRequest.selectMode == SelectMode.ACTIVE,
+              onChanged: (bool? value) => viewModel.selectRecipient(uploadRequest),
+              activeColor: AppColor.primaryColor)
+          : IconButton(
+              icon: SvgPicture.asset(
+                imagePath.icContextMenu,
+                width: 24,
+                height: 24,
+                fit: BoxFit.fill,
+              ),
+              onPressed: () => openRecipientContextMenu(context, uploadRequest.element)),
     );
   }
 
@@ -465,5 +502,22 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
       Text(status.displayValue(context),
           style: TextStyle(fontSize: 13, color: AppColor.uploadRequestHintTextColor))
     ]);
+  }
+
+  Widget _buildMultipleSelectionBottomBar(UploadRequestInsideState state) {
+    if (state.selectMode == SelectMode.INACTIVE) {
+      return SizedBox.shrink();
+    }
+
+    if (_arguments == null) {
+      return SizedBox.shrink();
+    }
+
+    switch (_arguments!.documentType) {
+      case UploadRequestDocumentType.files:
+        return buildFileMultipleSelectionBottomBar(context, state.getAllSelectedEntries());
+      case UploadRequestDocumentType.recipients:
+        return buildRecipientMultipleSelectionBottomBar(context, state.getAllSelectedRecipient());
+    }
   }
 }

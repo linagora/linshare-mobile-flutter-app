@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-11-05T11:27:21.294584",
+  "@@last_modified": "2021-11-11T11:07:35.273354",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -2450,6 +2450,42 @@
   },
   "this_feature_not_supported": "This feature is not currently supported",
   "@this_feature_not_supported": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit": "Edit",
+  "@edit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "save": "Save",
+  "@save": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yes": "Yes",
+  "@yes": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "no": "No",
+  "@no": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_successfully": "The upload request has been updated successfully!",
+  "@the_upload_request_has_been_updated_successfully": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_failed": "The upload request has been updated failed",
+  "@the_upload_request_has_been_updated_failed": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

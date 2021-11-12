@@ -43,7 +43,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/u
 
 @immutable
 class UploadRequestInsideState extends LinShareState with EquatableMixin {
-  final List<UploadRequest> uploadRequests;
+  final List<SelectableElement<UploadRequest>> uploadRequests;
 
   final List<SelectableElement<UploadRequestEntry>> uploadRequestEntries;
   final SelectMode selectMode;
@@ -106,9 +106,18 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
 
   UploadRequestInsideState setUploadRequests(
       {Either<Failure, Success>? viewState, required List<UploadRequest> newUploadRequests}) {
+    final currentSelectedUploadRequests = uploadRequests
+        .where((element) => element.selectMode == SelectMode.ACTIVE)
+        .map((selectableElement) => selectableElement.element)
+        .toList();
+
     return UploadRequestInsideState(
         viewState ?? this.viewState,
-        newUploadRequests.where((element) => element.status != UploadRequestStatus.DELETED).toList(),
+        newUploadRequests
+          .where((element) => element.status != UploadRequestStatus.DELETED)
+          .map((uploadRequest) => currentSelectedUploadRequests.contains(uploadRequest)
+            ? SelectableElement<UploadRequest>(uploadRequest, SelectMode.ACTIVE)
+            : SelectableElement<UploadRequest>(uploadRequest, SelectMode.INACTIVE)).toList(),
         uploadRequestEntries,
         selectMode,
         UploadRequestDocumentType.recipients,
@@ -197,6 +206,57 @@ class UploadRequestInsideState extends LinShareState with EquatableMixin {
     );
   }
 
+  UploadRequestInsideState selectUploadRequests(SelectableElement<UploadRequest> newSelectedUploadRequest) {
+    uploadRequests.firstWhere((entry) => entry == newSelectedUploadRequest).toggleSelect();
+    return UploadRequestInsideState(
+        viewState,
+        uploadRequests,
+        uploadRequestEntries,
+        SelectMode.ACTIVE,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest);
+  }
+
+  UploadRequestInsideState cancelSelectedUploadRequest() {
+    return UploadRequestInsideState(
+        viewState,
+        uploadRequests.map((entry) => SelectableElement<UploadRequest>(entry.element, SelectMode.INACTIVE))
+            .toList(),
+        uploadRequestEntries,
+        SelectMode.INACTIVE,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
+  }
+
+  UploadRequestInsideState selectAllUploadRequest() {
+    return UploadRequestInsideState(
+        viewState,
+        uploadRequests.map((entry) => SelectableElement<UploadRequest>(entry.element, SelectMode.ACTIVE))
+            .toList(),
+        uploadRequestEntries,
+        SelectMode.ACTIVE,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
+  }
+
+  UploadRequestInsideState unSelectAllUploadRequest() {
+    return UploadRequestInsideState(
+        viewState,
+        uploadRequests.map((entry) => SelectableElement<UploadRequest>(entry.element, SelectMode.INACTIVE))
+            .toList(),
+        uploadRequestEntries,
+        SelectMode.ACTIVE,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
+  }
+
   UploadRequestInsideState setSearchResult({required List<UploadRequestEntry> newSearchResult}) {
     final selectedElements = uploadRequestEntries
         .where((element) => element.selectMode == SelectMode.ACTIVE)
@@ -237,5 +297,16 @@ extension MultipleSelections on UploadRequestInsideState {
         .where((entry) => entry.selectMode == SelectMode.ACTIVE)
         .map((entry) => entry.element)
         .toList();
+  }
+
+  bool isAllRecipientSelected() {
+    return uploadRequests.every((uploadRequest) => uploadRequest.selectMode == SelectMode.ACTIVE);
+  }
+
+  List<UploadRequest> getAllSelectedRecipient() {
+    return uploadRequests
+      .where((entry) => entry.selectMode == SelectMode.ACTIVE)
+      .map((entry) => entry.element)
+      .toList();
   }
 }

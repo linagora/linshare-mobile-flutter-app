@@ -117,3 +117,24 @@ class UploadRequestEntrySetSearchResultAction extends ActionOffline {
 class CleanUploadRequestInsideAction extends ActionOffline {
   CleanUploadRequestInsideAction();
 }
+
+class SelectUploadRequestAction extends ActionOffline {
+  final SelectableElement<UploadRequest> selectedUploadRequest;
+
+  SelectUploadRequestAction(this.selectedUploadRequest);
+}
+
+@immutable
+class ClearUploadRequestSelectionAction extends ActionOffline {
+  ClearUploadRequestSelectionAction();
+}
+
+@immutable
+class UploadRequestSelectAllRecipientAction extends ActionOffline {
+  UploadRequestSelectAllRecipientAction();
+}
+
+@immutable
+class UploadRequestUnSelectAllRecipientAction extends ActionOffline {
+  UploadRequestUnSelectAllRecipientAction();
+}
