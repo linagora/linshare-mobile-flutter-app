@@ -32,6 +32,7 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/archived/archived_upload_request_inside_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/pending/pending_upload_request_inside_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
@@ -41,7 +42,7 @@ import '../../util/data_structure/stack.dart' as structure;
 import 'active_close/active_closed_upload_request_inside_widget.dart';
 
 typedef OnBackUploadRequestClickedCallback = void Function();
-typedef OnUploadRequestClickedCallback = void Function(UploadRequest uploadRequest);
+typedef OnUploadRequestClickedCallback = void Function(SelectableElement<UploadRequest> uploadRequest);
 
 class UploadRequestNavigatorWidget extends StatefulWidget {
 
@@ -128,15 +129,15 @@ class UploadRequestNavigatorWidgetState extends State<UploadRequestNavigatorWidg
     if (_validateActiveCloseUploadRequestInsideRoute(args.uploadRequestGroup.status)) {
       return ActiveClosedUploadRequestInsideWidget(
         wantToBack,
-        (uploadRequest) => _onClickUploadRequest(context, uploadRequest));
+        (uploadRequest) => _onClickUploadRequest(context, uploadRequest.element));
     } else if (_validatePendingUploadRequestInsideRoute(args.uploadRequestGroup.status)) {
       return PendingUploadRequestInsideWidget(
         () => wantToBack(),
-        (uploadRequest) => _onClickUploadRequest(context, uploadRequest));
+        (uploadRequest) => _onClickUploadRequest(context, uploadRequest.element));
     } else if (_validateArchivedUploadRequestInsideRoute(args.uploadRequestGroup.status)) {
       return ArchivedUploadRequestInsideWidget(
         () => wantToBack(),
-        (uploadRequest) => _onClickUploadRequest(context, uploadRequest));
+        (uploadRequest) => _onClickUploadRequest(context, uploadRequest.element));
     } else {
       return SizedBox.shrink();
     }
