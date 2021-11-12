@@ -31,65 +31,32 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/upload_request/update_upload_request_status_interactor.dart';
 
-class UploadRequestViewState extends ViewState {
-  final List<UploadRequest> uploadRequests;
+class UpdateMultipleUploadRequestStateInteractor {
 
-  UploadRequestViewState(this.uploadRequests);
+  final UpdateUploadRequestStateInteractor updateUploadRequestStateInteractor;
 
-  @override
-  List<Object> get props => [uploadRequests];
-}
+  UpdateMultipleUploadRequestStateInteractor(this.updateUploadRequestStateInteractor);
 
-class UploadRequestFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UpdateUploadRequestStateViewState extends ViewState {
-  final UploadRequest uploadRequest;
-  UpdateUploadRequestStateViewState(this.uploadRequest);
-
-  @override
-  List<Object?> get props => [uploadRequest];
-}
-
-class UpdateUploadRequestStateFailure extends FeatureFailure {
-  final exception;
-
-  UpdateUploadRequestStateFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UpdateUploadRequestAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestAllSuccessViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class UpdateUploadRequestAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestAllFailureViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class UpdateUploadRequestHasSomeFailedViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestHasSomeFailedViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
+  Future<Either<Failure, Success>> execute(List<UploadRequestId> uploadRequestIds, UploadRequestStatus status, {bool? copyToMySpace}) async {
+    final listResult =
+        await Future.wait(uploadRequestIds.map((uploadRequestId) => updateUploadRequestStateInteractor.execute(uploadRequestId, status, copyToMySpace: copyToMySpace)));
+    if (listResult.length == 1) {
+      return listResult.first;
+    } else {
+      var failedFileCount = 0;
+      listResult.forEach((element) {
+        if (element is Left) {
+          failedFileCount++;
+        }
+      });
+      if (failedFileCount == 0) {
+        return Right(UpdateUploadRequestAllSuccessViewState(listResult));
+      } else if (failedFileCount == listResult.length) {
+        return Left(UpdateUploadRequestAllFailureViewState(listResult));
+      }
+      return Right(UpdateUploadRequestHasSomeFailedViewState(listResult));
+    }
+  }
 }

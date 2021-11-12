@@ -34,4 +34,6 @@ import 'package:domain/domain.dart';
 
 abstract class UploadRequestRepository {
   Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId uploadRequestGroupId);
+
+  Future<UploadRequest> updateUploadRequestState(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace});
 }
