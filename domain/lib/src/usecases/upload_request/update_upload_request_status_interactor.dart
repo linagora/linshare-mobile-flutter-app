@@ -32,64 +32,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class UploadRequestViewState extends ViewState {
-  final List<UploadRequest> uploadRequests;
+class UpdateUploadRequestStateInteractor {
+  final UploadRequestRepository _uploadRequestRepository;
 
-  UploadRequestViewState(this.uploadRequests);
+  UpdateUploadRequestStateInteractor(this._uploadRequestRepository);
 
-  @override
-  List<Object> get props => [uploadRequests];
-}
-
-class UploadRequestFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UpdateUploadRequestStateViewState extends ViewState {
-  final UploadRequest uploadRequest;
-  UpdateUploadRequestStateViewState(this.uploadRequest);
-
-  @override
-  List<Object?> get props => [uploadRequest];
-}
-
-class UpdateUploadRequestStateFailure extends FeatureFailure {
-  final exception;
-
-  UpdateUploadRequestStateFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UpdateUploadRequestAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestAllSuccessViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class UpdateUploadRequestAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestAllFailureViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class UpdateUploadRequestHasSomeFailedViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestHasSomeFailedViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
+  Future<Either<Failure, Success>> execute(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace}) async {
+    try {
+      final resultUploadRequest = await _uploadRequestRepository.updateUploadRequestState(uploadRequestId, status, copyToMySpace: copyToMySpace);
+      return Right<Failure, Success>(UpdateUploadRequestStateViewState(resultUploadRequest));
+    } catch (exception) {
+      return Left<Failure, Success>(UpdateUploadRequestStateFailure(exception));
+    }
+  }
 }
