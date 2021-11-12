@@ -38,7 +38,7 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_context_menu_action_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_entry_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/upload_request_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_widget.dart';
@@ -78,9 +78,7 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
 
   @override
   List<Widget> fileMultipleSelectionActions(BuildContext context, List<UploadRequestEntry> allSelectedEntries) {
-    return [
-      _removeRecipientMultipleSelection(allSelectedEntries)
-    ];
+    throw UnimplementedError();
   }
 
   @override
@@ -110,15 +108,20 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
   }
 
 
-  Widget _removeRecipientMultipleSelection(List<UploadRequestEntry> uploadRequestEntries) {
-    return UploadRequestEntryMultipleSelectionActionBuilder(
+  Widget _removeRecipientMultipleSelection(List<UploadRequest> uploadRequestEntries) {
+    return UploadRequestMultipleSelectionActionBuilder(
         Key('multiple_selection_remove_action'),
         SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
         uploadRequestEntries)
-      .onActionClick((entries) => viewModel.removeFiles(
-        context,
-        entries,
-        itemSelectionType: ItemSelectionType.multiple))
+      .onActionClick((entries) => (viewModel as ArchivedUploadRequestInsideViewModel)
+        .removeRecipients(context, entries, itemSelectionType: ItemSelectionType.multiple))
       .build();
+  }
+
+  @override
+  List<Widget> recipientMultipleSelectionActions(BuildContext context, List<UploadRequest> allSelected) {
+    return [
+      _removeRecipientMultipleSelection(allSelected)
+    ];
   }
 }

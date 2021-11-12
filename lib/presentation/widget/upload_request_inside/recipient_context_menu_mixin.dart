@@ -35,9 +35,11 @@ import 'package:domain/domain.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_common_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 
 mixin RecipientContextMenuMixin {
   final imagePath = getIt.get<AppImagePaths>();
@@ -54,7 +56,17 @@ mixin RecipientContextMenuMixin {
       .build();
   }
 
+  Widget buildRecipientMultipleSelectionBottomBar(BuildContext context, List<UploadRequest> allSelected) {
+    return MultipleSelectionBarBuilder()
+      .key(Key('multiple_upload_request_recipient_selection_bar'))
+      .text(AppLocalizations.of(context).items(allSelected.length))
+      .actions(recipientMultipleSelectionActions(context, allSelected))
+      .build();
+  }
+
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest entry);
 
   Widget? recipientFooterActionTile();
+
+  List<Widget> recipientMultipleSelectionActions(BuildContext context, List<UploadRequest> allSelected);
 }
