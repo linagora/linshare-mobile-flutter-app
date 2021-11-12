@@ -64,10 +64,6 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
   }
 
   @override
-  void openRecipientContextMenu(BuildContext context, UploadRequestEntry entry) {
-  }
-
-  @override
   UploadRequestInsideViewModel get viewModel => getIt<ArchivedUploadRequestInsideViewModel>();
 
   @override
@@ -97,5 +93,32 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
   @override
   Widget? recipientFooterActionTile() {
     return null;
+  }
+
+  Widget _removeRecipientAction(
+    List<UploadRequest> entries,
+    {ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    return UploadRequestContextMenuActionBuilder(
+        Key('remove_upload_request_entry_context_menu_action'),
+        SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).delete,
+        entries.first)
+      .onActionClick((data) => (viewModel as ArchivedUploadRequestInsideViewModel)
+        .removeRecipients(context, entries, itemSelectionType: itemSelectionType))
+      .build();
+  }
+
+
+  Widget _removeRecipientMultipleSelection(List<UploadRequestEntry> uploadRequestEntries) {
+    return UploadRequestEntryMultipleSelectionActionBuilder(
+        Key('multiple_selection_remove_action'),
+        SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+        uploadRequestEntries)
+      .onActionClick((entries) => viewModel.removeFiles(
+        context,
+        entries,
+        itemSelectionType: ItemSelectionType.multiple))
+      .build();
   }
 }
