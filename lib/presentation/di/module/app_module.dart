@@ -431,6 +431,8 @@ class AppModule {
       getIt<CredentialRepository>()));
     getIt.registerFactory(() => DisableOfflineReceivedShareInteractor(getIt<ReceivedShareRepository>()));
     getIt.registerFactory(() => AdvanceSearchWorkgroupNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
+    getIt.registerFactory(() => UpdateUploadRequestStateInteractor(getIt<UploadRequestRepository>()));
+    getIt.registerFactory(() => UpdateMultipleUploadRequestStateInteractor(getIt<UpdateUploadRequestStateInteractor>()));
   }
 
   void _provideSharePreference() {
