@@ -29,85 +29,44 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class UploadRequestViewState extends ViewState {
-  final List<UploadRequest> uploadRequests;
+class EditUploadRequestRecipient extends Equatable {
+  final DateTime? activationDate;
+  final DateTime notificationDate;
+  final bool enableNotification;
+  final bool canClose;
+  final bool canDeleteDocument;
+  final DateTime expirationDate;
+  final String locale;
+  final int maxDepositSize;
+  final int maxFileCount;
+  final int maxFileSize;
 
-  UploadRequestViewState(this.uploadRequests);
-
-  @override
-  List<Object> get props => [uploadRequests];
-}
-
-class UploadRequestFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UpdateUploadRequestStateViewState extends ViewState {
-  final UploadRequest uploadRequest;
-  UpdateUploadRequestStateViewState(this.uploadRequest);
-
-  @override
-  List<Object?> get props => [uploadRequest];
-}
-
-class UpdateUploadRequestStateFailure extends FeatureFailure {
-  final exception;
-
-  UpdateUploadRequestStateFailure(this.exception);
+  EditUploadRequestRecipient(
+    this.activationDate,
+    this.notificationDate,
+    this.enableNotification,
+    this.canClose,
+    this.canDeleteDocument,
+    this.expirationDate,
+    this.locale,
+    this.maxDepositSize,
+    this.maxFileCount,
+    this.maxFileSize,
+  );
 
   @override
-  List<Object> get props => [exception];
-}
-
-class UpdateUploadRequestAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestAllSuccessViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class UpdateUploadRequestAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestAllFailureViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class UpdateUploadRequestHasSomeFailedViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestHasSomeFailedViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class EditUploadRequestRecipientViewState extends ViewState {
-  final UploadRequest uploadRequest;
-
-  EditUploadRequestRecipientViewState(this.uploadRequest);
-
-  @override
-  List<Object?> get props => [uploadRequest];
-}
-
-class EditUploadRequestRecipientFailure extends FeatureFailure {
-  final exception;
-
-  EditUploadRequestRecipientFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  List<Object?> get props => [
+    activationDate,
+    notificationDate,
+    enableNotification,
+    canClose,
+    canDeleteDocument,
+    expirationDate,
+    locale,
+    maxDepositSize,
+    maxFileCount,
+    maxFileSize,
+  ];
 }
