@@ -36,6 +36,7 @@ import 'package:testshared/fixture/shared_space_document_fixture.dart';
 
 final sharedSpace1 = SharedSpaceNodeNested(
   SharedSpaceId('e352ed55-abef-4630-816f-c025caa3b025'),
+  null,
   SharedSpaceRole(
     SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
     SharedSpaceRoleName.ADMIN
@@ -50,6 +51,7 @@ final sharedSpace1 = SharedSpaceNodeNested(
 
 final sharedSpace2 = SharedSpaceNodeNested(
   SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+  null,
   SharedSpaceRole(
     SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
     SharedSpaceRoleName.CONTRIBUTOR
@@ -64,6 +66,7 @@ final sharedSpace2 = SharedSpaceNodeNested(
 
 final sharedSpace3 = SharedSpaceNodeNested(
     SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+    null,
     SharedSpaceRole(
         SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
         SharedSpaceRoleName.CONTRIBUTOR
@@ -78,6 +81,7 @@ final sharedSpace3 = SharedSpaceNodeNested(
 
 final sharedSpaceResponse1 = SharedSpaceNodeNestedResponse(
   SharedSpaceId('e352ed55-abef-4630-816f-c025caa3b025'),
+  null,
   SharedSpaceRoleDto(
     SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
     SharedSpaceRoleName.ADMIN
@@ -92,6 +96,7 @@ final sharedSpaceResponse1 = SharedSpaceNodeNestedResponse(
 
 final sharedSpaceResponse2 = SharedSpaceNodeNestedResponse(
   SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+  null,
   SharedSpaceRoleDto(
     SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
     SharedSpaceRoleName.CONTRIBUTOR
@@ -171,6 +176,7 @@ final sharedSpaceRole4 = SharedSpaceRole(SharedSpaceRoleId('an id 4'), SharedSpa
 
 final sharedSpaceNodeNested = SharedSpaceNodeNested(
     SharedSpaceId('eda9a917-10a7-44e0-98dc-7179ab914ab7'),
+    null,
     SharedSpaceRole(
         SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
         SharedSpaceRoleName.ADMIN
@@ -185,6 +191,7 @@ final sharedSpaceNodeNested = SharedSpaceNodeNested(
 
 final sharedSpaceCache1 = SharedSpaceCache(
   SharedSpaceId('e352ed55-abef-4630-816f-c025caa3b025'),
+  null,
   SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
   SharedSpaceRoleName.ADMIN,
   true,
@@ -198,6 +205,7 @@ final sharedSpaceCache1 = SharedSpaceCache(
 
 final sharedSpaceCache2 = SharedSpaceCache(
   SharedSpaceId('e352ed55-ebef-4630-856f-c025caa3b025'),
+  null,
   SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
   SharedSpaceRoleName.CONTRIBUTOR,
   true,

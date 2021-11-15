@@ -37,7 +37,7 @@ import 'package:linshare_flutter_app/presentation/view/background_widgets/backgr
 class CommonView {
 
   Widget buildNoResultFound(BuildContext context) {
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
       .key(Key('search_no_result_found'))
       .text(AppLocalizations.of(context).no_results_found)
       .build();

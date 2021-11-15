@@ -262,6 +262,7 @@ class WidgetModule {
       getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>(),
       getIt<GetAllWorkgroupsInteractor>(),
+      getIt<GetAllWorkgroupsOfflineInteractor>(),
       getIt<SearchWorkgroupInsideDriveInteractor>(),
       getIt<RemoveMultipleSharedSpacesInteractor>(),
       getIt<CreateWorkGroupInteractor>(),

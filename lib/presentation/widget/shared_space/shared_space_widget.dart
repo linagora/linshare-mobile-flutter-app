@@ -233,7 +233,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         RefreshIndicator(
           onRefresh: () async => sharedSpaceViewModel.getAllSharedSpaces(needToGetOldSorter: false),
           child: failure is SharedSpacesFailure ? 
-            BackgroundWidgetBuilder()
+            BackgroundWidgetBuilder(context)
                 .key(Key('shared_space_error_background'))
                 .image(SvgPicture.asset(
                   imagePath.icUnexpectedError,
@@ -268,7 +268,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   }
 
   Widget _buildNoWorkgroupYet(BuildContext context) {
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
       .key(Key('shared_space_no_workgroup_yet'))
       .image(SvgPicture.asset(
         imagePath.icSharedSpaceNoWorkGroup,

@@ -244,7 +244,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
         (failure) => RefreshIndicator(
             onRefresh: () async => mySpaceViewModel.getAllDocument(),
             child: failure is MySpaceFailure
-                ? BackgroundWidgetBuilder()
+                ? BackgroundWidgetBuilder(context)
                     .key(Key('my_space_error_background'))
                     .image(SvgPicture.asset(imagePath.icUnexpectedError,
                         width: 120, height: 120, fit: BoxFit.fill))
@@ -405,7 +405,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   }
 
   Widget _buildUploadFileHere(BuildContext context) {
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
       .key(Key('my_space_upload_file_here'))
       .image(SvgPicture.asset(
         imagePath.icUploadFile,

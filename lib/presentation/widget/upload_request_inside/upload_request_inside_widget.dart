@@ -330,7 +330,7 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
   }
 
   Widget _buildEmptyListIndicator() {
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
       .image(SvgPicture.asset(
         imagePath.icUploadFile,
         width: 120,
