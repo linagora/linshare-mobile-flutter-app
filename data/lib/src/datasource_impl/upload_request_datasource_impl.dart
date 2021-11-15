@@ -75,4 +75,20 @@ class UploadRequestDataSourceImpl implements UploadRequestDataSource {
       });
     });
   }
+
+  @override
+  Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request) {
+    return Future.sync(() async {
+      final uploadRequestResponse = await _linShareHttpClient.editUploadRequestRecipient(uploadRequestId, request);
+      return uploadRequestResponse.toUploadRequest();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestNotFound();
+        } else {
+          throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
 }

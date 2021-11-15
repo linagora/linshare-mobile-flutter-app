@@ -29,130 +29,88 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/data.dart';
 import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/upload_request_id_converter.dart';
-import 'package:data/src/util/attribute.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'dart:convert';
 
-part 'upload_request_response.g.dart';
+part 'edit_upload_request_recipient_body_request.g.dart';
 
 @JsonSerializable()
 @DatetimeConverter()
-@UploadRequestIdConverter()
-class UploadRequestResponse extends Equatable {
-  UploadRequestResponse(
-      this.uploadRequestId,
-      this.label,
-      this.creationDate,
-      this.modificationDate,
-      this.activationDate,
-      this.notificationDate,
-      this.expiryDate,
-      this.protectedByPassword,
-      this.enableNotification,
-      this.collective,
-      this.owner,
-      this.status,
-      this.usedSpace,
-      this.nbrUploadedFiles,
-      this.pristine,
-      this.closed,
-      this.locale,
-      this.recipients,
-      this.maxFileCount,
-      this.maxDepositSize,
-      this.maxFileSize,
-      this.canClose,
-      this.canDeleteDocument,
-  );
-
-  @JsonKey(name: Attribute.uuid)
-  final UploadRequestId uploadRequestId;
-
-  final String label;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime activationDate;
+@DatetimeNullableConverter()
+class EditUploadRequestRecipientBodyRequest with EquatableMixin {
+  final DateTime? activationDate;
   final DateTime notificationDate;
-  final DateTime expiryDate;
-  final bool protectedByPassword;
   final bool enableNotification;
-  final bool collective;
-  final GenericUserDto owner;
-  final UploadRequestStatus status;
-  final double usedSpace;
-  final int nbrUploadedFiles;
-  final bool pristine;
-  final bool closed;
-  final String locale;
-  final List<GenericUserDto> recipients;
-  final int maxFileCount;
-  final double maxDepositSize;
-  final double? maxFileSize;
   final bool canClose;
   final bool canDeleteDocument;
+  final DateTime expiryDate;
+  final String locale;
+  final int maxDepositSize;
+  final int maxFileCount;
+  final int maxFileSize;
 
-  factory UploadRequestResponse.fromJson(Map<String, dynamic> json) => _$UploadRequestResponseFromJson(json);
+  EditUploadRequestRecipientBodyRequest(
+    this.activationDate,
+    this.notificationDate,
+    this.enableNotification,
+    this.canClose,
+    this.canDeleteDocument,
+    this.expiryDate,
+    this.locale,
+    this.maxDepositSize,
+    this.maxFileCount,
+    this.maxFileSize
+  );
 
-  Map<String, dynamic> toJson() => _$UploadRequestResponseToJson(this);
+  factory EditUploadRequestRecipientBodyRequest.fromJson(Map<String, dynamic> json) => _$EditUploadRequestRecipientBodyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _editUploadBodyRequestRecipientToJson(this);
+
+  Map<String, dynamic> _editUploadBodyRequestRecipientToJson(EditUploadRequestRecipientBodyRequest instance) => <String, dynamic>{
+    jsonEncode('activationDate'): const DatetimeNullableConverter().toJson(instance.activationDate),
+    jsonEncode('notificationDate'): const DatetimeConverter().toJson(instance.notificationDate),
+    jsonEncode('enableNotification'): jsonEncode(instance.enableNotification),
+    jsonEncode('canClose'): jsonEncode(instance.canClose),
+    jsonEncode('canDeleteDocument'): jsonEncode(instance.canDeleteDocument),
+    jsonEncode('expiryDate'): const DatetimeConverter().toJson(instance.expiryDate),
+    jsonEncode('locale'): jsonEncode(instance.locale),
+    jsonEncode('maxDepositSize'): jsonEncode(instance.maxDepositSize),
+    jsonEncode('maxFileCount'): jsonEncode(instance.maxFileCount),
+    jsonEncode('maxFileSize'): jsonEncode(instance.maxFileSize),
+  };
 
   @override
   List<Object?> get props => [
-    uploadRequestId,
-    label,
-    creationDate,
-    modificationDate,
     activationDate,
     notificationDate,
-    expiryDate,
-    protectedByPassword,
     enableNotification,
-    collective,
-    owner,
-    status,
-    usedSpace,
-    nbrUploadedFiles,
-    pristine,
-    closed,
-    locale,
-    recipients,
-    maxFileCount,
-    maxDepositSize,
-    maxFileSize,
     canClose,
     canDeleteDocument,
+    expiryDate,
+    locale,
+    maxDepositSize,
+    maxFileCount,
+    maxFileSize
   ];
 }
 
-extension UploadRequestResponseExtension on UploadRequestResponse {
-  UploadRequest toUploadRequest() {
-    return UploadRequest(
-      uploadRequestId,
-      label,
-      creationDate,
-      modificationDate,
+extension EditUploadRequestRecipientExtension on EditUploadRequestRecipient {
+  EditUploadRequestRecipientBodyRequest toBodyRequest() {
+    return EditUploadRequestRecipientBodyRequest(
       activationDate,
       notificationDate,
-      expiryDate,
-      protectedByPassword,
       enableNotification,
-      collective,
-      owner.toGenericUser(),
-      status,
-      usedSpace,
-      nbrUploadedFiles,
-      pristine,
-      closed,
-      locale,
-      recipients.map((e) => e.toGenericUser()).toList(),
-      maxFileCount,
-      maxDepositSize,
-      maxFileSize,
       canClose,
       canDeleteDocument,
+      expirationDate,
+      locale,
+      maxDepositSize,
+      maxFileCount,
+      maxFileSize
     );
   }
 }

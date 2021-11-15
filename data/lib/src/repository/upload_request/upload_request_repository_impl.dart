@@ -46,4 +46,9 @@ class UploadRequestRepositoryImpl implements UploadRequestRepository {
   Future<UploadRequest> updateUploadRequestState(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace}) {
     return _uploadRequestDataSource.updateUploadRequestState(uploadRequestId, status, copyToMySpace: copyToMySpace);
   }
+
+  @override
+  Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request) {
+    return _uploadRequestDataSource.editUploadRequest(uploadRequestId, request);
+  }
 }
