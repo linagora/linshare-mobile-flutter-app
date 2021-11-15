@@ -69,12 +69,14 @@ void main() {
       )).thenAnswer((_) async => '');
 
       when(sharedSpaceDocumentRepository.makeAvailableOfflineSharedSpaceDocument(
+          null,
           sharedSpaceNodeNested,
           workGroupDocument,
           ''
       )).thenAnswer((_) async => true);
 
       final result = await _makeAvailableOfflineSharedSpaceDocumentInteractor.execute(
+          null,
           sharedSpaceNodeNested,
           workGroupDocument
       );
@@ -86,12 +88,14 @@ void main() {
       final error = SQLiteDatabaseException();
 
       when(sharedSpaceDocumentRepository.makeAvailableOfflineSharedSpaceDocument(
+          null,
           sharedSpaceNodeNested,
           workGroupDocument,
           ''
       )).thenThrow(error);
 
       await _makeAvailableOfflineSharedSpaceDocumentInteractor.execute(
+          null,
           sharedSpaceNodeNested,
           workGroupDocument
       ).catchError((error) {
