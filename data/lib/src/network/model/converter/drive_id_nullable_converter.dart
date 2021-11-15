@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,11 +28,17 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-abstract class DriveDataSource {
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId);
+class DriveIdNullableConverter implements JsonConverter<DriveId?, String?> {
+  const DriveIdNullableConverter();
 
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId);
+  @override
+  DriveId? fromJson(String? json) => json != null ? DriveId(json) : null;
+
+  @override
+  String? toJson(DriveId? driveId) => driveId?.uuid;
 }

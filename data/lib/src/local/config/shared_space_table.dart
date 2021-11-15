@@ -33,6 +33,7 @@ class SharedSpaceTable {
   static const String TABLE_NAME = 'sharedSpace';
 
   static const String SHARED_SPACE_ID = 'sharedSpaceId';
+  static const String DRIVE_ID = 'driveId';
   static const String SHARED_SPACE_ROLE_ID = 'sharedSpaceRoleId';
   static const String SHARED_SPACE_ROLE_NAME = 'sharedSpaceRoleName';
   static const String SHARED_SPACE_ROLE_ENABLE = 'sharedSpaceRoleEnable';
@@ -43,8 +44,9 @@ class SharedSpaceTable {
   static const String QUOTA_ID = 'quotaId';
   static const String VERSIONING_PARAMETERS = 'versioningParameters';
 
-  static const String CREATE = '''CREATE TABLE $TABLE_NAME (
+  static const String CREATE = '''CREATE TABLE IF NOT EXISTS $TABLE_NAME (
     $SHARED_SPACE_ID TEXT PRIMARY KEY,
+    $DRIVE_ID TEXT,
     $SHARED_SPACE_ROLE_ID TEXT,
     $SHARED_SPACE_ROLE_NAME TEXT,
     $SHARED_SPACE_ROLE_ENABLE Integer,
@@ -55,4 +57,6 @@ class SharedSpaceTable {
     $QUOTA_ID TEXT,
     $VERSIONING_PARAMETERS Integer
   )''';
+
+  static const String ADD_NEW_COLUMN_DRIVE_ID = 'ALTER TABLE $TABLE_NAME ADD COLUMN $DRIVE_ID TEXT';
 }

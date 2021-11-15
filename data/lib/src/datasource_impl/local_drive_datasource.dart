@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -29,10 +29,32 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 
-abstract class DriveDataSource {
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId);
+class LocalDriveDataSource implements DriveDataSource {
+  final SharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
 
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId);
+  LocalDriveDataSource(this._sharedSpaceDocumentDatabaseManager);
+
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId) {
+    return Future.sync(() async {
+      final result = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(driveId);
+      return result.isNotEmpty
+        ? result.map((node) => node.toSharedSpaceNodeNested()).toList()
+        : <SharedSpaceNodeNested>[];
+    }).catchError((error) {
+      if (error is SQLiteDatabaseException) {
+        throw SQLiteDatabaseException();
+      } else {
+        throw LocalUnknownError(error);
+      }
+    });
+  }
 }

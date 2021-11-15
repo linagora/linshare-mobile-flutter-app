@@ -95,6 +95,7 @@ abstract class SharedSpaceDocumentDataSource {
     Uri baseUrl);
 
   Future<bool> makeAvailableOfflineSharedSpaceDocument(
+    SharedSpaceNodeNested? drive,
     SharedSpaceNodeNested sharedSpaceNodeNested,
     WorkGroupDocument workGroupDocument,
     String localPath,
@@ -102,7 +103,13 @@ abstract class SharedSpaceDocumentDataSource {
 
   Future<WorkGroupDocument?> getSharesSpaceDocumentOffline(WorkGroupNodeId workGroupNodeId);
 
-  Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath);
+  Future<bool> disableAvailableOfflineSharedSpaceDocument(
+    DriveId? driveId,
+    SharedSpaceId sharedSpaceId,
+    WorkGroupNodeId? parentNodeId,
+    WorkGroupNodeId workGroupNodeId,
+    String localPath
+  );
 
   Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId);
 
