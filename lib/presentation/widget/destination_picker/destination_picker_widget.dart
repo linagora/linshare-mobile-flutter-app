@@ -392,7 +392,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               }
             },
             child: failure is SharedSpaceDetailFailure
-                ? BackgroundWidgetBuilder()
+                ? BackgroundWidgetBuilder(context)
                     .key(Key('shared_space_error_background'))
                     .image(SvgPicture.asset(_imagePath.icUnexpectedError,
                         width: 120, height: 120, fit: BoxFit.fill))
@@ -433,7 +433,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         (failure) => RefreshIndicator(
           onRefresh: () async => _destinationPickerViewModel.getAllDrive(state.operation, state.routeData.drive!),
           child: failure is GetAllWorkgroupsFailure
-              ? BackgroundWidgetBuilder()
+              ? BackgroundWidgetBuilder(context)
                     .key(Key('shared_space_error_background'))
                     .image(SvgPicture.asset(_imagePath.icUnexpectedError, width: 120, height: 120, fit: BoxFit.fill))
                     .text(AppLocalizations.of(context).common_error_occured_message)
@@ -474,7 +474,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   }
 
   Widget _buildNoWorkgroupYet(BuildContext context) {
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
         .key(Key('shared_space_no_workgroup_yet'))
         .image(SvgPicture.asset(_imagePath.icSharedSpaceNoWorkGroup,
             width: 120, height: 120, fit: BoxFit.fill))

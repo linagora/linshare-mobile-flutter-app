@@ -502,7 +502,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
     if (widget.sharedSpaceDocumentUIType == SharedSpaceDocumentUIType.destinationPicker || sharedSpaceDocumentViewModel.isInSearchState()) {
       return SizedBox.shrink();
     }
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
       .image(
         SvgPicture.asset(
           imagePath.icUploadFile,
