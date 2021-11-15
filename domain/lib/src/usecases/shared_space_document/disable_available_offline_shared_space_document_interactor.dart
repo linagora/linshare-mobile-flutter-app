@@ -37,9 +37,10 @@ class DisableAvailableOfflineWorkGroupDocumentInteractor {
 
   DisableAvailableOfflineWorkGroupDocumentInteractor(this._sharedSpaceDocumentRepository);
 
-  Future<Either<Failure, Success>> execute(WorkGroupDocument workGroupDocument) async {
+  Future<Either<Failure, Success>> execute(WorkGroupDocument workGroupDocument, DriveId? driveId) async {
     try {
       final result = await _sharedSpaceDocumentRepository.disableAvailableOfflineSharedSpaceDocument(
+        driveId,
         workGroupDocument.sharedSpaceId,
         workGroupDocument.parentWorkGroupNodeId,
         workGroupDocument.workGroupNodeId,
