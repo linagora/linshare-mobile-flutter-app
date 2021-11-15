@@ -31,9 +31,12 @@
 //
 
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/upload_request/edit_upload_request_recipient.dart';
 
 abstract class UploadRequestRepository {
   Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId uploadRequestGroupId);
 
   Future<UploadRequest> updateUploadRequestState(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace});
+
+  Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request);
 }

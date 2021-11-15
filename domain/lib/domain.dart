@@ -175,6 +175,7 @@ export 'src/model/sort/sorter.dart';
 export 'src/model/suggestion/suggest_name_type.dart';
 export 'src/model/upload_request/upload_request.dart';
 export 'src/model/upload_request/upload_request_id.dart';
+export 'src/model/upload_request/edit_upload_request_recipient.dart';
 export 'src/model/upload_request_entry/upload_request_entry.dart';
 export 'src/model/upload_request_entry/upload_request_entry_id.dart';
 export 'src/model/upload_request_entry/upload_request_entry_owner.dart';
@@ -425,6 +426,7 @@ export 'src/usecases/upload_request/update_upload_request_multiple_status_intera
 export 'src/usecases/upload_request/update_upload_request_status_interactor.dart';
 export 'src/usecases/upload_request/upload_request_exception.dart';
 export 'src/usecases/upload_request/upload_request_view_state.dart';
+export 'src/usecases/upload_request/edit_upload_request_recipient_interactor.dart';
 export 'src/usecases/upload_request_entry/copy_multiple_files_from_upload_request_entries_to_my_space_interactor.dart';
 export 'src/usecases/upload_request_entry/copy_multiple_files_from_upload_request_entries_to_my_space_interactor.dart';
 export 'src/usecases/upload_request_entry/download_multiple_upload_request_entry_ios_interactor.dart';

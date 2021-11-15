@@ -51,7 +51,13 @@ class UploadRequest with EquatableMixin {
       this.pristine,
       this.closed,
       this.locale,
-      this.recipients);
+      this.recipients,
+      this.maxFileCount,
+      this.maxDepositSize,
+      this.maxFileSize,
+      this.canClose,
+      this.canDeleteDocument,
+  );
 
   final UploadRequestId uploadRequestId;
   final String label;
@@ -71,26 +77,36 @@ class UploadRequest with EquatableMixin {
   final bool closed;
   final String locale;
   final List<GenericUser> recipients;
+  final int maxFileCount;
+  final double maxDepositSize;
+  final double? maxFileSize;
+  final bool canClose;
+  final bool canDeleteDocument;
 
   @override
   List<Object?> get props => [
-        uploadRequestId,
-        label,
-        creationDate,
-        modificationDate,
-        activationDate,
-        notificationDate,
-        expiryDate,
-        protectedByPassword,
-        enableNotification,
-        collective,
-        owner,
-        status,
-        usedSpace,
-        nbrUploadedFiles,
-        pristine,
-        closed,
-        locale,
-        recipients
-      ];
+    uploadRequestId,
+    label,
+    creationDate,
+    modificationDate,
+    activationDate,
+    notificationDate,
+    expiryDate,
+    protectedByPassword,
+    enableNotification,
+    collective,
+    owner,
+    status,
+    usedSpace,
+    nbrUploadedFiles,
+    pristine,
+    closed,
+    locale,
+    recipients,
+    maxFileCount,
+    maxDepositSize,
+    maxFileSize,
+    canClose,
+    canDeleteDocument,
+  ];
 }
