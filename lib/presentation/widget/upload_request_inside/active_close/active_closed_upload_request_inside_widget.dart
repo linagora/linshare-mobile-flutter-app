@@ -195,6 +195,11 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
   }
 
   @override
+  Widget buildRecipientMultipleSelectionBottomBar(BuildContext context, List<UploadRequest> allSelected) {
+    return SizedBox.shrink();
+  }
+
+  @override
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest entry) {
     throw UnimplementedError();
   }
