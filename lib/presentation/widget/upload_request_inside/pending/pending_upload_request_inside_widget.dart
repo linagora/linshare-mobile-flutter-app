@@ -34,6 +34,7 @@
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/upload_request_entry/upload_request_entry.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/pending/pending_upload_request_inside_view_model.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
@@ -63,6 +64,11 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
 
   @override
   void openRecipientContextMenu(BuildContext context, UploadRequest entry) {
+  }
+
+  @override
+  Widget buildRecipientMultipleSelectionBottomBar(BuildContext context, List<UploadRequest> allSelected) {
+    return SizedBox.shrink();
   }
 
   @override
