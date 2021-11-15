@@ -398,7 +398,13 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
     });  }
 
   @override
-  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(
+      SharedSpaceNodeNested? drive,
+      SharedSpaceNodeNested sharedSpaceNodeNested,
+      WorkGroupDocument workGroupDocument,
+      String localPath,
+      {List<TreeNode>? treeNodes}
+  ) {
     throw UnimplementedError();
   }
 
@@ -408,7 +414,13 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath) {
+  Future<bool> disableAvailableOfflineSharedSpaceDocument(
+      DriveId? driveId,
+      SharedSpaceId sharedSpaceId,
+      WorkGroupNodeId? parentNodeId,
+      WorkGroupNodeId workGroupNodeId,
+      String localPath
+  ) {
     throw UnimplementedError();
   }
 

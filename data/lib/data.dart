@@ -56,6 +56,7 @@ export 'src/datasource_impl/upload_request_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_entry_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_group_datasource_impl.dart';
 export 'src/datasource_impl/drive_datasource_impl.dart';
+export 'src/datasource_impl/local_drive_datasource.dart';
 // exception
 export 'src/exception/biometric_exception_thrower.dart';
 // extension
