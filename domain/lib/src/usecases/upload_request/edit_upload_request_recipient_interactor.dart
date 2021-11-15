@@ -28,86 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class UploadRequestViewState extends ViewState {
-  final List<UploadRequest> uploadRequests;
+class EditUploadRequestRecipientInteractor {
+  final UploadRequestRepository _uploadRequestRepository;
 
-  UploadRequestViewState(this.uploadRequests);
+  EditUploadRequestRecipientInteractor(this._uploadRequestRepository);
 
-  @override
-  List<Object> get props => [uploadRequests];
-}
-
-class UploadRequestFailure extends FeatureFailure {
-  final exception;
-
-  UploadRequestFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UpdateUploadRequestStateViewState extends ViewState {
-  final UploadRequest uploadRequest;
-  UpdateUploadRequestStateViewState(this.uploadRequest);
-
-  @override
-  List<Object?> get props => [uploadRequest];
-}
-
-class UpdateUploadRequestStateFailure extends FeatureFailure {
-  final exception;
-
-  UpdateUploadRequestStateFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class UpdateUploadRequestAllSuccessViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestAllSuccessViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class UpdateUploadRequestAllFailureViewState extends FeatureFailure {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestAllFailureViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class UpdateUploadRequestHasSomeFailedViewState extends ViewState {
-  final List<Either<Failure, Success>> resultList;
-
-  UpdateUploadRequestHasSomeFailedViewState(this.resultList);
-
-  @override
-  List<Object> get props => [resultList];
-}
-
-class EditUploadRequestRecipientViewState extends ViewState {
-  final UploadRequest uploadRequest;
-
-  EditUploadRequestRecipientViewState(this.uploadRequest);
-
-  @override
-  List<Object?> get props => [uploadRequest];
-}
-
-class EditUploadRequestRecipientFailure extends FeatureFailure {
-  final exception;
-
-  EditUploadRequestRecipientFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  Future<Either<Failure, Success>> execute(UploadRequestId uploadRequestId, EditUploadRequestRecipient request) async {
+    try {
+      final uploadRequest = await _uploadRequestRepository.editUploadRequest(uploadRequestId, request);
+      return Right<Failure, Success>(EditUploadRequestRecipientViewState(uploadRequest));
+    } catch (exception) {
+      return Left<Failure, Success>(EditUploadRequestRecipientFailure(exception));
+    }
+  }
 }
