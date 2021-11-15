@@ -33,4 +33,6 @@ import 'package:domain/domain.dart';
 
 abstract class DriveRepository {
   Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId);
+
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId);
 }

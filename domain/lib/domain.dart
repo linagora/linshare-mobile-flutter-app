@@ -217,6 +217,7 @@ export 'src/model/upload_request_entry/upload_request_entry_owner.dart';
 export 'src/model/upload_request_entry/upload_request_entry_owner_id.dart';
 export 'src/model/account/last_login.dart';
 export 'src/model/sharedspace/enable_versioning_work_group_request.dart';
+export 'src/model/sharedspace/shared_space_node_nested.dart';
 export 'src/repository/audit/audit_user_repository.dart';
 export 'src/repository/authentication/authentication_oidc_repository.dart';
 // repository
@@ -451,3 +452,4 @@ export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive
 export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive_interactor.dart';
 export 'src/usecases/workgroup/get_all_workgroups_interactor.dart';
 export 'src/usecases/workgroup/workgroup_view_state.dart';
+export 'src/usecases/workgroup/get_all_workgroups_offline_interactor.dart';
