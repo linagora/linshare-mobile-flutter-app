@@ -54,6 +54,7 @@ void main() {
           .thenAnswer((_) async => true);
 
       final result = await _localSharedSpaceDocumentDataSourceImpl.makeAvailableOfflineSharedSpaceDocument(
+        null,
         sharedSpaceNodeNested,
         workGroupDocument,
         '123'
@@ -71,6 +72,7 @@ void main() {
           .thenThrow(error);
 
       await _localSharedSpaceDocumentDataSourceImpl.makeAvailableOfflineSharedSpaceDocument(
+          null,
           sharedSpaceNodeNested,
           workGroupDocument,
           '123'
@@ -100,7 +102,7 @@ void main() {
     });
 
     test('getAllSharedSpaceDocumentOffline Should Return Success List Node', () async {
-      when(_sharedSpaceDocumentDatabaseManager.getListWorkGroupCacheInSharedSpace(
+      when(_sharedSpaceDocumentDatabaseManager.getAllSharedSpaceDocumentOffline(
           sharedSpaceIdOffline1,
           workGroupNodeIdOffline1,
       )).thenAnswer((_) async => [workGroupNode1, workGroupNode2]);
@@ -116,7 +118,7 @@ void main() {
     test('getAllSharedSpaceDocumentOffline Should Throw Exception When getListWorkGroupCacheInSharedSpace Failed', () async {
       final error = SQLiteDatabaseException();
 
-      when(_sharedSpaceDocumentDatabaseManager.getListWorkGroupCacheInSharedSpace(
+      when(_sharedSpaceDocumentDatabaseManager.getAllSharedSpaceDocumentOffline(
         sharedSpaceIdOffline1,
         workGroupNodeIdOffline1
       )).thenThrow(error);

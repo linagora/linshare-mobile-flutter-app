@@ -43,14 +43,21 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   LocalSharedSpaceDocumentDataSourceImpl(this._sharedSpaceDocumentDatabaseManager);
 
   @override
-  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested? sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(
+      SharedSpaceNodeNested? drive,
+      SharedSpaceNodeNested sharedSpaceNodeNested,
+      WorkGroupDocument workGroupDocument,
+      String localPath,
+      {List<TreeNode>? treeNodes}
+  ) {
     return Future.sync(() async {
       if (localPath.isEmpty) {
         return false;
       }
       await Future.wait([
-        if (sharedSpaceNodeNested != null) _sharedSpaceDocumentDatabaseManager.insertSharedSpace(sharedSpaceNodeNested),
-        if (sharedSpaceNodeNested != null && treeNodes != null && treeNodes.isNotEmpty) _sharedSpaceDocumentDatabaseManager.insertListTreeNode(sharedSpaceNodeNested.sharedSpaceId, treeNodes),
+        if (drive != null) _sharedSpaceDocumentDatabaseManager.insertDrive(drive),
+        _sharedSpaceDocumentDatabaseManager.insertSharedSpace(sharedSpaceNodeNested),
+        if (treeNodes != null && treeNodes.isNotEmpty) _sharedSpaceDocumentDatabaseManager.insertListTreeNode(sharedSpaceNodeNested.sharedSpaceId, treeNodes),
       ]);
       return await _sharedSpaceDocumentDatabaseManager.insertData(workGroupDocument, localPath);
     }).catchError((error) {
@@ -76,13 +83,27 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   }
 
   @override
-  Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath) {
+  Future<bool> disableAvailableOfflineSharedSpaceDocument(
+      DriveId? driveId,
+      SharedSpaceId sharedSpaceId,
+      WorkGroupNodeId? parentNodeId,
+      WorkGroupNodeId workGroupNodeId,
+      String localPath
+  ) {
     return Future.sync(() async {
       final result = await _sharedSpaceDocumentDatabaseManager.deleteData(workGroupNodeId.uuid, localPath);
       final listNodeBySharedSpaceId = await _sharedSpaceDocumentDatabaseManager.getListWorkGroupCacheBySharedSpaceID(sharedSpaceId);
       if (listNodeBySharedSpaceId.isEmpty) {
         await _sharedSpaceDocumentDatabaseManager.deleteSharedSpace(sharedSpaceId);
       }
+
+      if (driveId != null) {
+        final workgroupsInsideDrive = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(driveId);
+        if (workgroupsInsideDrive.isNotEmpty) {
+          await _sharedSpaceDocumentDatabaseManager.deleteDrive(driveId);
+        }
+      }
+
       return result;
     }).catchError((error) {
       throw LocalUnknownError(error);
@@ -92,7 +113,7 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   @override
   Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) {
     return Future.sync(() async {
-      return await _sharedSpaceDocumentDatabaseManager.getListWorkGroupCacheInSharedSpace(sharedSpaceId, parentNodeId);
+      return await _sharedSpaceDocumentDatabaseManager.getAllSharedSpaceDocumentOffline(sharedSpaceId, parentNodeId);
     }).catchError((error) {
       if (error is SQLiteDatabaseException) {
         throw SQLiteDatabaseException();

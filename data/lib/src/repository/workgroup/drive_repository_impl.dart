@@ -34,12 +34,17 @@ import 'package:domain/domain.dart';
 
 class DriveRepositoryImpl implements DriveRepository {
 
-  final DriveDataSource _driveDataSource;
+  final Map<DataSourceType, DriveDataSource> _driveDataSources;
 
-  DriveRepositoryImpl(this._driveDataSource);
+  DriveRepositoryImpl(this._driveDataSources);
 
   @override
   Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId) {
-    return _driveDataSource.getAllWorkgroups(driveId);
+    return _driveDataSources[DataSourceType.network]!.getAllWorkgroups(driveId);
+  }
+
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId) {
+    return _driveDataSources[DataSourceType.local]!.getAllWorkgroupsOffline(driveId);
   }
 }

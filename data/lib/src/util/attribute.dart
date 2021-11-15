@@ -39,4 +39,5 @@ class Attribute {
   static const resourceUuid = 'resourceUuid';
   static const fromResourceUuid = 'fromResourceUuid';
   static const contextUuid = 'contextUuid';
+  static const parentUuid = 'parentUuid';
 }
