@@ -273,7 +273,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
         RefreshIndicator(
           onRefresh: () async => _viewModel.getAllWorkgroups(needToGetOldSorter: false),
           child: failure is SharedSpacesFailure ? 
-            BackgroundWidgetBuilder()
+            BackgroundWidgetBuilder(context)
                 .key(Key('workgroup_error_background'))
                 .image(SvgPicture.asset(_imagePath.icUnexpectedError, width: 120, height: 120, fit: BoxFit.fill))
                 .text(AppLocalizations.of(context).common_error_occured_message)
@@ -304,7 +304,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
   }
 
   Widget _buildNoWorkgroupYet(BuildContext context) {
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
       .key(Key('drive_no_workgroup_yet'))
       .image(SvgPicture.asset(_imagePath.icSharedSpaceNoWorkGroup, width: 120, height: 120, fit: BoxFit.fill))
       .text(AppLocalizations.of(context).do_not_have_any_workgroup).build();

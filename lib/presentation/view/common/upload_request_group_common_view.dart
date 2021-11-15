@@ -45,7 +45,7 @@ class UploadRequestGroupCommonView {
   final imagePath = getIt<AppImagePaths>();
 
   Widget buildCreateUploadRequestsHere(BuildContext context, String icon) {
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
       .key(Key('create_upload_request_here'))
       .image(SvgPicture.asset(icon, width: 120, height: 120, fit: BoxFit.fill))
       .text(AppLocalizations.of(context).create_upload_requests_here)

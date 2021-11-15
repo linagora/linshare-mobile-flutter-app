@@ -38,6 +38,10 @@ class BackgroundWidgetBuilder {
   SvgPicture? _image;
   String? _text;
 
+  final BuildContext _context;
+
+  BackgroundWidgetBuilder(this._context);
+
   BackgroundWidgetBuilder key(Key key) {
     _key = key;
     return this;
@@ -55,23 +59,31 @@ class BackgroundWidgetBuilder {
 
   Widget build() {
     return Center(
-        key: _key ?? Key('BackgroundWidgetBuilder'),
-        child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _image ?? SizedBox.shrink(),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Text(
-                    _text ?? '',
-                    style: TextStyle(color: AppColor.loginTextFieldTextColor, fontSize: 20),
-                    textAlign: TextAlign.center,
+      key: _key ?? Key('BackgroundWidgetBuilder'),
+      child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            child: Container(
+              height: MediaQuery.of(_context).size.height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _image ?? SizedBox.shrink(),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Text(
+                      _text ?? '',
+                      style: TextStyle(color: AppColor.loginTextFieldTextColor, fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-              ],
-            )));
+                ],
+              ),
+            ),
+          )
+        ]
+      )
+    );
   }
 }
