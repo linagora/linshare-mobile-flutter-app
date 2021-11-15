@@ -40,7 +40,6 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
-import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/upload_request_status_extension.dart';
@@ -49,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_context_menu_mixin.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_context_menu_mixin.dart';
@@ -72,7 +72,6 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
 
   UploadRequestInsideViewModel get viewModel => getIt<UploadRequestInsideViewModel>();
   final appNavigation = getIt<AppNavigation>();
-  final imagePath = getIt<AppImagePaths>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
   UploadRequestArguments? _arguments;
   final _widgetCommon = getIt<CommonView>();
@@ -519,5 +518,15 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
       case UploadRequestDocumentType.recipients:
         return buildRecipientMultipleSelectionBottomBar(context, state.getAllSelectedRecipient());
     }
+  }
+
+  Widget editUploadRequestRecipientAction(BuildContext context, UploadRequest entry) {
+    return UploadRequestContextMenuActionBuilder(
+        Key('edit_upload_request_recipient_context_menu_action'),
+        Icon(Icons.edit, size: 24.0, color: AppColor.unselectedElementColor),
+        AppLocalizations.of(context).edit,
+        entry)
+    .onActionClick((data) => viewModel.editUploadRequestRecipient(entry))
+    .build();
   }
 }

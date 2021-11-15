@@ -397,6 +397,7 @@ class AppModule {
     getIt.registerFactory(() => GetAllUploadRequestGroupsInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => AddNewUploadRequestInteractor(getIt<UploadRequestGroupRepository>()));
     getIt.registerFactory(() => EditUploadRequestInteractor(getIt<UploadRequestGroupRepository>()));
+    getIt.registerFactory(() => EditUploadRequestRecipientInteractor(getIt<UploadRequestRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestsInteractor(getIt<UploadRequestRepository>()));
     getIt.registerFactory(() => GetAllUploadRequestEntriesInteractor(getIt<UploadRequestEntryRepository>()));
     getIt.registerFactory(() => SearchUploadRequestGroupsInteractor());

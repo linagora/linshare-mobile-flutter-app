@@ -31,10 +31,20 @@
 
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
 
 class EditUploadRequestArguments extends RouterArguments {
-  final UploadRequestGroup uploadRequestGroup;
+  final UploadRequestGroup? uploadRequestGroup;
+  final UploadRequest? uploadRequest;
+  final EditUploadRequestType type;
   final List<Functionality?> uploadRequestFunctionalities;
 
-  EditUploadRequestArguments(this.uploadRequestGroup, this.uploadRequestFunctionalities);
+  EditUploadRequestArguments(
+    this.type,
+    this.uploadRequestFunctionalities,
+    {
+      this.uploadRequestGroup,
+      this.uploadRequest
+    }
+  );
 }

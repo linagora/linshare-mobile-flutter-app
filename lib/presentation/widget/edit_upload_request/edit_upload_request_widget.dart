@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/view/upload_request/file_size_
 import 'package:linshare_flutter_app/presentation/view/upload_request/upload_request_view_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/upload_request/pair_text_input_field_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_viewmodel.dart';
 import 'package:redux/redux.dart';
 
@@ -94,7 +95,7 @@ class _EditUploadRequestWidgetState extends State<EditUploadRequestWidget> {
           onPressed: () => _model.backToUploadRequestGroup()),
         centerTitle: true,
         title: Text(
-          _arguments?.uploadRequestGroup.label ?? '',
+          _arguments?.uploadRequestGroup?.label ?? '',
           key: Key('edit_upload_request_title'),
           style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor),
@@ -103,81 +104,13 @@ class _EditUploadRequestWidgetState extends State<EditUploadRequestWidget> {
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           child: StoreConnector<AppState, EditUploadRequestState>(
             converter: (Store<AppState> store) => store.state.editUploadRequestState,
-            builder: (context, state) => (UploadRequestViewBuilder(context)
-                ..key(_formKey)
-                ..addEmailMessageInput((EmailMessageInputFieldBuilder(context)
-                      ..addEmailSubjectController(_model.emailSubjectController)
-                      ..addEmailMessageController(_model.emailMessageController)
-                      ..addOnChangeEmailSubject((value) => _model.setEmailSubject(value)))
-                    .build())
-                ..addActivationDateInput(state.uploadRequest?.status == UploadRequestStatus.ENABLED
-                    ? (DateTimeNoChangeInputFieldBuilder()
-                        ..setKey(Key('activation_date_no_change_input'))
-                        ..setTitle(AppLocalizations.of(context).activation_date)
-                        ..setValue(state.uploadRequest?.activationDate))
-                      .build()
-                    : (DateTimeInputFieldBuilder()
-                        ..setKey(Key('activation_date_input'))
-                        ..setTitle(AppLocalizations.of(context).activation_date)
-                        ..addDateTimeTextValueNotifier(_model.textActivationNotifier)
-                        ..addOnDateTimeClickAction(() => _model.showDateTimeActivationAction(context)))
-                      .build())
-                ..addExpirationDateInput((DateTimeInputFieldBuilder()
-                      ..setKey(Key('expiration_date_input'))
-                      ..setTitle(AppLocalizations.of(context).expiration_date)
-                      ..addDateTimeTextValueNotifier(_model.textExpirationNotifier)
-                      ..addOnDateTimeClickAction(() => _model.showDateTimeExpirationAction(context)))
-                    .build())
-                ..addMaxNumberFileInput((NumberInputFieldBuilder(context)
-                      ..setKey(Key('max_number_files_input'))
-                      ..setTitle(AppLocalizations.of(context).max_number_of_files)
-                      ..addController(_model.maxNumberFilesController))
-                    .build())
-                ..addMaxSizeFileInput((FileSizeInputFieldBuilder(context)
-                      ..setKey(Key('max_file_size_input'))
-                      ..setTitle(AppLocalizations.of(context).max_size_of_a_file)
-                      ..setListSizeType(state.uploadRequest?.listMaxFileSizeType)
-                      ..addController(_model.maxFileSizeController)
-                      ..addOnSizeTypeNotifier(_model.maxFileSizeTypeNotifier))
-                    .build())
-                ..addReminderDateInput((DateTimeInputFieldBuilder()
-                      ..setKey(Key('reminder_date_input'))
-                      ..setTitle(AppLocalizations.of(context).reminder_date)
-                      ..addDateTimeTextValueNotifier(_model.textReminderNotifier)
-                      ..addOnDateTimeClickAction(() => _model.showDateTimeReminderAction(context)))
-                    .build())
-                ..addTotalSizeFileInput((FileSizeInputFieldBuilder(context)
-                      ..setKey(Key('total_file_size_input'))
-                      ..setTitle(AppLocalizations.of(context).total_size_of_files)
-                      ..setListSizeType(state.uploadRequest?.listTotalFileSizeType)
-                      ..addController(_model.totalFileSizeController)
-                      ..addOnSizeTypeNotifier(_model.totalFileSizeTypeNotifier))
-                    .build())
-                ..addPasswordProtectedNoChangeInput((PairTextInputFieldBuilder()
-                      ..setKey(Key('password_protected_no_change_input'))
-                      ..setTitle(AppLocalizations.of(context).password_protected)
-                      ..setValue(state.uploadRequest?.passwordProtected == true
-                          ? AppLocalizations.of(context).yes
-                          : AppLocalizations.of(context).no))
-                    .build())
-                ..addAllowDeletionInput((CheckboxInputFieldBuilder()
-                      ..setKey(Key('allow_deletion_input'))
-                      ..setTitle(AppLocalizations.of(context).allow_deletion)
-                      ..addOnNotifier(_model.allowDeletionNotifier))
-                    .build())
-                ..addAllowClosureInput((CheckboxInputFieldBuilder()
-                      ..setKey(Key('allow_closure_input'))
-                      ..setTitle(AppLocalizations.of(context).allow_closure)
-                      ..addOnNotifier(_model.allowClosureNotifier))
-                    .build())
-                ..addNotificationLanguageInput((ComboBoxInputFieldBuilder()
-                      ..setKey(Key('notification_language_input'))
-                      ..setTitle(AppLocalizations.of(context).notification_language)
-                      ..setListValue(state.uploadRequest?.listNotificationLanguages)
-                      ..addOnNotifier(_model.notificationLanguageNotifier))
-                    .build())
-                ..setAdvanceSettingVisibilityNotifier(_model.advanceVisibilityNotifier))
-              .build()
+            builder: (context, state) {
+              if (_arguments?.type == EditUploadRequestType.recipients) {
+                return _buildFormEditUploadRequestRecipients(state);
+              } else {
+                return _buildFormEditUploadRequestGroup(state);
+              }
+            }
           )
         ),
       ),
@@ -213,5 +146,156 @@ class _EditUploadRequestWidgetState extends State<EditUploadRequestWidget> {
         }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  Widget _buildFormEditUploadRequestGroup(EditUploadRequestState state) {
+    return (UploadRequestViewBuilder(context, EditUploadRequestType.group)
+        ..key(_formKey)
+        ..addEmailMessageInput((EmailMessageInputFieldBuilder(context)
+              ..addEmailSubjectController(_model.emailSubjectController)
+              ..addEmailMessageController(_model.emailMessageController)
+              ..addOnChangeEmailSubject((value) => _model.setEmailSubject(value)))
+            .build())
+        ..addActivationDateInput(state.uploadRequest?.status == UploadRequestStatus.ENABLED
+            ? (DateTimeNoChangeInputFieldBuilder()
+                ..setKey(Key('activation_date_no_change_input'))
+                ..setTitle(AppLocalizations.of(context).activation_date)
+                ..setValue(state.uploadRequest?.activationDate))
+              .build()
+            : (DateTimeInputFieldBuilder()
+                ..setKey(Key('activation_date_input'))
+                ..setTitle(AppLocalizations.of(context).activation_date)
+                ..addDateTimeTextValueNotifier(_model.textActivationNotifier)
+                ..addOnDateTimeClickAction(() => _model.showDateTimeActivationAction(context)))
+              .build())
+        ..addExpirationDateInput((DateTimeInputFieldBuilder()
+              ..setKey(Key('expiration_date_input'))
+              ..setTitle(AppLocalizations.of(context).expiration_date)
+              ..addDateTimeTextValueNotifier(_model.textExpirationNotifier)
+              ..addOnDateTimeClickAction(() => _model.showDateTimeExpirationAction(context)))
+            .build())
+        ..addMaxNumberFileInput((NumberInputFieldBuilder(context)
+              ..setKey(Key('max_number_files_input'))
+              ..setTitle(AppLocalizations.of(context).max_number_of_files)
+              ..addController(_model.maxNumberFilesController))
+            .build())
+        ..addMaxSizeFileInput((FileSizeInputFieldBuilder(context)
+              ..setKey(Key('max_file_size_input'))
+              ..setTitle(AppLocalizations.of(context).max_size_of_a_file)
+              ..setListSizeType(state.uploadRequest?.listMaxFileSizeType)
+              ..addController(_model.maxFileSizeController)
+              ..addOnSizeTypeNotifier(_model.maxFileSizeTypeNotifier))
+            .build())
+        ..addReminderDateInput((DateTimeInputFieldBuilder()
+              ..setKey(Key('reminder_date_input'))
+              ..setTitle(AppLocalizations.of(context).reminder_date)
+              ..addDateTimeTextValueNotifier(_model.textReminderNotifier)
+              ..addOnDateTimeClickAction(() => _model.showDateTimeReminderAction(context)))
+            .build())
+        ..addTotalSizeFileInput((FileSizeInputFieldBuilder(context)
+              ..setKey(Key('total_file_size_input'))
+              ..setTitle(AppLocalizations.of(context).total_size_of_files)
+              ..setListSizeType(state.uploadRequest?.listTotalFileSizeType)
+              ..addController(_model.totalFileSizeController)
+              ..addOnSizeTypeNotifier(_model.totalFileSizeTypeNotifier))
+            .build())
+        ..addPasswordProtectedNoChangeInput((PairTextInputFieldBuilder()
+              ..setKey(Key('password_protected_no_change_input'))
+              ..setTitle(AppLocalizations.of(context).password_protected)
+              ..setValue(state.uploadRequest?.passwordProtected == true
+                  ? AppLocalizations.of(context).yes
+                  : AppLocalizations.of(context).no))
+            .build())
+        ..addAllowDeletionInput((CheckboxInputFieldBuilder()
+              ..setKey(Key('allow_deletion_input'))
+              ..setTitle(AppLocalizations.of(context).allow_deletion)
+              ..addOnNotifier(_model.allowDeletionNotifier))
+            .build())
+        ..addAllowClosureInput((CheckboxInputFieldBuilder()
+              ..setKey(Key('allow_closure_input'))
+              ..setTitle(AppLocalizations.of(context).allow_closure)
+              ..addOnNotifier(_model.allowClosureNotifier))
+            .build())
+        ..addNotificationLanguageInput((ComboBoxInputFieldBuilder()
+              ..setKey(Key('notification_language_input'))
+              ..setTitle(AppLocalizations.of(context).notification_language)
+              ..setListValue(state.uploadRequest?.listNotificationLanguages)
+              ..addOnNotifier(_model.notificationLanguageNotifier))
+            .build())
+        ..setAdvanceSettingVisibilityNotifier(_model.advanceVisibilityNotifier))
+      .build();
+  }
+
+  Widget _buildFormEditUploadRequestRecipients(EditUploadRequestState state) {
+    return (UploadRequestViewBuilder(context, EditUploadRequestType.recipients)
+        ..key(_formKey)
+        ..addActivationDateInput(state.uploadRequest?.status == UploadRequestStatus.ENABLED
+            ? (DateTimeNoChangeInputFieldBuilder()
+                ..setKey(Key('activation_date_no_change_input'))
+                ..setTitle(AppLocalizations.of(context).activation_date)
+                ..setValue(state.uploadRequest?.activationDate))
+              .build()
+            : (DateTimeInputFieldBuilder()
+                ..setKey(Key('activation_date_input'))
+                ..setTitle(AppLocalizations.of(context).activation_date)
+                ..addDateTimeTextValueNotifier(_model.textActivationNotifier)
+                ..addOnDateTimeClickAction(() => _model.showDateTimeActivationAction(context)))
+              .build())
+        ..addExpirationDateInput((DateTimeInputFieldBuilder()
+              ..setKey(Key('expiration_date_input'))
+              ..setTitle(AppLocalizations.of(context).expiration_date)
+              ..addDateTimeTextValueNotifier(_model.textExpirationNotifier)
+              ..addOnDateTimeClickAction(() => _model.showDateTimeExpirationAction(context)))
+            .build())
+        ..addMaxNumberFileInput((NumberInputFieldBuilder(context)
+              ..setKey(Key('max_number_files_input'))
+              ..setTitle(AppLocalizations.of(context).max_number_of_files)
+              ..addController(_model.maxNumberFilesController))
+            .build())
+        ..addMaxSizeFileInput((FileSizeInputFieldBuilder(context)
+              ..setKey(Key('max_file_size_input'))
+              ..setTitle(AppLocalizations.of(context).max_size_of_a_file)
+              ..setListSizeType(state.uploadRequest?.listMaxFileSizeType)
+              ..addController(_model.maxFileSizeController)
+              ..addOnSizeTypeNotifier(_model.maxFileSizeTypeNotifier))
+            .build())
+        ..addReminderDateInput((DateTimeInputFieldBuilder()
+              ..setKey(Key('reminder_date_input'))
+              ..setTitle(AppLocalizations.of(context).reminder_date)
+              ..addDateTimeTextValueNotifier(_model.textReminderNotifier)
+              ..addOnDateTimeClickAction(() => _model.showDateTimeReminderAction(context)))
+            .build())
+        ..addTotalSizeFileInput((FileSizeInputFieldBuilder(context)
+              ..setKey(Key('total_file_size_input'))
+              ..setTitle(AppLocalizations.of(context).total_size_of_files)
+              ..setListSizeType(state.uploadRequest?.listTotalFileSizeType)
+              ..addController(_model.totalFileSizeController)
+              ..addOnSizeTypeNotifier(_model.totalFileSizeTypeNotifier))
+            .build())
+        ..addPasswordProtectedNoChangeInput((PairTextInputFieldBuilder()
+              ..setKey(Key('password_protected_no_change_input'))
+              ..setTitle(AppLocalizations.of(context).password_protected)
+              ..setValue(state.uploadRequest?.passwordProtected == true
+                  ? AppLocalizations.of(context).yes
+                  : AppLocalizations.of(context).no))
+            .build())
+        ..addAllowDeletionInput((CheckboxInputFieldBuilder()
+              ..setKey(Key('allow_deletion_input'))
+              ..setTitle(AppLocalizations.of(context).allow_deletion)
+              ..addOnNotifier(_model.allowDeletionNotifier))
+            .build())
+        ..addAllowClosureInput((CheckboxInputFieldBuilder()
+              ..setKey(Key('allow_closure_input'))
+              ..setTitle(AppLocalizations.of(context).allow_closure)
+              ..addOnNotifier(_model.allowClosureNotifier))
+            .build())
+        ..addNotificationLanguageInput((ComboBoxInputFieldBuilder()
+              ..setKey(Key('notification_language_input'))
+              ..setTitle(AppLocalizations.of(context).notification_language)
+              ..setListValue(state.uploadRequest?.listNotificationLanguages)
+              ..addOnNotifier(_model.notificationLanguageNotifier))
+            .build())
+        ..setAdvanceSettingVisibilityNotifier(_model.advanceVisibilityNotifier))
+      .build();
   }
 }
