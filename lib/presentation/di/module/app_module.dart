@@ -135,6 +135,7 @@ class AppModule {
     getIt.registerFactory(() => DriveDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerFactory(() => LocalDriveDataSource(getIt<SharedSpaceDocumentDatabaseManager>()));
   }
 
   void _provideDataSource() {
@@ -212,7 +213,10 @@ class AppModule {
     getIt.registerFactory(() => UploadRequestRepositoryImpl(getIt<UploadRequestDataSource>()));
     getIt.registerFactory(() => UploadRequestEntryRepositoryImpl(getIt<UploadRequestEntryDataSource>()));
     getIt.registerFactory(() => AuditUserRepositoryImpl(getIt<AuditUserDataSource>()));
-    getIt.registerFactory(() => DriveRepositoryImpl(getIt<DriveDataSource>()));
+    getIt.registerFactory(() => DriveRepositoryImpl({
+      DataSourceType.network : getIt<DriveDataSource>(),
+      DataSourceType.local : getIt<LocalDriveDataSource>()
+    }));
   }
 
   void _provideRepository() {
@@ -344,6 +348,7 @@ class AppModule {
     getIt.registerFactory(() => SharedSpaceActivitiesInteractor(getIt<SharedSpaceActivitiesRepository>()));
     getIt.registerFactory(() => CreateWorkGroupInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => GetAllWorkgroupsInteractor(getIt<DriveRepository>()));
+    getIt.registerFactory(() => GetAllWorkgroupsOfflineInteractor(getIt<DriveRepository>()));
     getIt.registerFactory(() => RenameSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => AddSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => UpdateSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));

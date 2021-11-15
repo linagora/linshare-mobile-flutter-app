@@ -31,6 +31,7 @@
 
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 class WorkGroupViewModel extends BaseViewModel {
 
   final GetAllWorkgroupsInteractor _getAllWorkgroupsInteractor;
+  final GetAllWorkgroupsOfflineInteractor _getAllWorkgroupsOfflineInteractor;
   final SearchWorkgroupInsideDriveInteractor _searchWorkgroupInsideDriveInteractor;
   final RemoveMultipleSharedSpacesInteractor _removeMultipleSharedSpacesInteractor;
   final CreateWorkGroupInteractor _createWorkGroupInteractor;
@@ -86,6 +88,7 @@ class WorkGroupViewModel extends BaseViewModel {
     Store<AppState> store,
     this._appNavigation,
     this._getAllWorkgroupsInteractor,
+    this._getAllWorkgroupsOfflineInteractor,
     this._searchWorkgroupInsideDriveInteractor,
     this._removeMultipleSharedSpacesInteractor,
     this._createWorkGroupInteractor,
@@ -110,10 +113,18 @@ class WorkGroupViewModel extends BaseViewModel {
   }
 
   void getAllWorkgroups({required bool needToGetOldSorter}) {
-    if (needToGetOldSorter) {
-      store.dispatch(_getAllWorkgroupsAndSortAction());
+    if (store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
+      if (needToGetOldSorter) {
+        store.dispatch(_getAllWorkgroupsOfflineAndSortAction());
+      } else {
+        store.dispatch(_getAllWorkgroupsOfflineAction());
+      }
     } else {
-      store.dispatch(_getAllWorkgroupsAction());
+      if (needToGetOldSorter) {
+        store.dispatch(_getAllWorkgroupsAndSortAction());
+      } else {
+        store.dispatch(_getAllWorkgroupsAction());
+      }
     }
   }
 
@@ -164,6 +175,54 @@ class WorkGroupViewModel extends BaseViewModel {
       store.dispatch(_sortFilesAction(store.state.workgroupState.sorter));
 
     });
+  }
+
+  ThunkAction<AppState> _getAllWorkgroupsOfflineAndSortAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartWorkgroupLoadingAction());
+
+      await Future.wait([
+        _getSorterInteractor.execute(OrderScreen.insideDrive),
+        _getAllWorkgroupsOfflineInteractor.execute(drive!.sharedSpaceId.toDriveId())
+      ]).then((response) async {
+        response.first.fold(
+          (failure) => store.dispatch(GetSorterInsideDriveAction(Sorter.fromOrderScreen(OrderScreen.insideDrive))),
+          (success) => store.dispatch(GetSorterInsideDriveAction(success is GetSorterSuccess
+            ? success.sorter
+            : Sorter.fromOrderScreen(OrderScreen.insideDrive)))
+          );
+        response.last.fold(
+          (failure) {
+            store.dispatch(GetAllWorkgroupsAction(Left(failure)));
+            _currentWorkgroups = List.empty();
+          },
+          (success) {
+            store.dispatch(GetAllWorkgroupsAction(Right(success)));
+            _currentWorkgroups = success is GetAllWorkgroupsViewState ? success.workgroups : List.empty();
+          });
+      });
+
+      store.dispatch(_sortFilesAction(store.state.workgroupState.sorter));
+    };
+  }
+
+  ThunkAction<AppState> _getAllWorkgroupsOfflineAction() {
+    return (Store<AppState> store) async {
+      store.dispatch(StartWorkgroupLoadingAction());
+
+      await _getAllWorkgroupsOfflineInteractor.execute(drive!.sharedSpaceId.toDriveId())
+        .then((result) => result.fold(
+          (failure) {
+            store.dispatch(GetAllWorkgroupsAction(Left(failure)));
+            _currentWorkgroups = List.empty();
+          },
+          (success) {
+            store.dispatch(GetAllWorkgroupsAction(Right(success)));
+            _currentWorkgroups = (success is GetAllWorkgroupsViewState) ? success.workgroups : List.empty();
+          }));
+
+      store.dispatch(_sortFilesAction(store.state.workgroupState.sorter));
+    };
   }
 
   void openWorkgroup(SharedSpaceNodeNested workgroup) {

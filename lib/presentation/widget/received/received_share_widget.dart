@@ -175,7 +175,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
         (failure) => RefreshIndicator(
             onRefresh: () async => receivedShareViewModel.getAllReceivedShare(),
             child: failure is SharedSpacesFailure
-                ? BackgroundWidgetBuilder()
+                ? BackgroundWidgetBuilder(context)
                     .key(Key('received_share_error_background'))
                     .image(SvgPicture.asset(imagePath.icUnexpectedError,
                         width: 120, height: 120, fit: BoxFit.fill))
@@ -228,7 +228,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   }
 
   Widget _buildNoReceivedShareYet(BuildContext context) {
-    return BackgroundWidgetBuilder()
+    return BackgroundWidgetBuilder(context)
         .key(Key('no_received_share_yet'))
         .image(
             SvgPicture.asset(imagePath.icNotReceivedYet, width: 120, height: 120, fit: BoxFit.fill))
