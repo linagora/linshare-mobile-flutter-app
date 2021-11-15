@@ -192,6 +192,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
 
   @override
   void openRecipientContextMenu(BuildContext context, UploadRequest uploadRequest) {
+    super.openRecipientContextMenu(context, uploadRequest);
   }
 
   @override
@@ -201,12 +202,14 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
 
   @override
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest entry) {
-    throw UnimplementedError();
+    return [
+      if (entry.status == UploadRequestStatus.ENABLED) editUploadRequestRecipientAction(context, entry)
+    ];
   }
 
   @override
   Widget? recipientFooterActionTile() {
-    throw UnimplementedError();
+    return null;
   }
 
   @override

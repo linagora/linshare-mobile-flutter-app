@@ -46,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/view/upload_request/email_mess
 import 'package:linshare_flutter_app/presentation/view/upload_request/number_input_field_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/upload_request/file_size_input_field_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/upload_request/upload_request_view_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_viewmodel.dart';
 import 'package:redux/redux.dart';
@@ -105,7 +106,7 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           child: StoreConnector<AppState, UploadRequestCreationState>(
             converter: (Store<AppState> store) => store.state.uploadRequestCreationState,
-            builder: (context, creationState) => (UploadRequestViewBuilder(context)
+            builder: (context, creationState) => (UploadRequestViewBuilder(context, EditUploadRequestType.group)
                 ..key(_formKey)
                 ..addRecipientsInput((AddRecipientsInputFieldBuilder(context)
                       ..addRecipientsFieldController(_model.recipientsController)

@@ -47,5 +47,5 @@ class FileSizeValueNotifier extends ValueNotifier<FileSizeType> {
 }
 
 class NotificationLanguageValueNotifier extends ValueNotifier<NotificationLanguage> {
-  NotificationLanguageValueNotifier() : super(NotificationLanguage.FRENCH);
+  NotificationLanguageValueNotifier() : super(NotificationLanguage.ENGLISH);
 }

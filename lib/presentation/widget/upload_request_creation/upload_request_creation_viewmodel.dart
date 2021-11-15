@@ -282,7 +282,7 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   void _initDefaultData() {
     maxFileSizeTypeNotifier.value = _maxFileSizeSetting?.unit.toFileSizeType() ?? FileSizeType.GB;
     totalFileSizeTypeNotifier.value = _totalFileSizeSetting?.unit.toFileSizeType() ?? FileSizeType.GB;
-    notificationLanguageNotifier.value = _notificationLanguageSetting?.value.toNotificationLanguage() ?? NotificationLanguage.FRENCH;
+    notificationLanguageNotifier.value = _notificationLanguageSetting?.value.toNotificationLanguage() ?? NotificationLanguage.ENGLISH;
 
     maxNumberFilesController.text = _maxFileCountSetting?.value.toString() ?? '0';
     maxFileSizeController.text = _maxFileSizeSetting?.value.toString() ?? '0';
