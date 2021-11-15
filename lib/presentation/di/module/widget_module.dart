@@ -545,6 +545,7 @@ class WidgetModule {
       getIt.get<AppNavigation>(),
       getIt.get<AppToast>(),
       getIt.get<EditUploadRequestInteractor>(),
+      getIt.get<EditUploadRequestRecipientInteractor>(),
     ));
   }
 

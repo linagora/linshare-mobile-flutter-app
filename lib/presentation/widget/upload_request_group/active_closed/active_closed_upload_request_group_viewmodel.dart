@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_tab_common_viewmodel.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -195,7 +196,10 @@ class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewM
     _appNavigation.popBack();
     _appNavigation.push(
       RoutePaths.editUploadRequest,
-      arguments: EditUploadRequestArguments(uploadRequestGroup, uploadRequestFunctionalities),
+      arguments: EditUploadRequestArguments(
+        EditUploadRequestType.group,
+        uploadRequestFunctionalities,
+        uploadRequestGroup: uploadRequestGroup)
     );
   }
 

@@ -33,10 +33,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
 
 class UploadRequestViewBuilder {
 
   final BuildContext context;
+  final EditUploadRequestType editUploadRequestType;
 
   Key? _key;
   Widget? _recipientsInput;
@@ -55,7 +57,7 @@ class UploadRequestViewBuilder {
 
   ValueNotifier<bool>? _advanceSettingVisibilityNotifier;
 
-  UploadRequestViewBuilder(this.context);
+  UploadRequestViewBuilder(this.context, this.editUploadRequestType);
 
   void key(Key key) {
     _key = key;
@@ -128,14 +130,9 @@ class UploadRequestViewBuilder {
           right: 20.0),
         child: Form(
           key: _key,
-          child: Column(children: [
-            if (_recipientsInput != null) _recipientsInput!,
-            if (_emailMessageInput != null)
-              Padding(padding: EdgeInsets.only(top: _recipientsInput != null ? 40 : 0), child: _emailMessageInput),
-            _buildSettingSimple(),
-            _buildSettingAdvance(),
-            SizedBox(height: 120.0)
-          ]),
+          child: Column(children: editUploadRequestType == EditUploadRequestType.recipients
+            ? _buildFormUploadRequestRecipients()
+            : _buildFormUploadRequestGroup()),
         ),
       ),
     );
@@ -208,4 +205,39 @@ class UploadRequestViewBuilder {
             ))
         : SizedBox.shrink();
     });
+
+  List<Widget> _buildFormUploadRequestGroup() {
+    return [
+      if (_recipientsInput != null) _recipientsInput!,
+      if (_emailMessageInput != null)
+        Padding(padding: EdgeInsets.only(top: _recipientsInput != null ? 40 : 0), child: _emailMessageInput),
+      _buildSettingSimple(),
+      _buildSettingAdvance(),
+      SizedBox(height: 120.0)
+    ];
+  }
+
+  List<Widget> _buildFormUploadRequestRecipients() {
+    return [
+      if (_expirationDateInput != null)
+        Padding(padding: EdgeInsets.only(top: 28, left: 4.0, right: 4.0), child: _expirationDateInput),
+      if (_totalSizeFileInput != null)
+        Padding(padding: EdgeInsets.only(top: 28, left: 4.0, right: 4.0), child: _totalSizeFileInput),
+      if (_maxNumberFileInput != null)
+        Padding(padding: EdgeInsets.only(top: 28, left: 4.0, right: 4.0), child: _maxNumberFileInput),
+      if (_maxSizeFileInput != null)
+        Padding(padding: EdgeInsets.only(top: 28, left: 4.0, right: 4.0), child: _maxSizeFileInput),
+      if (_activationDateInput != null)
+        Padding(padding: EdgeInsets.only(top: 28, left: 4.0, right: 4.0), child: _activationDateInput),
+      if (_allowDeletionInput != null)
+        Padding(padding: EdgeInsets.only(top: 28), child: _allowDeletionInput),
+      if (_allowClosureInput != null)
+        Padding(padding: EdgeInsets.only(top: 28), child: _allowClosureInput),
+      if (_reminderDateInput != null)
+        Padding(padding: EdgeInsets.only(top: 28), child: _reminderDateInput),
+      if (_notificationLanguageInput != null)
+        Padding(padding: EdgeInsets.only(top: 28), child: _notificationLanguageInput),
+      SizedBox(height: 120.0)
+    ];
+  }
 }
