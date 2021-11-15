@@ -28,60 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-
-import 'dart:io';
+//
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class MakeAvailableOfflineSharedSpaceDocumentInteractor {
-  final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
-  final TokenRepository _tokenRepository;
-  final CredentialRepository _credentialRepository;
+class GetAllWorkgroupsOfflineInteractor {
+  final DriveRepository _driveRepository;
 
-  MakeAvailableOfflineSharedSpaceDocumentInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository);
+  GetAllWorkgroupsOfflineInteractor(this._driveRepository);
 
-  Future<Either<Failure, Success>> execute(
-      SharedSpaceNodeNested? drive,
-      SharedSpaceNodeNested sharedSpaceNodeNested,
-      WorkGroupDocument workGroupDocument,
-      {List<TreeNode>? treeNodes}
-  ) async {
+  Future<Either<Failure, Success>> execute(DriveId driveId) async {
     try {
-      final downloadPreviewType = workGroupDocument.mediaType.isImageFile() ? DownloadPreviewType.image : DownloadPreviewType.original;
-
-      final filePath = await Future.wait([_tokenRepository.getToken(), _credentialRepository.getBaseUrl()], eagerError: true)
-          .then((List responses) async {
-        final token = responses[0];
-        final baseUrl = responses[1];
-
-        return await _sharedSpaceDocumentRepository.downloadMakeOfflineSharedSpaceDocument(
-          workGroupDocument.sharedSpaceId,
-          workGroupDocument.workGroupNodeId,
-          workGroupDocument.name,
-          downloadPreviewType,
-          token,
-          baseUrl);
-      });
-
-      final result = await _sharedSpaceDocumentRepository.makeAvailableOfflineSharedSpaceDocument(
-        drive,
-        sharedSpaceNodeNested,
-        workGroupDocument,
-        filePath,
-        treeNodes: treeNodes);
-
-      if (result) {
-        return Right<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentViewState(OfflineModeActionResult.successful, filePath));
-      } else {
-        final fileSaved = File(filePath);
-        if (fileSaved.existsSync()) {
-          fileSaved.deleteSync();
-        }
-        return Left<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentFailure(OfflineModeActionResult.failure));
-      }
+      final workgroups = await _driveRepository.getAllWorkgroupsOffline(driveId);
+      return Right<Failure, Success>(GetAllWorkgroupsViewState(workgroups));
     } catch (exception) {
-      return Left<Failure, Success>(MakeAvailableOfflineSharedSpaceDocumentFailure(exception));
+      return Left<Failure, Success>(GetAllWorkgroupsFailure(exception));
     }
   }
 }
