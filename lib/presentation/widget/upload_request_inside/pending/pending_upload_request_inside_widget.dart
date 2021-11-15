@@ -88,12 +88,14 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
 
   @override
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest entry) {
-    throw UnimplementedError();
+    return [
+      editUploadRequestRecipientAction(context, entry)
+    ];
   }
 
   @override
   Widget? recipientFooterActionTile() {
-    throw UnimplementedError();
+    return null;
   }
 
   @override

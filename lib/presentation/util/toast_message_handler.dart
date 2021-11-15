@@ -460,10 +460,16 @@ class ToastMessageHandler {
         if (failure is EditUploadRequestFailure) {
           appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
           _cleanEditUploadRequestViewState();
+        } else if (failure is EditUploadRequestRecipientFailure) {
+          appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
+          _cleanEditUploadRequestViewState();
         }
       },
       (success) {
         if (success is EditUploadRequestViewState) {
+          appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
+          _cleanEditUploadRequestViewState();
+        } else if (success is EditUploadRequestRecipientViewState) {
           appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
           _cleanEditUploadRequestViewState();
         }

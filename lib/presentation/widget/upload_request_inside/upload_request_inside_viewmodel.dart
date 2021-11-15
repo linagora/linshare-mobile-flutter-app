@@ -49,12 +49,16 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -104,7 +108,8 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
               success is RemoveSomeUploadRequestEntriesSuccessViewState ||
               success is UpdateUploadRequestStateViewState ||
               success is UpdateUploadRequestAllSuccessViewState ||
-              success is UpdateUploadRequestHasSomeFailedViewState
+              success is UpdateUploadRequestHasSomeFailedViewState ||
+              success is EditUploadRequestRecipientViewState
           ) {
             requestToGetUploadRequestAndEntries();
           }
@@ -468,6 +473,19 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
           (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
           (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
     };
+  }
+
+  void editUploadRequestRecipient(UploadRequest uploadRequest) {
+    final uploadRequestFunctionalities = store.state.functionalityState.getAllEnabledUploadRequest();
+
+    appNavigation.popBack();
+    appNavigation.push(
+      RoutePaths.editUploadRequest,
+      arguments: EditUploadRequestArguments(
+        EditUploadRequestType.recipients,
+        uploadRequestFunctionalities,
+        uploadRequest: uploadRequest)
+    );
   }
 
   @override

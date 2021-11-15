@@ -52,7 +52,12 @@ final uploadRequestResponse1 = UploadRequestResponse(
     true,
     false,
     "FRENCH",
-    [GenericUserDto('user2@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane'))]
+    [GenericUserDto('user2@linshare.org', lastName: optionOf('Smith'), firstName: optionOf('Jane'))],
+    23232323,
+    232332323232,
+    23232323232323,
+    true,
+    true
 );
 
 final uploadRequest1 = uploadRequestResponse1.toUploadRequest();

@@ -48,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
 import 'package:redux/src/store.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/string_extensions.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
@@ -59,6 +60,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final AppToast _appToast;
   final EditUploadRequestInteractor _editUploadRequestInteractor;
+  final EditUploadRequestRecipientInteractor _editUploadRequestRecipientInteractor;
 
   final TextEditingController emailSubjectController = TextEditingController();
   final TextEditingController emailMessageController = TextEditingController();
@@ -113,6 +115,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
     this._appNavigation,
     this._appToast,
     this._editUploadRequestInteractor,
+    this._editUploadRequestRecipientInteractor,
   ) : super(store);
 
   void _disposeValueNotifier() {
@@ -191,7 +194,12 @@ class EditUploadRequestViewModel extends BaseViewModel {
         break;
     }
     if (isInitialize) {
-      _initActivationDateRoundUp = arguments?.uploadRequestGroup.activationDate ?? _initActivationDateRoundUp;
+      if (arguments?.type == EditUploadRequestType.recipients) {
+        _initActivationDateRoundUp = arguments?.uploadRequest?.activationDate ?? _initActivationDateRoundUp;
+      } else {
+        _initActivationDateRoundUp = arguments?.uploadRequestGroup?.activationDate ?? _initActivationDateRoundUp;
+      }
+
       textActivationNotifier.value = Tuple2(_initActivationDateRoundUp, _initActivationDateRoundUp.getYMMMMdFormatWithJm());
     }
   }
@@ -216,7 +224,11 @@ class EditUploadRequestViewModel extends BaseViewModel {
         break;
     }
     if (isInitialize) {
-      _initExpirationDateRoundUp = arguments?.uploadRequestGroup.expiryDate ?? _initExpirationDateRoundUp;
+      if (arguments?.type == EditUploadRequestType.recipients) {
+        _initActivationDateRoundUp = arguments?.uploadRequest?.expiryDate ?? _initExpirationDateRoundUp;
+      } else {
+        _initActivationDateRoundUp = arguments?.uploadRequestGroup?.expiryDate ?? _initExpirationDateRoundUp;
+      }
     }
     textExpirationNotifier.value = Tuple2(_initExpirationDateRoundUp, _initExpirationDateRoundUp.getYMMMMdFormatWithJm());
   }
@@ -248,36 +260,58 @@ class EditUploadRequestViewModel extends BaseViewModel {
       _initReminderDateRoundUp = textActivationNotifier.value!.value1;
     }
     if (isInitialize) {
-      _initReminderDateRoundUp = arguments?.uploadRequestGroup.notificationDate ?? _initReminderDateRoundUp;
+      if (arguments?.type == EditUploadRequestType.recipients) {
+        _initActivationDateRoundUp = arguments?.uploadRequest?.notificationDate ?? _initReminderDateRoundUp;
+      } else {
+        _initActivationDateRoundUp = arguments?.uploadRequestGroup?.notificationDate ?? _initReminderDateRoundUp;
+      }
     }
     textReminderNotifier.value = Tuple2(_initReminderDateRoundUp, _initReminderDateRoundUp.getYMMMMdFormatWithJm());
   }
 
   void _initDefaultData() {
-    emailSubjectController.text = arguments?.uploadRequestGroup.label ?? '';
-    emailMessageController.text = arguments?.uploadRequestGroup.body ?? '';
+    if (arguments?.type == EditUploadRequestType.recipients) {
+      final maxFileSize = arguments?.uploadRequest?.maxFileSize?.toFileSize();
+      final totalFileSize = arguments?.uploadRequest?.maxDepositSize.toFileSize();
 
-    setEmailSubject(emailSubjectController.text);
+      maxFileSizeTypeNotifier.value = maxFileSize?.value2 ?? FileSizeType.GB;
+      totalFileSizeTypeNotifier.value = totalFileSize?.value2 ?? FileSizeType.GB;
+      notificationLanguageNotifier.value = arguments?.uploadRequest?.locale.toNotificationLanguage() ?? NotificationLanguage.ENGLISH;
 
-    final maxFileSize = arguments?.uploadRequestGroup.maxFileSize?.toFileSize();
-    final totalFileSize = arguments?.uploadRequestGroup.maxDepositSize.toFileSize();
+      maxNumberFilesController.text = arguments?.uploadRequest?.maxFileCount.toString() ?? '0';
+      maxFileSizeController.text = maxFileSize?.value1 ?? '0';
+      totalFileSizeController.text = totalFileSize?.value1 ?? '0';
 
-    maxFileSizeTypeNotifier.value = maxFileSize?.value2 ?? FileSizeType.GB;
-    totalFileSizeTypeNotifier.value = totalFileSize?.value2 ?? FileSizeType.GB;
-    notificationLanguageNotifier.value = arguments?.uploadRequestGroup.locale?.toNotificationLanguage() ?? NotificationLanguage.FRENCH;
+      allowDeletionNotifier.value = arguments?.uploadRequest?.canDeleteDocument ?? true;
+      allowClosureNotifier.value = arguments?.uploadRequest?.canClose ?? true;
+    } else {
+      emailSubjectController.text = arguments?.uploadRequestGroup?.label ?? '';
+      emailMessageController.text = arguments?.uploadRequestGroup?.body ?? '';
 
-    maxNumberFilesController.text = arguments?.uploadRequestGroup.maxFileCount.toString() ?? '0';
-    maxFileSizeController.text = maxFileSize?.value1 ?? '0';
-    totalFileSizeController.text = totalFileSize?.value1 ?? '0';
+      setEmailSubject(emailSubjectController.text);
 
-    allowDeletionNotifier.value = arguments?.uploadRequestGroup.canDelete ?? true;
-    allowClosureNotifier.value = arguments?.uploadRequestGroup.canClose ?? true;
+      final maxFileSize = arguments?.uploadRequestGroup?.maxFileSize?.toFileSize();
+      final totalFileSize = arguments?.uploadRequestGroup?.maxDepositSize.toFileSize();
+
+      maxFileSizeTypeNotifier.value = maxFileSize?.value2 ?? FileSizeType.GB;
+      totalFileSizeTypeNotifier.value = totalFileSize?.value2 ?? FileSizeType.GB;
+      notificationLanguageNotifier.value = arguments?.uploadRequestGroup?.locale?.toNotificationLanguage() ?? NotificationLanguage.ENGLISH;
+
+      maxNumberFilesController.text = arguments?.uploadRequestGroup?.maxFileCount.toString() ?? '0';
+      maxFileSizeController.text = maxFileSize?.value1 ?? '0';
+      totalFileSizeController.text = totalFileSize?.value1 ?? '0';
+
+      allowDeletionNotifier.value = arguments?.uploadRequestGroup?.canDelete ?? true;
+      allowClosureNotifier.value = arguments?.uploadRequestGroup?.canClose ?? true;
+    }
   }
 
   UploadRequestPresentation _generateUploadRequestPresentation() {
     final activationDate = textActivationNotifier.value?.value2;
-    final status = arguments?.uploadRequestGroup.status;
-    final passwordProtected = arguments?.uploadRequestGroup.protectedByPassword ?? false;
+    final status = arguments?.type == EditUploadRequestType.recipients
+      ? arguments?.uploadRequest?.status
+      : arguments?.uploadRequestGroup?.status;
+    final passwordProtected = arguments?.uploadRequestGroup?.protectedByPassword ?? false;
     final _listMaxFileSizeType = _maxFileSizeSetting?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
     final _listTotalFileSizeType = _totalFileSizeSetting?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
     final _listNotificationLanguages = _notificationLanguageSetting?.units.map((unit) => unit.toNotificationLanguage()).toList() ?? [];
@@ -313,15 +347,25 @@ class EditUploadRequestViewModel extends BaseViewModel {
     _getRoundUpDate();
     DatePicker.showDateTimePicker(context,
       showTitleActions: true,
-      minTime: arguments?.uploadRequestGroup.status == UploadRequestStatus.ENABLED
-        ? _creationDateRoundUp
-        : textActivationNotifier.value!.value1,
+      minTime: _getMinTimeExpiration(),
       maxTime: _maxExpirationDateRoundUp,
       onConfirm: (date) {
         textExpirationNotifier.value = Tuple2(date, date.getYMMMMdFormatWithJm());
         _getReminderDate(isInitialize: false);
       },
       currentTime: textExpirationNotifier.value?.value1);
+  }
+
+  DateTime? _getMinTimeExpiration() {
+    if (arguments?.type == EditUploadRequestType.recipients) {
+      return arguments?.uploadRequest?.status == UploadRequestStatus.ENABLED
+          ? _creationDateRoundUp
+          : textActivationNotifier.value!.value1;
+    } else {
+      return arguments?.uploadRequestGroup?.status == UploadRequestStatus.ENABLED
+          ? _creationDateRoundUp
+          : textActivationNotifier.value!.value1;
+    }
   }
 
   void showDateTimeReminderAction(BuildContext context) {
@@ -366,6 +410,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
       return;
     }
 
+
     // Once user change the time, prefer to get picked time.
     // Otherwise, passing null for server can handle by itself (temporary solution)
     var activateDate;
@@ -374,7 +419,9 @@ class EditUploadRequestViewModel extends BaseViewModel {
     }
 
     _editUploadRequestAction(
-      arguments!.uploadRequestGroup.uploadRequestGroupId,
+      arguments?.type,
+      uploadRequestId: arguments?.uploadRequest?.uploadRequestId,
+      groupId: arguments?.uploadRequestGroup?.uploadRequestGroupId,
       maxFileCount: numberFiles,
       maxFileSize: fileSizeInByte,
       expirationDate: textExpirationNotifier.value?.value1 ?? _initExpirationDateRoundUp,
@@ -390,8 +437,10 @@ class EditUploadRequestViewModel extends BaseViewModel {
   }
 
   void _editUploadRequestAction(
-    UploadRequestGroupId groupId,
+    EditUploadRequestType? editUploadRequestType,
     {
+      required UploadRequestId? uploadRequestId,
+      required UploadRequestGroupId? groupId,
       required int maxFileCount,
       required int maxFileSize,
       required DateTime expirationDate,
@@ -406,21 +455,38 @@ class EditUploadRequestViewModel extends BaseViewModel {
       required bool enableNotification
     }
   ) {
-    final editUploadRequest = EditUploadRequest(
-      activationDate,
-      notificationDate,
-      enableNotification,
-      emailMessage,
-      canClose,
-      canDelete,
-      expirationDate,
-      emailSubject,
-      locale,
-      maxDepositSize,
-      maxFileCount,
-      maxFileSize);
 
-    store.dispatch(_editUploadRequest(groupId, editUploadRequest));
+    if (editUploadRequestType == EditUploadRequestType.recipients) {
+      final editRequest = EditUploadRequestRecipient(
+          activationDate,
+          notificationDate,
+          enableNotification,
+          canClose,
+          canDelete,
+          expirationDate,
+          locale,
+          maxDepositSize,
+          maxFileCount,
+          maxFileSize);
+
+      store.dispatch(_editUploadRequestRecipient(uploadRequestId!, editRequest));
+    } else {
+      final editUploadRequest = EditUploadRequest(
+          activationDate,
+          notificationDate,
+          enableNotification,
+          emailMessage,
+          canClose,
+          canDelete,
+          expirationDate,
+          emailSubject,
+          locale,
+          maxDepositSize,
+          maxFileCount,
+          maxFileSize);
+
+      store.dispatch(_editUploadRequest(groupId!, editUploadRequest));
+    }
   }
 
   OnlineThunkAction _editUploadRequest(UploadRequestGroupId groupId, EditUploadRequest editUploadRequest) {
@@ -430,6 +496,18 @@ class EditUploadRequestViewModel extends BaseViewModel {
           (failure) => store.dispatch(EditUploadRequestAction(Left(failure))),
           (success) {
             backToUploadRequestGroup();
+            return store.dispatch(EditUploadRequestAction(Right(success)));
+          }));
+    });
+  }
+
+  OnlineThunkAction _editUploadRequestRecipient(UploadRequestId uploadRequestId, EditUploadRequestRecipient editRequest) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _editUploadRequestRecipientInteractor.execute(uploadRequestId, editRequest)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(EditUploadRequestAction(Left(failure))),
+          (success) {
+            _appNavigation.popBack();
             return store.dispatch(EditUploadRequestAction(Right(success)));
           }));
     });
