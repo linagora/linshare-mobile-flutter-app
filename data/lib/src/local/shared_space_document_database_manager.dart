@@ -79,32 +79,16 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   @override
   Future<bool> deleteAllData() async {
     final listWorkGroupDocument = await getListData();
-    var failedFileCount = 0;
-    listWorkGroupDocument.forEach((document) async {
-      if(document.localPath != null) {
-        final result = await deleteData(document.workGroupNodeId.uuid, document.localPath!);
-        if(!result) {
-          failedFileCount++;
-        }
-      }
-    });
-
-    final listSharedSpace = await getListSharedSpace();
-    listSharedSpace.forEach((sharedSpace) async {
-      final listWorkGroupNode = await getListWorkGroupCacheBySharedSpaceID(sharedSpace.sharedSpaceId);
-      listWorkGroupNode.forEach((node) async {
-        final result = await deleteWorkGroupNode(node.nodeId);
-        if(!result) {
-          failedFileCount++;
-        }
-      });
-      final result = await deleteSharedSpace(sharedSpace.sharedSpaceId);
-      if(!result) {
-        failedFileCount++;
-      }
-    });
-
-    return failedFileCount == 0;
+    if (listWorkGroupDocument.isNotEmpty) {
+      final listLocalPath = listWorkGroupDocument
+          .where((document) => document.localPath != null && document.localPath!.isNotEmpty)
+          .map((document) => document.localPath!)
+          .toList();
+      await _databaseClient.deleteListFile(listLocalPath);
+    }
+    final resultClearAllWorkgroup = await _databaseClient.clearAllData(WorkGroupNodeTable.TABLE_NAME);
+    final resultClearAllSharedSpace = await _databaseClient.clearAllData(SharedSpaceTable.TABLE_NAME);
+    return resultClearAllWorkgroup > 0 && resultClearAllSharedSpace > 0;
   }
 
   Future<bool> insertSharedSpace(SharedSpaceNodeNested sharedSpaceNodeNested) async {
@@ -167,7 +151,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
     return res > 0 ? true : false;
   }
 
-  Future<List<WorkGroupNode>> getListWorkGroupCacheInSharedSpace(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) async {
+  Future<List<WorkGroupNode>> getAllSharedSpaceDocumentOffline(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId) async {
     final keyCondition = parentNodeId == null
         ? '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.PARENT_NODE_ID} IS NULL'
         : '${WorkGroupNodeTable.SHARED_SPACE_ID} = ? AND ${WorkGroupNodeTable.PARENT_NODE_ID} = ?';
@@ -187,9 +171,43 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   }
 
   Future<List<SharedSpaceCache>> getListSharedSpace() async {
-    final res = await _databaseClient.getListData(SharedSpaceTable.TABLE_NAME);
+    final res = await _databaseClient.getListDataWithCondition(
+      SharedSpaceTable.TABLE_NAME,
+      '${SharedSpaceTable.DRIVE_ID} IS NULL',
+      null);
+
     return res.isNotEmpty
       ? res.map((mapObject) => SharedSpaceCache.fromJson(mapObject)).toList()
       : [];
+  }
+
+  Future<List<SharedSpaceCache>> getAllWorkgroupsInsideDrive(DriveId driveId) async {
+    final res = await _databaseClient.getListDataWithCondition(
+        SharedSpaceTable.TABLE_NAME,
+        '${SharedSpaceTable.DRIVE_ID} = ?',
+        [driveId.uuid]);
+
+    return res.isNotEmpty
+        ? res.map((mapObject) => SharedSpaceCache.fromJson(mapObject)).toList()
+        : [];
+  }
+
+  Future<bool> insertDrive(SharedSpaceNodeNested drive) async {
+    final driveExist = await _databaseClient.getData(
+        SharedSpaceTable.TABLE_NAME,
+        SharedSpaceTable.SHARED_SPACE_ID,
+        drive.sharedSpaceId.uuid);
+
+    if (driveExist.isEmpty) {
+      final res = await _databaseClient.insertData(SharedSpaceTable.TABLE_NAME, drive.toSharedSpaceDto().toJson());
+      return res > 0 ? true : false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<bool> deleteDrive(DriveId driveId) async {
+    final res = await _databaseClient.deleteData(SharedSpaceTable.TABLE_NAME, SharedSpaceTable.SHARED_SPACE_ID, driveId.uuid);
+    return res > 0 ? true : false;
   }
 }

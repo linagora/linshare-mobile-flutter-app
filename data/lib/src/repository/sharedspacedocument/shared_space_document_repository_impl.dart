@@ -136,8 +136,19 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<bool> makeAvailableOfflineSharedSpaceDocument(SharedSpaceNodeNested sharedSpaceNodeNested, WorkGroupDocument workGroupDocument, String localPath, {List<TreeNode>? treeNodes}) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.local]!.makeAvailableOfflineSharedSpaceDocument(sharedSpaceNodeNested, workGroupDocument, localPath, treeNodes: treeNodes);
+  Future<bool> makeAvailableOfflineSharedSpaceDocument(
+      SharedSpaceNodeNested? drive,
+      SharedSpaceNodeNested sharedSpaceNodeNested,
+      WorkGroupDocument workGroupDocument,
+      String localPath,
+      {List<TreeNode>? treeNodes}
+  ) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.local]!.makeAvailableOfflineSharedSpaceDocument(
+        drive,
+        sharedSpaceNodeNested,
+        workGroupDocument,
+        localPath,
+        treeNodes: treeNodes);
   }
 
   @override
@@ -146,8 +157,15 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<bool> disableAvailableOfflineSharedSpaceDocument(SharedSpaceId sharedSpaceId, WorkGroupNodeId? parentNodeId, WorkGroupNodeId workGroupNodeId, String localPath) {
+  Future<bool> disableAvailableOfflineSharedSpaceDocument(
+      DriveId? driveId,
+      SharedSpaceId sharedSpaceId,
+      WorkGroupNodeId? parentNodeId,
+      WorkGroupNodeId workGroupNodeId,
+      String localPath
+  ) {
     return _sharedSpaceDocumentDataSources[DataSourceType.local]!.disableAvailableOfflineSharedSpaceDocument(
+      driveId,
       sharedSpaceId,
       parentNodeId,
       workGroupNodeId,

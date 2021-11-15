@@ -60,4 +60,9 @@ class DriveDataSourceImpl implements DriveDataSource {
       });
     });
   }
+
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId) {
+    throw UnimplementedError();
+  }
 }

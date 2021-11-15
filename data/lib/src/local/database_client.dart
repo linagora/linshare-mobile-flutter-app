@@ -68,8 +68,11 @@ class DatabaseClient {
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (newVersion == DatabaseConfig.dbVersion2_0) {
-          await db.execute(ReceivedShareTable.CREATE);
+        if (newVersion > oldVersion) {
+          final batch = db.batch();
+          batch.execute(ReceivedShareTable.CREATE);
+          batch.execute(SharedSpaceTable.ADD_NEW_COLUMN_DRIVE_ID);
+          await batch.commit();
         }
       });
   }
@@ -123,7 +126,7 @@ class DatabaseClient {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getListDataWithCondition(String tableName, String condition, List<dynamic> values) async {
+  Future<List<Map<String, dynamic>>> getListDataWithCondition(String tableName, String condition, List<dynamic>? values) async {
     final db = await database;
     return await db.query(
         tableName,
@@ -139,5 +142,20 @@ class DatabaseClient {
       }
     });
     await batchInsert.commit(noResult: true);
+  }
+
+  Future<int> clearAllData(String tableName) async {
+    final db = await database;
+    return await db.delete(tableName);
+  }
+
+  Future deleteListFile(List<String> listLocalPath) async {
+    for (var path in listLocalPath) {
+      final fileSaved = File(path);
+      final fileExist = await fileSaved.exists();
+      if (fileExist) {
+        await fileSaved.delete();
+      }
+    }
   }
 }

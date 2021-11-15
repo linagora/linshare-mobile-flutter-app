@@ -36,6 +36,7 @@ extension SharedSpaceNodeNestedExtension on SharedSpaceNodeNested {
   SharedSpaceCache toSharedSpaceDto() {
     return SharedSpaceCache(
         sharedSpaceId,
+        driveId,
         sharedSpaceRole.sharedSpaceRoleId,
         sharedSpaceRole.name,
         sharedSpaceRole.enabled,
