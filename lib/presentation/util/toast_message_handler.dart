@@ -40,7 +40,6 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_recipients_upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/edit_upload_request_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
@@ -58,7 +57,6 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_i
 import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/edit_upload_request_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
@@ -91,7 +89,6 @@ class ToastMessageHandler {
       _handleDeleteSharedSpaceMembersToastMessage(context, event.deleteSharedSpaceMembersState);
       _handleSharedSpaceNodeVersionsToastMessage(context, event.sharedSpaceNodeVersionsState);
       _handleAddRecipientUploadRequestGroupToastMessage(context, event.addRecipientsUploadRequestGroupState);
-      _handleEditUploadRequestToastMessage(context, event.editUploadRequestState);
       _handleUploadRequestGroupToastMessage(context, event.uploadRequestGroupState);
       _handleUploadRequestInsideToastMessage(context, event.uploadRequestInsideState);
     });
@@ -454,28 +451,6 @@ class ToastMessageHandler {
       });
   }
 
-  void _handleEditUploadRequestToastMessage(BuildContext context, EditUploadRequestState editUploadRequestState) {
-    editUploadRequestState.viewState.fold(
-      (failure) {
-        if (failure is EditUploadRequestFailure) {
-          appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
-          _cleanEditUploadRequestViewState();
-        } else if (failure is EditUploadRequestRecipientFailure) {
-          appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
-          _cleanEditUploadRequestViewState();
-        }
-      },
-      (success) {
-        if (success is EditUploadRequestViewState) {
-          appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
-          _cleanEditUploadRequestViewState();
-        } else if (success is EditUploadRequestRecipientViewState) {
-          appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
-          _cleanEditUploadRequestViewState();
-        }
-      });
-  }
-
   void _handleUploadRequestGroupToastMessage(BuildContext context, UploadRequestGroupState requestGroupState) {
     requestGroupState.viewState.fold((failure) {
       if (failure is UpdateUploadRequestGroupStateFailure) {
@@ -483,6 +458,9 @@ class ToastMessageHandler {
         _cleanUploadRequestGroupViewState();
       } else if (failure is UpdateUploadRequestGroupAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanUploadRequestGroupViewState();
+      } else if (failure is EditUploadRequestGroupFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
         _cleanUploadRequestGroupViewState();
       }
     }, (success) {
@@ -494,6 +472,9 @@ class ToastMessageHandler {
         _cleanUploadRequestGroupViewState();
       } else if (success is UpdateUploadRequestGroupHasSomeGroupsFailedViewState) {
         appToast.showToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanUploadRequestGroupViewState();
+      } else if (success is EditUploadRequestGroupViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
         _cleanUploadRequestGroupViewState();
       }
     });
@@ -512,6 +493,9 @@ class ToastMessageHandler {
         _cleanUploadRequestInsideViewState();
       } else if (failure is RemoveAllUploadRequestEntriesFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_deleted);
+        _cleanUploadRequestInsideViewState();
+      } else if (failure is EditUploadRequestRecipientFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
         _cleanUploadRequestInsideViewState();
       }
     }, (success) {
@@ -533,16 +517,15 @@ class ToastMessageHandler {
       } else if (success is RemoveSomeUploadRequestEntriesSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
         _cleanUploadRequestInsideViewState();
+      } else if (success is EditUploadRequestRecipientViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
+        _cleanUploadRequestInsideViewState();
       }
     });
   }
 
   void _cleanAddRecipientUploadRequestGroupViewState() {
     _store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
-  }
-
-  void _cleanEditUploadRequestViewState() {
-    _store.dispatch(CleanEditUploadRequestAction());
   }
 
   void _cleanUploadRequestInsideViewState() {
