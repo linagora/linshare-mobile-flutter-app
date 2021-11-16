@@ -1953,5 +1953,17 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "drive": "Drive",
+  "@drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "loading": "Loading",
+  "@loading": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }

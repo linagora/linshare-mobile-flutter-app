@@ -77,11 +77,11 @@ class UploadRequest with EquatableMixin {
   final bool closed;
   final String locale;
   final List<GenericUser> recipients;
-  final int maxFileCount;
-  final double maxDepositSize;
+  final int? maxFileCount;
+  final double? maxDepositSize;
   final double? maxFileSize;
-  final bool canClose;
-  final bool canDeleteDocument;
+  final bool? canClose;
+  final bool? canDeleteDocument;
 
   @override
   List<Object?> get props => [

@@ -48,6 +48,11 @@ class UploadRequestRepositoryImpl implements UploadRequestRepository {
   }
 
   @override
+  Future<UploadRequest> getUploadRequest(UploadRequestId uploadRequestId) {
+    return _uploadRequestDataSource.getUploadRequest(uploadRequestId);
+  }
+
+  @override
   Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request) {
     return _uploadRequestDataSource.editUploadRequest(uploadRequestId, request);
   }

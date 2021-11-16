@@ -41,11 +41,14 @@ import 'package:linshare_flutter_app/presentation/model/nolitication_language.da
 import 'package:linshare_flutter_app/presentation/model/unit_time_type.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_request_presentation.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/edit_upload_request_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/loading_dialog.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
@@ -59,7 +62,8 @@ class EditUploadRequestViewModel extends BaseViewModel {
 
   final AppNavigation _appNavigation;
   final AppToast _appToast;
-  final EditUploadRequestInteractor _editUploadRequestInteractor;
+  final EditUploadRequestGroupInteractor _editUploadRequestGroupInteractor;
+  final GetUploadRequestInteractor _getUploadRequestInteractor;
   final EditUploadRequestRecipientInteractor _editUploadRequestRecipientInteractor;
 
   final TextEditingController emailSubjectController = TextEditingController();
@@ -97,6 +101,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
   FunctionalityLanguage? _notificationLanguageSetting;
 
   EditUploadRequestArguments? arguments;
+  UploadRequest? uploadRequest;
 
   final BehaviorSubject<bool> _enableCreateButton = BehaviorSubject.seeded(false);
   StreamView<bool> get enableCreateButton => _enableCreateButton;
@@ -114,7 +119,8 @@ class EditUploadRequestViewModel extends BaseViewModel {
     Store<AppState> store,
     this._appNavigation,
     this._appToast,
-    this._editUploadRequestInteractor,
+    this._editUploadRequestGroupInteractor,
+    this._getUploadRequestInteractor,
     this._editUploadRequestRecipientInteractor,
   ) : super(store);
 
@@ -136,9 +142,18 @@ class EditUploadRequestViewModel extends BaseViewModel {
     allowClosureNotifier.dispose();
   }
 
-  void initialize(EditUploadRequestArguments? editArguments) {
+  void initialize(BuildContext context, EditUploadRequestArguments? editArguments) {
     arguments = editArguments;
 
+    if (arguments?.type == EditUploadRequestType.recipients) {
+      _showLoadingDialog(context);
+      store.dispatch(_getUploadRequest(arguments?.uploadRequest?.uploadRequestId));
+    } else {
+      _setUpData();
+    }
+  }
+
+  void _setUpData() {
     _getFunctionalityData();
     _getRoundUpDate();
     _getActivationDate(isInitialize: true);
@@ -195,7 +210,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
     }
     if (isInitialize) {
       if (arguments?.type == EditUploadRequestType.recipients) {
-        _initActivationDateRoundUp = arguments?.uploadRequest?.activationDate ?? _initActivationDateRoundUp;
+        _initActivationDateRoundUp = uploadRequest?.activationDate ?? _initActivationDateRoundUp;
       } else {
         _initActivationDateRoundUp = arguments?.uploadRequestGroup?.activationDate ?? _initActivationDateRoundUp;
       }
@@ -225,7 +240,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
     }
     if (isInitialize) {
       if (arguments?.type == EditUploadRequestType.recipients) {
-        _initActivationDateRoundUp = arguments?.uploadRequest?.expiryDate ?? _initExpirationDateRoundUp;
+        _initActivationDateRoundUp = uploadRequest?.expiryDate ?? _initExpirationDateRoundUp;
       } else {
         _initActivationDateRoundUp = arguments?.uploadRequestGroup?.expiryDate ?? _initExpirationDateRoundUp;
       }
@@ -261,7 +276,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
     }
     if (isInitialize) {
       if (arguments?.type == EditUploadRequestType.recipients) {
-        _initActivationDateRoundUp = arguments?.uploadRequest?.notificationDate ?? _initReminderDateRoundUp;
+        _initActivationDateRoundUp = uploadRequest?.notificationDate ?? _initReminderDateRoundUp;
       } else {
         _initActivationDateRoundUp = arguments?.uploadRequestGroup?.notificationDate ?? _initReminderDateRoundUp;
       }
@@ -271,19 +286,19 @@ class EditUploadRequestViewModel extends BaseViewModel {
 
   void _initDefaultData() {
     if (arguments?.type == EditUploadRequestType.recipients) {
-      final maxFileSize = arguments?.uploadRequest?.maxFileSize?.toFileSize();
-      final totalFileSize = arguments?.uploadRequest?.maxDepositSize.toFileSize();
+      final maxFileSize = uploadRequest?.maxFileSize?.toFileSize();
+      final totalFileSize = uploadRequest?.maxDepositSize.toFileSize();
 
       maxFileSizeTypeNotifier.value = maxFileSize?.value2 ?? FileSizeType.GB;
       totalFileSizeTypeNotifier.value = totalFileSize?.value2 ?? FileSizeType.GB;
-      notificationLanguageNotifier.value = arguments?.uploadRequest?.locale.toNotificationLanguage() ?? NotificationLanguage.ENGLISH;
+      notificationLanguageNotifier.value = uploadRequest?.locale.toNotificationLanguage() ?? NotificationLanguage.ENGLISH;
 
-      maxNumberFilesController.text = arguments?.uploadRequest?.maxFileCount.toString() ?? '0';
+      maxNumberFilesController.text = uploadRequest?.maxFileCount.toString() ?? '0';
       maxFileSizeController.text = maxFileSize?.value1 ?? '0';
       totalFileSizeController.text = totalFileSize?.value1 ?? '0';
 
-      allowDeletionNotifier.value = arguments?.uploadRequest?.canDeleteDocument ?? true;
-      allowClosureNotifier.value = arguments?.uploadRequest?.canClose ?? true;
+      allowDeletionNotifier.value = uploadRequest?.canDeleteDocument ?? true;
+      allowClosureNotifier.value = uploadRequest?.canClose ?? true;
     } else {
       emailSubjectController.text = arguments?.uploadRequestGroup?.label ?? '';
       emailMessageController.text = arguments?.uploadRequestGroup?.body ?? '';
@@ -309,14 +324,14 @@ class EditUploadRequestViewModel extends BaseViewModel {
   UploadRequestPresentation _generateUploadRequestPresentation() {
     final activationDate = textActivationNotifier.value?.value2;
     final status = arguments?.type == EditUploadRequestType.recipients
-      ? arguments?.uploadRequest?.status
+      ? uploadRequest?.status
       : arguments?.uploadRequestGroup?.status;
     final passwordProtected = arguments?.uploadRequestGroup?.protectedByPassword ?? false;
     final _listMaxFileSizeType = _maxFileSizeSetting?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
     final _listTotalFileSizeType = _totalFileSizeSetting?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
     final _listNotificationLanguages = _notificationLanguageSetting?.units.map((unit) => unit.toNotificationLanguage()).toList() ?? [];
 
-    final uploadRequest = UploadRequestPresentation(
+    final uploadRequestPresentation = UploadRequestPresentation(
       activationDate: activationDate,
       status: status,
       passwordProtected: passwordProtected,
@@ -325,7 +340,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
       listNotificationLanguages: _listNotificationLanguages,
     );
 
-    return uploadRequest;
+    return uploadRequestPresentation;
   }
 
   void showDateTimeActivationAction(BuildContext context) {
@@ -358,7 +373,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
 
   DateTime? _getMinTimeExpiration() {
     if (arguments?.type == EditUploadRequestType.recipients) {
-      return arguments?.uploadRequest?.status == UploadRequestStatus.ENABLED
+      return uploadRequest?.status == UploadRequestStatus.ENABLED
           ? _creationDateRoundUp
           : textActivationNotifier.value!.value1;
     } else {
@@ -420,7 +435,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
 
     _editUploadRequestAction(
       arguments?.type,
-      uploadRequestId: arguments?.uploadRequest?.uploadRequestId,
+      uploadRequestId: uploadRequest?.uploadRequestId,
       groupId: arguments?.uploadRequestGroup?.uploadRequestGroupId,
       maxFileCount: numberFiles,
       maxFileSize: fileSizeInByte,
@@ -485,19 +500,51 @@ class EditUploadRequestViewModel extends BaseViewModel {
           maxFileCount,
           maxFileSize);
 
-      store.dispatch(_editUploadRequest(groupId!, editUploadRequest));
+      store.dispatch(_editUploadRequestGroup(groupId!, editUploadRequest));
     }
   }
 
-  OnlineThunkAction _editUploadRequest(UploadRequestGroupId groupId, EditUploadRequest editUploadRequest) {
+  OnlineThunkAction _editUploadRequestGroup(UploadRequestGroupId groupId, EditUploadRequest editUploadRequest) {
     return OnlineThunkAction((Store<AppState> store) async {
-      await _editUploadRequestInteractor.execute(groupId, editUploadRequest).then((result) =>
+      await _editUploadRequestGroupInteractor.execute(groupId, editUploadRequest).then((result) =>
         result.fold(
-          (failure) => store.dispatch(EditUploadRequestAction(Left(failure))),
-          (success) {
+          (failure) {
+            store.dispatch(UploadRequestGroupAction(Left(failure)));
             backToUploadRequestGroup();
-            return store.dispatch(EditUploadRequestAction(Right(success)));
+          },
+          (success) {
+            store.dispatch(UploadRequestGroupAction(Right(success)));
+            backToUploadRequestGroup();
           }));
+    });
+  }
+
+  void _showLoadingDialog(BuildContext context) {
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => LoadingDialogBuilder(
+            Key('loading_upload_request_dialog'),
+            AppLocalizations.of(context).loading)
+            .build());
+  }
+
+  OnlineThunkAction _getUploadRequest(UploadRequestId? uploadRequestId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _getUploadRequestInteractor.execute(uploadRequestId!).then((result) =>
+          result.fold(
+              (failure) {
+                _appNavigation.popBack();
+                _enableCreateButton.add(true);
+                _setUpData();
+              },
+              (success) {
+                _appNavigation.popBack();
+                if (success is GetUploadRequestViewState) {
+                  uploadRequest = success.uploadRequest;
+                }
+                _enableCreateButton.add(true);
+                _setUpData();
+              }));
     });
   }
 
@@ -505,10 +552,13 @@ class EditUploadRequestViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       await _editUploadRequestRecipientInteractor.execute(uploadRequestId, editRequest)
         .then((result) => result.fold(
-          (failure) => store.dispatch(EditUploadRequestAction(Left(failure))),
-          (success) {
+          (failure) {
+            store.dispatch(UploadRequestInsideAction(Left(failure)));
             _appNavigation.popBack();
-            return store.dispatch(EditUploadRequestAction(Right(success)));
+          },
+          (success) {
+            store.dispatch(UploadRequestInsideAction(Right(success)));
+            _appNavigation.popBack();
           }));
     });
   }

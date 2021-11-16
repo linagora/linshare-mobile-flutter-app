@@ -2429,6 +2429,13 @@ class AppLocalizations {
     return Intl.message('Drive',
         name: 'drive');
   }
+
+  String get loading {
+    return Intl.message(
+      'Loading',
+      name: 'loading',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

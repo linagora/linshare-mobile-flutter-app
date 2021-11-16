@@ -36,5 +36,7 @@ abstract class UploadRequestDataSource {
 
   Future<UploadRequest> updateUploadRequestState(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace});
 
+  Future<UploadRequest> getUploadRequest(UploadRequestId uploadRequestId);
+
   Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request);
 }
