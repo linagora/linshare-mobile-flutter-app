@@ -79,14 +79,11 @@ class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewM
 					} else if (success is DisableSearchViewState) {
 						store.dispatch((UploadRequestGroupActiveClosedSetSearchResultAction(_uploadRequestListActiveClosed)));
 						_searchQuery = SearchQuery('');
-					}
-				});
-
-        event.editUploadRequestState.viewState.fold((failure) => null, (success) {
-          if (success is EditUploadRequestViewState && success.uploadRequestGroup.status == UploadRequestStatus.ENABLED) {
+					} else if (success is EditUploadRequestGroupViewState &&
+              success.uploadRequestGroup.status == UploadRequestStatus.ENABLED) {
             getUploadRequestActiveClosedStatus();
           }
-        });
+				});
 			});
   }
 

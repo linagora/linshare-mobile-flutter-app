@@ -108,9 +108,12 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
               success is RemoveSomeUploadRequestEntriesSuccessViewState ||
               success is UpdateUploadRequestStateViewState ||
               success is UpdateUploadRequestAllSuccessViewState ||
-              success is UpdateUploadRequestHasSomeFailedViewState ||
-              success is EditUploadRequestRecipientViewState
+              success is UpdateUploadRequestHasSomeFailedViewState
           ) {
+            requestToGetUploadRequestAndEntries();
+          } else if (success is EditUploadRequestRecipientViewState &&
+              (success.uploadRequest.status == UploadRequestStatus.ENABLED ||
+               success.uploadRequest.status == UploadRequestStatus.CREATED)) {
             requestToGetUploadRequestAndEntries();
           }
         });

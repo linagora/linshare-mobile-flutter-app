@@ -545,7 +545,8 @@ class WidgetModule {
       getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>(),
       getIt.get<AppToast>(),
-      getIt.get<EditUploadRequestInteractor>(),
+      getIt.get<EditUploadRequestGroupInteractor>(),
+      getIt.get<GetUploadRequestInteractor>(),
       getIt.get<EditUploadRequestRecipientInteractor>(),
     ));
   }

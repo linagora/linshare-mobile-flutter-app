@@ -33,17 +33,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class EditUploadRequestInteractor {
-  final UploadRequestGroupRepository _uploadRequestGroupRepository;
+class GetUploadRequestInteractor {
+  final UploadRequestRepository _uploadRequestRepository;
 
-  EditUploadRequestInteractor(this._uploadRequestGroupRepository);
+  GetUploadRequestInteractor(this._uploadRequestRepository);
 
-  Future<Either<Failure, Success>> execute(UploadRequestGroupId uploadRequestGroupId, EditUploadRequest request) async {
+  Future<Either<Failure, Success>> execute(UploadRequestId uploadRequestId) async {
     try {
-      final uploadRequestGroup = await _uploadRequestGroupRepository.editUploadRequest(uploadRequestGroupId, request);
-      return Right<Failure, Success>(EditUploadRequestViewState(uploadRequestGroup));
+      final uploadRequest = await _uploadRequestRepository.getUploadRequest(uploadRequestId);
+      return Right<Failure, Success>(GetUploadRequestViewState(uploadRequest));
     } catch (exception) {
-      return Left<Failure, Success>(EditUploadRequestFailure(exception));
+      return Left<Failure, Success>(GetUploadRequestFailure(exception));
     }
   }
 }

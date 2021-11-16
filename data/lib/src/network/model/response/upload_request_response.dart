@@ -89,11 +89,11 @@ class UploadRequestResponse extends Equatable {
   final bool closed;
   final String locale;
   final List<GenericUserDto> recipients;
-  final int maxFileCount;
-  final double maxDepositSize;
+  final int? maxFileCount;
+  final double? maxDepositSize;
   final double? maxFileSize;
-  final bool canClose;
-  final bool canDeleteDocument;
+  final bool? canClose;
+  final bool? canDeleteDocument;
 
   factory UploadRequestResponse.fromJson(Map<String, dynamic> json) => _$UploadRequestResponseFromJson(json);
 

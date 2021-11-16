@@ -73,7 +73,7 @@ class _EditUploadRequestWidgetState extends State<EditUploadRequestWidget> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context)?.settings.arguments as EditUploadRequestArguments;
-      _model.initialize(_arguments);
+      _model.initialize(context, _arguments);
     });
   }
 
@@ -95,7 +95,9 @@ class _EditUploadRequestWidgetState extends State<EditUploadRequestWidget> {
           onPressed: () => _model.backToUploadRequestGroup()),
         centerTitle: true,
         title: Text(
-          _arguments?.uploadRequestGroup?.label ?? '',
+            _arguments?.type == EditUploadRequestType.recipients
+              ? _arguments?.uploadRequest?.label ?? ''
+              : _arguments?.uploadRequestGroup?.label ?? '',
           key: Key('edit_upload_request_title'),
           style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor),
