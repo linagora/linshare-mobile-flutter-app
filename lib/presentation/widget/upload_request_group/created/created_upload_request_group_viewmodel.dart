@@ -79,14 +79,11 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
 					} else if (success is DisableSearchViewState) {
 						store.dispatch((UploadRequestGroupCreatedSetSearchResultAction(_uploadRequestListPending)));
 						_searchQuery = SearchQuery('');
-					}
-				});
-
-        event.editUploadRequestState.viewState.fold((failure) => null, (success) {
-          if (success is EditUploadRequestViewState && success.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
+					} else if (success is EditUploadRequestGroupViewState &&
+              success.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
             getUploadRequestCreatedStatus();
           }
-        });
+				});
 			});
   }
 

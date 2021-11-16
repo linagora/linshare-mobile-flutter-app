@@ -94,6 +94,24 @@ class UpdateUploadRequestHasSomeFailedViewState extends ViewState {
   List<Object> get props => [resultList];
 }
 
+class GetUploadRequestViewState extends ViewState {
+  final UploadRequest uploadRequest;
+
+  GetUploadRequestViewState(this.uploadRequest);
+
+  @override
+  List<Object?> get props => [uploadRequest];
+}
+
+class GetUploadRequestFailure extends FeatureFailure {
+  final exception;
+
+  GetUploadRequestFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
 class EditUploadRequestRecipientViewState extends ViewState {
   final UploadRequest uploadRequest;
 

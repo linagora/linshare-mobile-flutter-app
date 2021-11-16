@@ -766,6 +766,13 @@ class LinShareHttpClient {
     return resultJson.map((data) => SharedSpaceNodeNestedResponse.fromJson(data)).toList();
   }
 
+  Future<UploadRequestResponse> getUploadRequest(UploadRequestId uploadRequestId) async {
+    final resultJson = await _dioClient.get(Endpoint.uploadRequestsRoute
+        .withPathParameter(uploadRequestId.uuid)
+        .generateEndpointPath());
+    return UploadRequestResponse.fromJson(resultJson);
+  }
+
   Future<UploadRequestResponse> editUploadRequestRecipient(UploadRequestId uploadRequestId, EditUploadRequestRecipient request) async {
     final resultJson = await _dioClient.put(
         Endpoint.uploadRequestsRoute
