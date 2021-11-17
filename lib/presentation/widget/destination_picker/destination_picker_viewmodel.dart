@@ -39,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_des
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/destination_picker_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
@@ -126,27 +127,38 @@ class DestinationPickerViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartDestinationPickerLoadingAction());
       await _getAllSharedSpacesInteractor.execute().then((result) => result.fold(
-              (failure) => store.dispatch(DestinationPickerGetAllSharedSpacesAction([])),
-              (success) => store.dispatch(DestinationPickerGetAllSharedSpacesAction(
-                  (success as SharedSpacesViewState).sharedSpacesList
-                      .where((element) {
-                        if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
-                          return SharedSpaceOperationRole.copyToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole.name);
-                        } else if (operation == Operation.upload) {
-                          return SharedSpaceOperationRole.uploadToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole.name);
-                        } else if (operation == Operation.copyTo) {
-                          return SharedSpaceOperationRole.copyToSharedSpaceRoles
-                              .contains(element.sharedSpaceRole.name);
-                        } else if (operation == Operation.move) {
-                          return SharedSpaceOperationRole.moveSharedSpaceNodeRoles
-                              .contains(element.sharedSpaceRole.name);
-                        }
-                        return true;
-                      })
-                      .toList()))));
+        (failure) => store.dispatch(DestinationPickerGetAllSharedSpacesAction([])),
+        (success) {
+          final sharedSpacesList = success is SharedSpacesViewState
+              ? success.sharedSpacesList
+                  .where((element) {
+                      if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
+                        return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(element.sharedSpaceRole.name);
+                      } else if (operation == Operation.upload) {
+                        return SharedSpaceOperationRole.uploadToSharedSpaceRoles.contains(element.sharedSpaceRole.name);
+                      } else if (operation == Operation.copyTo) {
+                        return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(element.sharedSpaceRole.name);
+                      } else if (operation == Operation.move) {
+                        return SharedSpaceOperationRole.moveSharedSpaceNodeRoles.contains(element.sharedSpaceRole.name);
+                      }
+                      return true;
+                    })
+                  .toList()
+              : <SharedSpaceNodeNested>[];
+          if (_isDriveEnable()) {
+            store.dispatch(DestinationPickerGetAllSharedSpacesAction(sharedSpacesList));
+          } else {
+            final newSharedSpaces = sharedSpacesList
+                .where((sharedSpace) => sharedSpace.nodeType != LinShareNodeType.DRIVE)
+                .toList();
+            store.dispatch(DestinationPickerGetAllSharedSpacesAction(newSharedSpaces));
+          }
+        }));
     };
+  }
+
+  bool _isDriveEnable() {
+    return store.state.functionalityState.isDriveEnable();
   }
 
   void getAllDrive(Operation? operation, SharedSpaceNodeNested sharedSpaceNodeNested) async {
