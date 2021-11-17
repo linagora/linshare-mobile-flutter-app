@@ -168,7 +168,15 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
   }
 
   void _loadListRecipientsIndividualUploadRequest(UploadRequestViewState uploadRequestViewState) {
-    store.dispatch(GetAllUploadRequestsAction(Right(uploadRequestViewState)));
+    if(_arguments.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
+      final newUploadRequests = uploadRequestViewState.uploadRequests
+          .where((element) => element.status == UploadRequestStatus.CREATED)
+          .toList();
+
+      store.dispatch(GetAllUploadRequestsAction(Right(UploadRequestViewState(newUploadRequests))));
+    } else {
+      store.dispatch(GetAllUploadRequestsAction(Right(uploadRequestViewState)));
+    }
   }
 
   void _loadUploadRequestEntriesByRecipient(UploadRequest uploadRequest) {
