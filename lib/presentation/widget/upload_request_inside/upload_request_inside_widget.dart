@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/upload_request_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_context_menu_mixin.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_context_menu_mixin.dart';
@@ -528,5 +529,14 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
         entry)
     .onActionClick((data) => viewModel.editUploadRequestRecipient(entry))
     .build();
+  }
+
+  Widget moreActionMultipleSelection(List<UploadRequest> entries, Function onActionClick) {
+    return UploadRequestMultipleSelectionActionBuilder(
+          Key('upload_request_multiple_selection_more_action'),
+          SvgPicture.asset(imagePath.icMoreVertical, width: 24, height: 24, fit: BoxFit.fill),
+          entries)
+      .onActionClick((entries) => onActionClick.call())
+      .build();
   }
 }
