@@ -46,7 +46,9 @@ import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -73,6 +75,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   final SaveSorterInteractor _saveSorterInteractor;
   final RenameWorkGroupInteractor _renameWorkGroupInteractor;
   final GetAllSharedSpaceOfflineInteractor _getAllSharedSpaceOfflineInteractor;
+  final AppToast _appToast;
 
   late StreamSubscription _storeStreamSubscription;
   late List<SharedSpaceNodeNested> _sharedSpaceNodes;
@@ -93,6 +96,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._saveSorterInteractor,
     this._renameWorkGroupInteractor,
     this._getAllSharedSpaceOfflineInteractor,
+    this._appToast,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -142,10 +146,15 @@ class SharedSpaceViewModel extends BaseViewModel {
           store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
           _sharedSpaceNodes = [];
         }, (success) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpacesViewState)
-              ? success.sharedSpacesList
-              : [];
+          if (_isDriveEnable()) {
+            store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
+            _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+          } else {
+            _sharedSpaceNodes = (success is SharedSpacesViewState)
+                ? success.sharedSpacesList.where((sharedSpace) => sharedSpace.nodeType != LinShareNodeType.DRIVE).toList()
+                : [];
+            store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(SharedSpacesViewState(_sharedSpaceNodes))));
+          }
         });
       });
 
@@ -163,8 +172,15 @@ class SharedSpaceViewModel extends BaseViewModel {
           _sharedSpaceNodes = [];
         },
         (success) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+          if (_isDriveEnable()) {
+            store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
+            _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+          } else {
+            _sharedSpaceNodes = (success is SharedSpacesViewState)
+                ? success.sharedSpacesList.where((sharedSpace) => sharedSpace.nodeType != LinShareNodeType.DRIVE).toList()
+                : [];
+            store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(SharedSpacesViewState(_sharedSpaceNodes))));
+          }
         }));
 
       store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
@@ -222,6 +238,10 @@ class SharedSpaceViewModel extends BaseViewModel {
               })
       );
     };
+  }
+
+  bool _isDriveEnable() {
+    return store.state.functionalityState.isDriveEnable();
   }
 
   bool _isInSearchState() {
@@ -338,6 +358,31 @@ class SharedSpaceViewModel extends BaseViewModel {
       RoutePaths.sharedSpaceDetails,
       arguments: SharedSpaceDetailsArguments(sharedSpaceNodeNested)
     );
+  }
+
+  void openCreateNewWorkGroup(BuildContext context) {
+    _appNavigation.popBack();
+    store.dispatch(_handleCreateNewWorkgroupModalAction(context));
+  }
+
+  void openCreateNewDrive(BuildContext context) {
+    _appNavigation.popBack();
+    _appToast.showToast(AppLocalizations.of(context).this_feature_not_supported);
+  }
+
+  void openCreateNewSharedSpaceMenu(BuildContext context, List<Widget> actionTiles) {
+    store.dispatch(_handleCreateNewSharedSpaceMenuAction(context, actionTiles));
+  }
+
+  ThunkAction<AppState> _handleCreateNewSharedSpaceMenuAction(BuildContext context, List<Widget> actionTiles) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context, areTilesHorizontal: true)
+        .addHeader(SimpleBottomSheetHeaderBuilder(Key('create_new_shared_space_bottom_sheet_header_builder'))
+          .addLabel(AppLocalizations.of(context).create_new_workgroup_or_drive)
+          .build())
+        .addTiles(actionTiles)
+        .build();
+    };
   }
 
   void openCreateNewWorkGroupModal(BuildContext context) {
@@ -475,8 +520,15 @@ class SharedSpaceViewModel extends BaseViewModel {
           _sharedSpaceNodes = [];
         },
         (success) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+          if (_isDriveEnable()) {
+            store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
+            _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+          } else {
+            _sharedSpaceNodes = (success is SharedSpacesViewState)
+                ? success.sharedSpacesList.where((sharedSpace) => sharedSpace.nodeType != LinShareNodeType.DRIVE).toList()
+                : [];
+            store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(SharedSpacesViewState(_sharedSpaceNodes))));
+          }
         }));
 
       store.dispatch(_sortFilesAction(store.state.sharedSpaceState.sorter));
@@ -502,8 +554,15 @@ class SharedSpaceViewModel extends BaseViewModel {
           store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
           _sharedSpaceNodes = [];
         }, (success) {
-          store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
-          _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+          if (_isDriveEnable()) {
+            store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
+            _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
+          } else {
+            _sharedSpaceNodes = (success is SharedSpacesViewState)
+                ? success.sharedSpacesList.where((sharedSpace) => sharedSpace.nodeType != LinShareNodeType.DRIVE).toList()
+                : [];
+            store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(SharedSpacesViewState(_sharedSpaceNodes))));
+          }
         });
       });
 

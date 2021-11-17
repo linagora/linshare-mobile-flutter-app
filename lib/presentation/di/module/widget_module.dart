@@ -253,6 +253,7 @@ class WidgetModule {
       getIt<SaveSorterInteractor>(),
       getIt<RenameWorkGroupInteractor>(),
       getIt<GetAllSharedSpaceOfflineInteractor>(),
+      getIt<AppToast>(),
     ));
   }
 

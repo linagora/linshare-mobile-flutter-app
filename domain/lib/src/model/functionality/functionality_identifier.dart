@@ -45,6 +45,8 @@ enum FunctionalityIdentifier {
   UPLOAD_REQUEST__CAN_DELETE,
   UPLOAD_REQUEST__CAN_CLOSE,
   UPLOAD_REQUEST__PROTECTED_BY_PASSWORD,
+  DRIVE,
+  DRIVE__CREATION_RIGHT,
 }
 
 extension FunctionalityIdentifierExtension on FunctionalityIdentifier {
