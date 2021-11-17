@@ -34,11 +34,14 @@
 import 'dart:io';
 
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_entry_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_entry_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/active_close/active_closed_upload_request_inside_view_model.dart';
@@ -196,8 +199,13 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
   }
 
   @override
+  void openRecipientMoreActionBottomMenu(BuildContext context, List<UploadRequest> allSelected) {
+    super.openRecipientMoreActionBottomMenu(context, allSelected);
+  }
+
+  @override
   Widget buildRecipientMultipleSelectionBottomBar(BuildContext context, List<UploadRequest> allSelected) {
-    return SizedBox.shrink();
+    return super.buildRecipientMultipleSelectionBottomBar(context, allSelected);
   }
 
   @override
@@ -209,21 +217,40 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
 
   @override
   Widget? recipientFooterActionTile(UploadRequest entry) {
-    return null;
+    return Column(children: [
+      if (entry.status == UploadRequestStatus.ENABLED) _closeUploadRequestAction([entry])
+    ]);
   }
 
   @override
   List<Widget> recipientMultipleSelectionActions(BuildContext context, List<UploadRequest> allSelected) {
-    throw UnimplementedError();
+    return [
+      moreActionMultipleSelection(allSelected, () => openRecipientMoreActionBottomMenu(context, allSelected)),
+    ];
   }
 
   @override
   Widget? recipientFooterMultipleSelectionMoreActionBottomMenuTile(List<UploadRequest> allSelected) {
-    throw UnimplementedError();
+    final isAllSelectedActive = allSelected.where((element) => element.status != UploadRequestStatus.ENABLED).isEmpty;
+
+    return Column(children: [
+      if (isAllSelectedActive) _closeUploadRequestAction(allSelected, itemSelectionType: ItemSelectionType.multiple),
+    ]);
   }
 
   @override
   List<Widget> recipientMultipleSelectionMoreActionBottomMenuTiles(BuildContext context, List<UploadRequest> allSelected) {
-    throw UnimplementedError();
+    return [];
+  }
+
+  Widget _closeUploadRequestAction(List<UploadRequest> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return UploadRequestContextMenuActionBuilder(
+          Key('close_upload_request_recipient_context_menu_action'),
+          Icon(Icons.cancel, size: 24.0, color: AppColor.unselectedElementColor),
+          AppLocalizations.of(context).close, entries.first)
+      .onActionClick((data) => (viewModel as ActiveCloseUploadRequestInsideViewModel)
+          .closeUploadRequest(context, entries, itemSelectionType: itemSelectionType))
+      .build();
   }
 }
