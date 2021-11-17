@@ -31,7 +31,9 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'package:dartz/dartz.dart';
 import 'package:data/src/util/device_manager.dart';
+import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/search_upload_request_inside/search_upload_request_entries_interactor.dart';
 import 'package:domain/src/usecases/upload_request/get_all_upload_requests_interactor.dart';
 import 'package:domain/src/usecases/upload_request_entry/copy_multiple_files_from_upload_request_entries_to_my_space_interactor.dart';
@@ -39,12 +41,21 @@ import 'package:domain/src/usecases/upload_request_entry/download_multiple_uploa
 import 'package:domain/src/usecases/upload_request_entry/download_upload_request_entry_interactor.dart';
 import 'package:domain/src/usecases/upload_request_entry/get_all_upload_request_entries_interactor.dart';
 import 'package:domain/src/usecases/upload_request_entry/remove_multiple_upload_request_entry_interactor.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
 import 'package:redux/src/store.dart';
 
 class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewModel {
+
+  final UpdateMultipleUploadRequestStateInteractor _updateMultipleUploadRequestStateInteractor;
+
   ActiveCloseUploadRequestInsideViewModel(
     Store<AppState> store,
     AppNavigation appNavigation,
@@ -55,7 +66,8 @@ class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewMod
     SearchUploadRequestEntriesInteractor searchUploadRequestEntriesInteractor,
     CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor,
     DeviceManager deviceManager,
-    RemoveMultipleUploadRequestEntryInteractor removeMultipleUploadRequestEntryInteractor
+    RemoveMultipleUploadRequestEntryInteractor removeMultipleUploadRequestEntryInteractor,
+    this._updateMultipleUploadRequestStateInteractor,
     ) : super(
       store,
       appNavigation,
@@ -67,4 +79,42 @@ class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewMod
       copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor,
       deviceManager,
       removeMultipleUploadRequestEntryInteractor);
+
+  void closeUploadRequest(
+      BuildContext context,
+      List<UploadRequest> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    if (entries.isNotEmpty) {
+      final title = AppLocalizations.of(context)
+          .confirm_close_multiple_upload_request(entries.length, entries.first.recipients.first.mail);
+
+      ConfirmModalSheetBuilder(appNavigation)
+          .key(Key('close_upload_request_confirm_modal'))
+          .title(title)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .onConfirmAction(AppLocalizations.of(context).upload_request_proceed_button, (_) {
+        appNavigation.popBack();
+        if (itemSelectionType == ItemSelectionType.multiple) {
+          cancelSelection();
+        }
+        store.dispatch(_cancelUploadRequestAction(entries));
+      }).show(context);
+    }
+  }
+
+  OnlineThunkAction _cancelUploadRequestAction(List<UploadRequest> entries) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _updateMultipleUploadRequestStateInteractor
+          .execute(entries.map((entry) => entry.uploadRequestId).toList(), UploadRequestStatus.CLOSED)
+          .then((result) => result.fold(
+              (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
+              (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
+    });
+  }
 }
