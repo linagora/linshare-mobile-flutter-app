@@ -99,14 +99,14 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
   @override
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest entry) {
     return [
-      editUploadRequestRecipientAction(context, entry)
+      if (entry.status == UploadRequestStatus.CREATED) editUploadRequestRecipientAction(context, entry)
     ];
   }
 
   @override
   Widget? recipientFooterActionTile(UploadRequest entry) {
     return Column(children: [
-      _cancelUploadRequestAction([entry])
+      if (entry.status == UploadRequestStatus.CREATED) _cancelUploadRequestAction([entry])
     ]);
   }
 
@@ -130,8 +130,10 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
 
   @override
   Widget? recipientFooterMultipleSelectionMoreActionBottomMenuTile(List<UploadRequest> allSelected) {
+    final isAllSelectedPending = allSelected.where((element) => element.status != UploadRequestStatus.CREATED).isEmpty;
+
     return Column(children: [
-      _cancelUploadRequestAction(allSelected, itemSelectionType: ItemSelectionType.multiple),
+      if (isAllSelectedPending) _cancelUploadRequestAction(allSelected, itemSelectionType: ItemSelectionType.multiple),
     ]);
   }
 
