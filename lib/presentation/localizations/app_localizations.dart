@@ -2436,6 +2436,13 @@ class AppLocalizations {
       name: 'loading',
     );
   }
+
+  String get create_new_workgroup_or_drive {
+    return Intl.message(
+      'Create new workgroup or drive',
+      name: 'create_new_workgroup_or_drive',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
