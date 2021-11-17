@@ -208,12 +208,22 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
   }
 
   @override
-  Widget? recipientFooterActionTile() {
+  Widget? recipientFooterActionTile(UploadRequest entry) {
     return null;
   }
 
   @override
   List<Widget> recipientMultipleSelectionActions(BuildContext context, List<UploadRequest> allSelected) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget? recipientFooterMultipleSelectionMoreActionBottomMenuTile(List<UploadRequest> allSelected) {
+    throw UnimplementedError();
+  }
+
+  @override
+  List<Widget> recipientMultipleSelectionMoreActionBottomMenuTiles(BuildContext context, List<UploadRequest> allSelected) {
     throw UnimplementedError();
   }
 }

@@ -36,9 +36,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
+import 'package:linshare_flutter_app/presentation/model/file/upload_request_recipient_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_common_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 
 mixin RecipientContextMenuMixin {
@@ -52,7 +55,7 @@ mixin RecipientContextMenuMixin {
         SvgPicture.asset(imagePath.icUploadRequestIndividual, width: 24, height: 24, fit: BoxFit.fill))
       .build())
       .addTiles(recipientContextMenuActionTiles(context, uploadRequest))
-      .addFooter(recipientFooterActionTile() ?? SizedBox.shrink())
+      .addFooter(recipientFooterActionTile(uploadRequest) ?? SizedBox.shrink())
       .build();
   }
 
@@ -64,9 +67,25 @@ mixin RecipientContextMenuMixin {
       .build();
   }
 
+  void openRecipientMoreActionBottomMenu(BuildContext context, List<UploadRequest> allSelected) {
+    ContextMenuBuilder(context)
+      .addHeader(MoreActionBottomSheetHeaderBuilder(
+            context,
+            Key('more_action_menu_header'),
+            allSelected.map<PresentationFile>((element) => UploadRequestPresentationFile.fromUploadRequest(element)).toList())
+        .build())
+      .addTiles(recipientMultipleSelectionMoreActionBottomMenuTiles(context, allSelected))
+      .addFooter(recipientFooterMultipleSelectionMoreActionBottomMenuTile(allSelected) ?? SizedBox.shrink())
+      .build();
+  }
+
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest entry);
 
-  Widget? recipientFooterActionTile();
+  Widget? recipientFooterActionTile(UploadRequest entry);
 
   List<Widget> recipientMultipleSelectionActions(BuildContext context, List<UploadRequest> allSelected);
+
+  List<Widget> recipientMultipleSelectionMoreActionBottomMenuTiles(BuildContext context, List<UploadRequest> allSelected);
+
+  Widget? recipientFooterMultipleSelectionMoreActionBottomMenuTile(List<UploadRequest> allSelected);
 }

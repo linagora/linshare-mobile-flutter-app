@@ -2443,6 +2443,11 @@ class AppLocalizations {
       name: 'create_new_workgroup_or_drive',
     );
   }
+
+  String get canceled {
+    return Intl.message('Canceled',
+        name: 'canceled');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

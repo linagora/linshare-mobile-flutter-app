@@ -211,11 +211,21 @@ class EditUploadRequestViewModel extends BaseViewModel {
     if (isInitialize) {
       if (arguments?.type == EditUploadRequestType.recipients) {
         _initActivationDateRoundUp = uploadRequest?.activationDate ?? _initActivationDateRoundUp;
+
+        textActivationNotifier.value = Tuple2(
+            _initActivationDateRoundUp,
+            uploadRequest?.status == UploadRequestStatus.CREATED
+              ? _initActivationDateRoundUp.getYMMMMdFormatWithJm()
+              : _initActivationDateRoundUp.getMMMddyyyyFormatString());
       } else {
         _initActivationDateRoundUp = arguments?.uploadRequestGroup?.activationDate ?? _initActivationDateRoundUp;
-      }
 
-      textActivationNotifier.value = Tuple2(_initActivationDateRoundUp, _initActivationDateRoundUp.getYMMMMdFormatWithJm());
+        textActivationNotifier.value = Tuple2(
+            _initActivationDateRoundUp,
+            arguments?.uploadRequestGroup?.status == UploadRequestStatus.CREATED
+              ? _initActivationDateRoundUp.getYMMMMdFormatWithJm()
+              : _initActivationDateRoundUp.getMMMddyyyyFormatString());
+      }
     }
   }
 
@@ -424,7 +434,6 @@ class EditUploadRequestViewModel extends BaseViewModel {
       _appToast.showErrorToast(AppLocalizations.of(context).total_file_size_error);
       return;
     }
-
 
     // Once user change the time, prefer to get picked time.
     // Otherwise, passing null for server can handle by itself (temporary solution)

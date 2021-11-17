@@ -89,7 +89,7 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
   }
 
   @override
-  Widget? recipientFooterActionTile() {
+  Widget? recipientFooterActionTile(UploadRequest entry) {
     return null;
   }
 
@@ -123,5 +123,15 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
     return [
       _removeRecipientMultipleSelection(allSelected)
     ];
+  }
+
+  @override
+  Widget? recipientFooterMultipleSelectionMoreActionBottomMenuTile(List<UploadRequest> allSelected) {
+    throw UnimplementedError();
+  }
+
+  @override
+  List<Widget> recipientMultipleSelectionMoreActionBottomMenuTiles(BuildContext context, List<UploadRequest> allSelected) {
+    throw UnimplementedError();
   }
 }
