@@ -70,6 +70,10 @@ class FunctionalityState extends LinShareState {
 extension FunctionalityStateExtension on FunctionalityState {
   bool isSharedSpaceEnable() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP);
 
+  bool isDriveEnable() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE);
+
+  bool isDriveCreationEnable() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE__CREATION_RIGHT);
+
   bool isUploadRequestEnable() => _isFunctionalityEnable(FunctionalityIdentifier.UPLOAD_REQUEST);
 
   bool _isFunctionalityEnable(FunctionalityIdentifier functionalityIdentifier) {
