@@ -580,6 +580,7 @@ class WidgetModule {
         getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
         getIt<DeviceManager>(),
         getIt<RemoveMultipleUploadRequestEntryInteractor>(),
+        getIt<UpdateMultipleUploadRequestStateInteractor>(),
       ));
 
     getIt.registerFactory(() =>
