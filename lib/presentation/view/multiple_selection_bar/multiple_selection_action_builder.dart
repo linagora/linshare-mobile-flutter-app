@@ -31,13 +31,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 typedef OnMultipleSelectionActionClick<T> = void Function(T data);
 
 abstract class MultipleSelectionActionBuilder<T> {
   @protected final Key key;
-  @protected final SvgPicture actionIcon;
+  @protected final Widget actionIcon;
   @protected OnMultipleSelectionActionClick<T>? onMultipleSelectionActionClick;
 
   MultipleSelectionActionBuilder(

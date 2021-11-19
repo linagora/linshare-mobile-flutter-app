@@ -75,6 +75,7 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
   final DownloadMultipleUploadRequestEntryIOSInteractor _downloadMultipleEntryIOSInteractor;
   final SearchUploadRequestEntriesInteractor _searchUploadRequestEntriesInteractor;
   final RemoveMultipleUploadRequestEntryInteractor _removeMultipleUploadRequestEntryInteractor;
+  final UpdateMultipleUploadRequestStateInteractor _updateMultipleUploadRequestStateInteractor;
   late StreamSubscription _storeStreamSubscription;
 
   SearchQuery _searchQuery = SearchQuery('');
@@ -95,6 +96,7 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
       this._copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor,
       this._deviceManager,
       this._removeMultipleUploadRequestEntryInteractor,
+      this._updateMultipleUploadRequestStateInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
         event.uploadRequestInsideState.viewState.fold((failure) => null, (success) {
@@ -484,6 +486,70 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
           (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
           (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
     };
+  }
+
+  void updateUploadRequestStatus(
+      BuildContext context,
+      {
+        required List<UploadRequest> entries,
+        required UploadRequestStatus status,
+        required String title,
+        required String titleButtonConfirm,
+        ItemSelectionType itemSelectionType = ItemSelectionType.single,
+        bool? optionalCheckbox,
+        String? optionalTitle,
+        Function? onUpdateSuccess,
+        Function? onUpdateFailed
+      }
+  ) {
+    appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelSelection();
+    }
+
+    if (entries.isNotEmpty) {
+      ConfirmModalSheetBuilder(appNavigation)
+          .key(Key('update_upload_request_group_confirm_modal'))
+          .title(title)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .optionalCheckbox(optionalTitle)
+          .onConfirmAction(titleButtonConfirm, (optionalCheckboxValue) {
+        appNavigation.popBack();
+        if (itemSelectionType == ItemSelectionType.multiple) {
+          cancelSelection();
+        }
+        store.dispatch(_updateUploadRequestStatusAction(
+          entries,
+          status,
+          copyToMySpace: optionalCheckboxValue,
+          onUpdateSuccess: onUpdateSuccess,
+          onUpdateFailed: onUpdateFailed));
+      }).show(context);
+    }
+  }
+
+  OnlineThunkAction _updateUploadRequestStatusAction(
+      List<UploadRequest> entries,
+      UploadRequestStatus status,
+      {
+        bool? copyToMySpace,
+        Function? onUpdateSuccess,
+        Function? onUpdateFailed
+      }
+  ) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _updateMultipleUploadRequestStateInteractor
+        .execute(entries.map((entry) => entry.uploadRequestId).toList(), status, copyToMySpace: copyToMySpace)
+        .then((result) => result.fold(
+            (failure) {
+              store.dispatch(UploadRequestInsideAction(Left(failure)));
+              onUpdateFailed?.call();
+            },
+            (success) {
+              store.dispatch(UploadRequestInsideAction(Right(success)));
+              onUpdateSuccess?.call();
+            }));
+    });
   }
 
   void editUploadRequestRecipient(UploadRequest uploadRequest) {

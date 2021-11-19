@@ -57,7 +57,7 @@ class ConfirmModalSheetBuilder {
   late OnConfirmActionClick _onConfirmActionClick;
 
   @protected
-  String _optionalCheckboxString = '';
+  String? _optionalCheckboxString;
 
   var isOptionalCheckboxChecked = false;
 
@@ -85,7 +85,7 @@ class ConfirmModalSheetBuilder {
     return this;
   }
 
-  ConfirmModalSheetBuilder optionalCheckbox(String checkboxName) {
+  ConfirmModalSheetBuilder optionalCheckbox(String? checkboxName) {
     _optionalCheckboxString = checkboxName;
     return this;
   }
@@ -96,7 +96,7 @@ class ConfirmModalSheetBuilder {
           dense: true,
           activeColor: AppColor.primaryColor,
           contentPadding: EdgeInsets.symmetric(horizontal: 36),
-          title: Text(_optionalCheckboxString, style: TextStyle(
+          title: Text(_optionalCheckboxString ?? '', style: TextStyle(
             color: AppColor.deleteMemberIconColor,
             fontSize: 12
           )),
@@ -119,7 +119,7 @@ class ConfirmModalSheetBuilder {
         builder: (BuildContext bc) {
           return Container(
             key: _key,
-            height: _optionalCheckboxString.isEmpty ? 208.0 : 240.0,
+            height: (_optionalCheckboxString == null || _optionalCheckboxString!.isEmpty) ? 208.0 : 240.0,
             child: Column(
               children: <Widget>[
                 Padding(
@@ -129,7 +129,7 @@ class ConfirmModalSheetBuilder {
                       style: TextStyle(fontSize: 16, color: AppColor.confirmDialogTitleTextColor),
                       textAlign: TextAlign.center,
                     )),
-                if (_optionalCheckboxString.isNotEmpty) _buildCheckboxRow(),
+                if ((_optionalCheckboxString != null && _optionalCheckboxString!.isNotEmpty)) _buildCheckboxRow(),
                 Padding(
                     padding: EdgeInsets.only(top: 20),
                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
