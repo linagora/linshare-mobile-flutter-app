@@ -31,7 +31,6 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:dartz/dartz.dart';
 import 'package:data/src/util/device_manager.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/search_upload_request_inside/search_upload_request_entries_interactor.dart';
@@ -41,20 +40,12 @@ import 'package:domain/src/usecases/upload_request_entry/download_multiple_uploa
 import 'package:domain/src/usecases/upload_request_entry/download_upload_request_entry_interactor.dart';
 import 'package:domain/src/usecases/upload_request_entry/get_all_upload_request_entries_interactor.dart';
 import 'package:domain/src/usecases/upload_request_entry/remove_multiple_upload_request_entry_interactor.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
 import 'package:redux/src/store.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 
 class ArchivedUploadRequestInsideViewModel extends UploadRequestInsideViewModel {
-  final UpdateMultipleUploadRequestStateInteractor _updateUploadRequestMultipleStatusInteractor;
-
   ArchivedUploadRequestInsideViewModel(
     Store<AppState> store,
       AppNavigation appNavigation,
@@ -66,7 +57,7 @@ class ArchivedUploadRequestInsideViewModel extends UploadRequestInsideViewModel 
       CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor,
       DeviceManager deviceManager,
       RemoveMultipleUploadRequestEntryInteractor removeMultipleUploadRequestEntryInteractor,
-      this._updateUploadRequestMultipleStatusInteractor
+      UpdateMultipleUploadRequestStateInteractor updateMultipleUploadRequestStateInteractor,
   ) : super(
       store,
       appNavigation,
@@ -77,45 +68,7 @@ class ArchivedUploadRequestInsideViewModel extends UploadRequestInsideViewModel 
       searchUploadRequestEntriesInteractor,
       copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor,
       deviceManager,
-      removeMultipleUploadRequestEntryInteractor
+      removeMultipleUploadRequestEntryInteractor,
+      updateMultipleUploadRequestStateInteractor,
   );
-
-  void removeRecipients(
-    BuildContext context, List<UploadRequest> entries,
-    {ItemSelectionType itemSelectionType = ItemSelectionType.single}
-  ) {
-    appNavigation.popBack();
-    if (itemSelectionType == ItemSelectionType.multiple) {
-      cancelSelection();
-    }
-
-    if (entries.isNotEmpty) {
-      final deleteTitle = AppLocalizations.of(context)
-          .are_you_sure_you_want_to_delete_multiple(entries.length, entries.first.recipients.first.mail);
-
-      ConfirmModalSheetBuilder(appNavigation)
-          .key(Key('remove_upload_request_recipient_confirm_modal'))
-          .title(deleteTitle)
-          .cancelText(AppLocalizations.of(context).cancel)
-          .onConfirmAction(AppLocalizations.of(context).delete, (_) {
-        appNavigation.popBack();
-        if (itemSelectionType == ItemSelectionType.multiple) {
-          cancelSelection();
-        }
-        store.dispatch(_removeRecipientAction(entries));
-      }).show(context);
-    }
-  }
-
-  ThunkAction<AppState> _removeRecipientAction(List<UploadRequest> entries) {
-    return (Store<AppState> store) async {
-      await _updateUploadRequestMultipleStatusInteractor
-        .execute(
-          entries.map((entry) => entry.uploadRequestId).toList(),
-          UploadRequestStatus.DELETED)
-        .then((result) => result.fold(
-          (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
-          (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
-    };
-  }
 }

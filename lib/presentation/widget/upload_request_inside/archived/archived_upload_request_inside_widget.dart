@@ -102,8 +102,13 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
         SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
         AppLocalizations.of(context).delete,
         entries.first)
-      .onActionClick((data) => (viewModel as ArchivedUploadRequestInsideViewModel)
-        .removeRecipients(context, entries, itemSelectionType: itemSelectionType))
+      .onActionClick((_) => viewModel.updateUploadRequestStatus(
+          context,
+          entries: entries,
+          status: UploadRequestStatus.DELETED,
+          title: AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(entries.length, entries.first.recipients.first.mail),
+          titleButtonConfirm: AppLocalizations.of(context).delete,
+          itemSelectionType: itemSelectionType))
       .build();
   }
 
@@ -113,8 +118,13 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
         Key('multiple_selection_remove_action'),
         SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
         uploadRequestEntries)
-      .onActionClick((entries) => (viewModel as ArchivedUploadRequestInsideViewModel)
-        .removeRecipients(context, entries, itemSelectionType: ItemSelectionType.multiple))
+      .onActionClick((entries) => viewModel.updateUploadRequestStatus(
+          context,
+          entries: entries,
+          status: UploadRequestStatus.DELETED,
+          title: AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(entries.length, entries.first.recipients.first.mail),
+          titleButtonConfirm: AppLocalizations.of(context).delete,
+          itemSelectionType: ItemSelectionType.multiple))
       .build();
   }
 
@@ -127,11 +137,11 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
 
   @override
   Widget? recipientFooterMultipleSelectionMoreActionBottomMenuTile(List<UploadRequest> allSelected) {
-    throw UnimplementedError();
+    return null;
   }
 
   @override
   List<Widget> recipientMultipleSelectionMoreActionBottomMenuTiles(BuildContext context, List<UploadRequest> allSelected) {
-    throw UnimplementedError();
+    return [];
   }
 }
