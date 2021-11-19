@@ -123,8 +123,13 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
           Key('cancel_upload_request_recipient_context_menu_action'),
           SvgPicture.asset(imagePath.icUploadRequestCancel, width: 24, height: 24, fit: BoxFit.fill),
           AppLocalizations.of(context).cancel, entries.first)
-      .onActionClick((data) => (viewModel as PendingUploadRequestInsideViewModel)
-          .cancelUploadRequest(context, entries, itemSelectionType: itemSelectionType))
+      .onActionClick((_) => viewModel.updateUploadRequestStatus(
+          context,
+          entries: entries,
+          status: UploadRequestStatus.CANCELED,
+          title: AppLocalizations.of(context).confirm_cancel_multiple_upload_request(entries.length, entries.first.recipients.first.mail),
+          titleButtonConfirm: AppLocalizations.of(context).upload_request_proceed_button,
+          itemSelectionType: itemSelectionType))
       .build();
   }
 

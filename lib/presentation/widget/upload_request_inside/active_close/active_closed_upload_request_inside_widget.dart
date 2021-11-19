@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_entry_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/upload_request_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_entry_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/active_close/active_closed_upload_request_inside_view_model.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
@@ -218,14 +219,19 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
   @override
   Widget? recipientFooterActionTile(UploadRequest entry) {
     return Column(children: [
-      if (entry.status == UploadRequestStatus.ENABLED) _closeUploadRequestAction([entry])
+      if (entry.status == UploadRequestStatus.ENABLED) _closeUploadRequestAction([entry]),
+      if (entry.status == UploadRequestStatus.CLOSED) _archiveUploadRequestAction([entry])
     ]);
   }
 
   @override
   List<Widget> recipientMultipleSelectionActions(BuildContext context, List<UploadRequest> allSelected) {
+    final isAllSelectedClosed = allSelected.where((element) => element.status != UploadRequestStatus.CLOSED).isEmpty;
+    final isAllSelectedActive = allSelected.where((element) => element.status != UploadRequestStatus.ENABLED).isEmpty;
+
     return [
-      moreActionMultipleSelection(allSelected, () => openRecipientMoreActionBottomMenu(context, allSelected)),
+      if (isAllSelectedClosed) _archiveUploadRequestMultipleSelectionAction(allSelected),
+      if (isAllSelectedActive) moreActionMultipleSelection(allSelected, () => openRecipientMoreActionBottomMenu(context, allSelected)),
     ];
   }
 
@@ -249,8 +255,48 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
           Key('close_upload_request_recipient_context_menu_action'),
           Icon(Icons.cancel, size: 24.0, color: AppColor.unselectedElementColor),
           AppLocalizations.of(context).close, entries.first)
-      .onActionClick((data) => (viewModel as ActiveCloseUploadRequestInsideViewModel)
-          .closeUploadRequest(context, entries, itemSelectionType: itemSelectionType))
+      .onActionClick((_) => viewModel.updateUploadRequestStatus(
+          context,
+          entries: entries,
+          status: UploadRequestStatus.CLOSED,
+          title: AppLocalizations.of(context).confirm_close_multiple_upload_request(entries.length, entries.first.recipients.first.mail),
+          titleButtonConfirm: AppLocalizations.of(context).upload_request_proceed_button,
+          itemSelectionType: itemSelectionType))
+      .build();
+  }
+
+  Widget _archiveUploadRequestAction(List<UploadRequest> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return UploadRequestContextMenuActionBuilder(
+          Key('archive_upload_request_recipient_context_menu_action'),
+          Icon(Icons.archive, size: 24.0, color: AppColor.unselectedElementColor),
+          AppLocalizations.of(context).archive, entries.first)
+      .onActionClick((_) => viewModel.updateUploadRequestStatus(
+          context,
+          entries: entries,
+          status: UploadRequestStatus.ARCHIVED,
+          title: AppLocalizations.of(context).confirm_archive_multiple_upload_request(entries.length, entries.first.recipients.first.mail),
+          titleButtonConfirm: AppLocalizations.of(context).archive,
+          optionalCheckbox: true,
+          optionalTitle: AppLocalizations.of(context).copy_before_archiving,
+          itemSelectionType: itemSelectionType))
+      .build();
+  }
+
+  Widget _archiveUploadRequestMultipleSelectionAction(List<UploadRequest> entries) {
+    return UploadRequestMultipleSelectionActionBuilder(
+        Key('multiple_selection_archive_action'),
+        Icon(Icons.archive, size: 24.0, color: AppColor.unselectedElementColor),
+        entries)
+      .onActionClick((entries) => viewModel.updateUploadRequestStatus(
+          context,
+          entries: entries,
+          status: UploadRequestStatus.ARCHIVED,
+          title: AppLocalizations.of(context).confirm_archive_multiple_upload_request(entries.length, entries.first.recipients.first.mail),
+          titleButtonConfirm: AppLocalizations.of(context).archive,
+          optionalCheckbox: true,
+          optionalTitle: AppLocalizations.of(context).copy_before_archiving,
+          itemSelectionType: ItemSelectionType.multiple))
       .build();
   }
 }
