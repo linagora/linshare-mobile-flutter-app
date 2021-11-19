@@ -497,6 +497,12 @@ class ToastMessageHandler {
       } else if (failure is EditUploadRequestRecipientFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
         _cleanUploadRequestInsideViewState();
+      } else if (failure is UpdateUploadRequestStateFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).upload_request_could_not_be_updated);
+        _cleanUploadRequestInsideViewState();
+      } else if (failure is UpdateUploadRequestAllFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanUploadRequestInsideViewState();
       }
     }, (success) {
       if (success is CopyToMySpaceViewState) {
@@ -519,6 +525,15 @@ class ToastMessageHandler {
         _cleanUploadRequestInsideViewState();
       } else if (success is EditUploadRequestRecipientViewState) {
         appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
+        _cleanUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestGroupStateViewState) {
+        appToast.showToast(AppLocalizations.of(context).upload_request_has_been_updated);
+        _cleanUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestGroupAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_upload_requests_have_been_updated);
+        _cleanUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestGroupHasSomeGroupsFailedViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
         _cleanUploadRequestInsideViewState();
       }
     });

@@ -32,9 +32,9 @@
  */
 
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/material/icon_button.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_action_builder.dart';
 
 class UploadRequestMultipleSelectionActionBuilder extends MultipleSelectionActionBuilder<List<UploadRequest>> {
@@ -42,7 +42,7 @@ class UploadRequestMultipleSelectionActionBuilder extends MultipleSelectionActio
 
   UploadRequestMultipleSelectionActionBuilder(
     Key key,
-    SvgPicture actionIcon,
+    Widget actionIcon,
     this._entries
   ) : super(key, actionIcon);
 
