@@ -53,6 +53,7 @@ void main() {
   getIt.registerLazySingleton<DynamicUrlInterceptors>(() => MockDynamicUrlInterceptors());
   getIt.registerLazySingleton<AppToast>(() => MockAppToast());
   getIt.registerLazySingleton<GetOIDCConfigurationInteractor>(() => MockGetOIDCConfigurationInteractor());
+  getIt.registerLazySingleton<VerifyNameInteractor>(() => MockVerifyNameInteractor());
   getIt.registerLazySingleton<LoginViewModel>(() => LoginViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<CreatePermanentTokenInteractor>(),
@@ -62,6 +63,7 @@ void main() {
       getIt.get<DynamicUrlInterceptors>(),
       getIt.get<AppToast>(),
       getIt<GetOIDCConfigurationInteractor>(),
+      getIt<VerifyNameInteractor>(),
   ));
 
   group('test loginViewModel', () {

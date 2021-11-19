@@ -44,6 +44,7 @@ class LoginTextBuilder {
   TextInputAction? _textInputAction;
   InputDecoration? _inputDecoration;
   bool? _obscureText;
+  Color? _cursorColor;
 
   LoginTextBuilder key(Key key) {
     _key = key;
@@ -75,6 +76,11 @@ class LoginTextBuilder {
     return this;
   }
 
+  LoginTextBuilder cursorColor(Color cursorColor) {
+    _cursorColor = cursorColor;
+    return this;
+  }
+
   TextField build() {
     return TextField(
       key: _key ?? Key('LoginTextBuilder'),
@@ -83,6 +89,7 @@ class LoginTextBuilder {
       decoration: _inputDecoration,
       style: _textStyle ?? TextStyle(color: AppColor.loginTextFieldTextColor),
       obscureText: _obscureText ?? false,
+      cursorColor: _cursorColor ?? AppColor.primaryColor,
     );
   }
 }
