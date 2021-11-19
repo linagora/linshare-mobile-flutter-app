@@ -30,4 +30,23 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum LoginFormType { main, selfHosted, credentials, sso }
+import 'package:domain/domain.dart';
+
+enum LoginFormType { main, useOwnServer, credentials }
+
+enum InputType { url, email, password }
+
+extension InputTypeExtension on InputType {
+
+  List<Validator> getValidator() {
+    switch(this) {
+      case InputType.url:
+        return [ EmptyLoginUrlValidator() ];
+      case InputType.email:
+        return [ EmptyLoginEmailValidator(), LoginEmailValidator() ];
+      case InputType.password:
+        return [ EmptyLoginPasswordValidator(), PasswordSpecialCharacterValidator()];
+    }
+  }
+
+}

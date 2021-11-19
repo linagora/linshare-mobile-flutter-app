@@ -35,6 +35,14 @@ extension NameValidatorStringExtension on String {
     return RegExp(r'^(?=.*?[!#%"*/?^`{|}~><:,\\])').hasMatch(this);
   }
 
+  bool hasSpecialCharactersInPassword() {
+    return RegExp(r'^([#%^$~!%&*()+|{}])').hasMatch(this);
+  }
+
+  bool isEmail() {
+    return RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(this);
+  }
+
   bool hasLastDotInName() {
     return length > 0 && lastIndexOf('.') == length - 1;
   }

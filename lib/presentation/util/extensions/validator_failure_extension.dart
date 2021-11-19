@@ -44,6 +44,16 @@ extension ValicatorFailureExtension on VerifyNameFailure {
       return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).file);
     } else if (exception is LastDotException) {
       return AppLocalizations.of(context).node_name_contain_last_dot(AppLocalizations.of(context).file);
+    } else if (exception is EmptyLoginEmailException) {
+      return AppLocalizations.of(context).email_is_required;
+    } else if (exception is LoginEmailInvalidException) {
+      return AppLocalizations.of(context).email_is_invalid;
+    } else if (exception is EmptyLoginPasswordException) {
+      return AppLocalizations.of(context).password_is_required;
+    } else if (exception is PasswordSpecialCharacterException) {
+      return AppLocalizations.of(context).password_is_invalid;
+    } else if (exception is EmptyLoginUrlException) {
+      return AppLocalizations.of(context).url_is_invalid;
     } else {
       return '';
     }

@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
@@ -46,6 +47,11 @@ import 'presentation/util/extensions/color_extension.dart';
 import 'presentation/widget/initialize/initialize_widget.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   setUpGetIt();
   if (kProfileMode) {
     enableFlutterDriverExtension();
