@@ -110,4 +110,19 @@ extension AppColor on Color {
   static const advanceSearchButtonResetColor = Color(0xff757575);
   static const doNotAccountMessageColor = Color(0xff435763);
   static const orMessageLoginColor = Color(0xd7ffffff);
+  static const backLoginColor = Color(0x99000000);
+  static const loginBackgroundColor = Color(0xffFFFFFF);
+  static const loginMessageCenterColor = Color(0xCC000000);
+  static const loginMessageBottomColor = Color(0xFF818C99);
+  static const loginDefaultButtonColor = Color(0xff005BEA);
+  static const loginUseOwnServerButtonColor = Color(0xffF2F3F5);
+  static const loginTextFieldBorderColor = Color(0x1F000000);
+  static const loginTextFieldBorderErrorColor = Color(0xFFE64646);
+  static const loginTextFieldBackgroundColor = Color(0xFFF2F3F5);
+  static const loginTextFieldBackgroundErrorColor = Color(0xFFFAEBEB);
+  static const loginHintTextFieldColor = Color(0xff818C99);
+  static const loginLabelTextFieldColor = Color(0xff000000);
+  static const loginCheckBoxBorderColor = Color(0xffB8C1CC);
+  static const loginCheckBoxActiveColor = Color(0xff005BEA);
+  static const loginLabelInputColor = Color(0xff6D7885);
 }

@@ -43,17 +43,29 @@ abstract class InputDecorationBuilder {
   String? _labelText;
   TextStyle? _labelStyle;
   String? _hintText;
+  String? _errorText;
   TextStyle? _hintStyle;
+  TextStyle? _prefixStyle;
+  TextStyle? _errorStyle;
   EdgeInsets? _contentPadding;
   OutlineInputBorder? _enabledBorder;
+  OutlineInputBorder? _focusBorder;
+  OutlineInputBorder? _errorBorder;
+  Color? _fillColor;
+  Color? _fillErrorColor;
 
-  InputDecorationBuilder prefixText(String prefixText) {
+  InputDecorationBuilder prefixText(String? prefixText) {
     _prefixText = prefixText;
     return this;
   }
 
-  InputDecorationBuilder labelText(String labelText) {
+  InputDecorationBuilder labelText(String? labelText) {
     _labelText = labelText;
+    return this;
+  }
+
+  InputDecorationBuilder errorText(String? errorText) {
+    _errorText = errorText;
     return this;
   }
 
@@ -62,13 +74,18 @@ abstract class InputDecorationBuilder {
     return this;
   }
 
-  InputDecorationBuilder hintText(String hintText) {
+  InputDecorationBuilder hintText(String? hintText) {
     _hintText = hintText;
     return this;
   }
 
   InputDecorationBuilder hintStyle(TextStyle hintStyle) {
     _hintStyle = hintStyle;
+    return this;
+  }
+
+  InputDecorationBuilder prefixStyle(TextStyle prefixStyle) {
+    _prefixStyle = prefixStyle;
     return this;
   }
 
@@ -79,6 +96,31 @@ abstract class InputDecorationBuilder {
 
   InputDecorationBuilder enabledBorder(OutlineInputBorder enabledBorder) {
     _enabledBorder = enabledBorder;
+    return this;
+  }
+
+  InputDecorationBuilder focusBorder(OutlineInputBorder focusBorder) {
+    _focusBorder = focusBorder;
+    return this;
+  }
+
+  InputDecorationBuilder errorBorder(OutlineInputBorder errorBorder) {
+    _errorBorder = errorBorder;
+    return this;
+  }
+
+  InputDecorationBuilder fillColor(Color fillColor) {
+    _fillColor = fillColor;
+    return this;
+  }
+
+  InputDecorationBuilder fillErrorColor(Color fillErrorColor) {
+    _fillErrorColor = fillErrorColor;
+    return this;
+  }
+
+  InputDecorationBuilder errorStyle(TextStyle errorStyle) {
+    _errorStyle = errorStyle;
     return this;
   }
 
@@ -101,21 +143,30 @@ class LoginInputDecorationBuilder extends InputDecorationBuilder {
         enabledBorder: _enabledBorder ?? OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(6)),
             borderSide: BorderSide(width: 1, color: Colors.white)),
-        focusedBorder: _enabledBorder ?? OutlineInputBorder(
+        focusedBorder: _focusBorder ?? OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(6)),
             borderSide: BorderSide(width: 2, color: AppColor.loginTextFieldFocusedBorder)),
-        errorBorder: OutlineInputBorder(
+        errorBorder: _errorBorder ?? OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6)),
+            borderSide: BorderSide(
+                width: 1, color: AppColor.loginTextFieldErrorBorder)),
+        focusedErrorBorder: _errorBorder ?? OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(6)),
             borderSide: BorderSide(
                 width: 1, color: AppColor.loginTextFieldErrorBorder)),
         prefixText: _prefixText,
         labelText: _labelText,
+        errorStyle: _errorStyle ?? TextStyle(color: AppColor.loginTextFieldHintColor, fontSize: 16),
+        errorText: _errorText,
         floatingLabelBehavior: FloatingLabelBehavior.never,
+        prefixStyle: _prefixStyle ?? TextStyle(color: AppColor.loginTextFieldHintColor, fontSize: 16),
         labelStyle: _labelStyle ?? TextStyle(color: AppColor.loginTextFieldLabelColor, fontSize: 16),
         hintText: _hintText,
         hintStyle: _hintStyle ?? TextStyle(color: AppColor.loginTextFieldHintColor, fontSize: 16),
         contentPadding: _contentPadding ?? EdgeInsets.all(10),
         filled: true,
-        fillColor: Colors.white);
+        fillColor: (_errorText != null && _errorText!.isNotEmpty)
+          ? _fillErrorColor ?? Colors.white
+          : _fillColor ?? Colors.white);
   }
 }

@@ -49,10 +49,7 @@ class ResponsiveUtils {
   static const double _contextMenuHorizontalMargin = 144.0;
   static const double _contextMenuTopMargin = 32.0;
 
-  static const double _loginTextBuilderWidthSmallScreen = 280.0;
-  static const double _loginTextBuilderWidthLargeScreen = 320.0;
-
-  static const double _loginButtonWidth = 280.0;
+  static const double _loginButtonWidth = 390.0;
 
   static const double _radiusDestinationPickerView = 20.0;
 
@@ -132,10 +129,6 @@ class ResponsiveUtils {
         ? EdgeInsets.only(top: _contextMenuTopMargin)
         : EdgeInsets.only(top: _contextMenuTopMargin, left: _contextMenuHorizontalMargin, right: _contextMenuHorizontalMargin);
   }
-
-  double getWidthLoginTextBuilder(BuildContext context) => isSmallScreen(context)
-      ? _loginTextBuilderWidthSmallScreen
-      : _loginTextBuilderWidthLargeScreen;
 
   double getWidthLoginButton() => _loginButtonWidth;
 }

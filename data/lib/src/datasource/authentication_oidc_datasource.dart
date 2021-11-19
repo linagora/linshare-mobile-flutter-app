@@ -122,7 +122,7 @@ class AuthenticationOIDCDataSource {
       return oidcParser.parseOIDCConfiguration(result);
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
-        throw BadCredentials();
+        throw UnknownError(error.response?.statusMessage!);
       });
     });
   }

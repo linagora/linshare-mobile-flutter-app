@@ -48,3 +48,4 @@ class MockDynamicUrlInterceptors extends Mock implements DynamicUrlInterceptors 
 class MockUploadWorkGroupDocumentInteractor extends Mock implements UploadWorkGroupDocumentInteractor {}
 class MockAppToast extends Mock implements AppToast {}
 class MockGetOIDCConfigurationInteractor extends Mock implements GetOIDCConfigurationInteractor {}
+class MockVerifyNameInteractor extends Mock implements VerifyNameInteractor {}

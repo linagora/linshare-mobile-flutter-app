@@ -37,6 +37,12 @@ abstract class VerifyNameException extends RemoteException {
   static const EmptyName = 'The name cannot be empty!';
   static const NameContainSpecialCharacter = 'The name cannot contain special characters';
   static const NameContainLastDot = 'The name cannot finishes by character "."';
+  static const EmptyLoginEmail = 'The email cannot be empty!';
+  static const LoginEmailInvalid = 'The email is invalid!';
+  static const EmptyLoginPassword = 'The password cannot be empty!';
+  static const EmptyLoginEmailPassword = 'The email and password cannot be empty!';
+  static const EmptyLoginUrl = 'The url cannot be empty!';
+  static const PasswordContainSpecialCharacter = 'The password cannot contain special characters';
 
   VerifyNameException(String message) : super(message);
 }
@@ -64,6 +70,48 @@ class SpecialCharacterException extends VerifyNameException {
 
 class LastDotException extends VerifyNameException {
   LastDotException() : super(VerifyNameException.NameContainLastDot);
+
+  @override
+  List<Object> get props => [];
+}
+
+class EmptyLoginEmailException extends VerifyNameException {
+  EmptyLoginEmailException() : super(VerifyNameException.EmptyLoginEmail);
+
+  @override
+  List<Object> get props => [];
+}
+
+class LoginEmailInvalidException extends VerifyNameException {
+  LoginEmailInvalidException() : super(VerifyNameException.LoginEmailInvalid);
+
+  @override
+  List<Object> get props => [];
+}
+
+class EmptyLoginPasswordException extends VerifyNameException {
+  EmptyLoginPasswordException() : super(VerifyNameException.EmptyLoginPassword);
+
+  @override
+  List<Object> get props => [];
+}
+
+class EmptyLoginEmailAndPasswordException extends VerifyNameException {
+  EmptyLoginEmailAndPasswordException() : super(VerifyNameException.EmptyLoginEmailPassword);
+
+  @override
+  List<Object> get props => [];
+}
+
+class EmptyLoginUrlException extends VerifyNameException {
+  EmptyLoginUrlException() : super(VerifyNameException.EmptyLoginUrl);
+
+  @override
+  List<Object> get props => [];
+}
+
+class PasswordSpecialCharacterException extends VerifyNameException {
+  PasswordSpecialCharacterException() : super(VerifyNameException.PasswordContainSpecialCharacter);
 
   @override
   List<Object> get props => [];
