@@ -159,6 +159,7 @@ class WidgetModule {
       getIt.get<DynamicUrlInterceptors>(),
       getIt<AppToast>(),
       getIt<GetOIDCConfigurationInteractor>(),
+      getIt<VerifyNameInteractor>(),
     ));
   }
 

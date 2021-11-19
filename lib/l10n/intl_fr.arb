@@ -1971,5 +1971,101 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "back": "Back",
+  "@back": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_message_center": "Join +100 million active users using LinShare\n to store and share files with ease",
+  "@login_message_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_message_bottom": "By default you connect to Linagora servers. If you are\n not sure about this setting, please contact your\n technical specialist.",
+  "@login_message_bottom": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_an_account": "Create an account",
+  "@create_an_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_user_own_server_message_center": "Before you can proceed, please choose a\n default server connection",
+  "@login_user_own_server_message_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkbox_text_login_with_sso": "My server is using a single sign-on(SSO)",
+  "@checkbox_text_login_with_sso": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_email_title": "Email",
+  "@login_email_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_password_title": "Password",
+  "@login_password_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_password_login": "Enter your password",
+  "@hint_input_password_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_email_login": "Enter your email",
+  "@hint_input_email_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_is_required": "Email is required",
+  "@email_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_is_required": "Password is required",
+  "@password_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "url_is_invalid": "URL is invalid",
+  "@url_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_is_invalid": "Email is invalid",
+  "@email_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_is_invalid": "Password is invalid",
+  "@password_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "use_your_own_server": "Use your own server",
+  "@use_your_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }

@@ -81,7 +81,7 @@ class AppLocalizations {
   }
 
   String get login_button_login {
-    return Intl.message('Login',
+    return Intl.message('Log in',
       name: 'login_button_login');
   }
 
@@ -2343,41 +2343,6 @@ class AppLocalizations {
     );
   }
 
-  String get sign_in_to_saas {
-    return Intl.message('Sign in to SaaS',
-        name: 'sign_in_to_saas');
-  }
-
-  String get sign_in_to_self_hosted_instance {
-    return Intl.message('Sign in to self-hosted instance',
-        name: 'sign_in_to_self_hosted_instance');
-  }
-
-  String get do_not_have_an_account {
-    return Intl.message('Don\'t have an account?',
-        name: 'do_not_have_an_account');
-  }
-
-  String get sign_up {
-    return Intl.message('Sign up',
-        name: 'sign_up');
-  }
-
-  String get sign_in_with_your_credentials {
-    return Intl.message('Sign in with your credentials',
-        name: 'sign_in_with_your_credentials');
-  }
-
-  String get sign_in_with_your_sso {
-    return Intl.message('Sign in with your SSO',
-        name: 'sign_in_with_your_sso');
-  }
-
-  String get please_input_your_url {
-    return Intl.message('Please input your URL',
-        name: 'please_input_your_url');
-  }
-
   String get this_feature_not_supported {
     return Intl.message('This feature is not currently supported',
         name: 'this_feature_not_supported');
@@ -2447,6 +2412,98 @@ class AppLocalizations {
   String get canceled {
     return Intl.message('Canceled',
         name: 'canceled');
+  }
+
+  String get back {
+    return Intl.message(
+        'Back',
+        name: 'back'
+    );
+  }
+
+  String get login_message_center {
+    return Intl.message(
+        'Join +100 million active users using LinShare\n to store and share files with ease',
+        name: 'login_message_center'
+    );
+  }
+
+  String get login_message_bottom {
+    return Intl.message(
+        'By default you connect to Linagora servers. If you are\n not sure about this setting, please contact your\n technical specialist.',
+        name: 'login_message_bottom'
+    );
+  }
+
+  String get create_an_account {
+    return Intl.message(
+        'Create an account',
+        name: 'create_an_account'
+    );
+  }
+
+  String get login_user_own_server_message_center {
+    return Intl.message(
+        'Before you can proceed, please choose a\n default server connection',
+        name: 'login_user_own_server_message_center'
+    );
+  }
+
+  String get checkbox_text_login_with_sso {
+    return Intl.message(
+        'My server is using a single sign-on(SSO)',
+        name: 'checkbox_text_login_with_sso'
+    );
+  }
+
+  String get login_email_title {
+    return Intl.message('Email',
+        name: 'login_email_title');
+  }
+
+  String get login_password_title {
+    return Intl.message('Password',
+        name: 'login_password_title');
+  }
+
+  String get hint_input_password_login {
+    return Intl.message('Enter your password',
+        name: 'hint_input_password_login');
+  }
+
+  String get hint_input_email_login {
+    return Intl.message('Enter your email',
+        name: 'hint_input_email_login');
+  }
+
+  String get email_is_required {
+    return Intl.message('Email is required',
+        name: 'email_is_required');
+  }
+
+  String get password_is_required {
+    return Intl.message('Password is required',
+        name: 'password_is_required');
+  }
+
+  String get url_is_invalid {
+    return Intl.message('URL is invalid',
+        name: 'url_is_invalid');
+  }
+
+  String get email_is_invalid {
+    return Intl.message('Email is invalid',
+        name: 'email_is_invalid');
+  }
+
+  String get password_is_invalid {
+    return Intl.message('Password is invalid',
+        name: 'password_is_invalid');
+  }
+
+  String get use_your_own_server {
+    return Intl.message('Use your own server',
+        name: 'use_your_own_server');
   }
 }
 
