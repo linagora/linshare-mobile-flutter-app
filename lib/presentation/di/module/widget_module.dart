@@ -325,6 +325,9 @@ class WidgetModule {
       getIt.get<VerifyNameInteractor>(),
       getIt.get<CreateSharedSpaceFolderInteractor>(),
       getIt.get<GetAllWorkgroupsInteractor>(),
+      getIt.get<SortInteractor>(),
+      getIt.get<GetSorterInteractor>(),
+      getIt.get<SaveSorterInteractor>(),
     ));
   }
 

@@ -61,6 +61,9 @@ class DestinationPickerViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final VerifyNameInteractor _verifyNameInteractor;
   final CreateSharedSpaceFolderInteractor _createSharedSpaceFolderInteractor;
+  final SortInteractor _sortInteractor;
+  final GetSorterInteractor _getSorterInteractor;
+  final SaveSorterInteractor _saveSorterInteractor;
   final BehaviorSubject<SharedSpaceDocumentArguments> currentNodeObservable = BehaviorSubject<SharedSpaceDocumentArguments>();
   final destinationTypeList = [DestinationType.mySpace, DestinationType.workGroup];
 
@@ -88,6 +91,9 @@ class DestinationPickerViewModel extends BaseViewModel {
       this._verifyNameInteractor,
       this._createSharedSpaceFolderInteractor,
       this._getAllWorkgroupsInteractor,
+      this._sortInteractor,
+      this._getSorterInteractor,
+      this._saveSorterInteractor,
   ) : super(store);
 
   void setCurrentViewByOperation(Operation operation) {
@@ -100,14 +106,14 @@ class DestinationPickerViewModel extends BaseViewModel {
         break;
       default:
         store.dispatch(DestinationPickerGoToSharedSpaceAction(operation));
-        getAllSharedSpaces(operation);
+        getAllSharedSpaces(operation, needToGetOldSorter: true);
     }
   }
 
   void onChoseSpaceDestination(DestinationType choseDestinationType, Operation pickerForOperation, List<BaseDestinationPickerAction> actionList) {
     if (choseDestinationType == DestinationType.workGroup) {
       store.dispatch(DestinationPickerGoToSharedSpaceAction(pickerForOperation));
-      getAllSharedSpaces(pickerForOperation);
+      getAllSharedSpaces(pickerForOperation, needToGetOldSorter: true);
     } else if (choseDestinationType == DestinationType.mySpace) {
       actionList.forEach((action) {
         if (action != null) {
@@ -119,43 +125,83 @@ class DestinationPickerViewModel extends BaseViewModel {
     }
   }
 
-  void getAllSharedSpaces(Operation operation) async {
-    store.dispatch(_getAllSharedSpacesAction(operation));
+  OnlineThunkAction _getAllSharedSpacesActionAndSort(Operation operation) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartDestinationPickerLoadingAction());
+
+      await Future.wait([
+        _getSorterInteractor.execute(OrderScreen.destinationPicker),
+        _getAllSharedSpacesInteractor.execute()
+      ]).then((response) {
+        final newSorter = response.first
+            .map((success) => success is GetSorterSuccess
+                ? success.sorter
+                : Sorter.fromOrderScreen(OrderScreen.destinationPicker))
+            .getOrElse(() => Sorter.fromOrderScreen(OrderScreen.destinationPicker));
+
+        store.dispatch(DestinationPickerGetAllSharedSpaceAndSorterAction(newSorter, List.empty()));
+
+        response.last.fold(
+          (failure) {
+            store.dispatch(DestinationPickerGetAllSharedSpaceAndSorterAction(newSorter, List.empty()));
+            store.dispatch(_sortSharedSpacesAction(newSorter, List.empty()));
+          },
+          (success) {
+            final newSharedSpaces = success is SharedSpacesViewState
+              ? success.sharedSpacesList.where((sharedSpace) => _validateGetAllSharedSpace(operation, sharedSpace)).toList()
+              : <SharedSpaceNodeNested>[];
+            store.dispatch(DestinationPickerGetAllSharedSpaceAndSorterAction(newSorter, newSharedSpaces));
+            store.dispatch(_sortSharedSpacesAction(newSorter, newSharedSpaces));
+          });
+      });
+    });
+  }
+
+  void getAllSharedSpaces(Operation operation, {bool needToGetOldSorter = false}) {
+    if (needToGetOldSorter) {
+      store.dispatch(_getAllSharedSpacesActionAndSort(operation));
+    } else {
+      store.dispatch(_getAllSharedSpacesAction(operation));
+    }
   }
 
   ThunkAction<AppState> _getAllSharedSpacesAction(Operation operation) {
     return (Store<AppState> store) async {
       store.dispatch(StartDestinationPickerLoadingAction());
       await _getAllSharedSpacesInteractor.execute().then((result) => result.fold(
-        (failure) => store.dispatch(DestinationPickerGetAllSharedSpacesAction([])),
+        (failure) {
+          store.dispatch(DestinationPickerGetAllSharedSpacesAction(List.empty()));
+          store.dispatch(_sortSharedSpacesAction(currentSorter, List.empty()));
+        },
         (success) {
-          final sharedSpacesList = success is SharedSpacesViewState
-              ? success.sharedSpacesList
-                  .where((element) {
-                      if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
-                        return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(element.sharedSpaceRole.name);
-                      } else if (operation == Operation.upload) {
-                        return SharedSpaceOperationRole.uploadToSharedSpaceRoles.contains(element.sharedSpaceRole.name);
-                      } else if (operation == Operation.copyTo) {
-                        return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(element.sharedSpaceRole.name);
-                      } else if (operation == Operation.move) {
-                        return SharedSpaceOperationRole.moveSharedSpaceNodeRoles.contains(element.sharedSpaceRole.name);
-                      }
-                      return true;
-                    })
-                  .toList()
-              : <SharedSpaceNodeNested>[];
-          if (_isDriveEnable()) {
-            store.dispatch(DestinationPickerGetAllSharedSpacesAction(sharedSpacesList));
-          } else {
-            final newSharedSpaces = sharedSpacesList
-                .where((sharedSpace) => sharedSpace.nodeType != LinShareNodeType.DRIVE)
-                .toList();
-            store.dispatch(DestinationPickerGetAllSharedSpacesAction(newSharedSpaces));
-          }
+          final newSharedSpaces = success is SharedSpacesViewState
+            ? success.sharedSpacesList.where((sharedSpace) => _validateGetAllSharedSpace(operation, sharedSpace)).toList()
+            : <SharedSpaceNodeNested>[];
+          store.dispatch(DestinationPickerGetAllSharedSpacesAction(newSharedSpaces));
+          store.dispatch(_sortSharedSpacesAction(currentSorter, newSharedSpaces));
         }));
     };
   }
+
+  bool _validateGetAllSharedSpace(Operation operation, SharedSpaceNodeNested sharedSpace) {
+    if (!_isDriveEnable() && sharedSpace.nodeType == LinShareNodeType.DRIVE) {
+      return false;
+    }
+    if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
+      return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
+    } else if (operation == Operation.upload) {
+      return SharedSpaceOperationRole.uploadToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
+    } else if (operation == Operation.copyTo) {
+      return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
+    } else if (operation == Operation.move) {
+      return SharedSpaceOperationRole.moveSharedSpaceNodeRoles.contains(sharedSpace.sharedSpaceRole.name);
+    }
+    return true;
+  }
+
+  Sorter get currentSorter => store.state.destinationPickerState.sorter;
+
+  List<SharedSpaceNodeNested> get currentSharedSpaceList => store.state.destinationPickerState.sharedSpacesList;
 
   bool _isDriveEnable() {
     return store.state.functionalityState.isDriveEnable();
@@ -308,6 +354,26 @@ class DestinationPickerViewModel extends BaseViewModel {
         .execute(sharedSpaceId, CreateSharedSpaceNodeFolderRequest(newName, parentNodeId))
         .then((result) => store.dispatch(SharedSpaceDestinationAction(result)));
     });
+  }
+
+  ThunkAction<AppState> _sortSharedSpacesAction(Sorter sorter, List<SharedSpaceNodeNested> sharedSpaces) {
+    return (Store<AppState> store) async {
+      await Future.wait([
+        _saveSorterInteractor.execute(sorter),
+        _sortInteractor.execute(sharedSpaces, sorter)
+      ]).then((response) => response.last.fold(
+        (failure) => store.dispatch(DestinationPickerSortSharedSpacesAction(sharedSpaces, sorter)),
+        (success) {
+          final newSharedSpaces = success is SharedSpacesViewState ? success.sharedSpacesList : sharedSpaces;
+          store.dispatch(DestinationPickerSortSharedSpacesAction(newSharedSpaces, sorter));
+        }));
+    };
+  }
+
+  void sortSharedSpace(Sorter sorter) {
+    final newSorter = currentSorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
+    _appNavigation.popBack();
+    store.dispatch(_sortSharedSpacesAction(newSorter, currentSharedSpaceList));
   }
 
   @override

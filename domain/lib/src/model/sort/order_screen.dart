@@ -32,6 +32,7 @@ enum OrderScreen {
   mySpace,
   sharedSpaceDocument,
   workGroup,
+  destinationPicker,
   insideDrive,
   receivedShares,
   uploadRequestGroupsCreated,
