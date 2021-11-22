@@ -43,11 +43,12 @@ class ContextMenuBuilder {
   final List<Widget> _actionTiles = [];
 
   final bool areTilesHorizontal;
+  final MainAxisAlignment alignment;
 
   Widget? _header;
   Widget? _footer;
 
-  ContextMenuBuilder(this._context, { this.areTilesHorizontal = false });
+  ContextMenuBuilder(this._context, { this.areTilesHorizontal = false, this.alignment = MainAxisAlignment.start });
 
   ContextMenuBuilder addTiles(List<Widget> tiles) {
     _actionTiles.addAll(tiles);
@@ -102,10 +103,12 @@ class ContextMenuBuilder {
                     _header ?? SizedBox.shrink(),
                     Divider(),
                     areTilesHorizontal
-                      ? Row(children: [
-                          ..._actionTiles,
-                          _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
-                        ])
+                      ? Row(
+                          mainAxisAlignment: alignment,
+                          children: [
+                            ..._actionTiles,
+                            _actionTiles.isNotEmpty && _footer != null ? Divider() : SizedBox.shrink()
+                          ])
                       : Padding(
                           padding: _footer == null ? EdgeInsets.only(bottom: 10.0) : EdgeInsets.zero,
                           child: Column(children: [

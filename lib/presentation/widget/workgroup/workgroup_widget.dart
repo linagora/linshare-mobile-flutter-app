@@ -314,7 +314,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
       BuildContext context, SelectableElement<SharedSpaceNodeNested> selectableWorkgroup, SelectMode selectMode) {
     return ListTile(
         leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(_imagePath.icSharedSpace, width: 20, height: 24, fit: BoxFit.fill)
+          SvgPicture.asset(_imagePath.icWorkgroup, width: 24, height: 24, fit: BoxFit.fill)
         ]),
         title: ResponsiveWidget(
           smallScreen: Transform(
