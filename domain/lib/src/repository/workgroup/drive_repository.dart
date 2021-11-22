@@ -35,4 +35,6 @@ abstract class DriveRepository {
   Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId);
 
   Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId);
+
+  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest);
 }

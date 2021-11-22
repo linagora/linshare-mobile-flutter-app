@@ -226,6 +226,7 @@ export 'src/model/sharedspace/enable_versioning_work_group_request.dart';
 export 'src/model/sharedspace/shared_space_node_nested.dart';
 export 'src/repository/audit/audit_user_repository.dart';
 export 'src/repository/authentication/authentication_oidc_repository.dart';
+export 'src/model/workgroup/create_drive_request.dart';
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
 export 'src/repository/authentication/authentication_oidc_repository.dart';
@@ -461,3 +462,4 @@ export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive
 export 'src/usecases/workgroup/get_all_workgroups_interactor.dart';
 export 'src/usecases/workgroup/workgroup_view_state.dart';
 export 'src/usecases/workgroup/get_all_workgroups_offline_interactor.dart';
+export 'src/usecases/workgroup/create_new_drive_interactor.dart';
