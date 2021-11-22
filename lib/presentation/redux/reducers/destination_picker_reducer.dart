@@ -49,6 +49,16 @@ final destinationPickerReducer = combineReducers<DestinationPickerState>([
           viewState: Right(IdleState()),
           newSharedSpacesList: action.sharedSpacesList,
           routeData: DestinationPickerRouteData(DestinationPickerCurrentView.sharedSpace))),
+  TypedReducer<DestinationPickerState, DestinationPickerGetAllSharedSpaceAndSorterAction>((DestinationPickerState state, DestinationPickerGetAllSharedSpaceAndSorterAction action) =>
+      state.setDestinationPickerState(
+          viewState: Right(IdleState()),
+          newSharedSpacesList: action.sharedSpaces,
+          newSorter: action.sorter)),
+  TypedReducer<DestinationPickerState, DestinationPickerSortSharedSpacesAction>((DestinationPickerState state, DestinationPickerSortSharedSpacesAction action) =>
+      state.setDestinationPickerState(
+          viewState: Right(IdleState()),
+          newSharedSpacesList: action.newSharedSpaces,
+          newSorter: action.newSorter)),
   TypedReducer<DestinationPickerState, CleanDestinationPickerStateAction>((DestinationPickerState state, _) => state.clearViewState()),
   TypedReducer<DestinationPickerState,
       DestinationPickerGoInsideSharedSpaceAction>((DestinationPickerState state,

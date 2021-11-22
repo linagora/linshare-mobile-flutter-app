@@ -43,34 +43,48 @@ class DestinationPickerState extends LinShareState with EquatableMixin {
   final List<SharedSpaceNodeNested> sharedSpacesList;
   final DestinationPickerRouteData routeData;
   final Operation operation;
+  final Sorter sorter;
 
-  DestinationPickerState(Either<Failure, Success> viewState, this.sharedSpacesList, this.routeData, this.operation) : super(viewState);
+  DestinationPickerState(
+    Either<Failure, Success> viewState,
+    this.sharedSpacesList,
+    this.routeData,
+    this.operation,
+    this.sorter,
+  ) : super(viewState);
 
   factory DestinationPickerState.initial() {
-    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial(), Operation.none);
+    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial(), Operation.none, Sorter.fromOrderScreen(OrderScreen.destinationPicker));
   }
 
   @override
   DestinationPickerState clearViewState() {
-    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial(), Operation.none);
+    return DestinationPickerState(Right(IdleState()), [], DestinationPickerRouteData.initial(), Operation.none, sorter);
   }
 
   @override
   DestinationPickerState sendViewState({required Either<Failure, Success> viewState}) {
-    return DestinationPickerState(viewState, sharedSpacesList, routeData, operation);
+    return DestinationPickerState(viewState, sharedSpacesList, routeData, operation, sorter);
   }
 
-  DestinationPickerState setDestinationPickerState(
-      {required Either<Failure, Success> viewState,
-        required List<SharedSpaceNodeNested> newSharedSpacesList,
-      DestinationPickerRouteData? routeData,
-      Operation? operation}) {
-    return DestinationPickerState(viewState, newSharedSpacesList, routeData ?? this.routeData, operation ?? this.operation);
+  DestinationPickerState setDestinationPickerState({
+    required Either<Failure, Success> viewState,
+    required List<SharedSpaceNodeNested> newSharedSpacesList,
+    DestinationPickerRouteData? routeData,
+    Operation? operation,
+    Sorter? newSorter
+  }) {
+    return DestinationPickerState(
+      viewState,
+      newSharedSpacesList,
+      routeData ?? this.routeData,
+      operation ?? this.operation,
+      newSorter ?? sorter);
   }
 
   @override
   DestinationPickerState startLoadingState() {
-    return DestinationPickerState(Right(LoadingState()), sharedSpacesList, routeData, operation);
+    return DestinationPickerState(Right(LoadingState()), sharedSpacesList, routeData, operation, sorter);
   }
 
   @override

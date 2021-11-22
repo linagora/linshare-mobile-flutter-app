@@ -109,3 +109,19 @@ class BackToInsideDriveDestinationAction extends ActionOffline {
 class CleanDestinationPickerStateAction extends ActionOffline {
   CleanDestinationPickerStateAction();
 }
+
+@immutable
+class DestinationPickerSortSharedSpacesAction extends ActionOnline {
+  final List<SharedSpaceNodeNested> newSharedSpaces;
+  final Sorter newSorter;
+
+  DestinationPickerSortSharedSpacesAction(this.newSharedSpaces, this.newSorter);
+}
+
+@immutable
+class DestinationPickerGetAllSharedSpaceAndSorterAction extends ActionOnline {
+  final Sorter sorter;
+  final List<SharedSpaceNodeNested> sharedSpaces;
+
+  DestinationPickerGetAllSharedSpaceAndSorterAction(this.sorter, this.sharedSpaces);
+}
