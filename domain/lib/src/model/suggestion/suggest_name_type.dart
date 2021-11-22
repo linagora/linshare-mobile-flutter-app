@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 enum SuggestNameType {
+  DRIVE,
   WORKGROUP,
   WORKGROUP_FOLDER
 }
