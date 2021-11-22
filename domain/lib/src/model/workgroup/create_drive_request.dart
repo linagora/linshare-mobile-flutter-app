@@ -30,39 +30,14 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class GetAllWorkgroupsViewState extends ViewState {
-  final List<SharedSpaceNodeNested> workgroups;
+class CreateDriveRequest with EquatableMixin {
+  final String name;
+  final LinShareNodeType nodeType;
 
-  GetAllWorkgroupsViewState(this.workgroups);
-
-  @override
-  List<Object> get props => [workgroups];
-}
-
-class GetAllWorkgroupsFailure extends FeatureFailure {
-  final exception;
-
-  GetAllWorkgroupsFailure(this.exception);
+  CreateDriveRequest(this.name, this.nodeType);
 
   @override
-  List<Object> get props => [exception];
-}
-
-class CreateNewDriveViewState extends ViewState {
-  final SharedSpaceNodeNested drive;
-
-  CreateNewDriveViewState(this.drive);
-
-  @override
-  List<Object> get props => [drive];
-}
-
-class CreateNewDriveFailure extends FeatureFailure {
-  final exception;
-
-  CreateNewDriveFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  List<Object?> get props => [name, nodeType];
 }
