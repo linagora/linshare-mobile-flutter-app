@@ -486,7 +486,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
       BuildContext context, SharedSpaceNodeNested sharedSpace, SharedSpaceNodeNested? drive) {
     return ListTile(
       leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SvgPicture.asset(_imagePath.icSharedSpace,
+        SvgPicture.asset(sharedSpace.nodeType == LinShareNodeType.WORK_GROUP ? _imagePath.icWorkgroup : _imagePath.icDrive,
             width: 20, height: 24, fit: BoxFit.fill)
       ]),
       title: Transform(
