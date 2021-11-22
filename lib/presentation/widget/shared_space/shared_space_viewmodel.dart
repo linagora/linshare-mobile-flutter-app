@@ -48,7 +48,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -75,7 +74,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   final SaveSorterInteractor _saveSorterInteractor;
   final RenameWorkGroupInteractor _renameWorkGroupInteractor;
   final GetAllSharedSpaceOfflineInteractor _getAllSharedSpaceOfflineInteractor;
-  final AppToast _appToast;
+  final CreateNewDriveInteractor _createNewDriveInteractor;
 
   late StreamSubscription _storeStreamSubscription;
   late List<SharedSpaceNodeNested> _sharedSpaceNodes;
@@ -96,7 +95,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._saveSorterInteractor,
     this._renameWorkGroupInteractor,
     this._getAllSharedSpaceOfflineInteractor,
-    this._appToast,
+    this._createNewDriveInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -107,7 +106,8 @@ class SharedSpaceViewModel extends BaseViewModel {
                 } else if (success is DisableSearchViewState) {
                   store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
                   _searchQuery = SearchQuery('');
-                } else if (success is CreateWorkGroupViewState) {
+                } else if (success is CreateWorkGroupViewState ||
+                    success is CreateNewDriveViewState) {
                   getAllSharedSpaces(needToGetOldSorter: false);
                 }
               });
@@ -367,7 +367,46 @@ class SharedSpaceViewModel extends BaseViewModel {
 
   void openCreateNewDrive(BuildContext context) {
     _appNavigation.popBack();
-    _appToast.showToast(AppLocalizations.of(context).this_feature_not_supported);
+    store.dispatch(_handleCreateNewDriveModalAction(context));
+  }
+
+  ThunkAction<AppState> _handleCreateNewDriveModalAction(BuildContext context) {
+    final suggestName = SuggestNameType.DRIVE
+      .suggestNewName(context,
+        _sharedSpaceNodes
+            .where((sharedSpaced) => sharedSpaced.nodeType == LinShareNodeType.DRIVE)
+            .map((sharedSpaced) => sharedSpaced.name).toList()
+    );
+    return (Store<AppState> store) async {
+      EditTextModalSheetBuilder()
+        .key(Key('create_new_drive_modal'))
+        .title(AppLocalizations.of(context).create_new_drive)
+        .cancelText(AppLocalizations.of(context).cancel)
+        .onConfirmAction(AppLocalizations.of(context).create,
+            (value) => this.store.dispatch(_createNewDriveAction(value)))
+        .setErrorString((value) => getErrorString(context, value, LinShareNodeType.DRIVE))
+        .setTextController(
+          TextEditingController.fromValue(
+            TextEditingValue(
+                text: suggestName,
+                selection: TextSelection(
+                    baseOffset: 0,
+                    extentOffset: suggestName.length
+                )
+            ),
+          ))
+        .show(context);
+    };
+  }
+
+  OnlineThunkAction _createNewDriveAction(String newName) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _createNewDriveInteractor
+        .execute(CreateDriveRequest(newName, LinShareNodeType.DRIVE))
+        .then((result) => result.fold(
+          (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+          (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+    });
   }
 
   void openCreateNewSharedSpaceMenu(BuildContext context, List<Widget> actionTiles) {
@@ -376,10 +415,7 @@ class SharedSpaceViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _handleCreateNewSharedSpaceMenuAction(BuildContext context, List<Widget> actionTiles) {
     return (Store<AppState> store) async {
-      ContextMenuBuilder(context, areTilesHorizontal: true)
-        .addHeader(SimpleBottomSheetHeaderBuilder(Key('create_new_shared_space_bottom_sheet_header_builder'))
-          .addLabel(AppLocalizations.of(context).create_new_workgroup_or_drive)
-          .build())
+      ContextMenuBuilder(context, areTilesHorizontal: true, alignment: MainAxisAlignment.spaceEvenly)
         .addTiles(actionTiles)
         .build();
     };
@@ -426,7 +462,9 @@ class SharedSpaceViewModel extends BaseViewModel {
     final suggestName = SuggestNameType.WORKGROUP
         .suggestNewName(
           context,
-          _sharedSpaceNodes.map((sharedSpaced) => sharedSpaced.name).toList()
+          _sharedSpaceNodes
+              .where((sharedSpaced) => sharedSpaced.nodeType == LinShareNodeType.WORK_GROUP)
+              .map((sharedSpaced) => sharedSpaced.name).toList()
         );
     return (Store<AppState> store) async {
       EditTextModalSheetBuilder()
@@ -435,7 +473,7 @@ class SharedSpaceViewModel extends BaseViewModel {
           .cancelText(AppLocalizations.of(context).cancel)
           .onConfirmAction(AppLocalizations.of(context).create,
               (value) => this.store.dispatch(_createNewWorkGroupAction(value)))
-          .setErrorString((value) => getErrorString(context, value))
+          .setErrorString((value) => getErrorString(context, value, LinShareNodeType.WORK_GROUP))
           .setTextController(
             TextEditingController.fromValue(
               TextEditingValue(
@@ -450,20 +488,32 @@ class SharedSpaceViewModel extends BaseViewModel {
     };
   }
 
-  String? getErrorString(BuildContext context, String value) {
+  String? getErrorString(BuildContext context, String value, LinShareNodeType nodeType) {
     return _verifyNameInteractor
         .execute(
           value,
-          [EmptyNameValidator(), DuplicateNameValidator(_sharedSpaceNodes.map((node) => node.name).toList()), SpecialCharacterValidator()]
+          [
+            EmptyNameValidator(),
+            if (nodeType == LinShareNodeType.WORK_GROUP) DuplicateNameValidator(_sharedSpaceNodes.map((node) => node.name).toList()),
+            SpecialCharacterValidator()
+          ]
         )
         .fold((failure) {
           if (failure is VerifyNameFailure) {
             if (failure.exception is EmptyNameException) {
-              return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).workgroup);
+              if (nodeType == LinShareNodeType.WORK_GROUP) {
+                return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).workgroup);
+              } else {
+                return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).drive);
+              }
             } else if (failure.exception is DuplicatedNameException) {
               return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workgroup);
             } else if (failure.exception is SpecialCharacterException) {
-              return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
+              if (nodeType == LinShareNodeType.WORK_GROUP) {
+                return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
+              } else {
+                return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).drive);
+              }
             } else {
               return null;
             }
@@ -493,7 +543,7 @@ class SharedSpaceViewModel extends BaseViewModel {
       .onConfirmAction(AppLocalizations.of(context).rename,
         (value) => store.dispatch(_renameWorkGroupAction(context, value, sharedSpace)))
       .setErrorString(
-        (value) => getErrorString(context, value))
+        (value) => getErrorString(context, value, LinShareNodeType.WORK_GROUP))
       .setTextSelection(
         TextSelection(baseOffset: 0, extentOffset: sharedSpace.name.length),
         value: sharedSpace.name)

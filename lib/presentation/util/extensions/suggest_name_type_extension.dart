@@ -40,6 +40,8 @@ extension SuggestNameTypeExtension on SuggestNameType {
 
   String getName(BuildContext context) {
     switch(this) {
+      case SuggestNameType.DRIVE:
+        return AppLocalizations.of(context).new_drive;
       case SuggestNameType.WORKGROUP:
         return AppLocalizations.of(context).new_workgroup;
       case SuggestNameType.WORKGROUP_FOLDER:
@@ -50,7 +52,7 @@ extension SuggestNameTypeExtension on SuggestNameType {
   }
 
   String patternNameWithIndex(String originalName, int index) {
-    return '${originalName} (${index})';
+    return '$originalName ($index)';
   }
 
   String suggestNameWithIndex(String originalSuggestName, List<String> listName) {

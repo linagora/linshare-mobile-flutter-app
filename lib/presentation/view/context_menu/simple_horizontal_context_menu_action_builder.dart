@@ -36,7 +36,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_action_builder.dart';
 
 class SimpleHorizontalContextMenuActionBuilder extends ContextMenuActionBuilder<void> {
-  SimpleHorizontalContextMenuActionBuilder(Key key, SvgPicture actionIcon, String actionName)
+
+  final double spaceCenterHeight;
+
+  SimpleHorizontalContextMenuActionBuilder(Key key, SvgPicture actionIcon, String actionName, {this.spaceCenterHeight = 8})
       : super(key, actionIcon, actionName);
 
   @override
@@ -51,7 +54,7 @@ class SimpleHorizontalContextMenuActionBuilder extends ContextMenuActionBuilder<
             child: Column(
               children: [
                 actionIcon,
-                SizedBox(height: 8),
+                SizedBox(height: spaceCenterHeight),
                 Text(actionName,
                   style: actionTextStyle(),
                   textAlign: TextAlign.center)

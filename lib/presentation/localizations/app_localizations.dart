@@ -2402,13 +2402,6 @@ class AppLocalizations {
     );
   }
 
-  String get create_new_workgroup_or_drive {
-    return Intl.message(
-      'Create new workgroup or drive',
-      name: 'create_new_workgroup_or_drive',
-    );
-  }
-
   String get canceled {
     return Intl.message('Canceled',
         name: 'canceled');
@@ -2504,6 +2497,34 @@ class AppLocalizations {
   String get use_your_own_server {
     return Intl.message('Use your own server',
         name: 'use_your_own_server');
+  }
+
+  String get create_drive {
+    return Intl.message(
+        'Create Drive',
+        name: 'create_drive'
+    );
+  }
+
+  String get create_workgroup {
+    return Intl.message(
+        'Create Workgroup',
+        name: 'create_workgroup'
+    );
+  }
+
+  String get create_new_drive {
+    return Intl.message(
+      'Create new drive',
+      name: 'create_new_drive',
+    );
+  }
+
+  String get new_drive {
+    return Intl.message(
+      'New drive',
+      name: 'new_drive',
+    );
   }
 }
 

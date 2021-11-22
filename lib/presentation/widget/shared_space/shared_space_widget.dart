@@ -291,15 +291,19 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace, SelectMode selectMode) {
     return ListTile(
         leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(imagePath.icSharedSpace, width: 20, height: 24, fit: BoxFit.fill)
+          SvgPicture.asset(
+              sharedSpace.element.nodeType == LinShareNodeType.WORK_GROUP ? imagePath.icWorkgroup : imagePath.icDrive,
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill)
         ]),
         title: ResponsiveWidget(
           smallScreen: Transform(
-            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            transform: Matrix4.translationValues(-10, 0.0, 0.0),
             child: _buildSharedSpaceName(sharedSpace.element.name),
           ),
           mediumScreen: Transform(
-            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            transform: Matrix4.translationValues(-10, 0.0, 0.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -313,7 +317,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
               ]),
           ),
           largeScreen: Transform(
-            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+            transform: Matrix4.translationValues(-10, 0.0, 0.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -330,7 +334,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         ),
         subtitle: _responsiveUtils.isSmallScreen(context)
           ? Transform(
-              transform: Matrix4.translationValues(-16, 0.0, 0.0),
+              transform: Matrix4.translationValues(-10, 0.0, 0.0),
               child: Row(
                 children: [
                   _buildModifiedSharedSpaceText(AppLocalizations.of(context).item_last_modified(
@@ -472,22 +476,24 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
 
   List<Widget> _createNewSharedSpaceActionTiles(BuildContext context) {
     return [
-      _createNewWorkgroup(context),
-      _createNewDrive(context)
+      _createNewDrive(context),
+      _createNewWorkgroup(context)
     ];
   }
 
   Widget _createNewWorkgroup(BuildContext context) => SimpleHorizontalContextMenuActionBuilder(
         Key('create_new_workgroup_context_menu_action'),
-        SvgPicture.asset(imagePath.icSharedSpace, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.uploadRequestAddNewIconColor),
-        AppLocalizations.of(context).workgroup)
+        SvgPicture.asset(imagePath.icWorkgroup, width: 30, height: 30, fit: BoxFit.fill),
+        AppLocalizations.of(context).create_workgroup,
+        spaceCenterHeight: 16)
     .onActionClick((_) => sharedSpaceViewModel.openCreateNewWorkGroup(context))
     .build();
 
   Widget _createNewDrive(BuildContext context) => SimpleHorizontalContextMenuActionBuilder(
         Key('create_new_drive_context_menu_action'),
-        SvgPicture.asset(imagePath.icSharedSpace, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.uploadRequestAddNewIconColor),
-        AppLocalizations.of(context).drive)
+        SvgPicture.asset(imagePath.icDrive, width: 30, height: 30, fit: BoxFit.fill),
+        AppLocalizations.of(context).create_drive,
+        spaceCenterHeight: 16)
     .onActionClick((_) => sharedSpaceViewModel.openCreateNewDrive(context))
     .build();
 }
