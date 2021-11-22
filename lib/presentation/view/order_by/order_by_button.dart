@@ -62,7 +62,7 @@ class OrderByButtonBuilder {
 
   Widget build() {
     return ListTile(
-      contentPadding: _responsiveUtils.isLargeScreen(_context)
+      contentPadding: _responsiveUtils.isLargeScreen(_context) && _currentSorter.orderScreen != OrderScreen.destinationPicker
           ? EdgeInsets.symmetric(horizontal: 155)
           : EdgeInsets.symmetric(horizontal: 16) ,
       leading: Column(
