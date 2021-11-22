@@ -47,4 +47,9 @@ class DriveRepositoryImpl implements DriveRepository {
   Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId) {
     return _driveDataSources[DataSourceType.local]!.getAllWorkgroupsOffline(driveId);
   }
+
+  @override
+  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest) {
+    return _driveDataSources[DataSourceType.network]!.createNewDrive(createDriveRequest);
+  }
 }

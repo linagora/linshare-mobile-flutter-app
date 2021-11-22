@@ -57,4 +57,9 @@ class LocalDriveDataSource implements DriveDataSource {
       }
     });
   }
+
+  @override
+  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest) {
+    throw UnimplementedError();
+  }
 }

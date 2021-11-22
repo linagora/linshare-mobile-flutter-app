@@ -781,4 +781,11 @@ class LinShareHttpClient {
         data: request.toBodyRequest().toJson().toString());
     return UploadRequestResponse.fromJson(resultJson);
   }
+
+  Future<SharedSpaceNodeNestedResponse> createNewDrive(CreateDriveBodyRequest createDriveBodyRequest) async {
+    final resultJson = await _dioClient.post(
+        Endpoint.sharedSpaces.generateEndpointPath(),
+        data: createDriveBodyRequest.toJson().toString());
+    return SharedSpaceNodeNestedResponse.fromJson(resultJson);
+  }
 }
