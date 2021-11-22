@@ -30,11 +30,8 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/data.dart';
-import 'package:data/src/network/linshare_http_client.dart';
-import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/sharedspace/shared_space_node_nested.dart';
 
 class DriveDataSourceImpl implements DriveDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -64,5 +61,22 @@ class DriveDataSourceImpl implements DriveDataSource {
   @override
   Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId) {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.createNewDrive(createDriveRequest.toCreateDriveBodyRequest())).toSharedSpaceNodeNested();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw SharedSpaceNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
+      });
+    });
   }
 }

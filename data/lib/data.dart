@@ -112,6 +112,7 @@ export 'src/network/model/request/rename_work_group_body_request.dart';
 export 'src/network/model/request/rename_work_group_node_body_request.dart';
 export 'src/network/model/request/edit_upload_request_body_request.dart';
 export 'src/network/model/request/edit_upload_request_recipient_body_request.dart';
+export 'src/network/model/request/create_drive_body_request.dart';
 export 'src/network/model/response/authentication_audit_log_entry_user_response.dart';
 export 'src/network/model/response/document_details_response.dart';
 // model
