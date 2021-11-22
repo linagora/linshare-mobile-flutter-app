@@ -65,6 +65,8 @@ class SortInteractor {
           return Left<Failure, Success>(MySpaceFailure(exception));
         case OrderScreen.workGroup:
           return Left<Failure, Success>(SharedSpacesFailure(exception));
+        case OrderScreen.destinationPicker:
+          return Left<Failure, Success>(SharedSpacesFailure(exception));
         case OrderScreen.insideDrive:
           return Left<Failure, Success>(GetAllWorkgroupsFailure(exception));
         case OrderScreen.sharedSpaceDocument:

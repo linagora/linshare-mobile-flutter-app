@@ -42,13 +42,17 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_ui_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
-
+import 'package:redux/redux.dart';
 import 'destination_picker_action/negative_destination_picker_action.dart';
 import 'destination_picker_viewmodel.dart';
 
@@ -137,10 +141,10 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                   ],
                 ),
                 backgroundColor: Colors.white,
-                body: Stack(
+                body: Column(
                   children: [
-                    Positioned.fill(
-                      bottom: 56.0,
+                    _buildMenuSorter(),
+                    Expanded(
                       child: StoreConnector<AppState, DestinationPickerState>(
                         converter: (store) => store.state.destinationPickerState,
                         builder: (context, state) {
@@ -152,30 +156,31 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                             return _buildDriveList(context, state);
                           } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside) {
                             return SharedSpaceDocumentNavigatorWidget(
-                              _sharedSpaceDocumentNavigatorKey,
-                              state.routeData.sharedSpaceNodeNested!,
-                              drive: state.routeData.drive,
-                              onBackToInsideDriveClickedCallback: (drive) => _destinationPickerViewModel.backToInsideDriveDestination(drive),
-                              onBackSharedSpaceClickedCallback: () => _destinationPickerViewModel.backToSharedSpace(),
-                              sharedSpaceDocumentUIType: SharedSpaceDocumentUIType.destinationPicker,
-                              currentNodeObservable: _destinationPickerViewModel.currentNodeObservable
+                                _sharedSpaceDocumentNavigatorKey,
+                                state.routeData.sharedSpaceNodeNested!,
+                                drive: state.routeData.drive,
+                                onBackToInsideDriveClickedCallback: (drive) => _destinationPickerViewModel.backToInsideDriveDestination(drive),
+                                onBackSharedSpaceClickedCallback: () => _destinationPickerViewModel.backToSharedSpace(),
+                                sharedSpaceDocumentUIType: SharedSpaceDocumentUIType.destinationPicker,
+                                currentNodeObservable: _destinationPickerViewModel.currentNodeObservable
                             );
                           }
                           return SizedBox.shrink();
-                        })),
+                        }
+                      )
+                    ),
                     StoreConnector<AppState, DestinationPickerState>(
                       converter: (store) => store.state.destinationPickerState,
-                      builder: (context, state) =>
-                      state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside
-                          ? _buildBottomBarLine()
-                          : Positioned(bottom: 0.0, child: SizedBox.shrink())),
+                      builder: (context, state) => state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside
+                          ? Divider(thickness: 1.0)
+                          : SizedBox.shrink()),
                     StoreConnector<AppState, DestinationPickerState>(
                       converter: (store) => store.state.destinationPickerState,
                       builder: (context, state) => state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceInside
                           ? _buildBottomBarAction(context)
-                          : Positioned(bottom: 0.0, child: SizedBox.shrink())),
-                  ],
-                ),
+                          : SizedBox.shrink()),
+                  ]
+                )
               )
             ),
           )
@@ -299,28 +304,16 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
       });
   }
 
-  Widget _buildBottomBarLine() {
-    return Positioned(
-        bottom: 48.0,
-        left: 0.0,
-        right: 0.0,
-        child: Divider(
-          thickness: 1.0,
-        ));
-  }
-
   Widget _buildBottomBarAction(BuildContext context) {
-    return Positioned(
-        bottom: 0.0,
-        left: 20.0,
-        right: 20.0,
-        child: SizedBox(
-          height: 56.0,
-          child: Row(
-            textDirection: TextDirection.rtl,
-            children: _buildBottomActionList(context),
-          ),
-        ));
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          textDirection: TextDirection.rtl,
+          children: _buildBottomActionList(context)
+        ),
+      )
+    );
   }
 
   List<Widget> _buildBottomActionList(BuildContext context) {
@@ -430,29 +423,32 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
 
   Widget _buildDriveList(BuildContext context, DestinationPickerState state) {
     return state.viewState.fold(
-        (failure) => RefreshIndicator(
-          onRefresh: () async => _destinationPickerViewModel.getAllDrive(state.operation, state.routeData.drive!),
-          child: failure is GetAllWorkgroupsFailure
-              ? BackgroundWidgetBuilder(context)
-                    .key(Key('shared_space_error_background'))
-                    .image(SvgPicture.asset(_imagePath.icUnexpectedError, width: 120, height: 120, fit: BoxFit.fill))
-                    .text(AppLocalizations.of(context).common_error_occured_message)
-                    .build()
-              : _buildSharedSpacesListView(context, state)),
-        (success) => success is LoadingState
-            ?   Column(children: [
-                  Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor)),
-                      )),
-                  Expanded(child: _buildSharedSpacesListView(context, state))
-                ])
-            : RefreshIndicator(
-                onRefresh: () async => _destinationPickerViewModel.getAllDrive(state.operation, state.routeData.drive!),
-                child: _buildSharedSpacesListView(context, state)));
+      (failure) => RefreshIndicator(
+        onRefresh: () async => _destinationPickerViewModel.getAllDrive(state.operation, state.routeData.drive!),
+        child: failure is GetAllWorkgroupsFailure
+          ? BackgroundWidgetBuilder(context)
+              .key(Key('shared_space_error_background'))
+              .image(SvgPicture.asset(_imagePath.icUnexpectedError, width: 120, height: 120, fit: BoxFit.fill))
+              .text(AppLocalizations.of(context).common_error_occured_message)
+              .build()
+          : _buildSharedSpacesListView(context, state)
+      ),
+      (success) => success is LoadingState
+          ? Column(
+              children: [
+                Center(child: Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor)),
+                  )
+                )),
+                Expanded(child: _buildSharedSpacesListView(context, state))
+              ])
+          : RefreshIndicator(
+              onRefresh: () async => _destinationPickerViewModel.getAllDrive(state.operation, state.routeData.drive!),
+              child: _buildSharedSpacesListView(context, state)));
   }
 
   Widget _buildSharedSpacesListView(
@@ -462,14 +458,14 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               (failure) => _buildNoWorkgroupYet(context),
               (success) => success is LoadingState ? SizedBox.shrink() : _buildNoWorkgroupYet(context));
     } else {
-      return ListView.builder(
+      return SafeArea(child: ListView.builder(
         key: Key('shared_spaces_list'),
         padding: EdgeInsets.zero,
         itemCount: state.sharedSpacesList.length,
         itemBuilder: (context, index) {
           return _buildSharedSpaceListItem(context, state.sharedSpacesList[index], state.routeData.drive);
         },
-      );
+      ));
     }
   }
 
@@ -515,5 +511,29 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
     return _destinationPickerArguments != null
         && _destinationPickerArguments!.availableDestinationTypes != null
         && _destinationPickerArguments!.availableDestinationTypes.contains(destinationType);
+  }
+
+  Widget _buildMenuSorter() {
+    return StoreConnector<AppState, DestinationPickerState>(
+      converter: (Store<AppState> store) => store.state.destinationPickerState,
+      builder: (context, state) {
+        return state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpace
+          ? OrderByButtonBuilder(context, state.sorter)
+              .onOpenOrderMenuAction((currentSorter) => _openPopupMenuSorter(context, currentSorter))
+              .build()
+          : SizedBox.shrink();
+      },
+    );
+  }
+
+  void _openPopupMenuSorter(BuildContext context, Sorter currentSorter) {
+    ContextMenuBuilder(context)
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('destination_picker_order_by_menu_header'))
+          .addLabel(AppLocalizations.of(context).order_by)
+          .build())
+      .addTiles(OrderByDialogBottomSheetBuilder(context, currentSorter)
+          .onSelectSorterAction((sorterSelected) => _destinationPickerViewModel.sortSharedSpace(sorterSelected))
+          .build())
+      .build();
   }
 }
