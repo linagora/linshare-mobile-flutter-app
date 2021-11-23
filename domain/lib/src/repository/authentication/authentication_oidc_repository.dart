@@ -42,6 +42,10 @@ abstract class AuthenticationOIDCRepository {
     List<String>? promptValues,
     bool allowInsecureConnections);
 
+  Future<void> persistTokenOIDC(TokenOIDC tokenOidc);
+
+  Future<TokenOIDC?> getStoredTokenOIDC();
+
   Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
 
   Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
@@ -51,5 +55,7 @@ abstract class AuthenticationOIDCRepository {
   Future<bool> verifyEmailSaaS(Uri baseUrl, String email);
 
   Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest);
+
+  Future<void> logout(Uri baseUrl);
 }
 

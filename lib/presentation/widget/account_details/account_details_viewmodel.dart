@@ -53,6 +53,7 @@ class AccountDetailsViewModel extends BaseViewModel {
   final SaveAuthorizedUserInteractor _saveAuthorizedUserInteractor;
   final SaveLastLoginInteractor _saveLastLoginInteractor;
   final SaveQuotaInteractor _saveQuotaInteractor;
+  final LogoutOidcInteractor _logoutOidcInteractor;
 
   AccountDetailsViewModel(
     Store<AppState> store,
@@ -68,17 +69,21 @@ class AccountDetailsViewModel extends BaseViewModel {
     this._saveAuthorizedUserInteractor,
     this._saveLastLoginInteractor,
     this._saveQuotaInteractor,
+    this._logoutOidcInteractor
   ) : super(store);
 
   void logout() {
     store.dispatch(_resetBiometricSetting());
     store.dispatch(logoutAction());
-    _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
-    store.dispatch(ClearCurrentView());
   }
 
   ThunkAction<AppState> logoutAction() {
     return (Store<AppState> store) async {
+      await _logoutOidcInteractor.execute()
+        .then((value) async {
+          await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+          store.dispatch(ClearCurrentView());
+        });
       await Future.wait([
         deletePermanentTokenInteractor.execute(),
         _deleteAllOfflineDocumentInteractor.execute(),
