@@ -40,8 +40,8 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -181,15 +181,8 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                 appState.sharedSpaceState.selectMode == SelectMode.INACTIVE) {
               return FloatingActionButton(
                 key: Key('shared_space_create_new_workgroup_button'),
-                onPressed: () {
-                  if (appState.functionalityState.isDriveEnable() &&
-                      appState.functionalityState.isDriveCreationEnable()) {
-                    sharedSpaceViewModel.openCreateNewSharedSpaceMenu(context, _createNewSharedSpaceActionTiles(context));
-                  } else {
-                    sharedSpaceViewModel.openCreateNewWorkGroupModal(context);
-                  }
-                },
-                backgroundColor: AppColor.primaryColor,
+                onPressed: () => _onPressCreateNewButton(context, appState),
+                backgroundColor: _bindingCreateNewButtonColor(appState),
                 child: SvgPicture.asset(
                   imagePath.icPlus,
                   width: 24,
@@ -201,6 +194,31 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
           }),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  Color _bindingCreateNewButtonColor(AppState appState) {
+    if (!appState.functionalityState.isDriveCreationEnable() && !appState.functionalityState.isCreateWorkgroupEnable()) {
+      return AppColor.disableColor;
+    }
+    return AppColor.primaryColor;
+  }
+
+  void _onPressCreateNewButton(BuildContext context, AppState appState) {
+    if (_driveCreationEnable(appState) && _workgroupCreationEnable(appState)) {
+      sharedSpaceViewModel.openCreateNewSharedSpaceMenu(context, _createNewSharedSpaceActionTiles(context));
+    } else if (_driveCreationEnable(appState) && !_workgroupCreationEnable(appState)) {
+      sharedSpaceViewModel.openCreateNewDrive(context);
+    } else if (!_driveCreationEnable(appState) && _workgroupCreationEnable(appState)) {
+      sharedSpaceViewModel.openCreateNewWorkGroupModal(context);
+    }
+  }
+
+  bool _driveCreationEnable(AppState appState) {
+    return (appState.functionalityState.isDriveEnable() && appState.functionalityState.isDriveCreationEnable());
+  }
+
+  bool _workgroupCreationEnable(AppState appState) {
+    return (appState.functionalityState.isSharedSpaceEnable() && appState.functionalityState.isCreateWorkgroupEnable());
   }
 
   Widget buildSharedSpaceListBySearchState() {
