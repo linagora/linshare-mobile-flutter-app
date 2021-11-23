@@ -28,17 +28,95 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:data/src/network/model/converter/quota_id_converter.dart';
+import 'package:data/src/network/model/converter/user_id_converter.dart';
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class UserIdConverter implements JsonConverter<UserId, String> {
-  const UserIdConverter();
+part 'user_cache.g.dart';
+
+@QuotaIdConverter()
+@UserIdConverter()
+@JsonSerializable(explicitToJson: true)
+class UserCache with EquatableMixin  {
+
+  static const String KEY_CACHE = 'UserCache';
+
+  @JsonKey(name: Attribute.uuid)
+  final UserId userId;
+
+  final String? locale;
+  final String? externalMailLocale;
+  final String? domain;
+  final String? firstName;
+  final String? lastName;
+  final String? mail;
+  final bool? canUpload;
+  final bool? canCreateGuest;
+  final AccountType accountType;
+  final bool secondFAEnabled;
+  final bool secondFARequired;
+
+  @JsonKey(name: Attribute.quotaUuid)
+  final QuotaId quotaUuid;
+
+  UserCache(
+    this.userId,
+    this.locale,
+    this.externalMailLocale,
+    this.domain,
+    this.firstName,
+    this.lastName,
+    this.mail,
+    this.canUpload,
+    this.canCreateGuest,
+    this.accountType,
+    this.quotaUuid,
+    this.secondFAEnabled,
+    this.secondFARequired,
+  );
+
+  factory UserCache.fromJson(Map<String, dynamic> json) => _$UserCacheFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserCacheToJson(this);
 
   @override
-  UserId fromJson(String json) => UserId(json);
+  List<Object?> get props => [
+    userId,
+    locale,
+    externalMailLocale,
+    domain,
+    firstName,
+    lastName,
+    mail,
+    canUpload,
+    canCreateGuest,
+    accountType,
+    quotaUuid,
+    secondFAEnabled,
+    secondFARequired
+  ];
+}
 
-  @override
-  String toJson(UserId object) => object.uuid;
+extension UserCacheExtension on UserCache {
+  User toUser() {
+    return User(
+      userId,
+      locale ?? '',
+      externalMailLocale ?? '',
+      domain ?? '',
+      firstName ?? '',
+      lastName ?? '',
+      mail ?? '',
+      canUpload ?? false,
+      canCreateGuest ?? false,
+      accountType,
+      quotaUuid,
+      secondFAEnabled,
+      secondFARequired
+    );
+  }
 }

@@ -30,8 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'dart:convert';
-
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -42,5 +40,5 @@ class QuotaSizeConverter implements JsonConverter<QuotaSize, int> {
   QuotaSize fromJson(int json) => QuotaSize(json);
 
   @override
-  int toJson(QuotaSize object) => int.parse(jsonEncode(object.size));
+  int toJson(QuotaSize object) => int.parse(object.size.toString());
 }

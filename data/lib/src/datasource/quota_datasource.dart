@@ -33,4 +33,8 @@ import 'package:domain/domain.dart';
 
 abstract class QuotaDataSource {
   Future<AccountQuota> findQuota(QuotaId quotaUuid);
+
+  Future saveQuota(AccountQuota accountQuota);
+
+  Future<AccountQuota> getQuotaOffline();
 }

@@ -13,7 +13,7 @@
 // the words “You are using the Free and Open Source version of LinShare™, powered by
 // Linagora © 2009–2020. Contribute to Linshare R&D by subscribing to an Enterprise
 // offer!”. You must also retain the latter notice in all asynchronous messages such as
-// e-mails sent with the Program, (ii) retain all hypertext links between LinShare and
+// e-mails sent with the Program, (ii) retain all hyper& links between LinShare and
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
@@ -28,17 +28,46 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class UserIdConverter implements JsonConverter<UserId, String> {
-  const UserIdConverter();
+class LocalQuotaDataSource implements QuotaDataSource {
+  final SharedPreferences _sharedPreferences;
+
+  LocalQuotaDataSource(this._sharedPreferences);
 
   @override
-  UserId fromJson(String json) => UserId(json);
+  Future<AccountQuota> findQuota(QuotaId? quotaUuid) async {
+    throw UnimplementedError();
+  }
 
   @override
-  String toJson(UserId object) => object.uuid;
+  Future saveQuota(AccountQuota accountQuota) {
+    return Future.sync(() async {
+      return await _sharedPreferences.setString(
+          AccountQuotaCache.KEY_CACHE,
+          jsonEncode(accountQuota.toAccountQuotaCache().toJson()));
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
+
+  @override
+  Future<AccountQuota> getQuotaOffline() {
+    return Future.sync(() async {
+      final result = _sharedPreferences.getString(AccountQuotaCache.KEY_CACHE) ?? '';
+      if (result.isNotEmpty) {
+        return AccountQuotaCache.fromJson(jsonDecode(result)).toAccountQuota();
+      } else {
+        throw QuotaNotFound();
+      }
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
 }

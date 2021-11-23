@@ -57,4 +57,14 @@ class AuditUserDataSourceImpl implements AuditUserDataSource {
       });
     });
   }
+
+  @override
+  Future saveLastLogin(LastLogin lastLogin) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<LastLogin> getLastLoginOffline() {
+    throw UnimplementedError();
+  }
 }
