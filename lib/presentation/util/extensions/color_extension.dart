@@ -125,4 +125,5 @@ extension AppColor on Color {
   static const loginCheckBoxBorderColor = Color(0xffB8C1CC);
   static const loginCheckBoxActiveColor = Color(0xff005BEA);
   static const loginLabelInputColor = Color(0xff6D7885);
+  static const disableColor = Color(0xffbbbbbb);
 }
