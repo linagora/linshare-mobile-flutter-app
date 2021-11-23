@@ -29,26 +29,36 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/authentication_datasource.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
-  final AuthenticationDataSource authenticationDataSource;
+  final Map<DataSourceType, AuthenticationDataSource> authenticationDataSources;
 
-  AuthenticationRepositoryImpl(this.authenticationDataSource);
+  AuthenticationRepositoryImpl(this.authenticationDataSources);
 
   @override
   Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
-    return authenticationDataSource.createPermanentToken(baseUrl, userName, password, otpCode: otpCode);
+    return authenticationDataSources[DataSourceType.network]!.createPermanentToken(baseUrl, userName, password, otpCode: otpCode);
   }
 
   @override
   Future<bool> deletePermanentToken(Token token) async {
-    return authenticationDataSource.deletePermanentToken(token);
+    return authenticationDataSources[DataSourceType.network]!.deletePermanentToken(token);
   }
 
   @override
   Future<User> getAuthorizedUser() async {
-    return authenticationDataSource.getAuthorizedUser();
+    return authenticationDataSources[DataSourceType.network]!.getAuthorizedUser();
+  }
+
+  @override
+  Future saveAuthorizedUser(User user) {
+    return authenticationDataSources[DataSourceType.local]!.saveAuthorizedUser(user);
+  }
+
+  @override
+  Future<User> getAuthorizedUserOffline() {
+    return authenticationDataSources[DataSourceType.local]!.getAuthorizedUserOffline();
   }
 }

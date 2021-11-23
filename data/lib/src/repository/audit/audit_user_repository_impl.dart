@@ -30,16 +30,26 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/datasource/audit_user_datasource.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 
 class AuditUserRepositoryImpl implements AuditUserRepository {
-  final AuditUserDataSource _auditUserDataSource;
+  final Map<DataSourceType, AuditUserDataSource> _auditUserDataSources;
 
-  AuditUserRepositoryImpl(this._auditUserDataSource);
+  AuditUserRepositoryImpl(this._auditUserDataSources);
 
   @override
   Future<LastLogin> getLastLogin() {
-    return _auditUserDataSource.getLastLogin();
+    return _auditUserDataSources[DataSourceType.network]!.getLastLogin();
+  }
+
+  @override
+  Future saveLastLogin(LastLogin lastLogin) {
+    return _auditUserDataSources[DataSourceType.local]!.saveLastLogin(lastLogin);
+  }
+
+  @override
+  Future<LastLogin> getLastLoginOffline() {
+    return _auditUserDataSources[DataSourceType.local]!.getLastLoginOffline();
   }
 }

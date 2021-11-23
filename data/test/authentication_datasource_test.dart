@@ -44,13 +44,13 @@ void main() {
     late MockDeviceManager _deviceManager;
     late MockLinShareHttpClient _linShareHttpClient;
     MockRemoteExceptionThrower _remoteExceptionThrower;
-    late AuthenticationDataSource _authenticationDataSource;
+    late AuthenticationDataSourceImpl _authenticationDataSource;
 
     setUp(() {
       _deviceManager = MockDeviceManager();
       _linShareHttpClient = MockLinShareHttpClient();
       _remoteExceptionThrower = MockRemoteExceptionThrower();
-      _authenticationDataSource = AuthenticationDataSource(_linShareHttpClient, _deviceManager, _remoteExceptionThrower);
+      _authenticationDataSource = AuthenticationDataSourceImpl(_linShareHttpClient, _deviceManager, _remoteExceptionThrower);
     });
 
     //TODO: Null-safety : Wait a solution replace for argThat

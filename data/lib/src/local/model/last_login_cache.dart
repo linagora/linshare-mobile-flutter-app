@@ -28,17 +28,47 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:data/src/network/model/converter/datetime_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class UserIdConverter implements JsonConverter<UserId, String> {
-  const UserIdConverter();
+part 'last_login_cache.g.dart';
+
+@JsonSerializable(explicitToJson: true)
+@DatetimeConverter()
+class LastLoginCache extends Equatable {
+
+  static const String KEY_CACHE = 'LastLoginCache';
+
+  final String type;
+  final DateTime creationDate;
+  final String action;
+  final String message;
+
+  LastLoginCache(this.type, this.creationDate, this.action, this.message);
+
+  factory LastLoginCache.fromJson(Map<String, dynamic> json) => _$LastLoginCacheFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LastLoginCacheToJson(this);
 
   @override
-  UserId fromJson(String json) => UserId(json);
+  List<Object> get props => [
+    type,
+    creationDate,
+    action,
+    message
+  ];
+}
 
-  @override
-  String toJson(UserId object) => object.uuid;
+extension LastLoginCacheExtension on LastLoginCache {
+  LastLogin toLastLogin() {
+    return LastLogin(
+      type,
+      action,
+      creationDate,
+      message
+    );
+  }
 }
