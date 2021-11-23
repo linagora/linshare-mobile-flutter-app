@@ -373,6 +373,7 @@ class WidgetModule {
       getIt.get<SaveAuthorizedUserInteractor>(),
       getIt.get<SaveLastLoginInteractor>(),
       getIt.get<SaveQuotaInteractor>(),
+      getIt<LogoutOidcInteractor>()
     ));
   }
 

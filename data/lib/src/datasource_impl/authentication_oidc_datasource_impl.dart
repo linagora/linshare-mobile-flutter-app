@@ -29,25 +29,33 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/extensions/share_preferences_extension.dart';
+
 import 'package:data/data.dart';
+import 'package:data/src/local/model/token_oidc_cache.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationOIDCDataSourceImpl implements AuthenticationOIDCDataSource {
+
+  static const _keyTokenOIDC = 'TOKEN-OIDC';
 
   final LinShareHttpClient linShareHttpClient;
   final RemoteExceptionThrower remoteExceptionThrower;
   final FlutterAppAuth appAuth;
   final DeviceManager deviceManager;
   final OIDCParser oidcParser;
+  final SharedPreferences sharedPreferences;
 
   AuthenticationOIDCDataSourceImpl(
     this.linShareHttpClient,
     this.remoteExceptionThrower,
     this.appAuth,
     this.deviceManager,
-    this.oidcParser
+    this.oidcParser,
+    this.sharedPreferences
   );
 
   @override
@@ -123,5 +131,43 @@ class AuthenticationOIDCDataSourceImpl implements AuthenticationOIDCDataSource {
         throw UnknownError(error.response?.statusMessage!);
       });
     });
+  }
+
+  @override
+  Future<TokenOIDC?> getStoredTokenOIDC() async {
+    final storedToken = await sharedPreferences.getObject(_keyTokenOIDC);
+    return Future.sync(() {
+      if (storedToken != null) {
+        final tokenOIDCCache = TokenOIDCCache.fromJson(storedToken);
+        return tokenOIDCCache.toTokenOIDC();
+      }
+      return null;
+    });
+  }
+
+  @override
+  Future<void> logout(Uri baseUrl) async {
+    final tokenOIDC = await getStoredTokenOIDC();
+    if (tokenOIDC != null) {
+      final oidcConfiguration = await getOIDCConfiguration(baseUrl);
+      if (oidcConfiguration != null) {
+        return Future.sync(() async {
+          await appAuth.endSession(EndSessionRequest(
+              idTokenHint: tokenOIDC.tokenId.uuid,
+              postLogoutRedirectUrl: OIDCConfiguration.redirectOidc,
+              discoveryUrl: oidcConfiguration.discoveryUrl
+          ));
+        }).catchError((error) {
+          remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
+            throw UnknownError(error.response?.statusMessage!);
+          });
+        });
+      }
+    }
+  }
+
+  @override
+  Future<void> persistTokenOIDC(TokenOIDC tokenOidc) async {
+    await sharedPreferences.setObject(_keyTokenOIDC, tokenOidc.toTokenOIDCCache().toJson());
   }
 }

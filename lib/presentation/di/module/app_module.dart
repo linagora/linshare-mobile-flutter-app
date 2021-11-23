@@ -84,7 +84,8 @@ class AppModule {
         getIt<RemoteExceptionThrower>(),
         getIt<FlutterAppAuth>(),
         getIt<DeviceManager>(),
-        getIt<OIDCParser>()
+        getIt<OIDCParser>(),
+        getIt<SharedPreferences>()
     ));
     getIt.registerFactory(() => AuthenticationSaaSDataSourceImpl(
         getIt<SaaSHttpClient>(),
@@ -303,6 +304,10 @@ class AppModule {
       getIt<AuthenticationRepository>(),
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
+    getIt.registerFactory(() => LogoutOidcInteractor(
+      getIt<AuthenticationOIDCRepository>(),
+      getIt<CredentialRepository>()
+    ));
     getIt.registerFactory(() => GetAllSharedSpacesInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => GetAutoCompleteSharingInteractor(getIt<AutoCompleteRepository>()));
     getIt.registerFactory(() => UploadWorkGroupDocumentInteractor(

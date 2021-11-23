@@ -32,6 +32,7 @@
 import 'package:data/data.dart';
 import 'package:data/src/datasource/authentication_oidc_datasource.dart';
 import 'package:domain/domain.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
 
@@ -82,5 +83,20 @@ class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
   @override
   Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest) {
     return saaSDataSource.signUpForSaaS(baseUrl, signUpRequest);
+  }
+
+  @override
+  Future<void> logout(Uri baseUrl) async {
+    return oidcDataSources.logout(baseUrl);
+  }
+
+  @override
+  Future<void> persistTokenOIDC(TokenOIDC tokenOidc) async {
+    await oidcDataSources.persistTokenOIDC(tokenOidc);
+  }
+
+  @override
+  Future<TokenOIDC?> getStoredTokenOIDC() async {
+    return oidcDataSources.getStoredTokenOIDC();
   }
 }
