@@ -46,3 +46,19 @@ class LogoutFailure extends FeatureFailure {
   @override
   List<Object> get props => [logoutException];
 }
+
+class LogoutOIDCSuccess extends ViewState {
+  LogoutOIDCSuccess();
+
+  @override
+  List<Object> get props => [];
+}
+
+class LogoutOIDCFailure extends FeatureFailure {
+  final logoutException;
+
+  LogoutOIDCFailure(this.logoutException);
+
+  @override
+  List<Object> get props => [logoutException];
+}

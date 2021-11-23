@@ -233,7 +233,7 @@ class LoginViewModel extends BaseViewModel {
         oidcConfiguration.discoveryUrl,
         oidcConfiguration.scopes,
         AuthenticationOIDCConfig.preferEphemeralSessionIOS,
-        AuthenticationOIDCConfig.promptValues,
+        null,
         AuthenticationOIDCConfig.allowInsecureConnection,
         baseUrl,
         authenticationType));

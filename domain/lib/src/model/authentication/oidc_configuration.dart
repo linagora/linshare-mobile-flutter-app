@@ -32,10 +32,12 @@
 import 'package:equatable/equatable.dart';
 
 class OIDCConfiguration extends Equatable {
+  static const redirectOidc = 'linshare.mobile://oauthredirect';
+  static const wellKnownOpenId = '.well-known/openid-configuration';
 
   final String authority;
   final String clientId;
-  final String redirectUrl = 'linshare.mobile://oauthredirect';
+  final String redirectUrl = redirectOidc;
   final String logoutRedirectUri;
   final String responseType;
   final List<String> scopes;
@@ -48,7 +50,7 @@ class OIDCConfiguration extends Equatable {
     required this.scopes
   });
 
-  String get discoveryUrl => authority + '.well-known/openid-configuration';
+  String get discoveryUrl => authority + wellKnownOpenId;
 
   @override
   List<Object?> get props => [authority, clientId, redirectUrl, scopes];

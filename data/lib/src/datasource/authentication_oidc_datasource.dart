@@ -42,7 +42,13 @@ abstract class AuthenticationOIDCDataSource {
     List<String>? promptValues,
     bool allowInsecureConnections);
 
+  Future<void> persistTokenOIDC(TokenOIDC tokenOidc);
+
+  Future<TokenOIDC?> getStoredTokenOIDC();
+
   Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
 
   Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+
+  Future<void> logout(Uri baseUrl);
 }
