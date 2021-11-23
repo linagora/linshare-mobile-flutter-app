@@ -111,7 +111,10 @@ class _AddSharedSpaceMemberWidgetState extends State<AddRecipientsUploadRequestG
                       ? AppColor.primaryColor
                       : AppColor.uploadButtonDisableBackgroundColor,
                   onPressed: () => _model.sendRecipientsList(
-                      context, arguments.uploadRequestGroup.uploadRequestGroupId, recipientsList),
+                      context,
+                      arguments.addRecipientType,
+                      arguments.uploadRequestGroup.uploadRequestGroupId,
+                      recipientsList),
                   label: Text(
                     AppLocalizations.of(context).add,
                     style: TextStyle(

@@ -82,6 +82,9 @@ class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewM
 					} else if (success is EditUploadRequestGroupViewState &&
               success.uploadRequestGroup.status == UploadRequestStatus.ENABLED) {
             getUploadRequestActiveClosedStatus();
+          } else if (success is AddRecipientsToUploadRequestGroupViewState &&
+              success.uploadRequestGroup.status == UploadRequestStatus.ENABLED) {
+            getUploadRequestActiveClosedStatus();
           }
 				});
 			});
