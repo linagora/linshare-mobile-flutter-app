@@ -48,3 +48,20 @@ class GetLastLoginFailure extends Failure {
   @override
   List<Object> get props => [exception];
 }
+
+class SaveLastLoginViewState extends ViewState {
+
+  SaveLastLoginViewState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SaveLastLoginFailure extends Failure {
+  final exception;
+
+  SaveLastLoginFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

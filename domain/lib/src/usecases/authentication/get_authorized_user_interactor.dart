@@ -41,7 +41,8 @@ class GetAuthorizedInteractor {
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final user = await authenticationRepository.getAuthorizedUser();
+      final user = await authenticationRepository.getAuthorizedUser()
+          .onError((error, stackTrace) => authenticationRepository.getAuthorizedUserOffline());
       final baseUrl = (await credentialRepository.getBaseUrl()).toString();
       if (_needSetup2FA(user)) {
         return Left(NeedSetup2FA());
