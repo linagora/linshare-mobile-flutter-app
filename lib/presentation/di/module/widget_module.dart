@@ -169,6 +169,7 @@ class WidgetModule {
       getIt<Store<AppState>>(),
       getIt<AppNavigation>(),
       getIt<GetAuthorizedInteractor>(),
+      getIt<SaveAuthorizedUserInteractor>(),
       getIt<UploadFileManager>(),
       getIt<Connectivity>(),
       getIt<GetAllFunctionalityInteractor>(),
@@ -343,7 +344,10 @@ class WidgetModule {
       getIt.get<GetLastLoginInteractor>(),
       getIt.get<GetQuotaInteractor>(),
       getIt.get<DeleteAllOfflineDocumentInteractor>(),
-      getIt.get<DeleteAllSharedSpaceOfflineInteractor>()
+      getIt.get<DeleteAllSharedSpaceOfflineInteractor>(),
+      getIt.get<SaveAuthorizedUserInteractor>(),
+      getIt.get<SaveLastLoginInteractor>(),
+      getIt.get<SaveQuotaInteractor>(),
     ));
   }
 
@@ -414,7 +418,8 @@ class WidgetModule {
         getIt<Store<AppState>>(),
         getIt<GetAuthorizedInteractor>(),
         getIt<DeletePermanentTokenInteractor>(),
-        getIt<AppNavigation>()
+        getIt<AppNavigation>(),
+        getIt<SaveAuthorizedUserInteractor>(),
     ));
   }
 

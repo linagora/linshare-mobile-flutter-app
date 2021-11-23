@@ -69,6 +69,7 @@ class HomeViewModel extends BaseViewModel {
   final UploadFileManager _uploadFileManager;
   final Connectivity _connectivity;
   final GetAuthorizedInteractor _getAuthorizedInteractor;
+  final SaveAuthorizedUserInteractor _saveAuthorizedUserInteractor;
   final GetAllFunctionalityInteractor _getAllFunctionalityInteractor;
   final GetBiometricSettingInteractor _getBiometricSettingInteractor;
   late StreamSubscription _uploadFileManagerStreamSubscription;
@@ -81,6 +82,7 @@ class HomeViewModel extends BaseViewModel {
       Store<AppState> store,
       this._appNavigation,
       this._getAuthorizedInteractor,
+      this._saveAuthorizedUserInteractor,
       this._uploadFileManager,
       this._connectivity,
       this._getAllFunctionalityInteractor,
@@ -184,8 +186,8 @@ class HomeViewModel extends BaseViewModel {
     store.dispatch(_getAuthorizedUserAction());
   }
 
-  OnlineThunkAction _getAuthorizedUserAction() {
-    return OnlineThunkAction((Store<AppState> store) async {
+  ThunkAction<AppState> _getAuthorizedUserAction() {
+    return (Store<AppState> store) async {
       await _getAuthorizedInteractor.execute().then((result) => result.fold(
         (left) => null,
         (right) {
@@ -193,12 +195,19 @@ class HomeViewModel extends BaseViewModel {
             return store.dispatch(_getAuthorizedUserSuccessAction((right)));
           }
         }));
-    });
+    };
+  }
+
+  ThunkAction<AppState> _saveAuthorizedUserAction(User user) {
+    return (Store<AppState> store) async {
+      await _saveAuthorizedUserInteractor.execute(user);
+    };
   }
 
   ThunkAction<AppState> _getAuthorizedUserSuccessAction(GetAuthorizedUserViewState success) {
     return (Store<AppState> store) async {
-      store.dispatch(SetAccountInformationsAction(success.user, success.baseUrl));
+      store.dispatch(_saveAuthorizedUserAction(success.user));
+      store.dispatch(SetAccountInformationAction(success.user, success.baseUrl));
     };
   }
 
