@@ -122,3 +122,20 @@ class GetTokenOIDCFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class SaveAuthorizedUserViewState extends ViewState {
+
+  SaveAuthorizedUserViewState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SaveAuthorizedUserFailure extends FeatureFailure {
+  final exception;
+
+  SaveAuthorizedUserFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

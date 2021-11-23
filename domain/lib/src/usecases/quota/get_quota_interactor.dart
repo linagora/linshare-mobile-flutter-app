@@ -41,7 +41,8 @@ class GetQuotaInteractor {
 
   Future<Either<Failure, Success>> execute(QuotaId quotaUuid) async {
     try {
-      final accountQuota = await quotaRepository.findQuota(quotaUuid);
+      final accountQuota = await quotaRepository.findQuota(quotaUuid)
+          .onError((error, stackTrace) => quotaRepository.getQuotaOffline());
       return Right(AccountQuotaViewState(accountQuota));
     } catch (exception) {
       return Left(AccountQuotaFailure(exception as Exception));

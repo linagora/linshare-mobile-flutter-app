@@ -37,4 +37,8 @@ abstract class AuthenticationRepository {
   Future<bool> deletePermanentToken(Token token);
 
   Future<User> getAuthorizedUser();
+
+  Future saveAuthorizedUser(User user);
+
+  Future<User> getAuthorizedUserOffline();
 }
