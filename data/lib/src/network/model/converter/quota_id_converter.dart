@@ -30,8 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'dart:convert';
-
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -42,5 +40,5 @@ class QuotaIdConverter implements JsonConverter<QuotaId, String> {
   QuotaId fromJson(String json) => QuotaId(json);
 
   @override
-  String toJson(QuotaId object) => jsonEncode(object.uuid);
+  String toJson(QuotaId object) => object.uuid;
 }

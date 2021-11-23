@@ -28,17 +28,52 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:data/src/network/model/converter/quota_size_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class UserIdConverter implements JsonConverter<UserId, String> {
-  const UserIdConverter();
+part 'account_quota_cache.g.dart';
+
+@QuotaSizeConverter()
+@JsonSerializable(explicitToJson: true)
+class AccountQuotaCache with EquatableMixin  {
+
+  static const String KEY_CACHE = 'AccountQuotaCache';
+
+  final QuotaSize quota;
+  final QuotaSize usedSpace;
+  final QuotaSize maxFileSize;
+  final bool maintenance;
+
+  AccountQuotaCache(
+    this.quota,
+    this.usedSpace,
+    this.maxFileSize,
+    this.maintenance
+  );
+
+  factory AccountQuotaCache.fromJson(Map<String, dynamic> json) => _$AccountQuotaCacheFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AccountQuotaCacheToJson(this);
 
   @override
-  UserId fromJson(String json) => UserId(json);
+  List<Object> get props => [
+    quota,
+    usedSpace,
+    maxFileSize,
+    maintenance,
+  ];
+}
 
-  @override
-  String toJson(UserId object) => object.uuid;
+extension AccountQuotaCacheExtension on AccountQuotaCache {
+  AccountQuota toAccountQuota() {
+    return AccountQuota(
+      quota,
+      usedSpace,
+      maxFileSize,
+      maintenance,
+    );
+  }
 }

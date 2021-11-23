@@ -28,17 +28,47 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+
+import 'dart:convert';
+
+import 'package:data/data.dart';
+import 'package:data/src/datasource/audit_user_datasource.dart';
 import 'package:domain/domain.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class UserIdConverter implements JsonConverter<UserId, String> {
-  const UserIdConverter();
+class LocalAuditUserDataSource implements AuditUserDataSource {
+  final SharedPreferences _sharedPreferences;
+
+  LocalAuditUserDataSource(this._sharedPreferences);
 
   @override
-  UserId fromJson(String json) => UserId(json);
+  Future<LastLogin> getLastLogin() {
+    throw UnimplementedError();
+  }
 
   @override
-  String toJson(UserId object) => object.uuid;
+  Future saveLastLogin(LastLogin lastLogin) {
+    return Future.sync(() async {
+      return await _sharedPreferences.setString(
+          LastLoginCache.KEY_CACHE,
+          jsonEncode(lastLogin.toLastLoginCache().toJson()));
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
+
+  @override
+  Future<LastLogin> getLastLoginOffline() {
+    return Future.sync(() async {
+      final result = _sharedPreferences.getString(LastLoginCache.KEY_CACHE) ?? '';
+      if (result.isNotEmpty) {
+        return LastLoginCache.fromJson(jsonDecode(result)).toLastLogin();
+      } else {
+        throw LoginNotFound();
+      }
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
 }

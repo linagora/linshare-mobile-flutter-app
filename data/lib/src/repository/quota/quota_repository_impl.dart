@@ -29,16 +29,27 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.p
 
+import 'package:data/data.dart';
 import 'package:data/src/datasource/quota_datasource.dart';
 import 'package:domain/domain.dart';
 
 class QuotaRepositoryImpl implements QuotaRepository {
-  final QuotaDataSource _documentDataSource;
+  final Map<DataSourceType, QuotaDataSource> _documentDataSources;
 
-  QuotaRepositoryImpl(this._documentDataSource);
+  QuotaRepositoryImpl(this._documentDataSources);
 
   @override
   Future<AccountQuota> findQuota(QuotaId quotaUuid) {
-    return _documentDataSource.findQuota(quotaUuid);
+    return _documentDataSources[DataSourceType.network]!.findQuota(quotaUuid);
+  }
+
+  @override
+  Future saveQuota(AccountQuota accountQuota) {
+    return _documentDataSources[DataSourceType.local]!.saveQuota(accountQuota);
+  }
+
+  @override
+  Future<AccountQuota> getQuotaOffline() {
+    return _documentDataSources[DataSourceType.local]!.getQuotaOffline();
   }
 }

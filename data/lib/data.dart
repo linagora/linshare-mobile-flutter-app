@@ -5,7 +5,6 @@ export 'package:data/src/network/model/response/shared_space_member_response.dar
 
 export 'src/datasource/audit_user_datasource.dart';
 // data source
-export 'src/datasource/authentication_datasource.dart';
 export 'src/datasource/authentication_oidc_datasource.dart';
 export 'src/datasource/autocomplete_datasource.dart';
 export 'src/datasource/biometric_datasource.dart';
@@ -32,6 +31,7 @@ export 'src/datasource_impl/autocomplete_datasource_impl.dart';
 export 'src/datasource_impl/biometric_datasource_impl.dart';
 export 'src/datasource_impl/contact_datasource_impl.dart';
 export 'src/datasource/drive_datasource.dart';
+export 'src/datasource/authentication_datasource.dart';
 // data source impl
 export 'src/datasource_impl/document_datasource_impl.dart';
 export 'src/datasource_impl/file_upload_datasource_impl.dart';
@@ -57,6 +57,10 @@ export 'src/datasource_impl/upload_request_entry_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_group_datasource_impl.dart';
 export 'src/datasource_impl/drive_datasource_impl.dart';
 export 'src/datasource_impl/local_drive_datasource.dart';
+export 'src/datasource_impl/authentication_datasource_impl.dart';
+export 'src/datasource_impl/local_authentication_datasource.dart';
+export 'src/datasource_impl/local_audit_user_datasource.dart';
+export 'src/datasource_impl/local_quota_datasource.dart';
 // exception
 export 'src/exception/biometric_exception_thrower.dart';
 // extension
@@ -68,6 +72,9 @@ export 'src/extensions/shared_space_node_nested_extension.dart';
 export 'src/extensions/tree_node_extension.dart';
 export 'src/extensions/work_group_document_extension.dart';
 export 'src/local/config/database_config.dart';
+export 'src/extensions/account_quota_extension.dart';
+export 'src/extensions/user_extension.dart';
+export 'src/extensions/last_login_extension.dart';
 // local
 export 'src/local/config/database_config.dart';
 export 'src/local/config/shared_space_table.dart';
@@ -141,6 +148,9 @@ export 'src/local/model/document_cache.dart';
 export 'src/local/model/data_source_type.dart';
 export 'src/local/model/shared_space_cache.dart';
 export 'src/local/model/work_group_node_cache.dart';
+export 'src/local/model/last_login_cache.dart';
+export 'src/local/model/account_quota_cache.dart';
+export 'src/local/model/user_cache.dart';
 export 'src/network/model/response/upload_request_group_response.dart';
 export 'src/network/model/response/upload_request_response.dart';
 export 'src/network/model/response/upload_request_entry_response.dart';

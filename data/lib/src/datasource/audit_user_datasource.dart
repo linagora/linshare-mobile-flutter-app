@@ -33,4 +33,8 @@ import 'package:domain/domain.dart';
 
 abstract class AuditUserDataSource {
   Future<LastLogin> getLastLogin();
+
+  Future saveLastLogin(LastLogin lastLogin);
+
+  Future<LastLogin> getLastLoginOffline();
 }
