@@ -150,6 +150,33 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
             }
             return SizedBox.shrink();
           }),
+      floatingActionButton: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (context, appState) {
+            final isInMultipleSelectMode = appState.uploadRequestInsideState.selectMode == SelectMode.ACTIVE;
+            final uploadRequestGroup = appState.uploadRequestInsideState.uploadRequestGroup;
+            if (!appState.uiState.isInSearchState() &&
+                !isInMultipleSelectMode &&
+                uploadRequestGroup != null &&
+                (uploadRequestGroup.status == UploadRequestStatus.ENABLED || uploadRequestGroup.status == UploadRequestStatus.CREATED)) {
+              return FloatingActionButton(
+                key: Key('upload_request_add_recipient_button'),
+                onPressed: () {
+                  if (appState.uploadRequestInsideState.uploadRequestGroup != null) {
+                    viewModel.goToAddRecipients(appState.uploadRequestInsideState.uploadRequestGroup!);
+                  }
+                },
+                backgroundColor: AppColor.primaryColor,
+                child: SvgPicture.asset(
+                  imagePath.icUploadRequestAddRecipient,
+                  width: 24,
+                  height: 24,
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

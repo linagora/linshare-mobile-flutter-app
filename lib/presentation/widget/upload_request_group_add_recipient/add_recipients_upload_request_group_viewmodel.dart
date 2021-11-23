@@ -34,12 +34,15 @@ import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_recipients_upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_type.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 
@@ -104,8 +107,12 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
     store.dispatch(RemoveRecipientsUploadRequestGroupAction(recipient.mail));
   }
 
-  void sendRecipientsList(BuildContext context, UploadRequestGroupId uploadRequestGroupId,
-      List<GenericUser> recipientsList) {
+  void sendRecipientsList(
+      BuildContext context,
+      AddRecipientType addRecipientType,
+      UploadRequestGroupId uploadRequestGroupId,
+      List<GenericUser> recipientsList
+  ) {
     final addRecipientTitle = AppLocalizations.of(context).confirm_add_recipients_title;
 
     ConfirmModalSheetBuilder(_appNavigation)
@@ -113,27 +120,36 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
         .title(addRecipientTitle)
         .cancelText(AppLocalizations.of(context).cancel)
         .onConfirmAction(AppLocalizations.of(context).add, (_) {
-            store.dispatch(_sendRecipientsAction(uploadRequestGroupId, recipientsList));
+            store.dispatch(_sendRecipientsAction(addRecipientType, uploadRequestGroupId, recipientsList));
             _appNavigation.popBack();
     }).show(context);
   }
 
   OnlineThunkAction _sendRecipientsAction(
-      UploadRequestGroupId uploadRequestGroupId, List<GenericUser> recipientsList) {
+      AddRecipientType addRecipientType,
+      UploadRequestGroupId uploadRequestGroupId,
+      List<GenericUser> recipientsList
+  ) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _addRecipientsToUploadRequestGroupInteractor
           .execute(uploadRequestGroupId, recipientsList)
           .then((result) => result.fold(
               (failure) {
-                store.dispatch(AddRecipientsUploadRequestGroupViewStateAction(Left(failure)));
+                if (addRecipientType == AddRecipientType.fromUploadRequestInside) {
+                  store.dispatch(UploadRequestInsideAction(Left(failure)));
+                } else if (addRecipientType == AddRecipientType.fromUploadRequestGroup) {
+                  store.dispatch(UploadRequestGroupAction(Left(failure)));
+                }
                 backToUploadRequest();
               },
               (success) {
-                store.dispatch(AddRecipientsUploadRequestGroupViewStateAction(Right(success)));
+                if (addRecipientType == AddRecipientType.fromUploadRequestInside) {
+                  store.dispatch(UploadRequestInsideAction(Right(success)));
+                } else if (addRecipientType == AddRecipientType.fromUploadRequestGroup) {
+                  store.dispatch(UploadRequestGroupAction(Right(success)));
+                }
                 backToUploadRequest();
               }));
-
-      store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
     });
   }
 

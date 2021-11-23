@@ -82,6 +82,9 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
 					} else if (success is EditUploadRequestGroupViewState &&
               success.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
             getUploadRequestCreatedStatus();
+          } else if (success is AddRecipientsToUploadRequestGroupViewState &&
+              success.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
+            getUploadRequestCreatedStatus();
           }
 				});
 			});
