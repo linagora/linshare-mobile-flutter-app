@@ -74,7 +74,7 @@ void main() {
           QuotaSize(10000),
           false
         );
-        _store.dispatch(SetAccountInformationsAction(user1, baseUrl1));
+        _store.dispatch(SetAccountInformationAction(user1, baseUrl1));
 
         when(_quotaRepository.findQuota(user1.quotaUuid))
           .thenAnswer((_) async => accountQuota);
@@ -93,7 +93,7 @@ void main() {
           QuotaSize(10000),
           false
         );
-        _store.dispatch(SetAccountInformationsAction(user1, baseUrl1));
+        _store.dispatch(SetAccountInformationAction(user1, baseUrl1));
 
         when(_quotaRepository.findQuota(user1.quotaUuid))
           .thenAnswer((_) async => accountQuota);
@@ -112,7 +112,7 @@ void main() {
           QuotaSize(10000),
           false
         );
-        _store.dispatch(SetAccountInformationsAction(user1, baseUrl1));
+        _store.dispatch(SetAccountInformationAction(user1, baseUrl1));
 
         when(_quotaRepository.findQuota(user1.quotaUuid))
           .thenAnswer((_) async => accountQuota);
@@ -133,7 +133,7 @@ void main() {
           QuotaSize(1),
           false
         );
-        _store.dispatch(SetAccountInformationsAction(user1, baseUrl1));
+        _store.dispatch(SetAccountInformationAction(user1, baseUrl1));
 
         when(_quotaRepository.findQuota(user1.quotaUuid))
           .thenAnswer((_) async => accountQuota);

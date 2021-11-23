@@ -29,12 +29,20 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class QuotaRepository {
-  Future<AccountQuota> findQuota(QuotaId quotaUuid);
+class SaveLastLoginInteractor {
+  final AuditUserRepository _auditUserRepository;
 
-  Future saveQuota(AccountQuota accountQuota);
+  SaveLastLoginInteractor(this._auditUserRepository);
 
-  Future<AccountQuota> getQuotaOffline();
+  Future<Either<Failure, Success>> execute(LastLogin lastLogin) async {
+    try {
+      await _auditUserRepository.saveLastLogin(lastLogin);
+      return Right<Failure, Success>(SaveLastLoginViewState());
+    } catch (exception) {
+      return Left<Failure, Success>(SaveLastLoginFailure(exception));
+    }
+  }
 }

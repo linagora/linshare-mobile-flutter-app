@@ -39,7 +39,8 @@ class GetLastLoginInteractor {
 
   Future<Either<Failure, Success>> execute() async {
     try {
-      final lastLogin = await _auditUserRepository.getLastLogin();
+      final lastLogin = await _auditUserRepository.getLastLogin()
+          .onError((error, stackTrace) => _auditUserRepository.getLastLoginOffline());
       return Right<Failure, Success>(GetLastLoginViewState(lastLogin));
     } catch (exception) {
       return Left<Failure, Success>(GetLastLoginFailure(exception));

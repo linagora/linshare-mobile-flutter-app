@@ -48,3 +48,20 @@ class AccountQuotaFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class SaveAccountQuotaViewState extends ViewState {
+
+  SaveAccountQuotaViewState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SaveAccountQuotaFailure extends FeatureFailure {
+  final dynamic exception;
+
+  SaveAccountQuotaFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
