@@ -33,7 +33,6 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -51,6 +50,9 @@ class AccountDetailsViewModel extends BaseViewModel {
   final GetQuotaInteractor _getQuotaInteractor;
   final DeleteAllOfflineDocumentInteractor _deleteAllOfflineDocumentInteractor;
   final DeleteAllSharedSpaceOfflineInteractor _deleteAllSharedSpaceOfflineInteractor;
+  final SaveAuthorizedUserInteractor _saveAuthorizedUserInteractor;
+  final SaveLastLoginInteractor _saveLastLoginInteractor;
+  final SaveQuotaInteractor _saveQuotaInteractor;
 
   AccountDetailsViewModel(
     Store<AppState> store,
@@ -63,6 +65,9 @@ class AccountDetailsViewModel extends BaseViewModel {
     this._getQuotaInteractor,
     this._deleteAllOfflineDocumentInteractor,
     this._deleteAllSharedSpaceOfflineInteractor,
+    this._saveAuthorizedUserInteractor,
+    this._saveLastLoginInteractor,
+    this._saveQuotaInteractor,
   ) : super(store);
 
   void logout() {
@@ -97,16 +102,21 @@ class AccountDetailsViewModel extends BaseViewModel {
   }
 
   void getLastLogin() {
-    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+    store.dispatch((Store<AppState> store) async {
       await _getLastLoginInteractor.execute()
         .then((result) => result.fold(
           (failure) => store.dispatch(AccountAction(Left(failure))),
-          (success) => store.dispatch(SetLastLoginAction((success as GetLastLoginViewState).lastLogin)))
+          (success) {
+            if (success is GetLastLoginViewState) {
+              store.dispatch(_saveLastLogin(success.lastLogin));
+              store.dispatch(SetLastLoginAction(success.lastLogin));
+            }
+          })
         );
-    }));
+    });
   }
 
-  void getUserInformations() {
+  void getUserInformation() {
     final currentUser = store.state.account.user;
 
     if (currentUser != null) {
@@ -118,25 +128,51 @@ class AccountDetailsViewModel extends BaseViewModel {
   }
 
   void getAccountQuota(QuotaId quotaId) {
-    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+    store.dispatch((Store<AppState> store) async {
       await _getQuotaInteractor.execute(quotaId)
         .then((result) => result.fold(
           (failure) => store.dispatch(AccountAction(Left(failure))),
-          (success) => store.dispatch(SetAccountQuotaAction((success as AccountQuotaViewState).accountQuota)))
-        );
-    }));
+          (success) {
+            if (success is AccountQuotaViewState) {
+              store.dispatch(_saveAccountQuota(success.accountQuota));
+              store.dispatch(SetAccountQuotaAction(success.accountQuota));
+            }
+          }));
+    });
   }
 
-  OnlineThunkAction _getAuthorizedUserAction() {
-    return OnlineThunkAction((Store<AppState> store) async {
+  ThunkAction<AppState> _getAuthorizedUserAction() {
+    return (Store<AppState> store) async {
       store.dispatch(StartAccountLoadingAction());
 
       await _getAuthorizedInteractor.execute()
         .then((result) => result.fold(
           (left) => store.dispatch(GetAccountInformationAction(Left(left))),
-          (right) => store.dispatch(GetAccountInformationAction(Right(right)))
-        ));
-    });
+          (success) {
+            if (success is GetAuthorizedUserViewState) {
+              store.dispatch(_saveAuthorizedUserAction(success.user));
+            }
+            store.dispatch(GetAccountInformationAction(Right(success)));
+          }));
+    };
+  }
+
+  ThunkAction<AppState> _saveAccountQuota(AccountQuota accountQuota) {
+    return (Store<AppState> store) async {
+      await _saveQuotaInteractor.execute(accountQuota);
+    };
+  }
+
+  ThunkAction<AppState> _saveAuthorizedUserAction(User user) {
+    return (Store<AppState> store) async {
+      await _saveAuthorizedUserInteractor.execute(user);
+    };
+  }
+
+  ThunkAction<AppState> _saveLastLogin(LastLogin lastLogin) {
+    return (Store<AppState> store) async {
+      await _saveLastLoginInteractor.execute(lastLogin);
+    };
   }
 
   void goToBiometricAuthentication() {

@@ -45,6 +45,7 @@ import 'authentication_arguments.dart';
 class AuthenticationViewModel extends BaseViewModel {
   final GetAuthorizedInteractor _getAuthorizedInteractor;
   final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
+  final SaveAuthorizedUserInteractor _saveAuthorizedUserInteractor;
   final AppNavigation _appNavigation;
   AuthenticationArguments? _authenticationArguments;
 
@@ -53,6 +54,7 @@ class AuthenticationViewModel extends BaseViewModel {
     this._getAuthorizedInteractor,
     this.deletePermanentTokenInteractor,
     this._appNavigation,
+    this._saveAuthorizedUserInteractor,
   ) : super(store) {
     _getAuthorizedUser();
   }
@@ -78,7 +80,8 @@ class AuthenticationViewModel extends BaseViewModel {
   }
 
   void _getAuthorizedUserSuccess(GetAuthorizedUserViewState success) {
-    store.dispatch(SetAccountInformationsAction(success.user, success.baseUrl));
+    store.dispatch(_saveAuthorizedUserAction(success.user));
+    store.dispatch(SetAccountInformationAction(success.user, success.baseUrl));
     store.dispatch(initializeHomeView(_appNavigation, _authenticationArguments!.baseUrl));
   }
 
@@ -96,6 +99,12 @@ class AuthenticationViewModel extends BaseViewModel {
   ThunkAction<AppState> logoutAction() {
     return (Store<AppState> store) async {
       await deletePermanentTokenInteractor.execute();
+    };
+  }
+
+  ThunkAction<AppState> _saveAuthorizedUserAction(User user) {
+    return (Store<AppState> store) async {
+      await _saveAuthorizedUserInteractor.execute(user);
     };
   }
 }

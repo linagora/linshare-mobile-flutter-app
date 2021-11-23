@@ -50,8 +50,8 @@ final accountReducer = combineReducers<AccountState>([
         .getOrElse(() => null))),
   TypedReducer<AccountState, CleanAccountStateAction>(
       (AccountState state, _) => state.clearViewState()),
-  TypedReducer<AccountState, SetAccountInformationsAction>(
-      (AccountState state, SetAccountInformationsAction action) => state.setCurrentUserInfo(action.newUser, action.baseUrl)),
+  TypedReducer<AccountState, SetAccountInformationAction>(
+      (AccountState state, SetAccountInformationAction action) => state.setCurrentUserInfo(action.newUser, action.baseUrl)),
   TypedReducer<AccountState, SetSupportBiometricStateAction>(
       (AccountState state, SetSupportBiometricStateAction action) => state.setSupportBiometricState(action.supportBiometricState)),
   TypedReducer<AccountState, SetLastLoginAction>(
