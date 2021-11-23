@@ -37,6 +37,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
+import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_archived_state.dart';
@@ -45,6 +46,8 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/common/upload_request_group_common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/common/upload_request_group_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_group_multiple_selection_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/archived/archived_upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:redux/redux.dart';
@@ -178,7 +181,7 @@ class _ArchivedUploadRequestGroupWidgetState extends State<ArchivedUploadRequest
           context,
           request.element,
           _contextMenuActionTiles(request.element),
-          footerAction: SizedBox.shrink())
+          footerAction: _buildFooterContextMenuActions(request.element))
     ).build();
   }
 
@@ -212,6 +215,7 @@ class _ArchivedUploadRequestGroupWidgetState extends State<ArchivedUploadRequest
 
   List<Widget> _multipleSelectionActions(List<UploadRequestGroup> allSelectedGroups) {
     return [
+      _deleteUploadRequestGroupMultipleSelectionAction(allSelectedGroups),
       _uploadRequestWidgetCommon.moreActionMultipleSelection(allSelectedGroups, () {
         _model.openMoreActionBottomMenu(context,
             allSelectedGroups: allSelectedGroups,
@@ -221,8 +225,50 @@ class _ArchivedUploadRequestGroupWidgetState extends State<ArchivedUploadRequest
     ];
   }
 
+  Widget _buildFooterContextMenuActions(UploadRequestGroup uploadRequestGroup) {
+    return Column(children: [
+      _deleteUploadRequestGroupAction([uploadRequestGroup]),
+    ]);
+  }
+
   List<Widget> _moreActionList(List<UploadRequestGroup> groups) {
     return [];
   }
 
+  Widget _deleteUploadRequestGroupAction(
+      List<UploadRequestGroup> groups,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    return SimpleContextMenuActionBuilder(
+          Key('delete_upload_request_group_menu_tile'),
+          SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+          AppLocalizations.of(context).delete)
+      .onActionClick((_) => _model.updateUploadRequestGroupStatus(
+          context,
+          listUploadRequest: groups,
+          status: UploadRequestStatus.DELETED,
+          title: AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(groups.length, groups.first.label),
+          titleButtonConfirm: AppLocalizations.of(context).delete,
+          currentTab: UploadRequestGroupTab.ARCHIVED,
+          itemSelectionType: itemSelectionType,
+          onUpdateSuccess: () => _model.getUploadRequestArchivedStatus()))
+      .build();
+  }
+
+  Widget _deleteUploadRequestGroupMultipleSelectionAction(List<UploadRequestGroup> allSelectedGroups) {
+    return UploadRequestGroupMultipleSelectionActionBuilder(
+          Key('upload_request_group_multiple_selection_delete_action'),
+          SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+          allSelectedGroups)
+      .onActionClick((_) =>  _model.updateUploadRequestGroupStatus(
+          context,
+          listUploadRequest: allSelectedGroups,
+          status: UploadRequestStatus.DELETED,
+          title: AppLocalizations.of(context).are_you_sure_you_want_to_delete_multiple(allSelectedGroups.length, allSelectedGroups.first.label),
+          titleButtonConfirm: AppLocalizations.of(context).delete,
+          currentTab: UploadRequestGroupTab.ARCHIVED,
+          itemSelectionType: ItemSelectionType.multiple,
+          onUpdateSuccess: () => _model.getUploadRequestArchivedStatus()))
+      .build();
+  }
 }
