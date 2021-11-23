@@ -38,7 +38,6 @@ import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/add_recipients_upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
@@ -443,12 +442,7 @@ class ToastMessageHandler {
   void _handleAddRecipientUploadRequestGroupToastMessage(BuildContext context, AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState) {
     addRecipientsUploadRequestGroupState.viewState.fold(
       (failure) {},
-      (success) => {
-        if (success is AddRecipientsToUploadRequestGroupViewState) {
-          appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added),
-          _cleanAddRecipientUploadRequestGroupViewState()
-        }
-      });
+      (success) => {});
   }
 
   void _handleUploadRequestGroupToastMessage(BuildContext context, UploadRequestGroupState requestGroupState) {
@@ -475,6 +469,9 @@ class ToastMessageHandler {
         _cleanUploadRequestGroupViewState();
       } else if (success is EditUploadRequestGroupViewState) {
         appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
+        _cleanUploadRequestGroupViewState();
+      } else if (success is AddRecipientsToUploadRequestGroupViewState) {
+        appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added);
         _cleanUploadRequestGroupViewState();
       }
     });
@@ -535,12 +532,11 @@ class ToastMessageHandler {
       } else if (success is UpdateUploadRequestGroupHasSomeGroupsFailedViewState) {
         appToast.showToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
         _cleanUploadRequestInsideViewState();
+      } else if (success is AddRecipientsToUploadRequestGroupViewState) {
+        appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added);
+        _cleanUploadRequestInsideViewState();
       }
     });
-  }
-
-  void _cleanAddRecipientUploadRequestGroupViewState() {
-    _store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
   }
 
   void _cleanUploadRequestInsideViewState() {

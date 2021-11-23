@@ -59,6 +59,8 @@ import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_moda
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -116,6 +118,10 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
           } else if (success is EditUploadRequestRecipientViewState &&
               (success.uploadRequest.status == UploadRequestStatus.ENABLED ||
                success.uploadRequest.status == UploadRequestStatus.CREATED)) {
+            requestToGetUploadRequestAndEntries();
+          } else if (success is AddRecipientsToUploadRequestGroupViewState &&
+              (success.uploadRequestGroup.status == UploadRequestStatus.ENABLED ||
+               success.uploadRequestGroup.status == UploadRequestStatus.CREATED)) {
             requestToGetUploadRequestAndEntries();
           }
         });
@@ -562,6 +568,13 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
         EditUploadRequestType.recipients,
         uploadRequestFunctionalities,
         uploadRequest: uploadRequest)
+    );
+  }
+
+  void goToAddRecipients(UploadRequestGroup request) {
+    appNavigation.push(
+      RoutePaths.addRecipientsUploadRequestGroup,
+      arguments: AddRecipientsUploadRequestGroupArgument(request, AddRecipientType.fromUploadRequestInside),
     );
   }
 
