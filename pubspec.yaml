@@ -117,7 +117,7 @@ dependencies:
   permission_handler: 7.0.0
 
   # OIDC
-  flutter_appauth: 1.0.0+1
+  flutter_appauth: 2.0.0
 
   # datetime picker
   flutter_datetime_picker: 1.5.1
