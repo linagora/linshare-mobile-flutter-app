@@ -28,17 +28,26 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-class UserIdConverter implements JsonConverter<UserId, String> {
-  const UserIdConverter();
-
-  @override
-  UserId fromJson(String json) => UserId(json);
-
-  @override
-  String toJson(UserId object) => object.uuid;
+extension UserExtension on User {
+  UserCache toUserCache() {
+    return UserCache(
+      userId,
+      locale,
+      externalMailLocale,
+      domain,
+      firstName,
+      lastName,
+      mail,
+      canUpload,
+      canCreateGuest,
+      accountType,
+      quotaUuid,
+      secondFAEnabled,
+      secondFARequired
+    );
+  }
 }

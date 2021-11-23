@@ -28,17 +28,57 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
+import 'dart:convert';
+
+import 'package:data/data.dart';
+import 'package:data/src/datasource/authentication_datasource.dart';
 import 'package:domain/domain.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class UserIdConverter implements JsonConverter<UserId, String> {
-  const UserIdConverter();
+class LocalAuthenticationDataSource implements AuthenticationDataSource{
+
+  final SharedPreferences _sharedPreferences;
+
+  LocalAuthenticationDataSource(this._sharedPreferences);
 
   @override
-  UserId fromJson(String json) => UserId(json);
+  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) {
+    throw UnimplementedError();
+  }
 
   @override
-  String toJson(UserId object) => object.uuid;
+  Future<bool> deletePermanentToken(Token token) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User> getAuthorizedUser() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future saveAuthorizedUser(User user) async {
+    return Future.sync(() async {
+      return await _sharedPreferences.setString(
+          UserCache.KEY_CACHE,
+          jsonEncode(user.toUserCache().toJson()));
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
+
+  @override
+  Future<User> getAuthorizedUserOffline() async {
+    return Future.sync(() async {
+      final result = _sharedPreferences.getString(UserCache.KEY_CACHE) ?? '';
+      if (result.isNotEmpty) {
+        return UserCache.fromJson(jsonDecode(result)).toUser();
+      } else {
+        throw NotAuthorizedUser();
+      }
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
 }

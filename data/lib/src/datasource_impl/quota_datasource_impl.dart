@@ -59,4 +59,14 @@ class QuotaDataSourceImpl implements QuotaDataSource {
       });
     });
   }
+
+  @override
+  Future saveQuota(AccountQuota accountQuota) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AccountQuota> getQuotaOffline() {
+    throw UnimplementedError();
+  }
 }
