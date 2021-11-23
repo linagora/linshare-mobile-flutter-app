@@ -29,9 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:core';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
 
 class GetTokenOIDCInteractor {
 
@@ -57,9 +58,13 @@ class GetTokenOIDCInteractor {
         preferEphemeralSessionIOS,
         promptValues,
         allowInsecureConnections);
-      return tokenOIDC != null
-        ? Right(GetTokenOIDCViewState(tokenOIDC))
-        : Left(GetTokenOIDCFailure(NotAuthorized()));
+
+      if (tokenOIDC != null) {
+        await authenticationOIDCRepository.persistTokenOIDC(tokenOIDC);
+        return Right(GetTokenOIDCViewState(tokenOIDC));
+      } else {
+        return Left(GetTokenOIDCFailure(NotAuthorized()));
+      }
     } catch (e) {
       return Left(GetTokenOIDCFailure(e));
     }
