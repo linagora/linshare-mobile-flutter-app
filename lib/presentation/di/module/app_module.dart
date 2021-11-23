@@ -78,6 +78,11 @@ class AppModule {
   }
 
   void _provideDataSourceImpl() {
+    getIt.registerFactory(() => AuthenticationDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<DeviceManager>(),
+        getIt<RemoteExceptionThrower>()));
+    getIt.registerLazySingleton(() => LocalAuthenticationDataSource(getIt<SharedPreferences>()));
     getIt.registerFactory(() => DocumentDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>(),
@@ -101,6 +106,7 @@ class AppModule {
     getIt.registerLazySingleton(() => QuotaDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerLazySingleton(() => LocalQuotaDataSource(getIt<SharedPreferences>()));
     getIt.registerLazySingleton(() => FunctionalityDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
@@ -132,6 +138,7 @@ class AppModule {
     getIt.registerFactory(() => AuditUserDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
+    getIt.registerLazySingleton(() => LocalAuditUserDataSource(getIt<SharedPreferences>()));
     getIt.registerFactory(() => DriveDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>()));
@@ -139,11 +146,7 @@ class AppModule {
   }
 
   void _provideDataSource() {
-    getIt.registerFactory(() => AuthenticationDataSource(
-      getIt<LinShareHttpClient>(),
-      getIt<DeviceManager>(),
-      getIt<RemoteExceptionThrower>()
-    ));
+    getIt.registerFactory<AuthenticationDataSource>(() => getIt<AuthenticationDataSourceImpl>());
     getIt.registerFactory(() => AuthenticationOIDCDataSource(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>(),
@@ -172,7 +175,10 @@ class AppModule {
   }
 
   void _provideRepositoryImpl() {
-    getIt.registerFactory(() => AuthenticationRepositoryImpl(getIt<AuthenticationDataSource>()));
+    getIt.registerFactory(() => AuthenticationRepositoryImpl({
+      DataSourceType.network : getIt<AuthenticationDataSource>(),
+      DataSourceType.local : getIt<LocalAuthenticationDataSource>()
+    }));
     getIt.registerFactory(() => AuthenticationOIDCRepositoryImpl(getIt<AuthenticationOIDCDataSource>()));
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
@@ -195,7 +201,10 @@ class AppModule {
         DataSourceType.local : getIt<LocalSharedSpaceDocumentDataSourceImpl>()
       },
       getIt<FileUploadDataSource>()));
-    getIt.registerFactory(() => QuotaRepositoryImpl(getIt<QuotaDataSource>()));
+    getIt.registerFactory(() => QuotaRepositoryImpl({
+      DataSourceType.network : getIt<QuotaDataSource>(),
+      DataSourceType.local : getIt<LocalQuotaDataSource>()
+    }));
     getIt.registerFactory(() => ReceivedShareRepositoryImpl(
       {
         DataSourceType.network : getIt<ReceivedShareDataSource>(),
@@ -212,7 +221,10 @@ class AppModule {
     getIt.registerFactory(() => UploadRequestGroupRepositoryImpl(getIt<UploadRequestGroupDataSource>()));
     getIt.registerFactory(() => UploadRequestRepositoryImpl(getIt<UploadRequestDataSource>()));
     getIt.registerFactory(() => UploadRequestEntryRepositoryImpl(getIt<UploadRequestEntryDataSource>()));
-    getIt.registerFactory(() => AuditUserRepositoryImpl(getIt<AuditUserDataSource>()));
+    getIt.registerFactory(() => AuditUserRepositoryImpl({
+      DataSourceType.network : getIt<AuditUserDataSource>(),
+      DataSourceType.local : getIt<LocalAuditUserDataSource>()
+    }));
     getIt.registerFactory(() => DriveRepositoryImpl({
       DataSourceType.network : getIt<DriveDataSource>(),
       DataSourceType.local : getIt<LocalDriveDataSource>()
@@ -441,6 +453,9 @@ class AppModule {
     getIt.registerFactory(() => AdvanceSearchWorkgroupNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => UpdateUploadRequestStateInteractor(getIt<UploadRequestRepository>()));
     getIt.registerFactory(() => UpdateMultipleUploadRequestStateInteractor(getIt<UpdateUploadRequestStateInteractor>()));
+    getIt.registerFactory(() => SaveAuthorizedUserInteractor(getIt<AuthenticationRepository>()));
+    getIt.registerFactory(() => SaveQuotaInteractor(getIt<QuotaRepository>()));
+    getIt.registerFactory(() => SaveLastLoginInteractor(getIt<AuditUserRepository>()));
   }
 
   void _provideSharePreference() {

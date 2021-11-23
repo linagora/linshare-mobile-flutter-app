@@ -46,18 +46,18 @@ class AccountAction extends ActionOnline {
 }
 
 @immutable
-class GetAccountInformationAction extends ActionOnline {
+class GetAccountInformationAction extends ActionOffline {
   final Either<Failure, Success> viewState;
 
   GetAccountInformationAction(this.viewState);
 }
 
 @immutable
-class SetAccountInformationsAction extends ActionOnline {
+class SetAccountInformationAction extends ActionOffline {
   final User newUser;
   final String baseUrl;
 
-  SetAccountInformationsAction(this.newUser, this.baseUrl);
+  SetAccountInformationAction(this.newUser, this.baseUrl);
 }
 
 @immutable
@@ -73,14 +73,14 @@ class SetSupportBiometricStateAction extends ActionOffline {
 }
 
 @immutable
-class SetLastLoginAction extends ActionOnline {
+class SetLastLoginAction extends ActionOffline {
   final LastLogin lastLogin;
 
   SetLastLoginAction(this.lastLogin);
 }
 
 @immutable
-class SetAccountQuotaAction extends ActionOnline {
+class SetAccountQuotaAction extends ActionOffline {
   final AccountQuota accountQuota;
 
   SetAccountQuotaAction(this.accountQuota);

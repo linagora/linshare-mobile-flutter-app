@@ -61,7 +61,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
   @override
   void initState() {
     super.initState();
-    accountDetailsViewModel.getUserInformations();
+    accountDetailsViewModel.getUserInformation();
     accountDetailsViewModel.getSupportBiometricState();
   }
 
