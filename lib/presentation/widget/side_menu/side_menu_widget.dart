@@ -110,7 +110,7 @@ class SideMenuDrawerWidget extends StatelessWidget {
               converter: (Store<AppState> store) => store.state.functionalityState,
               distinct: true,
               builder: (context, state) {
-                if (state.isSharedSpaceEnable()) {
+                if (state.isSharedSpaceEnable() || state.isDriveEnable()) {
                   return ListTile(
                     key: Key('side_menu_shared_space_button'),
                     leading: StoreConnector<AppState, UIState>(
