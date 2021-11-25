@@ -466,3 +466,6 @@ export 'src/usecases/workgroup/create_new_drive_interactor.dart';
 export 'src/usecases/quota/save_quota_interactor.dart';
 export 'src/usecases/audit_user/save_last_login_interactor.dart';
 export 'src/usecases/authentication/save_authorized_user_interactor.dart';
+export 'src/usecases/search_recipients_upload_request/search_recipients_upload_request_interactor.dart';
+export 'src/usecases/search_recipients_upload_request/search_recipients_upload_request_view_state.dart';
+export 'src/usecases/upload_request_entry/download_upload_request_entry_interactor.dart';
