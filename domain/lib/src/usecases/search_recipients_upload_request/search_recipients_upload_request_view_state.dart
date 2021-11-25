@@ -32,28 +32,28 @@
 
 import 'package:domain/domain.dart';
 
-class SearchUploadRequestEntriesSuccess extends ViewState {
-  final List<UploadRequestEntry> uploadRequestEntriesList;
+class SearchRecipientsUploadRequestSuccess extends ViewState {
+  final List<UploadRequest> uploadRequestList;
 
-  SearchUploadRequestEntriesSuccess(this.uploadRequestEntriesList);
+  SearchRecipientsUploadRequestSuccess(this.uploadRequestList);
 
   @override
-  List<Object> get props => [uploadRequestEntriesList];
+  List<Object> get props => [uploadRequestList];
 }
 
-class SearchUploadRequestEntriesFailure extends FeatureFailure {
+class SearchRecipientsUploadRequestFailure extends FeatureFailure {
   final exception;
 
-  SearchUploadRequestEntriesFailure(this.exception);
+  SearchRecipientsUploadRequestFailure(this.exception);
 
   @override
   List<Object> get props => [exception];
 }
 
-class SearchUploadRequestEntriesNewQuery extends ViewState {
+class SearchUploadRequestRecipientsNewQuery extends ViewState {
   final SearchQuery searchQuery;
 
-  SearchUploadRequestEntriesNewQuery(this.searchQuery);
+  SearchUploadRequestRecipientsNewQuery(this.searchQuery);
 
   @override
   List<Object> get props => [searchQuery];
