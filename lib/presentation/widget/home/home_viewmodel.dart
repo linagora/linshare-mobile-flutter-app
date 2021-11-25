@@ -41,13 +41,15 @@ import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/workgroup_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
@@ -261,9 +263,18 @@ class HomeViewModel extends BaseViewModel {
       store.dispatch(CleanCreatedUploadRequestGroupAction());
       store.dispatch(CleanArchivedUploadRequestGroupAction());
       store.dispatch(CleanActiveClosedUploadRequestGroupAction());
-    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.uploadRequestInside) {
-      store.dispatch(UploadRequestInsideAction(Right(DisableSearchViewState())));
-      store.dispatch(CleanUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.activeClosedUploadRequestInside ||
+        store.state.uiState.searchState.searchDestination == SearchDestination.activeClosedUploadRequestRecipient) {
+      store.dispatch(ActiveClosedUploadRequestInsideAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanActiveClosedUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.createdUploadRequestInside ||
+        store.state.uiState.searchState.searchDestination == SearchDestination.createdUploadRequestRecipient) {
+      store.dispatch(CreatedUploadRequestInsideAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanCreatedUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.archivedUploadRequestInside ||
+        store.state.uiState.searchState.searchDestination == SearchDestination.archivedUploadRequestRecipient) {
+      store.dispatch(ArchivedUploadRequestInsideAction(Right(DisableSearchViewState())));
+      store.dispatch(CleanArchivedUploadRequestInsideAction());
     }
   }
 
@@ -289,9 +300,24 @@ class HomeViewModel extends BaseViewModel {
 			store.dispatch(CleanCreatedUploadRequestGroupAction());
 			store.dispatch(CleanArchivedUploadRequestGroupAction());
 			store.dispatch(CleanActiveClosedUploadRequestGroupAction());
-    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.uploadRequestInside) {
-      store.dispatch(UploadRequestInsideAction(Right(SearchUploadRequestEntriesNewQuery(SearchQuery(text.trim())))));
-      store.dispatch(CleanUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.activeClosedUploadRequestInside) {
+      store.dispatch(ActiveClosedUploadRequestInsideAction(Right(SearchUploadRequestEntriesNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanActiveClosedUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.createdUploadRequestInside) {
+      store.dispatch(CreatedUploadRequestInsideAction(Right(SearchUploadRequestEntriesNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanCreatedUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.archivedUploadRequestInside) {
+      store.dispatch(ArchivedUploadRequestInsideAction(Right(SearchUploadRequestEntriesNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanArchivedUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.activeClosedUploadRequestRecipient) {
+      store.dispatch(ActiveClosedUploadRequestInsideAction(Right(SearchUploadRequestRecipientsNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanActiveClosedUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.createdUploadRequestRecipient) {
+      store.dispatch(CreatedUploadRequestInsideAction(Right(SearchUploadRequestRecipientsNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanCreatedUploadRequestInsideAction());
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.archivedUploadRequestRecipient) {
+      store.dispatch(ArchivedUploadRequestInsideAction(Right(SearchUploadRequestRecipientsNewQuery(SearchQuery(text.trim())))));
+      store.dispatch(CleanArchivedUploadRequestInsideAction());
     }
   }
 

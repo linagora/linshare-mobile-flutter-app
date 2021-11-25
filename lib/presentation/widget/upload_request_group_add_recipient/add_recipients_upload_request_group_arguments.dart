@@ -30,12 +30,14 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_destination.dart';
 
 class AddRecipientsUploadRequestGroupArgument extends RouterArguments {
   final UploadRequestGroup uploadRequestGroup;
-  final AddRecipientType addRecipientType;
+  final AddRecipientDestination destination;
+  final UploadRequestGroupTab tab;
 
-  AddRecipientsUploadRequestGroupArgument(this.uploadRequestGroup, this.addRecipientType);
+  AddRecipientsUploadRequestGroupArgument(this.uploadRequestGroup, this.destination, this.tab);
 }

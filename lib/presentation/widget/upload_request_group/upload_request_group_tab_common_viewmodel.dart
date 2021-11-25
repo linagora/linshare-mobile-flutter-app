@@ -58,7 +58,7 @@ import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_shee
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_destination.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_arguments.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -115,11 +115,11 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
     };
   }
 
-  void goToAddRecipients(UploadRequestGroup request) {
+  void goToAddRecipients(UploadRequestGroup request, UploadRequestGroupTab tab) {
     _appNavigation.popBack();
     _appNavigation.push(
       RoutePaths.addRecipientsUploadRequestGroup,
-      arguments: AddRecipientsUploadRequestGroupArgument(request, AddRecipientType.fromUploadRequestGroup),
+      arguments: AddRecipientsUploadRequestGroupArgument(request, AddRecipientDestination.fromGroup, tab),
     );
   }
 

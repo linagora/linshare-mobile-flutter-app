@@ -57,7 +57,12 @@ class AdvanceSearchSetting extends Equatable {
       case SearchDestination.mySpace:
       case SearchDestination.receivedShares:
       case SearchDestination.uploadRequestGroups:
-      case SearchDestination.uploadRequestInside:
+      case SearchDestination.activeClosedUploadRequestInside:
+      case SearchDestination.archivedUploadRequestInside:
+      case SearchDestination.createdUploadRequestInside:
+      case SearchDestination.activeClosedUploadRequestRecipient:
+      case SearchDestination.archivedUploadRequestRecipient:
+      case SearchDestination.createdUploadRequestRecipient:
         return AdvanceSearchSetting(
             listKindState: [
               AdvancedSearchKindState(AdvancedSearchRequestKind.DOCUMENT, false),

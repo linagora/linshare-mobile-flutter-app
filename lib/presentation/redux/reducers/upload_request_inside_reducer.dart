@@ -30,54 +30,15 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 import 'package:redux/redux.dart';
 
 final uploadRequestInsideReducer = combineReducers<UploadRequestInsideState>([
-  TypedReducer<UploadRequestInsideState, StartUploadRequestInsideLoadingAction>((UploadRequestInsideState state, _) => state.startLoadingState()),
-  TypedReducer<UploadRequestInsideState, UploadRequestInsideAction>((UploadRequestInsideState state, UploadRequestInsideAction action) => state.sendViewState(viewState: action.viewState)),
-  TypedReducer<UploadRequestInsideState, SetUploadRequestsArgumentsAction>((UploadRequestInsideState state, SetUploadRequestsArgumentsAction action) =>
-      state.setUploadRequestArgument(newUploadRequestArguments: action.arguments)),
-  TypedReducer<UploadRequestInsideState, GetAllUploadRequestsAction>((UploadRequestInsideState state, GetAllUploadRequestsAction action) =>
-      state.setUploadRequests(
-          newUploadRequests: action.viewState.fold(
-                  (failure) => [],
-                  (success) => (success is UploadRequestViewState) ? success.uploadRequests : []),
-          viewState: action.viewState)),
-  TypedReducer<UploadRequestInsideState, GetAllUploadRequestEntriesAction>((UploadRequestInsideState state, GetAllUploadRequestEntriesAction action) =>
-      state.setUploadRequestEntries(
-          newUploadRequestEntries: action.viewState.fold(
-                  (failure) => [],
-                  (success) => (success is UploadRequestEntryViewState) ? success.uploadRequestEntries : []),
-          viewState: action.viewState)),
-  TypedReducer<UploadRequestInsideState, SetSelectedUploadRequestAction>((UploadRequestInsideState state, SetSelectedUploadRequestAction action) =>
-      state.setSelectedUploadRequest(selectedUploadRequest: action.selectedUploadRequest)),
-  TypedReducer<UploadRequestInsideState, ClearUploadRequestEntriesListAction>((UploadRequestInsideState state, ClearUploadRequestEntriesListAction action) =>
-      state.setUploadRequestEntries(
-          newUploadRequestEntries: [])),
-  TypedReducer<UploadRequestInsideState, ClearUploadRequestsListAction>((UploadRequestInsideState state, ClearUploadRequestsListAction action) =>
-      state.setUploadRequests(
-          newUploadRequests: [])),
-  TypedReducer<UploadRequestInsideState, UploadRequestSelectEntryAction>((UploadRequestInsideState state, UploadRequestSelectEntryAction action) =>
-      state.selectUploadRequestEntry(action.selectedEntry)),
-  TypedReducer<UploadRequestInsideState, UploadRequestClearSelectedEntryAction>((UploadRequestInsideState state, UploadRequestClearSelectedEntryAction action) =>
-      state.cancelSelectedUploadRequestEntry()),
-  TypedReducer<UploadRequestInsideState, UploadRequestSelectAllEntryAction>((UploadRequestInsideState state, UploadRequestSelectAllEntryAction action) =>
-      state.selectAllUploadRequestEntry()),
-  TypedReducer<UploadRequestInsideState, UploadRequestUnSelectAllEntryAction>((UploadRequestInsideState state, UploadRequestUnSelectAllEntryAction action) =>
-      state.unSelectAllUploadRequestEntry()),
-  TypedReducer<UploadRequestInsideState, SelectUploadRequestAction>((UploadRequestInsideState state, SelectUploadRequestAction action) =>
-      state.selectUploadRequests(action.selectedUploadRequest)),
-  TypedReducer<UploadRequestInsideState, ClearUploadRequestSelectionAction>((UploadRequestInsideState state, ClearUploadRequestSelectionAction action) =>
-      state.cancelSelectedUploadRequest()),
-  TypedReducer<UploadRequestInsideState, UploadRequestSelectAllRecipientAction>((UploadRequestInsideState state, UploadRequestSelectAllRecipientAction action) =>
-      state.selectAllUploadRequest()),
-  TypedReducer<UploadRequestInsideState, UploadRequestUnSelectAllRecipientAction>((UploadRequestInsideState state, UploadRequestUnSelectAllRecipientAction action) =>
-      state.unSelectAllUploadRequest()),
-  TypedReducer<UploadRequestInsideState, UploadRequestEntrySetSearchResultAction>((UploadRequestInsideState state, UploadRequestEntrySetSearchResultAction action) =>
-      state.setSearchResult(newSearchResult: action.uploadRequestEntries)),
+  TypedReducer<UploadRequestInsideState, StartUploadRequestInsideLoadingAction>((UploadRequestInsideState state, _) =>
+      state.startLoadingState()),
+  TypedReducer<UploadRequestInsideState, UploadRequestInsideAction>((UploadRequestInsideState state, UploadRequestInsideAction action) =>
+      state.sendViewState(viewState: action.viewState)),
   TypedReducer<UploadRequestInsideState, CleanUploadRequestInsideAction>((UploadRequestInsideState state, _) =>
       state.clearViewState()),
 ]);

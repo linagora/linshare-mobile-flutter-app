@@ -39,10 +39,13 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
 import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
 import 'package:linshare_flutter_app/presentation/model/unit_time_type.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_request_presentation.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/edit_upload_request_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
@@ -444,6 +447,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
 
     _editUploadRequestAction(
       arguments?.type,
+      arguments?.tab,
       uploadRequestId: uploadRequest?.uploadRequestId,
       groupId: arguments?.uploadRequestGroup?.uploadRequestGroupId,
       maxFileCount: numberFiles,
@@ -462,6 +466,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
 
   void _editUploadRequestAction(
     EditUploadRequestType? editUploadRequestType,
+    UploadRequestGroupTab? currentTab,
     {
       required UploadRequestId? uploadRequestId,
       required UploadRequestGroupId? groupId,
@@ -493,7 +498,7 @@ class EditUploadRequestViewModel extends BaseViewModel {
           maxFileCount,
           maxFileSize);
 
-      store.dispatch(_editUploadRequestRecipient(uploadRequestId!, editRequest));
+      store.dispatch(_editUploadRequestRecipient(currentTab!, uploadRequestId!, editRequest));
     } else {
       final editUploadRequest = EditUploadRequest(
           activationDate,
@@ -557,19 +562,47 @@ class EditUploadRequestViewModel extends BaseViewModel {
     });
   }
 
-  OnlineThunkAction _editUploadRequestRecipient(UploadRequestId uploadRequestId, EditUploadRequestRecipient editRequest) {
+  OnlineThunkAction _editUploadRequestRecipient(UploadRequestGroupTab currentTab, UploadRequestId uploadRequestId, EditUploadRequestRecipient editRequest) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _editUploadRequestRecipientInteractor.execute(uploadRequestId, editRequest)
         .then((result) => result.fold(
           (failure) {
-            store.dispatch(UploadRequestInsideAction(Left(failure)));
+            _handleOnFailuresEditUploadRequestRecipientAction(currentTab, failure);
             _appNavigation.popBack();
           },
           (success) {
-            store.dispatch(UploadRequestInsideAction(Right(success)));
+            _handleOnSuccessEditUploadRequestRecipientAction(currentTab, success);
             _appNavigation.popBack();
           }));
     });
+  }
+
+  void _handleOnSuccessEditUploadRequestRecipientAction(UploadRequestGroupTab currentTab, Success success) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestInsideAction(Right(success)));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestInsideAction(Right(success)));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestInsideAction(Right(success)));
+        break;
+    }
+  }
+
+  void _handleOnFailuresEditUploadRequestRecipientAction(UploadRequestGroupTab currentTab, Failure failure) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestInsideAction(Left(failure)));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestInsideAction(Left(failure)));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestInsideAction(Left(failure)));
+        break;
+    }
   }
 
   @override
