@@ -33,9 +33,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 
 @immutable
 class StartUploadRequestInsideLoadingAction extends ActionOnline {}
@@ -48,93 +46,6 @@ class UploadRequestInsideAction extends ActionOffline {
 }
 
 @immutable
-class GetAllUploadRequestsAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  GetAllUploadRequestsAction(this.viewState);
-}
-
-@immutable
-class SetUploadRequestsArgumentsAction extends ActionOnline {
-  final UploadRequestArguments arguments;
-
-  SetUploadRequestsArgumentsAction(this.arguments);
-}
-
-@immutable
-class GetAllUploadRequestEntriesAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  GetAllUploadRequestEntriesAction(this.viewState);
-}
-
-@immutable
-class SetSelectedUploadRequestAction extends ActionOnline {
-  final UploadRequest selectedUploadRequest;
-
-  SetSelectedUploadRequestAction(this.selectedUploadRequest);
-}
-
-@immutable
-class ClearUploadRequestEntriesListAction extends ActionOffline {
-  ClearUploadRequestEntriesListAction();
-}
-
-@immutable
-class ClearUploadRequestsListAction extends ActionOffline {
-  ClearUploadRequestsListAction();
-}
-
-class UploadRequestSelectEntryAction extends ActionOffline {
-  final SelectableElement<UploadRequestEntry> selectedEntry;
-
-  UploadRequestSelectEntryAction(this.selectedEntry);
-}
-
-@immutable
-class UploadRequestClearSelectedEntryAction extends ActionOffline {
-  UploadRequestClearSelectedEntryAction();
-}
-
-@immutable
-class UploadRequestSelectAllEntryAction extends ActionOffline {
-  UploadRequestSelectAllEntryAction();
-}
-
-@immutable
-class UploadRequestUnSelectAllEntryAction extends ActionOffline {
-  UploadRequestUnSelectAllEntryAction();
-}
-
-@immutable
-class UploadRequestEntrySetSearchResultAction extends ActionOffline {
-  final List<UploadRequestEntry> uploadRequestEntries;
-
-  UploadRequestEntrySetSearchResultAction(this.uploadRequestEntries);
-}
-
-@immutable
 class CleanUploadRequestInsideAction extends ActionOffline {
   CleanUploadRequestInsideAction();
-}
-
-class SelectUploadRequestAction extends ActionOffline {
-  final SelectableElement<UploadRequest> selectedUploadRequest;
-
-  SelectUploadRequestAction(this.selectedUploadRequest);
-}
-
-@immutable
-class ClearUploadRequestSelectionAction extends ActionOffline {
-  ClearUploadRequestSelectionAction();
-}
-
-@immutable
-class UploadRequestSelectAllRecipientAction extends ActionOffline {
-  UploadRequestSelectAllRecipientAction();
-}
-
-@immutable
-class UploadRequestUnSelectAllRecipientAction extends ActionOffline {
-  UploadRequestUnSelectAllRecipientAction();
 }

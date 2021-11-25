@@ -60,11 +60,15 @@ class _AddSharedSpaceMemberWidgetState extends State<AddRecipientsUploadRequestG
   final TextEditingController _typeAheadController = TextEditingController();
   final appNavigation = getIt<AppNavigation>();
 
+  AddRecipientsUploadRequestGroupArgument? _arguments;
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      _model.initState(
-          ModalRoute.of(context)?.settings.arguments as AddRecipientsUploadRequestGroupArgument);
+      _arguments = ModalRoute.of(context)?.settings.arguments as AddRecipientsUploadRequestGroupArgument;
+      if (_arguments != null) {
+        _model.initState(_arguments!);
+      }
     });
     super.initState();
   }
@@ -77,8 +81,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddRecipientsUploadRequestG
 
   @override
   Widget build(BuildContext context) {
-    var arguments =
-        ModalRoute.of(context)?.settings.arguments as AddRecipientsUploadRequestGroupArgument;
+    _arguments = ModalRoute.of(context)?.settings.arguments as AddRecipientsUploadRequestGroupArgument;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -90,7 +93,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddRecipientsUploadRequestG
           onPressed: () => _model.backToUploadRequest(),
         ),
         centerTitle: true,
-        title: Text(arguments.uploadRequestGroup.label,
+        title: Text(_arguments?.uploadRequestGroup.label ?? '',
             key: Key('add_recipient_upload_request_group_title'),
             style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor,
@@ -112,8 +115,9 @@ class _AddSharedSpaceMemberWidgetState extends State<AddRecipientsUploadRequestG
                       : AppColor.uploadButtonDisableBackgroundColor,
                   onPressed: () => _model.sendRecipientsList(
                       context,
-                      arguments.addRecipientType,
-                      arguments.uploadRequestGroup.uploadRequestGroupId,
+                      _arguments!.destination,
+                      _arguments!.tab,
+                      _arguments!.uploadRequestGroup.uploadRequestGroupId,
                       recipientsList),
                   label: Text(
                     AppLocalizations.of(context).add,

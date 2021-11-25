@@ -30,4 +30,4 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum AddRecipientType { fromUploadRequestGroup, fromUploadRequestInside }
+enum AddRecipientDestination { fromGroup, fromInside }
