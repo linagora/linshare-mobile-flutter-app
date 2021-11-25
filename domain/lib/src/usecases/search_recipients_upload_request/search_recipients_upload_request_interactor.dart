@@ -30,31 +30,21 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class SearchUploadRequestEntriesSuccess extends ViewState {
-  final List<UploadRequestEntry> uploadRequestEntriesList;
+class SearchRecipientsUploadRequestInteractor {
 
-  SearchUploadRequestEntriesSuccess(this.uploadRequestEntriesList);
-
-  @override
-  List<Object> get props => [uploadRequestEntriesList];
-}
-
-class SearchUploadRequestEntriesFailure extends FeatureFailure {
-  final exception;
-
-  SearchUploadRequestEntriesFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class SearchUploadRequestEntriesNewQuery extends ViewState {
-  final SearchQuery searchQuery;
-
-  SearchUploadRequestEntriesNewQuery(this.searchQuery);
-
-  @override
-  List<Object> get props => [searchQuery];
+  Future<Either<Failure, Success>> execute(List<UploadRequest> uploadRequests, SearchQuery searchQuery) async {
+    try {
+      final resultList = uploadRequests
+        .where((element) => element.recipients.first.mail
+          .toLowerCase()
+          .contains(searchQuery.value.toLowerCase()))
+        .toList();
+      return Right<Failure, Success>(SearchRecipientsUploadRequestSuccess(resultList));
+    } catch (exception) {
+      return Left<Failure, Success>(SearchRecipientsUploadRequestFailure(exception));
+    }
+  }
 }
