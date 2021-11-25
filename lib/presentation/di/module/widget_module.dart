@@ -566,45 +566,48 @@ class WidgetModule {
         PendingUploadRequestInsideViewModel(
           getIt.get<Store<AppState>>(),
           getIt.get<AppNavigation>(),
+          getIt<DeviceManager>(),
+          getIt<DownloadUploadRequestEntriesInteractor>(),
+          getIt<UpdateMultipleUploadRequestStateInteractor>(),
+          getIt<RemoveMultipleUploadRequestEntryInteractor>(),
+          getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
+          getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
+          getIt<SearchUploadRequestEntriesInteractor>(),
+          getIt<SearchRecipientsUploadRequestInteractor>(),
           getIt.get<GetAllUploadRequestsInteractor>(),
           getIt.get<GetAllUploadRequestEntriesInteractor>(),
-          getIt<DownloadUploadRequestEntriesInteractor>(),
-          getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
-          getIt<SearchUploadRequestEntriesInteractor>(),
-          getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
-          getIt<DeviceManager>(),
-          getIt<RemoveMultipleUploadRequestEntryInteractor>(),
-          getIt<UpdateMultipleUploadRequestStateInteractor>(),
         ));
 
     getIt.registerFactory(() =>
       ActiveCloseUploadRequestInsideViewModel(
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
+        getIt<DeviceManager>(),
+        getIt<DownloadUploadRequestEntriesInteractor>(),
+        getIt<UpdateMultipleUploadRequestStateInteractor>(),
+        getIt<RemoveMultipleUploadRequestEntryInteractor>(),
+        getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
+        getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
+        getIt<SearchUploadRequestEntriesInteractor>(),
+        getIt<SearchRecipientsUploadRequestInteractor>(),
         getIt.get<GetAllUploadRequestsInteractor>(),
         getIt.get<GetAllUploadRequestEntriesInteractor>(),
-        getIt<DownloadUploadRequestEntriesInteractor>(),
-        getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
-        getIt<SearchUploadRequestEntriesInteractor>(),
-        getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
-        getIt<DeviceManager>(),
-        getIt<RemoveMultipleUploadRequestEntryInteractor>(),
-        getIt<UpdateMultipleUploadRequestStateInteractor>(),
       ));
 
     getIt.registerFactory(() =>
       ArchivedUploadRequestInsideViewModel(
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
+        getIt<DeviceManager>(),
+        getIt<DownloadUploadRequestEntriesInteractor>(),
+        getIt<UpdateMultipleUploadRequestStateInteractor>(),
+        getIt<RemoveMultipleUploadRequestEntryInteractor>(),
+        getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
+        getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
+        getIt<SearchUploadRequestEntriesInteractor>(),
+        getIt<SearchRecipientsUploadRequestInteractor>(),
         getIt.get<GetAllUploadRequestsInteractor>(),
         getIt.get<GetAllUploadRequestEntriesInteractor>(),
-        getIt<DownloadUploadRequestEntriesInteractor>(),
-        getIt<DownloadMultipleUploadRequestEntryIOSInteractor>(),
-        getIt<SearchUploadRequestEntriesInteractor>(),
-        getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
-        getIt<DeviceManager>(),
-        getIt<RemoveMultipleUploadRequestEntryInteractor>(),
-        getIt<UpdateMultipleUploadRequestStateInteractor>()
       ));
   }
 

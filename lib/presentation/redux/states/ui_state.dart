@@ -234,5 +234,10 @@ enum SearchDestination {
   allSharedSpaces,
   receivedShares,
   uploadRequestGroups,
-  uploadRequestInside
+  activeClosedUploadRequestInside,
+  archivedUploadRequestInside,
+  createdUploadRequestInside,
+  activeClosedUploadRequestRecipient,
+  archivedUploadRequestRecipient,
+  createdUploadRequestRecipient,
 }

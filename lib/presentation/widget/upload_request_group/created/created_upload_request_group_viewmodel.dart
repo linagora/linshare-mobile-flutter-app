@@ -34,6 +34,7 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -192,6 +193,7 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
       RoutePaths.editUploadRequest,
       arguments: EditUploadRequestArguments(
         EditUploadRequestType.group,
+        UploadRequestGroupTab.PENDING,
         uploadRequestFunctionalities,
         uploadRequestGroup: uploadRequestGroup)
     );

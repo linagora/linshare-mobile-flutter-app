@@ -29,7 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -37,18 +36,16 @@ import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
-import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/upload_request_entry_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
@@ -59,412 +56,120 @@ import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_moda
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_destination.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+
 import 'package:share/share.dart' as share_library;
 
 abstract class UploadRequestInsideViewModel extends BaseViewModel {
+
   final AppNavigation appNavigation;
-  final GetAllUploadRequestsInteractor _getAllUploadRequestsInteractor;
-  final GetAllUploadRequestEntriesInteractor _getAllUploadRequestEntriesInteractor;
-  late UploadRequestArguments _arguments;
-  final DownloadUploadRequestEntriesInteractor _downloadEntriesInteractor;
-  final DownloadMultipleUploadRequestEntryIOSInteractor _downloadMultipleEntryIOSInteractor;
-  final SearchUploadRequestEntriesInteractor _searchUploadRequestEntriesInteractor;
-  final RemoveMultipleUploadRequestEntryInteractor _removeMultipleUploadRequestEntryInteractor;
-  final UpdateMultipleUploadRequestStateInteractor _updateMultipleUploadRequestStateInteractor;
-  late StreamSubscription _storeStreamSubscription;
-
-  SearchQuery _searchQuery = SearchQuery('');
-  SearchQuery get searchQuery => _searchQuery;
-  List<UploadRequestEntry> _uploadRequestEntriesList = [];
-  final DeviceManager _deviceManager;
-
-  final CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor;
+  final DeviceManager deviceManager;
+  final DownloadUploadRequestEntriesInteractor downloadUploadRequestEntriesInteractor;
+  final UpdateMultipleUploadRequestStateInteractor updateMultipleUploadRequestStateInteractor;
+  final RemoveMultipleUploadRequestEntryInteractor removeMultipleUploadRequestEntryInteractor;
+  final DownloadMultipleUploadRequestEntryIOSInteractor downloadMultipleUploadRequestEntryIOSInteractor;
+  final CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor entriesToMySpaceInteractor;
+  final SearchUploadRequestEntriesInteractor searchUploadRequestEntriesInteractor;
+  final SearchRecipientsUploadRequestInteractor searchRecipientsUploadRequestInteractor;
 
   UploadRequestInsideViewModel(
       Store<AppState> store,
       this.appNavigation,
-      this._getAllUploadRequestsInteractor,
-      this._getAllUploadRequestEntriesInteractor,
-      this._downloadEntriesInteractor,
-      this._downloadMultipleEntryIOSInteractor,
-      this._searchUploadRequestEntriesInteractor,
-      this._copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor,
-      this._deviceManager,
-      this._removeMultipleUploadRequestEntryInteractor,
-      this._updateMultipleUploadRequestStateInteractor,
-  ) : super(store) {
-    _storeStreamSubscription = store.onChange.listen((event) {
-        event.uploadRequestInsideState.viewState.fold((failure) => null, (success) {
-          if (success is SearchUploadRequestEntriesNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
-            _search(success.searchQuery);
-          } else if (success is DisableSearchViewState) {
-            store.dispatch((UploadRequestEntrySetSearchResultAction(_uploadRequestEntriesList)));
-            _searchQuery = SearchQuery('');
-          } else if (success is RemoveUploadRequestEntryViewState ||
-              success is RemoveAllUploadRequestEntriesSuccessViewState ||
-              success is RemoveSomeUploadRequestEntriesSuccessViewState ||
-              success is UpdateUploadRequestStateViewState ||
-              success is UpdateUploadRequestAllSuccessViewState ||
-              success is UpdateUploadRequestHasSomeFailedViewState
-          ) {
-            requestToGetUploadRequestAndEntries();
-          } else if (success is EditUploadRequestRecipientViewState &&
-              (success.uploadRequest.status == UploadRequestStatus.ENABLED ||
-               success.uploadRequest.status == UploadRequestStatus.CREATED)) {
-            requestToGetUploadRequestAndEntries();
-          } else if (success is AddRecipientsToUploadRequestGroupViewState &&
-              (success.uploadRequestGroup.status == UploadRequestStatus.ENABLED ||
-               success.uploadRequestGroup.status == UploadRequestStatus.CREATED)) {
-            requestToGetUploadRequestAndEntries();
-          }
-        });
-      });
-  }
+      this.deviceManager,
+      this.downloadUploadRequestEntriesInteractor,
+      this.updateMultipleUploadRequestStateInteractor,
+      this.removeMultipleUploadRequestEntryInteractor,
+      this.downloadMultipleUploadRequestEntryIOSInteractor,
+      this.entriesToMySpaceInteractor,
+      this.searchUploadRequestEntriesInteractor,
+      this.searchRecipientsUploadRequestInteractor,
+  ) : super(store);
 
-  void initState(UploadRequestArguments arguments) {
-    _arguments = arguments;
-    store.dispatch(SetUploadRequestsArgumentsAction(_arguments));
-    requestToGetUploadRequestAndEntries();
-  }
+  void updateUploadRequestStatus(
+      BuildContext context,
+      {
+        required List<UploadRequest> uploadRequests,
+        required UploadRequestStatus status,
+        required String title,
+        required String titleButtonConfirm,
+        required UploadRequestGroupTab currentTab,
+        ItemSelectionType itemSelectionType = ItemSelectionType.single,
+        bool? optionalCheckbox,
+        String? optionalTitle,
+        Function? onUpdateSuccess,
+        Function? onUpdateFailed
+      }
+  ) {
+    appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelAllSelectionRecipients(currentTab);
+    }
 
-  void requestToGetUploadRequestAndEntries() {
-    store.dispatch(_getAllUploadRequests(_arguments.uploadRequestGroup.uploadRequestGroupId));
-  }
+    if (uploadRequests.isNotEmpty) {
+      ConfirmModalSheetBuilder(appNavigation)
+          .key(Key('update_upload_request_recipients_confirm_modal'))
+          .title(title)
+          .cancelText(AppLocalizations.of(context).cancel)
+          .optionalCheckbox(optionalTitle)
+          .onConfirmAction(titleButtonConfirm, (optionalCheckboxValue) {
+        appNavigation.popBack();
+        if (itemSelectionType == ItemSelectionType.multiple) {
+          cancelAllSelectionRecipients(currentTab);
+        }
 
-  OnlineThunkAction _getAllUploadRequests(UploadRequestGroupId uploadRequestGroupId) {
-    return OnlineThunkAction((Store<AppState> store) async {
-      _showLoading();
-
-      await _getAllUploadRequestsInteractor.execute(uploadRequestGroupId).then(
-          (result) => result.fold(
-            (failure) {
-              if(failure is UploadRequestFailure) {
-                _handleFailedAction(failure);
-              }
-            },
-            (success) {
-              if(success is UploadRequestViewState) {
-                if(_arguments.uploadRequestGroup.collective) {
-                  _loadListFilesCollectiveUploadRequest(success);
-                } else {
-                  if(_arguments.documentType == UploadRequestDocumentType.recipients) {
-                    _loadListRecipientsIndividualUploadRequest(success);
-                  } else if (_arguments.documentType == UploadRequestDocumentType.files &&
-                    _arguments.selectedUploadRequest != null) {
-                    _loadUploadRequestEntriesByRecipient(_arguments.selectedUploadRequest!);
-                  }
-                }
-              }
-            })
-      );
-    });
-  }
-
-  void _loadListFilesCollectiveUploadRequest(UploadRequestViewState uploadRequestViewState) {
-    if(uploadRequestViewState.uploadRequests.isEmpty) {
-      _handleFailedAction(UploadRequestFailure(UploadRequestNotFound()));
-    } else {
-      return store.dispatch(_getAllUploadRequestEntries(uploadRequestViewState.uploadRequests.first));
+        store.dispatch(_updateUploadRequestStatusAction(
+          uploadRequests,
+          currentTab,
+          status,
+          copyToMySpace: optionalCheckboxValue,
+          onUpdateSuccess: onUpdateSuccess,
+          onUpdateFailed: onUpdateFailed));
+      }).show(context);
     }
   }
 
-  void _loadListRecipientsIndividualUploadRequest(UploadRequestViewState uploadRequestViewState) {
-    if(_arguments.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
-      final newUploadRequests = uploadRequestViewState.uploadRequests
-          .where((element) => element.status == UploadRequestStatus.CREATED)
-          .toList();
-
-      store.dispatch(GetAllUploadRequestsAction(Right(UploadRequestViewState(newUploadRequests))));
-    } else {
-      store.dispatch(GetAllUploadRequestsAction(Right(uploadRequestViewState)));
-    }
-  }
-
-  void _loadUploadRequestEntriesByRecipient(UploadRequest uploadRequest) {
-    store.dispatch(SetSelectedUploadRequestAction(uploadRequest));
-    store.dispatch(_getAllUploadRequestEntries(uploadRequest));
-  }
-
-  OnlineThunkAction _getAllUploadRequestEntries(UploadRequest uploadRequest) {
+  OnlineThunkAction _updateUploadRequestStatusAction(
+      List<UploadRequest> uploadRequests,
+      UploadRequestGroupTab currentTab,
+      UploadRequestStatus status,
+      {
+        bool? copyToMySpace,
+        Function? onUpdateSuccess,
+        Function? onUpdateFailed
+      }
+  ) {
     return OnlineThunkAction((Store<AppState> store) async {
-      _showLoading();
-      await _getAllUploadRequestEntriesInteractor.execute(uploadRequest.uploadRequestId).then(
-        (result) => result.fold(
+      await updateMultipleUploadRequestStateInteractor
+        .execute(uploadRequests.map((uploadRequest) => uploadRequest.uploadRequestId).toList(), status, copyToMySpace: copyToMySpace)
+        .then((result) => result.fold(
           (failure) {
-            _uploadRequestEntriesList = [];
-            if (failure is UploadRequestEntryFailure) {
-              _handleFailedAction(failure);
-            }
+            handleOnFailureAction(currentTab, failure);
+            onUpdateFailed?.call();
           },
           (success) {
-            _uploadRequestEntriesList = success is UploadRequestEntryViewState ? success.uploadRequestEntries : [];
-            if (success is UploadRequestEntryViewState) {
-              store.dispatch(GetAllUploadRequestEntriesAction(Right(success)));
-            }
-          })
-      );
+            handleOnSuccessAction(currentTab, success);
+            onUpdateSuccess?.call();
+          }));
     });
   }
 
-  void _handleFailedAction(FeatureFailure failure) {
-    store.dispatch(UploadRequestInsideAction(Left(failure)));
-  }
-
-  void _showLoading() {
-    store.dispatch(StartUploadRequestInsideLoadingAction());
-  }
-
-  UploadRequestInsideState getUploadRequestInsideState() {
-    return store.state.uploadRequestInsideState;
-  }
-
-  void clearUploadRequestListAction() {
-    store.dispatch(ClearUploadRequestEntriesListAction());
-    store.dispatch(ClearUploadRequestsListAction());
-  }
-
-  // Upload Request Entry actions
-
-  void selectItem(SelectableElement<UploadRequestEntry> selectedEntry) {
-    store.dispatch(UploadRequestSelectEntryAction(selectedEntry));
-  }
-
-  void cancelSelection() {
-    store.dispatch(UploadRequestClearSelectedEntryAction());
-  }
-  
-  void selectRecipient(SelectableElement<UploadRequest> selectedRecipient) {
-    store.dispatch(SelectUploadRequestAction(selectedRecipient));
-  }
-
-  void cancelRecipientSelection() {
-    store.dispatch(ClearUploadRequestSelectionAction());
-  }
-
-  void toggleSelectAllEntries() {
-    if (getUploadRequestInsideState().isAllEntriesSelected()) {
-      store.dispatch(UploadRequestUnSelectAllEntryAction());
-    } else {
-      store.dispatch(UploadRequestSelectAllEntryAction());
-    }
-  }
-
-  void toggleSelectAllRecipients() {
-    if (getUploadRequestInsideState().isAllRecipientSelected()) {
-      store.dispatch(UploadRequestUnSelectAllRecipientAction());
-    } else {
-      store.dispatch(UploadRequestSelectAllRecipientAction());
-    }
-  }
-
-  void openMoreActionBottomMenu(
+  void removeFiles(
       BuildContext context,
       List<UploadRequestEntry> entries,
-      List<Widget> actionTiles,
-      Widget footerAction) {
-    ContextMenuBuilder(context)
-      .addHeader(MoreActionBottomSheetHeaderBuilder(
-      context,
-      Key('more_action_menu_header'),
-      entries.map<PresentationFile>(
-          (element) => UploadRequestEntryPresentationFile.fromUploadRequestEntry(element))
-        .toList())
-      .build())
-      .addTiles(actionTiles)
-      .addFooter(footerAction)
-      .build();
-  }
-
-  // Upload Request Entry actions - Download
-
-  void downloadEntries(List<UploadRequestEntry> entries,
-      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    store.dispatch(_downloadEntriesAction(entries));
-    appNavigation.popBack();
-    if (itemSelectionType == ItemSelectionType.multiple) {
-      cancelSelection();
-    }
-  }
-
-  void exportFiles(BuildContext context, List<UploadRequestEntry> entries,
-      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    appNavigation.popBack();
-    if (itemSelectionType == ItemSelectionType.multiple) {
-      cancelSelection();
-    }
-    final cancelToken = CancelToken();
-    _showDownloadingFileDialog(context, entries, cancelToken);
-    store.dispatch(_exportFileAction(entries, cancelToken));
-  }
-
-  OnlineThunkAction _downloadEntriesAction(List<UploadRequestEntry> entries) {
-    return OnlineThunkAction((Store<AppState> store) async {
-      final needRequestPermission = await _deviceManager.isNeedRequestStoragePermissionOnAndroid();
-      if(Platform.isAndroid && needRequestPermission) {
-        final status = await Permission.storage.status;
-        switch (status) {
-          case PermissionStatus.granted:
-            _dispatchHandleDownloadAction(entries);
-            break;
-          case PermissionStatus.permanentlyDenied:
-            appNavigation.popBack();
-            break;
-          default:
-            {
-              final requested = await Permission.storage.request();
-              switch (requested) {
-                case PermissionStatus.granted:
-                  _dispatchHandleDownloadAction(entries);
-                  break;
-                default:
-                  appNavigation.popBack();
-                  break;
-              }
-            }
-        }
-      } else {
-        _dispatchHandleDownloadAction(entries);
+      {
+        required UploadRequestGroupTab currentTab,
+        ItemSelectionType itemSelectionType = ItemSelectionType.single,
+        Function? onActionSuccess,
+        Function? onActionFailed,
       }
-    });
-  }
-
-  void _dispatchHandleDownloadAction(List<UploadRequestEntry> entries) {
-    store.dispatch(_handleDownloadEntries(entries));
-  }
-
-  OnlineThunkAction _handleDownloadEntries(List<UploadRequestEntry> entries) {
-    return OnlineThunkAction((Store<AppState> store) async {
-      await _downloadEntriesInteractor.execute(entries).then((result) =>
-        result.fold(
-          (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
-          (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
-    });
-  }
-
-  void _showDownloadingFileDialog(BuildContext context, List<UploadRequestEntry> entries, CancelToken cancelToken) {
-    final downloadMessage = entries.length <= 1
-      ? AppLocalizations.of(context).downloading_file(entries.first.name)
-      : AppLocalizations.of(context).downloading_files(entries.length);
-    showCupertinoDialog(
-      context: context,
-      builder: (_) => DownloadingFileBuilder(cancelToken, appNavigation)
-        .key(Key('downloading_file_dialog'))
-        .title(AppLocalizations.of(context).preparing_to_export)
-        .content(downloadMessage)
-        .actionText(AppLocalizations.of(context).cancel)
-        .build());
-  }
-
-  OnlineThunkAction _exportFileAction(List<UploadRequestEntry> entries, CancelToken cancelToken) {
-    return OnlineThunkAction((Store<AppState> store) async {
-      await _downloadMultipleEntryIOSInteractor
-        .execute(entries, cancelToken)
-        .then((result) => result.fold(
-          (failure) => store.dispatch(_exportFileFailureAction(failure)),
-          (success) => store.dispatch(_exportFileSuccessAction(success))));
-    });
-  }
-
-  ThunkAction<AppState> _exportFileSuccessAction(Success success) {
-    return (Store<AppState> store) async {
-      appNavigation.popBack();
-      if (success is DownloadEntryIOSViewState) {
-        await share_library.Share.shareFiles(
-            [success.filePath]);
-      } else if (success is DownloadEntryIOSAllSuccessViewState) {
-        await share_library.Share.shareFiles(success.resultList
-            .map((result) => ((result.getOrElse(() => IdleState()) as DownloadEntryIOSViewState).filePath))
-            .toList());
-      } else if (success is DownloadEntryIOSHasSomeFilesFailureViewState) {
-        await share_library.Share.shareFiles(success.resultList
-            .map((result) => result.fold(
-                (failure) => '',
-                (success) => ((success as DownloadEntryIOSViewState).filePath)))
-            .toList());
-      }
-    };
-  }
-
-  ThunkAction<AppState> _exportFileFailureAction(Failure failure) {
-    return (Store<AppState> store) async {
-      if (failure is DownloadEntryIOSFailure
-          && !(failure.downloadFileException is CancelDownloadFileException)) {
-        appNavigation.popBack();
-      }
-      store.dispatch(UploadRequestInsideAction(Left(failure)));
-    };
-  }
-
-  // Search
-  void openSearchState(BuildContext context) {
-    var destinationName = AppLocalizations.of(context).upload_requests;
-    if((getUploadRequestInsideState().uploadRequestGroup?.collective == false
-          && getUploadRequestInsideState().uploadRequestDocumentType == UploadRequestDocumentType.recipients)
-      || getUploadRequestInsideState().uploadRequestGroup?.collective == true) {
-      destinationName = store.state.uiState.uploadRequestGroup?.label ?? AppLocalizations.of(context).upload_requests;
-    } else {
-      destinationName = getUploadRequestInsideState().selectedUploadRequest?.recipients.first.mail ?? AppLocalizations.of(context).upload_requests;
-    }
-    store.dispatch(EnableSearchStateAction(SearchDestination.uploadRequestInside, AppLocalizations.of(context).search_in(destinationName)));
-    store.dispatch((UploadRequestEntrySetSearchResultAction([])));
-  }
-
-  void _search(SearchQuery searchQuery) {
-    _searchQuery = searchQuery;
-    if (searchQuery.value.isNotEmpty) {
-      store.dispatch(_searchUploadRequestEntriesAction(_uploadRequestEntriesList, searchQuery));
-    } else {
-      store.dispatch(UploadRequestEntrySetSearchResultAction([]));
-    }
-  }
-
-  ThunkAction<AppState> _searchUploadRequestEntriesAction(List<UploadRequestEntry> entries, SearchQuery searchQuery) {
-    return (Store<AppState> store) async {
-        await _searchUploadRequestEntriesInteractor.execute(entries, searchQuery).then((result) => result.fold((failure) {
-            if (isInSearchState()) {
-              store.dispatch(UploadRequestEntrySetSearchResultAction([]));
-            }
-          }, (success) {
-            if (isInSearchState()) {
-              store.dispatch(UploadRequestEntrySetSearchResultAction(success is SearchUploadRequestEntriesSuccess ? success.uploadRequestEntriesList : []));
-            }
-          }));
-    };
-  }
-
-  bool isInSearchState()
-    => store.state.uiState.isInSearchState();
-
-  void copyToMySpace(List<UploadRequestEntry> entries, {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+  ) {
     appNavigation.popBack();
     if (itemSelectionType == ItemSelectionType.multiple) {
-      cancelSelection();
-    }
-
-    store.dispatch(_copyToMySpaceAction(entries));
-  }
-
-  OnlineThunkAction _copyToMySpaceAction(List<UploadRequestEntry> entries) {
-    return OnlineThunkAction((Store<AppState> store) async {
-      await _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor.execute(entries)
-        .then((result) => result.fold(
-          (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
-          (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
-    });
-  }
-
-  void removeFiles(BuildContext context, List<UploadRequestEntry> entries,
-      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
-    appNavigation.popBack();
-    if (itemSelectionType == ItemSelectionType.multiple) {
-      cancelSelection();
+      cancelAllSelectionEntries(currentTab);
     }
 
     if (entries.isNotEmpty) {
@@ -477,113 +182,402 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
           .onConfirmAction(AppLocalizations.of(context).delete, (_) {
         appNavigation.popBack();
         if (itemSelectionType == ItemSelectionType.multiple) {
-          cancelSelection();
+          cancelAllSelectionEntries(currentTab);
         }
-        store.dispatch(_removeFileAction(entries));
+
+        store.dispatch(_removeFileAction(
+            entries,
+            currentTab,
+            onActionSuccess: onActionSuccess,
+            onActionFailed: onActionFailed));
       }).show(context);
     }
   }
 
-  ThunkAction<AppState> _removeFileAction(List<UploadRequestEntry> entries) {
-    return (Store<AppState> store) async {
-      await _removeMultipleUploadRequestEntryInteractor
+  OnlineThunkAction _removeFileAction(List<UploadRequestEntry> entries, UploadRequestGroupTab currentTab,
+      {Function? onActionSuccess, Function? onActionFailed}) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await removeMultipleUploadRequestEntryInteractor
         .execute(entries)
         .then((result) => result.fold(
-          (failure) => store.dispatch(UploadRequestInsideAction(Left(failure))),
-          (success) => store.dispatch(UploadRequestInsideAction(Right(success)))));
-    };
+          (failure) {
+            handleOnFailureAction(currentTab, failure);
+            onActionFailed?.call();
+          },
+          (success) {
+            handleOnSuccessAction(currentTab, success);
+            onActionSuccess?.call();
+          }));
+    });
   }
 
-  void updateUploadRequestStatus(
-      BuildContext context,
+  void downloadEntries(
+      List<UploadRequestEntry> entries,
       {
-        required List<UploadRequest> entries,
-        required UploadRequestStatus status,
-        required String title,
-        required String titleButtonConfirm,
-        ItemSelectionType itemSelectionType = ItemSelectionType.single,
-        bool? optionalCheckbox,
-        String? optionalTitle,
-        Function? onUpdateSuccess,
-        Function? onUpdateFailed
+        required UploadRequestGroupTab currentTab,
+        ItemSelectionType itemSelectionType = ItemSelectionType.single
       }
   ) {
     appNavigation.popBack();
     if (itemSelectionType == ItemSelectionType.multiple) {
-      cancelSelection();
+      cancelAllSelectionEntries(currentTab);
     }
-
-    if (entries.isNotEmpty) {
-      ConfirmModalSheetBuilder(appNavigation)
-          .key(Key('update_upload_request_group_confirm_modal'))
-          .title(title)
-          .cancelText(AppLocalizations.of(context).cancel)
-          .optionalCheckbox(optionalTitle)
-          .onConfirmAction(titleButtonConfirm, (optionalCheckboxValue) {
-        appNavigation.popBack();
-        if (itemSelectionType == ItemSelectionType.multiple) {
-          cancelSelection();
-        }
-        store.dispatch(_updateUploadRequestStatusAction(
-          entries,
-          status,
-          copyToMySpace: optionalCheckboxValue,
-          onUpdateSuccess: onUpdateSuccess,
-          onUpdateFailed: onUpdateFailed));
-      }).show(context);
-    }
+    store.dispatch(_downloadEntriesAction(currentTab, entries));
   }
 
-  OnlineThunkAction _updateUploadRequestStatusAction(
-      List<UploadRequest> entries,
-      UploadRequestStatus status,
-      {
-        bool? copyToMySpace,
-        Function? onUpdateSuccess,
-        Function? onUpdateFailed
-      }
-  ) {
+  OnlineThunkAction _downloadEntriesAction(UploadRequestGroupTab currentTab, List<UploadRequestEntry> entries) {
     return OnlineThunkAction((Store<AppState> store) async {
-      await _updateMultipleUploadRequestStateInteractor
-        .execute(entries.map((entry) => entry.uploadRequestId).toList(), status, copyToMySpace: copyToMySpace)
-        .then((result) => result.fold(
-            (failure) {
-              store.dispatch(UploadRequestInsideAction(Left(failure)));
-              onUpdateFailed?.call();
-            },
-            (success) {
-              store.dispatch(UploadRequestInsideAction(Right(success)));
-              onUpdateSuccess?.call();
-            }));
+      final needRequestPermission = await deviceManager.isNeedRequestStoragePermissionOnAndroid();
+      if(Platform.isAndroid && needRequestPermission) {
+        final status = await Permission.storage.status;
+        switch (status) {
+          case PermissionStatus.granted:
+            _dispatchHandleDownloadAction(currentTab, entries);
+            break;
+          case PermissionStatus.permanentlyDenied:
+            appNavigation.popBack();
+            break;
+          default:
+            {
+              final requested = await Permission.storage.request();
+              switch (requested) {
+                case PermissionStatus.granted:
+                  _dispatchHandleDownloadAction(currentTab, entries);
+                  break;
+                default:
+                  appNavigation.popBack();
+                  break;
+              }
+            }
+        }
+      } else {
+        _dispatchHandleDownloadAction(currentTab, entries);
+      }
     });
   }
 
-  void editUploadRequestRecipient(UploadRequest uploadRequest) {
-    final uploadRequestFunctionalities = store.state.functionalityState.getAllEnabledUploadRequest();
+  void _dispatchHandleDownloadAction(UploadRequestGroupTab currentTab, List<UploadRequestEntry> entries) {
+    store.dispatch(_handleDownloadEntries(currentTab, entries));
+  }
 
+  OnlineThunkAction _handleDownloadEntries(UploadRequestGroupTab currentTab, List<UploadRequestEntry> entries) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await downloadUploadRequestEntriesInteractor.execute(entries).then((result) =>
+        result.fold(
+          (failure) => handleOnFailureAction(currentTab, failure),
+          (success) => handleOnSuccessAction(currentTab, success)));
+    });
+  }
+
+  void openMoreActionEntryBottomMenu(
+      BuildContext context,
+      List<UploadRequestEntry> entries,
+      List<Widget> actionTiles,
+      Widget footerAction
+  ) {
+    ContextMenuBuilder(context)
+      .addHeader(MoreActionBottomSheetHeaderBuilder(
+        context,
+        Key('more_action_menu_header'),
+        entries.map((element) => UploadRequestEntryPresentationFile.fromUploadRequestEntry(element))
+          .toList())
+      .build())
+      .addTiles(actionTiles)
+      .addFooter(footerAction)
+      .build();
+  }
+
+  void exportFiles(
+      BuildContext context,
+      List<UploadRequestEntry> entries,
+      {
+        required UploadRequestGroupTab currentTab,
+        ItemSelectionType itemSelectionType = ItemSelectionType.single
+      }
+  ) {
     appNavigation.popBack();
-    appNavigation.push(
-      RoutePaths.editUploadRequest,
-      arguments: EditUploadRequestArguments(
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelAllSelectionEntries(currentTab);
+    }
+
+    final cancelToken = CancelToken();
+    _showDownloadingFileDialog(context, entries, cancelToken);
+    store.dispatch(_exportFileAction(currentTab, entries, cancelToken));
+  }
+
+  void _showDownloadingFileDialog(BuildContext context, List<UploadRequestEntry> entries, CancelToken cancelToken) {
+    final downloadMessage = entries.length <= 1
+        ? AppLocalizations.of(context).downloading_file(entries.first.name)
+        : AppLocalizations.of(context).downloading_files(entries.length);
+
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => DownloadingFileBuilder(cancelToken, appNavigation)
+          .key(Key('downloading_file_dialog'))
+          .title(AppLocalizations.of(context).preparing_to_export)
+          .content(downloadMessage)
+          .actionText(AppLocalizations.of(context).cancel)
+          .build());
+  }
+
+  OnlineThunkAction _exportFileAction(UploadRequestGroupTab currentTab, List<UploadRequestEntry> entries, CancelToken cancelToken) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await downloadMultipleUploadRequestEntryIOSInteractor
+        .execute(entries, cancelToken)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(_exportFileFailureAction(currentTab, failure)),
+          (success) => store.dispatch(_exportFileSuccessAction(currentTab, success))));
+    });
+  }
+
+  ThunkAction<AppState> _exportFileSuccessAction(UploadRequestGroupTab currentTab, Success success) {
+    return (Store<AppState> store) async {
+      appNavigation.popBack();
+      if (success is DownloadEntryIOSViewState) {
+        await share_library.Share.shareFiles([success.filePath]);
+      } else if (success is DownloadEntryIOSAllSuccessViewState) {
+        await share_library.Share.shareFiles(success.resultList
+          .map((result) => ((result.getOrElse(() => IdleState()) as DownloadEntryIOSViewState).filePath))
+          .toList());
+      } else if (success is DownloadEntryIOSHasSomeFilesFailureViewState) {
+        await share_library.Share.shareFiles(success.resultList
+          .map((result) => result.fold(
+            (failure) => '',
+            (success) => ((success as DownloadEntryIOSViewState).filePath)))
+          .toList());
+      }
+    };
+  }
+
+  ThunkAction<AppState> _exportFileFailureAction(UploadRequestGroupTab currentTab, Failure failure) {
+    return (Store<AppState> store) async {
+      if (failure is DownloadEntryIOSFailure && !(failure.downloadFileException is CancelDownloadFileException)) {
+        appNavigation.popBack();
+      }
+      handleOnFailureAction(currentTab,  failure);
+    };
+  }
+
+  void copyToMySpace(List<UploadRequestEntry> entries,
+      {required UploadRequestGroupTab currentTab, ItemSelectionType itemSelectionType = ItemSelectionType.single}
+  ) {
+    appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelAllSelectionEntries(currentTab);
+    }
+
+    store.dispatch(_copyToMySpaceAction(currentTab, entries));
+  }
+
+  OnlineThunkAction _copyToMySpaceAction(UploadRequestGroupTab currentTab, List<UploadRequestEntry> entries) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await entriesToMySpaceInteractor.execute(entries)
+        .then((result) => result.fold(
+          (failure) => handleOnFailureAction(currentTab, failure),
+          (success) => handleOnSuccessAction(currentTab, success)));
+    });
+  }
+
+  ThunkAction<AppState> searchUploadRequestEntriesAction(
+      UploadRequestGroupTab currentTab,
+      List<UploadRequestEntry> entries,
+      SearchQuery searchQuery
+  ) {
+    return (Store<AppState> store) async {
+      await searchUploadRequestEntriesInteractor.execute(entries, searchQuery)
+        .then((result) => result.fold(
+          (failure) {
+            if (isInSearchState()) {
+              handleOnFailureSearchEntriesAction(currentTab);
+            }
+          },
+          (success) {
+            if (isInSearchState()) {
+              handleOnSuccessSearchEntriesAction(currentTab, success);
+            }
+          }));
+    };
+  }
+
+  ThunkAction<AppState> searchRecipientsUploadRequestAction(
+      UploadRequestGroupTab currentTab,
+      List<UploadRequest> uploadRequests,
+      SearchQuery searchQuery
+  ) {
+    return (Store<AppState> store) async {
+      await searchRecipientsUploadRequestInteractor.execute(uploadRequests, searchQuery)
+        .then((result) => result.fold(
+          (failure) {
+            if (isInSearchState()) {
+              handleOnFailureSearchRecipientsAction(currentTab);
+            }
+          },
+          (success) {
+            if (isInSearchState()) {
+              handleOnSuccessSearchRecipientsAction(currentTab, success);
+            }
+          }));
+    };
+  }
+
+  void handleOnSuccessSearchRecipientsAction(UploadRequestGroupTab currentTab, Success success) {
+    final uploadRequests = success is SearchRecipientsUploadRequestSuccess
+        ? success.uploadRequestList
+        : <UploadRequest>[];
+
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestSetSearchResultAction(uploadRequests));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestSetSearchResultAction(uploadRequests));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestSetSearchResultAction(uploadRequests));
+        break;
+    }
+  }
+
+  void handleOnFailureSearchRecipientsAction(UploadRequestGroupTab currentTab) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestSetSearchResultAction([]));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestSetSearchResultAction([]));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestSetSearchResultAction([]));
+        break;
+    }
+  }
+
+  void handleOnSuccessSearchEntriesAction(UploadRequestGroupTab currentTab, Success success) {
+    final entries = success is SearchUploadRequestEntriesSuccess
+        ? success.uploadRequestEntriesList
+        : <UploadRequestEntry>[];
+
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestEntrySetSearchResultAction(entries));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestEntrySetSearchResultAction(entries));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestEntrySetSearchResultAction(entries));
+        break;
+    }
+  }
+
+  void handleOnFailureSearchEntriesAction(UploadRequestGroupTab currentTab) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestEntrySetSearchResultAction([]));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestEntrySetSearchResultAction([]));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestEntrySetSearchResultAction([]));
+        break;
+    }
+  }
+
+  bool isInSearchState() => store.state.uiState.isInSearchState();
+
+  void handleOnSuccessAction(UploadRequestGroupTab currentTab, Success success) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestInsideAction(Right(success)));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestInsideAction(Right(success)));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestInsideAction(Right(success)));
+        break;
+    }
+  }
+
+  void handleOnFailureAction(UploadRequestGroupTab currentTab, Failure failure) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestInsideAction(Left(failure)));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestInsideAction(Left(failure)));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestInsideAction(Left(failure)));
+        break;
+    }
+  }
+
+  void cancelAllSelectionRecipients(UploadRequestGroupTab currentTab) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ClearActiveClosedUploadRequestSelectionAction());
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(ClearCreatedUploadRequestSelectionAction());
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ClearArchivedUploadRequestSelectionAction());
+        break;
+    }
+  }
+
+  void cancelAllSelectionEntries(UploadRequestGroupTab currentTab) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestClearSelectedEntryAction());
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestClearSelectedEntryAction());
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestClearSelectedEntryAction());
+        break;
+    }
+  }
+
+  void clearUploadRequestListAction(UploadRequestGroupTab currentTab) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ClearActiveClosedUploadRequestEntriesListAction());
+        store.dispatch(ClearActiveClosedUploadRequestsListAction());
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(ClearCreatedUploadRequestEntriesListAction());
+        store.dispatch(ClearCreatedUploadRequestsListAction());
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ClearArchivedUploadRequestEntriesListAction());
+        store.dispatch(ClearArchivedUploadRequestsListAction());
+        break;
+    }
+  }
+
+  void goToEditUploadRequestRecipient(UploadRequest uploadRequest, UploadRequestGroupTab tab) {
+    final uploadRequestFunctionalities = store.state.functionalityState.getAllEnabledUploadRequest();
+    appNavigation.popBack();
+    appNavigation.push(RoutePaths.editUploadRequest, arguments: EditUploadRequestArguments(
         EditUploadRequestType.recipients,
+        tab,
         uploadRequestFunctionalities,
         uploadRequest: uploadRequest)
     );
   }
 
-  void goToAddRecipients(UploadRequestGroup request) {
+  void goToAddRecipients(UploadRequestGroup request, UploadRequestGroupTab tab) {
     appNavigation.push(
       RoutePaths.addRecipientsUploadRequestGroup,
-      arguments: AddRecipientsUploadRequestGroupArgument(request, AddRecipientType.fromUploadRequestInside),
-    );
+      arguments: AddRecipientsUploadRequestGroupArgument(request, AddRecipientDestination.fromInside, tab));
   }
 
   @override
   void onDisposed() {
-    _storeStreamSubscription.cancel();
-    cancelSelection();
-    clearUploadRequestListAction();
     super.onDisposed();
   }
-
 }

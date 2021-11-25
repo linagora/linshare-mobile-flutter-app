@@ -45,6 +45,9 @@ import 'package:linshare_flutter_app/presentation/redux/actions/received_share_a
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/workgroup_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_node_versions_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
@@ -52,7 +55,6 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_g
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
@@ -61,6 +63,9 @@ import 'package:linshare_flutter_app/presentation/redux/states/network_connectiv
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_active_closed_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_archived_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_created_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
@@ -90,6 +95,9 @@ class ToastMessageHandler {
       _handleAddRecipientUploadRequestGroupToastMessage(context, event.addRecipientsUploadRequestGroupState);
       _handleUploadRequestGroupToastMessage(context, event.uploadRequestGroupState);
       _handleUploadRequestInsideToastMessage(context, event.uploadRequestInsideState);
+      _handleActiveClosedUploadRequestInsideToastMessage(context, event.activeClosedUploadRequestInsideState);
+      _handleCreatedUploadRequestInsideToastMessage(context, event.createdUploadRequestInsideState);
+      _handleArchivedUploadRequestInsideToastMessage(context, event.archivedUploadRequestInsideState);
     });
   }
 
@@ -478,71 +486,206 @@ class ToastMessageHandler {
   }
 
   void _handleUploadRequestInsideToastMessage(BuildContext context, UploadRequestInsideState uploadRequestInsideState) {
-    uploadRequestInsideState.viewState.fold((failure) {
+    uploadRequestInsideState.viewState.fold((failure) {}, (success) {});
+  }
+
+  void _handleActiveClosedUploadRequestInsideToastMessage(BuildContext context, ActiveClosedUploadRequestInsideState activeClosedUploadRequestInsideState) {
+    activeClosedUploadRequestInsideState.viewState.fold((failure) {
       if (failure is CopyToMySpaceFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (failure is CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_files_could_not_be_copied_to_my_space);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (failure is RemoveUploadRequestEntryFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (failure is RemoveAllUploadRequestEntriesFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_deleted);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (failure is EditUploadRequestRecipientFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (failure is UpdateUploadRequestStateFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).upload_request_could_not_be_updated);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (failure is UpdateUploadRequestAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       }
     }, (success) {
       if (success is CopyToMySpaceViewState) {
         appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesAllSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).all_items_have_been_copied_to_my_space);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesHasSomeFilesViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (success is RemoveUploadRequestEntryViewState) {
         appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (success is RemoveAllUploadRequestEntriesSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).files_have_been_successfully_deleted);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (success is RemoveSomeUploadRequestEntriesSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (success is EditUploadRequestRecipientViewState) {
         appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
-        _cleanUploadRequestInsideViewState();
-      } else if (success is UpdateUploadRequestGroupStateViewState) {
+        _cleanActiveClosedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestStateViewState) {
         appToast.showToast(AppLocalizations.of(context).upload_request_has_been_updated);
-        _cleanUploadRequestInsideViewState();
-      } else if (success is UpdateUploadRequestGroupAllSuccessViewState) {
+        _cleanActiveClosedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestAllSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).some_upload_requests_have_been_updated);
-        _cleanUploadRequestInsideViewState();
-      } else if (success is UpdateUploadRequestGroupHasSomeGroupsFailedViewState) {
+        _cleanActiveClosedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestHasSomeFailedViewState) {
         appToast.showToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       } else if (success is AddRecipientsToUploadRequestGroupViewState) {
         appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added);
-        _cleanUploadRequestInsideViewState();
+        _cleanActiveClosedUploadRequestInsideViewState();
       }
     });
   }
 
-  void _cleanUploadRequestInsideViewState() {
-    _store.dispatch(CleanUploadRequestInsideAction());
+  void _handleCreatedUploadRequestInsideToastMessage(BuildContext context, CreatedUploadRequestInsideState createdUploadRequestInsideState) {
+    createdUploadRequestInsideState.viewState.fold((failure) {
+      if (failure is CopyToMySpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (failure is CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_files_could_not_be_copied_to_my_space);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (failure is RemoveUploadRequestEntryFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (failure is RemoveAllUploadRequestEntriesFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_deleted);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (failure is EditUploadRequestRecipientFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (failure is UpdateUploadRequestStateFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).upload_request_could_not_be_updated);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (failure is UpdateUploadRequestAllFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanCreatedUploadRequestInsideViewState();
+      }
+    }, (success) {
+      if (success is CopyToMySpaceViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).all_items_have_been_copied_to_my_space);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesHasSomeFilesViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is RemoveUploadRequestEntryViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is RemoveAllUploadRequestEntriesSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).files_have_been_successfully_deleted);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is RemoveSomeUploadRequestEntriesSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is EditUploadRequestRecipientViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestStateViewState) {
+        appToast.showToast(AppLocalizations.of(context).upload_request_has_been_updated);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_upload_requests_have_been_updated);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestHasSomeFailedViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanCreatedUploadRequestInsideViewState();
+      } else if (success is AddRecipientsToUploadRequestGroupViewState) {
+        appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added);
+        _cleanCreatedUploadRequestInsideViewState();
+      }
+    });
   }
 
+  void _handleArchivedUploadRequestInsideToastMessage(BuildContext context, ArchivedUploadRequestInsideState archivedUploadRequestInsideState) {
+    archivedUploadRequestInsideState.viewState.fold((failure) {
+      if (failure is CopyToMySpaceFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_copied);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (failure is CopyMultipleToMySpaceFromUploadRequestEntriesAllFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_files_could_not_be_copied_to_my_space);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (failure is RemoveUploadRequestEntryFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_file_could_not_be_deleted);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (failure is RemoveAllUploadRequestEntriesFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).files_could_not_be_deleted);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (failure is EditUploadRequestRecipientFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (failure is UpdateUploadRequestStateFailure) {
+        appToast.showErrorToast(AppLocalizations.of(context).upload_request_could_not_be_updated);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (failure is UpdateUploadRequestAllFailureViewState) {
+        appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanArchivedUploadRequestInsideViewState();
+      }
+    }, (success) {
+      if (success is CopyToMySpaceViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_copied_successfully);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).all_items_have_been_copied_to_my_space);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesHasSomeFilesViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_have_been_copied_to_my_space);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is RemoveUploadRequestEntryViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_file_has_been_successfully_deleted);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is RemoveAllUploadRequestEntriesSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).files_have_been_successfully_deleted);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is RemoveSomeUploadRequestEntriesSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_items_could_not_be_deleted);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is EditUploadRequestRecipientViewState) {
+        appToast.showToast(AppLocalizations.of(context).the_upload_request_has_been_updated_successfully);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestStateViewState) {
+        appToast.showToast(AppLocalizations.of(context).upload_request_has_been_updated);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestAllSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_upload_requests_have_been_updated);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is UpdateUploadRequestHasSomeFailedViewState) {
+        appToast.showToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (success is AddRecipientsToUploadRequestGroupViewState) {
+        appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added);
+        _cleanArchivedUploadRequestInsideViewState();
+      }
+    });
+  }
+
+  void _cleanActiveClosedUploadRequestInsideViewState() {
+    _store.dispatch(CleanActiveClosedUploadRequestInsideAction());
+  }
+
+  void _cleanCreatedUploadRequestInsideViewState() {
+    _store.dispatch(CleanCreatedUploadRequestInsideAction());
+  }
+
+  void _cleanArchivedUploadRequestInsideViewState() {
+    _store.dispatch(CleanArchivedUploadRequestInsideAction());
+  }
 
   void _cleanMySpaceViewState() {
     _store.dispatch(CleanMySpaceStateAction());
