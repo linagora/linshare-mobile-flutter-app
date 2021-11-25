@@ -32,6 +32,7 @@
  */
 
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
@@ -39,10 +40,13 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file/presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/upload_request_recipient_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/context_menu_common_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/upload_request_multiple_selection_action_builder.dart';
 
 mixin RecipientContextMenuMixin {
   final imagePath = getIt.get<AppImagePaths>();
@@ -76,6 +80,25 @@ mixin RecipientContextMenuMixin {
         .build())
       .addTiles(recipientMultipleSelectionMoreActionBottomMenuTiles(context, allSelected))
       .addFooter(recipientFooterMultipleSelectionMoreActionBottomMenuTile(allSelected) ?? SizedBox.shrink())
+      .build();
+  }
+
+  Widget editUploadRequestRecipientAction(BuildContext context, UploadRequest entry, Function onActionClick) {
+    return UploadRequestContextMenuActionBuilder(
+          Key('edit_upload_request_recipient_context_menu_action'),
+          Icon(Icons.edit, size: 24.0, color: AppColor.unselectedElementColor),
+          AppLocalizations.of(context).edit,
+          entry)
+      .onActionClick((_) => onActionClick.call())
+      .build();
+  }
+
+  Widget moreActionMultipleSelection(List<UploadRequest> uploadRequests, Function onActionClick) {
+    return UploadRequestMultipleSelectionActionBuilder(
+          Key('upload_request_multiple_selection_more_action'),
+          SvgPicture.asset(imagePath.icMoreVertical, width: 24, height: 24, fit: BoxFit.fill),
+          uploadRequests)
+      .onActionClick((_) => onActionClick.call())
       .build();
   }
 

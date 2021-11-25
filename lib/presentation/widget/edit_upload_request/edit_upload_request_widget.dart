@@ -96,7 +96,7 @@ class _EditUploadRequestWidgetState extends State<EditUploadRequestWidget> {
         centerTitle: true,
         title: Text(
             _arguments?.type == EditUploadRequestType.recipients
-              ? _arguments?.uploadRequest?.label ?? ''
+              ? _arguments?.uploadRequest?.recipients.first.mail ?? ''
               : _arguments?.uploadRequestGroup?.label ?? '',
           key: Key('edit_upload_request_title'),
           style: TextStyle(fontSize: 24, color: Colors.white)),

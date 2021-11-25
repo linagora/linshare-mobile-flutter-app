@@ -33,16 +33,19 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_recipients_upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_destination.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 
@@ -74,6 +77,7 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
   }
 
   void backToUploadRequest() {
+    store.dispatch(CleanAddRecipientsUploadRequestGroupAction());
     _appNavigation.popBack();
   }
 
@@ -109,7 +113,8 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
 
   void sendRecipientsList(
       BuildContext context,
-      AddRecipientType addRecipientType,
+      AddRecipientDestination destination,
+      UploadRequestGroupTab tab,
       UploadRequestGroupId uploadRequestGroupId,
       List<GenericUser> recipientsList
   ) {
@@ -120,13 +125,14 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
         .title(addRecipientTitle)
         .cancelText(AppLocalizations.of(context).cancel)
         .onConfirmAction(AppLocalizations.of(context).add, (_) {
-            store.dispatch(_sendRecipientsAction(addRecipientType, uploadRequestGroupId, recipientsList));
+            store.dispatch(_sendRecipientsAction(destination, tab, uploadRequestGroupId, recipientsList));
             _appNavigation.popBack();
     }).show(context);
   }
 
   OnlineThunkAction _sendRecipientsAction(
-      AddRecipientType addRecipientType,
+      AddRecipientDestination destination,
+      UploadRequestGroupTab tab,
       UploadRequestGroupId uploadRequestGroupId,
       List<GenericUser> recipientsList
   ) {
@@ -135,22 +141,50 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
           .execute(uploadRequestGroupId, recipientsList)
           .then((result) => result.fold(
               (failure) {
-                if (addRecipientType == AddRecipientType.fromUploadRequestInside) {
-                  store.dispatch(UploadRequestInsideAction(Left(failure)));
-                } else if (addRecipientType == AddRecipientType.fromUploadRequestGroup) {
+                if (destination == AddRecipientDestination.fromInside) {
+                  _handleOnFailureUploadRequestInsideAction(tab, failure);
+                } else if (destination == AddRecipientDestination.fromGroup) {
                   store.dispatch(UploadRequestGroupAction(Left(failure)));
                 }
                 backToUploadRequest();
               },
               (success) {
-                if (addRecipientType == AddRecipientType.fromUploadRequestInside) {
-                  store.dispatch(UploadRequestInsideAction(Right(success)));
-                } else if (addRecipientType == AddRecipientType.fromUploadRequestGroup) {
+                if (destination == AddRecipientDestination.fromInside) {
+                  _handleOnSuccessUploadRequestInsideAction(tab, success);
+                } else if (destination == AddRecipientDestination.fromGroup) {
                   store.dispatch(UploadRequestGroupAction(Right(success)));
                 }
                 backToUploadRequest();
               }));
     });
+  }
+
+  void _handleOnSuccessUploadRequestInsideAction(UploadRequestGroupTab currentTab, Success success) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestInsideAction(Right(success)));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestInsideAction(Right(success)));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestInsideAction(Right(success)));
+        break;
+    }
+  }
+
+  void _handleOnFailureUploadRequestInsideAction(UploadRequestGroupTab currentTab, Failure failure) {
+    switch(currentTab) {
+      case UploadRequestGroupTab.ACTIVE_CLOSED:
+        store.dispatch(ActiveClosedUploadRequestInsideAction(Left(failure)));
+        break;
+      case UploadRequestGroupTab.PENDING:
+        store.dispatch(CreatedUploadRequestInsideAction(Left(failure)));
+        break;
+      case UploadRequestGroupTab.ARCHIVED:
+        store.dispatch(ArchivedUploadRequestInsideAction(Left(failure)));
+        break;
+    }
   }
 
   void _checkContactPermission() async {

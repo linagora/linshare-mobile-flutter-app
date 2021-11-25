@@ -294,7 +294,7 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
         SvgPicture.asset(imagePath.icAddMember,
             width: 24, height: 24, fit: BoxFit.fill),
         AppLocalizations.of(context).add_recipients)
-        .onActionClick((_) => _model.goToAddRecipients(uploadRequestGroup))
+        .onActionClick((_) => _model.goToAddRecipients(uploadRequestGroup, UploadRequestGroupTab.ACTIVE_CLOSED))
         .build();
   }
 

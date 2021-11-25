@@ -37,6 +37,9 @@ import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/received_share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_active_closed_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_archived_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/workgroup_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
@@ -60,6 +63,9 @@ class HomeAppBarViewModel extends BaseViewModel {
       _handleWorkgroupViewState(_typeAheadController, event.workgroupState.viewState);
       _handleUploadRequestGroupsViewState(_typeAheadController, event.uploadRequestGroupState.viewState);
       _handleUploadRequestInsideViewState(_typeAheadController, event.uploadRequestInsideState.viewState);
+      _handleActiveClosedUploadRequestInsideViewState(_typeAheadController, event.activeClosedUploadRequestInsideState.viewState);
+      _handleCreatedUploadRequestInsideViewState(_typeAheadController, event.createdUploadRequestInsideState.viewState);
+      _handleArchivedUploadRequestInsideViewState(_typeAheadController, event.archivedUploadRequestInsideState.viewState);
     });
   }
 
@@ -122,6 +128,36 @@ class HomeAppBarViewModel extends BaseViewModel {
       if (success is DisableSearchViewState) {
         _typeAheadController.clear();
         store.dispatch(CleanUploadRequestInsideAction());
+      }
+    });
+  }
+
+  void _handleActiveClosedUploadRequestInsideViewState(
+      TextEditingController _typeAheadController, Either<Failure, Success> viewState) {
+    viewState.fold((failure) => null, (success) {
+      if (success is DisableSearchViewState) {
+        _typeAheadController.clear();
+        store.dispatch(CleanActiveClosedUploadRequestInsideAction());
+      }
+    });
+  }
+
+  void _handleCreatedUploadRequestInsideViewState(
+      TextEditingController _typeAheadController, Either<Failure, Success> viewState) {
+    viewState.fold((failure) => null, (success) {
+      if (success is DisableSearchViewState) {
+        _typeAheadController.clear();
+        store.dispatch(CleanCreatedUploadRequestInsideAction());
+      }
+    });
+  }
+
+  void _handleArchivedUploadRequestInsideViewState(
+      TextEditingController _typeAheadController, Either<Failure, Success> viewState) {
+    viewState.fold((failure) => null, (success) {
+      if (success is DisableSearchViewState) {
+        _typeAheadController.clear();
+        store.dispatch(CleanArchivedUploadRequestInsideAction());
       }
     });
   }
