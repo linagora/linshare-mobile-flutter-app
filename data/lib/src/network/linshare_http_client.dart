@@ -738,8 +738,7 @@ class LinShareHttpClient {
   }
 
   Future<String> getOIDCConfiguration(Uri baseUrl) async {
-    final result = await _dioClient.get(
-        Endpoint.oidcConfiguration.generateOIDCConfigurationUrl(baseUrl));
+    final result = await _dioClient.get(Endpoint.oidcConfiguration.generateBaseUrl(baseUrl));
     return result;
   }
 

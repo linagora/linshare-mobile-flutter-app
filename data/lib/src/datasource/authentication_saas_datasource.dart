@@ -31,18 +31,10 @@
 
 import 'package:domain/domain.dart';
 
-abstract class AuthenticationOIDCDataSource {
+abstract class AuthenticationSaaSDataSource {
+  Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest);
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  Future<bool> verifyEmailSaaS(Uri baseUrl, String email);
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
-
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+  Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest);
 }

@@ -29,20 +29,50 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
-abstract class AuthenticationOIDCDataSource {
+class AuthenticationSaaSDataSourceImpl implements AuthenticationSaaSDataSource {
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  final SaaSHttpClient saaSHttpClient;
+  final RemoteExceptionThrower remoteExceptionThrower;
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
+  AuthenticationSaaSDataSourceImpl(this.saaSHttpClient, this.remoteExceptionThrower);
 
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+  @override
+  Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest) {
+    return Future.sync(() async {
+      final result = await saaSHttpClient.getSaaSSecretToken(baseUrl, planRequest.toPlanBodyRequest());
+      return result.secretToken;
+    }).catchError((error) {
+      remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
+        throw UnknownError(error.response?.statusMessage!);
+      });
+    });
+  }
+
+  @override
+  Future<bool> verifyEmailSaaS(Uri baseUrl, String email)  {
+    return Future.sync(() async {
+      final result = await saaSHttpClient.verifyEmailSaaS(baseUrl, email);
+      return result.isEmailValid();
+    }).catchError((error) {
+      remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
+        throw UnknownError(error.response?.statusMessage!);
+      });
+    });
+  }
+
+  @override
+  Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest)  {
+    return Future.sync(() async {
+      final result = await saaSHttpClient.signUpForSaaS(baseUrl, signUpRequest.toSignUpBodyRequest());
+      return result.toUserSaaS();
+    }).catchError((error) {
+      remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
+        throw UnknownError(error.response?.statusMessage!);
+      });
+    });
+  }
 }

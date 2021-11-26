@@ -28,21 +28,58 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
+
+import 'dart:convert';
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationOIDCDataSource {
+class SignUpBodyRequest with EquatableMixin {
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  final String email;
+  final String name;
+  final String surname;
+  final String companyName;
+  final String password;
+  final String locale;
+  final String captchaResponseToken;
+  final SaaSSecretToken secretToken;
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
+  SignUpBodyRequest(
+      this.email,
+      this.name,
+      this.surname,
+      this.companyName,
+      this.password,
+      this.locale,
+      this.captchaResponseToken,
+      this.secretToken
+  );
 
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('email'): jsonEncode(email),
+    jsonEncode('name'): jsonEncode(name),
+    jsonEncode('surname'): jsonEncode(surname),
+    jsonEncode('companyName'): jsonEncode(companyName),
+    jsonEncode('password'): jsonEncode(password),
+    jsonEncode('locale'): jsonEncode(locale),
+    jsonEncode('captchaResponseToken'): jsonEncode(captchaResponseToken),
+    jsonEncode('secretToken'): jsonEncode(secretToken.value),
+  };
+
+  @override
+  List<Object> get props => [email, name, surname, secretToken];
+}
+
+extension SignUpRequestExtension on SignUpRequest {
+  SignUpBodyRequest toSignUpBodyRequest() => SignUpBodyRequest(
+      email,
+      name,
+      surname,
+      companyName,
+      password,
+      locale,
+      captchaResponseToken,
+      secretToken);
 }

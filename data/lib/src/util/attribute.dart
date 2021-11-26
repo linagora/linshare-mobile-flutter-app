@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 class Attribute {
+  static const id = '_id';
   static const uuid = 'uuid';
   static const type = 'type';
   static const mimeType = 'mimeType';
