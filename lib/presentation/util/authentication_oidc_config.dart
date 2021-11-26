@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 class AuthenticationOIDCConfig {
-  static const baseUrlSaaS = 'https://user.linshare-4-3-on-commit.integration-linshare.org/';
+  static const captcha = String.fromEnvironment('CAPTCHA_TOKEN', defaultValue: '');
 
   static const allowInsecureConnection = false;
 

@@ -54,6 +54,10 @@ extension ValicatorFailureExtension on VerifyNameFailure {
       return AppLocalizations.of(context).password_is_invalid;
     } else if (exception is EmptyLoginUrlException) {
       return AppLocalizations.of(context).url_is_invalid;
+    } else if (exception is EmptySignUpNameException) {
+      return AppLocalizations.of(context).name_is_required;
+    } else if (exception is EmptySignUpSurnameException) {
+      return AppLocalizations.of(context).surname_is_required;
     } else {
       return '';
     }

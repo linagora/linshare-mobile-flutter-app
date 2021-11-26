@@ -34,19 +34,73 @@
 //
 // the Additional Terms applicable to LinShare software.
 
-import 'package:data/data.dart';
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
-import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
-import 'package:mockito/mockito.dart';
+import 'package:flutter/material.dart';
 
-class MockCreatePermanentTokenInteractor extends Mock implements CreatePermanentTokenInteractor {}
-class MockCreatePermanentTokenSSOInteractor extends Mock implements CreatePermanentTokenOIDCInteractor {}
-class MockGetTokenSSOInteractor extends Mock implements GetTokenOIDCInteractor {}
-class MockAppNavigation extends Mock implements AppNavigation {}
-class MockDynamicUrlInterceptors extends Mock implements DynamicUrlInterceptors {}
-class MockUploadWorkGroupDocumentInteractor extends Mock implements UploadWorkGroupDocumentInteractor {}
-class MockAppToast extends Mock implements AppToast {}
-class MockGetOIDCConfigurationInteractor extends Mock implements GetOIDCConfigurationInteractor {}
-class MockVerifyNameInteractor extends Mock implements VerifyNameInteractor {}
-class MockGetSaaSConfigurationInteractor extends Mock implements GetSaaSConfigurationInteractor {}
+class RichTextBuilder {
+
+  final String _textOrigin;
+  final String _wordToStyle;
+  final TextStyle _styleOrigin;
+  final TextStyle _styleWord;
+
+  Key? _key;
+  int? _maxLines;
+  TextOverflow? _overflow;
+
+  RichTextBuilder(
+    this._textOrigin,
+    this._wordToStyle,
+    this._styleOrigin,
+    this._styleWord,
+  );
+
+  void key(Key key) {
+    _key = key;
+  }
+
+  void maxLines(int? maxLines) {
+    _maxLines = maxLines;
+  }
+
+  void setOverflow(TextOverflow? textOverflow) {
+    _overflow = textOverflow;
+  }
+
+  RichText build() {
+    return RichText(
+      key: _key,
+      textAlign: TextAlign.center,
+      maxLines: _maxLines ?? 1,
+      overflow: _overflow ?? TextOverflow.ellipsis,
+      text: TextSpan(
+        style: _styleOrigin,
+        children: _getSpans(_textOrigin, _wordToStyle, _styleWord)));
+  }
+
+  List<TextSpan> _getSpans(String text, String matchWord, TextStyle style) {
+    var spans = <TextSpan>[];
+    var spanBoundary = 0;
+    do {
+      // look for the next match
+      final startIndex = text.toLowerCase().indexOf(matchWord.toLowerCase(), spanBoundary);
+      // if no more matches then add the rest of the string without style
+      if (startIndex == -1) {
+        spans.add(TextSpan(text: text.substring(spanBoundary)));
+        return spans;
+      }
+      // add any unStyled text before the next match
+      if (startIndex > spanBoundary) {
+        spans.add(TextSpan(text: text.substring(spanBoundary, startIndex)));
+      }
+      // style the matched text
+      final endIndex = startIndex + matchWord.length;
+      final spanText = text.substring(startIndex, endIndex);
+      spans.add(TextSpan(text: spanText, style: style));
+      // mark the boundary to start the next search from
+      spanBoundary = endIndex;
+      // continue until there are no more matches
+    } while (spanBoundary < text.length);
+
+    return spans;
+  }
+}

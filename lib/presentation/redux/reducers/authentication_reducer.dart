@@ -46,4 +46,6 @@ final authenticationReducer = combineReducers<AuthenticationState>([
       (AuthenticationState state, _) => state.clearViewState()),
   TypedReducer<AuthenticationState, UpdateAuthenticationScreenStateAction>(
       (AuthenticationState state, UpdateAuthenticationScreenStateAction action) => state.updateAuthenticationScreenState(formType: action.loginFormType)),
+  TypedReducer<AuthenticationState, UpdateSaaSConfigurationAction>(
+      (AuthenticationState state, UpdateSaaSConfigurationAction action) => state.updateSaaSConfiguration(saaSConfiguration: action.configuration)),
 ]);
