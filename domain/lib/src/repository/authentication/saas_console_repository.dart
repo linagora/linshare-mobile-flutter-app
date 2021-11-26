@@ -31,25 +31,6 @@
 
 import 'package:domain/domain.dart';
 
-abstract class AuthenticationOIDCRepository {
-
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
-
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
-
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
-
-  Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest);
-
-  Future<bool> verifyEmailSaaS(Uri baseUrl, String email);
-
-  Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest);
+abstract class SaaSConsoleRepository {
+  Future<SaaSConfiguration> getSaaSConfiguration(SaaSType saaSType);
 }
-

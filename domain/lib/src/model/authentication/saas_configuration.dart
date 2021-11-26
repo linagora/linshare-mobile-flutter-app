@@ -29,27 +29,24 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationOIDCRepository {
+class SaaSConfiguration extends Equatable {
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  final Uri loginBaseUrl;
+  final Uri signUpBaseUrl;
+  final Uri secretBaseUrl;
+  final Uri verifyEmailBaseUrl;
+  final String companyName;
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
+  SaaSConfiguration({
+    required this.loginBaseUrl,
+    required this.signUpBaseUrl,
+    required this.secretBaseUrl,
+    required this.verifyEmailBaseUrl,
+    required this.companyName,
+  });
 
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
-
-  Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest);
-
-  Future<bool> verifyEmailSaaS(Uri baseUrl, String email);
-
-  Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest);
+  @override
+  List<Object?> get props => [loginBaseUrl, signUpBaseUrl, secretBaseUrl, verifyEmailBaseUrl, companyName];
 }
-

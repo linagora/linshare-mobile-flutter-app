@@ -197,6 +197,8 @@ export 'src/model/verification/empty_name_validator.dart';
 export 'src/model/verification/empty_login_email_validator.dart';
 export 'src/model/verification/empty_login_password_validator.dart';
 export 'src/model/verification/empty_login_url_validator.dart';
+export 'src/model/verification/empty_signup_name_validator.dart';
+export 'src/model/verification/empty_signup_surname_validator.dart';
 export 'src/model/verification/password_special_character_validator.dart';
 export 'src/model/verification/login_email_validator.dart';
 export 'src/model/verification/last_dot_validator.dart';
@@ -227,6 +229,12 @@ export 'src/model/sharedspace/shared_space_node_nested.dart';
 export 'src/repository/audit/audit_user_repository.dart';
 export 'src/repository/authentication/authentication_oidc_repository.dart';
 export 'src/model/workgroup/create_drive_request.dart';
+export 'src/model/authentication/saas_configuration.dart';
+export 'src/model/authentication/saas_type.dart';
+export 'src/model/authentication/saas_secret_token.dart';
+export 'src/model/authentication/signup_request.dart';
+export 'src/model/authentication/user_saas.dart';
+export 'src/model/authentication/plan_request.dart';
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
 export 'src/repository/authentication/authentication_oidc_repository.dart';
@@ -248,6 +256,7 @@ export 'src/repository/upload_request_group/upload_request_group_repository.dart
 export 'src/repository/upload_request/upload_request_repository.dart';
 export 'src/repository/upload_request_entry/upload_request_entry_repository.dart';
 export 'src/repository/workgroup/drive_repository.dart';
+export 'src/repository/authentication/saas_console_repository.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -257,6 +266,7 @@ export 'src/usecases/audit_user/audit_user_view_state.dart';
 export 'src/usecases/audit_user/audit_user_view_state.dart';
 export 'src/usecases/audit_user/get_last_login_interactor.dart';
 export 'src/usecases/audit_user/get_last_login_interactor.dart';
+export 'src/usecases/authentication/saas_configuration_view_state.dart';
 
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
@@ -469,3 +479,7 @@ export 'src/usecases/authentication/save_authorized_user_interactor.dart';
 export 'src/usecases/search_recipients_upload_request/search_recipients_upload_request_interactor.dart';
 export 'src/usecases/search_recipients_upload_request/search_recipients_upload_request_view_state.dart';
 export 'src/usecases/upload_request_entry/download_upload_request_entry_interactor.dart';
+export 'src/usecases/authentication/get_saas_configuration_interactor.dart';
+export 'src/usecases/authentication/get_secret_token_interactor.dart';
+export 'src/usecases/authentication/sign_up_for_saas_interactor.dart';
+export 'src/usecases/authentication/verify_email_saas_interactor.dart';

@@ -139,3 +139,58 @@ class SaveAuthorizedUserFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class GetSecretTokenViewState extends ViewState {
+  final SaaSSecretToken secretToken;
+
+  GetSecretTokenViewState(this.secretToken);
+
+  @override
+  List<Object> get props => [secretToken];
+}
+
+class GetSecretTokenFailure extends FeatureFailure {
+  final exception;
+
+  GetSecretTokenFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class SignUpForSaaSViewState extends ViewState {
+  final UserSaaS userSaaS;
+
+  SignUpForSaaSViewState(this.userSaaS);
+
+  @override
+  List<Object> get props => [userSaaS];
+}
+
+class SignUpForSaaSFailure extends FeatureFailure {
+  final exception;
+
+  SignUpForSaaSFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class VerifyEmailSaaSViewState extends ViewState {
+
+  final bool isEmailAvailable;
+
+  VerifyEmailSaaSViewState(this.isEmailAvailable);
+
+  @override
+  List<Object> get props => [isEmailAvailable];
+}
+
+class VerifyEmailSaaSFailure extends FeatureFailure {
+  final exception;
+
+  VerifyEmailSaaSFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
