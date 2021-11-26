@@ -29,14 +29,16 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
 import 'package:data/src/datasource/authentication_oidc_datasource.dart';
 import 'package:domain/domain.dart';
 
 class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
 
-  AuthenticationOIDCDataSource authenticationOIDCDataSource;
+  final AuthenticationOIDCDataSource oidcDataSources;
+  final AuthenticationSaaSDataSource saaSDataSource;
 
-  AuthenticationOIDCRepositoryImpl(this.authenticationOIDCDataSource);
+  AuthenticationOIDCRepositoryImpl(this.oidcDataSources, this.saaSDataSource);
 
   @override
   Future<TokenOIDC?> getTokenOIDC(
@@ -47,7 +49,7 @@ class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
       bool preferEphemeralSessionIOS,
       List<String>? promptValues,
       bool allowInsecureConnections) {
-    return authenticationOIDCDataSource.getTokenOIDC(
+    return oidcDataSources.getTokenOIDC(
         clientId,
         redirectUrl,
         discoveryUrl,
@@ -59,11 +61,26 @@ class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
 
   @override
   Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode}) {
-    return authenticationOIDCDataSource.createPermanentTokenWithOIDC(baseUrl, tokenOIDC, otpCode: otpCode);
+    return oidcDataSources.createPermanentTokenWithOIDC(baseUrl, tokenOIDC, otpCode: otpCode);
   }
 
   @override
   Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl) {
-    return authenticationOIDCDataSource.getOIDCConfiguration(baseUrl);
+    return oidcDataSources.getOIDCConfiguration(baseUrl);
+  }
+
+  @override
+  Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest) {
+    return saaSDataSource.getSaaSSecretToken(baseUrl, planRequest);
+  }
+
+  @override
+  Future<bool> verifyEmailSaaS(Uri baseUrl, String email) {
+    return saaSDataSource.verifyEmailSaaS(baseUrl, email);
+  }
+
+  @override
+  Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest) {
+    return saaSDataSource.signUpForSaaS(baseUrl, signUpRequest);
   }
 }

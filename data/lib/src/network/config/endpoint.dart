@@ -73,6 +73,12 @@ class Endpoint {
   static final ServicePath audit = ServicePath('/audit');
 
   static final ServicePath oidcConfiguration = ServicePath('/config/config.js');
+
+  static final ServicePath secretToken = ServicePath('/api/subscriptions/reservation');
+
+  static final ServicePath verifyEmail = ServicePath('/api/users/email-availability');
+
+  static final ServicePath signUp = ServicePath('/api/signup');
 }
 
 extension ServicePathExtension on ServicePath {
@@ -116,7 +122,7 @@ extension ServicePathExtension on ServicePath {
     return ServicePath(path + other.path);
   }
 
-  String generateOIDCConfigurationUrl(Uri baseUrl) {
+  String generateBaseUrl(Uri baseUrl) {
     return baseUrl.origin + '$path';
   }
 }
