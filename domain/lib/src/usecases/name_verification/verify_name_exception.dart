@@ -39,10 +39,14 @@ abstract class VerifyNameException extends RemoteException {
   static const NameContainLastDot = 'The name cannot finishes by character "."';
   static const EmptyLoginEmail = 'The email cannot be empty!';
   static const LoginEmailInvalid = 'The email is invalid!';
+  static const EmailNotAvailable = 'The email is not available';
   static const EmptyLoginPassword = 'The password cannot be empty!';
   static const EmptyLoginEmailPassword = 'The email and password cannot be empty!';
   static const EmptyLoginUrl = 'The url cannot be empty!';
   static const PasswordContainSpecialCharacter = 'The password cannot contain special characters';
+  static const EmptySignUpAllName = 'The name and surname cannot be empty!';
+  static const EmptySignUpSurname = 'The surname cannot be empty!';
+  static const EmptySignUpName = 'The signup name cannot be empty!';
 
   VerifyNameException(String message) : super(message);
 }
@@ -89,6 +93,13 @@ class LoginEmailInvalidException extends VerifyNameException {
   List<Object> get props => [];
 }
 
+class EmailNotAvailableException extends VerifyNameException {
+  EmailNotAvailableException() : super(VerifyNameException.EmailNotAvailable);
+
+  @override
+  List<Object> get props => [];
+}
+
 class EmptyLoginPasswordException extends VerifyNameException {
   EmptyLoginPasswordException() : super(VerifyNameException.EmptyLoginPassword);
 
@@ -112,6 +123,27 @@ class EmptyLoginUrlException extends VerifyNameException {
 
 class PasswordSpecialCharacterException extends VerifyNameException {
   PasswordSpecialCharacterException() : super(VerifyNameException.PasswordContainSpecialCharacter);
+
+  @override
+  List<Object> get props => [];
+}
+
+class EmptySignUpSurnameException extends VerifyNameException {
+  EmptySignUpSurnameException() : super(VerifyNameException.EmptySignUpSurname);
+
+  @override
+  List<Object> get props => [];
+}
+
+class EmptySignUpAllNameException extends VerifyNameException {
+  EmptySignUpAllNameException() : super(VerifyNameException.EmptySignUpAllName);
+
+  @override
+  List<Object> get props => [];
+}
+
+class EmptySignUpNameException extends VerifyNameException {
+  EmptySignUpNameException() : super(VerifyNameException.EmptySignUpName);
 
   @override
   List<Object> get props => [];

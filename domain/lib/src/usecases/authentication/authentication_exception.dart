@@ -35,6 +35,7 @@ abstract class AuthenticationException extends RemoteException {
   static final wrongCredential = 'Credential is wrong';
   static final userLocked = 'User is locked';
   static final needAuthenticateWithOTP = 'Need authenticate with OTP';
+  static final notFoundSaaSConfiguration = 'Not found saas configuration';
 
   AuthenticationException(String message) : super(message);
 }
@@ -55,6 +56,13 @@ class UserLocked extends AuthenticationException {
 
 class NeedAuthenticateWithOTP extends AuthenticationException {
   NeedAuthenticateWithOTP() : super(AuthenticationException.needAuthenticateWithOTP);
+
+  @override
+  List<Object> get props => [];
+}
+
+class NotFoundSaaSConfiguration extends AuthenticationException {
+  NotFoundSaaSConfiguration() : super(AuthenticationException.notFoundSaaSConfiguration);
 
   @override
   List<Object> get props => [];

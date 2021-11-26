@@ -29,27 +29,21 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'dart:core';
 
-abstract class AuthenticationOIDCRepository {
+class SignUpForSaaSInteractor {
+  final AuthenticationOIDCRepository authenticationOIDCRepository;
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  SignUpForSaaSInteractor(this.authenticationOIDCRepository);
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
-
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
-
-  Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest);
-
-  Future<bool> verifyEmailSaaS(Uri baseUrl, String email);
-
-  Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest);
+  Future<Either<Failure, Success>> execute(Uri baseUrl, SignUpRequest signUpRequest) async {
+    try {
+      final success = await authenticationOIDCRepository.signUpForSaaS(baseUrl, signUpRequest);
+      return Right<Failure, Success>(SignUpForSaaSViewState(success));
+    } catch (exception) {
+      return Left<Failure, Success>(SignUpForSaaSFailure(exception));
+    }
+  }
 }
-
