@@ -1978,7 +1978,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_message_center": "Join +100 million active users using LinShare to store and share files with ease",
+  "login_message_center": "Join +10000 active users using LinShare to store and share files with ease",
   "@login_message_center": {
     "type": "text",
     "placeholders_order": [],
@@ -1996,7 +1996,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_user_own_server_message_center": "Before you can proceed, please choose a\n default server connection",
+  "login_user_own_server_message_center": "Before you can proceed, please choose a default server connection",
   "@login_user_own_server_message_center": {
     "type": "text",
     "placeholders_order": [],
