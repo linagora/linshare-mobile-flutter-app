@@ -34,7 +34,6 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
 import 'package:redux/redux.dart';
@@ -51,9 +50,9 @@ void main() {
   getIt.registerLazySingleton<GetTokenOIDCInteractor>(() => MockGetTokenSSOInteractor());
   getIt.registerLazySingleton<AppNavigation>(() => MockAppNavigation());
   getIt.registerLazySingleton<DynamicUrlInterceptors>(() => MockDynamicUrlInterceptors());
-  getIt.registerLazySingleton<AppToast>(() => MockAppToast());
   getIt.registerLazySingleton<GetOIDCConfigurationInteractor>(() => MockGetOIDCConfigurationInteractor());
   getIt.registerLazySingleton<VerifyNameInteractor>(() => MockVerifyNameInteractor());
+  getIt.registerLazySingleton<GetSaaSConfigurationInteractor>(() => MockGetSaaSConfigurationInteractor());
   getIt.registerLazySingleton<LoginViewModel>(() => LoginViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<CreatePermanentTokenInteractor>(),
@@ -61,9 +60,9 @@ void main() {
       getIt.get<GetTokenOIDCInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
-      getIt.get<AppToast>(),
       getIt<GetOIDCConfigurationInteractor>(),
       getIt<VerifyNameInteractor>(),
+      getIt<GetSaaSConfigurationInteractor>(),
   ));
 
   group('test loginViewModel', () {

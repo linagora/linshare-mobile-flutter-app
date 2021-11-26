@@ -52,6 +52,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_docu
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_active_closed_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_archived_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_created_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/signup_authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
@@ -72,6 +73,7 @@ import 'destination_picker_state.dart';
 class AppState with EquatableMixin {
   final UIState uiState;
   final AuthenticationState authenticationState;
+  final SignUpAuthenticationState signUpAuthenticationState;
   final UploadFileState uploadFileState;
   final MySpaceState mySpaceState;
   final ShareState shareState;
@@ -111,6 +113,7 @@ class AppState with EquatableMixin {
   AppState(
       {required this.uiState,
       required this.authenticationState,
+      required this.signUpAuthenticationState,
       required this.uploadFileState,
       required this.mySpaceState,
       required this.shareState,
@@ -151,6 +154,7 @@ class AppState with EquatableMixin {
     return AppState(
         uiState: UIState.initial(),
         authenticationState: AuthenticationState.initial(),
+        signUpAuthenticationState: SignUpAuthenticationState.initial(),
         uploadFileState: UploadFileState.initial(),
         mySpaceState: MySpaceState.initial(),
         shareState: ShareState.initial(),
@@ -193,6 +197,7 @@ class AppState with EquatableMixin {
   List<Object> get props => [
         uiState,
         authenticationState,
+        signUpAuthenticationState,
         uploadFileState,
         mySpaceState,
         shareState,

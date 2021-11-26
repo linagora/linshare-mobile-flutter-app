@@ -52,6 +52,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/ad
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_widget.dart';
@@ -60,6 +61,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case RoutePaths.loginRoute:
       return MaterialPageRoute(builder: (context) => getIt<LoginWidget>(), settings: settings);
+    case RoutePaths.signUpRoute:
+      return MaterialPageRoute(builder: (context) => getIt<SignUpWidget>(), settings: settings);
     case RoutePaths.homeRoute:
       return MaterialPageRoute(builder: (context) => getIt<HomeWidget>(), settings: settings);
     case RoutePaths.uploadDocumentRoute:

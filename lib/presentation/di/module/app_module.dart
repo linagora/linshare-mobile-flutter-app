@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/file_path_util.dart';
+import 'package:linshare_flutter_app/presentation/util/generate_password_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/lifecycle_event_handler.dart';
@@ -78,6 +79,17 @@ class AppModule {
   }
 
   void _provideDataSourceImpl() {
+    getIt.registerFactory(() => AuthenticationOIDCDataSourceImpl(
+        getIt<LinShareHttpClient>(),
+        getIt<RemoteExceptionThrower>(),
+        getIt<FlutterAppAuth>(),
+        getIt<DeviceManager>(),
+        getIt<OIDCParser>()
+    ));
+    getIt.registerFactory(() => AuthenticationSaaSDataSourceImpl(
+        getIt<SaaSHttpClient>(),
+        getIt<RemoteExceptionThrower>(),
+    ));
     getIt.registerFactory(() => AuthenticationDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<DeviceManager>(),
@@ -147,13 +159,8 @@ class AppModule {
 
   void _provideDataSource() {
     getIt.registerFactory<AuthenticationDataSource>(() => getIt<AuthenticationDataSourceImpl>());
-    getIt.registerFactory(() => AuthenticationOIDCDataSource(
-        getIt<LinShareHttpClient>(),
-        getIt<RemoteExceptionThrower>(),
-        getIt<FlutterAppAuth>(),
-        getIt<DeviceManager>(),
-        getIt<OIDCParser>()
-    ));
+    getIt.registerFactory<AuthenticationOIDCDataSource>(() => getIt<AuthenticationOIDCDataSourceImpl>());
+    getIt.registerFactory<AuthenticationSaaSDataSource>(() => getIt<AuthenticationSaaSDataSourceImpl>());
     getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDataSource>(() => getIt<SharedSpaceDataSourceImpl>());
     getIt.registerFactory<AutoCompleteDataSource>(() => getIt<AutoCompleteDataSourceImpl>());
@@ -179,9 +186,13 @@ class AppModule {
       DataSourceType.network : getIt<AuthenticationDataSource>(),
       DataSourceType.local : getIt<LocalAuthenticationDataSource>()
     }));
-    getIt.registerFactory(() => AuthenticationOIDCRepositoryImpl(getIt<AuthenticationOIDCDataSource>()));
+    getIt.registerFactory(() => AuthenticationOIDCRepositoryImpl(
+        getIt<AuthenticationOIDCDataSource>(),
+        getIt<AuthenticationSaaSDataSource>()
+    ));
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
+    getIt.registerFactory(() => SaaSConsoleRepositoryImpl());
     getIt.registerFactory(() => DocumentRepositoryImpl(
       {
         DataSourceType.network : getIt<DocumentDataSource>(),
@@ -236,6 +247,7 @@ class AppModule {
     getIt.registerFactory<AuthenticationOIDCRepository>(() => getIt<AuthenticationOIDCRepositoryImpl>());
     getIt.registerFactory<TokenRepository>(() => getIt<TokenRepositoryImpl>());
     getIt.registerFactory<CredentialRepository>(() => getIt<CredentialRepositoryImpl>());
+    getIt.registerFactory<SaaSConsoleRepository>(() => getIt<SaaSConsoleRepositoryImpl>());
     getIt.registerFactory<DocumentRepository>(() => getIt<DocumentRepositoryImpl>());
     getIt.registerFactory<AutoCompleteRepository>(() => getIt<AutoCompleteRepositoryImpl>());
     getIt.registerFactory<SharedSpaceRepository>(() => getIt<SharedSpaceRepositoryImpl>());
@@ -269,6 +281,10 @@ class AppModule {
         getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetQuotaInteractor(getIt<QuotaRepository>()));
     getIt.registerFactory(() => GetCredentialInteractor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => GetSaaSConfigurationInteractor(getIt<SaaSConsoleRepository>()));
+    getIt.registerFactory(() => GetSecretTokenInteractor(getIt<AuthenticationOIDCRepository>()));
+    getIt.registerFactory(() => VerifyEmailSaaSInteractor(getIt<AuthenticationOIDCRepository>()));
+    getIt.registerFactory(() => SignUpForSaaSInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => UploadMySpaceDocumentInteractor(
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
@@ -532,6 +548,7 @@ class AppModule {
   void _provideAppAuth() {
     getIt.registerLazySingleton(() => FlutterAppAuth());
     getIt.registerLazySingleton(() => OIDCParser());
+    getIt.registerLazySingleton(() => GeneratePasswordUtils());
   }
 
   void _provideObservers() {
