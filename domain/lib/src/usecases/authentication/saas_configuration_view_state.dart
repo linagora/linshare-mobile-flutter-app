@@ -31,25 +31,20 @@
 
 import 'package:domain/domain.dart';
 
-abstract class AuthenticationOIDCRepository {
+class GetSaaSConfigurationViewState extends ViewState {
+  final SaaSConfiguration saaSConfiguration;
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  GetSaaSConfigurationViewState(this.saaSConfiguration);
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
-
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
-
-  Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest);
-
-  Future<bool> verifyEmailSaaS(Uri baseUrl, String email);
-
-  Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest);
+  @override
+  List<Object> get props => [saaSConfiguration];
 }
 
+class GetSaaSConfigurationFailure extends FeatureFailure {
+  final exception;
+
+  GetSaaSConfigurationFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
