@@ -37,6 +37,7 @@ import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
+import 'package:linshare_flutter_app/presentation/util/generate_password_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
@@ -90,6 +91,8 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
@@ -117,6 +120,7 @@ import 'package:redux/redux.dart';
 class WidgetModule {
   WidgetModule() {
     _provideLoginComponent();
+    _provideSignUpComponent();
     _provideHomeComponent();
     _provideMySpaceComponent();
     _provideUploadFileComponent();
@@ -160,9 +164,27 @@ class WidgetModule {
       getIt.get<GetTokenOIDCInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
-      getIt<AppToast>(),
       getIt<GetOIDCConfigurationInteractor>(),
       getIt<VerifyNameInteractor>(),
+      getIt<GetSaaSConfigurationInteractor>(),
+    ));
+  }
+
+  void _provideSignUpComponent() {
+    getIt.registerFactory(() => SignUpWidget());
+    getIt.registerFactory(() => SignUpViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+      getIt.get<GeneratePasswordUtils>(),
+      getIt<VerifyNameInteractor>(),
+      getIt<GetSaaSConfigurationInteractor>(),
+      getIt<GetOIDCConfigurationInteractor>(),
+      getIt<GetSecretTokenInteractor>(),
+      getIt<VerifyEmailSaaSInteractor>(),
+      getIt<SignUpForSaaSInteractor>(),
+      getIt<GetTokenOIDCInteractor>(),
+      getIt<CreatePermanentTokenOIDCInteractor>(),
+      getIt<DynamicUrlInterceptors>(),
     ));
   }
 

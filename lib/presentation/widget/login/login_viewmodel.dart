@@ -36,7 +36,6 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/url_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
@@ -57,9 +56,9 @@ class LoginViewModel extends BaseViewModel {
   final GetTokenOIDCInteractor _getTokenOIDCInteractor;
   final AppNavigation _appNavigation;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
-  final AppToast _appToast;
   final GetOIDCConfigurationInteractor _getOIDCConfigurationInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
+  final GetSaaSConfigurationInteractor _getSaaSConfigurationInteractor;
 
   LoginViewModel(
     Store<AppState> store,
@@ -68,9 +67,9 @@ class LoginViewModel extends BaseViewModel {
     this._getTokenOIDCInteractor,
     this._appNavigation,
     this._dynamicUrlInterceptors,
-    this._appToast,
     this._getOIDCConfigurationInteractor,
     this._verifyNameInteractor,
+    this._getSaaSConfigurationInteractor,
   ) : super(store);
 
   final ValueNotifier<bool> loginWithSSONotifier = ValueNotifier<bool>(false);
@@ -101,7 +100,7 @@ class LoginViewModel extends BaseViewModel {
   }
 
   void handleSignUpPressed(BuildContext context) {
-    _appToast.showToast(AppLocalizations.of(context).this_feature_not_supported);
+    _appNavigation.push(RoutePaths.signUpRoute);
   }
 
   void handleLoginPressed(
@@ -113,8 +112,7 @@ class LoginViewModel extends BaseViewModel {
 
     switch(authenticationType) {
       case AuthenticationType.saas:
-        _appToast.showToast(AppLocalizations.of(context).this_feature_not_supported);
-        // _loginToSaaS(context, AuthenticationOIDCConfig.baseUrlSaaS);
+        _loginToSaaS(context);
         break;
       case AuthenticationType.credentials:
         if (loginFormType == LoginFormType.useOwnServer) {
@@ -151,9 +149,33 @@ class LoginViewModel extends BaseViewModel {
     }
   }
 
-  // void _loginToSaaS(BuildContext context, String baseUrl) {
-  //   _getOIDCConfiguration(context, baseUrl, AuthenticationType.saas);
-  // }
+  void _loginToSaaS(BuildContext context) {
+    _getSaaSConfiguration(context);
+  }
+
+  void _getSaaSConfiguration(BuildContext context) {
+    store.dispatch(_getSaaSConfigurationAction(context));
+  }
+
+  ThunkAction<AppState> _getSaaSConfigurationAction(BuildContext context) {
+    return (Store<AppState> store) async {
+      store.dispatch(StartAuthenticationSaaSLoadingAction());
+
+      await _getSaaSConfigurationInteractor.execute(SaaSType.dev)
+        .then((result) => result.fold(
+          (failure) {
+            if (failure is GetSaaSConfigurationFailure) {
+              _loginOIDCFailureAction(context, failure, AuthenticationType.saas);
+            }
+          },
+          ((success) {
+            if (success is GetSaaSConfigurationViewState) {
+              store.dispatch(UpdateSaaSConfigurationAction(success.saaSConfiguration));
+              _getOIDCConfiguration(context, success.saaSConfiguration.loginBaseUrl.origin, AuthenticationType.saas);
+            }
+          })));
+    };
+  }
 
   void _loginWithCredentials() {
     store.dispatch(_loginCredentialsAction(

@@ -63,6 +63,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_docu
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_active_closed_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_archived_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_created_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/signup_authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
@@ -158,6 +159,7 @@ class MockOnlineAction extends ActionOnline {}
 AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState networkConnectivityState, {MySpaceState? mySpaceState}) {
   return AppState(
     authenticationState: AuthenticationState.initial(),
+    signUpAuthenticationState: SignUpAuthenticationState.initial(),
     uploadFileState: UploadFileState.initial(),
     mySpaceState: mySpaceState ?? MySpaceState.initial(),
     shareState: ShareState.initial(),

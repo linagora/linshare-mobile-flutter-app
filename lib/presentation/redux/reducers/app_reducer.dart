@@ -54,6 +54,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_do
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_active_closed_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_archived_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_created_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/signup_authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/workgroup_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_versions_reducer.dart';
@@ -78,6 +79,7 @@ AppState appStateReducer(AppState state, action) {
     return AppState(
         uiState: uiReducer(state.uiState, action),
         authenticationState: authenticationReducer(state.authenticationState, action),
+        signUpAuthenticationState: signupAuthenticationReducer(state.signUpAuthenticationState, action),
         uploadFileState: uploadFileReducer(state.uploadFileState, action),
         mySpaceState: mySpaceReducer(state.mySpaceState, action),
         shareState: shareReducer(state.shareState, action),
@@ -119,6 +121,7 @@ AppState appStateReducer(AppState state, action) {
   return AppState(
       uiState: state.uiState,
       authenticationState: state.authenticationState,
+      signUpAuthenticationState: state.signUpAuthenticationState,
       uploadFileState: state.uploadFileState,
       mySpaceState: state.mySpaceState,
       shareState: state.shareState,

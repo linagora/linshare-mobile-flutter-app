@@ -2606,6 +2606,66 @@ class AppLocalizations {
       args: [memberName, driveName],
     );
   }
+
+  String get name_is_required {
+    return Intl.message('Name is required',
+        name: 'name_is_required');
+  }
+
+  String get surname_is_required {
+    return Intl.message('Surname is required',
+        name: 'surname_is_required');
+  }
+
+  String get sign_up_continue {
+    return Intl.message('Continue',
+        name: 'sign_up_continue');
+  }
+
+  String get sign_up_send_me_a_password {
+    return Intl.message('Send me a password',
+        name: 'sign_up_send_me_a_password');
+  }
+
+  String get sign_up_name_title {
+    return Intl.message('Name',
+        name: 'sign_up_name_title');
+  }
+
+  String get sign_up_surname_title {
+    return Intl.message('Surname',
+        name: 'sign_up_surname_title');
+  }
+
+  String get hint_input_sign_up_name {
+    return Intl.message('Enter your name',
+        name: 'hint_input_sign_up_name');
+  }
+
+  String get hint_input_sign_up_surname {
+    return Intl.message('Enter your surname',
+        name: 'hint_input_sign_up_surname');
+  }
+
+  String get sign_up_completed_title_center {
+    return Intl.message(
+        'Done, check your inbox',
+        name: 'sign_up_completed_title_center'
+    );
+  }
+
+  String sign_up_completed_message_center(String email) {
+    return Intl.message(
+        'A password has been sent to your email $email, check your email and\n continue login',
+        name: 'sign_up_completed_message_center',
+        args: [email]
+    );
+  }
+
+  String get email_is_not_available{
+    return Intl.message('Email is not available',
+        name: 'email_is_not_available');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
