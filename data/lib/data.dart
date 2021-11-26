@@ -6,6 +6,7 @@ export 'package:data/src/network/model/response/shared_space_member_response.dar
 export 'src/datasource/audit_user_datasource.dart';
 // data source
 export 'src/datasource/authentication_oidc_datasource.dart';
+export 'src/datasource/authentication_saas_datasource.dart';
 export 'src/datasource/autocomplete_datasource.dart';
 export 'src/datasource/biometric_datasource.dart';
 export 'src/datasource/contact_datasource.dart';
@@ -33,6 +34,8 @@ export 'src/datasource_impl/contact_datasource_impl.dart';
 export 'src/datasource/drive_datasource.dart';
 export 'src/datasource/authentication_datasource.dart';
 // data source impl
+export 'src/datasource_impl/authentication_saas_datasource_impl.dart';
+export 'src/datasource_impl/authentication_oidc_datasource_impl.dart';
 export 'src/datasource_impl/document_datasource_impl.dart';
 export 'src/datasource_impl/file_upload_datasource_impl.dart';
 export 'src/datasource_impl/functionality_datasource_impl.dart';
@@ -75,6 +78,7 @@ export 'src/local/config/database_config.dart';
 export 'src/extensions/account_quota_extension.dart';
 export 'src/extensions/user_extension.dart';
 export 'src/extensions/last_login_extension.dart';
+export 'src/extensions/authentication_token_extension.dart';
 // local
 export 'src/local/config/database_config.dart';
 export 'src/local/config/shared_space_table.dart';
@@ -83,6 +87,7 @@ export 'src/local/config/work_group_node_table.dart';
 // network
 export 'src/network/dio_client.dart';
 export 'src/network/linshare_http_client.dart';
+export 'src/network/saas_http_client.dart';
 export 'src/network/remote_exception_thrower.dart';
 export 'src/network/linshare_download_manager.dart';
 export 'src/network/config/endpoint.dart';
@@ -120,8 +125,12 @@ export 'src/network/model/request/rename_work_group_node_body_request.dart';
 export 'src/network/model/request/edit_upload_request_body_request.dart';
 export 'src/network/model/request/edit_upload_request_recipient_body_request.dart';
 export 'src/network/model/request/create_drive_body_request.dart';
+export 'src/network/model/request/plan_body_request.dart';
+export 'src/network/model/request/signup_body_request.dart';
 export 'src/network/model/response/authentication_audit_log_entry_user_response.dart';
 export 'src/network/model/response/document_details_response.dart';
+export 'src/network/model/response/user_saas_response.dart';
+export 'src/network/model/response/secret_token_response.dart';
 // model
 export 'src/network/model/response/document_response.dart';
 export 'src/network/model/response/shared_space_node_nested_response.dart';
@@ -155,6 +164,10 @@ export 'src/network/model/response/upload_request_group_response.dart';
 export 'src/network/model/response/upload_request_response.dart';
 export 'src/network/model/response/upload_request_entry_response.dart';
 export 'src/network/model/response/upload_request_entry_owner_response.dart';
+export 'src/network/model/response/verify_email_response.dart';
+export 'src/network/model/request/signup_body_request.dart';
+export 'src/network/model/response/permanent_token.dart';
+export 'src/network/model/request/permanent_token_body_request.dart';
 export 'src/network/model/share/received_share_dto.dart';
 export 'src/network/model/response/authentication_audit_log_entry_user_response.dart';
 export 'src/network/model/request/enable_versioning_work_group_body_request.dart';
@@ -190,11 +203,13 @@ export 'src/repository/upload_request_entry/upload_request_entry_repository_impl
 export 'src/repository/upload_request_group/upload_request_group_repository_impl.dart';
 export 'src/repository/workgroup/drive_repository_impl.dart';
 export 'src/util/biometric_service.dart';
+export 'src/repository/authentication/saas_console_repository_impl.dart';
 // util
 export 'src/util/device_manager.dart';
 export 'src/util/biometric_service.dart';
 export 'src/util/local_biometric_service.dart';
 export 'src/util/oidc_parser.dart';
+export 'src/util/constant.dart';
 
 // exception
 export 'src/exception/biometric_exception_thrower.dart';

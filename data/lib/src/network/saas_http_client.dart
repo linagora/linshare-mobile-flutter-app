@@ -29,20 +29,34 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'dart:async';
 
-abstract class AuthenticationOIDCDataSource {
+import 'package:data/data.dart';
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+class SaaSHttpClient {
+  final DioClient _dioClient;
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
+  SaaSHttpClient(this._dioClient);
 
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+  Future<SecretTokenResponse> getSaaSSecretToken(Uri baseUrl, PlanBodyRequest planBodyRequest) async {
+    final result = await _dioClient.post(
+      Endpoint.secretToken.generateBaseUrl(baseUrl),
+      data: planBodyRequest.toJson().toString());
+    return SecretTokenResponse.fromJson(result);
+  }
+
+  Future<VerifyEmailResponse> verifyEmailSaaS(Uri baseUrl, String email) async {
+    final result = await _dioClient.get(
+      Endpoint.verifyEmail
+        .withPathParameter(email)
+        .generateBaseUrl(baseUrl));
+    return VerifyEmailResponse.fromJson(result);
+  }
+
+  Future<UserSaaSResponse> signUpForSaaS(Uri baseUrl, SignUpBodyRequest signUpBodyRequest) async {
+    final result = await _dioClient.post(
+      Endpoint.signUp.generateBaseUrl(baseUrl),
+      data: signUpBodyRequest.toJson().toString());
+    return UserSaaSResponse.fromJson(result);
+  }
 }

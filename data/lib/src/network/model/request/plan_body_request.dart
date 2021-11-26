@@ -28,21 +28,27 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
+
+import 'dart:convert';
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationOIDCDataSource {
+class PlanBodyRequest with EquatableMixin {
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  final String planId;
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
+  PlanBodyRequest(this.planId);
 
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('planId'): jsonEncode(planId)
+  };
+
+  @override
+  List<Object> get props => [planId];
+}
+
+extension PlanRequestExtension on PlanRequest {
+  PlanBodyRequest toPlanBodyRequest() => PlanBodyRequest(planId);
 }
