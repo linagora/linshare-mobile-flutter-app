@@ -31,18 +31,26 @@
 
 import 'package:domain/domain.dart';
 
-abstract class AuthenticationOIDCDataSource {
+class SaaSConsoleRepositoryImpl extends SaaSConsoleRepository {
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  final loginBaseUrl = 'https://user.linshare-saas-on-commit.integration-linshare.org';
+  final secretBaseUrl = 'https://subscription-twakeconsole.dev-linshare.lin-saas.dev';
+  final signUpBaseUrl = 'https://account-twakeconsole.dev-linshare.lin-saas.dev';
+  final verifyEmailBaseUrl = 'https://account-twakeconsole.dev-linshare.lin-saas.dev';
+  final companyName = 'My company';
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
+  SaaSConsoleRepositoryImpl();
 
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+  @override
+  Future<SaaSConfiguration> getSaaSConfiguration(SaaSType saaSType) async {
+    switch(saaSType) {
+      case SaaSType.dev:
+        return SaaSConfiguration(
+          loginBaseUrl: Uri.parse(loginBaseUrl),
+          signUpBaseUrl: Uri.parse(signUpBaseUrl),
+          secretBaseUrl: Uri.parse(secretBaseUrl),
+          verifyEmailBaseUrl: Uri.parse(verifyEmailBaseUrl),
+          companyName: companyName);
+    }
+  }
 }

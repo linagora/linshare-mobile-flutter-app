@@ -29,20 +29,26 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/network/model/converter/secret_token_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-abstract class AuthenticationOIDCDataSource {
+part 'secret_token_response.g.dart';
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+@JsonSerializable(explicitToJson: true)
+@SecretTokenConverter()
+class SecretTokenResponse with EquatableMixin {
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
+  String status;
+  SaaSSecretToken secretToken;
 
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+  SecretTokenResponse(this.status, this.secretToken);
+
+  factory SecretTokenResponse.fromJson(Map<String, dynamic> json) => _$SecretTokenResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SecretTokenResponseToJson(this);
+
+  @override
+  List<Object> get props => [status, secretToken];
 }

@@ -28,21 +28,17 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-abstract class AuthenticationOIDCDataSource {
+class SecretTokenConverter implements JsonConverter<SaaSSecretToken, String> {
+  const SecretTokenConverter();
 
-  Future<TokenOIDC?> getTokenOIDC(
-    String clientId,
-    String redirectUrl,
-    String discoveryUrl,
-    List<String> scopes,
-    bool preferEphemeralSessionIOS,
-    List<String>? promptValues,
-    bool allowInsecureConnections);
+  @override
+  SaaSSecretToken fromJson(String json) =>  SaaSSecretToken(json);
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
-
-  Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
+  @override
+  String toJson(SaaSSecretToken object) => object.value;
 }
