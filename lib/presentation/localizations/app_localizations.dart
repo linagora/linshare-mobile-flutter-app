@@ -2416,7 +2416,7 @@ class AppLocalizations {
 
   String get login_message_center {
     return Intl.message(
-        'Join +100 million active users using LinShare to store and share files with ease',
+        'Join +10000 active users using LinShare to store and share files with ease',
         name: 'login_message_center'
     );
   }
@@ -2437,7 +2437,7 @@ class AppLocalizations {
 
   String get login_user_own_server_message_center {
     return Intl.message(
-        'Before you can proceed, please choose a\n default server connection',
+        'Before you can proceed, please choose a default server connection',
         name: 'login_user_own_server_message_center'
     );
   }

@@ -1413,659 +1413,596 @@
     "type": "text",
     "placeholders": {}
   },
-  "restore": "Restore",
+  "restore": "Khôi phục",
   "@restore": {
     "type": "text",
     "placeholders": {}
   },
-  "available_offline": "Available offline",
+  "available_offline": "Ngoại tuyến sẵn có",
   "@available_offline": {
     "type": "text",
     "placeholders": {}
   },
-  "files_will_be_made_available_for_offline_use": "The files will be made available for offline use.",
+  "files_will_be_made_available_for_offline_use": "Tệp sẽ sẵn sàng sử dụng ngoại tuyến.",
   "@files_will_be_made_available_for_offline_use": {
     "type": "text",
     "placeholders": {}
   },
-  "files_will_no_longer_be_usable_without_be_network": "The files will no longer be usable without the network.",
+  "files_will_no_longer_be_usable_without_be_network": "Tệp không thể sử dụng ngoại tuyến.",
   "@files_will_no_longer_be_usable_without_be_network": {
     "type": "text",
     "placeholders": {}
   },
-  "file_cannot_be_switched_to_offline_mode": "This file cannot be switched to offline mode",
+  "file_cannot_be_switched_to_offline_mode": "Tệp không thể chuyển sang ngoại tuyến sẵn ",
   "@file_cannot_be_switched_to_offline_mode": {
     "type": "text",
     "placeholders": {}
   },
-  "login_sso_button": "Đăng nhập với SSO",
+  "login_sso_button": "Đăng nhập một lần",
   "@login_sso_button": {
     "type": "text",
     "placeholders": {}
   },
-  "login_sso_failed": "Đăng nhập lỗi",
+  "login_sso_failed": "Đăng nhập thất bại",
   "@login_sso_failed": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_requests": "Upload Requests",
+  "upload_requests": "Yêu cầu tải lên",
   "@upload_requests": {
     "type": "text",
     "placeholders": {}
   },
-  "pending": "Pending",
+  "pending": "Đang chờ",
   "@pending": {
     "type": "text",
     "placeholders": {}
   },
-  "active_closed": "Active / Closed",
+  "active_closed": "Mở / Đóng",
   "@active_closed": {
     "type": "text",
     "placeholders": {}
   },
-  "archived": "Archived",
+  "archived": "Lưu trữ",
   "@archived": {
     "type": "text",
     "placeholders": {}
   },
-  "create_upload_requests_here": "Create upload requests here",
+  "create_upload_requests_here": "Tạo mới yêu cầu tải lên",
   "@create_upload_requests_here": {
     "type": "text",
     "placeholders": {}
   },
-  "activated_date": "Activated {date}",
+  "activated_date": "Đã hoạt động {date}",
   "@activated_date": {
     "type": "text",
     "placeholders": {
       "date": {}
     }
   },
-  "active": "Active",
-  "@active": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "archived_date": "Archived {date}",
+  "archived_date": "Đã lưu trữ {date}",
   "@archived_date": {
     "type": "text",
     "placeholders": {
       "date": {}
     }
   },
-  "expired_closed": "Expired / Closed",
+  "active": "Hoạt động",
+  "@active": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "expired_closed": "Hết hạn | Đóng",
   "@expired_closed": {
     "type": "text",
     "placeholders": {}
   },
-  "add_new_upload_request": "Add new upload request",
+  "add_new_upload_request": "Thêm mới yêu cầu tải lên",
   "@add_new_upload_request": {
     "type": "text",
     "placeholders": {}
   },
-  "collective_upload": "Collective \nUpload",
+  "collective_upload": "Tải lên \nnhóm",
   "@collective_upload": {
     "type": "text",
     "placeholders": {}
   },
-  "individual_upload": "Individual \nUpload",
+  "individual_upload": "Tải lên \ncá nhân",
   "@individual_upload": {
     "type": "text",
     "placeholders": {}
   },
-  "create_collective_upload_request_title": "Collective Upload",
+  "create_collective_upload_request_title": "Tải lên nhóm",
   "@create_collective_upload_request_title": {
     "type": "text",
     "placeholders": {}
   },
-  "create_individual_upload_request_title": "Individual Upload",
+  "create_individual_upload_request_title": "Tải lên cá nhân",
   "@create_individual_upload_request_title": {
     "type": "text",
     "placeholders": {}
   },
-  "create_upload_request_button": "Create Upload Request",
+  "create_upload_request_button": "Tạo mới yêu cầu tải lên",
   "@create_upload_request_button": {
     "type": "text",
     "placeholders": {}
   },
-  "email_subject": "Email subject",
+  "email_subject": "Tiêu đề",
   "@email_subject": {
     "type": "text",
     "placeholders": {}
   },
-  "email_message": "Email message",
+  "email_message": "Thông điệp",
   "@email_message": {
     "type": "text",
     "placeholders": {}
   },
-  "settings": "Settings",
+  "settings": "Cài đặt",
   "@settings": {
     "type": "text",
     "placeholders": {}
   },
-  "advanced_options": "Advanced options",
+  "advanced_options": "Cài đặt nâng cao",
   "@advanced_options": {
     "type": "text",
     "placeholders": {}
   },
-  "show_less": "Show less",
+  "show_less": "Rút gọn",
   "@show_less": {
     "type": "text",
     "placeholders": {}
   },
-  "activation_date": "Activation date",
+  "activation_date": "Ngày kích hoạt",
   "@activation_date": {
     "type": "text",
     "placeholders": {}
   },
-  "expiration_date": "Expiration date",
+  "expiration_date": "Ngày hết hạn",
   "@expiration_date": {
     "type": "text",
     "placeholders": {}
   },
-  "reminder_date": "Reminder date",
+  "reminder_date": "Ngày nhắc nhở",
   "@reminder_date": {
     "type": "text",
     "placeholders": {}
   },
-  "max_number_of_files": "Max number of files",
+  "max_number_of_files": "Số lượng tệp tối đa",
   "@max_number_of_files": {
     "type": "text",
     "placeholders": {}
   },
-  "max_size_of_a_file": "Max size of a file",
+  "max_size_of_a_file": "Dung lượng tối đa",
   "@max_size_of_a_file": {
     "type": "text",
     "placeholders": {}
   },
-  "allow_deletion": "Allow deletion",
+  "allow_deletion": "Cho phép xoá",
   "@allow_deletion": {
     "type": "text",
     "placeholders": {}
   },
-  "allow_closure": "Allow closure",
+  "allow_closure": "Cho phép đóng",
   "@allow_closure": {
     "type": "text",
     "placeholders": {}
   },
-  "notification_language": "Notification Language",
+  "notification_language": "Ngôn ngữ thông báo",
   "@notification_language": {
     "type": "text",
     "placeholders": {}
   },
-  "max_number_files_error": "Max number of files must be set and smaller than 1000",
+  "max_number_files_error": "Số lượng tệp tối đa phải nhỏ hơn 1000",
   "@max_number_files_error": {
     "type": "text",
     "placeholders": {}
   },
-  "max_file_size_error": "Max size of a file must be set and smaller than 100 GB",
+  "max_file_size_error": "Dung lượng tối đa phải nhỏ hơn 100 GB",
   "@max_file_size_error": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_requests_root_back_title": "Back to Upload Requests",
+  "upload_requests_root_back_title": "Quay lại Yêu cầu tải lên",
   "@upload_requests_root_back_title": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_requests_no_files_uploaded": "No files uploaded yet",
+  "upload_requests_no_files_uploaded": "Chưa có tệp",
   "@upload_requests_no_files_uploaded": {
     "type": "text",
     "placeholders": {}
   },
-  "status": "Status",
+  "status": "Trạng thái",
   "@status": {
     "type": "text",
     "placeholders": {}
   },
-  "type": "Type",
+  "type": "Loại",
   "@type": {
     "type": "text",
     "placeholders": {}
   },
-  "search_in_upload_request_groups": "Search in Upload Request Groups",
+  "search_in_upload_request_groups": "Tìm kiếm yêu cầu tải lên",
   "@search_in_upload_request_groups": {
     "type": "text",
     "placeholders": {}
   },
-  "total_size_of_files": "Total size of files",
+  "total_size_of_files": "Dung lượng",
   "@total_size_of_files": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "password_protected": "Password protected",
+  "password_protected": "Mật khẩu được bảo vệ",
   "@password_protected": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "total_file_size_error": "Total size of files must be set and smaller than 100 GB",
+  "total_file_size_error": "Tổng dung lượng tệp phải nhỏ hơn 100 GB",
   "@total_file_size_error": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "add": "Add",
+  "add": "Thêm",
   "@add": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "confirm_add_recipients_title": "You are about to add a recipient to this upload request ! Beware, this action cannot be undone",
+  "confirm_add_recipients_title": "Bạn đã thêm người nhận vào Yêu cầu tải lên! Hành động này không thể thay đổi",
   "@confirm_add_recipients_title": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "recipients_have_been_successfully_added": "Recipients have been successfully added",
+  "recipients_have_been_successfully_added": "Người nhận đã được thêm",
   "@recipients_have_been_successfully_added": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "confirm_cancel_multiple_upload_request": "{numberOfItems,plural, =1{Are you sure you want to cancel \"{singleItemName}\"?}other{Are you sure you want to cancel {numberOfItems} items?}}",
+  "confirm_cancel_multiple_upload_request": "{numberOfItems,plural, =1{Bạn có đồng ý huỷ bỏ \"{singleItemName}\"?}other{Bạn có đồng ý huỷ bỏ {numberOfItems} yêu cầu tải lên?}}",
   "@confirm_cancel_multiple_upload_request": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems",
-      "singleItemName"
-    ],
     "placeholders": {
       "numberOfItems": {},
       "singleItemName": {}
     }
   },
-  "upload_request_proceed_button": "Proceed",
+  "upload_request_proceed_button": "Xử lý",
   "@upload_request_proceed_button": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "upload_request_has_been_updated": "Upload request has been updated",
+  "upload_request_has_been_updated": "Yêu cầu tải lên đã được cập nhật",
   "@upload_request_has_been_updated": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "some_upload_requests_have_been_updated": "Some upload requests have been updated",
+  "some_upload_requests_have_been_updated": "Các yêu cầu tải lên đã được cập nhật",
   "@some_upload_requests_have_been_updated": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "upload_request_could_not_be_updated": "Upload request could not be updated",
+  "upload_request_could_not_be_updated": "Cập nhật yêu cầu tải lên không thành công",
   "@upload_request_could_not_be_updated": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "some_upload_requests_could_not_be_updated": "Some upload requests could not be updated",
+  "some_upload_requests_could_not_be_updated": "Cập nhật yêu cầu tải lên không thành công",
   "@some_upload_requests_could_not_be_updated": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "archive": "Archive",
+  "archive": "Lưu trữ",
   "@archive": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "confirm_archive_multiple_upload_request": "{numberOfItems,plural, =1{Are you sure you want to archive \"{singleItemName}\"?}other{Are you sure you want to archive {numberOfItems} items?}}",
+  "confirm_archive_multiple_upload_request": "{numberOfItems,plural, =1{Bạn có đồng ý lưu trữ \"{singleItemName}\"?}other{Bạn có đồng ý lưu trữ {numberOfItems} Yêu cầu tải lên?}}",
   "@confirm_archive_multiple_upload_request": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems",
-      "singleItemName"
-    ],
     "placeholders": {
       "numberOfItems": {},
       "singleItemName": {}
     }
   },
-  "copy_before_archiving": "Copy all files to my personal space before archiving",
+  "copy_before_archiving": "Sao chép tệp tới Không gian của tôi trước khi thực hiện lưu trữ",
   "@copy_before_archiving": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "close": "Close",
+  "close": "Đóng",
   "@close": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "confirm_close_multiple_upload_request": "{numberOfItems,plural, =1{Are you sure you want to close \"{singleItemName}\"?}other{Are you sure you want to close {numberOfItems} items?}}",
+  "confirm_close_multiple_upload_request": "{numberOfItems,plural, =1{Bạn có đồng ý đóng \"{singleItemName}\"?}other{Bạn có đồng ý đóng {numberOfItems} Yêu cầu tải lên?}}",
   "@confirm_close_multiple_upload_request": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems",
-      "singleItemName"
-    ],
     "placeholders": {
       "numberOfItems": {},
       "singleItemName": {}
     }
   },
-  "search_in_upload_request_entries": "Search in Upload Requests Entries",
+  "search_in_upload_request_entries": "Tìm kiếm yêu cầu tải lên",
   "@search_in_upload_request_entries": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "the_files_could_not_be_copied_to_my_space": "The files could not be copied to My Space",
-  "@the_files_could_not_be_copied_to_my_space": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "biometric_timeout_title": "Set timeout",
+  "biometric_timeout_title": "Đặt thời gian hết hạn",
   "@biometric_timeout_title": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} second}other{{numberOfItems} seconds}}",
+  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} giây}other{{numberOfItems} giây}}",
   "@biometric_timeout_second": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems"
-    ],
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} minute}other{{numberOfItems} minutes}}",
+  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} phút}other{{numberOfItems} phút}}",
   "@biometric_timeout_minute": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems"
-    ],
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} hour}other{{numberOfItems} hours}}",
+  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} giờ}other{{numberOfItems} giờ}}",
   "@biometric_timeout_hour": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems"
-    ],
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "search_in": "Search in {node}",
+  "search_in": "Tìm kiếm trong {node}",
   "@search_in": {
     "type": "text",
-    "placeholders_order": [
-      "node"
-    ],
     "placeholders": {
       "node": {}
     }
   },
-  "move": "Move",
+  "move": "Di chuyển",
   "@move": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "move_here": "Move here",
+  "move_here": "Di chuyển đến",
   "@move_here": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_setting": "Advanced search settings",
+  "versioning_enable": "Bật lưu lại phiên bản",
+  "@versioning_enable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "are_you_sure_want_to_remove_this_version": "Bạn có chắc chắn xoá phiên bản này, chú ý, hành động này không thể hoàn tác?",
+  "@are_you_sure_want_to_remove_this_version": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "advance_search_setting": "Cài đặt tìm kiếm nâng cao",
   "@advance_search_setting": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_document": "Document",
+  "advance_search_type_document": "Tài liệu",
   "@advance_search_type_document": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
   "advance_search_type_pdf": "PDF",
   "@advance_search_type_pdf": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_spreadsheet": "Spreadsheet",
+  "advance_search_type_spreadsheet": "Bảng tính",
   "@advance_search_type_spreadsheet": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_image": "Image",
+  "advance_search_type_image": "Hình ảnh",
   "@advance_search_type_image": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_audio": "Audio",
+  "advance_search_type_audio": "Âm thanh",
   "@advance_search_type_audio": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_archive": "Archive",
+  "advance_search_type_archive": "Lưu trữ",
   "@advance_search_type_archive": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_other": "Other",
+  "advance_search_type_other": "Khác",
   "@advance_search_type_other": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_any_time": "Any time",
+  "advance_search_date_any_time": "Mọi lúc",
   "@advance_search_date_any_time": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_past_day": "Past day",
+  "advance_search_date_past_day": "Hôm qua",
   "@advance_search_date_past_day": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_past_week": "Past week",
+  "advance_search_date_past_week": "Tuần trước",
   "@advance_search_date_past_week": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_past_month": "Past month",
+  "advance_search_date_past_month": "Tháng trước",
   "@advance_search_date_past_month": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_past_year": "Past year",
+  "advance_search_date_past_year": "Năm trước",
   "@advance_search_date_past_year": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_button_reset": "Reset",
+  "advance_search_button_reset": "Cài đặt lại",
   "@advance_search_button_reset": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_button_apply": "Apply",
+  "advance_search_button_apply": "Áp dụng",
   "@advance_search_button_apply": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_in_to_saas": "Sign in to SaaS",
-  "@sign_in_to_saas": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "sign_in_to_self_hosted_instance": "Sign in to self-hosted instance",
-  "@sign_in_to_self_hosted_instance": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "do_not_have_an_account": "Don't have an account?",
-  "@do_not_have_an_account": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "sign_up": "Sign up",
-  "@sign_up": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "sign_in_with_your_credentials": "Sign in with your credentials",
-  "@sign_in_with_your_credentials": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "sign_in_with_your_sso": "Sign in with your SSO",
-  "@sign_in_with_your_sso": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "please_input_your_url": "Please input your URL",
-  "@please_input_your_url": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "this_feature_not_supported": "This feature is not currently supported",
+  "this_feature_not_supported": "Tính năng này hiện chưa được hỗ trợ",
   "@this_feature_not_supported": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "drive": "Drive",
+  "edit": "Chỉnh sửa",
+  "@edit": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "save": "Lưu",
+  "@save": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "yes": "Đồng ý",
+  "@yes": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no": "Không",
+  "@no": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_successfully": "Cập nhật Yêu cầu tải lên thành công!",
+  "@the_upload_request_has_been_updated_successfully": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_failed": "Cập nhật Yêu cầu tải lên thất bại",
+  "@the_upload_request_has_been_updated_failed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "drive": "Ổ đĩa",
   "@drive": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "loading": "Loading",
+  "loading": "Đang xử lý",
   "@loading": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "create_new_workgroup_or_drive": "Create new workgroup or drive",
-  "@create_new_workgroup_or_drive": {
+  "canceled": "Huỷ bỏ",
+  "@canceled": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "back": "Back",
+  "back": "Quay lại",
   "@back": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "login_message_center": "Join +100 million active users using LinShare to store and share files with ease",
+  "login_message_center": "Tham gia cộng đồng +10000 người dùng LinShare\n giúp lưu trữ và chia sẻ tài liệu dễ dàng hơn",
   "@login_message_center": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "login_message_bottom": "By default you connect to Linagora servers. If you are not sure about this setting, please contact your technical specialist.",
+  "login_message_bottom": "Kết nối mặc định tới máy chủ Linagora.\nNếu bạn không chắc chắn, hãy liên hệ với\n hỗ trợ kỹ thuật của bạn.",
   "@login_message_bottom": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "create_an_account": "Create an account",
+  "create_an_account": "Tạo tài khoản",
   "@create_an_account": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "login_user_own_server_message_center": "Before you can proceed, please choose a\n default server connection",
+  "login_user_own_server_message_center": "Trước khi tiếp tục, hãy nhập \n đường dẫn máy chủ của bạn",
   "@login_user_own_server_message_center": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "checkbox_text_login_with_sso": "My server is using a single sign-on(SSO)",
+  "checkbox_text_login_with_sso": "Máy chủ sử dụng Đăng nhập một lần (SSO)",
   "@checkbox_text_login_with_sso": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
   "login_email_title": "Email",
   "@login_email_title": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "login_password_title": "Password",
+  "login_password_title": "Mật khẩu",
   "@login_password_title": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "hint_input_password_login": "Enter your password",
+  "hint_input_password_login": "Nhập mật khẩu",
   "@hint_input_password_login": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "hint_input_email_login": "Enter your email",
+  "hint_input_email_login": "Nhập email",
   "@hint_input_email_login": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "email_is_required": "Email is required",
+  "email_is_required": "Bắt buộc",
   "@email_is_required": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "password_is_required": "Password is required",
+  "password_is_required": "Bắt buộc",
   "@password_is_required": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "url_is_invalid": "URL is invalid",
+  "url_is_invalid": "Đường dẫn không hợp lệ",
   "@url_is_invalid": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "email_is_invalid": "Email is invalid",
+  "email_is_invalid": "Email không hợp lệ",
   "@email_is_invalid": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "password_is_invalid": "Password is invalid",
+  "password_is_invalid": "Mật khẩu không hợp lệ",
   "@password_is_invalid": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "use_your_own_server": "Use your own server",
+  "use_your_own_server": "Sử dụng máy chủ của bạn",
   "@use_your_own_server": {
     "type": "text",
-    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_drive": "Tạo Ổ đĩa",
+  "@create_drive": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_workgroup": "Tạo nhóm làm việc",
+  "@create_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_drive": "Tạo Ổ đĩa mới",
+  "@create_new_drive": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_drive": "Ổ đĩa mới",
+  "@new_drive": {
+    "type": "text",
     "placeholders": {}
   },
   "add_a_member": "Add a member",
