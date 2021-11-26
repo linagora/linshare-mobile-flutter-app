@@ -31,57 +31,63 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_form_type.dart';
 import 'package:meta/meta.dart';
 
 import 'linshare_state.dart';
 
 @immutable
-class AuthenticationState extends LinShareState  {
-  final LoginFormType loginFormType;
-  final SaaSConfiguration? configuration;
+class SignUpAuthenticationState extends LinShareState  {
+  final SignUpFormType signUpFormType;
+  final SaaSConfiguration? saaSConfiguration;
+  final UserSaaS? userSaaS;
 
-  AuthenticationState(
+  SignUpAuthenticationState(
       Either<Failure, Success> viewState,
-      this.configuration,
-      this.loginFormType,
+      this.saaSConfiguration,
+      this.userSaaS,
+      this.signUpFormType,
   ) : super(viewState);
 
-  factory AuthenticationState.initial() {
-    return AuthenticationState(Right(IdleState()), null, LoginFormType.main);
+  factory SignUpAuthenticationState.initial() {
+    return SignUpAuthenticationState(Right(IdleState()), null, null, SignUpFormType.main);
   }
 
   @override
-  AuthenticationState startLoadingState() {
-    return AuthenticationState(Right(LoadingState()), configuration, loginFormType);
-  }
-
-  AuthenticationState startAuthenticationSSOLoadingState() {
-    return AuthenticationState(Right(AuthenticationSSOLoadingState()), configuration, loginFormType);
-  }
-
-  AuthenticationState startAuthenticationSaaSLoadingState() {
-    return AuthenticationState(Right(AuthenticationSaaSLoadingState()), configuration, loginFormType);
+  SignUpAuthenticationState startLoadingState() {
+    return SignUpAuthenticationState(Right(LoadingState()), saaSConfiguration, userSaaS, signUpFormType);
   }
 
   @override
-  AuthenticationState sendViewState({required Either<Failure, Success> viewState}) {
-    return AuthenticationState(viewState, configuration, loginFormType);
+  SignUpAuthenticationState sendViewState({required Either<Failure, Success> viewState}) {
+    return SignUpAuthenticationState(viewState, saaSConfiguration, userSaaS, signUpFormType);
   }
 
   @override
-  AuthenticationState clearViewState() {
-    return AuthenticationState.initial();
+  SignUpAuthenticationState clearViewState() {
+    return SignUpAuthenticationState.initial();
   }
 
-  AuthenticationState updateAuthenticationScreenState({required LoginFormType formType}) {
-    return AuthenticationState(Right(IdleState()), configuration, formType);
+  SignUpAuthenticationState setSaaSConfiguration({required SaaSConfiguration newConfig}) {
+    return SignUpAuthenticationState(Right(IdleState()), newConfig, userSaaS, signUpFormType);
   }
 
-  AuthenticationState updateSaaSConfiguration({required SaaSConfiguration saaSConfiguration}) {
-    return AuthenticationState(Right(IdleState()), saaSConfiguration, loginFormType);
+  SignUpAuthenticationState setSignUpSuccess(UserSaaS? user, SignUpFormType? formType) {
+    return SignUpAuthenticationState(Right(IdleState()), saaSConfiguration, user ?? userSaaS, formType ?? signUpFormType);
+  }
+
+  SignUpAuthenticationState updateAuthenticationScreenState({required SignUpFormType formType}) {
+    return SignUpAuthenticationState(Right(IdleState()), saaSConfiguration, userSaaS, formType);
   }
 
   @override
   List<Object?> get props => super.props;
+}
+
+extension SignUpAuthenticationSelector on SignUpAuthenticationState {
+  bool isSignUpAuthenticationLoading() {
+    return viewState.fold(
+      (failure) => false,
+      (success) => success is LoadingState);
+  }
 }

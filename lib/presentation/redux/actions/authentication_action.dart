@@ -60,3 +60,10 @@ class UpdateAuthenticationScreenStateAction extends ActionOffline {
 
   UpdateAuthenticationScreenStateAction(this.loginFormType);
 }
+
+@immutable
+class UpdateSaaSConfigurationAction extends ActionOffline {
+  final SaaSConfiguration configuration;
+
+  UpdateSaaSConfigurationAction(this.configuration);
+}

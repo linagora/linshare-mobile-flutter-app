@@ -76,6 +76,7 @@ class NetworkModule {
   void _provideHttpClient() {
     getIt.registerSingleton(DioClient(getIt<Dio>()));
     getIt.registerSingleton(LinShareHttpClient(getIt<DioClient>()));
+    getIt.registerSingleton(SaaSHttpClient(getIt<DioClient>()));
     getIt.registerFactory(() => LinShareDownloadManager(
         getIt<RemoteExceptionThrower>(),
         getIt<LinShareHttpClient>()));
