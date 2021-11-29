@@ -46,7 +46,7 @@ abstract class SharedSpaceRepository {
 
   Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
 
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles();
+  Future<List<SharedSpaceRole>> getSharedSpacesRoles({LinShareNodeType? type});
 
   Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
 
