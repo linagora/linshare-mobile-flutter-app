@@ -66,7 +66,7 @@ class LocalSharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   }
 
   @override
-  Future<SharedSpaceNodeNested> getSharedSpace(SharedSpaceId sharedSpaceId, {MembersParameter membersParameter = MembersParameter.withoutMembers, RolesParameter rolesParameter = RolesParameter.withRole}) {
+  Future<SharedSpaceNodeNested> getSharedSpace(SharedSpaceId sharedSpaceId, {MembersParameter membersParameter = MembersParameter.withMembers, RolesParameter rolesParameter = RolesParameter.withRole}) {
     throw UnimplementedError();
   }
 

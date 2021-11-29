@@ -2561,6 +2561,43 @@ class AppLocalizations {
       name: 'member_default_role_of_all_workgroups_inside_this_drive',
     );
   }
+
+  String get drive_admin {
+    return Intl.message('Drive Admin',
+        name: 'drive_admin');
+  }
+
+  String get drive_reader {
+    return Intl.message('Drive Reader',
+        name: 'drive_reader');
+  }
+
+  String get drive_writer {
+    return Intl.message('Drive Writer',
+        name: 'drive_writer');
+  }
+
+  String get workgroup_admin {
+    return Intl.message('Workgroup Admin',
+        name: 'workgroup_admin');
+  }
+
+  String get workgroup_reader {
+    return Intl.message('Workgroup Reader',
+        name: 'workgroup_reader');
+  }
+
+  String get workgroup_writer {
+    return Intl.message('Workgroup Writer',
+        name: 'workgroup_writer');
+  }
+
+  String get workgroup_contributor {
+    return Intl.message(
+      'Workgroup Contributor',
+      name: 'workgroup_contributor',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

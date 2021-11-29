@@ -59,6 +59,7 @@ import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_mo
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_member_destination.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -371,7 +372,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     _appNavigation.popBack();
     _appNavigation.push(
         RoutePaths.addDriveMember,
-        arguments: AddDriveMemberArguments(drive)
+        arguments: AddDriveMemberArguments(drive, AddMemberDestination.sharedSpaceView)
     );
   }
 

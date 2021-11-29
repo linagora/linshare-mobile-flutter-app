@@ -81,7 +81,7 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   Future<SharedSpaceNodeNested> getSharedSpace(
     SharedSpaceId sharedSpaceId,
     {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
+      MembersParameter membersParameter = MembersParameter.withMembers,
       RolesParameter rolesParameter = RolesParameter.withRole
     }
   ) {

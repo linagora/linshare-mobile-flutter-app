@@ -65,13 +65,13 @@ void main() {
     test('get shared space interactor should return success with complete data', () async {
       when(sharedSpaceRepository.getSharedSpace(
         sharedSpaceId1,
-        membersParameter: MembersParameter.withoutMembers,
+        membersParameter: MembersParameter.withMembers,
         rolesParameter: RolesParameter.withoutRole
       )).thenAnswer((_) async => sharedSpace1);
 
       final result = await getSharedSpaceInteractor.execute(
         sharedSpaceId1,
-        membersParameter: MembersParameter.withoutMembers,
+        membersParameter: MembersParameter.withMembers,
         rolesParameter: RolesParameter.withoutRole
       );
 
