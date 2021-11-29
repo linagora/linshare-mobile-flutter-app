@@ -39,9 +39,9 @@ class GetAllSharedSpaceRolesInteractor {
 
   GetAllSharedSpaceRolesInteractor(this._sharedSpaceRepository);
 
-  Future<Either<Failure, Success>> execute() async {
+  Future<Either<Failure, Success>> execute({LinShareNodeType? type}) async {
     try {
-      final roles = await _sharedSpaceRepository.getSharedSpacesRoles();
+      final roles = await _sharedSpaceRepository.getSharedSpacesRoles(type: type);
       return Right<Failure, Success>(SharedSpaceRolesViewState(roles));
     } catch (exception) {
       return Left<Failure, Success>(SharedSpaceRolesFailure(exception));
