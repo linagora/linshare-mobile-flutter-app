@@ -44,6 +44,12 @@ final sharedSpaceDetailsReducer = combineReducers<SharedSpaceDetailsState>([
                   (failure) => [],
                   (success) => (success is SharedSpaceMembersViewState) ? success.members : []),
           viewState: action.getMembersViewState)),
+  TypedReducer<SharedSpaceDetailsState, SharedSpaceDetailsGetAllDriveMembersAction>((SharedSpaceDetailsState state, SharedSpaceDetailsGetAllDriveMembersAction action) =>
+      state.setSharedSpaceMembers(
+          newMembers: action.getMembersViewState.fold(
+              (failure) => [],
+              (success) => (success is SharedSpaceMembersViewState) ? success.members : []),
+          viewState: action.getMembersViewState)),
   TypedReducer<SharedSpaceDetailsState, CleanSharedSpaceDetailsStateAction>((SharedSpaceDetailsState state, CleanSharedSpaceDetailsStateAction action) => state.clearViewState()),
   TypedReducer<SharedSpaceDetailsState, SharedSpaceDetailsGetAllSharedSpaceActivitesAction>((SharedSpaceDetailsState state, SharedSpaceDetailsGetAllSharedSpaceActivitesAction action) =>
       state.setSharedSpaceActivities(

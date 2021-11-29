@@ -41,6 +41,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_member_destination.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:redux/redux.dart';
 
@@ -72,9 +74,11 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
 
   void initState(SharedSpaceDetailsArguments arguments) {
     refreshSharedSpaceMembers(arguments.sharedSpace.sharedSpaceId);
-    store.dispatch(_getSharedSpaceAction(arguments.sharedSpace.sharedSpaceId));
-    store.dispatch(_getSharedSpaceActivitiesAction(arguments.sharedSpace.sharedSpaceId));
-    store.dispatch(_getSharedSpaceRolesAction());
+    store.dispatch(_getSharedSpaceAction(arguments.sharedSpace));
+    if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
+      store.dispatch(_getSharedSpaceActivitiesAction(arguments.sharedSpace.sharedSpaceId));
+      store.dispatch(_getSharedSpaceRolesAction());
+    }
   }
 
   void backToSharedSpacesList() {
@@ -95,6 +99,13 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     );
   }
 
+  void goToAddDriveMember(SharedSpaceNodeNested drive, List<SharedSpaceMember> members) {
+    _appNavigation.push(
+      RoutePaths.addDriveMember,
+      arguments: AddDriveMemberArguments(drive, AddMemberDestination.sharedSpaceDetail, members: members),
+    );
+  }
+
   void changeMemberRole(SharedSpaceId sharedSpaceId, SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
     store.dispatch(_updateSharedSpaceMemberRoleAction(sharedSpaceId, AccountId(fromMember.account?.accountId.uuid ?? ''), changeToRole));
     _appNavigation.popBack();
@@ -107,6 +118,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
 
   OnlineThunkAction _getSharedSpaceMembersAction(SharedSpaceId sharedSpaceId) {
     return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartSharedSpaceDetailsLoadingAction());
       store.dispatch(SharedSpaceDetailsGetAllSharedSpaceMembersAction(await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId)));
     });
   }
@@ -117,19 +129,18 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     });
   }
 
-  OnlineThunkAction _getSharedSpaceAction(SharedSpaceId sharedSpaceId) {
+  OnlineThunkAction _getSharedSpaceAction(SharedSpaceNodeNested sharedSpace) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final sharedSpaceViewState = await _getSharedSpaceInteractor.execute(sharedSpaceId);
+      final sharedSpaceViewState = await _getSharedSpaceInteractor.execute(sharedSpace.sharedSpaceId);
       store.dispatch(SharedSpaceDetailsGetSharedSpaceDetailsAction(sharedSpaceViewState));
 
-      await sharedSpaceViewState.fold(
-        (_) => null,
-        (success) async {
+      if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
+        await sharedSpaceViewState.fold((_) => null, (success) async {
           if (success is SharedSpaceDetailViewState) {
             store.dispatch(SharedSpaceDetailsGetAccountQuotaAction(await _getQuotaInteractor.execute(success.sharedSpace.quotaId)));
           }
-        }
-      );
+        });
+      }
     });
   }
 

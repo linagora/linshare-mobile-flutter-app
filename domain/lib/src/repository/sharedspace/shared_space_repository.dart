@@ -39,7 +39,7 @@ abstract class SharedSpaceRepository {
   Future<SharedSpaceNodeNested> getSharedSpace(
     SharedSpaceId shareSpaceId,
     {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
+      MembersParameter membersParameter = MembersParameter.withMembers,
       RolesParameter rolesParameter = RolesParameter.withRole
     }
   );
