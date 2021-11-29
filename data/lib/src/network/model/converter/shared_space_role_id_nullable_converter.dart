@@ -29,71 +29,17 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/network/model/account/account_dto.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/shared_space_member_id_converter.dart';
-import 'package:data/src/network/model/response/shared_space_member_node_dto.dart';
-import 'package:data/src/network/model/sharedspace/shared_space_role_dto.dart';
-import 'package:data/src/util/attribute.dart';
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'shared_space_member_response.g.dart';
-
-@JsonSerializable()
-@DatetimeConverter()
-@SharedSpaceMemberIdConverter()
-class SharedSpaceMemberResponse with EquatableMixin {
-  final AccountDto? account;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final SharedSpaceMemberNodeDto? node;
-  final SharedSpaceRoleDto? role;
-  final SharedSpaceRoleDto? nestedRole;
-  final LinShareNodeType? type;
-
-  @JsonKey(name: Attribute.uuid)
-  final SharedSpaceMemberId sharedSpaceMemberId;
-
-  SharedSpaceMemberResponse(
-    this.account,
-    this.node,
-    this.role,
-    this.nestedRole,
-    this.type,
-    this.sharedSpaceMemberId,
-    this.creationDate,
-    this.modificationDate
-  );
-
-  factory SharedSpaceMemberResponse.fromJson(Map<String, dynamic> json) => _$SharedSpaceMemberResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$SharedSpaceMemberResponseToJson(this);
+class SharedSpaceRoleIdNullableConverter implements JsonConverter<SharedSpaceRoleId?, String?> {
+  const SharedSpaceRoleIdNullableConverter();
 
   @override
-  List<Object?> get props => [
-    account,
-    node,
-    role,
-    nestedRole,
-    type,
-    sharedSpaceMemberId,
-    creationDate,
-    modificationDate
-  ];
-}
+  SharedSpaceRoleId? fromJson(String? json) => json != null ? SharedSpaceRoleId(json) : null;
 
-extension SharedSpaceMemberResponseExtension on SharedSpaceMemberResponse {
-  SharedSpaceMember toSharedSpaceMember() {
-    return SharedSpaceMember(
-      sharedSpaceMemberId,
-      account?.toAccount(),
-      creationDate,
-      modificationDate,
-      node?.toSharedSpaceMemberNode(),
-      role?.toSharedSpaceRole(),
-      nestedRole?.toSharedSpaceRole(),
-      type,
-    );
-  }
+  @override
+  String? toJson(SharedSpaceRoleId? object) => object != null ? jsonEncode(object.uuid) : null;
 }

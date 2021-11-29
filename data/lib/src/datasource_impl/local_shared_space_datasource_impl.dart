@@ -71,7 +71,7 @@ class LocalSharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   }
 
   @override
-  Future<List<SharedSpaceRole>> getSharedSpaceRoles() {
+  Future<List<SharedSpaceRole>> getSharedSpaceRoles({LinShareNodeType? type}) {
     throw UnimplementedError();
   }
 

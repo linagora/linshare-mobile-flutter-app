@@ -47,11 +47,12 @@ class SharedSpaceRoleDto extends Equatable {
   final SharedSpaceRoleId sharedSpaceRoleId;
 
   final SharedSpaceRoleName name;
+  final LinShareNodeType? type;
 
-  SharedSpaceRoleDto(this.sharedSpaceRoleId, this.name);
+  SharedSpaceRoleDto(this.sharedSpaceRoleId, this.name, this.type);
 
   @override
-  List<Object> get props => [sharedSpaceRoleId, name];
+  List<Object?> get props => [sharedSpaceRoleId, name, type];
 
   factory SharedSpaceRoleDto.fromJson(Map<String, dynamic> json) => _$SharedSpaceRoleDtoFromJson(json);
   Map<String, dynamic> toJson() => _$SharedSpaceRoleDtoToJson(this);
@@ -59,6 +60,6 @@ class SharedSpaceRoleDto extends Equatable {
 
 extension SharedSpaceRoleDtoExtension on SharedSpaceRoleDto {
   SharedSpaceRole toSharedSpaceRole() {
-    return SharedSpaceRole(sharedSpaceRoleId, name);
+    return SharedSpaceRole(sharedSpaceRoleId, name, type: type);
   }
 }
