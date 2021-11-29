@@ -36,13 +36,19 @@ class AddSharedSpaceMemberRequest extends Equatable {
   final AccountId account;
   final SharedSpaceId node;
   final SharedSpaceRoleId role;
+  final LinShareNodeType? type;
+  final SharedSpaceRoleId? nestedRole;
 
   AddSharedSpaceMemberRequest(
     this.account,
     this.node,
-    this.role
+    this.role,
+    {
+      this.type,
+      this.nestedRole
+    }
   );
 
   @override
-  List<Object> get props => [account, node, role];
+  List<Object?> get props => [account, node, role, type, nestedRole];
 }
