@@ -381,7 +381,13 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
       SharedSpaceMember member) {
     SelectRoleModalSheetBuilder(
           key: Key('select_role_on_shared_space_member_details'),
-          selectedRole: selectedRole)
+          selectedRole: selectedRole,
+          listRoles: [
+            SharedSpaceRoleName.READER,
+            SharedSpaceRoleName.ADMIN,
+            SharedSpaceRoleName.CONTRIBUTOR,
+            SharedSpaceRoleName.WRITER
+          ])
         .onConfirmAction((role) => _model.changeMemberRole(sharedSpaceId, member, role))
         .show(context);
   }

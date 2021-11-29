@@ -45,21 +45,12 @@ typedef OnSelectActionClick = void Function(SharedSpaceRoleName role);
 class SelectRoleModalSheetBuilder {
   @protected final Key key;
   @protected final SharedSpaceRoleName selectedRole;
-  @protected final List<SharedSpaceRoleName> listRoles;
   @protected OnSelectActionClick? _onSelectActionClick;
 
-  Widget? _header;
+  SelectRoleModalSheetBuilder({required this.key, required this.selectedRole});
 
-  SelectRoleModalSheetBuilder({required this.key, required this.selectedRole, required this.listRoles});
-
-  SelectRoleModalSheetBuilder onConfirmAction(OnSelectActionClick onConfirmActionClick) {
+  void onConfirmAction(OnSelectActionClick onConfirmActionClick) {
     _onSelectActionClick = onConfirmActionClick;
-    return this;
-  }
-
-  SelectRoleModalSheetBuilder addHeader(Widget header) {
-    _header = header;
-    return this;
   }
 
   void show(context) {
@@ -76,11 +67,9 @@ class SelectRoleModalSheetBuilder {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if(_header != null) _header!,
-                      if(_header != null) Divider(),
-                      ...listRoles
-                        .map((role) => _getSelectingRoleTile(context, role, selectedRole))
-                        .toList()
+                      _getSelectingRoleTile(context, SharedSpaceRoleName.DRIVE_READER, selectedRole),
+                      _getSelectingRoleTile(context, SharedSpaceRoleName.DRIVE_ADMIN, selectedRole),
+                      _getSelectingRoleTile(context, SharedSpaceRoleName.DRIVE_WRITER, selectedRole),
                     ],
                   )
               )

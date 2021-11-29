@@ -395,7 +395,10 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   void _onPressContextMenu(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
     switch (sharedSpace.element.nodeType) {
       case LinShareNodeType.DRIVE:
-        sharedSpaceViewModel.openDriveContextMenu(context, sharedSpace.element, []);
+        sharedSpaceViewModel.openDriveContextMenu(
+            context,
+            sharedSpace.element,
+            _contextDriveMenuActionTiles(context, sharedSpace));
         break;
       default:
         sharedSpaceViewModel.openContextMenu(
@@ -404,6 +407,13 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
           _contextMenuActionTiles(context, sharedSpace),
           footerAction: _contextMenuFooterAction(sharedSpace.element));
     }
+  }
+
+  List<Widget> _contextDriveMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
+    return [
+      if (SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.element.sharedSpaceRole.name))
+        _addDriveMemberAction(sharedSpace.element),
+    ];
   }
 
   List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
@@ -441,6 +451,15 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             AppLocalizations.of(context).details)
         .onActionClick((data) => sharedSpaceViewModel.clickOnDetails(sharedSpace))
         .build();
+  }
+
+  Widget _addDriveMemberAction(SharedSpaceNodeNested drive) {
+    return SimpleContextMenuActionBuilder(
+          Key('add_drive_member_context_menu_action'),
+          Icon(Icons.person_add, size: 24.0),
+          AppLocalizations.of(context).add_a_member)
+      .onActionClick((data) => sharedSpaceViewModel.clickOnAddDriveMember(drive))
+      .build();
   }
 
   Widget _buildSharedSpaceName(String sharedSpaceName) {
