@@ -445,16 +445,20 @@ class LinShareHttpClient {
 
   Future<SharedSpaceMemberResponse> addSharedSpaceMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request) async {
     final resultJson = await _dioClient.post(
-      Endpoint.sharedSpaces
-        .withPathParameter(sharedSpaceId.uuid)
-        .withPathParameter('members')
-        .generateEndpointPath(),
+        Endpoint.sharedSpaces
+          .withPathParameter(sharedSpaceId.uuid)
+          .withPathParameter('members')
+          .generateEndpointPath(),
         data: request.toBodyRequest().toJson().toString());
     return SharedSpaceMemberResponse.fromJson(resultJson);
   }
 
-  Future<List<SharedSpaceRoleDto>> getSharedSpaceRoles() async {
-    final sharedSpaceRolesPath = Endpoint.sharedSpaceRoles.generateEndpointPath();
+  Future<List<SharedSpaceRoleDto>> getSharedSpaceRoles({LinShareNodeType? type}) async {
+    final sharedSpaceRolesPath = Endpoint.sharedSpaceRoles
+        .withQueryParameters([
+          if (type != null) StringQueryParameter('nodeType', type.value)
+        ])
+        .generateEndpointPath();
     final List rolesJson = await _dioClient.get(sharedSpaceRolesPath);
 
     return rolesJson
