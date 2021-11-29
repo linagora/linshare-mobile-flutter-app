@@ -79,6 +79,8 @@ import 'package:linshare_flutter_app/presentation/widget/second_factor_authentic
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_viewmodel.dart';
@@ -128,6 +130,7 @@ class WidgetModule {
     _provideAccountDetailsComponent();
     _provideReceivedShareWidgetComponent();
     _provideSharedSpaceDetailsWidgetComponent();
+    _provideAddDriveMemberWidgetComponent();
     _provideAuthenticationWidgetComponent();
     _provideEnterOTPWidgetComponent();
     _provide2FAWidgetComponent();
@@ -386,6 +389,19 @@ class WidgetModule {
         getIt.get<UpdateSharedSpaceMemberInteractor>(),
         getIt.get<DeleteSharedSpaceMemberInteractor>(),
         getIt.get<EnableVersioningWorkgroupInteractor>(),
+    ));
+  }
+
+  void _provideAddDriveMemberWidgetComponent() {
+    getIt.registerFactory(() => AddDriveMemberWidget());
+    getIt.registerFactory(() => AddDriveMemberViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+      getIt.get<GetSharedSpaceInteractor>(),
+      getIt.get<GetAllSharedSpaceMembersInteractor>(),
+      getIt.get<GetAutoCompleteSharingInteractor>(),
+      getIt.get<AddSharedSpaceMemberInteractor>(),
+      getIt.get<GetAllSharedSpaceRolesInteractor>(),
     ));
   }
 

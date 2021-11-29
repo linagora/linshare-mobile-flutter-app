@@ -2526,6 +2526,41 @@ class AppLocalizations {
       name: 'new_drive',
     );
   }
+
+  String get add_a_member {
+    return Intl.message(
+      'Add a member',
+      name: 'add_a_member',
+    );
+  }
+
+  String get add_team_members_with_roles {
+    return Intl.message(
+      'Add team members with roles',
+      name: 'add_team_members_with_roles',
+    );
+  }
+
+  String get role_in_this_drive {
+    return Intl.message(
+      'Role in this drive',
+      name: 'role_in_this_drive',
+    );
+  }
+
+  String get default_role_in_workgroups {
+    return Intl.message(
+      'Default role in workgroups',
+      name: 'default_role_in_workgroups',
+    );
+  }
+
+  String get member_default_role_of_all_workgroups_inside_this_drive {
+    return Intl.message(
+      'Member\'s default role of all workgroups inside this drive',
+      name: 'member_default_role_of_all_workgroups_inside_this_drive',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

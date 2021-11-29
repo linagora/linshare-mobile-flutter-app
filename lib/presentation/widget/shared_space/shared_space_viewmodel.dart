@@ -58,6 +58,7 @@ import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_moda
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -357,6 +358,20 @@ class SharedSpaceViewModel extends BaseViewModel {
     _appNavigation.push(
       RoutePaths.sharedSpaceDetails,
       arguments: SharedSpaceDetailsArguments(sharedSpaceNodeNested)
+    );
+  }
+
+  void clickOnAddDriveMember(SharedSpaceNodeNested drive) {
+    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
+      _goToAddDriveMember(drive);
+    }));
+  }
+
+  void _goToAddDriveMember(SharedSpaceNodeNested drive) {
+    _appNavigation.popBack();
+    _appNavigation.push(
+        RoutePaths.addDriveMember,
+        arguments: AddDriveMemberArguments(drive)
     );
   }
 
