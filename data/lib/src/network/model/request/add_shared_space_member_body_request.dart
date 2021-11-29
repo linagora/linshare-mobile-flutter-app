@@ -32,6 +32,7 @@
 import 'package:data/src/network/model/converter/account_id_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_role_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_role_id_nullable_converter.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -43,15 +44,20 @@ part 'add_shared_space_member_body_request.g.dart';
 @AccountIdConverter()
 @SharedSpaceIdConverter()
 @SharedSpaceRoleIdConverter()
+@SharedSpaceRoleIdNullableConverter()
 class AddSharedSpaceMemberBodyRequest with EquatableMixin {
   final AccountId account;
   final SharedSpaceId node;
   final SharedSpaceRoleId role;
+  final LinShareNodeType? type;
+  final SharedSpaceRoleId? nestedRole;
 
   AddSharedSpaceMemberBodyRequest(
     this.account,
     this.node,
-    this.role
+    this.role,
+    this.type,
+    this.nestedRole,
   );
 
   factory AddSharedSpaceMemberBodyRequest.fromJson(Map<String, dynamic> json) => _$AddSharedSpaceMemberBodyRequestFromJson(json);
@@ -60,14 +66,16 @@ class AddSharedSpaceMemberBodyRequest with EquatableMixin {
     jsonEncode('account'): { jsonEncode('uuid'): jsonEncode(account.uuid) },
     jsonEncode('node'): { jsonEncode('uuid'): jsonEncode(node.uuid) },
     jsonEncode('role'): { jsonEncode('uuid'): jsonEncode(role.uuid) },
+    if (nestedRole != null) jsonEncode('nestedRole'): { jsonEncode('uuid'): jsonEncode(nestedRole!.uuid) },
+    if (type != null) jsonEncode('type'): jsonEncode(type!.value),
   };
 
   @override
-  List<Object> get props => [account, node, role];
+  List<Object?> get props => [account, node, role, nestedRole];
 }
 
 extension AddSharedSpaceMemberExtension on AddSharedSpaceMemberRequest {
   AddSharedSpaceMemberBodyRequest toBodyRequest() {
-    return AddSharedSpaceMemberBodyRequest(account, node, role);
+    return AddSharedSpaceMemberBodyRequest(account, node, role, type, nestedRole);
   }
 }

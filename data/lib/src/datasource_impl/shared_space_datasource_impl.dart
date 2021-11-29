@@ -122,9 +122,9 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   }
 
   @override
-  Future<List<SharedSpaceRole>> getSharedSpaceRoles() {
+  Future<List<SharedSpaceRole>> getSharedSpaceRoles({LinShareNodeType? type}) {
     return Future.sync(() async {
-      return (await _linShareHttpClient.getSharedSpaceRoles()).map((role) => role.toSharedSpaceRole()).toList();
+      return (await _linShareHttpClient.getSharedSpaceRoles(type: type)).map((role) => role.toSharedSpaceRole()).toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response?.statusCode == 404) {

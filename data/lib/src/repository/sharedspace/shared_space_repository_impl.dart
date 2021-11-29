@@ -65,8 +65,8 @@ class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
   }
 
   @override
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles() {
-    return _sharedSpaceDataSources[DataSourceType.network]!.getSharedSpaceRoles();
+  Future<List<SharedSpaceRole>> getSharedSpacesRoles({LinShareNodeType? type}) {
+    return _sharedSpaceDataSources[DataSourceType.network]!.getSharedSpaceRoles(type: type);
   }
 
   @override
