@@ -39,6 +39,8 @@ class SharedSpaceMember extends Equatable {
   final DateTime modificationDate;
   final SharedSpaceMemberNode? node;
   final SharedSpaceRole? role;
+  final SharedSpaceRole? nestedRole;
+  final LinShareNodeType? type;
   final SharedSpaceMemberId sharedSpaceMemberId;
 
   SharedSpaceMember(
@@ -47,7 +49,9 @@ class SharedSpaceMember extends Equatable {
     this.creationDate,
     this.modificationDate,
     this.node,
-    this.role
+    this.role,
+    this.nestedRole,
+    this.type,
   );
 
   @override
@@ -57,6 +61,8 @@ class SharedSpaceMember extends Equatable {
     creationDate,
     modificationDate,
     node,
-    role
+    role,
+    nestedRole,
+    type,
   ];
 }
