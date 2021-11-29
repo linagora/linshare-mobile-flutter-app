@@ -411,6 +411,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
 
   List<Widget> _contextDriveMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
     return [
+      _sharedSpaceDetailsAction(sharedSpace.element),
       if (SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.element.sharedSpaceRole.name))
         _addDriveMemberAction(sharedSpace.element),
     ];

@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entr
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/drive_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
@@ -83,7 +85,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
     var arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceDetailsArguments;
 
     return DefaultTabController(
-        length: 3,
+        length: arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP ? 3 : 1,
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -107,27 +109,27 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                   indicatorColor: AppColor.uploadProgressValueColor,
                   unselectedLabelColor: AppColor.loginTextFieldTextColor,
                   tabs: [
-                    _tabTextWidget(AppLocalizations.of(context).details),
+                    if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) _tabTextWidget(AppLocalizations.of(context).details),
                     _tabTextWidget(AppLocalizations.of(context).members),
-                    _tabTextWidget(AppLocalizations.of(context).activities)
+                    if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) _tabTextWidget(AppLocalizations.of(context).activities)
                   ],
                 ),
               ),
+              _buildLoadingView(),
               Expanded(
-                  child: TabBarView(children: [
-                StoreConnector<AppState, SharedSpaceDetailsState>(
-                  converter: (store) => store.state.sharedSpaceDetailsState,
-                  builder: (_, state) => _detailsTabWidget(state),
-                ),
-                StoreConnector<AppState, SharedSpaceDetailsState>(
-                  converter: (store) => store.state.sharedSpaceDetailsState,
-                  builder: (_, state) => _membersTabWidget(state),
-                ),
-                StoreConnector<AppState, List<AuditLogEntryUser?>?>(
-                  converter: (store) => store.state.sharedSpaceDetailsState.activitiesList,
-                  builder: (_, activitiesList) => _activitiesTabWidget(activitiesList),
-                ),
-              ]))
+                child: TabBarView(children: [
+                  if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP)
+                    StoreConnector<AppState, SharedSpaceDetailsState>(
+                      converter: (store) => store.state.sharedSpaceDetailsState,
+                      builder: (_, state) => _detailsTabWidget(state)),
+                  StoreConnector<AppState, SharedSpaceDetailsState>(
+                    converter: (store) => store.state.sharedSpaceDetailsState,
+                    builder: (_, state) => _membersTabWidget(state)),
+                  if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP)
+                    StoreConnector<AppState, List<AuditLogEntryUser?>?>(
+                      converter: (store) => store.state.sharedSpaceDetailsState.activitiesList,
+                      builder: (_, activitiesList) => _activitiesTabWidget(activitiesList)),
+                ]))
             ],
           ),
         ));
@@ -268,6 +270,25 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
     );
   }
 
+  Widget _buildLoadingView() {
+    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
+      converter: (store) => store.state.sharedSpaceDetailsState.viewState,
+      builder: (context, viewState) {
+        return viewState.fold(
+            (failure) => SizedBox.shrink(),
+            (success) => (success is LoadingState)
+            ? Padding(
+                padding: EdgeInsets.all(20),
+                child: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor),),
+                ))
+            : SizedBox.shrink());
+      },
+    );
+  }
+
   Widget _membersTabWidget(SharedSpaceDetailsState state) {
     return RefreshIndicator(
       onRefresh: () async {
@@ -277,38 +298,66 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
         body: ListView.builder(
           itemCount: state.membersList?.length,
           itemBuilder: (context, index) {
-            var member = state.membersList?[index];
-            if(member == null) {
+            final member = state.membersList?[index];
+            if(member == null || state.sharedSpace == null) {
               return SizedBox.shrink();
             }
-            return SharedSpaceMemberListTileBuilder(
-              member.account?.name ?? '',
-              member.account?.mail ?? '',
-              member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
-              userCurrentRole: state.sharedSpace?.sharedSpaceRole.name,
-              onSelectedRoleCallback: () => selectRoleBottomSheet(
-                context,
-                member.role?.name ?? SharedSpaceRoleName.READER,
-                state.sharedSpace!.sharedSpaceId,
-                member),
-              onDeleteMemberCallback: () => confirmDeleteMember(
-                context,
-                member.account?.name ?? '',
-                state.sharedSpace?.name ?? '',
-                state.sharedSpace!.sharedSpaceId,
-                member.sharedSpaceMemberId)).build();
-              }),
-        floatingActionButton:
-          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(state.sharedSpace?.sharedSpaceRole.name)
-          ? FloatingActionButton(
-              onPressed: () => _model.goToAddSharedSpaceMember(state.sharedSpace!, state.membersList!),
-              backgroundColor: AppColor.primaryColor,
-              child: Icon(Icons.person_add, color: Colors.white, size: 24.0),
-            )
-          : SizedBox.shrink(),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.centerFloat,
+            return _buildItemMember(state.sharedSpace!, member);
+          }),
+        floatingActionButton: state.sharedSpace != null && _validateDisplayAddMemberButton(state.sharedSpace!)
+            ? FloatingActionButton(
+                onPressed: () => _goToAddMember(state.sharedSpace!, state.membersList ?? <SharedSpaceMember>[]),
+                backgroundColor: AppColor.primaryColor,
+                child: Icon(Icons.person_add, color: Colors.white, size: 24.0))
+            : SizedBox.shrink(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ));
+  }
+
+  void _goToAddMember(SharedSpaceNodeNested sharedSpace, List<SharedSpaceMember> membersList) {
+    if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
+      _model.goToAddSharedSpaceMember(sharedSpace, membersList);
+    } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
+      _model.goToAddDriveMember(sharedSpace, membersList);
+    }
+  }
+
+  bool _validateDisplayAddMemberButton(SharedSpaceNodeNested sharedSpace) {
+    if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
+      return SharedSpaceOperationRole.addMemberSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
+    } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
+      return SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.sharedSpaceRole.name);
+    }
+    return false;
+  }
+
+  Widget _buildItemMember(SharedSpaceNodeNested sharedSpace, SharedSpaceMember member) {
+    if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
+      return SharedSpaceMemberListTileBuilder(
+          member.account?.name ?? '',
+          member.account?.mail ?? '',
+          member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+          userCurrentRole: sharedSpace.sharedSpaceRole.name,
+          onSelectedRoleCallback: () => selectRoleBottomSheet(
+              context,
+              member.role?.name ?? SharedSpaceRoleName.READER,
+              sharedSpace.sharedSpaceId,
+              member),
+          onDeleteMemberCallback: () => confirmDeleteMember(
+              context,
+              member.account?.name ?? '',
+              sharedSpace.name,
+              sharedSpace.sharedSpaceId,
+              member.sharedSpaceMemberId)).build();
+    } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
+      return DriveMemberListTileBuilder(
+          member.account?.name ?? '',
+          member.account?.mail ?? '',
+          member.role?.name.getDriveRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+          member.nestedRole?.name.getWorkgroupRoleNameInsideDrive(context) ?? AppLocalizations.of(context).unknown_role,
+      ).build();
+    }
+    return SizedBox.shrink();
   }
 
   Widget _activitiesTabWidget(List<AuditLogEntryUser?>? activitiesList) {
@@ -408,5 +457,4 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
             (_) => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
         .show(context);
   }
-
 }
