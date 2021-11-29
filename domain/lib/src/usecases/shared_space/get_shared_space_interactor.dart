@@ -42,7 +42,7 @@ class GetSharedSpaceInteractor {
   Future<Either<Failure, Success>> execute(
     SharedSpaceId sharedSpaceId,
     {
-      MembersParameter membersParameter = MembersParameter.withoutMembers,
+      MembersParameter membersParameter = MembersParameter.withMembers,
       RolesParameter rolesParameter = RolesParameter.withRole
     }
   ) async {

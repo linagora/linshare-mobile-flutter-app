@@ -32,11 +32,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_drive_member_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_details_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_member_destination.dart';
 import 'package:redux/redux.dart';
 
 class AddDriveMemberViewModel extends BaseViewModel {
@@ -46,6 +48,8 @@ class AddDriveMemberViewModel extends BaseViewModel {
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
   final AddSharedSpaceMemberInteractor _addSharedSpaceMemberInteractor;
   final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
+
+  AddDriveMemberArguments? _arguments;
 
   AddDriveMemberViewModel(
       Store<AppState> store,
@@ -58,9 +62,35 @@ class AddDriveMemberViewModel extends BaseViewModel {
   ) : super(store);
 
   void initState(AddDriveMemberArguments? arguments) {
-    if (arguments != null) {
-      store.dispatch(_getDriveAndAllMemberAction(arguments.drive.sharedSpaceId));
+    _arguments = arguments;
+    if (_arguments != null) {
+      if (_arguments!.destination == AddMemberDestination.sharedSpaceDetail) {
+        store.dispatch(AddDriveMemberGetDriveAction(Right(SharedSpaceDetailViewState(_arguments!.drive))));
+        store.dispatch(AddDriveMemberGetAllDriveMembersAction(Right(SharedSpaceMembersViewState(_arguments!.members ?? []))));
+        store.dispatch(_getAllDriveRolesAction(_arguments!.drive.sharedSpaceId));
+      } else {
+        store.dispatch(_getDriveAndAllMemberAction(_arguments!.drive.sharedSpaceId));
+      }
     }
+  }
+
+  OnlineThunkAction _getAllDriveRolesAction(SharedSpaceId sharedSpaceId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await Future.wait([
+        _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.DRIVE),
+        _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.WORK_GROUP),
+      ]).then((responses) {
+
+        final driveRoles = responses.first
+            .map((success) => success is SharedSpaceRolesViewState ? success.roles : List<SharedSpaceRole>.empty())
+            .getOrElse(() => List<SharedSpaceRole>.empty());
+        final workgroupRoles = responses.last
+            .map((success) => success is SharedSpaceRolesViewState ? success.roles : List<SharedSpaceRole>.empty())
+            .getOrElse(() => List<SharedSpaceRole>.empty());
+
+        store.dispatch(AddDriveMemberGetAllRolesAction(driveRoles, workgroupRoles));
+      });
+    });
   }
 
   OnlineThunkAction _getDriveAndAllMemberAction(SharedSpaceId sharedSpaceId) {
@@ -69,7 +99,7 @@ class AddDriveMemberViewModel extends BaseViewModel {
       store.dispatch(StartAddDriveMemberLoadingAction());
 
       await Future.wait([
-        _getSharedSpaceInteractor.execute(sharedSpaceId, membersParameter: MembersParameter.withMembers),
+        _getSharedSpaceInteractor.execute(sharedSpaceId),
         _getAllDriveMembersInteractor.execute(sharedSpaceId),
         _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.DRIVE),
         _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.WORK_GROUP),
@@ -154,8 +184,11 @@ class AddDriveMemberViewModel extends BaseViewModel {
 
   OnlineThunkAction _getDriveMembersAction(SharedSpaceId sharedSpaceId) {
     return OnlineThunkAction((Store<AppState> store) async {
-      store.dispatch(AddDriveMemberGetAllDriveMembersAction(
-          await _getAllDriveMembersInteractor.execute(sharedSpaceId)));
+      final memberViewState = await _getAllDriveMembersInteractor.execute(sharedSpaceId);
+      store.dispatch(AddDriveMemberGetAllDriveMembersAction(memberViewState));
+      if (_arguments?.destination == AddMemberDestination.sharedSpaceDetail) {
+        store.dispatch(SharedSpaceDetailsGetAllDriveMembersAction(memberViewState));
+      }
     });
   }
 
