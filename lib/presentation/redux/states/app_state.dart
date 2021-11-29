@@ -31,6 +31,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/add_drive_member_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
@@ -84,6 +85,7 @@ class AppState with EquatableMixin {
   final AccountState account;
   final FunctionalityState functionalityState;
   final SharedSpaceDetailsState sharedSpaceDetailsState;
+  final AddDriveMemberState addDriveMemberState;
   final AddSharedSpaceMembersState addSharedSpaceMembersState;
   final UpdateSharedSpaceMembersState updateSharedSpaceMembersState;
   final DeleteSharedSpaceMembersState deleteSharedSpaceMembersState;
@@ -122,6 +124,7 @@ class AppState with EquatableMixin {
       required this.account,
       required this.functionalityState,
       required this.sharedSpaceDetailsState,
+      required this.addDriveMemberState,
       required this.addSharedSpaceMembersState,
       required this.updateSharedSpaceMembersState,
       required this.deleteSharedSpaceMembersState,
@@ -161,6 +164,7 @@ class AppState with EquatableMixin {
         account: AccountState.initial(),
         functionalityState: FunctionalityState.initial(),
         sharedSpaceDetailsState: SharedSpaceDetailsState.initial(),
+        addDriveMemberState: AddDriveMemberState.initial(),
         addSharedSpaceMembersState: AddSharedSpaceMembersState.initial(),
         updateSharedSpaceMembersState: UpdateSharedSpaceMembersState.initial(),
         deleteSharedSpaceMembersState: DeleteSharedSpaceMembersState.initial(),
@@ -202,6 +206,7 @@ class AppState with EquatableMixin {
         account,
         functionalityState,
         sharedSpaceDetailsState,
+        addDriveMemberState,
         addSharedSpaceMembersState,
         deleteSharedSpaceMembersState,
         documentDetailsState,

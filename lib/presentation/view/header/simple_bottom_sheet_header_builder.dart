@@ -39,6 +39,8 @@ class SimpleBottomSheetHeaderBuilder {
   String? _label;
   TextStyle? _textStyle;
 
+  Matrix4? _transformPadding;
+
   SimpleBottomSheetHeaderBuilder(this._key);
 
   SimpleBottomSheetHeaderBuilder addLabel(String label) {
@@ -51,11 +53,16 @@ class SimpleBottomSheetHeaderBuilder {
     return this;
   }
 
+  SimpleBottomSheetHeaderBuilder addTransformPadding(Matrix4 transformPadding) {
+    _transformPadding = transformPadding;
+    return this;
+  }
+
   ListTile build() {
     return ListTile(
         key: _key,
         title: Transform(
-          transform: Matrix4.translationValues(12, 5, 0.0),
+          transform: _transformPadding ?? Matrix4.translationValues(12, 5, 0.0),
           child: Text(
             _label ?? '',
             style: _textStyle ?? TextStyle(
