@@ -84,7 +84,7 @@ final sharedSpaceResponse1 = SharedSpaceNodeNestedResponse(
   null,
   SharedSpaceRoleDto(
     SharedSpaceRoleId('234be74d-2966-41c1-9dee-e47c8c63c14e'),
-    SharedSpaceRoleName.ADMIN
+    SharedSpaceRoleName.ADMIN, null
   ),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
@@ -99,7 +99,7 @@ final sharedSpaceResponse2 = SharedSpaceNodeNestedResponse(
   null,
   SharedSpaceRoleDto(
     SharedSpaceRoleId('234be74d-1966-41c1-9dee-e47c8d63c14e'),
-    SharedSpaceRoleName.CONTRIBUTOR
+    SharedSpaceRoleName.CONTRIBUTOR, null
   ),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
@@ -122,6 +122,8 @@ final sharedSpaceMember1 = SharedSpaceMember(
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
   ),
   SharedSpaceRole(SharedSpaceRoleId('an id'), SharedSpaceRoleName.ADMIN),
+  null,
+  null,
 );
 
 final sharedSpaceMember2 = SharedSpaceMember(
@@ -137,6 +139,8 @@ final sharedSpaceMember2 = SharedSpaceMember(
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
   ),
   SharedSpaceRole(SharedSpaceRoleId('an id 2'), SharedSpaceRoleName.READER),
+  null,
+  null,
 );
 
 final sharedSpaceMemberResponse1 = SharedSpaceMemberResponse(
@@ -148,7 +152,9 @@ final sharedSpaceMemberResponse1 = SharedSpaceMemberResponse(
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
   ),
-  SharedSpaceRoleDto(SharedSpaceRoleId('an id'), SharedSpaceRoleName.ADMIN),
+  SharedSpaceRoleDto(SharedSpaceRoleId('an id'), SharedSpaceRoleName.ADMIN, null),
+  null,
+  null,
   SharedSpaceMemberId('b4c8e5ba-8d94-11eb-8dcd-0242ac130003'),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
@@ -163,7 +169,9 @@ final sharedSpaceMemberResponse2 = SharedSpaceMemberResponse(
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
   ),
-  SharedSpaceRoleDto(SharedSpaceRoleId('an id 2'), SharedSpaceRoleName.READER),
+  SharedSpaceRoleDto(SharedSpaceRoleId('an id 2'), SharedSpaceRoleName.READER, null),
+  null,
+  null,
   SharedSpaceMemberId('d00df810-8d94-11eb-8dcd-0242ac130003'),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),
   DateTime.fromMillisecondsSinceEpoch(1604482138188),

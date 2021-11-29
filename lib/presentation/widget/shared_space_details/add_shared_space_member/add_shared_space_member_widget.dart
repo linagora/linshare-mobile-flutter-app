@@ -237,7 +237,13 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
     {Function(SharedSpaceRoleName)? onNewRoleUpdated}) {
     SelectRoleModalSheetBuilder(
       key: Key('select_role_on_add_shared_space_member'),
-      selectedRole: selectedRole)
+      selectedRole: selectedRole,
+      listRoles: [
+        SharedSpaceRoleName.READER,
+        SharedSpaceRoleName.ADMIN,
+        SharedSpaceRoleName.CONTRIBUTOR,
+        SharedSpaceRoleName.WRITER
+      ])
       .onConfirmAction((role) => onNewRoleUpdated?.call(role))
       .show(context);
   }
