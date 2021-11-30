@@ -2490,7 +2490,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_user_own_server_message_center": "Before you can proceed, please choose a default server connection",
+  "login_user_own_server_message_center": "Before you can proceed, please choose a\n default server connection",
   "@login_user_own_server_message_center": {
     "type": "text",
     "placeholders_order": [],
