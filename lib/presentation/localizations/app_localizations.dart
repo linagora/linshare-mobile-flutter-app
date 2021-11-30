@@ -2437,7 +2437,7 @@ class AppLocalizations {
 
   String get login_user_own_server_message_center {
     return Intl.message(
-        'Before you can proceed, please choose a default server connection',
+        'Before you can proceed, please choose a\n default server connection',
         name: 'login_user_own_server_message_center'
     );
   }
