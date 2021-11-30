@@ -1924,7 +1924,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "login_user_own_server_message_center": "Avant de continuer, veuillez choisir une connexion au serveur a par défaut",
+  "login_user_own_server_message_center": "Avant de continuer, veuillez choisir une\n connexion au serveur a par défaut",
   "@login_user_own_server_message_center": {
     "type": "text",
     "placeholders": {}

@@ -1418,726 +1418,573 @@
     "type": "text",
     "placeholders": {}
   },
-  "available_offline": "Available offline",
+  "available_offline": "Доступно оффлайн",
   "@available_offline": {
     "type": "text",
     "placeholders": {}
   },
-  "files_will_be_made_available_for_offline_use": "The files will be made available for offline use.",
+  "files_will_be_made_available_for_offline_use": "Файлы будут доступны для использования оффлайн.",
   "@files_will_be_made_available_for_offline_use": {
     "type": "text",
     "placeholders": {}
   },
-  "files_will_no_longer_be_usable_without_be_network": "The files will no longer be usable without the network.",
+  "files_will_no_longer_be_usable_without_be_network": "Файлы больше нельзя будет использовать оффлайн",
   "@files_will_no_longer_be_usable_without_be_network": {
     "type": "text",
     "placeholders": {}
   },
-  "file_cannot_be_switched_to_offline_mode": "This file cannot be switched to offline mode",
+  "file_cannot_be_switched_to_offline_mode": "Этот файл не может быть переведен в режиме оффлайн",
   "@file_cannot_be_switched_to_offline_mode": {
     "type": "text",
     "placeholders": {}
   },
-  "login_sso_button": "Login with SSO",
+  "login_sso_button": "Войти с помощью SSO",
   "@login_sso_button": {
     "type": "text",
     "placeholders": {}
   },
-  "login_sso_failed": "Login failed",
+  "login_sso_failed": "Вход не удался",
   "@login_sso_failed": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_requests": "Upload Requests",
+  "upload_requests": "Запросы на загрузку",
   "@upload_requests": {
     "type": "text",
     "placeholders": {}
   },
-  "pending": "Pending",
+  "pending": "В ожидании",
   "@pending": {
     "type": "text",
     "placeholders": {}
   },
-  "active_closed": "Active / Closed",
+  "active_closed": "Активный / Закрытый",
   "@active_closed": {
     "type": "text",
     "placeholders": {}
   },
-  "archived": "Archived",
+  "archived": "Заархивировано",
   "@archived": {
     "type": "text",
     "placeholders": {}
   },
-  "create_upload_requests_here": "Create upload requests here",
+  "create_upload_requests_here": "Создать запросы на загрузку здесь",
   "@create_upload_requests_here": {
     "type": "text",
     "placeholders": {}
   },
-  "activated_date": "Activated {date}",
+  "activated_date": "Активировано {date}",
   "@activated_date": {
     "type": "text",
     "placeholders": {
       "date": {}
     }
   },
-  "archived_date": "Archived {date}",
+  "archived_date": "Заархивировано {date}",
   "@archived_date": {
     "type": "text",
     "placeholders": {
       "date": {}
     }
   },
-  "active": "Active",
+  "active": "Активный",
   "@active": {
     "type": "text",
     "placeholders": {}
   },
-  "expired_closed": "Expired / Closed",
+  "expired_closed": "Окончен / Закрыт",
   "@expired_closed": {
     "type": "text",
     "placeholders": {}
   },
-  "add_new_upload_request": "Add new upload request",
+  "add_new_upload_request": "Добавить новый запрос на загрузку",
   "@add_new_upload_request": {
     "type": "text",
     "placeholders": {}
   },
-  "collective_upload": "Collective \nUpload",
+  "collective_upload": "Коллективная \nЗагрузка",
   "@collective_upload": {
     "type": "text",
     "placeholders": {}
   },
-  "individual_upload": "Individual \nUpload",
+  "individual_upload": "Индивидуальная \nЗагрузка",
   "@individual_upload": {
     "type": "text",
     "placeholders": {}
   },
-  "create_collective_upload_request_title": "Collective Upload",
+  "create_collective_upload_request_title": "Коллективная загрузка",
   "@create_collective_upload_request_title": {
     "type": "text",
     "placeholders": {}
   },
-  "create_individual_upload_request_title": "Individual Upload",
+  "create_individual_upload_request_title": "Индивидуальная загрузка",
   "@create_individual_upload_request_title": {
     "type": "text",
     "placeholders": {}
   },
-  "create_upload_request_button": "Create Upload Request",
+  "create_upload_request_button": "Создать запрос на загрузку",
   "@create_upload_request_button": {
     "type": "text",
     "placeholders": {}
   },
-  "email_subject": "Email subject",
+  "email_subject": "Тема письма",
   "@email_subject": {
     "type": "text",
     "placeholders": {}
   },
-  "email_message": "Email message",
+  "email_message": "Сообщение",
   "@email_message": {
     "type": "text",
     "placeholders": {}
   },
-  "settings": "Settings",
+  "settings": "Настройки",
   "@settings": {
     "type": "text",
     "placeholders": {}
   },
-  "advanced_options": "Advanced options",
+  "advanced_options": "Расширенные настройки",
   "@advanced_options": {
     "type": "text",
     "placeholders": {}
   },
-  "show_less": "Show less",
+  "show_less": "Показать меньше",
   "@show_less": {
     "type": "text",
     "placeholders": {}
   },
-  "activation_date": "Activation date",
+  "activation_date": "Дата активации",
   "@activation_date": {
     "type": "text",
     "placeholders": {}
   },
-  "expiration_date": "Expiration date",
+  "expiration_date": "Дата истечения срока действия",
   "@expiration_date": {
     "type": "text",
     "placeholders": {}
   },
-  "reminder_date": "Reminder date",
+  "reminder_date": "Дата напоминания",
   "@reminder_date": {
     "type": "text",
     "placeholders": {}
   },
-  "max_number_of_files": "Max number of files",
+  "max_number_of_files": "Максимальное количество файлов",
   "@max_number_of_files": {
     "type": "text",
     "placeholders": {}
   },
-  "max_size_of_a_file": "Max size of a file",
+  "max_size_of_a_file": "Максимальный размер файла",
   "@max_size_of_a_file": {
     "type": "text",
     "placeholders": {}
   },
-  "allow_deletion": "Allow deletion",
+  "allow_deletion": "Разрешить удаление файлов",
   "@allow_deletion": {
     "type": "text",
     "placeholders": {}
   },
-  "allow_closure": "Allow closure",
+  "allow_closure": "Разрешить закрытие запроса",
   "@allow_closure": {
     "type": "text",
     "placeholders": {}
   },
-  "notification_language": "Notification Language",
+  "notification_language": "Язык уведомлений",
   "@notification_language": {
     "type": "text",
     "placeholders": {}
   },
-  "max_number_files_error": "Max number of files must be set and smaller than 1000",
+  "max_number_files_error": "Максимальное количество файлов должно быть задано и меньше 1000",
   "@max_number_files_error": {
     "type": "text",
     "placeholders": {}
   },
-  "max_file_size_error": "Max size of a file must be set and smaller than 100 GB",
+  "max_file_size_error": "Максимальный размер файла должен быть установлен и не превышать 100 ГБ",
   "@max_file_size_error": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_requests_root_back_title": "Back to Upload Requests",
+  "upload_requests_root_back_title": "Вернуться к запросам на загрузку",
   "@upload_requests_root_back_title": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_requests_no_files_uploaded": "No files uploaded yet",
+  "upload_requests_no_files_uploaded": "Файлы еще не загружены",
   "@upload_requests_no_files_uploaded": {
     "type": "text",
     "placeholders": {}
   },
-  "status": "Status",
+  "status": "Статус",
   "@status": {
     "type": "text",
     "placeholders": {}
   },
-  "type": "Type",
+  "type": "Тип",
   "@type": {
     "type": "text",
     "placeholders": {}
   },
-  "search_in_upload_request_groups": "Search in Upload Request Groups",
+  "search_in_upload_request_groups": "Поиск в группах запросов на загрузку",
   "@search_in_upload_request_groups": {
     "type": "text",
     "placeholders": {}
   },
-  "total_size_of_files": "Total size of files",
+  "total_size_of_files": "Общий размер файлов",
   "@total_size_of_files": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "password_protected": "Password protected",
+  "password_protected": "Защищено паролем",
   "@password_protected": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "total_file_size_error": "Total size of files must be set and smaller than 100 GB",
+  "total_file_size_error": "Общий размер файлов должен быть установлен и не превышать 100 ГБ",
   "@total_file_size_error": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "add": "Add",
+  "add": "Добавить",
   "@add": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "confirm_add_recipients_title": "You are about to add a recipient to this upload request ! Beware, this action cannot be undone",
+  "confirm_add_recipients_title": "Вы собираетесь добавить получателя к этому запросу на загрузку. Это действие нельзя отменить!",
   "@confirm_add_recipients_title": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "recipients_have_been_successfully_added": "Recipients have been successfully added",
+  "recipients_have_been_successfully_added": "Получатели были успешно добавлены",
   "@recipients_have_been_successfully_added": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "confirm_cancel_multiple_upload_request": "{numberOfItems,plural, =1{Are you sure you want to cancel \"{singleItemName}\"?}other{Are you sure you want to cancel {numberOfItems} items?}}",
+  "confirm_cancel_multiple_upload_request": "{numberOfItems,plural, =1{Вы уверены, что хотите отменить запрос на загрузку \"{singleItemName}\"?}other{Вы уверены, что хотите отменить {numberOfItems} запросов на загрузку?}}",
   "@confirm_cancel_multiple_upload_request": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems",
-      "singleItemName"
-    ],
     "placeholders": {
       "numberOfItems": {},
       "singleItemName": {}
     }
   },
-  "upload_request_proceed_button": "Proceed",
+  "upload_request_proceed_button": "Продолжить",
   "@upload_request_proceed_button": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "upload_request_has_been_updated": "Upload request has been updated",
+  "upload_request_has_been_updated": "Запрос на загрузку был обновлен",
   "@upload_request_has_been_updated": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "some_upload_requests_have_been_updated": "Some upload requests have been updated",
+  "some_upload_requests_have_been_updated": "Некоторые запросы на выгрузку были обновлены",
   "@some_upload_requests_have_been_updated": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "upload_request_could_not_be_updated": "Upload request could not be updated",
+  "upload_request_could_not_be_updated": "Не удалось обновить запрос на выгрузку",
   "@upload_request_could_not_be_updated": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "some_upload_requests_could_not_be_updated": "Some upload requests could not be updated",
+  "some_upload_requests_could_not_be_updated": "Некоторые запросы на выгрузку не могут быть обновлены",
   "@some_upload_requests_could_not_be_updated": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "archive": "Archive",
+  "archive": "Архив",
   "@archive": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "confirm_archive_multiple_upload_request": "{numberOfItems,plural, =1{Are you sure you want to archive \"{singleItemName}\"?}other{Are you sure you want to archive {numberOfItems} items?}}",
+  "confirm_archive_multiple_upload_request": "{numberOfItems,plural, =1{Вы уверены, что хотите заархивировать \"{singleItemName}\"?}other{Вы уверены, что хотите заархивировать {numberOfItems}?}}",
   "@confirm_archive_multiple_upload_request": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems",
-      "singleItemName"
-    ],
     "placeholders": {
       "numberOfItems": {},
       "singleItemName": {}
     }
   },
-  "copy_before_archiving": "Copy all files to my personal space before archiving",
+  "copy_before_archiving": "Скопировать все файлы в мое личное пространство перед архивацией",
   "@copy_before_archiving": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "close": "Close",
+  "close": "Закрыть",
   "@close": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "confirm_close_multiple_upload_request": "{numberOfItems,plural, =1{Are you sure you want to close \"{singleItemName}\"?}other{Are you sure you want to close {numberOfItems} items?}}",
+  "confirm_close_multiple_upload_request": "{numberOfItems,plural, =1{Вы уверены, что хотите закрыть запрос на загрузку \"{singleItemName}\"?}other{Вы уверены, что хотите закрыть запросы на загрузку {numberOfItems}?}}",
   "@confirm_close_multiple_upload_request": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems",
-      "singleItemName"
-    ],
     "placeholders": {
       "numberOfItems": {},
       "singleItemName": {}
     }
   },
-  "search_in_upload_request_entries": "Search in Upload Requests Entries",
+  "search_in_upload_request_entries": "Искать в запросах на загрузку",
   "@search_in_upload_request_entries": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "the_files_could_not_be_copied_to_my_space": "The files could not be copied to My Space",
+  "the_files_could_not_be_copied_to_my_space": "Файлы не удалось скопировать в мой личное пространство",
   "@the_files_could_not_be_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_timeout_title": "Set timeout",
+  "biometric_timeout_title": "Установить тайм-аут ",
   "@biometric_timeout_title": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} second}other{{numberOfItems} seconds}}",
+  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} секунда}other{{numberOfItems} секунды}}",
   "@biometric_timeout_second": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems"
-    ],
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} minute}other{{numberOfItems} minutes}}",
+  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} минута}other{{numberOfItems} минуты}}",
   "@biometric_timeout_minute": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems"
-    ],
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} hour}other{{numberOfItems} hours}}",
+  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} час}other{{numberOfItems} часы}}",
   "@biometric_timeout_hour": {
     "type": "text",
-    "placeholders_order": [
-      "numberOfItems"
-    ],
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "search_in": "Search in {node}",
+  "search_in": "Искать в {node}",
   "@search_in": {
     "type": "text",
-    "placeholders_order": [
-      "node"
-    ],
     "placeholders": {
       "node": {}
     }
   },
-  "move": "Move",
+  "move": "Переместить",
   "@move": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "move_here": "Move here",
+  "move_here": "Переместить сюда",
   "@move_here": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_setting": "Advanced search settings",
+  "advance_search_setting": "Расширенные настройки поиска",
   "@advance_search_setting": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_document": "Document",
+  "advance_search_type_document": "Документ",
   "@advance_search_type_document": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
   "advance_search_type_pdf": "PDF",
   "@advance_search_type_pdf": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_spreadsheet": "Spreadsheet",
+  "advance_search_type_spreadsheet": "Таблица",
   "@advance_search_type_spreadsheet": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_image": "Image",
+  "advance_search_type_image": "Изображение",
   "@advance_search_type_image": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_audio": "Audio",
+  "advance_search_type_audio": "Аудио",
   "@advance_search_type_audio": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_archive": "Archive",
+  "advance_search_type_archive": "Архив",
   "@advance_search_type_archive": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_other": "Other",
+  "advance_search_type_other": "Другое",
   "@advance_search_type_other": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_any_time": "Any time",
+  "advance_search_date_any_time": "Любое время",
   "@advance_search_date_any_time": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_past_day": "Past day",
+  "advance_search_date_past_day": "Вчера",
   "@advance_search_date_past_day": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_past_week": "Past week",
+  "advance_search_date_past_week": "Прошлая неделя",
   "@advance_search_date_past_week": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_past_month": "Past month",
+  "advance_search_date_past_month": "Прошлый месяц",
   "@advance_search_date_past_month": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_date_past_year": "Past year",
+  "advance_search_date_past_year": "Прошлый год",
   "@advance_search_date_past_year": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_button_reset": "Reset",
+  "advance_search_button_reset": "Сброс",
   "@advance_search_button_reset": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_button_apply": "Apply",
+  "advance_search_button_apply": "Применить",
   "@advance_search_button_apply": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_in_to_saas": "Sign in to SaaS",
+  "sign_in_to_saas": "Войти в версию SaaS",
   "@sign_in_to_saas": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_in_to_self_hosted_instance": "Sign in to self-hosted instance",
+  "sign_in_to_self_hosted_instance": "Войти в self-hosted версию",
   "@sign_in_to_self_hosted_instance": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "do_not_have_an_account": "Don't have an account?",
+  "do_not_have_an_account": "Нет учетной записи?",
   "@do_not_have_an_account": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up": "Sign up",
+  "sign_up": "Зарегистрироваться",
   "@sign_up": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_in_with_your_credentials": "Sign in with your credentials",
+  "sign_in_with_your_credentials": "Войти с вашими учетными данными",
   "@sign_in_with_your_credentials": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_in_with_your_sso": "Sign in with your SSO",
+  "sign_in_with_your_sso": "Войти с помощью SSO",
   "@sign_in_with_your_sso": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "please_input_your_url": "Please input your URL",
+  "please_input_your_url": "Пожалуйста, введите ваш URL",
   "@please_input_your_url": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "this_feature_not_supported": "This feature is not currently supported",
+  "this_feature_not_supported": "Эта функция в настоящее время не поддерживается",
   "@this_feature_not_supported": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "drive": "Drive",
+  "drive": "Диск",
   "@drive": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "loading": "Loading",
+  "loading": "Загрузка",
   "@loading": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "create_new_workgroup_or_drive": "Create new workgroup or drive",
+  "create_new_workgroup_or_drive": "Создать новую рабочую группу или диск",
   "@create_new_workgroup_or_drive": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "back": "Back",
+  "back": "Назад",
   "@back": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "login_message_center": "Join +100 million active users using LinShare to store and share files with ease",
+  "login_message_center": "Присоединяйтесь к +10000 тысячам активных пользователей, использующих LinShare для удобного хранения и обмена файлами",
   "@login_message_center": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "login_message_bottom": "By default you connect to Linagora servers. If you are not sure about this setting, please contact your technical specialist.",
+  "login_message_bottom": "По умолчанию вы подключаетесь к серверам LINAGORA. Если вы не уверены в этом действии, пожалуйста, свяжитесь с вашим техническим специалистом.",
   "@login_message_bottom": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "create_an_account": "Create an account",
+  "create_an_account": "Создать аккаунт",
   "@create_an_account": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "login_user_own_server_message_center": "Before you can proceed, please choose a\n default server connection",
+  "login_user_own_server_message_center": "Прежде чем продолжить, пожалуйста, выберите \n подключение к серверу по умолчанию",
   "@login_user_own_server_message_center": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "checkbox_text_login_with_sso": "My server is using a single sign-on(SSO)",
+  "checkbox_text_login_with_sso": "Мой сервер использует единую регистрацию (SSO)",
   "@checkbox_text_login_with_sso": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
   "login_email_title": "Email",
   "@login_email_title": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "login_password_title": "Password",
+  "login_password_title": "Пароль",
   "@login_password_title": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "hint_input_password_login": "Enter your password",
+  "hint_input_password_login": "Введите пароль",
   "@hint_input_password_login": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "hint_input_email_login": "Enter your email",
+  "hint_input_email_login": "Введите свою эл. почту",
   "@hint_input_email_login": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "email_is_required": "Email is required",
+  "email_is_required": "Требуется эл. почта",
   "@email_is_required": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "password_is_required": "Password is required",
+  "password_is_required": "Требуется пароль",
   "@password_is_required": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "url_is_invalid": "URL is invalid",
+  "url_is_invalid": "URL недействителен",
   "@url_is_invalid": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "email_is_invalid": "Email is invalid",
+  "email_is_invalid": "Эл. почта недействителена",
   "@email_is_invalid": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "password_is_invalid": "Password is invalid",
+  "password_is_invalid": "Пароль недействителен",
   "@password_is_invalid": {
     "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   },
-  "use_your_own_server": "Use your own server",
+  "use_your_own_server": "Использовать свой собственный сервер",
   "@use_your_own_server": {
     "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "add_a_member": "Add a member",
-  "@add_a_member": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "add_team_members_with_roles": "Add team members with roles",
-  "@add_team_members_with_roles": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "role_in_this_drive": "Role in this drive",
-  "@role_in_this_drive": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "default_role_in_workgroups": "Default role in workgroups",
-  "@default_role_in_workgroups": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "member_default_role_of_all_workgroups_inside_this_drive": "Member's default role of all workgroups inside this drive",
-  "@member_default_role_of_all_workgroups_inside_this_drive": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "drive_admin": "Drive Admin",
-  "@drive_admin": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "drive_reader": "Drive Reader",
-  "@drive_reader": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "drive_writer": "Drive Writer",
-  "@drive_writer": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "workgroup_admin": "Workgroup Admin",
-  "@workgroup_admin": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "workgroup_reader": "Workgroup Reader",
-  "@workgroup_reader": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "workgroup_writer": "Workgroup Writer",
-  "@workgroup_writer": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "workgroup_contributor": "Workgroup Contributor",
-  "@workgroup_contributor": {
-    "type": "text",
-    "placeholders_order": [],
     "placeholders": {}
   }
 }
