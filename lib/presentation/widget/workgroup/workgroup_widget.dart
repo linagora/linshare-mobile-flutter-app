@@ -173,8 +173,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
         floatingActionButton: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (context, appState) {
-            if (!appState.uiState.isInSearchState() &&
-                appState.workgroupState.selectMode == SelectMode.INACTIVE) {
+            if (_validateDisplayAddWorkgroupButton(appState)) {
               return FloatingActionButton(
                 key: Key('create_new_workgroup_inside_drive_button'),
                 onPressed: () => _viewModel.openCreateNewWorkGroupModal(context),
@@ -186,6 +185,15 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
           }),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  bool _validateDisplayAddWorkgroupButton(AppState appState) {
+    if (!appState.uiState.isInSearchState() &&
+        appState.workgroupState.selectMode == SelectMode.INACTIVE &&
+        SharedSpaceOperationRole.addWorkgroupInsideDrive.contains(appState.uiState.selectedDrive!.sharedSpaceRole.name)) {
+      return true;
+    }
+    return false;
   }
 
   Widget _buildTopBar() {

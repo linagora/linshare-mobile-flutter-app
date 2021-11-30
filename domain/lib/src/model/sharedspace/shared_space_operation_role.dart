@@ -60,6 +60,11 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.DRIVE_ADMIN,
   ];
 
+  static const addWorkgroupInsideDrive = [
+    SharedSpaceRoleName.DRIVE_ADMIN,
+    SharedSpaceRoleName.DRIVE_WRITER,
+  ];
+
   static const editMemberSharedSpaceRoles = [
     SharedSpaceRoleName.ADMIN,
   ];
