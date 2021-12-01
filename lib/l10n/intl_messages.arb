@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-11-23T09:10:23.960241",
+  "@@last_modified": "2021-12-01T11:42:10.994558",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -2472,13 +2472,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_message_center": "Join +100 million active users using LinShare\n to store and share files with ease",
+  "login_message_center": "Join +100 million active users using LinShare to store and share files with ease",
   "@login_message_center": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_message_bottom": "By default you connect to Linagora servers. If you are\n not sure about this setting, please contact your\n technical specialist.",
+  "login_message_bottom": "By default you connect to Linagora servers. If you are not sure about this setting, please contact your technical specialist.",
   "@login_message_bottom": {
     "type": "text",
     "placeholders_order": [],
@@ -2582,6 +2582,78 @@
   },
   "new_drive": "New drive",
   "@new_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_a_member": "Add a member",
+  "@add_a_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_team_members_with_roles": "Add team members with roles",
+  "@add_team_members_with_roles": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "role_in_this_drive": "Role in this drive",
+  "@role_in_this_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "default_role_in_workgroups": "Default role in workgroups",
+  "@default_role_in_workgroups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "member_default_role_of_all_workgroups_inside_this_drive": "Member's default role of all workgroups inside this drive",
+  "@member_default_role_of_all_workgroups_inside_this_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_admin": "Drive Admin",
+  "@drive_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_reader": "Drive Reader",
+  "@drive_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_writer": "Drive Writer",
+  "@drive_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_admin": "Workgroup Admin",
+  "@workgroup_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_reader": "Workgroup Reader",
+  "@workgroup_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_writer": "Workgroup Writer",
+  "@workgroup_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_contributor": "Workgroup Contributor",
+  "@workgroup_contributor": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
