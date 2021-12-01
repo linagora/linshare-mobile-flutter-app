@@ -46,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/drive_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_viewmodel.dart';
@@ -326,6 +327,13 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
               member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
               member.nestedRole?.name.getWorkgroupRoleNameInsideDrive(context) ?? AppLocalizations.of(context).unknown_role,
               tileColor: Colors.white,
+              userCurrentDriveRole: drive.sharedSpaceRole.name,
+              onDeleteMemberCallback: () => _confirmDeleteMember(
+                context,
+                member.account?.name ?? '',
+                drive.name,
+                drive.sharedSpaceId,
+                member.sharedSpaceMemberId)
             ).build();
           }))
     ]);
@@ -351,5 +359,22 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
           .build())
       .onConfirmAction((role) => onNewRoleUpdated?.call(role))
       .show(context);
+  }
+
+  void _confirmDeleteMember(
+      BuildContext context,
+      String memberName,
+      String driveName,
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceMemberId sharedSpaceMemberId
+  ) {
+    final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_drive_member(memberName, driveName);
+    ConfirmModalSheetBuilder(appNavigation)
+        .key(Key('delete_member_drive_confirm_modal'))
+        .title(deleteTitle)
+        .cancelText(AppLocalizations.of(context).cancel)
+        .onConfirmAction(AppLocalizations.of(context).delete,
+            (_) => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
+        .show(context);
   }
 }

@@ -348,6 +348,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
               member.account?.name ?? '',
               sharedSpace.name,
               sharedSpace.sharedSpaceId,
+              sharedSpace.nodeType,
               member.sharedSpaceMemberId)).build();
     } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
       return DriveMemberListTileBuilder(
@@ -355,6 +356,15 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           member.account?.mail ?? '',
           member.role?.name.getDriveRoleName(context) ?? AppLocalizations.of(context).unknown_role,
           member.nestedRole?.name.getWorkgroupRoleNameInsideDrive(context) ?? AppLocalizations.of(context).unknown_role,
+          tileColor: Colors.white,
+          userCurrentDriveRole: sharedSpace.sharedSpaceRole.name,
+          onDeleteMemberCallback: () => confirmDeleteMember(
+            context,
+            member.account?.name ?? '',
+            sharedSpace.name,
+            sharedSpace.sharedSpaceId,
+            sharedSpace.nodeType,
+            member.sharedSpaceMemberId)
       ).build();
     }
     return SizedBox.shrink();
@@ -444,10 +454,13 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   void confirmDeleteMember(
       BuildContext context,
       String memberName,
-      String workspaceName,
+      String sharedSpaceName,
       SharedSpaceId sharedSpaceId,
+      LinShareNodeType? type,
       SharedSpaceMemberId sharedSpaceMemberId) {
-    final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_member(memberName, workspaceName);
+    final deleteTitle = type == LinShareNodeType.DRIVE
+        ? AppLocalizations.of(context).are_you_sure_you_want_to_delete_drive_member(memberName, sharedSpaceName)
+        : AppLocalizations.of(context).are_you_sure_you_want_to_delete_member(memberName, sharedSpaceName);
     ConfirmModalSheetBuilder(appNavigation)
         .key(Key('delete_member_shared_space_confirm_modal'))
         .title(deleteTitle)

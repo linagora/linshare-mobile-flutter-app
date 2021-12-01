@@ -402,6 +402,7 @@ class WidgetModule {
       getIt.get<GetAutoCompleteSharingInteractor>(),
       getIt.get<AddSharedSpaceMemberInteractor>(),
       getIt.get<GetAllSharedSpaceRolesInteractor>(),
+      getIt.get<DeleteSharedSpaceMemberInteractor>(),
     ));
   }
 
