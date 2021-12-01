@@ -83,9 +83,10 @@ workflows:
         inputs:
         - platform: ios
         - is_debug_mode: 'true'
+	- additional_build_params: "--dart-define=CAPTCHA_TOKEN=$CAPTCHA_TOKEN"
         - ios_additional_params: "--no-sound-null-safety --release"
         - ios_codesign_identity: 'iPhone Distribution: Linagora (KUT463DS29)'
-    - xcode-archive@3:
+    - xcode-archive@4:
         inputs:
         - team_id: KUT463DS29
         - force_team_id: KUT463DS29
