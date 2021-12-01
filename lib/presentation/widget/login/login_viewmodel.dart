@@ -109,7 +109,7 @@ class LoginViewModel extends BaseViewModel {
       LoginFormType loginFormType,
       AuthenticationType authenticationType
   ) {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
 
     switch(authenticationType) {
       case AuthenticationType.saas:
@@ -345,7 +345,7 @@ class LoginViewModel extends BaseViewModel {
   }
 
   void handleBackButtonLoginPressed(BuildContext context, LoginFormType loginFormType) {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
 
     if (loginFormType == LoginFormType.useOwnServer) {
       store.dispatch(UpdateAuthenticationScreenStateAction(LoginFormType.main));
@@ -400,7 +400,7 @@ class LoginViewModel extends BaseViewModel {
   }
 
   void handleCloseLoginPressed(BuildContext context) {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
     _clearAllValueInput();
     store.dispatch(UpdateAuthenticationScreenStateAction(LoginFormType.main));
   }
