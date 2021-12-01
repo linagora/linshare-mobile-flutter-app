@@ -32,6 +32,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_drive_member_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_details_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
@@ -48,6 +49,7 @@ class AddDriveMemberViewModel extends BaseViewModel {
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
   final AddSharedSpaceMemberInteractor _addSharedSpaceMemberInteractor;
   final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
+  final DeleteSharedSpaceMemberInteractor _deleteSharedSpaceMemberInteractor;
 
   AddDriveMemberArguments? _arguments;
 
@@ -59,6 +61,7 @@ class AddDriveMemberViewModel extends BaseViewModel {
       this._getAutoCompleteSharingInteractor,
       this._addSharedSpaceMemberInteractor,
       this._getAllSharedSpaceRolesInteractor,
+      this._deleteSharedSpaceMemberInteractor,
   ) : super(store);
 
   void initState(AddDriveMemberArguments? arguments) {
@@ -189,6 +192,27 @@ class AddDriveMemberViewModel extends BaseViewModel {
       if (_arguments?.destination == AddMemberDestination.sharedSpaceDetail) {
         store.dispatch(SharedSpaceDetailsGetAllDriveMembersAction(memberViewState));
       }
+    });
+  }
+
+  void deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) {
+    store.dispatch(_deleteDriveMemberAction(sharedSpaceId, sharedSpaceMemberId));
+    _appNavigation.popBack();
+  }
+
+  OnlineThunkAction _deleteDriveMemberAction(
+      SharedSpaceId sharedSpaceId,
+      SharedSpaceMemberId sharedSpaceMemberId
+  ) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _deleteSharedSpaceMemberInteractor.execute(sharedSpaceId, sharedSpaceMemberId)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(DeleteSharedSpaceMembersAction(
+              Left<Failure, Success>(DeleteSharedSpaceMemberFailure(DeleteMemberFailed())))),
+          (success) {
+            store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
+            _refreshListDriveMember(sharedSpaceId);
+          }));
     });
   }
 
