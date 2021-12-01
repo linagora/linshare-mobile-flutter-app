@@ -2598,6 +2598,14 @@ class AppLocalizations {
       name: 'workgroup_contributor',
     );
   }
+
+  String are_you_sure_you_want_to_delete_drive_member(String memberName, String driveName) {
+    return Intl.message(
+      'Are you sure you want to delete $memberName from the drive $driveName and all related workgroups?',
+      name: 'are_you_sure_you_want_to_delete_drive_member',
+      args: [memberName, driveName],
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
