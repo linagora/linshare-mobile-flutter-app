@@ -103,7 +103,7 @@ class _EditUploadRequestWidgetState extends State<EditUploadRequestWidget> {
         backgroundColor: AppColor.primaryColor),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          onTap: () => FocusScope.of(context).unfocus(),
           child: StoreConnector<AppState, EditUploadRequestState>(
             converter: (Store<AppState> store) => store.state.editUploadRequestState,
             builder: (context, state) {

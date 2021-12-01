@@ -72,39 +72,45 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.loginBackgroundColor,
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
           child: Stack(
             children: [
-              Container(
-                alignment: AlignmentDirectional.center,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 60),
-                      child: Image(
-                        image: AssetImage(imagePath.icLoginLogoStandard),
-                        fit: BoxFit.fill,
-                        width: 150,
-                        alignment: Alignment.center)),
-                    Expanded(child: StoreConnector<AppState, LoginFormType>(
-                      converter: (store) => store.state.authenticationState.loginFormType,
-                      builder: (context, loginFormType) {
-                        switch(loginFormType) {
-                          case LoginFormType.main:
-                            return _buildMainLoginForm();
-                          case LoginFormType.useOwnServer:
-                            return _buildUseOwnServerLoginForm(context);
-                          case LoginFormType.credentials:
-                            return _buildCredentialsLoginForm(context);
-                          default:
-                            return _buildMainLoginForm();
-                        }
-                      }
-                    )),
-                  ],
-                ),
+              SingleChildScrollView(
+                reverse: true,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 60),
+                          child: Image(
+                            image: AssetImage(imagePath.icLoginLogoStandard),
+                            fit: BoxFit.fill,
+                            width: 150,
+                            alignment: Alignment.center)),
+                        StoreConnector<AppState, LoginFormType>(
+                          converter: (store) => store.state.authenticationState.loginFormType,
+                          builder: (context, loginFormType) {
+                            switch(loginFormType) {
+                              case LoginFormType.main:
+                                return _buildMainLoginForm();
+                              case LoginFormType.useOwnServer:
+                                return _buildUseOwnServerLoginForm(context);
+                              case LoginFormType.credentials:
+                                return _buildCredentialsLoginForm(context);
+                              default:
+                                return _buildMainLoginForm();
+                            }
+                          }
+                        ),
+                      ],
+                    ),
+                  )
+                )
               ),
               StoreConnector<AppState, LoginFormType>(
                 converter: (store) => store.state.authenticationState.loginFormType,
@@ -317,8 +323,8 @@ class _LoginWidgetState extends State<LoginWidget> {
         Container(
           margin: EdgeInsets.only(
             top: 114,
-            left: _getPaddingHorizontal(context),
-            right: _getPaddingHorizontal(context)),
+            left: 32,
+            right: 32),
           width: _getWidthButton(context),
           child: CenterTextBuilder()
             .text(AppLocalizations.of(context).login_message_center)
@@ -341,10 +347,9 @@ class _LoginWidgetState extends State<LoginWidget> {
               child: authenticationState.isAuthenticationSaaSLoading()
                 ? _loadingCircularProgress()
                 : _buildLoginButton(context, LoginFormType.main, AuthenticationType.saas))),
-        Spacer(),
         Padding(
           padding: EdgeInsets.only(
-            top: 72,
+            top: MediaQuery.of(context).size.height <= 600 ? 120 : 200,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: _loginUseOwnServerButton(context)),
@@ -352,8 +357,8 @@ class _LoginWidgetState extends State<LoginWidget> {
           padding: EdgeInsets.only(
             top: 12,
             bottom: 24,
-            left: _getPaddingHorizontal(context),
-            right: _getPaddingHorizontal(context)),
+            left: 32,
+            right: 32),
           width: _getWidthButton(context),
           child: CenterTextBuilder()
             .text(AppLocalizations.of(context).login_message_bottom)
@@ -415,7 +420,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       side: BorderSide(width: 1, color: AppColor.loginCheckBoxBorderColor)),
                     onChanged: (value) => loginViewModel.loginWithSSONotifier.value = value ?? false,
                     activeColor: AppColor.loginCheckBoxActiveColor)),
-                GestureDetector(
+              Expanded(child: GestureDetector(
                   onTap: () => loginViewModel.setCheckedLoginWithSSO(loginViewModel.loginWithSSONotifier.value),
                   child: Text(
                     AppLocalizations.of(context).checkbox_text_login_with_sso,
@@ -423,7 +428,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       fontSize: 16,
                       color: AppColor.loginLabelTextFieldColor,
                       fontWeight: FontWeight.normal)),
-                )
+                ))
               ]
             )
           )),

@@ -2416,14 +2416,14 @@ class AppLocalizations {
 
   String get login_message_center {
     return Intl.message(
-        'Join +100 million active users using LinShare\n to store and share files with ease',
+        'Join +100 million active users using LinShare to store and share files with ease',
         name: 'login_message_center'
     );
   }
 
   String get login_message_bottom {
     return Intl.message(
-        'By default you connect to Linagora servers. If you are\n not sure about this setting, please contact your\n technical specialist.',
+        'By default you connect to Linagora servers. If you are not sure about this setting, please contact your technical specialist.',
         name: 'login_message_bottom'
     );
   }

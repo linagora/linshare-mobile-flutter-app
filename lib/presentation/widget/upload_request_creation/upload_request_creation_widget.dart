@@ -103,7 +103,7 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          onTap: () => FocusScope.of(context).unfocus(),
           child: StoreConnector<AppState, UploadRequestCreationState>(
             converter: (Store<AppState> store) => store.state.uploadRequestCreationState,
             builder: (context, creationState) => (UploadRequestViewBuilder(context, EditUploadRequestType.group)
