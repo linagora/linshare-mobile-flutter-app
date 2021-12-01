@@ -92,16 +92,17 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_version_offset: alpha$BITRISE_BUILD_NUMBER
-        - build_short_version_string: 2.1.0
+        - build_short_version_string: 1.0.0
         - plist_path: "$BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/Info.plist"
     - flutter-build@0:
         inputs:
         - is_debug_mode: 'true'
         - ios_additional_params: "--no-sound-null-safety --release"
         - android_additional_params: "--no-sound-null-safety --release"
+        - additional_build_params: "--dart-define=CAPTCHA_TOKEN=$CAPTCHA_TOKEN"
         - ios_codesign_identity: 'iPhone Developer: Tung Tran (B8V9X882MX)'
     - sign-apk@1: {}
-    - xcode-archive@3:
+    - xcode-archive@4:
         inputs:
         - team_id: KUT463DS29
         - force_team_id: KUT463DS29
