@@ -29,26 +29,36 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/list_tile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 
+typedef DeleteDriveMemberCallback = void Function();
+
 class DriveMemberListTileBuilder {
   final String _name;
   final String _email;
   final String _driveRoleName;
   final String _workgroupRoleName;
+  final SharedSpaceRoleName? userCurrentDriveRole;
 
   Color? tileColor;
+
+  final DeleteDriveMemberCallback? onDeleteMemberCallback;
 
   DriveMemberListTileBuilder(
     this._name,
     this._email,
     this._driveRoleName,
     this._workgroupRoleName,
-    {this.tileColor,}
+    {
+      this.tileColor,
+      this.userCurrentDriveRole,
+      this.onDeleteMemberCallback,
+    }
   );
 
   ListTile build() {
@@ -57,6 +67,11 @@ class DriveMemberListTileBuilder {
       leading: LabelAvatarBuilder(_name.characters.first.toUpperCase())
         .key(Key('label_drive_member_avatar'))
         .build(),
+      trailing: SharedSpaceOperationRole.deleteDriveMemberRoles.contains(userCurrentDriveRole)
+          ? GestureDetector(
+              onTap: () => _handleDeleteMemberTap(),
+              child: Icon(Icons.close, color: AppColor.deleteMemberIconColor))
+          : SizedBox.shrink(),
       title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
           padding: EdgeInsets.only(bottom: 8),
@@ -105,5 +120,11 @@ class DriveMemberListTileBuilder {
       ]),
       tileColor: tileColor,
     );
+  }
+
+  void _handleDeleteMemberTap() {
+    if (onDeleteMemberCallback != null) {
+      onDeleteMemberCallback?.call();
+    }
   }
 }
