@@ -170,4 +170,9 @@ class AuthenticationOIDCDataSourceImpl implements AuthenticationOIDCDataSource {
   Future<void> persistTokenOIDC(TokenOIDC tokenOidc) async {
     await sharedPreferences.setObject(_keyTokenOIDC, tokenOidc.toTokenOIDCCache().toJson());
   }
+
+  @override
+  Future<void> deleteStoredTokenOIDC() async {
+    await sharedPreferences.remove(_keyTokenOIDC);
+  }
 }

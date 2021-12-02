@@ -362,6 +362,7 @@ class WidgetModule {
     getIt.registerFactory(() => AccountDetailsViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<DeletePermanentTokenInteractor>(),
+      getIt.get<DeleteTokenOidcInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<IsAvailableBiometricInteractor>(),
       getIt.get<GetAuthorizedInteractor>(),
