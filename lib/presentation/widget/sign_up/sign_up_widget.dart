@@ -73,39 +73,45 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.loginBackgroundColor,
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
           child: Stack(
             children: [
-              Container(
-                alignment: AlignmentDirectional.center,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 60),
-                      child: Image(
-                        image: AssetImage(_imagePath.icLoginLogoStandard),
-                        fit: BoxFit.fill,
-                        width: 150,
-                        alignment: Alignment.center)),
-                    Expanded(child: StoreConnector<AppState, SignUpAuthenticationState>(
-                      converter: (store) => store.state.signUpAuthenticationState,
-                      builder: (context, state) {
-                        switch(state.signUpFormType) {
-                          case SignUpFormType.main:
-                            return _buildMainSignUpForm();
-                          case SignUpFormType.fillName:
-                            return _buildFillNameForm(context);
-                          case SignUpFormType.completed:
-                            return _buildSignUpCompletedForm(context, state);
-                          default:
-                            return _buildMainSignUpForm();
-                        }
-                      }
-                    )),
-                  ],
-                ),
+              SingleChildScrollView(
+                reverse: true,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Container(
+                    alignment: AlignmentDirectional.center,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 60),
+                          child: Image(
+                            image: AssetImage(_imagePath.icLoginLogoStandard),
+                            fit: BoxFit.fill,
+                            width: 150,
+                            alignment: Alignment.center)),
+                        StoreConnector<AppState, SignUpAuthenticationState>(
+                          converter: (store) => store.state.signUpAuthenticationState,
+                          builder: (context, state) {
+                            switch(state.signUpFormType) {
+                              case SignUpFormType.main:
+                                return _buildMainSignUpForm();
+                              case SignUpFormType.fillName:
+                                return _buildFillNameForm(context);
+                              case SignUpFormType.completed:
+                                return _buildSignUpCompletedForm(context, state);
+                              default:
+                                return _buildMainSignUpForm();
+                            }
+                          }
+                        ),
+                      ],
+                    ),
+                  )
+                )
               ),
               StoreConnector<AppState, SignUpFormType>(
                 converter: (store) => store.state.signUpAuthenticationState.signUpFormType,
@@ -302,6 +308,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
             Padding(
               padding: EdgeInsets.only(
                 top: 20,
+                bottom: 24,
                 left: _getPaddingHorizontal(context),
                 right: _getPaddingHorizontal(context)),
               child: signUpAuthenticationState.isSignUpAuthenticationLoading()
@@ -425,10 +432,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ..maxLines(5)
                 ..setOverflow(null))
               .build())),
-        Spacer(),
         Padding(
           padding: EdgeInsets.only(
-            top: 30,
+            top: 80,
             bottom: 80,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
