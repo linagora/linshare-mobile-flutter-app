@@ -57,5 +57,7 @@ abstract class AuthenticationOIDCRepository {
   Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest);
 
   Future<void> logout(Uri baseUrl);
+
+  Future<void> deleteStoredTokenOIDC();
 }
 

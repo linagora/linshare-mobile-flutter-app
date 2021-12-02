@@ -51,4 +51,6 @@ abstract class AuthenticationOIDCDataSource {
   Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
 
   Future<void> logout(Uri baseUrl);
+
+  Future<void> deleteStoredTokenOIDC();
 }
