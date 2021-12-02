@@ -99,4 +99,9 @@ class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
   Future<TokenOIDC?> getStoredTokenOIDC() async {
     return oidcDataSources.getStoredTokenOIDC();
   }
+
+  @override
+  Future<void> deleteStoredTokenOIDC() async {
+    return oidcDataSources.deleteStoredTokenOIDC();
+  }
 }
