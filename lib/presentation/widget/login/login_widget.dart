@@ -349,7 +349,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 : _buildLoginButton(context, LoginFormType.main, AuthenticationType.saas))),
         Padding(
           padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height <= 600 ? 120 : 200,
+            top: _getPaddingTop(context),
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: _loginUseOwnServerButton(context)),
@@ -558,5 +558,15 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   double _getPaddingHorizontal(BuildContext context) {
     return _responsiveUtils.isSmallScreen(context) ? 14 : 0;
+  }
+
+  double _getPaddingTop(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    if (height <= 800) {
+      return 110;
+    } else if (height >= 1024) {
+      return 350;
+    }
+    return  200;
   }
 }
