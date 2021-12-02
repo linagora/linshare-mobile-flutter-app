@@ -104,7 +104,7 @@ class SignUpViewModel extends BaseViewModel {
       SignUpFormType formType,
       SignUpAuthenticationType authenticationType
   ) {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
 
     switch(authenticationType) {
       case SignUpAuthenticationType.sendEmail:
@@ -417,7 +417,7 @@ class SignUpViewModel extends BaseViewModel {
   }
 
   void handleCloseSignUpPressed(BuildContext context) {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
     _clearAllValueInput();
     store.dispatch(UpdateSignUpAuthenticationScreenStateAction(SignUpFormType.main));
     _appNavigation.popBack();
