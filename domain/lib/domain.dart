@@ -484,3 +484,4 @@ export 'src/usecases/authentication/get_secret_token_interactor.dart';
 export 'src/usecases/authentication/sign_up_for_saas_interactor.dart';
 export 'src/usecases/authentication/verify_email_saas_interactor.dart';
 export 'src/usecases/authentication/log_out_oidc_interactor.dart';
+export 'src/usecases/authentication/delete_token_oidc_interactor.dart';

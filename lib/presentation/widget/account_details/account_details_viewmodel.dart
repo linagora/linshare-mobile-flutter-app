@@ -41,7 +41,8 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class AccountDetailsViewModel extends BaseViewModel {
-  final DeletePermanentTokenInteractor deletePermanentTokenInteractor;
+  final DeletePermanentTokenInteractor _deletePermanentTokenInteractor;
+  final DeleteTokenOidcInteractor _deleteTokenOidcInteractor;
   final AppNavigation _appNavigation;
   final IsAvailableBiometricInteractor _isAvailableBiometricInteractor;
   final GetAuthorizedInteractor _getAuthorizedInteractor;
@@ -57,7 +58,8 @@ class AccountDetailsViewModel extends BaseViewModel {
 
   AccountDetailsViewModel(
     Store<AppState> store,
-    this.deletePermanentTokenInteractor,
+    this._deletePermanentTokenInteractor,
+    this._deleteTokenOidcInteractor,
     this._appNavigation,
     this._isAvailableBiometricInteractor,
     this._getAuthorizedInteractor,
@@ -79,16 +81,19 @@ class AccountDetailsViewModel extends BaseViewModel {
 
   ThunkAction<AppState> logoutAction() {
     return (Store<AppState> store) async {
-      await _logoutOidcInteractor.execute()
-        .then((value) async {
-          await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
-          store.dispatch(ClearCurrentView());
-        });
       await Future.wait([
-        deletePermanentTokenInteractor.execute(),
+        _deletePermanentTokenInteractor.execute(),
         _deleteAllOfflineDocumentInteractor.execute(),
         _deleteAllSharedSpaceOfflineInteractor.execute()
       ]);
+
+      await _logoutOidcInteractor.execute()
+        .then((value) async {
+          await _deleteTokenOidcInteractor.execute();
+        });
+
+      await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+      store.dispatch(ClearCurrentView());
     };
   }
 

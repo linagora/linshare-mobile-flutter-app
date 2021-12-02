@@ -308,6 +308,7 @@ class AppModule {
       getIt<AuthenticationOIDCRepository>(),
       getIt<CredentialRepository>()
     ));
+    getIt.registerFactory(() => DeleteTokenOidcInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => GetAllSharedSpacesInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => GetAutoCompleteSharingInteractor(getIt<AutoCompleteRepository>()));
     getIt.registerFactory(() => UploadWorkGroupDocumentInteractor(
