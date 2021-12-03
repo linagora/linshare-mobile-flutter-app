@@ -87,7 +87,7 @@ workflows:
         - ios_additional_params: "--no-sound-null-safety --release"
         - ios_codesign_identity: 'iPhone Distribution: Linagora (KUT463DS29)'
     - xcode-archive@4:
-        inputs:
+        inputs:  
         - team_id: KUT463DS29
         - force_team_id: KUT463DS29
         - force_code_sign_identity: 'iPhone Distribution: Linagora (KUT463DS29)'
