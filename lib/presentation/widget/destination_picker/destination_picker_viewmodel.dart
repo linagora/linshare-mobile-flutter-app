@@ -204,7 +204,7 @@ class DestinationPickerViewModel extends BaseViewModel {
   List<SharedSpaceNodeNested> get currentSharedSpaceList => store.state.destinationPickerState.sharedSpacesList;
 
   bool _isDriveEnable() {
-    return store.state.functionalityState.isDriveEnabled();
+    return store.state.functionalityState.isDriveEnabled() || store.state.functionalityState.isSharedSpaceEnabledV5();
   }
 
   void getAllDrive(Operation? operation, SharedSpaceNodeNested sharedSpaceNodeNested) async {
