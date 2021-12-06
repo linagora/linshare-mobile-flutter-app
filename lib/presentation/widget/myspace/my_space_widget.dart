@@ -634,7 +634,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return StoreConnector<AppState, FunctionalityState>(
         converter: (Store<AppState> store) => store.state.functionalityState,
-        builder: (context, state) => state.isSharedSpaceEnable()
+        builder: (context, state) => state.isSharedSpaceEnabled()
             ? DocumentContextMenuTileBuilder(
                     Key('copy_to_workgroup_context_menu_action'),
                     SvgPicture.asset(imagePath.icSharedSpace,

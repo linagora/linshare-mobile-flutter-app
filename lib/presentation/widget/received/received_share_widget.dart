@@ -580,7 +580,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
       {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
     return StoreConnector<AppState, FunctionalityState>(
       converter: (Store<AppState> store) => store.state.functionalityState,
-      builder: (context, state) => state.isSharedSpaceEnable()
+      builder: (context, state) => state.isSharedSpaceEnabled()
         ? ReceivedShareContextMenuTileBuilder(
               Key('copy_to_workgroup_context_menu_action'),
               SvgPicture.asset(imagePath.icSharedSpace, width: 24, height: 24, fit: BoxFit.fill),

@@ -32,7 +32,7 @@
 
 enum FunctionalityIdentifier {
   UNKNOWN_IDENTIFIER,
-  WORK_GROUP,
+  WORK_GROUP,                                    // work with back-end 4.2 and below
   WORK_GROUP__CREATION_RIGHT,
   UPLOAD_REQUEST,
   UPLOAD_REQUEST__MAXIMUM_FILE_SIZE,
@@ -46,8 +46,9 @@ enum FunctionalityIdentifier {
   UPLOAD_REQUEST__CAN_DELETE,
   UPLOAD_REQUEST__CAN_CLOSE,
   UPLOAD_REQUEST__PROTECTED_BY_PASSWORD,
-  DRIVE,
+  DRIVE,                                         // work with back-end 4.2 and below
   DRIVE__CREATION_RIGHT,
+  SHARED_SPACE                                   // work with back-end 5.0
 }
 
 extension FunctionalityIdentifierExtension on FunctionalityIdentifier {

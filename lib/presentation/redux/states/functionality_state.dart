@@ -68,13 +68,23 @@ class FunctionalityState extends LinShareState {
 }
 
 extension FunctionalityStateExtension on FunctionalityState {
-  bool isSharedSpaceEnable() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP);
+  bool isSharedSpaceEnabled() {
+    return (isSharedSpaceEnabledV4() || isSharedSpaceEnabledV5());
+  }
 
-  bool isCreateWorkgroupEnable() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP__CREATION_RIGHT);
+  bool isSharedSpaceEnabledV4() {
+    return (isWorkGroupEnabled() || isDriveEnabled());
+  }
 
-  bool isDriveEnable() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE);
+  bool isSharedSpaceEnabledV5() => _isFunctionalityEnable(FunctionalityIdentifier.SHARED_SPACE);
 
-  bool isDriveCreationEnable() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE__CREATION_RIGHT);
+  bool isWorkGroupEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP);
+
+  bool isCreateWorkgroupEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP__CREATION_RIGHT);
+
+  bool isDriveEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE);
+
+  bool isDriveCreationEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE__CREATION_RIGHT);
 
   bool isUploadRequestEnable() => _isFunctionalityEnable(FunctionalityIdentifier.UPLOAD_REQUEST);
 
@@ -85,7 +95,7 @@ extension FunctionalityStateExtension on FunctionalityState {
     if (functionality != null) {
       return functionality.enable;
     }
-    return true;
+    return false;
   }
 
   List<Functionality?> getAllEnabledUploadRequest() {

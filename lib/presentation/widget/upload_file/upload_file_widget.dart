@@ -279,7 +279,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       converter: (Store<AppState> store) => store.state.functionalityState,
       distinct: true,
       builder: (context, state) {
-        if (state.isSharedSpaceEnable()) {
+        if (state.isSharedSpaceEnabled()) {
           return GestureDetector(
             onTap: () => uploadFileViewModel.onPickUploadDestinationPressed(context),
             child: _buildUploadDestinationPickerRow(),
@@ -333,7 +333,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                   converter: (Store<AppState> store) => store.state.functionalityState,
                   distinct: true,
                   builder: (context, state) {
-                    if (state.isSharedSpaceEnable()) {
+                    if (state.isSharedSpaceEnabled()) {
                       return SvgPicture.asset(imagePath.icArrowRight,
                           width: 18, height: 18, fit: BoxFit.fill);
                     }
