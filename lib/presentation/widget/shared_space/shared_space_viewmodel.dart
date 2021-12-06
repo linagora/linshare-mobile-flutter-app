@@ -243,7 +243,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   }
 
   bool _isDriveEnable() {
-    return store.state.functionalityState.isDriveEnable();
+    return store.state.functionalityState.isDriveEnabled();
   }
 
   bool _isInSearchState() {
