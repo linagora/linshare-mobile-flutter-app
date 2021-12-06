@@ -148,7 +148,7 @@ class SharedSpaceViewModel extends BaseViewModel {
           store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
           _sharedSpaceNodes = [];
         }, (success) {
-          if (_isDriveEnable()) {
+          if (_validateShowingDrive()) {
             store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
             _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
           } else {
@@ -174,7 +174,7 @@ class SharedSpaceViewModel extends BaseViewModel {
           _sharedSpaceNodes = [];
         },
         (success) {
-          if (_isDriveEnable()) {
+          if (_validateShowingDrive()) {
             store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
             _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
           } else {
@@ -240,6 +240,10 @@ class SharedSpaceViewModel extends BaseViewModel {
               })
       );
     };
+  }
+
+  bool _validateShowingDrive() {
+    return _isDriveEnable() || store.state.functionalityState.isSharedSpaceEnabledV5();
   }
 
   bool _isDriveEnable() {
@@ -586,7 +590,7 @@ class SharedSpaceViewModel extends BaseViewModel {
           _sharedSpaceNodes = [];
         },
         (success) {
-          if (_isDriveEnable()) {
+          if (_validateShowingDrive()) {
             store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
             _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
           } else {
@@ -620,7 +624,7 @@ class SharedSpaceViewModel extends BaseViewModel {
           store.dispatch(SharedSpaceGetAllSharedSpacesAction(Left(failure)));
           _sharedSpaceNodes = [];
         }, (success) {
-          if (_isDriveEnable()) {
+          if (_validateShowingDrive()) {
             store.dispatch(SharedSpaceGetAllSharedSpacesAction(Right(success)));
             _sharedSpaceNodes = (success is SharedSpacesViewState) ? success.sharedSpacesList : [];
           } else {
