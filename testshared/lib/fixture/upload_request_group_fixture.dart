@@ -306,7 +306,7 @@ final addUploadRequest1 = AddUploadRequest(
   50000000000,
   true,
   true,
-  "FRENCH",
+  'FRENCH',
   true,
   true
 );

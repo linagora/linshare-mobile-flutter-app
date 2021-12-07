@@ -29,44 +29,15 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:equatable/equatable.dart';
+import 'package:domain/domain.dart';
 
-class EditUploadRequestRecipient extends Equatable {
-  final DateTime? activationDate;
-  final DateTime? notificationDate;
-  final bool enableNotification;
-  final bool? canClose;
-  final bool? canDeleteDocument;
-  final DateTime? expirationDate;
-  final String locale;
-  final int? maxDepositSize;
-  final int? maxFileCount;
-  final int? maxFileSize;
+extension ListFunctionalitiesExtension on List<Functionality?> {
 
-  EditUploadRequestRecipient(
-    this.activationDate,
-    this.notificationDate,
-    this.enableNotification,
-    this.canClose,
-    this.canDeleteDocument,
-    this.expirationDate,
-    this.locale,
-    this.maxDepositSize,
-    this.maxFileCount,
-    this.maxFileSize,
-  );
-
-  @override
-  List<Object?> get props => [
-    activationDate,
-    notificationDate,
-    enableNotification,
-    canClose,
-    canDeleteDocument,
-    expirationDate,
-    locale,
-    maxDepositSize,
-    maxFileCount,
-    maxFileSize,
-  ];
+  Functionality? findFunctionality(FunctionalityIdentifier identifier) {
+    try {
+      return firstWhere((element) => (element != null && element.identifier == identifier));
+    } catch (exception) {
+      return null;
+    }
+  }
 }

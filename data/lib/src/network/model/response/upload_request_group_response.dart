@@ -39,7 +39,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'upload_request_group_response.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 @DatetimeConverter()
 @UploadRequestGroupIdConverter()
 class UploadRequestGroupResponse extends Equatable {
@@ -77,7 +77,7 @@ class UploadRequestGroupResponse extends Equatable {
   final DateTime creationDate;
   final DateTime modificationDate;
   final int maxFileCount;
-  final double maxDepositSize;
+  final double? maxDepositSize;
   final double? maxFileSize;
   final DateTime activationDate;
   final DateTime notificationDate;

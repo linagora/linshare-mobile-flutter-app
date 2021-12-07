@@ -48,9 +48,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel {
-  final AppNavigation _appNavigation;
   final GetAllUploadRequestGroupsInteractor _getAllUploadRequestGroupsInteractor;
-  final UpdateMultipleUploadRequestGroupStateInteractor _multipleUploadRequestGroupStateInteractor;
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final SortInteractor _sortInteractor;
@@ -62,17 +60,19 @@ class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewM
   List<UploadRequestGroup> _uploadRequestListActiveClosed = [];
 
 	ActiveClosedUploadRequestGroupViewModel(
-		Store<AppState> store, 
-		this._appNavigation, 
+		Store<AppState> store,
+    AppNavigation appNavigation,
 		this._getAllUploadRequestGroupsInteractor, 
 		this._getSorterInteractor,
     this._saveSorterInteractor, 
 		this._sortInteractor, 
 		this._searchUploadRequestGroupsInteractor,
-    this._multipleUploadRequestGroupStateInteractor) : super(
+    UpdateMultipleUploadRequestGroupStateInteractor multipleUploadRequestGroupStateInteractor
+  ) : super(
       store,
-      _appNavigation,
-      _multipleUploadRequestGroupStateInteractor) {
+      appNavigation,
+      multipleUploadRequestGroupStateInteractor
+  ) {
 			_storeStreamSubscription = store.onChange.listen((event) {
 				event.uploadRequestGroupState.viewState.fold((failure) => null, (success) {
 					if (success is SearchUploadRequestGroupsNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
@@ -84,6 +84,9 @@ class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewM
               success.uploadRequestGroup.status == UploadRequestStatus.ENABLED) {
             getUploadRequestActiveClosedStatus();
           } else if (success is AddRecipientsToUploadRequestGroupViewState &&
+              success.uploadRequestGroup.status == UploadRequestStatus.ENABLED) {
+            getUploadRequestActiveClosedStatus();
+          } else if (success is AddNewUploadRequestViewState &&
               success.uploadRequestGroup.status == UploadRequestStatus.ENABLED) {
             getUploadRequestActiveClosedStatus();
           }
@@ -103,7 +106,7 @@ class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewM
     final newSorter = store.state.activeClosedUploadRequestGroupState.activeClosedSorter == sorter 
 			? sorter.getSorterByOrderType(sorter.orderType) 
 			: sorter;
-    _appNavigation.popBack();
+    appNavigation.popBack();
     store.dispatch(_sortFilesActionActiveClosed(newSorter));
   }
 
@@ -194,8 +197,8 @@ class ActiveClosedUploadRequestGroupViewModel extends UploadRequestGroupTabViewM
   }
 
   void editUploadRequest(UploadRequestGroup uploadRequestGroup, List<Functionality?> uploadRequestFunctionalities) {
-    _appNavigation.popBack();
-    _appNavigation.push(
+    appNavigation.popBack();
+    appNavigation.push(
       RoutePaths.editUploadRequest,
       arguments: EditUploadRequestArguments(
         EditUploadRequestType.group,

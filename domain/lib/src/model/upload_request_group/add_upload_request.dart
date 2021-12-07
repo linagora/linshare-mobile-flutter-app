@@ -38,17 +38,17 @@ class AddUploadRequest extends Equatable {
   final String label;
   final String? body;
   final DateTime? activationDate;
-  final DateTime expiryDate;
-  final int maxFileCount;
-  final int maxFileSize;
+  final DateTime? expiryDate;
+  final int? maxFileCount;
+  final int? maxFileSize;
 
   // Advance settings
-  final DateTime notificationDate;
-  final int maxDepositSize;
-  final bool canDelete;
-  final bool canClose;
+  final DateTime? notificationDate;
+  final int? maxDepositSize;
+  final bool? canDelete;
+  final bool? canClose;
   final String locale;
-  final bool protectedByPassword;
+  final bool? protectedByPassword;
   final bool enableNotification;
 
 

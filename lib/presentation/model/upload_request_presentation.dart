@@ -42,6 +42,17 @@ class UploadRequestPresentation extends Equatable {
   final List<FileSizeType>? listMaxFileSizeType;
   final List<FileSizeType>? listTotalFileSizeType;
   final List<NotificationLanguage>? listNotificationLanguages;
+  final FunctionalityTime? activationSetting;
+  final FunctionalityTime? expirationSetting;
+  final FunctionalityTime? notificationSetting;
+  final FunctionalitySize? totalFileSizeSetting;
+  final FunctionalityInteger? maxFileCountSetting;
+  final FunctionalitySize? maxFileSizeSetting;
+  final FunctionalityBoolean? canCloseSetting;
+  final FunctionalityBoolean? canDeleteSetting;
+  final FunctionalityBoolean? protectPasswordSetting;
+  final FunctionalitySimple? enableReminderNotificationSetting;
+  final FunctionalityLanguage? notificationLanguageSetting;
 
   UploadRequestPresentation({
     this.status,
@@ -50,6 +61,17 @@ class UploadRequestPresentation extends Equatable {
     this.listMaxFileSizeType,
     this.listTotalFileSizeType,
     this.listNotificationLanguages,
+    this.activationSetting,
+    this.expirationSetting,
+    this.notificationSetting,
+    this.totalFileSizeSetting,
+    this.maxFileCountSetting,
+    this.maxFileSizeSetting,
+    this.canCloseSetting,
+    this.canDeleteSetting,
+    this.protectPasswordSetting,
+    this.enableReminderNotificationSetting,
+    this.notificationLanguageSetting,
   });
 
   @override
@@ -60,5 +82,16 @@ class UploadRequestPresentation extends Equatable {
     listMaxFileSizeType,
     listTotalFileSizeType,
     listNotificationLanguages,
+    activationSetting,
+    expirationSetting,
+    notificationSetting,
+    totalFileSizeSetting,
+    maxFileCountSetting,
+    maxFileSizeSetting,
+    canCloseSetting,
+    canDeleteSetting,
+    protectPasswordSetting,
+    enableReminderNotificationSetting,
+    notificationLanguageSetting,
   ];
 }

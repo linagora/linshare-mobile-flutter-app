@@ -33,17 +33,17 @@ import 'package:equatable/equatable.dart';
 
 class EditUploadRequest extends Equatable {
   final DateTime? activationDate;
-  final DateTime notificationDate;
+  final DateTime? notificationDate;
   final bool enableNotification;
   final String? body;
-  final bool canClose;
-  final bool canDelete;
-  final DateTime expirationDate;
+  final bool? canClose;
+  final bool? canDelete;
+  final DateTime? expirationDate;
   final String label;
   final String locale;
-  final int maxDepositSize;
-  final int maxFileCount;
-  final int maxFileSize;
+  final int? maxDepositSize;
+  final int? maxFileCount;
+  final int? maxFileSize;
 
   EditUploadRequest(
     this.activationDate,
