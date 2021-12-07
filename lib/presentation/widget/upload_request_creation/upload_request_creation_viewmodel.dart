@@ -41,11 +41,11 @@ import 'package:linshare_flutter_app/presentation/model/nolitication_language.da
 import 'package:linshare_flutter_app/presentation/model/unit_time_type.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_request_presentation.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_creation_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/list_functionalities_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
@@ -177,28 +177,19 @@ class UploadRequestCreationViewModel extends BaseViewModel {
 
   void _getFunctionalityData() {
     final listFunctionalities = arguments?.uploadRequestFunctionalities ?? [];
-    _activationSetting = listFunctionalities.firstWhere((element) =>
-      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_ACTIVATION)) as FunctionalityTime?;
-    _expirationSetting = listFunctionalities.firstWhere((element) =>
-      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_EXPIRATION)) as FunctionalityTime?;
-    _notificationSetting = listFunctionalities.firstWhere((element) =>
-      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_NOTIFICATION)) as FunctionalityTime?;
-    _totalFileSizeSetting = listFunctionalities.firstWhere((element) =>
-      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_DEPOSIT_SIZE)) as FunctionalitySize?;
-    _maxFileCountSetting = listFunctionalities.firstWhere((element) =>
-      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_FILE_COUNT)) as FunctionalityInteger?;
-    _maxFileSizeSetting = listFunctionalities.firstWhere((element) =>
-     (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_FILE_SIZE)) as FunctionalitySize?;
-    _canCloseSetting = listFunctionalities.firstWhere(
-      (element) => (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__CAN_CLOSE)) as FunctionalityBoolean?;
-    _canDeleteSetting = listFunctionalities.firstWhere(
-      (element) => (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__CAN_DELETE)) as FunctionalityBoolean?;
-    _protectPasswordSetting = listFunctionalities.firstWhere((element) =>
-      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__PROTECTED_BY_PASSWORD)) as FunctionalityBoolean?;
-    _enableReminderNotificationSetting = listFunctionalities.firstWhere((element) =>
-      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__REMINDER_NOTIFICATION)) as FunctionalitySimple?;
-    _notificationLanguageSetting = listFunctionalities.firstWhere((element) =>
-      (element != null && element.identifier == FunctionalityIdentifier.UPLOAD_REQUEST__NOTIFICATION_LANGUAGE)) as FunctionalityLanguage?;
+    if (listFunctionalities.isNotEmpty) {
+      _activationSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_ACTIVATION) as FunctionalityTime?;
+      _expirationSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_EXPIRATION) as FunctionalityTime?;
+      _notificationSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__DELAY_BEFORE_NOTIFICATION) as FunctionalityTime?;
+      _totalFileSizeSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_DEPOSIT_SIZE) as FunctionalitySize?;
+      _maxFileCountSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_FILE_COUNT) as FunctionalityInteger?;
+      _maxFileSizeSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__MAXIMUM_FILE_SIZE) as FunctionalitySize?;
+      _canCloseSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__CAN_CLOSE) as FunctionalityBoolean?;
+      _canDeleteSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__CAN_DELETE) as FunctionalityBoolean?;
+      _protectPasswordSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__PROTECTED_BY_PASSWORD) as FunctionalityBoolean?;
+      _enableReminderNotificationSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__REMINDER_NOTIFICATION) as FunctionalitySimple?;
+      _notificationLanguageSetting = listFunctionalities.findFunctionality(FunctionalityIdentifier.UPLOAD_REQUEST__NOTIFICATION_LANGUAGE) as FunctionalityLanguage?;
+    }
   }
 
   void _getRoundUpDate() {
@@ -280,13 +271,13 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   }
 
   void _initDefaultData() {
-    maxFileSizeTypeNotifier.value = _maxFileSizeSetting?.unit.toFileSizeType() ?? FileSizeType.GB;
-    totalFileSizeTypeNotifier.value = _totalFileSizeSetting?.unit.toFileSizeType() ?? FileSizeType.GB;
+    maxFileSizeTypeNotifier.value = _maxFileSizeSetting?.unit.toFileSizeType() ?? FileSizeType.MB;
+    totalFileSizeTypeNotifier.value = _totalFileSizeSetting?.unit.toFileSizeType() ?? FileSizeType.MB;
     notificationLanguageNotifier.value = _notificationLanguageSetting?.value.toNotificationLanguage() ?? NotificationLanguage.ENGLISH;
 
-    maxNumberFilesController.text = _maxFileCountSetting?.value.toString() ?? '0';
-    maxFileSizeController.text = _maxFileSizeSetting?.value.toString() ?? '0';
-    totalFileSizeController.text = _totalFileSizeSetting?.value.toString() ?? '0';
+    maxNumberFilesController.text = _maxFileCountSetting?.value.toString() ?? '10';
+    maxFileSizeController.text = _maxFileSizeSetting?.value.toString() ?? '10';
+    totalFileSizeController.text = _totalFileSizeSetting?.value.toString() ?? '500';
 
     passwordProtectNotifier.value = _protectPasswordSetting?.value ?? false;
     allowDeletionNotifier.value = _canDeleteSetting?.value ?? true;
@@ -294,14 +285,28 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   }
 
   UploadRequestPresentation _generateUploadRequestCreation() {
-    final _listMaxFileSizeType = _maxFileSizeSetting?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
-    final _listTotalFileSizeType = _totalFileSizeSetting?.units.map((unit) => unit.toFileSizeType()).toList() ?? [];
-    final _listNotificationLanguages = _notificationLanguageSetting?.units.map((unit) => unit.toNotificationLanguage()).toList() ?? [];
+    final _listMaxFileSizeType = _maxFileSizeSetting?.units.map((unit) =>
+        unit.toFileSizeType()).toList() ?? FileSizeType.values;
+    final _listTotalFileSizeType = _totalFileSizeSetting?.units.map((unit) =>
+        unit.toFileSizeType()).toList() ?? FileSizeType.values;
+    final _listNotificationLanguages = _notificationLanguageSetting?.units.map((unit) =>
+        unit.toNotificationLanguage()).toList() ?? NotificationLanguage.values;
 
     final uploadRequestCreation = UploadRequestPresentation(
       listMaxFileSizeType: _listMaxFileSizeType,
       listTotalFileSizeType: _listTotalFileSizeType,
       listNotificationLanguages: _listNotificationLanguages,
+      activationSetting: _activationSetting,
+      expirationSetting: _expirationSetting,
+      notificationSetting: _notificationSetting,
+      totalFileSizeSetting: _totalFileSizeSetting,
+      maxFileCountSetting: _maxFileCountSetting,
+      maxFileSizeSetting: _maxFileSizeSetting,
+      canCloseSetting: _canCloseSetting,
+      canDeleteSetting: _canDeleteSetting,
+      protectPasswordSetting: _protectPasswordSetting,
+      enableReminderNotificationSetting: _enableReminderNotificationSetting,
+      notificationLanguageSetting: _notificationLanguageSetting,
     );
 
     return uploadRequestCreation;
@@ -350,52 +355,66 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   }
 
   void validateFormData(BuildContext context) {
-    final numberFiles = int.tryParse(maxNumberFilesController.text) ?? 0;
-    final maxFilesConfig = _maxFileCountSetting?.maxValue ?? 0;
-    if (numberFiles <= 0 || numberFiles >= maxFilesConfig) {
-      _appToast.showErrorToast(AppLocalizations.of(context).max_number_files_error);
-      return;
+    var numberFiles;
+    if (_maxFileCountSetting != null) {
+      numberFiles = int.tryParse(maxNumberFilesController.text) ?? 0;
+      final maxFilesConfig = _maxFileCountSetting!.maxValue;
+      if (numberFiles <= 0 || numberFiles >= maxFilesConfig) {
+        _appToast.showErrorToast(AppLocalizations.of(context).max_number_files_error);
+        return;
+      }
     }
 
-    final inputSize = int.tryParse(maxFileSizeController.text) ?? 0;
-    final fileSizeInByte = maxFileSizeTypeNotifier.value.toByte(inputSize);
-    final maxFileSizeConfig = _maxFileSizeSetting?.maxValue ?? 0;
-    final maxFileSizeTypeConfig = _maxFileSizeSetting?.maxUnit.toFileSizeType() ?? FileSizeType.GB;
-    if (fileSizeInByte <= 0 ||
-        (inputSize >= maxFileSizeConfig && maxFileSizeTypeNotifier.value == maxFileSizeTypeConfig)) {
-      _appToast.showErrorToast(AppLocalizations.of(context).max_file_size_error);
-      return;
+    var fileSizeInByte;
+    if (_maxFileSizeSetting != null) {
+      final inputSize = int.tryParse(maxFileSizeController.text) ?? 0;
+      fileSizeInByte = maxFileSizeTypeNotifier.value.toByte(inputSize);
+      final maxFileSizeConfig = _maxFileSizeSetting!.maxValue;
+      final maxFileSizeTypeConfig = _maxFileSizeSetting!.maxUnit.toFileSizeType();
+      if (fileSizeInByte <= 0 ||
+          (inputSize >= maxFileSizeConfig && maxFileSizeTypeNotifier.value == maxFileSizeTypeConfig)) {
+        _appToast.showErrorToast(AppLocalizations.of(context).max_file_size_error);
+        return;
+      }
     }
 
-    final totalSizeOfFiles = int.tryParse(totalFileSizeController.text) ?? 0;
-    final totalSizeOfFilesInByte = totalFileSizeTypeNotifier.value.toByte(totalSizeOfFiles);
-    final totalFileSizeConfig = _totalFileSizeSetting?.maxValue ?? 0;
-    final totalFileSizeTypeConfig = _totalFileSizeSetting?.maxUnit.toFileSizeType() ?? FileSizeType.GB;
-    if (totalSizeOfFilesInByte <= 0 ||
-        (totalSizeOfFiles >= totalFileSizeConfig && maxFileSizeTypeNotifier.value == totalFileSizeTypeConfig)) {
-      _appToast.showErrorToast(AppLocalizations.of(context).total_file_size_error);
-      return;
+    var totalSizeOfFilesInByte;
+    if (_totalFileSizeSetting != null) {
+      final totalSizeOfFiles = int.tryParse(totalFileSizeController.text) ?? 0;
+      totalSizeOfFilesInByte = totalFileSizeTypeNotifier.value.toByte(totalSizeOfFiles);
+      final totalFileSizeConfig = _totalFileSizeSetting!.maxValue;
+      final totalFileSizeTypeConfig = _totalFileSizeSetting!.maxUnit.toFileSizeType();
+      if (totalSizeOfFilesInByte <= 0 ||
+          (totalSizeOfFiles >= totalFileSizeConfig && maxFileSizeTypeNotifier.value == totalFileSizeTypeConfig)) {
+        _appToast.showErrorToast(AppLocalizations.of(context).total_file_size_error);
+        return;
+      }
     }
 
     // Once user change the time, prefer to get picked time.
     // Otherwise, passing null for server can handle by itself (temporary solution)
     var activateDate;
-    if(textActivationNotifier.value?.value1.compareTo(_initActivationDateRoundUp) != 0) {
+    if( _activationSetting != null && textActivationNotifier.value?.value1.compareTo(_initActivationDateRoundUp) != 0) {
       activateDate = textActivationNotifier.value!.value1;
     }
+    final expirationDate = _expirationSetting != null ? textExpirationNotifier.value?.value1 ?? _initExpirationDateRoundUp : null;
+    final notificationDate = _notificationSetting != null ? textReminderNotifier.value?.value1 ?? _initReminderDateRoundUp : null;
+    final canClose = _canCloseSetting != null ? allowClosureNotifier.value : null;
+    final canDelete = _canDeleteSetting != null ? allowDeletionNotifier.value : null;
+    final protectedByPassword = _protectPasswordSetting != null ? passwordProtectNotifier.value : null;
 
     _createUploadRequestAction(
       arguments?.type ?? UploadRequestCreationType.COLLECTIVE,
       maxFileCount: numberFiles,
       maxFileSize: fileSizeInByte,
-      expirationDate: textExpirationNotifier.value?.value1 ?? _initExpirationDateRoundUp,
+      expirationDate: expirationDate,
       emailMessage: emailMessageController.text,
       activationDate: activateDate,
-      notificationDate: textReminderNotifier.value?.value1 ?? _initReminderDateRoundUp,
+      notificationDate: notificationDate,
       maxDepositSize: totalSizeOfFilesInByte,
-      protectedByPassword: passwordProtectNotifier.value,
-      canClose: allowClosureNotifier.value,
-      canDelete: allowDeletionNotifier.value,
+      protectedByPassword: protectedByPassword,
+      canClose: canClose,
+      canDelete: canDelete,
       enableNotification: _enableReminderNotificationSetting?.enable ?? true,
       locale: notificationLanguageNotifier.value.text);
   }
@@ -403,17 +422,17 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   void _createUploadRequestAction(
     UploadRequestCreationType creationType,
     {
-      required int maxFileCount,
-      required int maxFileSize,
-      required DateTime expirationDate,
-      required String emailMessage,
+      required int? maxFileCount,
+      required int? maxFileSize,
+      required DateTime? expirationDate,
+      required String? emailMessage,
       required DateTime? activationDate,
-      required DateTime notificationDate,
-      required int maxDepositSize,
-      required bool canDelete,
-      required bool canClose,
+      required DateTime? notificationDate,
+      required int? maxDepositSize,
+      required bool? canDelete,
+      required bool? canClose,
       required String locale,
-      required bool protectedByPassword,
+      required bool? protectedByPassword,
       required bool enableNotification
     }
   ) {
@@ -439,33 +458,17 @@ class UploadRequestCreationViewModel extends BaseViewModel {
 
   OnlineThunkAction _addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest) {
     return OnlineThunkAction((Store<AppState> store) async {
-      await _addNewUploadRequestInteractor.execute(creationType, addUploadRequest).then((result) =>
-          result.fold(
-              (failure) => store.dispatch(UploadRequestCreationAction(
-                  Left(AddNewUploadRequestFailure(UploadRequestCreateFailed())))),
-              (success) {
-                getUploadRequestCreatedStatus();
-                getUploadRequestActiveClosedStatus();
-                backToUploadRequestGroup();
-              }));
+      await _addNewUploadRequestInteractor.execute(creationType, addUploadRequest)
+        .then((result) => result.fold(
+          (failure) {
+            store.dispatch(UploadRequestGroupAction(Left(failure)));
+            backToUploadRequestGroup();
+          },
+          (success) {
+            store.dispatch(UploadRequestGroupAction(Right(success)));
+            backToUploadRequestGroup();
+          }));
     });
-  }
-
-  void getUploadRequestCreatedStatus() {
-    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
-      store.dispatch(StartCreatedUploadRequestGroupLoadingAction());
-      store.dispatch(UploadRequestGroupGetAllCreatedAction(
-          await _getAllUploadRequestGroupsInteractor.execute([UploadRequestStatus.CREATED])));
-    }));
-  }
-
-  void getUploadRequestActiveClosedStatus() {
-    store.dispatch(OnlineThunkAction((Store<AppState> store) async {
-      store.dispatch(StartActiveClosedUploadRequestGroupLoadingAction());
-      store.dispatch(UploadRequestGroupGetAllActiveClosedAction(
-          await _getAllUploadRequestGroupsInteractor
-              .execute([UploadRequestStatus.ENABLED, UploadRequestStatus.CLOSED])));
-    }));
   }
 
   void updateEmailSubjectObservable(String newData) {

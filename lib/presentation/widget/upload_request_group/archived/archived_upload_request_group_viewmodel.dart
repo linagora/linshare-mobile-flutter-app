@@ -44,9 +44,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class ArchivedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel {
-  final AppNavigation _appNavigation;
   final GetAllUploadRequestGroupsInteractor _getAllUploadRequestGroupsInteractor;
-  final UpdateMultipleUploadRequestGroupStateInteractor _multipleUploadRequestGroupStateInteractor;
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final SortInteractor _sortInteractor;
@@ -58,17 +56,19 @@ class ArchivedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel
   List<UploadRequestGroup> _uploadRequestListArchived = [];
 
 	ArchivedUploadRequestGroupViewModel(
-		Store<AppState> store, 
-		this._appNavigation, 
+		Store<AppState> store,
+    AppNavigation appNavigation,
 		this._getAllUploadRequestGroupsInteractor, 
 		this._getSorterInteractor,
     this._saveSorterInteractor, 
 		this._sortInteractor, 
 		this._searchUploadRequestGroupsInteractor,
-    this._multipleUploadRequestGroupStateInteractor) : super(
+    UpdateMultipleUploadRequestGroupStateInteractor multipleUploadRequestGroupStateInteractor
+  ) : super(
       store,
-      _appNavigation,
-      _multipleUploadRequestGroupStateInteractor) {
+      appNavigation,
+      multipleUploadRequestGroupStateInteractor
+  ) {
 			_storeStreamSubscription = store.onChange.listen((event) {
 				event.uploadRequestGroupState.viewState.fold((failure) => null, (success) {
 					if (success is SearchUploadRequestGroupsNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
@@ -91,7 +91,7 @@ class ArchivedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel
 
   void _sortFilesArchived(Sorter sorter) {
     final newSorter = store.state.archivedUploadRequestGroupState.archivedSorter == sorter ? sorter.getSorterByOrderType(sorter.orderType) : sorter;
-    _appNavigation.popBack();
+    appNavigation.popBack();
     store.dispatch(_sortFilesActionArchived(newSorter));
   }
 

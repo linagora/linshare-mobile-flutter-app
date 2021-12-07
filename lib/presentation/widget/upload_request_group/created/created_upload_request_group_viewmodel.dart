@@ -48,9 +48,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel {
-  final AppNavigation _appNavigation;
   final GetAllUploadRequestGroupsInteractor _getAllUploadRequestGroupsInteractor;
-  final UpdateMultipleUploadRequestGroupStateInteractor _multipleUploadRequestGroupStateInteractor;
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final SortInteractor _sortInteractor;
@@ -63,16 +61,18 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
 
   CreatedUploadRequestGroupViewModel(
 		Store<AppState> store,
-		this._appNavigation,
+    AppNavigation appNavigation,
 		this._getAllUploadRequestGroupsInteractor,
 		this._getSorterInteractor,
     this._saveSorterInteractor,
 		this._sortInteractor,
 		this._searchUploadRequestGroupsInteractor,
-    this._multipleUploadRequestGroupStateInteractor) : super(
+    UpdateMultipleUploadRequestGroupStateInteractor multipleUploadRequestGroupStateInteractor
+  ) : super(
       store,
-      _appNavigation,
-      _multipleUploadRequestGroupStateInteractor) {
+      appNavigation,
+      multipleUploadRequestGroupStateInteractor
+  ) {
 			_storeStreamSubscription = store.onChange.listen((event) {
 				event.uploadRequestGroupState.viewState.fold((failure) => null, (success) {
 					if (success is SearchUploadRequestGroupsNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
@@ -84,6 +84,9 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
               success.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
             getUploadRequestCreatedStatus();
           } else if (success is AddRecipientsToUploadRequestGroupViewState &&
+              success.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
+            getUploadRequestCreatedStatus();
+          } else if (success is AddNewUploadRequestViewState &&
               success.uploadRequestGroup.status == UploadRequestStatus.CREATED) {
             getUploadRequestCreatedStatus();
           }
@@ -103,7 +106,7 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
     final newSorter = store.state.createdUploadRequestGroupState.pendingSorter == sorter 
 			? sorter.getSorterByOrderType(sorter.orderType) 
 			: sorter;
-    _appNavigation.popBack();
+    appNavigation.popBack();
     store.dispatch(_sortFilesActionPending(newSorter));
   }
 
@@ -188,8 +191,8 @@ class CreatedUploadRequestGroupViewModel extends UploadRequestGroupTabViewModel 
   }
 
   void editUploadRequest(UploadRequestGroup uploadRequestGroup, List<Functionality?> uploadRequestFunctionalities) {
-    _appNavigation.popBack();
-    _appNavigation.push(
+    appNavigation.popBack();
+    appNavigation.push(
       RoutePaths.editUploadRequest,
       arguments: EditUploadRequestArguments(
         EditUploadRequestType.group,

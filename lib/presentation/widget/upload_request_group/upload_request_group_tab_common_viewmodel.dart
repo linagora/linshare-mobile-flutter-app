@@ -66,13 +66,14 @@ import 'package:redux_thunk/redux_thunk.dart';
 typedef OnSelectedSorter = void Function(Sorter sorter);
 
 abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
-  final AppNavigation _appNavigation;
-  final UpdateMultipleUploadRequestGroupStateInteractor _multipleUploadRequestGroupStateInteractor;
+  final AppNavigation appNavigation;
+  final UpdateMultipleUploadRequestGroupStateInteractor multipleUploadRequestGroupStateInteractor;
 
   UploadRequestGroupTabViewModel(
     Store<AppState> store,
-    this._appNavigation,
-    this._multipleUploadRequestGroupStateInteractor) : super(store);
+    this.appNavigation,
+    this.multipleUploadRequestGroupStateInteractor
+  ) : super(store);
 
   void openPopupMenuSorter(BuildContext context, Sorter currentSorter, OnSelectedSorter selectSorterAction) {
     ContextMenuBuilder(context)
@@ -116,8 +117,8 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
   }
 
   void goToAddRecipients(UploadRequestGroup request, UploadRequestGroupTab tab) {
-    _appNavigation.popBack();
-    _appNavigation.push(
+    appNavigation.popBack();
+    appNavigation.push(
       RoutePaths.addRecipientsUploadRequestGroup,
       arguments: AddRecipientsUploadRequestGroupArgument(request, AddRecipientDestination.fromGroup, tab),
     );
@@ -151,16 +152,16 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
       String? optionalTitle,
       Function? onUpdateSuccess,
       Function? onUpdateFailed}) {
-    _appNavigation.popBack();
+    appNavigation.popBack();
     if (listUploadRequest.isNotEmpty) {
       if(optionalCheckbox != null) {
-        ConfirmModalSheetBuilder(_appNavigation)
+        ConfirmModalSheetBuilder(appNavigation)
           .key(Key('update_upload_request_group_confirm_modal'))
           .title(title)
           .cancelText(AppLocalizations.of(context).cancel)
           .optionalCheckbox(optionalTitle ?? '')
           .onConfirmAction(titleButtonConfirm, (optionalCheckboxValue) {
-              _appNavigation.popBack();
+              appNavigation.popBack();
               if (itemSelectionType == ItemSelectionType.multiple) {
                 cancelSelection(currentTab);
               }
@@ -172,12 +173,12 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
                   onUpdateFailed: onUpdateFailed));
         }).show(context);
       } else {
-        ConfirmModalSheetBuilder(_appNavigation)
+        ConfirmModalSheetBuilder(appNavigation)
           .key(Key('update_upload_request_group_confirm_modal'))
           .title(title)
           .cancelText(AppLocalizations.of(context).cancel)
           .onConfirmAction(titleButtonConfirm, (_) {
-              _appNavigation.popBack();
+              appNavigation.popBack();
               if (itemSelectionType == ItemSelectionType.multiple) {
                 cancelSelection(currentTab);
               }
@@ -198,7 +199,7 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
     Function? onUpdateSuccess,
     Function? onUpdateFailed}) {
     return OnlineThunkAction((Store<AppState> store) async {
-      await _multipleUploadRequestGroupStateInteractor
+      await multipleUploadRequestGroupStateInteractor
           .execute(groups, status, copyToMySpace: copyToMySpace)
           .then((result) => result.fold(
               (failure) {
