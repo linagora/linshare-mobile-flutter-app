@@ -38,22 +38,22 @@ import 'dart:convert';
 
 part 'edit_upload_request_body_request.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 @DatetimeConverter()
 @DatetimeNullableConverter()
 class EditUploadRequestBodyRequest with EquatableMixin {
   final DateTime? activationDate;
-  final DateTime notificationDate;
+  final DateTime? notificationDate;
   final bool enableNotification;
   final String? body;
-  final bool canClose;
-  final bool canDelete;
-  final DateTime expiryDate;
+  final bool? canClose;
+  final bool? canDelete;
+  final DateTime? expiryDate;
   final String label;
   final String locale;
-  final int maxDepositSize;
-  final int maxFileCount;
-  final int maxFileSize;
+  final int? maxDepositSize;
+  final int? maxFileCount;
+  final int? maxFileSize;
 
   EditUploadRequestBodyRequest(
     this.activationDate,
@@ -75,18 +75,18 @@ class EditUploadRequestBodyRequest with EquatableMixin {
   Map<String, dynamic> toJson() => _editUploadBodyRequestToJson(this);
 
   Map<String, dynamic> _editUploadBodyRequestToJson(EditUploadRequestBodyRequest instance) => <String, dynamic>{
-    jsonEncode('activationDate'): const DatetimeNullableConverter().toJson(instance.activationDate),
-    jsonEncode('notificationDate'): const DatetimeConverter().toJson(instance.notificationDate),
+    if (instance.activationDate != null) jsonEncode('activationDate'): const DatetimeNullableConverter().toJson(instance.activationDate),
+    if (instance.notificationDate != null) jsonEncode('notificationDate'): const DatetimeNullableConverter().toJson(instance.notificationDate),
     jsonEncode('enableNotification'): jsonEncode(instance.enableNotification),
     jsonEncode('body'): jsonEncode(instance.body),
-    jsonEncode('canClose'): jsonEncode(instance.canClose),
-    jsonEncode('canDelete'): jsonEncode(instance.canDelete),
-    jsonEncode('expiryDate'): const DatetimeConverter().toJson(instance.expiryDate),
+    if (instance.canClose != null) jsonEncode('canClose'): jsonEncode(instance.canClose),
+    if (instance.canDelete != null) jsonEncode('canDelete'): jsonEncode(instance.canDelete),
+    if (instance.expiryDate != null) jsonEncode('expiryDate'): const DatetimeNullableConverter().toJson(instance.expiryDate),
     jsonEncode('label'): jsonEncode(instance.label),
     jsonEncode('locale'): jsonEncode(instance.locale),
-    jsonEncode('maxDepositSize'): jsonEncode(instance.maxDepositSize),
-    jsonEncode('maxFileCount'): jsonEncode(instance.maxFileCount),
-    jsonEncode('maxFileSize'): jsonEncode(instance.maxFileSize),
+    if (instance.maxDepositSize != null) jsonEncode('maxDepositSize'): jsonEncode(instance.maxDepositSize),
+    if (instance.maxFileCount != null) jsonEncode('maxFileCount'): jsonEncode(instance.maxFileCount),
+    if (instance.maxFileSize != null) jsonEncode('maxFileSize'): jsonEncode(instance.maxFileSize),
   };
 
   @override
