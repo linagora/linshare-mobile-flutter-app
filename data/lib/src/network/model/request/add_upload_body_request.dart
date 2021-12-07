@@ -39,7 +39,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'add_upload_body_request.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 @DatetimeConverter()
 @DatetimeNullableConverter()
 class AddUploadBodyRequest with EquatableMixin {
@@ -49,17 +49,17 @@ class AddUploadBodyRequest with EquatableMixin {
   final String label;
   final String? body;
   final DateTime? activationDate;
-  final DateTime expiryDate;
-  final int maxFileCount;
-  final int maxFileSize;
+  final DateTime? expiryDate;
+  final int? maxFileCount;
+  final int? maxFileSize;
 
   // Advance settings
-  final DateTime notificationDate;
-  final int maxDepositSize;
-  final bool canDelete;
-  final bool canClose;
+  final DateTime? notificationDate;
+  final int? maxDepositSize;
+  final bool? canDelete;
+  final bool? canClose;
   final String locale;
-  final bool protectedByPassword;
+  final bool? protectedByPassword;
   final bool enableNotification;
 
   AddUploadBodyRequest(
@@ -83,21 +83,21 @@ class AddUploadBodyRequest with EquatableMixin {
   Map<String, dynamic> toJson() => _addUploadBodyRequestToJson(this);
 
   Map<String, dynamic> _addUploadBodyRequestToJson(AddUploadBodyRequest instance) => <String, dynamic>{
-        jsonEncode('contactList'): instance.contactList.map((e) => jsonEncode(e)).toList(),
-        jsonEncode('label'): jsonEncode(instance.label),
-        jsonEncode('body'): jsonEncode(instance.body),
-        jsonEncode('activationDate'): const DatetimeNullableConverter().toJson(instance.activationDate),
-        jsonEncode('expiryDate'): const DatetimeConverter().toJson(instance.expiryDate),
-        jsonEncode('maxFileCount'): jsonEncode(instance.maxFileCount),
-        jsonEncode('maxFileSize'): jsonEncode(instance.maxFileSize),
-        jsonEncode('notificationDate'): const DatetimeConverter().toJson(instance.notificationDate),
-        jsonEncode('maxDepositSize'): jsonEncode(instance.maxDepositSize),
-        jsonEncode('canDelete'): jsonEncode(instance.canDelete),
-        jsonEncode('canClose'): jsonEncode(instance.canClose),
-        jsonEncode('locale'): jsonEncode(instance.locale),
-        jsonEncode('protectedByPassword'): jsonEncode(instance.protectedByPassword),
-        jsonEncode('enableNotification'): jsonEncode(instance.enableNotification),
-      };
+    jsonEncode('contactList'): instance.contactList.map((e) => jsonEncode(e)).toList(),
+    jsonEncode('label'): jsonEncode(instance.label),
+    jsonEncode('body'): jsonEncode(instance.body),
+    if (instance.activationDate != null) jsonEncode('activationDate'): const DatetimeNullableConverter().toJson(instance.activationDate),
+    if (instance.expiryDate != null)  jsonEncode('expiryDate'): const DatetimeNullableConverter().toJson(instance.expiryDate),
+    if (instance.maxFileCount != null)  jsonEncode('maxFileCount'): jsonEncode(instance.maxFileCount),
+    if (instance.maxFileSize != null)  jsonEncode('maxFileSize'): jsonEncode(instance.maxFileSize),
+    if (instance.notificationDate != null)  jsonEncode('notificationDate'): const DatetimeNullableConverter().toJson(instance.notificationDate),
+    if (instance.maxDepositSize != null)  jsonEncode('maxDepositSize'): jsonEncode(instance.maxDepositSize),
+    if (instance.canDelete != null)  jsonEncode('canDelete'): jsonEncode(instance.canDelete),
+    if (instance.canClose != null)  jsonEncode('canClose'): jsonEncode(instance.canClose),
+    jsonEncode('locale'): jsonEncode(instance.locale),
+    if (instance.protectedByPassword != null)  jsonEncode('protectedByPassword'): jsonEncode(instance.protectedByPassword),
+    jsonEncode('enableNotification'): jsonEncode(instance.enableNotification),
+  };
 
   @override
   List<Object?> get props => [

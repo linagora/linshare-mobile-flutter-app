@@ -65,7 +65,7 @@ class UploadRequestGroup with EquatableMixin {
   final DateTime creationDate;
   final DateTime modificationDate;
   final int maxFileCount;
-  final double maxDepositSize;
+  final double? maxDepositSize;
   final double? maxFileSize;
   final DateTime activationDate;
   final DateTime notificationDate;

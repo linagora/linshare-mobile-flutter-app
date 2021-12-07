@@ -55,7 +55,6 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_g
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
@@ -92,7 +91,6 @@ class ToastMessageHandler {
       _handleReceivedShareToastMessage(context, event.receivedShareState);
       _handleDeleteSharedSpaceMembersToastMessage(context, event.deleteSharedSpaceMembersState);
       _handleSharedSpaceNodeVersionsToastMessage(context, event.sharedSpaceNodeVersionsState);
-      _handleAddRecipientUploadRequestGroupToastMessage(context, event.addRecipientsUploadRequestGroupState);
       _handleUploadRequestGroupToastMessage(context, event.uploadRequestGroupState);
       _handleUploadRequestInsideToastMessage(context, event.uploadRequestInsideState);
       _handleActiveClosedUploadRequestInsideToastMessage(context, event.activeClosedUploadRequestInsideState);
@@ -447,12 +445,6 @@ class ToastMessageHandler {
       });
   }
 
-  void _handleAddRecipientUploadRequestGroupToastMessage(BuildContext context, AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState) {
-    addRecipientsUploadRequestGroupState.viewState.fold(
-      (failure) {},
-      (success) => {});
-  }
-
   void _handleUploadRequestGroupToastMessage(BuildContext context, UploadRequestGroupState requestGroupState) {
     requestGroupState.viewState.fold((failure) {
       if (failure is UpdateUploadRequestGroupStateFailure) {
@@ -463,6 +455,10 @@ class ToastMessageHandler {
         _cleanUploadRequestGroupViewState();
       } else if (failure is EditUploadRequestGroupFailure) {
         appToast.showErrorToast(AppLocalizations.of(context).the_upload_request_has_been_updated_failed);
+        _cleanUploadRequestGroupViewState();
+      } else if (failure is AddRecipientsToUploadRequestGroupFailure) {
+        _cleanUploadRequestGroupViewState();
+      } else if (failure is AddNewUploadRequestFailure) {
         _cleanUploadRequestGroupViewState();
       }
     }, (success) {
@@ -480,6 +476,8 @@ class ToastMessageHandler {
         _cleanUploadRequestGroupViewState();
       } else if (success is AddRecipientsToUploadRequestGroupViewState) {
         appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added);
+        _cleanUploadRequestGroupViewState();
+      } else if (success is AddNewUploadRequestViewState) {
         _cleanUploadRequestGroupViewState();
       }
     });
@@ -511,6 +509,8 @@ class ToastMessageHandler {
         _cleanActiveClosedUploadRequestInsideViewState();
       } else if (failure is UpdateUploadRequestAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanActiveClosedUploadRequestInsideViewState();
+      } else if (failure is AddRecipientsToUploadRequestGroupFailure) {
         _cleanActiveClosedUploadRequestInsideViewState();
       }
     }, (success) {
@@ -574,6 +574,8 @@ class ToastMessageHandler {
       } else if (failure is UpdateUploadRequestAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
         _cleanCreatedUploadRequestInsideViewState();
+      } else if (failure is AddRecipientsToUploadRequestGroupFailure) {
+        _cleanCreatedUploadRequestInsideViewState();
       }
     }, (success) {
       if (success is CopyToMySpaceViewState) {
@@ -635,6 +637,8 @@ class ToastMessageHandler {
         _cleanArchivedUploadRequestInsideViewState();
       } else if (failure is UpdateUploadRequestAllFailureViewState) {
         appToast.showErrorToast(AppLocalizations.of(context).some_upload_requests_could_not_be_updated);
+        _cleanArchivedUploadRequestInsideViewState();
+      } else if (failure is AddRecipientsToUploadRequestGroupFailure) {
         _cleanArchivedUploadRequestInsideViewState();
       }
     }, (success) {
