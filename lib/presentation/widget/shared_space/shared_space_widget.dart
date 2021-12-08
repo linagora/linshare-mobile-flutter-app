@@ -197,7 +197,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   }
 
   Color _bindingCreateNewButtonColor(AppState appState) {
-    if (!appState.functionalityState.isDriveCreationEnabled() && !appState.functionalityState.isCreateWorkgroupEnabled()) {
+    if (!_driveCreationEnable(appState) && !_workgroupCreationEnable(appState)) {
       return AppColor.disableColor;
     }
     return AppColor.primaryColor;
@@ -213,13 +213,9 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     }
   }
 
-  bool _driveCreationEnable(AppState appState) {
-    return (appState.functionalityState.isDriveEnabled() && appState.functionalityState.isDriveCreationEnabled());
-  }
+  bool _driveCreationEnable(AppState appState) => appState.functionalityState.isDriveCreationEnabled();
 
-  bool _workgroupCreationEnable(AppState appState) {
-    return (appState.functionalityState.isWorkGroupEnabled() && appState.functionalityState.isCreateWorkgroupEnabled());
-  }
+  bool _workgroupCreationEnable(AppState appState) => appState.functionalityState.isCreateWorkgroupEnabled();
 
   Widget buildSharedSpaceListBySearchState() {
     return StoreConnector<AppState, AppState>(
