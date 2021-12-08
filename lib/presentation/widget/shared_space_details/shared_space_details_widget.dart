@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entry_user_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_member_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/drive_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
@@ -115,7 +116,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                   ],
                 ),
               ),
-              _buildLoadingView(),
+              if (arguments.sharedSpace.nodeType == LinShareNodeType.DRIVE) _buildLoadingView(),
               Expanded(
                 child: TabBarView(children: [
                   if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP)
@@ -292,21 +293,21 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   Widget _membersTabWidget(SharedSpaceDetailsState state) {
     return RefreshIndicator(
       onRefresh: () async {
-        _model.refreshSharedSpaceMembers(state.sharedSpace?.sharedSpaceId);
+        _model.refreshSharedSpaceMembers(state.sharedSpace);
       },
       child: Scaffold(
         body: ListView.builder(
-          itemCount: state.membersList?.length,
+          itemCount: state.membersList.length,
           itemBuilder: (context, index) {
-            final member = state.membersList?[index];
-            if(member == null || state.sharedSpace == null) {
+            final member = state.membersList[index];
+            if(state.sharedSpace == null) {
               return SizedBox.shrink();
             }
-            return _buildItemMember(state.sharedSpace!, member);
+            return _buildItemMember(state.sharedSpace!, member, state.driveMembersList);
           }),
         floatingActionButton: state.sharedSpace != null && _validateDisplayAddMemberButton(state.sharedSpace!)
             ? FloatingActionButton(
-                onPressed: () => _goToAddMember(state.sharedSpace!, state.membersList ?? <SharedSpaceMember>[]),
+                onPressed: () => _goToAddMember(state.sharedSpace!, state.membersList),
                 backgroundColor: AppColor.primaryColor,
                 child: Icon(Icons.person_add, color: Colors.white, size: 24.0))
             : SizedBox.shrink(),
@@ -331,23 +332,26 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
     return false;
   }
 
-  Widget _buildItemMember(SharedSpaceNodeNested sharedSpace, SharedSpaceMember member) {
+  Widget _buildItemMember(SharedSpaceNodeNested sharedSpace, SharedSpaceMember member, List<SharedSpaceMember> driveMembers) {
+    final memberType = sharedSpace.driveId != null ? member.getMemberType(driveMembers) : null;
     if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
       return SharedSpaceMemberListTileBuilder(
+          context,
           member.account?.name ?? '',
           member.account?.mail ?? '',
           member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+          memberType: memberType,
           userCurrentRole: sharedSpace.sharedSpaceRole.name,
           onSelectedRoleCallback: () => selectRoleBottomSheet(
               context,
               member.role?.name ?? SharedSpaceRoleName.READER,
-              sharedSpace.sharedSpaceId,
+              sharedSpace,
               member),
           onDeleteMemberCallback: () => confirmDeleteMember(
               context,
               member.account?.name ?? '',
               sharedSpace.name,
-              sharedSpace.sharedSpaceId,
+              sharedSpace,
               sharedSpace.nodeType,
               member.sharedSpaceMemberId)).build();
     } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
@@ -362,7 +366,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
             context,
             member.account?.name ?? '',
             sharedSpace.name,
-            sharedSpace.sharedSpaceId,
+            sharedSpace,
             sharedSpace.nodeType,
             member.sharedSpaceMemberId)
       ).build();
@@ -436,7 +440,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   void selectRoleBottomSheet(
       BuildContext context,
       SharedSpaceRoleName selectedRole,
-      SharedSpaceId sharedSpaceId,
+      SharedSpaceNodeNested sharedSpace,
       SharedSpaceMember member) {
     SelectRoleModalSheetBuilder(
           key: Key('select_role_on_shared_space_member_details'),
@@ -447,7 +451,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
             SharedSpaceRoleName.CONTRIBUTOR,
             SharedSpaceRoleName.WRITER
           ])
-        .onConfirmAction((role) => _model.changeMemberRole(sharedSpaceId, member, role))
+        .onConfirmAction((role) => _model.changeMemberRole(sharedSpace, member, role))
         .show(context);
   }
 
@@ -455,7 +459,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
       BuildContext context,
       String memberName,
       String sharedSpaceName,
-      SharedSpaceId sharedSpaceId,
+      SharedSpaceNodeNested sharedSpace,
       LinShareNodeType? type,
       SharedSpaceMemberId sharedSpaceMemberId) {
     final deleteTitle = type == LinShareNodeType.DRIVE
@@ -467,7 +471,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
         .cancelText(AppLocalizations.of(context).cancel)
         .onConfirmAction(
           AppLocalizations.of(context).delete,
-            (_) => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
+            (_) => _model.deleteMember(sharedSpace, sharedSpaceMemberId))
         .show(context);
   }
 }

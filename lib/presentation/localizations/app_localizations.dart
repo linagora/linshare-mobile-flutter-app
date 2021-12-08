@@ -2666,6 +2666,18 @@ class AppLocalizations {
     return Intl.message('Email is not available',
         name: 'email_is_not_available');
   }
+
+  String get drive_member {
+    return Intl.message(
+        'Drive member',
+        name: 'drive_member');
+  }
+
+  String get external_member {
+    return Intl.message(
+        'External member',
+        name: 'external_member');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_deta
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_member_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
@@ -96,8 +97,8 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
         body: StoreConnector<AppState, SharedSpaceDetailsState>(
           converter: (store) => store.state.sharedSpaceDetailsState,
           builder: (_, state) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _addMemberWidget(state.sharedSpace!, state.membersList!),
-            Expanded(child: _membersListWidget(state.sharedSpace!, state.membersList!))
+            _addMemberWidget(state.sharedSpace!, state.membersList),
+            Expanded(child: _membersListWidget(state.sharedSpace!, state.membersList, state.driveMembersList))
           ]),
         ));
   }
@@ -174,8 +175,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
                           },
                           onSuggestionSelected: (autoCompleteResult) async {
                             _typeAheadController.text = '';
-                            _model.addSharedSpaceMember(
-                                sharedSpace.sharedSpaceId, autoCompleteResult as SharedSpaceMemberAutoCompleteResult);
+                            _model.addSharedSpaceMember(sharedSpace, autoCompleteResult as SharedSpaceMemberAutoCompleteResult);
                           },
                           noItemsFoundBuilder: (context) => Padding(
                                 padding: EdgeInsets.all(24.0),
@@ -191,7 +191,10 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
   }
 
   Widget _membersListWidget(
-      SharedSpaceNodeNested sharedSpace, List<SharedSpaceMember> members) {
+      SharedSpaceNodeNested sharedSpace,
+      List<SharedSpaceMember> members,
+      List<SharedSpaceMember> driveMembers
+  ) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
           width: double.infinity,
@@ -208,10 +211,13 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
           itemCount: members.length,
           itemBuilder: (context, index) {
             var member = members[index];
+            final memberType = sharedSpace.driveId != null ? member.getMemberType(driveMembers) : null;
             return SharedSpaceMemberListTileBuilder(
+              context,
               member.account?.name ?? '',
               member.account?.mail ?? '',
               member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+              memberType: memberType,
               userCurrentRole: sharedSpace.sharedSpaceRole.name,
               tileColor: Colors.white,
               onSelectedRoleCallback: () =>
@@ -219,13 +225,13 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
                   context,
                   member.role?.name ?? SharedSpaceRoleName.READER,
                   onNewRoleUpdated: (newRole) {
-                    _model.changeMemberRole(sharedSpace.sharedSpaceId, member, newRole);
+                    _model.changeMemberRole(sharedSpace, member, newRole);
                   }),
               onDeleteMemberCallback: () => confirmDeleteMember(
                 context,
                 member.account?.name ?? '',
                 sharedSpace.name,
-                sharedSpace.sharedSpaceId,
+                sharedSpace,
                 member.sharedSpaceMemberId)).build();
           }))
     ]);
@@ -252,7 +258,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
     BuildContext context,
     String memberName,
     String workspaceName,
-    SharedSpaceId sharedSpaceId,
+    SharedSpaceNodeNested sharedSpace,
     SharedSpaceMemberId sharedSpaceMemberId) {
     final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_member(memberName, workspaceName);
     ConfirmModalSheetBuilder(appNavigation)
@@ -261,7 +267,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
       .cancelText(AppLocalizations.of(context).cancel)
       .onConfirmAction(
         AppLocalizations.of(context).delete,
-        (_) => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
+        (_) => _model.deleteMember(sharedSpace, sharedSpaceMemberId))
       .show(context);
   }
 
