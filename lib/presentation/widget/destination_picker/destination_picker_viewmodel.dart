@@ -184,19 +184,21 @@ class DestinationPickerViewModel extends BaseViewModel {
   }
 
   bool _validateGetAllSharedSpace(Operation operation, SharedSpaceNodeNested sharedSpace) {
-    if (!_isDriveEnable() && sharedSpace.nodeType == LinShareNodeType.DRIVE) {
-      return false;
+    if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
+      return _isDriveEnable();
+    } else {
+      if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
+        return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
+      } else if (operation == Operation.upload) {
+        return SharedSpaceOperationRole.uploadToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
+      } else if (operation == Operation.copyTo) {
+        return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
+      } else if (operation == Operation.move) {
+        return SharedSpaceOperationRole.moveSharedSpaceNodeRoles.contains(sharedSpace.sharedSpaceRole.name);
+      } else {
+        return true;
+      }
     }
-    if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
-      return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
-    } else if (operation == Operation.upload) {
-      return SharedSpaceOperationRole.uploadToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
-    } else if (operation == Operation.copyTo) {
-      return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
-    } else if (operation == Operation.move) {
-      return SharedSpaceOperationRole.moveSharedSpaceNodeRoles.contains(sharedSpace.sharedSpaceRole.name);
-    }
-    return true;
   }
 
   Sorter get currentSorter => store.state.destinationPickerState.sorter;
@@ -207,17 +209,17 @@ class DestinationPickerViewModel extends BaseViewModel {
     return store.state.functionalityState.isDriveEnabled() || store.state.functionalityState.isSharedSpaceEnabledV5();
   }
 
-  void getAllDrive(Operation? operation, SharedSpaceNodeNested sharedSpaceNodeNested) async {
-    store.dispatch(_getAllDriveAction(operation, sharedSpaceNodeNested));
+  void getAllDrive(Operation? operation, SharedSpaceNodeNested drive) async {
+    store.dispatch(_getAllDriveAction(operation, drive));
   }
 
-  ThunkAction<AppState> _getAllDriveAction(Operation? operation, SharedSpaceNodeNested sharedSpaceNodeNested) {
+  ThunkAction<AppState> _getAllDriveAction(Operation? operation, SharedSpaceNodeNested drive) {
     return (Store<AppState> store) async {
       store.dispatch(StartDestinationPickerLoadingAction());
 
-      await _getAllWorkgroupsInteractor.execute(sharedSpaceNodeNested.sharedSpaceId.toDriveId())
+      await _getAllWorkgroupsInteractor.execute(drive.sharedSpaceId.toDriveId())
           .then((result) => result.fold(
-              (failure) => store.dispatch(DestinationPickerGetAllDriveAction(result, sharedSpaceNodeNested, [])),
+              (failure) => store.dispatch(DestinationPickerGetAllDriveAction(result, drive, [])),
               (success) {
                  if (success is GetAllWorkgroupsViewState) {
                    final sharedSpacesList = success.workgroups.where((element) {
@@ -237,9 +239,9 @@ class DestinationPickerViewModel extends BaseViewModel {
                       return true;
                    }).toList();
 
-                   store.dispatch(DestinationPickerGetAllDriveAction(result, sharedSpaceNodeNested, sharedSpacesList));
+                   store.dispatch(DestinationPickerGetAllDriveAction(result, drive, sharedSpacesList));
                  } else {
-                   store.dispatch(DestinationPickerGetAllDriveAction(result, sharedSpaceNodeNested, []));
+                   store.dispatch(DestinationPickerGetAllDriveAction(result, drive, []));
                  }
               }));
     };
@@ -249,9 +251,9 @@ class DestinationPickerViewModel extends BaseViewModel {
     store.dispatch(DestinationPickerGoInsideSharedSpaceAction(sharedSpace, drive: drive));
   }
 
-  void openDrive(SharedSpaceNodeNested sharedSpace) {
-    store.dispatch(ClearAllSharedSpaceListStateAction(DestinationPickerCurrentView.drive, drive: sharedSpace));
-    getAllDrive(store.state.destinationPickerState.operation, sharedSpace);
+  void openDrive(SharedSpaceNodeNested drive) {
+    store.dispatch(ClearAllSharedSpaceListStateAction(DestinationPickerCurrentView.drive, drive: drive));
+    getAllDrive(store.state.destinationPickerState.operation, drive);
   }
 
   void backToSharedSpace({SharedSpaceNodeNested? drive}) {
@@ -263,8 +265,8 @@ class DestinationPickerViewModel extends BaseViewModel {
     }
   }
 
-  void backToChooseSpaceDestination() {
-    store.dispatch(GoToChooseSpaceAction(Operation.none));
+  void backToChooseSpaceDestination(Operation operation) {
+    store.dispatch(GoToChooseSpaceAction(operation));
   }
 
   void backToInsideDriveDestination(SharedSpaceNodeNested sharedSpace) {
