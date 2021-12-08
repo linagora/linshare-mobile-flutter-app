@@ -72,11 +72,7 @@ class SharedSpaceMemberListTileBuilder {
       leading: LabelAvatarBuilder(_name.characters.first.toUpperCase())
         .key(Key('label_shared_space_member_avatar'))
         .build(),
-      trailing: SharedSpaceOperationRole.deleteMemberSharedSpaceRoles.contains(userCurrentRole)
-        ? GestureDetector(
-          onTap: () => _handleDeleteMemberTap(),
-          child: Icon(Icons.close, color: AppColor.deleteMemberIconColor))
-        : SizedBox.shrink(),
+      trailing: _buildDeleteButton(),
       title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
           padding: EdgeInsets.only(bottom: 8),
@@ -132,6 +128,22 @@ class SharedSpaceMemberListTileBuilder {
     );
   }
 
+  Widget _buildDeleteButton() {
+    if (memberType != null) {
+      return memberType == WorkgroupMemberType.external && SharedSpaceOperationRole.deleteMemberSharedSpaceRoles.contains(userCurrentRole)
+        ? GestureDetector(
+            onTap: () => _handleDeleteMemberTap(),
+            child: Icon(Icons.close, color: AppColor.deleteMemberIconColor))
+        : SizedBox.shrink();
+    } else {
+      return SharedSpaceOperationRole.deleteMemberSharedSpaceRoles.contains(userCurrentRole)
+        ? GestureDetector(
+            onTap: () => _handleDeleteMemberTap(),
+            child: Icon(Icons.close, color: AppColor.deleteMemberIconColor))
+        : SizedBox.shrink();
+    }
+  }
+
   void _handleDeleteMemberTap() {
     if (onDeleteMemberCallback != null) {
       onDeleteMemberCallback?.call();
@@ -144,5 +156,4 @@ class SharedSpaceMemberListTileBuilder {
       onSelectedRoleCallback?.call();
     }
   }
-
 }
