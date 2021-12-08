@@ -43,21 +43,25 @@ import 'package:redux/redux.dart';
 
 class AddSharedSpaceMemberViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
+  final GetSharedSpaceInteractor _getSharedSpaceInteractor;
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
   final AddSharedSpaceMemberInteractor _addSharedSpaceMemberInteractor;
   final UpdateSharedSpaceMemberInteractor _updateSharedSpaceMemberInteractor;
   final GetAllSharedSpaceMembersInteractor _getAllSharedSpaceMembersInteractor;
+  final SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
   final DeleteSharedSpaceMemberInteractor _deleteSharedSpaceMemberInteractor;
 
   AddSharedSpaceMemberViewModel(
       Store<AppState> store,
       this._appNavigation,
+      this._getSharedSpaceInteractor,
       this._getAutoCompleteSharingInteractor,
       this._addSharedSpaceMemberInteractor,
       this._updateSharedSpaceMemberInteractor,
       this._getAllSharedSpaceMembersInteractor,
-      this._deleteSharedSpaceMemberInteractor)
-      : super(store);
+      this._sharedSpaceActivitiesInteractor,
+      this._deleteSharedSpaceMemberInteractor
+  ) : super(store);
 
   void initState() {
   }
@@ -133,7 +137,10 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
           .execute(sharedSpace.sharedSpaceId, AddSharedSpaceMemberRequest(accountId, sharedSpace.sharedSpaceId, role.sharedSpaceRoleId))
           .then((result) => result.fold(
               (failure) => store.dispatch(AddSharedSpaceMembersAction(Left<Failure, Success>(AddSharedSpaceMemberFailure(AddMemberFailed())))),
-              (success) => _getAllMember(sharedSpace)));
+              (success) {
+                _getAllMember(sharedSpace);
+                store.dispatch(_getSharedSpaceActivitiesAction(sharedSpace.sharedSpaceId));
+              }));
     });
   }
 
@@ -159,7 +166,11 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
           .then((result) => result.fold(
               (failure) => store.dispatch(UpdateSharedSpaceMembersAction(
                   Left<Failure, Success>(UpdateSharedSpaceMemberFailure(UpdateRoleFailed())))),
-              (success) => _getAllMember(sharedSpace)));
+              (success) {
+                store.dispatch(_refreshSharedSpaceAction(sharedSpace));
+                _getAllMember(sharedSpace);
+                store.dispatch(_getSharedSpaceActivitiesAction(sharedSpace.sharedSpaceId));
+              }));
     });
   }
 
@@ -168,6 +179,13 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
       store.dispatch(_getDriveMembersAction(sharedSpaceNodeNested.driveId!));
     }
     store.dispatch(_getSharedSpaceMembersAction(sharedSpaceNodeNested.sharedSpaceId));
+  }
+
+  OnlineThunkAction _refreshSharedSpaceAction(SharedSpaceNodeNested sharedSpace) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final sharedSpaceViewState = await _getSharedSpaceInteractor.execute(sharedSpace.sharedSpaceId);
+      store.dispatch(SharedSpaceDetailsGetSharedSpaceDetailsAction(sharedSpaceViewState));
+    });
   }
 
   OnlineThunkAction _getSharedSpaceMembersAction(SharedSpaceId sharedSpaceId) {
@@ -189,19 +207,25 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
     });
   }
 
+  OnlineThunkAction _getSharedSpaceActivitiesAction(SharedSpaceId sharedSpaceId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(SharedSpaceDetailsGetAllSharedSpaceActivitesAction(await _sharedSpaceActivitiesInteractor.execute(sharedSpaceId)));
+    });
+  }
+
   OnlineThunkAction _deleteSharedSpaceMemberAction(
       SharedSpaceNodeNested sharedSpace,
       SharedSpaceMemberId sharedSpaceMemberId) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _deleteSharedSpaceMemberInteractor
-          .execute(sharedSpace.sharedSpaceId, sharedSpaceMemberId)
-          .then((result) => result.fold(
-              (failure) => store.dispatch(DeleteSharedSpaceMembersAction(
-              Left<Failure, Success>(DeleteSharedSpaceMemberFailure(
-                  DeleteMemberFailed())))), (success) {
-        store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
-        _getAllMember(sharedSpace);
-      }));
+        .execute(sharedSpace.sharedSpaceId, sharedSpaceMemberId)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(DeleteSharedSpaceMembersAction(Left<Failure, Success>(DeleteSharedSpaceMemberFailure(DeleteMemberFailed())))),
+          (success) {
+            store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
+            _getAllMember(sharedSpace);
+            store.dispatch(_getSharedSpaceActivitiesAction(sharedSpace.sharedSpaceId));
+          }));
     });
   }
 
