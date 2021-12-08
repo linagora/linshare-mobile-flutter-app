@@ -117,3 +117,8 @@ class SortAllWorkgroupsInsideDriveAction extends ActionOffline {
 
   SortAllWorkgroupsInsideDriveAction(this.workgroups, this.sorter);
 }
+
+@immutable
+class ClearAllListWorkgroupAction extends ActionOffline {
+  ClearAllListWorkgroupAction();
+}
