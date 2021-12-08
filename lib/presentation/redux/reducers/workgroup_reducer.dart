@@ -47,6 +47,7 @@ final workgroupReducer = combineReducers<WorkgroupState>([
   TypedReducer<WorkgroupState, WorkgroupInsideDriveSetSearchResultAction>((WorkgroupState state, WorkgroupInsideDriveSetSearchResultAction action) =>
       state.setSharedSpaces(newSharedSpacesList: action.sharedSpaceNodes)),
   TypedReducer<WorkgroupState, CleanWorkgroupStateAction>((WorkgroupState state, _) => state.clearViewState()),
+  TypedReducer<WorkgroupState, ClearAllListWorkgroupAction>((WorkgroupState state, _) => state.setSharedSpaces(newSharedSpacesList: List.empty())),
   TypedReducer<WorkgroupState, EnableCreateWorkGroupButtonInsideDriveAction>((WorkgroupState state, _) => state.enableUploadButton()),
   TypedReducer<WorkgroupState, DisableCreateWorkGroupButtonInsideDriveAction>((WorkgroupState state, _) => state.disableUploadButton()),
   TypedReducer<WorkgroupState, SelectWorkgroupInsideDriveAction>((WorkgroupState state, SelectWorkgroupInsideDriveAction action) => state.selectSharedSpace(action.selectedSharedSpace)),
