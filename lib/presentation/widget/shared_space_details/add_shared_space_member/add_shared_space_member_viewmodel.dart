@@ -71,26 +71,26 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
     _appNavigation.popBack();
   }
 
-  void addSharedSpaceMember(SharedSpaceId sharedSpaceId,
+  void addSharedSpaceMember(SharedSpaceNodeNested sharedSpace,
       SharedSpaceMemberAutoCompleteResult autoCompleteResult) {
     store.dispatch(
         _addSharedSpaceAction(
-            sharedSpaceId,
+            sharedSpace,
             AccountId(autoCompleteResult.userUuid.uuid)));
   }
 
-  void changeMemberRole(SharedSpaceId sharedSpaceId,
+  void changeMemberRole(SharedSpaceNodeNested sharedSpace,
       SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
     store.dispatch(
         _updateSharedSpaceMemberRoleAction(
-            sharedSpaceId,
+            sharedSpace,
             AccountId(fromMember.account?.accountId.uuid ?? ''),
             changeToRole));
     _appNavigation.popBack();
   }
 
-  void deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) {
-    store.dispatch(_deleteSharedSpaceMemberAction(sharedSpaceId, sharedSpaceMemberId));
+  void deleteMember(SharedSpaceNodeNested sharedSpace, SharedSpaceMemberId sharedSpaceMemberId) {
+    store.dispatch(_deleteSharedSpaceMemberAction(sharedSpace, sharedSpaceMemberId));
     _appNavigation.popBack();
   }
 
@@ -112,7 +112,7 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
         );
   }
 
-  OnlineThunkAction _addSharedSpaceAction(SharedSpaceId sharedSpaceId, AccountId accountId) {
+  OnlineThunkAction _addSharedSpaceAction(SharedSpaceNodeNested sharedSpace, AccountId accountId) {
     return OnlineThunkAction((Store<AppState> store) async {
       final rolesList = store.state.sharedSpaceState.rolesList;
       if (rolesList.isEmpty) {
@@ -122,12 +122,6 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
       }
 
       final selectedRole = store.state.addSharedSpaceMembersState.selectedRole;
-      if (selectedRole == null) {
-        store.dispatch(AddSharedSpaceMembersAction(
-            Left<Failure, Success>(AddSharedSpaceMemberFailure(SelectedRoleNotFound()))));
-        return;
-      }
-
       final role = rolesList.firstWhere((element) => element.name == selectedRole, orElse: () => SharedSpaceRole.initial());
       if (role.sharedSpaceRoleId.uuid.isEmpty) {
         store.dispatch(AddSharedSpaceMembersAction(
@@ -136,19 +130,15 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
       }
 
       await _addSharedSpaceMemberInteractor
-          .execute(sharedSpaceId,
-              AddSharedSpaceMemberRequest(accountId, sharedSpaceId, role.sharedSpaceRoleId))
+          .execute(sharedSpace.sharedSpaceId, AddSharedSpaceMemberRequest(accountId, sharedSpace.sharedSpaceId, role.sharedSpaceRoleId))
           .then((result) => result.fold(
-                  (failure) => store.dispatch(AddSharedSpaceMembersAction(
-                      Left<Failure, Success>(AddSharedSpaceMemberFailure(AddMemberFailed())))),
-                  (success) {
-                    store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
-              }));
+              (failure) => store.dispatch(AddSharedSpaceMembersAction(Left<Failure, Success>(AddSharedSpaceMemberFailure(AddMemberFailed())))),
+              (success) => _getAllMember(sharedSpace)));
     });
   }
 
   OnlineThunkAction _updateSharedSpaceMemberRoleAction(
-      SharedSpaceId sharedSpaceId, AccountId accountId, SharedSpaceRoleName newRole) {
+      SharedSpaceNodeNested sharedSpace, AccountId accountId, SharedSpaceRoleName newRole) {
     return OnlineThunkAction((Store<AppState> store) async {
       final rolesList = store.state.sharedSpaceState.rolesList;
       if (rolesList.isEmpty) {
@@ -165,15 +155,19 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
       }
 
       await _updateSharedSpaceMemberInteractor
-          .execute(sharedSpaceId,
-              UpdateSharedSpaceMemberRequest(accountId, sharedSpaceId, role.sharedSpaceRoleId))
+          .execute(sharedSpace.sharedSpaceId, UpdateSharedSpaceMemberRequest(accountId, sharedSpace.sharedSpaceId, role.sharedSpaceRoleId))
           .then((result) => result.fold(
-                  (failure) => store.dispatch(UpdateSharedSpaceMembersAction(
-                      Left<Failure, Success>(UpdateSharedSpaceMemberFailure(UpdateRoleFailed())))),
-                  (success) {
-                store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
-              }));
+              (failure) => store.dispatch(UpdateSharedSpaceMembersAction(
+                  Left<Failure, Success>(UpdateSharedSpaceMemberFailure(UpdateRoleFailed())))),
+              (success) => _getAllMember(sharedSpace)));
     });
+  }
+
+  void _getAllMember(SharedSpaceNodeNested sharedSpaceNodeNested) {
+    if (sharedSpaceNodeNested.driveId != null) {
+      store.dispatch(_getDriveMembersAction(sharedSpaceNodeNested.driveId!));
+    }
+    store.dispatch(_getSharedSpaceMembersAction(sharedSpaceNodeNested.sharedSpaceId));
   }
 
   OnlineThunkAction _getSharedSpaceMembersAction(SharedSpaceId sharedSpaceId) {
@@ -183,18 +177,30 @@ class AddSharedSpaceMemberViewModel extends BaseViewModel {
     });
   }
 
+  OnlineThunkAction _getDriveMembersAction(DriveId driveId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartSharedSpaceDetailsLoadingAction());
+
+      await _getAllSharedSpaceMembersInteractor.execute(SharedSpaceId(driveId.uuid))
+        .then((result) => result.fold(
+          (failure) => store.dispatch(GetAllDriveMembersInsideWorkgroupDetailAction([])),
+          (success) => store.dispatch(GetAllDriveMembersInsideWorkgroupDetailAction(
+            success is SharedSpaceMembersViewState ? success.members : []))));
+    });
+  }
+
   OnlineThunkAction _deleteSharedSpaceMemberAction(
-      SharedSpaceId sharedSpaceId,
+      SharedSpaceNodeNested sharedSpace,
       SharedSpaceMemberId sharedSpaceMemberId) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _deleteSharedSpaceMemberInteractor
-          .execute(sharedSpaceId, sharedSpaceMemberId)
+          .execute(sharedSpace.sharedSpaceId, sharedSpaceMemberId)
           .then((result) => result.fold(
               (failure) => store.dispatch(DeleteSharedSpaceMembersAction(
               Left<Failure, Success>(DeleteSharedSpaceMemberFailure(
                   DeleteMemberFailed())))), (success) {
         store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
-        store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
+        _getAllMember(sharedSpace);
       }));
     });
   }
