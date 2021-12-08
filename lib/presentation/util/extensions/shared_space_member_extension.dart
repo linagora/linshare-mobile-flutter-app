@@ -28,73 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/workgroup_member_type.dart';
 
-@immutable
-class StartSharedSpaceDetailsLoadingAction extends ActionOnline {}
+extension SharedSpaceMemberExtension on SharedSpaceMember {
 
-@immutable
-class SharedSpaceDetailsAction extends ActionOnline {
-  final Either<Failure, Success> viewState;
-
-  SharedSpaceDetailsAction(this.viewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetAllSharedSpaceMembersAction extends ActionOnline {
-  final Either<Failure, Success> getMembersViewState;
-
-  SharedSpaceDetailsGetAllSharedSpaceMembersAction(this.getMembersViewState);
-}
-
-@immutable
-class CleanSharedSpaceDetailsStateAction extends ActionOffline {
-  CleanSharedSpaceDetailsStateAction();
-}
-
-@immutable
-class SharedSpaceDetailsGetAllSharedSpaceActivitesAction extends ActionOnline {
-  final Either<Failure, Success> getActivitesViewState;
-
-  SharedSpaceDetailsGetAllSharedSpaceActivitesAction(this.getActivitesViewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetSharedSpaceDetailsAction extends ActionOnline {
-  final Either<Failure, Success> getSharedSpaceViewState;
-
-  SharedSpaceDetailsGetSharedSpaceDetailsAction(this.getSharedSpaceViewState);
-}
-
-@immutable
-class SharedSpaceDetailsGetAccountQuotaAction extends ActionOnline {
-  final Either<Failure, Success> getAccountQuotaViewState;
-
-  SharedSpaceDetailsGetAccountQuotaAction(this.getAccountQuotaViewState);
-}
-
-@immutable
-class SharedSpaceDetailsEnableVersioningAction extends ActionOnline {
-  final SharedSpaceNodeNested? sharedSpaceNodeNested;
-
-  SharedSpaceDetailsEnableVersioningAction(this.sharedSpaceNodeNested);
-}
-
-@immutable
-class SharedSpaceDetailsGetAllDriveMembersAction extends ActionOnline {
-  final Either<Failure, Success> getMembersViewState;
-
-  SharedSpaceDetailsGetAllDriveMembersAction(this.getMembersViewState);
-}
-
-@immutable
-class GetAllDriveMembersInsideWorkgroupDetailAction extends ActionOnline {
-  final List<SharedSpaceMember> driveMembers;
-
-  GetAllDriveMembersInsideWorkgroupDetailAction(this.driveMembers);
+  WorkgroupMemberType getMemberType(List<SharedSpaceMember> driveMembers) {
+    try {
+      driveMembers.firstWhere((driveMember) {
+        return driveMember.account != null &&
+          account != null &&
+          driveMember.account!.accountId == account!.accountId;
+      });
+      return WorkgroupMemberType.drive;
+    } catch (exception) {
+      return WorkgroupMemberType.external;
+    }
+  }
 }

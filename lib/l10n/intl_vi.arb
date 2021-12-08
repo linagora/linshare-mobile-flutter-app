@@ -2076,5 +2076,99 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_drive_member": "Are you sure you want to delete {memberName} from the drive {driveName} and all related workgroups?",
+  "@are_you_sure_you_want_to_delete_drive_member": {
+    "type": "text",
+    "placeholders_order": [
+      "memberName",
+      "driveName"
+    ],
+    "placeholders": {
+      "memberName": {},
+      "driveName": {}
+    }
+  },
+  "name_is_required": "Name is required",
+  "@name_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "surname_is_required": "Surname is required",
+  "@surname_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_continue": "Continue",
+  "@sign_up_continue": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_send_me_a_password": "Send me a password",
+  "@sign_up_send_me_a_password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_name_title": "Name",
+  "@sign_up_name_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_surname_title": "Surname",
+  "@sign_up_surname_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_sign_up_name": "Enter your name",
+  "@hint_input_sign_up_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_sign_up_surname": "Enter your surname",
+  "@hint_input_sign_up_surname": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_completed_title_center": "Done, check your inbox",
+  "@sign_up_completed_title_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_completed_message_center": "A password has been sent to your email {email}, check your email and\n continue login",
+  "@sign_up_completed_message_center": {
+    "type": "text",
+    "placeholders_order": [
+      "email"
+    ],
+    "placeholders": {
+      "email": {}
+    }
+  },
+  "email_is_not_available": "Email is not available",
+  "@email_is_not_available": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_member": "Drive member",
+  "@drive_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "external_member": "External member",
+  "@external_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }

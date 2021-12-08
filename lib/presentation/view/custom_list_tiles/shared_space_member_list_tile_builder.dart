@@ -35,25 +35,36 @@ import 'package:flutter/src/material/list_tile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/workgroup_member_type.dart';
 
 typedef SelectRoleCallback = void Function();
 typedef DeleteMemberCallback = void Function();
 
 class SharedSpaceMemberListTileBuilder {
+  final BuildContext _context;
   final String _name;
   final String _email;
   final String _roleName;
+  final WorkgroupMemberType? memberType;
   final SharedSpaceRoleName? userCurrentRole;
   final SelectRoleCallback? onSelectedRoleCallback;
   final DeleteMemberCallback? onDeleteMemberCallback;
 
   Color? tileColor;
 
-  SharedSpaceMemberListTileBuilder(this._name, this._email, this._roleName,
-      {this.userCurrentRole,
+  SharedSpaceMemberListTileBuilder(
+    this._context,
+    this._name,
+    this._email,
+    this._roleName,
+    {
+      this.memberType,
+      this.userCurrentRole,
       this.tileColor,
       this.onSelectedRoleCallback,
-      this.onDeleteMemberCallback});
+      this.onDeleteMemberCallback
+    }
+  );
 
   ListTile build() {
     return ListTile(
@@ -95,14 +106,29 @@ class SharedSpaceMemberListTileBuilder {
                     fontStyle: FontStyle.normal,
                     color: AppColor.workgroupNodesSurfingBackTitleColor)),
                 SharedSpaceOperationRole.editMemberSharedSpaceRoles.contains(userCurrentRole)
-                ? Icon(Icons.arrow_drop_down,
-                    color: AppColor.primaryColor)
-                : SizedBox.shrink()
-                ],
+                  ? Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
+                  : SizedBox.shrink(),
+                if (memberType != null) _buildMemberTypeLabel(memberType!)
+              ],
             ),
           )),
       ]),
       tileColor: tileColor,
+    );
+  }
+
+  Widget _buildMemberTypeLabel(WorkgroupMemberType memberType) {
+    return Container(
+      margin: EdgeInsets.only(left: 16),
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColor.primaryColor, width: 1),
+        borderRadius: BorderRadius.circular(0),
+        shape: BoxShape.rectangle,
+        color: AppColor.workgroupMemberTypeColor),
+      child: Text(
+        memberType.getDisplayText(_context),
+        style: TextStyle(fontSize: 13, color: AppColor.loginTextFieldTextColor)),
     );
   }
 
