@@ -163,6 +163,13 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     });
   }
 
+  OnlineThunkAction _refreshSharedSpaceAction(SharedSpaceNodeNested sharedSpace) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final sharedSpaceViewState = await _getSharedSpaceInteractor.execute(sharedSpace.sharedSpaceId);
+      store.dispatch(SharedSpaceDetailsGetSharedSpaceDetailsAction(sharedSpaceViewState));
+    });
+  }
+
   OnlineThunkAction _getSharedSpaceRolesAction() {
     return OnlineThunkAction((Store<AppState> store) async {
       final roles = (await _getAllSharedSpaceRolesInteractor.execute())
@@ -196,7 +203,13 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
           .then((result) => result.fold(
               (failure) => store.dispatch(UpdateSharedSpaceMembersAction(
                   Left<Failure, Success>(UpdateSharedSpaceMemberFailure(UpdateRoleFailed())))),
-              (success) => _getAllMember(sharedSpace)));
+              (success) {
+                store.dispatch(_refreshSharedSpaceAction(sharedSpace));
+                _getAllMember(sharedSpace);
+                if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
+                  store.dispatch(_getSharedSpaceActivitiesAction(sharedSpace.sharedSpaceId));
+                }
+              }));
     });
   }
 
@@ -212,6 +225,9 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
               (success) {
                 store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
                 _getAllMember(sharedSpace);
+                if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
+                  store.dispatch(_getSharedSpaceActivitiesAction(sharedSpace.sharedSpaceId));
+                }
               }));
     });
   }

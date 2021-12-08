@@ -97,7 +97,8 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
         body: StoreConnector<AppState, SharedSpaceDetailsState>(
           converter: (store) => store.state.sharedSpaceDetailsState,
           builder: (_, state) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _addMemberWidget(state.sharedSpace!, state.membersList),
+            if (SharedSpaceOperationRole.addMemberSharedSpaceRoles.contains(state.sharedSpace!.sharedSpaceRole.name))
+              _addMemberWidget(state.sharedSpace!, state.membersList),
             Expanded(child: _membersListWidget(state.sharedSpace!, state.membersList, state.driveMembersList))
           ]),
         ));
