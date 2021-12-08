@@ -73,7 +73,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   ) : super(store);
 
   void initState(SharedSpaceDetailsArguments arguments) {
-    refreshSharedSpaceMembers(arguments.sharedSpace.sharedSpaceId);
+    refreshSharedSpaceMembers(arguments.sharedSpace);
     store.dispatch(_getSharedSpaceAction(arguments.sharedSpace));
     if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
       store.dispatch(_getSharedSpaceActivitiesAction(arguments.sharedSpace.sharedSpaceId));
@@ -85,11 +85,18 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     _appNavigation.popBack();
   }
 
-  void refreshSharedSpaceMembers(SharedSpaceId? sharedSpaceId) {
-    if(sharedSpaceId == null) {
+  void refreshSharedSpaceMembers(SharedSpaceNodeNested? sharedSpaceNodeNested) {
+    if(sharedSpaceNodeNested == null) {
       return;
     }
-    store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
+    _getAllMember(sharedSpaceNodeNested);
+  }
+
+  void _getAllMember(SharedSpaceNodeNested sharedSpaceNodeNested) {
+    if (sharedSpaceNodeNested.driveId != null) {
+      store.dispatch(_getDriveMembersAction(sharedSpaceNodeNested.driveId!));
+    }
+    store.dispatch(_getSharedSpaceMembersAction(sharedSpaceNodeNested.sharedSpaceId));
   }
 
   void goToAddSharedSpaceMember(SharedSpaceNodeNested sharedSpace, List<SharedSpaceMember> members) {
@@ -106,13 +113,13 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     );
   }
 
-  void changeMemberRole(SharedSpaceId sharedSpaceId, SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
-    store.dispatch(_updateSharedSpaceMemberRoleAction(sharedSpaceId, AccountId(fromMember.account?.accountId.uuid ?? ''), changeToRole));
+  void changeMemberRole(SharedSpaceNodeNested sharedSpace, SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
+    store.dispatch(_updateSharedSpaceMemberRoleAction(sharedSpace, AccountId(fromMember.account?.accountId.uuid ?? ''), changeToRole));
     _appNavigation.popBack();
   }
 
-  void deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) {
-    store.dispatch(_deleteSharedSpaceMemberAction(sharedSpaceId, sharedSpaceMemberId));
+  void deleteMember(SharedSpaceNodeNested sharedSpace, SharedSpaceMemberId sharedSpaceMemberId) {
+    store.dispatch(_deleteSharedSpaceMemberAction(sharedSpace, sharedSpaceMemberId));
     _appNavigation.popBack();
   }
 
@@ -120,6 +127,18 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartSharedSpaceDetailsLoadingAction());
       store.dispatch(SharedSpaceDetailsGetAllSharedSpaceMembersAction(await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId)));
+    });
+  }
+
+  OnlineThunkAction _getDriveMembersAction(DriveId driveId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(StartSharedSpaceDetailsLoadingAction());
+
+      await _getAllSharedSpaceMembersInteractor.execute(SharedSpaceId(driveId.uuid))
+        .then((result) => result.fold(
+          (failure) => store.dispatch(GetAllDriveMembersInsideWorkgroupDetailAction([])),
+          (success) => store.dispatch(GetAllDriveMembersInsideWorkgroupDetailAction(
+              success is SharedSpaceMembersViewState ? success.members : []))));
     });
   }
 
@@ -155,7 +174,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   }
 
   OnlineThunkAction _updateSharedSpaceMemberRoleAction(
-      SharedSpaceId sharedSpaceId, AccountId accountId, SharedSpaceRoleName newRole) {
+      SharedSpaceNodeNested sharedSpace, AccountId accountId, SharedSpaceRoleName newRole) {
     return OnlineThunkAction((Store<AppState> store) async {
       final rolesList = store.state.sharedSpaceState.rolesList;
       if (rolesList.isEmpty) {
@@ -172,29 +191,27 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
       }
 
       await _updateSharedSpaceMemberInteractor
-          .execute(sharedSpaceId,
-              UpdateSharedSpaceMemberRequest(accountId, sharedSpaceId, role.sharedSpaceRoleId))
+          .execute(sharedSpace.sharedSpaceId,
+              UpdateSharedSpaceMemberRequest(accountId, sharedSpace.sharedSpaceId, role.sharedSpaceRoleId))
           .then((result) => result.fold(
               (failure) => store.dispatch(UpdateSharedSpaceMembersAction(
                   Left<Failure, Success>(UpdateSharedSpaceMemberFailure(UpdateRoleFailed())))),
-              (success) {
-                store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
-              }));
+              (success) => _getAllMember(sharedSpace)));
     });
   }
 
   OnlineThunkAction _deleteSharedSpaceMemberAction(
-      SharedSpaceId sharedSpaceId,
+      SharedSpaceNodeNested sharedSpace,
       SharedSpaceMemberId sharedSpaceMemberId) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _deleteSharedSpaceMemberInteractor
-          .execute(sharedSpaceId, sharedSpaceMemberId)
+          .execute(sharedSpace.sharedSpaceId, sharedSpaceMemberId)
           .then((result) => result.fold(
               (failure) => store.dispatch(DeleteSharedSpaceMembersAction(
                   Left<Failure, Success>(DeleteSharedSpaceMemberFailure(DeleteMemberFailed())))),
               (success) {
                 store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
-                store.dispatch(_getSharedSpaceMembersAction(sharedSpaceId));
+                _getAllMember(sharedSpace);
               }));
     });
   }
