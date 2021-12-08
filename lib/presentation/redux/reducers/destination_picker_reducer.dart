@@ -102,7 +102,8 @@ final destinationPickerReducer = combineReducers<DestinationPickerState>([
           state.setDestinationPickerState(
               viewState: state.viewState,
               newSharedSpacesList: state.sharedSpacesList,
-              routeData: DestinationPickerRouteData(DestinationPickerCurrentView.sharedSpace))),
+              routeData: DestinationPickerRouteData(DestinationPickerCurrentView.sharedSpace),
+              operation: action.pickerForOperation)),
   TypedReducer<DestinationPickerState, GoToChooseSpaceAction>(
           (DestinationPickerState state, GoToChooseSpaceAction action) =>
           state.setDestinationPickerState(

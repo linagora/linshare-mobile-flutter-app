@@ -40,7 +40,6 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/shared_space_node_nested_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/workgroup_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
@@ -488,13 +487,17 @@ class WorkGroupViewModel extends BaseViewModel {
   }
 
   void backToSharedSpace() {
+    store.dispatch(ClearAllListWorkgroupAction());
     store.dispatch(SetCurrentView(RoutePaths.sharedSpace));
   }
 
   @override
   void onDisposed() {
-    store.dispatch(CleanShareStateAction());
+    store.dispatch(ClearAllListWorkgroupAction());
     cancelSelection();
+    store.dispatch(DisableSearchStateAction());
     _storeStreamSubscription.cancel();
+    _searchQuery = SearchQuery('');
+    super.onDisposed();
   }
 }
