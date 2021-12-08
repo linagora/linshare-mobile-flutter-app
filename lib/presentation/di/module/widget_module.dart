@@ -435,10 +435,12 @@ class WidgetModule {
     getIt.registerFactory(() => AddSharedSpaceMemberViewModel(
           getIt.get<Store<AppState>>(),
           getIt.get<AppNavigation>(),
+          getIt.get<GetSharedSpaceInteractor>(),
           getIt.get<GetAutoCompleteSharingInteractor>(),
           getIt.get<AddSharedSpaceMemberInteractor>(),
           getIt.get<UpdateSharedSpaceMemberInteractor>(),
           getIt.get<GetAllSharedSpaceMembersInteractor>(),
+          getIt.get<SharedSpaceActivitiesInteractor>(),
           getIt.get<DeleteSharedSpaceMemberInteractor>(),
         ));
   }
