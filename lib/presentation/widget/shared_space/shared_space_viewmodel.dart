@@ -293,9 +293,9 @@ class SharedSpaceViewModel extends BaseViewModel {
       ContextMenuBuilder(context)
         .addHeader(ContextMenuHeaderBuilder(
           Key('drive_context_menu_header'),
-          SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(nodeNested))
-        .build())
+          SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(nodeNested)).build())
         .addTiles(actionTiles)
+        .addFooter(footerAction ?? SizedBox.shrink())
         .build();
     };
   }
