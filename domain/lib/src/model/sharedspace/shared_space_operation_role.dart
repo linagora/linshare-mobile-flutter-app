@@ -52,6 +52,10 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.ADMIN,
   ];
 
+  static const deleteDriveRoles = [
+    SharedSpaceRoleName.DRIVE_ADMIN,
+  ];
+
   static const addMemberSharedSpaceRoles = [
     SharedSpaceRoleName.ADMIN,
   ];

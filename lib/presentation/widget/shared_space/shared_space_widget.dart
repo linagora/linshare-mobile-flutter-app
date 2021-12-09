@@ -394,7 +394,8 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         sharedSpaceViewModel.openDriveContextMenu(
             context,
             sharedSpace.element,
-            _contextDriveMenuActionTiles(context, sharedSpace));
+            _contextDriveMenuActionTiles(context, sharedSpace),
+            footerAction: _driveContextMenuFooterAction(sharedSpace.element));
         break;
       default:
         sharedSpaceViewModel.openContextMenu(
@@ -425,6 +426,17 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     return SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name)
         ? SimpleContextMenuActionBuilder(
                 Key('delete_shared_space_context_menu_action'),
+                SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+                AppLocalizations.of(context).delete)
+            .onActionClick((data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
+            .build()
+        : SizedBox.shrink();
+  }
+
+  Widget _driveContextMenuFooterAction(SharedSpaceNodeNested sharedSpace) {
+    return SharedSpaceOperationRole.deleteDriveRoles.contains(sharedSpace.sharedSpaceRole.name)
+        ? SimpleContextMenuActionBuilder(
+                Key('delete_drive_context_menu_action'),
                 SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
                 AppLocalizations.of(context).delete)
             .onActionClick((data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
@@ -476,8 +488,18 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   }
 
   List<Widget> _multipleSelectionActions(List<SharedSpaceNodeNested> sharedSpaces) {
+    final sharedSpacesCanNotDelete = sharedSpaces.where((sharedSpace) {
+      if ((sharedSpace.nodeType == LinShareNodeType.DRIVE &&
+          SharedSpaceOperationRole.deleteDriveRoles.contains(sharedSpace.sharedSpaceRole.name)) ||
+          (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP &&
+          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name))) {
+        return false;
+      }
+      return true;
+    }).toList();
+
     return [
-      _removeMultipleSelection(sharedSpaces)
+      if (sharedSpacesCanNotDelete.isEmpty) _removeMultipleSelection(sharedSpaces)
     ];
   }
 
