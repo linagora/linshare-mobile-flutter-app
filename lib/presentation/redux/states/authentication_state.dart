@@ -31,6 +31,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:meta/meta.dart';
 
@@ -48,7 +49,7 @@ class AuthenticationState extends LinShareState  {
   ) : super(viewState);
 
   factory AuthenticationState.initial() {
-    return AuthenticationState(Right(IdleState()), null, LoginFormType.main);
+    return AuthenticationState(Right(IdleState()), null, AuthenticationOIDCConfig.saasAvailable ? LoginFormType.main : LoginFormType.useOwnServer);
   }
 
   @override
