@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/redux/selectors/authentication
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/view/text/login_text_input_builder.dart';
@@ -139,7 +140,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
               StoreConnector<AppState, LoginFormType>(
                 converter: (store) => store.state.authenticationState.loginFormType,
-                builder: (context, loginFormType) => loginFormType != LoginFormType.main
+                builder: (context, loginFormType) => (AuthenticationOIDCConfig.saasAvailable && loginFormType != LoginFormType.main)
                   ? Positioned(
                       right: 10,
                       child: IconButton(

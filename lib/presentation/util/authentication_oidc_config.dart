@@ -31,6 +31,7 @@
 
 class AuthenticationOIDCConfig {
   static const captcha = String.fromEnvironment('CAPTCHA_TOKEN', defaultValue: '');
+  static const saasAvailable = bool.fromEnvironment('SAAS_AVAILABLE', defaultValue: false);
 
   static const allowInsecureConnection = false;
 
