@@ -99,7 +99,7 @@ workflows:
         - is_debug_mode: 'true'
         - ios_additional_params: "--no-sound-null-safety --release"
         - android_additional_params: "--no-sound-null-safety --release"
-        - additional_build_params: "--dart-define=CAPTCHA_TOKEN=$CAPTCHA_TOKEN"
+        - additional_build_params: "--dart-define=CAPTCHA_TOKEN=$CAPTCHA_TOKEN --dart-define=SAAS_AVAILABLE=$SAAS_AVAILABLE"
         - ios_codesign_identity: 'iPhone Developer: Tung Tran (B8V9X882MX)'
     - sign-apk@1: {}
     - xcode-archive@4:
@@ -158,3 +158,7 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
+  - opts:
+      is_expand: false
+    SAAS_AVAILABLE: 'false'
+
