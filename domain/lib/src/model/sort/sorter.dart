@@ -79,6 +79,7 @@ extension SorterExtension on Sorter {
       case OrderScreen.uploadRequestGroupsArchived:
         return _getListSorterUploadRequest();
       case OrderScreen.uploadRequestRecipientCreated:
+      case OrderScreen.uploadRequestRecipientActiveClosed:
         return _getListSorterUploadRequestRecipient();
     }
   }

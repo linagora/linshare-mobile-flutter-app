@@ -82,4 +82,10 @@ final activeClosedUploadRequestInsideReducer = combineReducers<ActiveClosedUploa
       state.clearViewState()),
   TypedReducer<ActiveClosedUploadRequestInsideState, ActiveClosedUploadRequestSetSearchResultAction>((ActiveClosedUploadRequestInsideState state, ActiveClosedUploadRequestSetSearchResultAction action) =>
       state.setSearchResultRecipients(newSearchResult: action.uploadRequests)),
+  TypedReducer<ActiveClosedUploadRequestInsideState, ActiveClosedUploadRequestInsideSortAction>((ActiveClosedUploadRequestInsideState state, ActiveClosedUploadRequestInsideSortAction action) =>
+      state.setUploadRequestsRecipientsWithSort(
+          newUploadRequestsList: action.uploadRequests,
+          newSorter: action.sorter)),
+  TypedReducer<ActiveClosedUploadRequestInsideState, ActiveClosedUploadRequestInsideGetSorterAction>((ActiveClosedUploadRequestInsideState state, ActiveClosedUploadRequestInsideGetSorterAction action) =>
+      state.setSorterUploadRequestRecipient(newSorter: action.sorter)),
 ]);
