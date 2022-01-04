@@ -90,26 +90,36 @@ class SharedSpaceMemberListTileBuilder {
             color: AppColor.documentModifiedDateItemTextColor)),
         Padding(
           padding: EdgeInsets.only(top: 8),
-          child: GestureDetector(
-            onTap: () => _handleUpdateRoleTap(),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(_roleName,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: AppColor.workgroupNodesSurfingBackTitleColor)),
-                SharedSpaceOperationRole.editMemberSharedSpaceRoles.contains(userCurrentRole)
-                  ? Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
-                  : SizedBox.shrink(),
-                if (memberType != null) _buildMemberTypeLabel(memberType!)
-              ],
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildWorkgroupTypeLabel(),
+              if (memberType != null) _buildMemberTypeLabel(memberType!)
+            ]
           )),
       ]),
       tileColor: tileColor,
+    );
+  }
+
+  Widget _buildWorkgroupTypeLabel() {
+    return GestureDetector(
+      onTap: () => _handleUpdateRoleTap(),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            _roleName,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.normal,
+              color: AppColor.workgroupNodesSurfingBackTitleColor)),
+          SharedSpaceOperationRole.editMemberSharedSpaceRoles.contains(userCurrentRole)
+            ? Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
+            : SizedBox.shrink(),
+        ],
+      ),
     );
   }
 
