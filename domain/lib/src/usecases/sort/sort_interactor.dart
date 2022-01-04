@@ -56,6 +56,8 @@ class SortInteractor {
         return Right<Failure, Success>(GetAllReceivedShareSuccess(filesSorted.cast<ReceivedShare>()));
       } else if (filesSorted is List<UploadRequestGroup>) {
         return Right<Failure, Success>(UploadRequestGroupViewState(filesSorted.cast<UploadRequestGroup>()));
+      } else if (filesSorted is List<UploadRequest>) {
+        return Right<Failure, Success>(UploadRequestViewState(filesSorted.cast<UploadRequest>()));
       } else {
         return Right<Failure, Success>(SortFileSuccess(filesSorted));
       }
@@ -79,6 +81,8 @@ class SortInteractor {
           return Left<Failure, Success>(UploadRequestGroupFailure(exception));
         case OrderScreen.uploadRequestGroupsArchived:
           return Left<Failure, Success>(UploadRequestGroupFailure(exception));
+        case OrderScreen.uploadRequestRecipientCreated:
+          return Left<Failure, Success>(UploadRequestFailure(exception));
         default:
           return Left<Failure, Success>(SortFileFailure(exception));
       }

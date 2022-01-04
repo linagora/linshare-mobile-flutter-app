@@ -28,34 +28,26 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+
 import 'package:domain/domain.dart';
 
-extension OrderByExt on OrderBy {
-  OrderBy getOrderBy(String orderByStr, OrderScreen orderScreen) {
-    if (orderByStr == OrderBy.creationDate.toString()) {
-      return OrderBy.creationDate;
-    } else if (orderByStr == OrderBy.fileSize.toString()) {
-      return OrderBy.fileSize;
-    } else if (orderByStr == OrderBy.name.toString()) {
-      return OrderBy.name;
-    } else if (orderByStr == OrderBy.shared.toString()) {
-      return OrderBy.shared;
-    } else if (orderByStr == OrderBy.sender.toString()) {
-      return OrderBy.sender;
-    } else if (orderByStr == OrderBy.status.toString()) {
-      return OrderBy.status;
-    } else if (orderByStr == OrderBy.type.toString()) {
-      return OrderBy.type;
-    } else if (orderByStr == OrderBy.activationDate.toString()) {
-      return OrderBy.activationDate;
-    } else if (orderByStr == OrderBy.expirationDate.toString()) {
-      return OrderBy.expirationDate;
-    } else if (orderByStr == OrderBy.files.toString()) {
-      return OrderBy.files;
-    } else if (orderByStr == OrderBy.recipient.toString()) {
-      return OrderBy.recipient;
-    } else {
-      return orderScreen.getDefaultOrderBy();
-    }
+extension ListUploadRequest on List<UploadRequest> {
+  void sortFiles(OrderBy orderBy, OrderType orderType) {
+    sort((ur1, ur2) {
+      switch (orderBy) {
+        case OrderBy.recipient:
+          return ur2.recipients.first.mail.compareToSort(ur1.recipients.first.mail, orderType);
+        case OrderBy.files:
+          return ur2.nbrUploadedFiles.compareToSort(ur1.nbrUploadedFiles, orderType);
+        case OrderBy.type:
+          return ur2.collective.compareToSort(ur1.collective, orderType);
+        case OrderBy.expirationDate:
+          return ur2.expiryDate.compareToSort(ur1.expiryDate, orderType);
+        case OrderBy.activationDate:
+          return ur2.activationDate.compareToSort(ur1.activationDate, orderType);
+        default:
+          return ur2.recipients.first.mail.compareToSort(ur1.recipients.first.mail, orderType);
+      }
+    });
   }
 }

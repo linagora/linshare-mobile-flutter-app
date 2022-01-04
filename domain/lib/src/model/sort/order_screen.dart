@@ -28,6 +28,8 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+import 'package:domain/src/model/sort/order_by.dart';
+
 enum OrderScreen {
   mySpace,
   sharedSpaceDocument,
@@ -37,5 +39,18 @@ enum OrderScreen {
   receivedShares,
   uploadRequestGroupsCreated,
   uploadRequestGroupsActiveClosed,
-  uploadRequestGroupsArchived
+  uploadRequestGroupsArchived,
+  uploadRequestRecipientCreated,
+}
+
+extension OrderScreenExtension on OrderScreen {
+
+  OrderBy getDefaultOrderBy() {
+    switch(this) {
+      case OrderScreen.uploadRequestRecipientCreated:
+        return OrderBy.recipient;
+      default:
+        return OrderBy.modificationDate;
+    }
+  }
 }

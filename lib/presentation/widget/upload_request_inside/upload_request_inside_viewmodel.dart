@@ -52,10 +52,13 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/downloading_file/downloading_file_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_tab_common_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_destination.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_arguments.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -75,6 +78,9 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
   final CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor entriesToMySpaceInteractor;
   final SearchUploadRequestEntriesInteractor searchUploadRequestEntriesInteractor;
   final SearchRecipientsUploadRequestInteractor searchRecipientsUploadRequestInteractor;
+  final GetSorterInteractor getSorterInteractor;
+  final SaveSorterInteractor saveSorterInteractor;
+  final SortInteractor sortInteractor;
 
   UploadRequestInsideViewModel(
       Store<AppState> store,
@@ -87,6 +93,9 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
       this.entriesToMySpaceInteractor,
       this.searchUploadRequestEntriesInteractor,
       this.searchRecipientsUploadRequestInteractor,
+      this.getSorterInteractor,
+      this.saveSorterInteractor,
+      this.sortInteractor,
   ) : super(store);
 
   void updateUploadRequestStatus(
@@ -557,6 +566,14 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
         store.dispatch(ClearArchivedUploadRequestsListAction());
         break;
     }
+  }
+
+  void openPopupMenuSorter(BuildContext context, Sorter currentSorter, OnSelectedSorter selectSorterAction) {
+    ContextMenuBuilder(context)
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('order_by_menu_header')).addLabel(AppLocalizations.of(context).order_by).build())
+      .addTiles(OrderByDialogBottomSheetBuilder(context, currentSorter).onSelectSorterAction((sorterSelected) =>
+          selectSorterAction.call(sorterSelected)).build())
+      .build();
   }
 
   void goToEditUploadRequestRecipient(UploadRequest uploadRequest, UploadRequestGroupTab tab) {
