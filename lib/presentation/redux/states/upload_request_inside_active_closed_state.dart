@@ -46,6 +46,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
   final List<SelectableElement<UploadRequest>> uploadRequests;
   final List<SelectableElement<UploadRequestEntry>> uploadRequestEntries;
   final SelectMode selectMode;
+  final Sorter recipientSorter;
   final UploadRequestDocumentType uploadRequestDocumentType;
   final UploadRequestGroup? uploadRequestGroup;
   final UploadRequest? selectedUploadRequest;
@@ -55,13 +56,22 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
       this.uploadRequests,
       this.uploadRequestEntries,
       this.selectMode,
+      this.recipientSorter,
       this.uploadRequestDocumentType,
       this.uploadRequestGroup,
       this.selectedUploadRequest
   ) : super(viewState);
 
   factory ActiveClosedUploadRequestInsideState.initial() {
-    return ActiveClosedUploadRequestInsideState(Right(IdleState()), [], [], SelectMode.INACTIVE, UploadRequestDocumentType.recipients, null, null);
+    return ActiveClosedUploadRequestInsideState(
+        Right(IdleState()),
+        [],
+        [],
+        SelectMode.INACTIVE,
+        Sorter.fromOrderScreen(OrderScreen.uploadRequestRecipientActiveClosed),
+        UploadRequestDocumentType.recipients,
+        null,
+        null);
   }
 
   @override
@@ -71,6 +81,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
       uploadRequests,
       uploadRequestEntries,
       selectMode,
+      recipientSorter,
       uploadRequestDocumentType,
       uploadRequestGroup,
       selectedUploadRequest
@@ -84,6 +95,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
         uploadRequests,
         uploadRequestEntries,
         selectMode,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -96,6 +108,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
       uploadRequests,
       uploadRequestEntries,
       selectMode,
+        recipientSorter,
       newUploadRequestArguments.documentType,
       newUploadRequestArguments.uploadRequestGroup,
       newUploadRequestArguments.selectedUploadRequest
@@ -118,6 +131,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
             : SelectableElement<UploadRequest>(uploadRequest, SelectMode.INACTIVE)).toList(),
         uploadRequestEntries,
         selectMode,
+        recipientSorter,
         UploadRequestDocumentType.recipients,
         uploadRequestGroup,
         selectedUploadRequest);
@@ -135,18 +149,19 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
         : SelectableElement<UploadRequestEntry>(entry, SelectMode.INACTIVE))
         .toList(),
       selectMode,
+      recipientSorter,
       UploadRequestDocumentType.files, uploadRequestGroup, selectedUploadRequest);
   }
 
   ActiveClosedUploadRequestInsideState setSelectedUploadRequest(
       {required UploadRequest selectedUploadRequest}) {
-    return ActiveClosedUploadRequestInsideState(viewState, uploadRequests, uploadRequestEntries, selectMode,
+    return ActiveClosedUploadRequestInsideState(viewState, uploadRequests, uploadRequestEntries, selectMode, recipientSorter,
         UploadRequestDocumentType.files, uploadRequestGroup, selectedUploadRequest);
   }
 
   @override
   ActiveClosedUploadRequestInsideState startLoadingState() {
-    return ActiveClosedUploadRequestInsideState(Right(LoadingState()), uploadRequests, uploadRequestEntries, selectMode,
+    return ActiveClosedUploadRequestInsideState(Right(LoadingState()), uploadRequests, uploadRequestEntries, selectMode, recipientSorter,
         uploadRequestDocumentType, uploadRequestGroup, selectedUploadRequest);
   }
 
@@ -157,6 +172,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
         uploadRequests,
         uploadRequestEntries,
         SelectMode.ACTIVE,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest);
@@ -170,6 +186,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
           .map((entry) => SelectableElement<UploadRequestEntry>(entry.element, SelectMode.INACTIVE))
           .toList(),
         SelectMode.INACTIVE,
+        recipientSorter,
         uploadRequestDocumentType, 
         uploadRequestGroup, 
         selectedUploadRequest
@@ -184,6 +201,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
           .map((entry) => SelectableElement<UploadRequestEntry>(entry.element, SelectMode.ACTIVE))
           .toList(),
         SelectMode.ACTIVE,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -198,6 +216,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
           .map((entry) => SelectableElement<UploadRequestEntry>(entry.element, SelectMode.INACTIVE))
           .toList(),
         SelectMode.ACTIVE,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -211,6 +230,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
         uploadRequests,
         uploadRequestEntries,
         SelectMode.ACTIVE,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest);
@@ -224,6 +244,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
             .toList(),
         uploadRequestEntries,
         SelectMode.INACTIVE,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -238,6 +259,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
             .toList(),
         uploadRequestEntries,
         SelectMode.ACTIVE,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -252,6 +274,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
             .toList(),
         uploadRequestEntries,
         SelectMode.ACTIVE,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -270,6 +293,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
           ? SelectableElement<UploadRequestEntry>(entry, SelectMode.ACTIVE)
           : SelectableElement<UploadRequestEntry>(entry, SelectMode.INACTIVE)).toList(),
         selectMode,
+        recipientSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -288,6 +312,40 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
           : SelectableElement<UploadRequest>(uploadRequest, SelectMode.INACTIVE)).toList(),
         uploadRequestEntries,
         selectMode,
+        recipientSorter,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
+  }
+
+  ActiveClosedUploadRequestInsideState setUploadRequestsRecipientsWithSort({required List<UploadRequest> newUploadRequestsList, required Sorter newSorter}) {
+    final selectedElements = uploadRequests
+        .where((element) => element.selectMode == SelectMode.ACTIVE)
+        .map((element) => element.element)
+        .toList();
+
+    return ActiveClosedUploadRequestInsideState(
+        viewState,
+        newUploadRequestsList.map((uploadRequest) => selectedElements.contains(uploadRequest)
+            ? SelectableElement<UploadRequest>(uploadRequest, SelectMode.ACTIVE)
+            : SelectableElement<UploadRequest>(uploadRequest, SelectMode.INACTIVE)).toList(),
+        uploadRequestEntries,
+        selectMode,
+        newSorter,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
+  }
+
+  ActiveClosedUploadRequestInsideState setSorterUploadRequestRecipient({required Sorter newSorter}) {
+    return ActiveClosedUploadRequestInsideState(
+        viewState,
+        uploadRequests,
+        uploadRequestEntries,
+        selectMode,
+        newSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -308,6 +366,7 @@ class ActiveClosedUploadRequestInsideState extends LinShareState with EquatableM
       uploadRequests,
       uploadRequestEntries,
       selectMode,
+      recipientSorter,
       uploadRequestDocumentType,
       uploadRequestGroup,
       selectedUploadRequest
