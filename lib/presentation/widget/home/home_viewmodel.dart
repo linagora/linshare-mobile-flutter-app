@@ -91,7 +91,6 @@ class HomeViewModel extends BaseViewModel {
       this._getBiometricSettingInteractor
   ) : super(store) {
     _getBiometricAuthenticationTimerSetting();
-    _registerPendingUploadFile();
     _registerNetworkConnectivityState();
     _registerBiometricSettingState();
     _getAllFunctionality();
@@ -181,6 +180,8 @@ class HomeViewModel extends BaseViewModel {
           .then((result) => result.fold(
               (failure) => store.dispatch(FunctionalityGetAllAction(Left(failure))),
               (success) => store.dispatch(FunctionalityGetAllAction(Right(success)))));
+
+      _registerPendingUploadFile();
     });
   }
 
