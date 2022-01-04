@@ -43,11 +43,11 @@ class SortDataSourceImpl implements SortDataSource {
     return Future.sync(() async {
       final orderByStr = _sharedPreferences
           .getString('sort_file_order_by_${orderScreen.toString()}') ??
-          OrderBy.modificationDate.toString();
+          orderScreen.getDefaultOrderBy().toString();
       final orderTypeStr = _sharedPreferences
           .getString('sort_file_order_type_${orderScreen.toString()}') ??
           OrderType.descending.toString();
-      final orderBy = OrderBy.modificationDate.getOrderBy(orderByStr);
+      final orderBy = OrderBy.modificationDate.getOrderBy(orderByStr, orderScreen);
       final orderType = orderTypeStr == OrderType.descending.toString()
           ? OrderType.descending
           : OrderType.ascending;
@@ -80,6 +80,8 @@ class SortDataSourceImpl implements SortDataSource {
         listFiles.cast<ReceivedShare>().sortFiles(sorter.orderBy, sorter.orderType);
       } else if (listFiles is List<UploadRequestGroup>) {
         listFiles.cast<UploadRequestGroup>().sortFiles(sorter.orderBy, sorter.orderType);
+      } else if (listFiles is List<UploadRequest>) {
+        listFiles.cast<UploadRequest>().sortFiles(sorter.orderBy, sorter.orderType);
       } else if (listFiles is List<SharedSpaceNodeNested>) {
         listFiles.cast<SharedSpaceNodeNested>().sortFiles(sorter.orderBy, sorter.orderType);
       }
