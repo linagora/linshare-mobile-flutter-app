@@ -79,6 +79,9 @@ class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewMod
     CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor entriesToMySpaceInteractor,
     SearchUploadRequestEntriesInteractor searchUploadRequestEntriesInteractor,
     SearchRecipientsUploadRequestInteractor searchRecipientsUploadRequestInteractor,
+    GetSorterInteractor getSorterInteractor,
+    SaveSorterInteractor saveSorterInteractor,
+    SortInteractor sortInteractor,
     this._getAllUploadRequestsInteractor,
     this._getAllUploadRequestEntriesInteractor,
   ) : super(
@@ -92,6 +95,9 @@ class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewMod
       entriesToMySpaceInteractor,
       searchUploadRequestEntriesInteractor,
       searchRecipientsUploadRequestInteractor,
+      getSorterInteractor,
+      saveSorterInteractor,
+      sortInteractor,
   ) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.activeClosedUploadRequestInsideState.viewState.fold((failure) => null, (success) {

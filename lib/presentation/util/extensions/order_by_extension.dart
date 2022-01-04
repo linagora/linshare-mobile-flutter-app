@@ -56,6 +56,10 @@ extension OrderByExtension on OrderBy {
         return AppLocalizations.of(context).status;
       case OrderBy.type:
         return AppLocalizations.of(context).type;
+      case OrderBy.recipient:
+        return AppLocalizations.of(context).recipient;
+      case OrderBy.files:
+        return AppLocalizations.of(context).files;
       default:
         return '';
     }

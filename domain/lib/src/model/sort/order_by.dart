@@ -38,7 +38,9 @@ enum OrderBy {
   fileSize,
   name,
   shared,
-  sender
+  sender,
+  recipient,
+  files,
 }
 
 extension OrderByExtension on OrderBy {

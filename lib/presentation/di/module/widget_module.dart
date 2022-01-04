@@ -617,6 +617,9 @@ class WidgetModule {
           getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
           getIt<SearchUploadRequestEntriesInteractor>(),
           getIt<SearchRecipientsUploadRequestInteractor>(),
+          getIt<GetSorterInteractor>(),
+          getIt<SaveSorterInteractor>(),
+          getIt<SortInteractor>(),
           getIt.get<GetAllUploadRequestsInteractor>(),
           getIt.get<GetAllUploadRequestEntriesInteractor>(),
         ));
@@ -633,6 +636,9 @@ class WidgetModule {
         getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
         getIt<SearchUploadRequestEntriesInteractor>(),
         getIt<SearchRecipientsUploadRequestInteractor>(),
+        getIt<GetSorterInteractor>(),
+        getIt<SaveSorterInteractor>(),
+        getIt<SortInteractor>(),
         getIt.get<GetAllUploadRequestsInteractor>(),
         getIt.get<GetAllUploadRequestEntriesInteractor>(),
       ));
@@ -649,6 +655,9 @@ class WidgetModule {
         getIt<CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor>(),
         getIt<SearchUploadRequestEntriesInteractor>(),
         getIt<SearchRecipientsUploadRequestInteractor>(),
+        getIt<GetSorterInteractor>(),
+        getIt<SaveSorterInteractor>(),
+        getIt<SortInteractor>(),
         getIt.get<GetAllUploadRequestsInteractor>(),
         getIt.get<GetAllUploadRequestEntriesInteractor>(),
       ));
