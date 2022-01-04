@@ -53,12 +53,14 @@ import 'package:linshare_flutter_app/presentation/view/background_widgets/backgr
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/upload_request_multiple_selection_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/archived/archived_upload_request_inside_view_model.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_widget.dart';
+import 'package:redux/redux.dart';
 
 class ArchivedUploadRequestInsideWidget extends UploadRequestInsideWidget {
 
@@ -137,6 +139,7 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
         children: [
           buildTopBar(titleTopBar: _buildTitleTopBar()),
           _buildMultipleSelectionTopBar(),
+          _buildMenuSorter(),
           _buildLoadingLayout(),
           Expanded(child: _buildUploadRequestList()),
           StoreConnector<AppState, ArchivedUploadRequestInsideState>(
@@ -154,6 +157,17 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
             }
             return SizedBox.shrink();
           }),
+    );
+  }
+
+  Widget _buildMenuSorter() {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (context, appState) => appState.archivedUploadRequestInsideState.isIndividualRecipients() && !appState.uiState.isInSearchState()
+        ? OrderByButtonBuilder(context, appState.archivedUploadRequestInsideState.recipientSorter)
+            .onOpenOrderMenuAction((currentSorter) => _viewModel.openPopupMenuSorterRecipients(context, currentSorter))
+            .build()
+        : SizedBox.shrink()
     );
   }
 

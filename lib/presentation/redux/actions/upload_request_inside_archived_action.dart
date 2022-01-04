@@ -145,3 +145,18 @@ class ArchivedUploadRequestSetSearchResultAction extends ActionOffline {
 
   ArchivedUploadRequestSetSearchResultAction(this.uploadRequests);
 }
+
+@immutable
+class ArchivedUploadRequestInsideGetSorterAction extends ActionOffline {
+  final Sorter sorter;
+
+  ArchivedUploadRequestInsideGetSorterAction(this.sorter);
+}
+
+@immutable
+class ArchivedUploadRequestInsideSortAction extends ActionOffline {
+  final List<UploadRequest> uploadRequests;
+  final Sorter sorter;
+
+  ArchivedUploadRequestInsideSortAction(this.uploadRequests, this.sorter);
+}
