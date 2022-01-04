@@ -41,6 +41,7 @@ enum OrderScreen {
   uploadRequestGroupsActiveClosed,
   uploadRequestGroupsArchived,
   uploadRequestRecipientCreated,
+  uploadRequestRecipientActiveClosed,
 }
 
 extension OrderScreenExtension on OrderScreen {
@@ -48,6 +49,7 @@ extension OrderScreenExtension on OrderScreen {
   OrderBy getDefaultOrderBy() {
     switch(this) {
       case OrderScreen.uploadRequestRecipientCreated:
+      case OrderScreen.uploadRequestRecipientActiveClosed:
         return OrderBy.recipient;
       default:
         return OrderBy.modificationDate;
