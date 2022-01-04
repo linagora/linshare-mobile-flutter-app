@@ -2678,6 +2678,20 @@ class AppLocalizations {
         'External member',
         name: 'external_member');
   }
+
+  String get files {
+    return Intl.message(
+        'Files',
+        name: 'files'
+    );
+  }
+
+  String get recipient {
+    return Intl.message(
+        'Recipient',
+        name: 'recipient'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

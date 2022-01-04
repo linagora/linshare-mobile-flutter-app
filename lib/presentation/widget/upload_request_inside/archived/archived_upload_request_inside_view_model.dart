@@ -85,6 +85,9 @@ class ArchivedUploadRequestInsideViewModel extends UploadRequestInsideViewModel 
       CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor entriesToMySpaceInteractor,
       SearchUploadRequestEntriesInteractor searchUploadRequestEntriesInteractor,
       SearchRecipientsUploadRequestInteractor searchRecipientsUploadRequestInteractor,
+      GetSorterInteractor getSorterInteractor,
+      SaveSorterInteractor saveSorterInteractor,
+      SortInteractor sortInteractor,
       this._getAllUploadRequestsInteractor,
       this._getAllUploadRequestEntriesInteractor,
   ) : super(
@@ -98,6 +101,9 @@ class ArchivedUploadRequestInsideViewModel extends UploadRequestInsideViewModel 
       entriesToMySpaceInteractor,
       searchUploadRequestEntriesInteractor,
       searchRecipientsUploadRequestInteractor,
+      getSorterInteractor,
+      saveSorterInteractor,
+      sortInteractor,
   ) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.archivedUploadRequestInsideState.viewState.fold((failure) => null, (success) {

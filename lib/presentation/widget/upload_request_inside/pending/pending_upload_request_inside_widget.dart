@@ -54,12 +54,14 @@ import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/upload_request_context_menu_action_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/order_by/order_by_button.dart';
 import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/pending/pending_upload_request_inside_view_model.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_widget.dart';
+import 'package:redux/redux.dart';
 
 class PendingUploadRequestInsideWidget extends UploadRequestInsideWidget {
 
@@ -138,6 +140,7 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
         children: [
           buildTopBar(titleTopBar: _buildTitleTopBar()),
           _buildMultipleSelectionTopBar(),
+          _buildMenuSorterPending(),
           _buildLoadingLayout(),
           Expanded(child: _buildUploadRequestList()),
           StoreConnector<AppState, CreatedUploadRequestInsideState>(
@@ -178,6 +181,17 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
             return SizedBox.shrink();
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildMenuSorterPending() {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (context, appState) => appState.createdUploadRequestInsideState.isIndividualRecipients() && !appState.uiState.isInSearchState()
+        ? OrderByButtonBuilder(context, appState.createdUploadRequestInsideState.recipientSorter)
+            .onOpenOrderMenuAction((currentSorter) => _viewModel.openPopupMenuSorterRecipientsPending(context, currentSorter))
+            .build()
+        : SizedBox.shrink()
     );
   }
 

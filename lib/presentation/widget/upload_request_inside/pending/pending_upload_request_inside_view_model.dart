@@ -58,6 +58,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/u
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
 import 'package:redux/src/store.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class PendingUploadRequestInsideViewModel extends UploadRequestInsideViewModel {
 
@@ -85,6 +86,9 @@ class PendingUploadRequestInsideViewModel extends UploadRequestInsideViewModel {
       CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor entriesToMySpaceInteractor,
       SearchUploadRequestEntriesInteractor searchUploadRequestEntriesInteractor,
       SearchRecipientsUploadRequestInteractor searchRecipientsUploadRequestInteractor,
+      GetSorterInteractor getSorterInteractor,
+      SaveSorterInteractor saveSorterInteractor,
+      SortInteractor sortInteractor,
       this._getAllUploadRequestsInteractor,
       this._getAllUploadRequestEntriesInteractor,
   ) : super(
@@ -98,6 +102,9 @@ class PendingUploadRequestInsideViewModel extends UploadRequestInsideViewModel {
       entriesToMySpaceInteractor,
       searchUploadRequestEntriesInteractor,
       searchRecipientsUploadRequestInteractor,
+      getSorterInteractor,
+      saveSorterInteractor,
+      sortInteractor,
   ) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.createdUploadRequestInsideState.viewState.fold((failure) => null, (success) {
@@ -143,30 +150,43 @@ class PendingUploadRequestInsideViewModel extends UploadRequestInsideViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartCreatedUploadRequestInsideLoadingAction());
 
-      await _getAllUploadRequestsInteractor.execute(group.uploadRequestGroupId)
-          .then((result) => result.fold(
-              (failure) {
-                if (failure is UploadRequestFailure) {
-                  if (documentType == UploadRequestDocumentType.recipients) {
-                    _uploadRequests = [];
-                  }
-                  handleOnFailureAction(UploadRequestGroupTab.PENDING, failure);
-                }
-              },
-              (success) {
-                if (success is UploadRequestViewState) {
-                  if (group.collective) {
-                    _loadListFilesCollectiveUploadRequest(success);
-                  } else {
-                    if (documentType == UploadRequestDocumentType.recipients) {
-                      _loadListRecipientsIndividualUploadRequest(success, group);
-                    } else if (documentType == UploadRequestDocumentType.files && selectedUploadRequest != null) {
-                      _loadUploadRequestEntriesByRecipient(selectedUploadRequest);
-                    }
-                  }
-                }
-              })
-      );
+      await Future.wait([
+        getSorterInteractor.execute(OrderScreen.uploadRequestRecipientCreated),
+        _getAllUploadRequestsInteractor.execute(group.uploadRequestGroupId)
+      ]).then((response) async {
+        response.first.fold((failure) {
+          store.dispatch(CreatedUploadRequestInsideGetSorterAction(Sorter.fromOrderScreen(OrderScreen.uploadRequestRecipientCreated)));
+        }, (success) {
+          store.dispatch(CreatedUploadRequestInsideGetSorterAction(success is GetSorterSuccess
+              ? success.sorter
+              : Sorter.fromOrderScreen(OrderScreen.uploadRequestRecipientCreated)));
+        });
+
+        response.last.fold((failure) {
+          if (failure is UploadRequestFailure) {
+            if (documentType == UploadRequestDocumentType.recipients) {
+              _uploadRequests = [];
+            }
+            handleOnFailureAction(UploadRequestGroupTab.PENDING, failure);
+          }
+        }, (success) {
+          if (success is UploadRequestViewState) {
+            if (group.collective) {
+              _loadListFilesCollectiveUploadRequest(success);
+            } else {
+              if (documentType == UploadRequestDocumentType.recipients) {
+                _loadListRecipientsIndividualUploadRequest(success, group);
+              } else if (documentType == UploadRequestDocumentType.files && selectedUploadRequest != null) {
+                _loadUploadRequestEntriesByRecipient(selectedUploadRequest);
+              }
+            }
+          }
+        });
+      });
+
+      if (!group.collective && documentType == UploadRequestDocumentType.recipients) {
+        store.dispatch(_sortRecipientsActionPending(store.state.createdUploadRequestInsideState.recipientSorter));
+      }
     });
   }
 
@@ -279,6 +299,35 @@ class PendingUploadRequestInsideViewModel extends UploadRequestInsideViewModel {
     } else {
       store.dispatch(CreatedUploadRequestSelectAllRecipientAction());
     }
+  }
+
+  void openPopupMenuSorterRecipientsPending(BuildContext context, Sorter currentSorter) {
+    openPopupMenuSorter(context, currentSorter, (sorterSelected) => _sortRecipientsPending(sorterSelected));
+  }
+
+  void _sortRecipientsPending(Sorter sorter) {
+    final newSorter = store.state.createdUploadRequestInsideState.recipientSorter == sorter
+        ? sorter.getSorterByOrderType(sorter.orderType)
+        : sorter;
+    appNavigation.popBack();
+    store.dispatch(_sortRecipientsActionPending(newSorter));
+  }
+
+  ThunkAction<AppState> _sortRecipientsActionPending(Sorter sorter) {
+    return (Store<AppState> store) async {
+      await Future.wait([
+        saveSorterInteractor.execute(sorter),
+        sortInteractor.execute(_uploadRequests, sorter)
+      ]).then((response) => response.last.fold(
+        (failure) {
+          _uploadRequests = [];
+          store.dispatch(CreatedUploadRequestInsideSortAction(_uploadRequests, sorter));
+        },
+        (success) {
+          _uploadRequests = success is UploadRequestViewState ? success.uploadRequests : [];
+          store.dispatch(CreatedUploadRequestInsideSortAction(_uploadRequests, sorter));
+        }));
+    };
   }
 
   void _setSearchQuery(SearchQuery newSearchQuery) => _searchQuery = newSearchQuery;

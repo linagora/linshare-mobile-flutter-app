@@ -48,7 +48,7 @@ class Sorter extends Equatable {
   }
 
   static Sorter fromOrderScreen(OrderScreen orderScreen) {
-    return Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending);
+    return Sorter(orderScreen, orderScreen.getDefaultOrderBy(), OrderType.descending);
   }
 
   @override
@@ -56,8 +56,6 @@ class Sorter extends Equatable {
 }
 
 extension SorterExtension on Sorter {
-  Sorter defaultSorter(OrderScreen orderScreen) => Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending);
-
   Sorter getSorterByOrderType(OrderType orderType) => Sorter(orderScreen, orderBy, orderType == OrderType.descending ? OrderType.ascending : OrderType.descending);
 
   List<Sorter> getListSorter(OrderScreen orderScreen) {
@@ -80,6 +78,8 @@ extension SorterExtension on Sorter {
         return _getListSorterUploadRequest();
       case OrderScreen.uploadRequestGroupsArchived:
         return _getListSorterUploadRequest();
+      case OrderScreen.uploadRequestRecipientCreated:
+        return _getListSorterUploadRequestRecipient();
     }
   }
 
@@ -145,6 +145,16 @@ extension SorterExtension on Sorter {
       Sorter(orderScreen, OrderBy.name, OrderType.descending),
       Sorter(orderScreen, OrderBy.status, OrderType.descending),
       Sorter(orderScreen, OrderBy.type, OrderType.descending),
+    ];
+  }
+
+  List<Sorter> _getListSorterUploadRequestRecipient() {
+    return <Sorter>[
+      Sorter(orderScreen, OrderBy.recipient, OrderType.descending),
+      Sorter(orderScreen, OrderBy.files, OrderType.descending),
+      Sorter(orderScreen, OrderBy.type, OrderType.descending),
+      Sorter(orderScreen, OrderBy.activationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.expirationDate, OrderType.descending),
     ];
   }
 }
