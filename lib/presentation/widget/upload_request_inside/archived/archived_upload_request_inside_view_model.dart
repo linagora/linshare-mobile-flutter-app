@@ -58,6 +58,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/u
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_document_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_viewmodel.dart';
 import 'package:redux/src/store.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class ArchivedUploadRequestInsideViewModel extends UploadRequestInsideViewModel {
 
@@ -146,30 +147,43 @@ class ArchivedUploadRequestInsideViewModel extends UploadRequestInsideViewModel 
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartArchivedUploadRequestInsideLoadingAction());
 
-      await _getAllUploadRequestsInteractor.execute(group.uploadRequestGroupId)
-          .then((result) => result.fold(
-              (failure) {
-                if (failure is UploadRequestFailure) {
-                  if (documentType == UploadRequestDocumentType.recipients) {
-                    _uploadRequests = [];
-                  }
-                  handleOnFailureAction(UploadRequestGroupTab.ARCHIVED, failure);
-                }
-              },
-              (success) {
-                if (success is UploadRequestViewState) {
-                  if (group.collective) {
-                    _loadListFilesCollectiveUploadRequest(success);
-                  } else {
-                    if (documentType == UploadRequestDocumentType.recipients) {
-                      _loadListRecipientsIndividualUploadRequest(success, group);
-                    } else if (documentType == UploadRequestDocumentType.files && selectedUploadRequest != null) {
-                      _loadUploadRequestEntriesByRecipient(selectedUploadRequest);
-                    }
-                  }
-                }
-              })
-      );
+      await Future.wait([
+        getSorterInteractor.execute(OrderScreen.uploadRequestRecipientArchived),
+        _getAllUploadRequestsInteractor.execute(group.uploadRequestGroupId)
+      ]).then((response) async {
+        response.first.fold((failure) {
+          store.dispatch(ArchivedUploadRequestInsideGetSorterAction(Sorter.fromOrderScreen(OrderScreen.uploadRequestRecipientArchived)));
+        }, (success) {
+          store.dispatch(ArchivedUploadRequestInsideGetSorterAction(success is GetSorterSuccess
+              ? success.sorter
+              : Sorter.fromOrderScreen(OrderScreen.uploadRequestRecipientArchived)));
+        });
+
+        response.last.fold((failure) {
+          if (failure is UploadRequestFailure) {
+            if (documentType == UploadRequestDocumentType.recipients) {
+              _uploadRequests = [];
+            }
+            handleOnFailureAction(UploadRequestGroupTab.ARCHIVED, failure);
+          }
+        }, (success) {
+          if (success is UploadRequestViewState) {
+            if (group.collective) {
+              _loadListFilesCollectiveUploadRequest(success);
+            } else {
+              if (documentType == UploadRequestDocumentType.recipients) {
+                _loadListRecipientsIndividualUploadRequest(success, group);
+              } else if (documentType == UploadRequestDocumentType.files && selectedUploadRequest != null) {
+                _loadUploadRequestEntriesByRecipient(selectedUploadRequest);
+              }
+            }
+          }
+        });
+      });
+
+      if (!group.collective && documentType == UploadRequestDocumentType.recipients) {
+        store.dispatch(_sortRecipientsAction(store.state.archivedUploadRequestInsideState.recipientSorter));
+      }
     });
   }
 
@@ -282,6 +296,35 @@ class ArchivedUploadRequestInsideViewModel extends UploadRequestInsideViewModel 
     } else {
       store.dispatch(ArchivedUploadRequestSelectAllRecipientAction());
     }
+  }
+
+  void openPopupMenuSorterRecipients(BuildContext context, Sorter currentSorter) {
+    openPopupMenuSorter(context, currentSorter, (sorterSelected) => _sortRecipients(sorterSelected));
+  }
+
+  void _sortRecipients(Sorter sorter) {
+    final newSorter = store.state.archivedUploadRequestInsideState.recipientSorter == sorter
+        ? sorter.getSorterByOrderType(sorter.orderType)
+        : sorter;
+    appNavigation.popBack();
+    store.dispatch(_sortRecipientsAction(newSorter));
+  }
+
+  ThunkAction<AppState> _sortRecipientsAction(Sorter sorter) {
+    return (Store<AppState> store) async {
+      await Future.wait([
+        saveSorterInteractor.execute(sorter),
+        sortInteractor.execute(_uploadRequests, sorter)
+      ]).then((response) => response.last.fold(
+        (failure) {
+          _uploadRequests = [];
+          store.dispatch(ArchivedUploadRequestInsideSortAction(_uploadRequests, sorter));
+        },
+        (success) {
+          _uploadRequests = success is UploadRequestViewState ? success.uploadRequests : [];
+          store.dispatch(ArchivedUploadRequestInsideSortAction(_uploadRequests, sorter));
+        }));
+    };
   }
 
   void _setSearchQuery(SearchQuery newSearchQuery) => _searchQuery = newSearchQuery;

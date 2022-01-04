@@ -80,6 +80,7 @@ extension SorterExtension on Sorter {
         return _getListSorterUploadRequest();
       case OrderScreen.uploadRequestRecipientCreated:
       case OrderScreen.uploadRequestRecipientActiveClosed:
+      case OrderScreen.uploadRequestRecipientArchived:
         return _getListSorterUploadRequestRecipient();
     }
   }

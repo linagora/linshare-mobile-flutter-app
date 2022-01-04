@@ -82,4 +82,10 @@ final archivedUploadRequestInsideReducer = combineReducers<ArchivedUploadRequest
       state.clearViewState()),
   TypedReducer<ArchivedUploadRequestInsideState, ArchivedUploadRequestSetSearchResultAction>((ArchivedUploadRequestInsideState state, ArchivedUploadRequestSetSearchResultAction action) =>
       state.setSearchResultRecipients(newSearchResult: action.uploadRequests)),
+  TypedReducer<ArchivedUploadRequestInsideState, ArchivedUploadRequestInsideSortAction>((ArchivedUploadRequestInsideState state, ArchivedUploadRequestInsideSortAction action) =>
+      state.setUploadRequestsRecipientsWithSort(
+          newUploadRequestsList: action.uploadRequests,
+          newSorter: action.sorter)),
+  TypedReducer<ArchivedUploadRequestInsideState, ArchivedUploadRequestInsideGetSorterAction>((ArchivedUploadRequestInsideState state, ArchivedUploadRequestInsideGetSorterAction action) =>
+      state.setSorterUploadRequestRecipient(newSorter: action.sorter)),
 ]);
