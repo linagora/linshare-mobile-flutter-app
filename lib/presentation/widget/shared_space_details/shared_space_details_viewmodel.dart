@@ -153,13 +153,11 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
       final sharedSpaceViewState = await _getSharedSpaceInteractor.execute(sharedSpace.sharedSpaceId);
       store.dispatch(SharedSpaceDetailsGetSharedSpaceDetailsAction(sharedSpaceViewState));
 
-      if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
-        await sharedSpaceViewState.fold((_) => null, (success) async {
-          if (success is SharedSpaceDetailViewState) {
-            store.dispatch(SharedSpaceDetailsGetAccountQuotaAction(await _getQuotaInteractor.execute(success.sharedSpace.quotaId)));
-          }
-        });
-      }
+      await sharedSpaceViewState.fold((_) => null, (success) async {
+        if (success is SharedSpaceDetailViewState) {
+          store.dispatch(SharedSpaceDetailsGetAccountQuotaAction(await _getQuotaInteractor.execute(success.sharedSpace.quotaId)));
+        }
+      });
     });
   }
 
