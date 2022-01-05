@@ -279,6 +279,7 @@ class WidgetModule {
       getIt<GetSorterInteractor>(),
       getIt<SaveSorterInteractor>(),
       getIt<RenameWorkGroupInteractor>(),
+      getIt<RenameDriveInteractor>(),
       getIt<GetAllSharedSpaceOfflineInteractor>(),
       getIt<CreateNewDriveInteractor>(),
     ));
