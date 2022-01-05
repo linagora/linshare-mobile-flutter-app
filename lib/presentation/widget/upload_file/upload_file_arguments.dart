@@ -36,19 +36,24 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 class UploadFileArguments extends RouterArguments {
   final List<FileInfo> uploadFiles;
   late ShareType shareType;
+  ShareDestination? shareDestination;
   List<Document>? documents;
   late WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo;
 
   UploadFileArguments(this.uploadFiles, {
     ShareType shareType = ShareType.uploadAndShare,
     List<Document>? documents,
+    ShareDestination? shareDestination,
     WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo
   }) {
     this.shareType = shareType;
+    this.shareDestination = shareDestination;
     this.documents = documents;
     this.workGroupDocumentUploadInfo = workGroupDocumentUploadInfo;
   }
 }
+
+enum ShareDestination { mySpace }
 
 enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
 

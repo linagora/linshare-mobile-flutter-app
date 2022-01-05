@@ -145,6 +145,8 @@ class MySpaceViewModel extends BaseViewModel {
             } else if (success is MakeAvailableOfflineMultipleDocumentsAllSuccessViewState ||
                 success is MakeAvailableOfflineMultipleDocumentsHasSomeFilesFailedViewState) {
               store.dispatch(_enableAvailableOfflineDocument(_documentList));
+            } else if (success is ShareDocumentViewState) {
+              getAllDocument();
             }
       });
 
@@ -246,6 +248,7 @@ class MySpaceViewModel extends BaseViewModel {
         arguments: UploadFileArguments(
             [],
             shareType: ShareType.quickShare,
+            shareDestination: ShareDestination.mySpace,
             documents: documents));
   }
 
