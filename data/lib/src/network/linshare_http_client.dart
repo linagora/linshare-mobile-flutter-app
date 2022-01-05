@@ -534,6 +534,18 @@ class LinShareHttpClient {
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
 
+  Future<SharedSpaceNodeNestedResponse> renameDrive(
+      SharedSpaceId sharedSpaceId,
+      RenameDriveBodyRequest renameDriveBodyRequest
+  ) async {
+    final resultJson = await _dioClient.put(
+      Endpoint.sharedSpaces.withPathParameter(sharedSpaceId.uuid).generateEndpointPath(),
+      data: renameDriveBodyRequest.toJson().toString(),
+    );
+
+    return SharedSpaceNodeNestedResponse.fromJson(resultJson);
+  }
+
   Future<DocumentResponse> editDescriptionDocument(DocumentId documentId, EditDescriptionDocumentRequest request) async {
     final resultJson = await _dioClient.put(
         Endpoint.documents
