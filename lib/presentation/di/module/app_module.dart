@@ -402,6 +402,7 @@ class AppModule {
     getIt.registerFactory(() => DuplicateMultipleFilesInMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
     getIt.registerFactory(() => RestoreWorkGroupDocumentVersionInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => RenameWorkGroupInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => RenameDriveInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => EditDescriptionDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => MakeAvailableOfflineDocumentInteractor(
         getIt<DocumentRepository>(),
