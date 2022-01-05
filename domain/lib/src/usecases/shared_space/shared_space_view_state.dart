@@ -573,3 +573,21 @@ class EnableVersioningWorkGroupFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class RenameDriveViewState extends ViewState {
+  final SharedSpaceNodeNested drive;
+
+  RenameDriveViewState(this.drive);
+
+  @override
+  List<Object> get props => [drive];
+}
+
+class RenameDriveFailure extends FeatureFailure {
+  final exception;
+
+  RenameDriveFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
