@@ -28,34 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-abstract class SharedSpaceRepository {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+class RenameDriveInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+  RenameDriveInteractor(this._sharedSpaceRepository);
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId shareSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
+  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, RenameDriveRequest renameDriveRequest) async {
+    try {
+      final drive = await _sharedSpaceRepository.renameDrive(sharedSpaceId, renameDriveRequest);
+      return Right<Failure, Success>(RenameDriveViewState(drive));
+    } catch (exception) {
+      return Left<Failure, Success>(RenameDriveFailure(exception));
     }
-  );
-
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
-
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles({LinShareNodeType? type});
-
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
-
-  Future<SharedSpaceNodeNested> renameDrive(SharedSpaceId sharedSpaceId, RenameDriveRequest renameRequest);
-
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
-
-  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
-    SharedSpaceId sharedSpaceId,
-    SharedSpaceRole sharedSpaceRole,
-    EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest);
+  }
 }
