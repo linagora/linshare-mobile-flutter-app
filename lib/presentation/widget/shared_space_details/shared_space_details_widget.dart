@@ -29,7 +29,6 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +85,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
     var arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceDetailsArguments;
 
     return DefaultTabController(
-        length: arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP ? 3 : 1,
+        length: arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP ? 3 : 2,
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -110,19 +109,17 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                   indicatorColor: AppColor.uploadProgressValueColor,
                   unselectedLabelColor: AppColor.loginTextFieldTextColor,
                   tabs: [
-                    if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) _tabTextWidget(AppLocalizations.of(context).details),
+                    _tabTextWidget(AppLocalizations.of(context).details),
                     _tabTextWidget(AppLocalizations.of(context).members),
                     if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) _tabTextWidget(AppLocalizations.of(context).activities)
                   ],
                 ),
               ),
-              if (arguments.sharedSpace.nodeType == LinShareNodeType.DRIVE) _buildLoadingView(),
               Expanded(
                 child: TabBarView(children: [
-                  if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP)
-                    StoreConnector<AppState, SharedSpaceDetailsState>(
-                      converter: (store) => store.state.sharedSpaceDetailsState,
-                      builder: (_, state) => _detailsTabWidget(state)),
+                  StoreConnector<AppState, SharedSpaceDetailsState>(
+                    converter: (store) => store.state.sharedSpaceDetailsState,
+                    builder: (_, state) => _detailsTabWidget(state)),
                   StoreConnector<AppState, SharedSpaceDetailsState>(
                     converter: (store) => store.state.sharedSpaceDetailsState,
                     builder: (_, state) => _membersTabWidget(state)),
@@ -191,10 +188,11 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                 state.sharedSpace?.creationDate.getMMMddyyyyFormatString() ?? ''),
             _sharedSpaceInformationTile(
                 AppLocalizations.of(context).my_rights,
-                toBeginningOfSentenceCase(
-                    state.sharedSpace?.sharedSpaceRole.name.getRoleName(context)) ?? ''),
-            _sharedSpaceInformationTile(
-                AppLocalizations.of(context).max_file_size, filesize(state.quota?.maxFileSize.size)),
+                toBeginningOfSentenceCase(state.sharedSpace?.nodeType == LinShareNodeType.DRIVE
+                    ? state.sharedSpace?.sharedSpaceRole.name.getDriveRoleName(context)
+                    : state.sharedSpace?.sharedSpaceRole.name.getRoleName(context)) ?? ''),
+            if (state.sharedSpace?.nodeType == LinShareNodeType.WORK_GROUP)
+              _sharedSpaceInformationTile(AppLocalizations.of(context).max_file_size, filesize(state.quota?.maxFileSize.size)),
           ],
         ),
         Divider(),
@@ -218,7 +216,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                             fontSize: 16.0)))
               ],
             )),
-        if (state.sharedSpace != null)
+        if (state.sharedSpace != null && state.sharedSpace?.nodeType == LinShareNodeType.WORK_GROUP)
           Column(children: [
             Divider(),
             _sharedSpaceVersioningWidget(context, state.sharedSpace!)
@@ -268,25 +266,6 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
         activeColor: sharedSpace.sharedSpaceRole.name == SharedSpaceRoleName.ADMIN
           ? AppColor.primaryColor
           : AppColor.versioningDisabledTextColor),
-    );
-  }
-
-  Widget _buildLoadingView() {
-    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
-      converter: (store) => store.state.sharedSpaceDetailsState.viewState,
-      builder: (context, viewState) {
-        return viewState.fold(
-            (failure) => SizedBox.shrink(),
-            (success) => (success is LoadingState)
-            ? Padding(
-                padding: EdgeInsets.all(20),
-                child: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor),),
-                ))
-            : SizedBox.shrink());
-      },
     );
   }
 
