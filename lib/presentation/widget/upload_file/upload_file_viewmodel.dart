@@ -71,6 +71,7 @@ class UploadFileViewModel extends BaseViewModel {
   ShareType _shareTypeArgument = ShareType.uploadAndShare;
   ShareType get shareTypeArgument => _shareTypeArgument;
 
+  ShareDestination? _shareDestination;
   List<Document>? _documentsArgument;
   WorkGroupDocumentUploadInfo? _workGroupDocumentUploadInfoArgument;
   WorkGroupDocumentUploadInfo? get workGroupDocumentUploadInfoArgument => _workGroupDocumentUploadInfoArgument;
@@ -133,6 +134,10 @@ class UploadFileViewModel extends BaseViewModel {
 
   void setDocumentsArgument(List<Document>? documents) {
     _documentsArgument = documents;
+  }
+
+  void setShareDestinationArgument(ShareDestination? shareDestination) {
+    _shareDestination = shareDestination;
   }
 
   void setWorkGroupDocumentUploadInfoArgument(WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo) {
@@ -262,6 +267,7 @@ class UploadFileViewModel extends BaseViewModel {
       await _uploadShareFileManager.justShare(
         _autoCompleteResultListObservable.value,
         documentIdList,
+        shareDestination: _shareDestination,
       );
     };
   }
