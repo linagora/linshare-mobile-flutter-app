@@ -29,33 +29,26 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class SharedSpaceDataSource {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+class RenameDriveBodyRequest with EquatableMixin {
+  final String name;
+  final LinShareNodeType nodeType;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+  RenameDriveBodyRequest(this.name, this.nodeType);
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId sharedSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
-  );
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('name'): jsonEncode(name),
+    jsonEncode('nodeType'): jsonEncode(nodeType.value)
+  };
 
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
+  @override
+  List<Object> get props => [name, nodeType];
+}
 
-  Future<List<SharedSpaceRole>> getSharedSpaceRoles({LinShareNodeType? type});
-
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
-
-  Future<SharedSpaceNodeNested> renameDrive(SharedSpaceId sharedSpaceId, RenameDriveRequest renameRequest);
-
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
-
-  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
-    SharedSpaceId sharedSpaceId,
-    SharedSpaceRole sharedSpaceRole,
-    EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest);
+extension RenameDriveRequestExtension on RenameDriveRequest {
+  RenameDriveBodyRequest toRenameDriveBodyRequest() => RenameDriveBodyRequest(name, nodeType);
 }
