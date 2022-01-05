@@ -90,4 +90,9 @@ class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
       sharedSpaceRole,
       enableVersioningWorkGroupRequest);
   }
+
+  @override
+  Future<SharedSpaceNodeNested> renameDrive(SharedSpaceId sharedSpaceId, RenameDriveRequest renameRequest) {
+    return _sharedSpaceDataSources[DataSourceType.network]!.renameDrive(sharedSpaceId, renameRequest);
+  }
 }
