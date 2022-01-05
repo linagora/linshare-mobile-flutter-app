@@ -82,6 +82,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     var arguments = ModalRoute.of(context)?.settings.arguments as UploadFileArguments;
     uploadFileViewModel.setUploadFilesArgument(arguments.uploadFiles);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
+    uploadFileViewModel.setShareDestinationArgument(arguments.shareDestination);
     if (arguments.documents != null) {
       uploadFileViewModel.setDocumentsArgument(arguments.documents);
     }

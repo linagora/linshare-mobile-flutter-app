@@ -566,6 +566,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
     return [
       _exportFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
       _removeFileAction(entries, itemSelectionType: ItemSelectionType.multiple),
+      _shareAction(entries, itemSelectionType: ItemSelectionType.multiple),
       _copyToMySpaceAction(entries, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadFilesAction(entries, itemSelectionType: ItemSelectionType.multiple),
     ];
@@ -636,6 +637,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
     return [
       _exportFileAction([entry]),
       _removeFileAction([entry]),
+      _shareAction([entry]),
       _copyToMySpaceAction([entry]),
       if (Platform.isAndroid) _downloadFilesAction([entry])
     ];
@@ -768,6 +770,18 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
           optionalTitle: AppLocalizations.of(context).copy_before_archiving,
           itemSelectionType: ItemSelectionType.multiple,
           onUpdateSuccess: () => _viewModel.requestToGetUploadRequestAndEntries()))
+      .build();
+  }
+
+  Widget _shareAction(List<UploadRequestEntry> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single}) {
+    return UploadRequestEntryContextMenuTileBuilder(
+        Key('share_context_menu_action'),
+        SvgPicture.asset(imagePath.icContextItemShare, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).share,
+        entries.first)
+      .onActionClick((data) =>
+        _viewModel.copyToAndShareFiles(entries, itemSelectionType: itemSelectionType, currentTab: UploadRequestGroupTab.ACTIVE_CLOSED))
       .build();
   }
 }

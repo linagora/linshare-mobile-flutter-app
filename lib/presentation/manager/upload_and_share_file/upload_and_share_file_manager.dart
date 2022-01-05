@@ -41,12 +41,12 @@ import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/manager/quota/verify_quota_manager.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_file_state_list.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_and_share/upload_and_share_model.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/share_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:redux/redux.dart';
 
 class UploadShareFileManager {
@@ -236,12 +236,24 @@ class UploadShareFileManager {
   Future<void> justShare(
     List<AutoCompleteResult>? recipients,
     List<DocumentId>? shareDocuments,
+    {ShareDestination? shareDestination}
   ) async {
     if(recipients == null || shareDocuments == null) {
       return;
     }
     await _share(recipients, shareDocuments)
-        .then((shareResult) => _store.dispatch(ShareAction(shareResult)));
+        .then((shareResult) => shareResult.fold(
+            (failure) => _store.dispatch(ShareAction(shareResult)),
+            (success) {
+              _store.dispatch(ShareAction(shareResult));
+              _pushNotifyUpdateDataInShareDestination(shareDestination, success);
+            }));
+  }
+
+  void _pushNotifyUpdateDataInShareDestination(ShareDestination? shareDestination, Success success) {
+    if (shareDestination == ShareDestination.mySpace) {
+      _store.dispatch(MySpaceAction(Right(success)));
+    }
   }
 
   Future<Either<Failure, Success>> _share(
