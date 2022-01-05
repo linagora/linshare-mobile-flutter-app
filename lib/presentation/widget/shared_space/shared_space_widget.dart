@@ -411,6 +411,8 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       _sharedSpaceDetailsAction(sharedSpace.element),
       if (SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.element.sharedSpaceRole.name))
         _addDriveMemberAction(sharedSpace.element),
+      if (SharedSpaceOperationRole.renameDriveRoles.contains(sharedSpace.element.sharedSpaceRole.name))
+        _renameDriveAction(context, sharedSpace.element),
     ];
   }
 
@@ -450,6 +452,15 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
         AppLocalizations.of(context).rename, sharedSpace)
       .onActionClick((sharedSpace) => sharedSpaceViewModel.openRenameWorkGroupModal(context, sharedSpace))
+      .build();
+  }
+
+  Widget _renameDriveAction(BuildContext context, SharedSpaceNodeNested drive) {
+    return WorkgroupContextMenuTileBuilder(
+        Key('rename_drive_context_menu_action'),
+        SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).rename, drive)
+      .onActionClick((drive) => sharedSpaceViewModel.openRenameDriveModal(context, drive))
       .build();
   }
 

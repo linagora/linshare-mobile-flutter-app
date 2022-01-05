@@ -75,6 +75,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final RenameWorkGroupInteractor _renameWorkGroupInteractor;
+  final RenameDriveInteractor _renameDriveInteractor;
   final GetAllSharedSpaceOfflineInteractor _getAllSharedSpaceOfflineInteractor;
   final CreateNewDriveInteractor _createNewDriveInteractor;
 
@@ -96,6 +97,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._getSorterInteractor,
     this._saveSorterInteractor,
     this._renameWorkGroupInteractor,
+    this._renameDriveInteractor,
     this._getAllSharedSpaceOfflineInteractor,
     this._createNewDriveInteractor,
   ) : super(store) {
@@ -576,6 +578,30 @@ class SharedSpaceViewModel extends BaseViewModel {
         .execute(
           sharedSpaceNodeNested.sharedSpaceId,
           RenameWorkGroupRequest(newName, sharedSpaceNodeNested.versioningParameters, sharedSpaceNodeNested.nodeType!))
+        .then((result) => getAllSharedSpaces(needToGetOldSorter: true));
+    });
+  }
+
+  void openRenameDriveModal(BuildContext context, SharedSpaceNodeNested drive) {
+    _appNavigation.popBack();
+
+    EditTextModalSheetBuilder()
+      .key(Key('rename_drive_modal'))
+      .title(AppLocalizations.of(context).rename_node(AppLocalizations.of(context).drive.toLowerCase()))
+      .cancelText(AppLocalizations.of(context).cancel)
+      .onConfirmAction(AppLocalizations.of(context).rename,
+          (value) => store.dispatch(_renameDriveAction(context, value, drive)))
+      .setErrorString((value) => getErrorString(context, value, LinShareNodeType.DRIVE))
+      .setTextSelection(TextSelection(baseOffset: 0, extentOffset: drive.name.length), value: drive.name)
+      .show(context);
+  }
+
+  OnlineThunkAction _renameDriveAction(BuildContext context, String newName, SharedSpaceNodeNested drive) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _renameDriveInteractor
+        .execute(
+          drive.sharedSpaceId,
+          RenameDriveRequest(newName, drive.nodeType!))
         .then((result) => getAllSharedSpaces(needToGetOldSorter: true));
     });
   }
