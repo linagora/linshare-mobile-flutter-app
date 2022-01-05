@@ -93,4 +93,9 @@ class LocalSharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   ) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<SharedSpaceNodeNested> renameDrive(SharedSpaceId sharedSpaceId, RenameDriveRequest renameRequest) {
+    throw UnimplementedError();
+  }
 }
