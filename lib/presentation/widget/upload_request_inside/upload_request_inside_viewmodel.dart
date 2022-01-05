@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file/upload_request_entry_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_active_closed_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_archived_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_inside_created_action.dart';
@@ -58,6 +59,7 @@ import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_tab_common_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_destination.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_arguments.dart';
@@ -591,6 +593,56 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
     appNavigation.push(
       RoutePaths.addRecipientsUploadRequestGroup,
       arguments: AddRecipientsUploadRequestGroupArgument(request, AddRecipientDestination.fromInside, tab));
+  }
+
+  void copyToAndShareFiles(List<UploadRequestEntry> entries,
+      {ItemSelectionType itemSelectionType = ItemSelectionType.single, required UploadRequestGroupTab currentTab}) {
+    appNavigation.popBack();
+    if (itemSelectionType == ItemSelectionType.multiple) {
+      cancelAllSelectionEntries(currentTab);
+    }
+
+    store.dispatch(_copyToAndShareFilesAction(entries, currentTab: currentTab));
+  }
+
+  OnlineThunkAction _copyToAndShareFilesAction(List<UploadRequestEntry> entries, {required UploadRequestGroupTab currentTab}) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await entriesToMySpaceInteractor.execute(entries)
+        .then((result) => result.fold(
+          (failure) => handleOnFailureAction(currentTab, failure),
+          (success) => _handleOnSuccessCopyToAndShareAction(success)));
+    });
+  }
+
+  void _handleOnSuccessCopyToAndShareAction(Success success) {
+    final shareDocuments = List<Document>.empty(growable: true);
+
+    if (success is CopyToMySpaceViewState) {
+      shareDocuments.addAll(success.documentsList);
+    } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesAllSuccessViewState) {
+      success.resultList
+        .where((either) => either.isRight())
+        .map((either) => either.map((result) => (result as CopyToMySpaceViewState).documentsList).toIterable().first)
+        .forEach((documentList) => shareDocuments.addAll(documentList));
+    } else if (success is CopyMultipleToMySpaceFromUploadRequestEntriesHasSomeFilesViewState) {
+      success.resultList
+        .where((either) => either.isRight())
+        .map((either) => either.map((result) => (result as CopyToMySpaceViewState).documentsList).toIterable().first)
+        .forEach((documentList) => shareDocuments.addAll(documentList));
+    }
+
+    _goToMySpaceAndOpenShareView(shareDocuments);
+  }
+
+  void _goToMySpaceAndOpenShareView(List<Document> documents) {
+    store.dispatch(SetCurrentView(RoutePaths.mySpace));
+
+    appNavigation.push(RoutePaths.uploadDocumentRoute,
+      arguments: UploadFileArguments(
+        [],
+        shareType: ShareType.quickShare,
+        shareDestination: ShareDestination.mySpace,
+        documents: documents));
   }
 
   @override
