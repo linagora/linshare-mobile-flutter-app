@@ -56,6 +56,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   final SharedSpaceActivitiesInteractor _sharedSpaceActivitiesInteractor;
   final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
   final UpdateSharedSpaceMemberInteractor _updateSharedSpaceMemberInteractor;
+  final UpdateDriveMemberInteractor _updateDriveMemberInteractor;
   final DeleteSharedSpaceMemberInteractor _deleteSharedSpaceMemberInteractor;
   final EnableVersioningWorkgroupInteractor _enableVersioningWorkgroupInteractor;
 
@@ -68,6 +69,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     this._sharedSpaceActivitiesInteractor,
     this._getAllSharedSpaceRolesInteractor,
     this._updateSharedSpaceMemberInteractor,
+    this._updateDriveMemberInteractor,
     this._deleteSharedSpaceMemberInteractor,
     this._enableVersioningWorkgroupInteractor,
   ) : super(store);
@@ -77,8 +79,8 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     store.dispatch(_getSharedSpaceAction(arguments.sharedSpace));
     if (arguments.sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
       store.dispatch(_getSharedSpaceActivitiesAction(arguments.sharedSpace.sharedSpaceId));
-      store.dispatch(_getSharedSpaceRolesAction());
     }
+    store.dispatch(_getSharedSpaceRolesAction());
   }
 
   void backToSharedSpacesList() {
@@ -170,11 +172,19 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
 
   OnlineThunkAction _getSharedSpaceRolesAction() {
     return OnlineThunkAction((Store<AppState> store) async {
-      final roles = (await _getAllSharedSpaceRolesInteractor.execute())
-          .map((result) => result is SharedSpaceRolesViewState ? result.roles : <SharedSpaceRole>[])
-          .getOrElse(() => <SharedSpaceRole>[]);
+      await Future.wait([
+        _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.DRIVE),
+        _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.WORK_GROUP),
+      ]).then((responses) {
+        final driveRoles = responses.first
+            .map((success) => success is SharedSpaceRolesViewState ? success.roles : List<SharedSpaceRole>.empty())
+            .getOrElse(() => List<SharedSpaceRole>.empty());
+        final workgroupRoles = responses.last
+            .map((success) => success is SharedSpaceRolesViewState ? success.roles : List<SharedSpaceRole>.empty())
+            .getOrElse(() => List<SharedSpaceRole>.empty());
 
-      store.dispatch(SharedSpaceGetSharedSpaceRolesListAction(roles));
+        store.dispatch(SharedSpaceGetSharedSpaceRolesListAction(workgroupRoles, driveRoles));
+      });
     });
   }
 
@@ -255,6 +265,50 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
           (success) => success is EnableVersioningWorkGroupViewState
             ? store.dispatch(SharedSpaceDetailsEnableVersioningAction(success.sharedSpaceNodeNested))
             : null));
+    });
+  }
+
+  void changeDriveMemberRole(SharedSpaceNodeNested drive, SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
+    store.dispatch(_updateDriveMemberRoleAction(
+        drive,
+        AccountId(fromMember.account?.accountId.uuid ?? ''),
+        changeToRole,
+        fromMember.nestedRole?.name ?? SharedSpaceRoleName.READER));
+    _appNavigation.popBack();
+  }
+
+  OnlineThunkAction _updateDriveMemberRoleAction(
+      SharedSpaceNodeNested drive, AccountId accountId, SharedSpaceRoleName newRole, SharedSpaceRoleName nestedRoleName) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final driveRolesList = store.state.sharedSpaceState.driveRolesList;
+      final rolesList = store.state.sharedSpaceState.rolesList;
+      if (rolesList.isEmpty || driveRolesList.isEmpty) {
+        store.dispatch(UpdateDriveMembersAction(Left<Failure, Success>(UpdateDriveMemberFailure(RolesListNotFound()))));
+        return;
+      }
+
+      final workgroupRole = rolesList.firstWhere((_role) => _role.name == nestedRoleName, orElse: () => SharedSpaceRole.initial());
+      final roleDrive = driveRolesList.firstWhere((_role) => _role.name == newRole, orElse: () => SharedSpaceRole.initialDrive());
+      if (roleDrive.sharedSpaceRoleId.uuid.isEmpty || workgroupRole.sharedSpaceRoleId.uuid.isEmpty) {
+        store.dispatch(UpdateDriveMembersAction(Left<Failure, Success>(UpdateDriveMemberFailure(SelectedRoleNotFound()))));
+        return;
+      }
+
+      await _updateDriveMemberInteractor
+          .execute(
+              drive.sharedSpaceId,
+              UpdateDriveMemberRequest(
+                  accountId,
+                  drive.sharedSpaceId,
+                  roleDrive.sharedSpaceRoleId,
+                  workgroupRole.sharedSpaceRoleId,
+                  LinShareNodeType.DRIVE))
+          .then((result) => result.fold(
+              (failure) => store.dispatch(UpdateDriveMembersAction(Left<Failure, Success>(UpdateDriveMemberFailure(UpdateRoleFailed())))),
+              (success) {
+                store.dispatch(_refreshSharedSpaceAction(drive));
+                _getAllMember(drive);
+              }));
     });
   }
 
