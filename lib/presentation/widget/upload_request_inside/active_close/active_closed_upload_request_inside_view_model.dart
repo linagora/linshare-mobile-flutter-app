@@ -146,6 +146,7 @@ class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewMod
 
       await Future.wait([
         getSorterInteractor.execute(OrderScreen.uploadRequestRecipientActiveClosed),
+        getSorterInteractor.execute(OrderScreen.uploadRequestFileActiveClosed),
         _getAllUploadRequestsInteractor.execute(group.uploadRequestGroupId)
       ]).then((response) async {
         response.first.fold((failure) {
@@ -155,6 +156,18 @@ class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewMod
               ? success.sorter
               : Sorter.fromOrderScreen(OrderScreen.uploadRequestRecipientActiveClosed)));
         });
+
+        response.elementAt(1).fold(
+          (failure) {
+              store.dispatch(ActiveClosedUploadRequestEntryInsideGetSorterAction(Sorter.fromOrderScreen(OrderScreen.uploadRequestFileActiveClosed)));
+          },
+          (success) {
+            print('$success');
+            store.dispatch(ActiveClosedUploadRequestEntryInsideGetSorterAction(success is GetSorterSuccess
+              ? success.sorter
+              : Sorter.fromOrderScreen(OrderScreen.uploadRequestFileActiveClosed)));
+          }
+        );
 
         response.last.fold((failure) {
           if (failure is UploadRequestFailure) {
@@ -293,6 +306,35 @@ class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewMod
     } else {
       store.dispatch(ActiveClosedUploadRequestSelectAllRecipientAction());
     }
+  }
+
+  void openPopupMenuSorterFile(BuildContext context, Sorter currentSorter) {
+    openPopupMenuSorter(context, currentSorter, (sorterSelected) => _sortFiles(sorterSelected));
+  }
+
+  void _sortFiles(Sorter sorter) {
+    final newSorter = store.state.activeClosedUploadRequestInsideState.fileSorter == sorter
+        ? sorter.getSorterByOrderType(sorter.orderType)
+        : sorter;
+    appNavigation.popBack();
+    store.dispatch(_sortFilesAction(newSorter));
+  }
+
+  ThunkAction<AppState> _sortFilesAction(Sorter sorter) {
+    return (Store<AppState> store) async {
+      await Future.wait([
+        saveSorterInteractor.execute(sorter),
+        sortInteractor.execute(_uploadRequestEntries, sorter)
+      ]).then((response) => response.last.fold(
+          (failure) {
+            _uploadRequestEntries = [];
+            store.dispatch(ActiveClosedUploadRequestEntryInsideSortAction(_uploadRequestEntries, sorter));
+          },
+          (success) {
+            _uploadRequestEntries = success is UploadRequestEntryViewState ? success.uploadRequestEntries : [];
+            store.dispatch(ActiveClosedUploadRequestEntryInsideSortAction(_uploadRequestEntries, sorter));
+          }));
+    };
   }
 
   void openPopupMenuSorterRecipients(BuildContext context, Sorter currentSorter) {
