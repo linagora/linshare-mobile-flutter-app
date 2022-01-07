@@ -387,6 +387,7 @@ class AppModule {
     getIt.registerFactory(() => RenameSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => AddSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => UpdateSharedSpaceMemberInteractor(getIt<SharedSpaceMemberRepository>()));
+    getIt.registerFactory(() => UpdateDriveMemberInteractor(getIt<SharedSpaceMemberRepository>()));
     getIt.registerFactory(() => GetAllSharedSpaceRolesInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RenameDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => SearchReceivedSharesInteractor());
