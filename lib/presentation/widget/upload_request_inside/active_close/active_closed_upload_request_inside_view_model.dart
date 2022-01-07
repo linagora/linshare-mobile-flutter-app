@@ -162,7 +162,6 @@ class ActiveCloseUploadRequestInsideViewModel extends UploadRequestInsideViewMod
               store.dispatch(ActiveClosedUploadRequestEntryInsideGetSorterAction(Sorter.fromOrderScreen(OrderScreen.uploadRequestFileActiveClosed)));
           },
           (success) {
-            print('$success');
             store.dispatch(ActiveClosedUploadRequestEntryInsideGetSorterAction(success is GetSorterSuccess
               ? success.sorter
               : Sorter.fromOrderScreen(OrderScreen.uploadRequestFileActiveClosed)));
