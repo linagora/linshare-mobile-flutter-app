@@ -256,6 +256,8 @@ class _ActiveClosedUploadRequestGroupWidgetState extends State<ActiveClosedUploa
     final uploadRequestFunctionality = state.getAllEnabledUploadRequest();
 
     return [
+      _uploadRequestWidgetCommon.viewDetailsUploadRequestGroupAction(context, uploadRequestGroup,
+          (group) => _model.goToUploadRequestGroupDetails(group)),
       if(uploadRequestGroup.status == UploadRequestStatus.ENABLED) _addRecipientsAction(uploadRequestGroup),
       if(uploadRequestGroup.status == UploadRequestStatus.ENABLED) _editUploadRequestGroupAction(uploadRequestGroup, uploadRequestFunctionality)
     ];

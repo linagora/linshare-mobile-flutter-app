@@ -210,7 +210,10 @@ class _ArchivedUploadRequestGroupWidgetState extends State<ArchivedUploadRequest
   }
 
   List<Widget> _contextMenuActionTiles(UploadRequestGroup uploadRequestGroup) {
-    return [];
+    return [
+      _uploadRequestWidgetCommon.viewDetailsUploadRequestGroupAction(context, uploadRequestGroup,
+        (group) => _model.goToUploadRequestGroupDetails(group)),
+    ];
   }
 
   List<Widget> _multipleSelectionActions(List<UploadRequestGroup> allSelectedGroups) {
