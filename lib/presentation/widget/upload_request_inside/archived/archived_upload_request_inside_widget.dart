@@ -163,12 +163,21 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
   Widget _buildMenuSorter() {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
-      builder: (context, appState) => appState.archivedUploadRequestInsideState.isIndividualRecipients() && !appState.uiState.isInSearchState()
-        ? OrderByButtonBuilder(context, appState.archivedUploadRequestInsideState.recipientSorter)
-            .onOpenOrderMenuAction((currentSorter) => _viewModel.openPopupMenuSorterRecipients(context, currentSorter))
-            .build()
+      builder: (context, appState) => !appState.uiState.isInSearchState()
+        ? _buildSorterArchivedWidget(context, appState)
         : SizedBox.shrink()
     );
+  }
+
+  Widget _buildSorterArchivedWidget(BuildContext context, AppState appState) {
+    if (appState.archivedUploadRequestInsideState.uploadRequestDocumentType == UploadRequestDocumentType.files) {
+      return OrderByButtonBuilder(context, appState.archivedUploadRequestInsideState.fileSorter)
+        .onOpenOrderMenuAction((currentSorter) => _viewModel.openPopupMenuSorterFile(context, currentSorter))
+        .build();
+    }
+    return OrderByButtonBuilder(context, appState.archivedUploadRequestInsideState.recipientSorter)
+        .onOpenOrderMenuAction((currentSorter) => _viewModel.openPopupMenuSorterRecipients(context, currentSorter))
+        .build();
   }
 
   Widget _buildTitleTopBar() {
