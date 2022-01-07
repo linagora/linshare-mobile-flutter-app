@@ -2692,6 +2692,92 @@ class AppLocalizations {
         name: 'recipient'
     );
   }
+
+  String get recipients {
+    return Intl.message(
+        'Recipients',
+        name: 'recipients'
+    );
+  }
+
+  String get meta_data {
+    return Intl.message(
+        'Meta-data',
+        name: 'meta_data'
+    );
+  }
+
+  String number_of_uploaded_files(int count) {
+    return Intl.message(
+        '$count file uploaded',
+        name: 'number_of_uploaded_files',
+        args: [count]
+    );
+  }
+
+  String upload_request_group_modification_date(String date) {
+    return Intl.message(
+        'Updated at $date',
+        name: 'upload_request_group_modification_date',
+        args: [date]
+    );
+  }
+
+  String get owner {
+    return Intl.message(
+        'Owner',
+        name: 'owner'
+    );
+  }
+
+  String get view {
+    return Intl.message(
+      'View',
+      name: 'view',
+    );
+  }
+
+  String get created_at {
+    return Intl.message(
+      'Created at',
+      name: 'created_at',
+    );
+  }
+
+  String get activated_at {
+    return Intl.message(
+      'Activated at',
+      name: 'activated_at',
+    );
+  }
+
+  String get collective {
+    return Intl.message(
+      'Collective',
+      name: 'collective',
+    );
+  }
+
+  String get max_total_file_size {
+    return Intl.message(
+      'Max total file size',
+      name: 'max_total_file_size',
+    );
+  }
+
+  String get max_size_per_file {
+    return Intl.message(
+      'Max size per file',
+      name: 'max_size_per_file',
+    );
+  }
+
+  String get notification_language_meta_data {
+    return Intl.message(
+      'Notification language',
+      name: 'notification_language_meta_data',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

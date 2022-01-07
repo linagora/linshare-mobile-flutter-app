@@ -37,6 +37,7 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/multiple_selection_bar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/multiple_selection_bar/uploadrequest_group_multiple_selection_action_builder.dart';
 
@@ -67,4 +68,13 @@ class UploadRequestGroupCommonView {
       groups)
     .onActionClick((entries) => onActionClick.call())
     .build();
+
+  Widget viewDetailsUploadRequestGroupAction(BuildContext context, UploadRequestGroup group, Function(UploadRequestGroup) onActionClick) {
+    return SimpleContextMenuActionBuilder(
+        Key('upload_request_group_details_context_menu_action'),
+        SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).details)
+      .onActionClick((data) => onActionClick.call(group))
+      .build();
+  }
 }

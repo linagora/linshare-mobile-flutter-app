@@ -226,6 +226,8 @@ class _CreatedUploadRequestGroupWidgetState extends State<CreatedUploadRequestGr
     final uploadRequestFunctionality = state.getAllEnabledUploadRequest();
 
     return [
+      _uploadRequestWidgetCommon.viewDetailsUploadRequestGroupAction(context, uploadRequestGroup,
+          (group) => _model.goToUploadRequestGroupDetails(group)),
       _addRecipientsAction(uploadRequestGroup),
       _editUploadRequestGroupAction(uploadRequestGroup, uploadRequestFunctionality)
     ];
