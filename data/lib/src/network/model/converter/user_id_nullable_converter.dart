@@ -17,8 +17,7 @@
 // http://www.linshare.org, between linagora.com and Linagora, and (iii) refrain from
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
-// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-//
+// <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
 // for more details.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -26,59 +25,20 @@
 // more details.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
-// <http://www.gnu.org/licenses
-// for the GNU Affero General Public License version
+// <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
+//  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
+//  the Additional Terms applicable to LinShare software.
 //
-// 3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf
-// for
-//
-// the Additional Terms applicable to LinShare software.
 
-import 'dart:convert';
-
-import 'package:dartz/dartz.dart';
-import 'package:data/src/network/model/converter/user_id_nullable_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class GenericUserDto {
-  String? _mail;
-    String? get mail => _mail;
+class UserIdNullableConverter implements JsonConverter<UserId?, String?> {
+  const UserIdNullableConverter();
 
-  Option<String> _lastName = none();
-  Option<String> get lastName => _lastName;
+  @override
+  UserId? fromJson(String? json) => json != null ? UserId(json) : null;
 
-  Option<String> _firstName = none();
-  Option<String> get firstName => _firstName;
-
-  UserId? userId;
-
-  GenericUserDto(String mail, {Option<String>? lastName, Option<String>? firstName, UserId? userId}) {
-    _mail = mail;
-    _lastName = lastName ?? none();
-    _firstName = firstName ?? none();
-    this.userId = userId;
-  }
-
-  factory GenericUserDto.fromJson(Map<String, dynamic> json) {
-    return GenericUserDto(
-      json['mail'] as String,
-      lastName: optionOf(json['lastName'] as String?),
-      firstName: optionOf(json['firstName'] as String?),
-      userId: UserIdNullableConverter().fromJson(json['uuid'] as String?)
-    );
-  }
-
-  Map<String, dynamic> toJson() =>
-    {
-      jsonEncode('mail'): jsonEncode(_mail),
-      jsonEncode('lastName'): jsonEncode(lastName.fold(() => '', (lastName) => lastName)),
-      jsonEncode('firstName'): jsonEncode(firstName.fold(() => '', (firstName) => firstName)),
-      jsonEncode('uuid'): jsonEncode(userId?.uuid)
-    };
-}
-
-extension GenericUserDtoExtension on GenericUserDto {
-  GenericUser toGenericUser() {
-    return GenericUser(_mail ?? '', firstName: _firstName, lastName: _lastName, userId: userId);
-  }
+  @override
+  String? toJson(UserId? object) => object?.uuid;
 }
