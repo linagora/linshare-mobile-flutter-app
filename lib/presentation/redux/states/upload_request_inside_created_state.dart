@@ -47,6 +47,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
   final List<SelectableElement<UploadRequestEntry>> uploadRequestEntries;
   final SelectMode selectMode;
   final Sorter recipientSorter;
+  final Sorter fileSorter;
   final UploadRequestDocumentType uploadRequestDocumentType;
   final UploadRequestGroup? uploadRequestGroup;
   final UploadRequest? selectedUploadRequest;
@@ -57,6 +58,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
       this.uploadRequestEntries,
       this.selectMode,
       this.recipientSorter,
+      this.fileSorter,
       this.uploadRequestDocumentType,
       this.uploadRequestGroup,
       this.selectedUploadRequest,
@@ -69,6 +71,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         [],
         SelectMode.INACTIVE,
         Sorter.fromOrderScreen(OrderScreen.uploadRequestRecipientCreated),
+        Sorter.fromOrderScreen(OrderScreen.uploadRequestFileCreated),
         UploadRequestDocumentType.recipients,
         null,
         null);
@@ -82,6 +85,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
       uploadRequestEntries,
       selectMode,
       recipientSorter,
+      fileSorter,
       uploadRequestDocumentType,
       uploadRequestGroup,
       selectedUploadRequest
@@ -96,6 +100,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         selectMode,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -109,6 +114,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
       uploadRequestEntries,
       selectMode,
       recipientSorter,
+      fileSorter,
       newUploadRequestArguments.documentType,
       newUploadRequestArguments.uploadRequestGroup,
       newUploadRequestArguments.selectedUploadRequest
@@ -132,6 +138,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         selectMode,
         recipientSorter,
+        fileSorter,
         UploadRequestDocumentType.recipients,
         uploadRequestGroup,
         selectedUploadRequest);
@@ -150,18 +157,19 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
           .toList(),
         selectMode,
         recipientSorter,
+        fileSorter,
         UploadRequestDocumentType.files, uploadRequestGroup, selectedUploadRequest);
   }
 
   CreatedUploadRequestInsideState setSelectedUploadRequest(
       {required UploadRequest selectedUploadRequest}) {
-    return CreatedUploadRequestInsideState(viewState, uploadRequests, uploadRequestEntries, selectMode, recipientSorter,
+    return CreatedUploadRequestInsideState(viewState, uploadRequests, uploadRequestEntries, selectMode, recipientSorter, fileSorter,
         UploadRequestDocumentType.files, uploadRequestGroup, selectedUploadRequest);
   }
 
   @override
   CreatedUploadRequestInsideState startLoadingState() {
-    return CreatedUploadRequestInsideState(Right(LoadingState()), uploadRequests, uploadRequestEntries, selectMode, recipientSorter,
+    return CreatedUploadRequestInsideState(Right(LoadingState()), uploadRequests, uploadRequestEntries, selectMode, recipientSorter, fileSorter,
         uploadRequestDocumentType, uploadRequestGroup, selectedUploadRequest);
   }
 
@@ -173,6 +181,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         SelectMode.ACTIVE,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest);
@@ -187,7 +196,8 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
           .toList(),
         SelectMode.INACTIVE,
         recipientSorter,
-        uploadRequestDocumentType, 
+        fileSorter,
+        uploadRequestDocumentType,
         uploadRequestGroup, 
         selectedUploadRequest
     );
@@ -202,6 +212,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
           .toList(),
         SelectMode.ACTIVE,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -217,6 +228,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
           .toList(),
         SelectMode.ACTIVE,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -231,6 +243,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         SelectMode.ACTIVE,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest);
@@ -244,6 +257,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         SelectMode.INACTIVE,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -258,6 +272,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         SelectMode.ACTIVE,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -272,6 +287,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         SelectMode.ACTIVE,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -291,6 +307,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
             : SelectableElement<UploadRequestEntry>(entry, SelectMode.INACTIVE)).toList(),
         selectMode,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -310,6 +327,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         selectMode,
         recipientSorter,
+        fileSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -330,6 +348,28 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequestEntries,
         selectMode,
         newSorter,
+        fileSorter,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
+  }
+
+  CreatedUploadRequestInsideState setUploadRequestsFilesCreatedWithSort({required List<UploadRequestEntry> newUploadRequestsEntries, required Sorter newSorter}) {
+    final selectedElements = uploadRequests
+        .where((element) => element.selectMode == SelectMode.ACTIVE)
+        .map((element) => element.element)
+        .toList();
+
+    return CreatedUploadRequestInsideState(
+        viewState,
+        uploadRequests,
+        newUploadRequestsEntries.map((uploadRequestEntry) => selectedElements.contains(uploadRequestEntry)
+            ? SelectableElement<UploadRequestEntry>(uploadRequestEntry, SelectMode.ACTIVE)
+            : SelectableElement<UploadRequestEntry>(uploadRequestEntry, SelectMode.INACTIVE)).toList(),
+        selectMode,
+        recipientSorter,
+        newSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
         selectedUploadRequest
@@ -342,6 +382,21 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
         uploadRequests,
         uploadRequestEntries,
         selectMode,
+        newSorter,
+        fileSorter,
+        uploadRequestDocumentType,
+        uploadRequestGroup,
+        selectedUploadRequest
+    );
+  }
+
+  CreatedUploadRequestInsideState setSorterUploadRequestFiles({required Sorter newSorter}) {
+    return CreatedUploadRequestInsideState(
+        viewState,
+        uploadRequests,
+        uploadRequestEntries,
+        selectMode,
+        recipientSorter,
         newSorter,
         uploadRequestDocumentType,
         uploadRequestGroup,
@@ -364,6 +419,7 @@ class CreatedUploadRequestInsideState extends LinShareState with EquatableMixin 
       uploadRequestEntries,
       selectMode,
       recipientSorter,
+      fileSorter,
       uploadRequestDocumentType,
       uploadRequestGroup,
       selectedUploadRequest

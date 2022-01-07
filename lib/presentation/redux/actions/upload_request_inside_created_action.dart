@@ -160,3 +160,18 @@ class CreatedUploadRequestInsideSortAction extends ActionOffline {
 
   CreatedUploadRequestInsideSortAction(this.uploadRequests, this.sorter);
 }
+
+@immutable
+class CreatedUploadRequestEntryInsideGetSorterAction extends ActionOffline {
+  final Sorter sorter;
+
+  CreatedUploadRequestEntryInsideGetSorterAction(this.sorter);
+}
+
+@immutable
+class CreatedUploadRequestEntryInsideSortAction extends ActionOffline {
+  final List<UploadRequestEntry> uploadRequestEntries;
+  final Sorter sorter;
+
+  CreatedUploadRequestEntryInsideSortAction(this.uploadRequestEntries, this.sorter);
+}
