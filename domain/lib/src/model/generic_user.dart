@@ -35,6 +35,7 @@
 // the Additional Terms applicable to LinShare software.
 
 import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class GenericUser with EquatableMixin {
@@ -47,14 +48,17 @@ class GenericUser with EquatableMixin {
   Option<String>? _firstName = none();
   Option<String>? get firstName => _firstName;
 
-  GenericUser(String mail, {Option<String>? lastName, Option<String>? firstName}) {
+  UserId? userId;
+
+  GenericUser(String mail, {Option<String>? lastName, Option<String>? firstName, UserId? userId}) {
     _mail = mail;
     _lastName = lastName;
     _firstName = firstName;
+    this.userId = userId;
   }
 
   @override
-  List<Object?> get props => [_mail, _lastName, _firstName];
+  List<Object?> get props => [_mail, _lastName, _firstName, userId];
 
   @override
   bool get stringify => true;
