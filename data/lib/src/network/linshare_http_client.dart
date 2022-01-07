@@ -803,4 +803,12 @@ class LinShareHttpClient {
         data: createDriveBodyRequest.toJson().toString());
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
+
+  Future<UploadRequestGroupResponse> getUploadRequestGroup(UploadRequestGroupId uploadRequestGroupId) async {
+    final resultJson = await _dioClient.get(
+        Endpoint.uploadRequestGroups
+            .withPathParameter(uploadRequestGroupId.uuid)
+            .generateEndpointPath());
+    return UploadRequestGroupResponse.fromJson(resultJson);
+  }
 }
