@@ -127,4 +127,6 @@ extension AppColor on Color {
   static const loginLabelInputColor = Color(0xff6D7885);
   static const disableColor = Color(0xffbbbbbb);
   static const workgroupMemberTypeColor = Color(0xffeeeeee);
+  static const uploadRequestGroupDetailHeaderColor = Color(0xff218de0);
+  static const uploadRequestGroupOwnerNameColor = Color(0xff070707);
 }
