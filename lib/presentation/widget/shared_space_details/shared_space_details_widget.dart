@@ -48,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_m
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/drive_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
@@ -341,6 +342,11 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           member.nestedRole?.name.getWorkgroupRoleNameInsideDrive(context) ?? AppLocalizations.of(context).unknown_role,
           tileColor: Colors.white,
           userCurrentDriveRole: sharedSpace.sharedSpaceRole.name,
+          onSelectedRoleDriveCallback: () => selectDriveMemberRoleBottomSheet(
+              context,
+              member.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
+              sharedSpace,
+              member),
           onDeleteMemberCallback: () => confirmDeleteMember(
             context,
             member.account?.name ?? '',
@@ -452,5 +458,28 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           AppLocalizations.of(context).delete,
             (_) => _model.deleteMember(sharedSpace, sharedSpaceMemberId))
         .show(context);
+  }
+
+  void selectDriveMemberRoleBottomSheet(
+      BuildContext context,
+      SharedSpaceRoleName selectedRole,
+      SharedSpaceNodeNested drive,
+      SharedSpaceMember member
+  ) {
+    SelectRoleModalSheetBuilder(
+          key: Key('select_role_on_drive_member_details'),
+          selectedRole: selectedRole,
+          listRoles: [
+            SharedSpaceRoleName.DRIVE_READER,
+            SharedSpaceRoleName.DRIVE_ADMIN,
+            SharedSpaceRoleName.DRIVE_WRITER
+          ])
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_drive_member_header'))
+          .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
+          .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
+          .addLabel(AppLocalizations.of(context).role_in_this_drive)
+          .build())
+      .onConfirmAction((role) => _model.changeDriveMemberRole(drive, member, role))
+      .show(context);
   }
 }

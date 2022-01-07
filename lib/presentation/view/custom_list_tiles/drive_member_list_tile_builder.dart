@@ -37,6 +37,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 
 typedef DeleteDriveMemberCallback = void Function();
+typedef SelectRoleDriveCallback = void Function();
 
 class DriveMemberListTileBuilder {
   final String _name;
@@ -48,6 +49,7 @@ class DriveMemberListTileBuilder {
   Color? tileColor;
 
   final DeleteDriveMemberCallback? onDeleteMemberCallback;
+  final SelectRoleDriveCallback? onSelectedRoleDriveCallback;
 
   DriveMemberListTileBuilder(
     this._name,
@@ -58,6 +60,7 @@ class DriveMemberListTileBuilder {
       this.tileColor,
       this.userCurrentDriveRole,
       this.onDeleteMemberCallback,
+      this.onSelectedRoleDriveCallback,
     }
   );
 
@@ -92,18 +95,7 @@ class DriveMemberListTileBuilder {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _driveRoleName,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontStyle: FontStyle.normal,
-                        color: AppColor.workgroupNodesSurfingBackTitleColor)),
-                  ])),
+              Expanded(child: _buildDriveMemberTypeLabel()),
               Expanded(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -122,9 +114,37 @@ class DriveMemberListTileBuilder {
     );
   }
 
+  Widget _buildDriveMemberTypeLabel() {
+    return GestureDetector(
+      onTap: () => _handleUpdateRoleDriveTap(),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+              _driveRoleName,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal,
+                  color: AppColor.workgroupNodesSurfingBackTitleColor)),
+          SharedSpaceOperationRole.editDriveMemberRoles.contains(userCurrentDriveRole)
+              ? Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
+              : SizedBox.shrink(),
+        ],
+      ),
+    );
+  }
+
   void _handleDeleteMemberTap() {
     if (onDeleteMemberCallback != null) {
       onDeleteMemberCallback?.call();
+    }
+  }
+
+  void _handleUpdateRoleDriveTap() {
+    if (onSelectedRoleDriveCallback != null &&
+        SharedSpaceOperationRole.editDriveMemberRoles.contains(userCurrentDriveRole)) {
+      onSelectedRoleDriveCallback?.call();
     }
   }
 }
