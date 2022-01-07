@@ -30,15 +30,23 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class SharedSpaceMemberRepository {
-  Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId);
+class UpdateDriveMemberRequest extends Equatable {
+  final AccountId account;
+  final SharedSpaceId node;
+  final SharedSpaceRoleId role;
+  final SharedSpaceRoleId nestedRole;
+  final LinShareNodeType type;
 
-  Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request);
+  UpdateDriveMemberRequest(
+    this.account,
+    this.node,
+    this.role,
+    this.nestedRole,
+    this.type,
+  );
 
-  Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request);
-
-  Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request);
-
-  Future<SharedSpaceMember> deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId);
+  @override
+  List<Object> get props => [account, node, role, nestedRole, type];
 }
