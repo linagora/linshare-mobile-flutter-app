@@ -457,13 +457,13 @@ export 'src/usecases/upload_request_group/add_new_upload_request_interactor.dart
 export 'src/usecases/upload_request_group/add_recipients_upload_request_group_interactor.dart';
 export 'src/usecases/upload_request_group/edit_upload_request_group_interactor.dart';
 export 'src/usecases/upload_request_group/get_all_upload_request_groups_interactor.dart';
+export 'src/usecases/upload_request_group/get_upload_request_group_interactor.dart';
 export 'src/usecases/upload_request_group/update_upload_request_group_status_interactor.dart';
 export 'src/usecases/upload_request_group/update_upload_request_multiple_group_status_interactor.dart';
 export 'src/usecases/upload_request_group/upload_request_group_exception.dart';
 export 'src/usecases/upload_request_group/upload_request_group_view_state.dart';
 export 'src/usecases/upload_request_entry/remove_multiple_upload_request_entry_interactor.dart';
 export 'src/usecases/upload_request_entry/remove_upload_request_entry_interactor.dart';
-export 'src/usecases/upload_request_group/edit_upload_request_group_interactor.dart';
 export 'src/usecases/authentication/get_oidc_configuration_interactor.dart';
 export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive_view_state.dart';
 export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive_interactor.dart';

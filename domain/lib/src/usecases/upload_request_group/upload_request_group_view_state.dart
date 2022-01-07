@@ -156,3 +156,21 @@ class EditUploadRequestGroupFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class GetUploadRequestGroupViewState extends ViewState {
+  final UploadRequestGroup group;
+
+  GetUploadRequestGroupViewState(this.group);
+
+  @override
+  List<Object> get props => [group];
+}
+
+class GetUploadRequestGroupFailure extends FeatureFailure {
+  final exception;
+
+  GetUploadRequestGroupFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
