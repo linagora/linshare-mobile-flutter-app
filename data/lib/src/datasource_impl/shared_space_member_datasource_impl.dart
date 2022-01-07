@@ -114,4 +114,22 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
       });
     });
   }
+
+  @override
+  Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request) {
+    return Future.sync(() async {
+      final driveMember = await _linShareHttpClient.updateRoleDriveMember(sharedSpaceId, request);
+      return driveMember.toSharedSpaceMember();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw SharedSpaceNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
+      });
+    });
+  }
 }

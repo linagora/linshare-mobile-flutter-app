@@ -75,6 +75,7 @@ import 'model/request/add_upload_body_request.dart';
 import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
 import 'model/request/update_shared_space_member_body_request.dart';
+import 'model/request/update_drive_member_body_request.dart';
 import 'model/response/document_details_response.dart';
 import 'model/response/upload_request_response.dart';
 import 'model/response/user_response.dart';
@@ -472,6 +473,18 @@ class LinShareHttpClient {
             .withPathParameter(sharedSpaceId.uuid)
             .withPathParameter('members')
             .withPathParameter(request.account.uuid)
+            .generateEndpointPath(),
+        data: request.toBodyRequest().toJson().toString());
+    return SharedSpaceMemberResponse.fromJson(resultJson);
+  }
+
+  Future<SharedSpaceMemberResponse> updateRoleDriveMember(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request) async {
+    final resultJson = await _dioClient.put(
+        Endpoint.sharedSpaces
+            .withPathParameter(sharedSpaceId.uuid)
+            .withPathParameter('members')
+            .withPathParameter(request.account.uuid)
+            .withQueryParameters([BooleanQueryParameter('force', false)])
             .generateEndpointPath(),
         data: request.toBodyRequest().toJson().toString());
     return SharedSpaceMemberResponse.fromJson(resultJson);
