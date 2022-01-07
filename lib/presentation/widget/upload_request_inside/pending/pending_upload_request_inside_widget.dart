@@ -48,8 +48,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_created_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/common/common_view.dart';
@@ -187,12 +187,21 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
   Widget _buildMenuSorterPending() {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
-      builder: (context, appState) => appState.createdUploadRequestInsideState.isIndividualRecipients() && !appState.uiState.isInSearchState()
-        ? OrderByButtonBuilder(context, appState.createdUploadRequestInsideState.recipientSorter)
-            .onOpenOrderMenuAction((currentSorter) => _viewModel.openPopupMenuSorterRecipientsPending(context, currentSorter))
-            .build()
+      builder: (context, appState) => !appState.uiState.isInSearchState()
+        ? _buildSorterPendingWidget(context, appState)
         : SizedBox.shrink()
     );
+  }
+
+  Widget _buildSorterPendingWidget(BuildContext context, AppState appState) {
+    if (appState.createdUploadRequestInsideState.uploadRequestDocumentType == UploadRequestDocumentType.files) {
+      return OrderByButtonBuilder(context, appState.createdUploadRequestInsideState.fileSorter)
+        .onOpenOrderMenuAction((currentSorter) => _viewModel)
+        .build();
+    }
+    return OrderByButtonBuilder(context, appState.createdUploadRequestInsideState.recipientSorter)
+      .onOpenOrderMenuAction((currentSorter) => _viewModel.openPopupMenuSorterRecipientsPending(context, currentSorter))
+      .build();
   }
 
   Widget _buildTitleTopBar() {
