@@ -29,36 +29,51 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/shared_space_member_datasource.dart';
+import 'package:data/src/network/model/converter/account_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_role_id_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'dart:convert';
 
-class SharedSpaceMemberRepositoryImpl implements SharedSpaceMemberRepository {
-  final SharedSpaceMemberDataSource _sharedSpaceMemberDataSource;
+part 'update_drive_member_body_request.g.dart';
 
-  SharedSpaceMemberRepositoryImpl(this._sharedSpaceMemberDataSource);
+@JsonSerializable()
+@AccountIdConverter()
+@SharedSpaceIdConverter()
+@SharedSpaceRoleIdConverter()
+class UpdateDriveMemberBodyRequest with EquatableMixin {
+  final AccountId account;
+  final SharedSpaceId node;
+  final SharedSpaceRoleId role;
+  final SharedSpaceRoleId nestedRole;
+  final LinShareNodeType type;
+
+  UpdateDriveMemberBodyRequest(
+    this.account,
+    this.node,
+    this.role,
+    this.nestedRole,
+    this.type,
+  );
+
+  factory UpdateDriveMemberBodyRequest.fromJson(Map<String, dynamic> json) => _$UpdateDriveMemberBodyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('account'): { jsonEncode('uuid'): jsonEncode(account.uuid) },
+    jsonEncode('node'): { jsonEncode('uuid'): jsonEncode(node.uuid) },
+    jsonEncode('role'): { jsonEncode('uuid'): jsonEncode(role.uuid) },
+    jsonEncode('nestedRole'): { jsonEncode('uuid'): jsonEncode(nestedRole.uuid) },
+    jsonEncode('type'): jsonEncode(type.value),
+  };
 
   @override
-  Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId) {
-    return _sharedSpaceMemberDataSource.getMembers(sharedSpaceId);
-  }
+  List<Object> get props => [account, node, role, nestedRole, type];
+}
 
-  @override
-  Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request) {
-    return _sharedSpaceMemberDataSource.addMember(sharedSpaceId, request);
-  }
-
-  @override
-  Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request) {
-    return _sharedSpaceMemberDataSource.updateMemberRole(sharedSpaceId, request);
-  }
-
-  @override
-  Future<SharedSpaceMember> deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId) {
-    return _sharedSpaceMemberDataSource.deleteMember(sharedSpaceId, sharedSpaceMemberId);
-  }
-
-  @override
-  Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request) {
-    return _sharedSpaceMemberDataSource.updateDriveMemberRole(sharedSpaceId, request);
+extension UpdateDriveMemberExtension on UpdateDriveMemberRequest {
+  UpdateDriveMemberBodyRequest toBodyRequest() {
+    return UpdateDriveMemberBodyRequest(account, node, role, nestedRole, type);
   }
 }
