@@ -39,6 +39,7 @@ export 'src/extension/biometric_authentication_timeout_extension.dart';
 export 'src/extension/shared_space_node_nested_extensions.dart';
 export 'src/extension/work_group_document_extensions.dart';
 export 'src/extension/work_group_node_extensions.dart';
+export 'src/extension/list_upload_request_entry_extension.dart';
 
 // model
 export 'src/model/account/account.dart';
