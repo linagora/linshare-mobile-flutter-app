@@ -415,6 +415,7 @@ class WidgetModule {
         getIt.get<SharedSpaceActivitiesInteractor>(),
         getIt.get<GetAllSharedSpaceRolesInteractor>(),
         getIt.get<UpdateSharedSpaceMemberInteractor>(),
+        getIt.get<UpdateDriveMemberInteractor>(),
         getIt.get<DeleteSharedSpaceMemberInteractor>(),
         getIt.get<EnableVersioningWorkgroupInteractor>(),
     ));

@@ -99,8 +99,9 @@ class SharedSpaceUnselectAllSharedSpacesAction extends ActionOffline {
 @immutable
 class SharedSpaceGetSharedSpaceRolesListAction extends ActionOffline {
   final List<SharedSpaceRole> rolesList;
+  final List<SharedSpaceRole> driveRolesList;
 
-  SharedSpaceGetSharedSpaceRolesListAction(this.rolesList);
+  SharedSpaceGetSharedSpaceRolesListAction(this.rolesList, this.driveRolesList);
 }
 
 @immutable

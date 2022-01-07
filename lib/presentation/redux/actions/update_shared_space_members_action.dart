@@ -46,3 +46,10 @@ class UpdateSharedSpaceMembersAction extends ActionOnline {
 class CleanUpdateSharedSpaceMembersStateAction extends ActionOffline {
   CleanUpdateSharedSpaceMembersStateAction();
 }
+
+@immutable
+class UpdateDriveMembersAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+
+  UpdateDriveMembersAction(this.viewState);
+}
