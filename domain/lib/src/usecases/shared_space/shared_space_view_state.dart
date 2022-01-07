@@ -591,3 +591,20 @@ class RenameDriveFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class UpdateDriveMemberViewState extends ViewState {
+
+  UpdateDriveMemberViewState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateDriveMemberFailure extends FeatureFailure {
+  final exception;
+
+  UpdateDriveMemberFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
