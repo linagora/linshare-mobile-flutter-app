@@ -60,6 +60,7 @@ import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_destination.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_arguments.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -267,4 +268,10 @@ abstract class UploadRequestGroupTabViewModel extends BaseViewModel {
     }
   }
 
+  void goToUploadRequestGroupDetails(UploadRequestGroup group) {
+    appNavigation.popBack();
+    appNavigation.push(
+      RoutePaths.uploadRequestGroupDetails,
+      arguments: UploadRequestGroupDetailsArguments(group));
+  }
 }
