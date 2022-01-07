@@ -82,6 +82,10 @@ extension SorterExtension on Sorter {
       case OrderScreen.uploadRequestRecipientActiveClosed:
       case OrderScreen.uploadRequestRecipientArchived:
         return _getListSorterUploadRequestRecipient();
+      case OrderScreen.uploadRequestFileCreated:
+      case OrderScreen.uploadRequestFileActiveClosed:
+      case OrderScreen.uploadRequestFileArchived:
+        return _getListSorterUploadRequestFile();
     }
   }
 
@@ -157,6 +161,15 @@ extension SorterExtension on Sorter {
       Sorter(orderScreen, OrderBy.type, OrderType.descending),
       Sorter(orderScreen, OrderBy.activationDate, OrderType.descending),
       Sorter(orderScreen, OrderBy.expirationDate, OrderType.descending),
+    ];
+  }
+
+  List<Sorter> _getListSorterUploadRequestFile() {
+    return <Sorter>[
+      Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.name, OrderType.descending),
+      Sorter(orderScreen, OrderBy.fileSize, OrderType.descending)
     ];
   }
 }

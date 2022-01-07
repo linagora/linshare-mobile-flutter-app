@@ -43,6 +43,9 @@ enum OrderScreen {
   uploadRequestRecipientCreated,
   uploadRequestRecipientActiveClosed,
   uploadRequestRecipientArchived,
+  uploadRequestFileCreated,
+  uploadRequestFileActiveClosed,
+  uploadRequestFileArchived,
 }
 
 extension OrderScreenExtension on OrderScreen {

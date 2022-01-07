@@ -58,6 +58,8 @@ class SortInteractor {
         return Right<Failure, Success>(UploadRequestGroupViewState(filesSorted.cast<UploadRequestGroup>()));
       } else if (filesSorted is List<UploadRequest>) {
         return Right<Failure, Success>(UploadRequestViewState(filesSorted.cast<UploadRequest>()));
+      } else if (filesSorted is List<UploadRequestEntry>) {
+        return Right<Failure, Success>(UploadRequestEntryViewState(filesSorted.cast<UploadRequestEntry>()));
       } else {
         return Right<Failure, Success>(SortFileSuccess(filesSorted));
       }
