@@ -62,4 +62,9 @@ class UploadRequestGroupRepositoryImpl implements UploadRequestGroupRepository {
   Future<UploadRequestGroup> editUploadRequest(UploadRequestGroupId uploadRequestGroupId, EditUploadRequest request) {
     return _uploadRequestGroupDataSource.editUploadRequest(uploadRequestGroupId, request);
   }
+
+  @override
+  Future<UploadRequestGroup> getUploadRequestGroup(UploadRequestGroupId uploadRequestGroupId) {
+    return _uploadRequestGroupDataSource.getUploadRequestGroup(uploadRequestGroupId);
+  }
 }
