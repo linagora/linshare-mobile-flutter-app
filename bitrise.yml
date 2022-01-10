@@ -76,7 +76,7 @@ workflows:
         is_always_run: true
     - set-xcode-build-number@1:
         inputs:
-        - build_short_version_string: 2.2.2
+        - build_short_version_string: 2.3.0
         - build_version_offset: alpha$BITRISE_BUILD_NUMBER
         - plist_path: "$BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/Info.plist"
     - flutter-build@0:
@@ -122,3 +122,4 @@ app:
   - opts:
       is_expand: false
     SAAS_AVAILABLE: 'false'
+
