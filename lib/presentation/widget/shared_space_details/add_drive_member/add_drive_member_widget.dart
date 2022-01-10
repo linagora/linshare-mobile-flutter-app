@@ -48,6 +48,7 @@ import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/drive_m
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_with_action_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_viewmodel.dart';
 
@@ -100,23 +101,25 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
               style: TextStyle(fontSize: 24, color: Colors.white)),
           backgroundColor: AppColor.primaryColor,
         ),
-        body: SafeArea(
-          child: Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                _buildLoadingView(),
-                StoreConnector<AppState, AddDriveMemberState>(
-                    converter: (store) => store.state.addDriveMemberState,
-                    builder: (_, state) => state.drive != null
-                        ? _addMemberWidget(state.drive!, state.membersList)
-                        : SizedBox.shrink()),
-                StoreConnector<AppState, AddDriveMemberState>(
-                    converter: (store) => store.state.addDriveMemberState,
-                    builder: (_, state) => state.drive != null
-                        ? Expanded(child: _membersListWidget(state.drive!, state.membersList))
-                        : SizedBox.shrink()),
-              ]),
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                  children: [
+                    _buildLoadingView(),
+                    StoreConnector<AppState, AddDriveMemberState>(
+                        converter: (store) => store.state.addDriveMemberState,
+                        builder: (_, state) => state.drive != null
+                            ? _addMemberWidget(state.drive!, state.membersList)
+                            : SizedBox.shrink()),
+                    StoreConnector<AppState, AddDriveMemberState>(
+                        converter: (store) => store.state.addDriveMemberState,
+                        builder: (_, state) => state.drive != null
+                            ? _membersListWidget(state.drive!, state.membersList)
+                            : SizedBox.shrink()),
+                  ]),
+            ),
           ),
         )
     );
@@ -315,9 +318,9 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
                   color: AppColor.addSharedSpaceMemberTitleColor,
                   fontSize: 16,
                   fontWeight: FontWeight.w500))),
-      Expanded(
-        child: ListView.builder(
+      ListView.builder(
           shrinkWrap: true,
+          primary: false,
           itemCount: members.length,
           itemBuilder: (context, index) {
             var member = members[index];
@@ -328,6 +331,16 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
               member.nestedRole?.name.getWorkgroupRoleNameInsideDrive(context) ?? AppLocalizations.of(context).unknown_role,
               tileColor: Colors.white,
               userCurrentDriveRole: drive.sharedSpaceRole.name,
+              onSelectedRoleDriveCallback: () => selectDriveMemberRoleBottomSheet(
+                  context,
+                  member.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
+                  drive,
+                  member),
+              onSelectedRoleWorkgroupCallback: () => selectWorkgroupRoleInsideDriveBottomSheet(
+                  context,
+                  member.nestedRole?.name ?? SharedSpaceRoleName.READER,
+                  drive,
+                  member),
               onDeleteMemberCallback: () => _confirmDeleteMember(
                 context,
                 member.account?.name ?? '',
@@ -335,7 +348,8 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
                 drive.sharedSpaceId,
                 member.sharedSpaceMemberId)
             ).build();
-          }))
+          }
+      )
     ]);
   }
 
@@ -376,5 +390,54 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
         .onConfirmAction(AppLocalizations.of(context).delete,
             (_) => _model.deleteMember(sharedSpaceId, sharedSpaceMemberId))
         .show(context);
+  }
+
+  void selectDriveMemberRoleBottomSheet(
+      BuildContext context,
+      SharedSpaceRoleName selectedRole,
+      SharedSpaceNodeNested drive,
+      SharedSpaceMember member) {
+    SelectRoleModalSheetBuilder(
+        key: Key('select_role_on_drive_member_details'),
+        selectedRole: selectedRole,
+        listRoles: [
+          SharedSpaceRoleName.DRIVE_READER,
+          SharedSpaceRoleName.DRIVE_ADMIN,
+          SharedSpaceRoleName.DRIVE_WRITER
+        ])
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_drive_member_header'))
+        .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
+        .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
+        .addLabel(AppLocalizations.of(context).role_in_this_drive)
+        .build())
+      .onConfirmAction((role) => _model.changeDriveMemberRole(drive, member, role))
+      .show(context);
+  }
+
+  void selectWorkgroupRoleInsideDriveBottomSheet(
+      BuildContext context,
+      SharedSpaceRoleName selectedRole,
+      SharedSpaceNodeNested drive,
+      SharedSpaceMember member) {
+    SelectRoleWithActionModalSheetBuilder(
+        context,
+        key: Key('select_role_on_workgroup_inside_drive_add_member'),
+        selectedRole: selectedRole,
+        listRoles: [
+          SharedSpaceRoleName.READER,
+          SharedSpaceRoleName.ADMIN,
+          SharedSpaceRoleName.CONTRIBUTOR,
+          SharedSpaceRoleName.WRITER
+        ])
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_workgroup_inside_drive_add_member_header'))
+        .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
+        .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
+        .addLabel(AppLocalizations.of(context).edit_default_workgroup_role)
+        .build())
+      .optionalCheckbox(AppLocalizations.of(context).override_this_role_for_all_existing_workgroups)
+      .onNegativeAction(() => appNavigation.popBack())
+      .onPositiveAction((role, isOverrideRoleForAll) =>
+        _model.changeWorkgroupInsideDriveMemberRole(drive, member, role, isOverrideRoleForAll: isOverrideRoleForAll))
+      .show(context);
   }
 }
