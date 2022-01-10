@@ -60,6 +60,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart'
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_file_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_active_closed_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_archived_state.dart';
@@ -194,6 +195,7 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     activeClosedUploadRequestGroupState: ActiveClosedUploadRequestGroupState.initial(),
     archivedUploadRequestGroupState: ArchivedUploadRequestGroupState.initial(),
     uploadRequestInsideState: UploadRequestInsideState.initial(),
+    uploadRequestFileDetailsState: UploadRequestFileDetailsState.initial(),
     activeClosedUploadRequestInsideState: ActiveClosedUploadRequestInsideState.initial(),
     createdUploadRequestInsideState: CreatedUploadRequestInsideState.initial(),
     archivedUploadRequestInsideState: ArchivedUploadRequestInsideState.initial(),
