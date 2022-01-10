@@ -51,6 +51,7 @@ import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_with_action_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
@@ -340,11 +341,15 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           member.account?.mail ?? '',
           member.role?.name.getDriveRoleName(context) ?? AppLocalizations.of(context).unknown_role,
           member.nestedRole?.name.getWorkgroupRoleNameInsideDrive(context) ?? AppLocalizations.of(context).unknown_role,
-          tileColor: Colors.white,
           userCurrentDriveRole: sharedSpace.sharedSpaceRole.name,
           onSelectedRoleDriveCallback: () => selectDriveMemberRoleBottomSheet(
               context,
               member.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
+              sharedSpace,
+              member),
+          onSelectedRoleWorkgroupCallback: () => selectWorkgroupRoleInsideDriveBottomSheet(
+              context,
+              member.nestedRole?.name ?? SharedSpaceRoleName.READER,
               sharedSpace,
               member),
           onDeleteMemberCallback: () => confirmDeleteMember(
@@ -480,6 +485,33 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           .addLabel(AppLocalizations.of(context).role_in_this_drive)
           .build())
       .onConfirmAction((role) => _model.changeDriveMemberRole(drive, member, role))
+      .show(context);
+  }
+
+  void selectWorkgroupRoleInsideDriveBottomSheet(
+      BuildContext context,
+      SharedSpaceRoleName selectedRole,
+      SharedSpaceNodeNested drive,
+      SharedSpaceMember member) {
+    SelectRoleWithActionModalSheetBuilder(
+        context,
+        key: Key('select_role_on_workgroup_inside_drive_member_details'),
+        selectedRole: selectedRole,
+        listRoles: [
+          SharedSpaceRoleName.READER,
+          SharedSpaceRoleName.ADMIN,
+          SharedSpaceRoleName.CONTRIBUTOR,
+          SharedSpaceRoleName.WRITER
+        ])
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_workgroup_inside_drive_member_header'))
+        .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
+        .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
+        .addLabel(AppLocalizations.of(context).edit_default_workgroup_role)
+        .build())
+      .optionalCheckbox(AppLocalizations.of(context).override_this_role_for_all_existing_workgroups)
+      .onNegativeAction(() => appNavigation.popBack())
+      .onPositiveAction((role, isOverrideRoleForAll) =>
+        _model.changeWorkgroupInsideDriveMemberRole(drive, member, role, isOverrideRoleForAll: isOverrideRoleForAll))
       .show(context);
   }
 }
