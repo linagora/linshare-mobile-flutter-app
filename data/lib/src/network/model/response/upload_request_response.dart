@@ -46,6 +46,7 @@ class UploadRequestResponse extends Equatable {
   UploadRequestResponse(
       this.uploadRequestId,
       this.label,
+      this.body,
       this.creationDate,
       this.modificationDate,
       this.activationDate,
@@ -73,6 +74,7 @@ class UploadRequestResponse extends Equatable {
   final UploadRequestId uploadRequestId;
 
   final String label;
+  final String? body;
   final DateTime creationDate;
   final DateTime modificationDate;
   final DateTime activationDate;
@@ -103,6 +105,7 @@ class UploadRequestResponse extends Equatable {
   List<Object?> get props => [
     uploadRequestId,
     label,
+    body,
     creationDate,
     modificationDate,
     activationDate,
@@ -132,6 +135,7 @@ extension UploadRequestResponseExtension on UploadRequestResponse {
     return UploadRequest(
       uploadRequestId,
       label,
+      body,
       creationDate,
       modificationDate,
       activationDate,

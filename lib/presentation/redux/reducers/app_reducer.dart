@@ -56,6 +56,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_archived_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_created_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/signup_authentication_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_recipient_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/workgroup_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_versions_reducer.dart';
@@ -105,6 +106,7 @@ AppState appStateReducer(AppState state, action) {
         sharedSpaceNodeVersionsState: sharedSpaceNodeVersionsReducer(state.sharedSpaceNodeVersionsState, action),
         uploadRequestGroupState: uploadRequestGroupReducer(state.uploadRequestGroupState, action),
         uploadRequestGroupDetailsState: uploadRequestGroupDetailsReducer(state.uploadRequestGroupDetailsState, action),
+        uploadRequestRecipientDetailsState: uploadRequestRecipientDetailsReducer(state.uploadRequestRecipientDetailsState, action),
         uploadRequestCreationState: uploadRequestCreationReducer(state.uploadRequestCreationState, action),
         editUploadRequestState: editUploadRequestReducer(state.editUploadRequestState, action),
         uploadRequestInsideState: uploadRequestInsideReducer(state.uploadRequestInsideState, action),
@@ -150,6 +152,7 @@ AppState appStateReducer(AppState state, action) {
       sharedSpaceNodeVersionsState: state.sharedSpaceNodeVersionsState,
       uploadRequestGroupState: state.uploadRequestGroupState,
       uploadRequestGroupDetailsState: state.uploadRequestGroupDetailsState,
+      uploadRequestRecipientDetailsState: state.uploadRequestRecipientDetailsState,
       uploadRequestCreationState: state.uploadRequestCreationState,
       editUploadRequestState: state.editUploadRequestState,
       uploadRequestInsideState: state.uploadRequestInsideState,

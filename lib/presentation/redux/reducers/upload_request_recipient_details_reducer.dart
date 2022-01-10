@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,88 +28,21 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_recipient_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_recipient_details_state.dart';
+import 'package:redux/redux.dart';
 
-class UploadRequest with EquatableMixin {
-  UploadRequest(
-      this.uploadRequestId,
-      this.label,
-      this.body,
-      this.creationDate,
-      this.modificationDate,
-      this.activationDate,
-      this.notificationDate,
-      this.expiryDate,
-      this.protectedByPassword,
-      this.enableNotification,
-      this.collective,
-      this.owner,
-      this.status,
-      this.usedSpace,
-      this.nbrUploadedFiles,
-      this.pristine,
-      this.closed,
-      this.locale,
-      this.recipients,
-      this.maxFileCount,
-      this.maxDepositSize,
-      this.maxFileSize,
-      this.canClose,
-      this.canDeleteDocument,
-  );
-
-  final UploadRequestId uploadRequestId;
-  final String label;
-  final String? body;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime activationDate;
-  final DateTime notificationDate;
-  final DateTime expiryDate;
-  final bool protectedByPassword;
-  final bool enableNotification;
-  final bool collective;
-  final GenericUser owner;
-  final UploadRequestStatus status;
-  final double usedSpace;
-  final int nbrUploadedFiles;
-  final bool pristine;
-  final bool closed;
-  final String locale;
-  final List<GenericUser> recipients;
-  final int? maxFileCount;
-  final double? maxDepositSize;
-  final double? maxFileSize;
-  final bool? canClose;
-  final bool? canDeleteDocument;
-
-  @override
-  List<Object?> get props => [
-    uploadRequestId,
-    label,
-    body,
-    creationDate,
-    modificationDate,
-    activationDate,
-    notificationDate,
-    expiryDate,
-    protectedByPassword,
-    enableNotification,
-    collective,
-    owner,
-    status,
-    usedSpace,
-    nbrUploadedFiles,
-    pristine,
-    closed,
-    locale,
-    recipients,
-    maxFileCount,
-    maxDepositSize,
-    maxFileSize,
-    canClose,
-    canDeleteDocument,
-  ];
-}
+final uploadRequestRecipientDetailsReducer = combineReducers<UploadRequestRecipientDetailsState>([
+  TypedReducer<UploadRequestRecipientDetailsState, StartUploadRequestRecipientDetailsLoadingAction>((UploadRequestRecipientDetailsState state, _) => state.startLoadingState()),
+  TypedReducer<UploadRequestRecipientDetailsState, UploadRequestRecipientDetailsAction>((UploadRequestRecipientDetailsState state, UploadRequestRecipientDetailsAction action) => state.sendViewState(viewState: action.viewState)),
+  TypedReducer<UploadRequestRecipientDetailsState, CleanUploadRequestRecipientDetailsStateAction>((UploadRequestRecipientDetailsState state, CleanUploadRequestRecipientDetailsStateAction action) => state.clearViewState()),
+  TypedReducer<UploadRequestRecipientDetailsState, UploadRequestRecipientDetailsGetUploadRequestAction>((UploadRequestRecipientDetailsState state, UploadRequestRecipientDetailsGetUploadRequestAction action) =>
+      state.setUploadRequestGroup(
+          newUploadRequest: action.viewState.fold(
+              (failure) => null,
+              (success) => (success is GetUploadRequestViewState) ? success.uploadRequest : null),
+          viewState: action.viewState)),
+]);
