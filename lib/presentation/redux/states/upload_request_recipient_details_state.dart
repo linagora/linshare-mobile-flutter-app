@@ -28,88 +28,45 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-class UploadRequest with EquatableMixin {
-  UploadRequest(
-      this.uploadRequestId,
-      this.label,
-      this.body,
-      this.creationDate,
-      this.modificationDate,
-      this.activationDate,
-      this.notificationDate,
-      this.expiryDate,
-      this.protectedByPassword,
-      this.enableNotification,
-      this.collective,
-      this.owner,
-      this.status,
-      this.usedSpace,
-      this.nbrUploadedFiles,
-      this.pristine,
-      this.closed,
-      this.locale,
-      this.recipients,
-      this.maxFileCount,
-      this.maxDepositSize,
-      this.maxFileSize,
-      this.canClose,
-      this.canDeleteDocument,
-  );
+@immutable
+class UploadRequestRecipientDetailsState extends LinShareState with EquatableMixin {
+  final UploadRequest? uploadRequest;
 
-  final UploadRequestId uploadRequestId;
-  final String label;
-  final String? body;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime activationDate;
-  final DateTime notificationDate;
-  final DateTime expiryDate;
-  final bool protectedByPassword;
-  final bool enableNotification;
-  final bool collective;
-  final GenericUser owner;
-  final UploadRequestStatus status;
-  final double usedSpace;
-  final int nbrUploadedFiles;
-  final bool pristine;
-  final bool closed;
-  final String locale;
-  final List<GenericUser> recipients;
-  final int? maxFileCount;
-  final double? maxDepositSize;
-  final double? maxFileSize;
-  final bool? canClose;
-  final bool? canDeleteDocument;
+  UploadRequestRecipientDetailsState(
+      Either<Failure, Success> viewState,
+      this.uploadRequest,
+  ) : super(viewState);
+
+  factory UploadRequestRecipientDetailsState.initial() {
+    return UploadRequestRecipientDetailsState(Right(IdleState()), null);
+  }
 
   @override
-  List<Object?> get props => [
-    uploadRequestId,
-    label,
-    body,
-    creationDate,
-    modificationDate,
-    activationDate,
-    notificationDate,
-    expiryDate,
-    protectedByPassword,
-    enableNotification,
-    collective,
-    owner,
-    status,
-    usedSpace,
-    nbrUploadedFiles,
-    pristine,
-    closed,
-    locale,
-    recipients,
-    maxFileCount,
-    maxDepositSize,
-    maxFileSize,
-    canClose,
-    canDeleteDocument,
-  ];
+  UploadRequestRecipientDetailsState clearViewState() {
+    return UploadRequestRecipientDetailsState(Right(IdleState()), null);
+  }
+
+  @override
+  UploadRequestRecipientDetailsState sendViewState({required Either<Failure, Success> viewState}) {
+    return UploadRequestRecipientDetailsState(viewState, uploadRequest);
+  }
+
+  @override
+  UploadRequestRecipientDetailsState startLoadingState() {
+    return UploadRequestRecipientDetailsState(Right(LoadingState()), uploadRequest);
+  }
+
+  UploadRequestRecipientDetailsState setUploadRequestGroup({required Either<Failure, Success> viewState, UploadRequest? newUploadRequest}) {
+    return UploadRequestRecipientDetailsState(viewState, newUploadRequest);
+  }
 }

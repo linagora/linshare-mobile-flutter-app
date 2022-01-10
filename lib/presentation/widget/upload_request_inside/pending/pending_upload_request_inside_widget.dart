@@ -545,6 +545,7 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
   @override
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest uploadRequest) {
     return [
+      viewDetailsUploadRequestRecipientAction(context, uploadRequest, (uploadRequest) => _viewModel.goToUploadRequestRecipientDetails(uploadRequest)),
       if (uploadRequest.status == UploadRequestStatus.CREATED) editUploadRequestRecipientAction(
           context,
           uploadRequest,

@@ -62,4 +62,5 @@ class RoutePaths {
   static const String addRecipientsUploadRequestGroup = 'add_recipients_upload_request_group';
   static const String advanceSearchSettings = 'advance_search_settings';
   static const String uploadRequestGroupDetails = 'upload_request_group_details';
+  static const String uploadRequestRecipientDetails = 'upload_request_recipient_details';
 }
