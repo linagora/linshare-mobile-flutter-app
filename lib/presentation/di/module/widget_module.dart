@@ -432,6 +432,7 @@ class WidgetModule {
       getIt.get<AddSharedSpaceMemberInteractor>(),
       getIt.get<GetAllSharedSpaceRolesInteractor>(),
       getIt.get<DeleteSharedSpaceMemberInteractor>(),
+      getIt.get<UpdateDriveMemberInteractor>(),
     ));
   }
 
