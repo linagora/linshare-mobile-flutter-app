@@ -58,6 +58,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_creation
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_widget.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -103,6 +104,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<UploadRequestGroupDetailsWidget>(), settings: settings);
     case RoutePaths.uploadRequestRecipientDetails:
       return MaterialPageRoute(builder: (context) => getIt<UploadRequestRecipientDetailsWidget>(), settings: settings);
+      case RoutePaths.uploadRequestFileDetails:
+      return MaterialPageRoute(builder: (context) => getIt<UploadRequestFileDetailsWidget>(), settings: settings);
     case RoutePaths.receivedShareDetails:
       return MaterialPageRoute(builder: (context) => getIt<ReceivedShareDetailsWidget>(), settings: settings);
     case RoutePaths.addRecipientsUploadRequestGroup:

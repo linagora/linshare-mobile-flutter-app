@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart'
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_file_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_active_closed_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_archived_state.dart';
@@ -107,6 +108,7 @@ class AppState with EquatableMixin {
   final ActiveClosedUploadRequestGroupState activeClosedUploadRequestGroupState;
   final ArchivedUploadRequestGroupState archivedUploadRequestGroupState;
   final UploadRequestInsideState uploadRequestInsideState;
+  final UploadRequestFileDetailsState uploadRequestFileDetailsState;
   final ActiveClosedUploadRequestInsideState activeClosedUploadRequestInsideState;
   final CreatedUploadRequestInsideState createdUploadRequestInsideState;
   final ArchivedUploadRequestInsideState archivedUploadRequestInsideState;
@@ -146,6 +148,7 @@ class AppState with EquatableMixin {
       required this.uploadRequestCreationState,
       required this.editUploadRequestState,
       required this.uploadRequestInsideState,
+      required this.uploadRequestFileDetailsState,
       required this.activeClosedUploadRequestInsideState,
       required this.createdUploadRequestInsideState,
       required this.archivedUploadRequestInsideState,
@@ -192,6 +195,7 @@ class AppState with EquatableMixin {
         activeClosedUploadRequestGroupState: ActiveClosedUploadRequestGroupState.initial(),
         archivedUploadRequestGroupState: ArchivedUploadRequestGroupState.initial(),
         uploadRequestInsideState: UploadRequestInsideState.initial(),
+        uploadRequestFileDetailsState: UploadRequestFileDetailsState.initial(),
         activeClosedUploadRequestInsideState: ActiveClosedUploadRequestInsideState.initial(),
         createdUploadRequestInsideState: CreatedUploadRequestInsideState.initial(),
         archivedUploadRequestInsideState: ArchivedUploadRequestInsideState.initial(),
@@ -236,6 +240,7 @@ class AppState with EquatableMixin {
         activeClosedUploadRequestGroupState,
         archivedUploadRequestGroupState,
         uploadRequestInsideState,
+        uploadRequestFileDetailsState,
         activeClosedUploadRequestInsideState,
         createdUploadRequestInsideState,
         archivedUploadRequestInsideState,

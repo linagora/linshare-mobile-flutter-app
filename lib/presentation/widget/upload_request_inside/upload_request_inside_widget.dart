@@ -120,6 +120,15 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
       .build();
   }
 
+  Widget viewDetailsFileAction(BuildContext context, UploadRequestEntry entry, Function(UploadRequestEntry) onActionClick) {
+    return SimpleContextMenuActionBuilder(
+        Key('upload_request_file_details_context_menu_action'),
+        SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).details)
+    .onActionClick((data) => onActionClick.call(entry))
+    .build();
+  }
+
   @override
   void dispose() {
     super.dispose();
