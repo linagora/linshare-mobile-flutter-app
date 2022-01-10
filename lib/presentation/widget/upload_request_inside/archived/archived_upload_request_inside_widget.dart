@@ -474,11 +474,14 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
 
   @override
   void openFileContextMenu(BuildContext context, UploadRequestEntry entry) {
+    super.openFileContextMenu(context, entry);
   }
 
   @override
   List<Widget> fileContextMenuActionTiles(BuildContext context, UploadRequestEntry entry) {
-    throw [];
+    return [
+      viewDetailsFileAction(context,  entry, (entry) => _viewModel.goToUploadRequestFileDetails(entry)),
+    ];
   }
 
   @override

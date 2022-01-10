@@ -644,6 +644,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
   @override
   List<Widget> fileContextMenuActionTiles(BuildContext context, UploadRequestEntry entry) {
     return [
+      viewDetailsFileAction(context,  entry, (entry) => _viewModel.goToUploadRequestFileDetails(entry)),
       _exportFileAction([entry]),
       _removeFileAction([entry]),
       _shareAction([entry]),

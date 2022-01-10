@@ -97,6 +97,8 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_group_de
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
@@ -152,6 +154,7 @@ class WidgetModule {
     _provideUploadRequestCreationComponent();
     _provideEditUploadRequestComponent();
     _provideUploadRequestInsideComponent();
+    _provideUploadRequestFileDetailsComponent();
     _provideHomeAppBarComponent();
     _provideReceivedShareDetailsComponent();
     _provideAddRecipientsUploadRequestGroupComponent();
@@ -670,6 +673,14 @@ class WidgetModule {
         getIt.get<GetAllUploadRequestsInteractor>(),
         getIt.get<GetAllUploadRequestEntriesInteractor>(),
       ));
+  }
+
+  void _provideUploadRequestFileDetailsComponent() {
+    getIt.registerFactory(() => UploadRequestFileDetailsWidget());
+    getIt.registerFactory(() => UploadRequestFileDetailsViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+    ));
   }
 
   void _provideHomeAppBarComponent() {
