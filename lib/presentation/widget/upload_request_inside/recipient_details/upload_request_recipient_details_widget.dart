@@ -40,31 +40,31 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
 import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_details_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_recipient_details_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/string_extensions.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/file_size_extension.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_viewmodel.dart';
 
-class UploadRequestGroupDetailsWidget extends StatefulWidget {
+class UploadRequestRecipientDetailsWidget extends StatefulWidget {
   @override
-  _UploadRequestGroupDetailsWidgetState createState() => _UploadRequestGroupDetailsWidgetState();
+  _UploadRequestRecipientDetailsWidgetState createState() => _UploadRequestRecipientDetailsWidgetState();
 }
 
-class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDetailsWidget> {
-  final _model = getIt<UploadRequestGroupDetailsViewModel>();
+class _UploadRequestRecipientDetailsWidgetState extends State<UploadRequestRecipientDetailsWidget> {
+  final _model = getIt<UploadRequestRecipientDetailsViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final appNavigation = getIt<AppNavigation>();
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      var arg = ModalRoute.of(context)?.settings.arguments as UploadRequestGroupDetailsArguments;
+      var arg = ModalRoute.of(context)?.settings.arguments as UploadRequestRecipientDetailsArguments;
       _model.initState(arg);
     });
     super.initState();
@@ -78,25 +78,16 @@ class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDeta
 
   @override
   Widget build(BuildContext context) {
-    var arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestGroupDetailsArguments;
+    var arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestRecipientDetailsArguments;
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          key: Key('upload_request_group_details_arrow_back_button'),
+          key: Key('upload_request_recipient_details_arrow_back_button'),
           icon: Image.asset(imagePath.icArrowBack),
           onPressed: () => _model.backToUploadRequest(),
         ),
-        title: Row(children: [
-          SvgPicture.asset(
-            arguments.group.collective ? imagePath.icUploadRequestCollective : imagePath.icUploadRequestIndividual,
-            color: Colors.white,
-            width: 20,
-            height: 24,
-            fit: BoxFit.fill),
-          SizedBox(width: 16),
-          Expanded(child: Text(arguments.group.label, style: TextStyle(fontSize: 24, color: Colors.white)))
-        ]),
+        title: Text(arguments.uploadRequest.recipients.first.mail, style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: AppColor.primaryColor,
       ),
       body: SafeArea(child: _buildDetailsView()),
@@ -105,7 +96,7 @@ class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDeta
 
   Widget _buildLoadingView() {
     return StoreConnector<AppState, dartz.Either<Failure, Success>>(
-      converter: (store) => store.state.uploadRequestGroupDetailsState.viewState,
+      converter: (store) => store.state.uploadRequestRecipientDetailsState.viewState,
       builder: (context, viewState) {
         return viewState.fold(
           (failure) => SizedBox.shrink(),
@@ -128,21 +119,20 @@ class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDeta
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
-        if (state.uploadRequestGroupDetailsState.group == null) {
+        if (state.uploadRequestRecipientDetailsState.uploadRequest == null) {
           return _buildLoadingView();
         }
         return SingleChildScrollView(child: Column(children: [
-          _numberOfUploadedFilesWidget(state.uploadRequestGroupDetailsState),
-          _messagesUploadRequestGroupWidget(state.uploadRequestGroupDetailsState),
+          _numberOfUploadedFilesWidget(state.uploadRequestRecipientDetailsState),
+          _messagesUploadRequestGroupWidget(state.uploadRequestRecipientDetailsState),
           _ownerUploadRequestGroupWidget(state),
-          _recipientsUploadRequestGroupWidget(state.uploadRequestGroupDetailsState),
-          _metaDataUploadRequestGroupWidget(state.uploadRequestGroupDetailsState),
+          _metaDataUploadRequestGroupWidget(state.uploadRequestRecipientDetailsState),
         ]));
       },
     );
   }
 
-  Widget _numberOfUploadedFilesWidget(UploadRequestGroupDetailsState state) {
+  Widget _numberOfUploadedFilesWidget(UploadRequestRecipientDetailsState state) {
     return Container(
       color: AppColor.uploadRequestGroupDetailHeaderColor,
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -150,25 +140,23 @@ class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDeta
         Container(
           width: 70,
           height: 70,
-          padding: EdgeInsets.all(16),
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(35))),
-          child: SvgPicture.asset(
-              state.group?.collective == true
-                  ? imagePath.icUploadRequestCollective
-                  : imagePath.icUploadRequestIndividual,
-              color: AppColor.primaryColor,
-              width: 20,
-              height: 24,
-              fit: BoxFit.fill),
+          child: Text(
+              _getNumberFileUploaded(state.uploadRequest),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: AppColor.uploadRequestGroupDetailHeaderColor, fontWeight: FontWeight.bold, fontSize: 18.0)),
         ),
         Expanded(child: Padding(
             padding: EdgeInsets.only(right: 30, left: 16),
             child: Align(
               alignment: Alignment.centerRight,
               child: Text(
-                  AppLocalizations.of(context).number_of_uploaded_files(state.group?.nbrUploadedFiles ?? 0),
+                  AppLocalizations.of(context).files_uploaded,
                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 18.0)),
             ))
         )
@@ -176,28 +164,35 @@ class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDeta
     );
   }
 
+  String _getNumberFileUploaded(UploadRequest? uploadRequest) {
+    if (uploadRequest != null && uploadRequest.nbrUploadedFiles > 999) {
+      return '999+';
+    }
+    return '${uploadRequest?.nbrUploadedFiles ?? 0}';
+  }
+
   Widget _ownerUploadRequestGroupWidget(AppState state) {
     return ListTile(
-        leading: LabelAvatarBuilder(state.uploadRequestGroupDetailsState.group?.owner.fullName().characters.first.toUpperCase()
-                ?? state.uploadRequestGroupDetailsState.group?.owner.mail.characters.first.toUpperCase()
+        leading: LabelAvatarBuilder(state.uploadRequestRecipientDetailsState.uploadRequest?.owner.fullName().characters.first.toUpperCase()
+            ?? state.uploadRequestRecipientDetailsState.uploadRequest?.owner.mail.characters.first.toUpperCase()
                 ?? '')
-            .key(Key('label_upload_request_group_owner_avatar'))
+            .key(Key('label_upload_request_recipient_owner_avatar'))
             .build(),
         title: Text(
-            state.uploadRequestGroupDetailsState.group?.owner.fullName() ?? state.uploadRequestGroupDetailsState.group?.owner.mail ?? '',
+            state.uploadRequestRecipientDetailsState.uploadRequest?.owner.fullName() ?? state.uploadRequestRecipientDetailsState.uploadRequest?.owner.mail ?? '',
             style: TextStyle(color: AppColor.uploadRequestGroupOwnerNameColor, fontWeight: FontWeight.w500, fontSize: 16.0)),
         subtitle:Text(
-            AppLocalizations.of(context).upload_request_group_modification_date(state.uploadRequestGroupDetailsState.group?.modificationDate.getMMMddyyyyFormatString() ?? ''),
+            AppLocalizations.of(context).upload_request_group_modification_date(state.uploadRequestRecipientDetailsState.uploadRequest?.modificationDate.getMMMddyyyyFormatString() ?? ''),
             style: TextStyle(color: AppColor.uploadFileFileNameTextColor, fontSize: 14.0)),
-        trailing: state.uploadRequestGroupDetailsState.group?.owner.userId?.uuid == state.account.user?.userId.uuid
+        trailing: state.uploadRequestRecipientDetailsState.uploadRequest?.owner.userId?.uuid == state.account.user?.userId.uuid
             ? Text(
                 AppLocalizations.of(context).owner,
                 style: TextStyle(fontSize: 14, color: AppColor.uploadFileFileNameTextColor))
             : null);
   }
 
-  Widget _messagesUploadRequestGroupWidget(UploadRequestGroupDetailsState state) {
-    if (state.group?.body.isNotEmpty == true) {
+  Widget _messagesUploadRequestGroupWidget(UploadRequestRecipientDetailsState state) {
+    if (state.uploadRequest?.body?.isNotEmpty == true) {
       return Column(
         children: [
           StreamBuilder(
@@ -209,7 +204,7 @@ class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDeta
                   children: [
                     Expanded(child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                      child: Text(state.group?.body ?? '',
+                      child: Text(state.uploadRequest?.body ?? '',
                           maxLines: snapshot.data == true ? null : 1,
                           overflow: snapshot.data == true ? null : TextOverflow.ellipsis,
                           style: TextStyle(
@@ -236,87 +231,8 @@ class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDeta
     return SizedBox.shrink();
   }
 
-  Widget _recipientsUploadRequestGroupWidget(UploadRequestGroupDetailsState state) {
-    if (state.recipients.isNotEmpty) {
-      return StreamBuilder(
-          stream: _model.isShowRecipients,
-          initialData: false,
-          builder: (context, AsyncSnapshot<bool> snapshot) {
-            return Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Column(children: [
-                Row(children: [
-                  SvgPicture.asset(
-                      imagePath.icAddMember,
-                      color: AppColor.uploadRequestGroupOwnerNameColor,
-                      width: 24,
-                      height: 24,
-                      fit: BoxFit.fill),
-                  Expanded(child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                          AppLocalizations.of(context).recipients,
-                          style: TextStyle(color: AppColor.uploadRequestGroupOwnerNameColor, fontWeight: FontWeight.w500, fontSize: 16.0)))),
-                  GestureDetector(
-                    onTap: () => _model.toggleShowRecipients(),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.only(right: 5),
-                            child: Text(
-                                AppLocalizations.of(context).view,
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColor.primaryColor))),
-                        SvgPicture.asset(
-                            snapshot.data == true ? imagePath.icSortUpItem : imagePath.icSortDownItem,
-                            color: AppColor.primaryColor,
-                            width: 12,
-                            height: 12,
-                            fit: BoxFit.fill),
-                      ],
-                    ),
-                  )]),
-                if (snapshot.data == true) _buildListViewRecipients(state.recipients),
-              ]),
-            );
-          }
-      );
-    }
-
-    return SizedBox.shrink();
-  }
-
-  Widget _buildListViewRecipients(List<GenericUser> recipients) {
-    if (recipients.isEmpty) {
-      return SizedBox.shrink();
-    }
-    return ListView.builder(
-      shrinkWrap: true,
-      primary: false,
-      itemCount: recipients.length,
-      padding: EdgeInsets.only(top: 16),
-      itemBuilder: (BuildContext context, int index) {
-        final recipient = recipients[index];
-        return ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 8),
-          leading: SizedBox(
-              width: 35,
-              height: 35,
-              child: LabelAvatarBuilder(recipient.mail.characters.first.toUpperCase())
-                .key(Key('label_recipient_avatar'))
-                .build()),
-          title: Text(recipient.mail,
-            style: TextStyle(
-              color: AppColor.uploadRequestGroupOwnerNameColor,
-              fontWeight: FontWeight.w500,
-              fontSize: 14.0)),
-        );
-      },
-    );
-  }
-
-  Widget _metaDataUploadRequestGroupWidget(UploadRequestGroupDetailsState state) {
-    if (state.group != null) {
+  Widget _metaDataUploadRequestGroupWidget(UploadRequestRecipientDetailsState state) {
+    if (state.uploadRequest != null) {
       return Padding(
           padding: EdgeInsets.only(left: 18, right: 18, top: 20, bottom: 30),
           child: Column(children: [
@@ -337,58 +253,57 @@ class _UploadRequestGroupDetailsWidgetState extends State<UploadRequestGroupDeta
             ]),
             Padding(
               padding: EdgeInsets.only(left: 16),
-              child: _buildListMetaData(state.group!)),
+              child: _buildListMetaData(state.uploadRequest!)),
           ]));
     }
     return SizedBox.shrink();
   }
 
-  Widget _buildListMetaData(UploadRequestGroup group) {
+  Widget _buildListMetaData(UploadRequest uploadRequest) {
     return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             _buildItemMetaData(AppLocalizations.of(context).created_at,
-                group.creationDate.getMMMddyyyyFormatString()),
+                uploadRequest.creationDate.getMMMddyyyyFormatString()),
             _buildItemMetaData(AppLocalizations.of(context).expiration_date,
-                group.expiryDate.getMMMddyyyyFormatString()),
+                uploadRequest.expiryDate.getMMMddyyyyFormatString()),
             _buildItemMetaData(AppLocalizations.of(context).max_number_of_files,
-                '${group.maxFileCount}'),
+                '${uploadRequest.maxFileCount}'),
             _buildItemMetaData(AppLocalizations.of(context).max_size_per_file,
-                '${group.maxFileSize.toFileSize().value1} ${group.maxFileSize.toFileSize().value2.text}'),
+                '${uploadRequest.maxFileSize.toFileSize().value1} ${uploadRequest.maxFileSize.toFileSize().value2.text}'),
             _buildItemMetaData(
                 AppLocalizations.of(context).allow_deletion,
-                group.canDelete
+                uploadRequest.canDeleteDocument == true
                     ? AppLocalizations.of(context).yes
                     : AppLocalizations.of(context).no),
             _buildItemMetaData(AppLocalizations.of(context).reminder_date,
-                group.notificationDate.getMMMddyyyyFormatString()),
+                uploadRequest.notificationDate.getMMMddyyyyFormatString()),
           ]),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             _buildItemMetaData(AppLocalizations.of(context).activated_at,
-                group.activationDate.getMMMddyyyyFormatString()),
+                uploadRequest.activationDate.getMMMddyyyyFormatString()),
             _buildItemMetaData(
                 AppLocalizations.of(context).collective,
-                group.collective
+                uploadRequest.collective
                     ? AppLocalizations.of(context).yes
                     : AppLocalizations.of(context).no),
             _buildItemMetaData(AppLocalizations.of(context).max_total_file_size,
-                '${group.maxDepositSize.toFileSize().value1} ${group.maxDepositSize.toFileSize().value2.text}'),
+                '${uploadRequest.maxDepositSize.toFileSize().value1} ${uploadRequest.maxDepositSize.toFileSize().value2.text}'),
             _buildItemMetaData(
                 AppLocalizations.of(context).password_protected,
-                group.protectedByPassword
+                uploadRequest.protectedByPassword
                     ? AppLocalizations.of(context).yes
                     : AppLocalizations.of(context).no),
             _buildItemMetaData(
                 AppLocalizations.of(context).allow_closure,
-                group.canClose
+                uploadRequest.canClose == true
                     ? AppLocalizations.of(context).yes
                     : AppLocalizations.of(context).no),
             _buildItemMetaData(
                 AppLocalizations.of(context).notification_language,
-                group.locale?.toNotificationLanguage().text.capitalizeFirst() ??
-                    NotificationLanguage.ENGLISH.text.capitalizeFirst()),
+                uploadRequest.locale.toNotificationLanguage().text.capitalizeFirst()),
           ]),
         ]);
   }

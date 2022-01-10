@@ -492,9 +492,10 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
   }
 
   @override
-  List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest entry) {
+  List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest uploadRequest) {
     return [
-      _removeRecipientAction([entry])
+      viewDetailsUploadRequestRecipientAction(context, uploadRequest, (uploadRequest) => _viewModel.goToUploadRequestRecipientDetails(uploadRequest)),
+      _removeRecipientAction([uploadRequest])
     ];
   }
 

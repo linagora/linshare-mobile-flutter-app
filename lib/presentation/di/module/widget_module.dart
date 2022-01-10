@@ -95,6 +95,8 @@ import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_viewmod
 import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
@@ -156,6 +158,7 @@ class WidgetModule {
     _provideWidgetCommonView();
     _provideAdvanceSearchWidgetComponent();
     _provideUploadRequestGroupDetailsWidgetComponent();
+    _provideUploadRequestRecipientDetailsWidgetComponent();
   }
 
   void _provideLoginComponent() {
@@ -719,6 +722,15 @@ class WidgetModule {
       getIt.get<AppNavigation>(),
       getIt.get<GetUploadRequestGroupInteractor>(),
       getIt.get<GetAllUploadRequestsInteractor>(),
+    ));
+  }
+
+  void _provideUploadRequestRecipientDetailsWidgetComponent() {
+    getIt.registerFactory(() => UploadRequestRecipientDetailsWidget());
+    getIt.registerFactory(() => UploadRequestRecipientDetailsViewModel(
+      getIt.get<Store<AppState>>(),
+      getIt.get<AppNavigation>(),
+      getIt.get<GetUploadRequestInteractor>(),
     ));
   }
 }

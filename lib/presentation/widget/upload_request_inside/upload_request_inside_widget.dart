@@ -33,10 +33,12 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/upload_request_status_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/simple_context_menu_action_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_context_menu_mixin.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_context_menu_mixin.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/upload_request_inside_navigator_widget.dart';
@@ -107,6 +109,15 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
       Text(
         status.displayValue(context),
         style: TextStyle(fontSize: 13, color: AppColor.uploadRequestHintTextColor))]);
+  }
+
+  Widget viewDetailsUploadRequestRecipientAction(BuildContext context, UploadRequest uploadRequest, Function(UploadRequest) onActionClick) {
+    return SimpleContextMenuActionBuilder(
+        Key('upload_request_recipient_details_context_menu_action'),
+        SvgPicture.asset(imagePath.icInfo, width: 24, height: 24, fit: BoxFit.fill),
+        AppLocalizations.of(context).details)
+      .onActionClick((data) => onActionClick.call(uploadRequest))
+      .build();
   }
 
   @override
