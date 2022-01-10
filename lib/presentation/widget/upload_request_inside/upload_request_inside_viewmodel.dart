@@ -64,6 +64,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_group/up
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipient_destination.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_arguments.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -651,6 +652,13 @@ abstract class UploadRequestInsideViewModel extends BaseViewModel {
     appNavigation.push(
         RoutePaths.uploadRequestRecipientDetails,
         arguments: UploadRequestRecipientDetailsArguments(uploadRequest));
+  }
+
+  void goToUploadRequestFileDetails(UploadRequestEntry entry) {
+    appNavigation.popBack();
+    appNavigation.push(
+        RoutePaths.uploadRequestFileDetails,
+        arguments: UploadRequestFileDetailsArguments(entry));
   }
 
   @override
