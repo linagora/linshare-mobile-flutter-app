@@ -40,9 +40,9 @@ class UpdateDriveMemberInteractor {
 
   UpdateDriveMemberInteractor(this._sharedSpaceMemberRepository);
 
-  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request) async {
+  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request, {bool? isOverrideRoleForAll}) async {
     try {
-      await _sharedSpaceMemberRepository.updateDriveMemberRole(sharedSpaceId, request);
+      await _sharedSpaceMemberRepository.updateDriveMemberRole(sharedSpaceId, request, isOverrideRoleForAll: isOverrideRoleForAll);
       return Right<Failure, Success>(UpdateDriveMemberViewState());
     } catch (exception) {
       return Left<Failure, Success>(UpdateDriveMemberFailure(exception));

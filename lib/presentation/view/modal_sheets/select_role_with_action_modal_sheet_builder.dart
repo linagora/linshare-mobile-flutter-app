@@ -38,32 +38,95 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 
-typedef OnSelectActionClick = void Function(SharedSpaceRoleName role);
+typedef OnNegativeActionButtonClick = void Function();
+typedef OnPositiveActionButtonClick = void Function(SharedSpaceRoleName, bool);
 
-class SelectRoleModalSheetBuilder {
+class SelectRoleWithActionModalSheetBuilder {
   final responsiveUtils = getIt<ResponsiveUtils>();
 
+  @protected final BuildContext context;
   @protected final Key key;
   @protected final SharedSpaceRoleName selectedRole;
   @protected final List<SharedSpaceRoleName> listRoles;
-  @protected OnSelectActionClick? _onSelectActionClick;
+  @protected OnNegativeActionButtonClick? _onNegativeActionButtonClick;
+  @protected OnPositiveActionButtonClick? _onPositiveActionButtonClick;
 
   Widget? _header;
+  String? _optionalCheckboxString;
+  var isOptionalCheckboxChecked = false;
+  SharedSpaceRoleName? currentRole;
 
-  SelectRoleModalSheetBuilder({required this.key, required this.selectedRole, required this.listRoles});
+  SelectRoleWithActionModalSheetBuilder(
+      this.context,
+      {
+        required this.key,
+        required this.selectedRole,
+        required this.listRoles
+      }
+  );
 
-  SelectRoleModalSheetBuilder onConfirmAction(OnSelectActionClick onConfirmActionClick) {
-    _onSelectActionClick = onConfirmActionClick;
+  SelectRoleWithActionModalSheetBuilder addHeader(Widget header) {
+    _header = header;
     return this;
   }
 
-  SelectRoleModalSheetBuilder addHeader(Widget header) {
-    _header = header;
+  SelectRoleWithActionModalSheetBuilder optionalCheckbox(String? checkboxName) {
+    _optionalCheckboxString = checkboxName;
     return this;
+  }
+
+  SelectRoleWithActionModalSheetBuilder onPositiveAction(OnPositiveActionButtonClick onPositiveActionButtonClick) {
+    _onPositiveActionButtonClick = onPositiveActionButtonClick;
+    return this;
+  }
+
+  SelectRoleWithActionModalSheetBuilder onNegativeAction(OnNegativeActionButtonClick onNegativeActionButtonClick) {
+    _onNegativeActionButtonClick = onNegativeActionButtonClick;
+    return this;
+  }
+
+  Widget _buildCheckboxRow() {
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return CheckboxListTile(
+          dense: true,
+          activeColor: AppColor.primaryColor,
+          contentPadding: EdgeInsets.symmetric(horizontal: 4),
+          title: Text(_optionalCheckboxString ?? '',
+              style: TextStyle(
+                  color: AppColor.deleteMemberIconColor, fontSize: 14.0)),
+          value: isOptionalCheckboxChecked,
+          controlAffinity: ListTileControlAffinity.leading,
+          onChanged: (bool? value) => setState(() => isOptionalCheckboxChecked = value!));
+    });
+  }
+
+  Widget _buildButtonAction() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+                primary: AppColor.documentNameItemTextColor,
+                backgroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
+            onPressed: () => _onNegativeActionButtonClick?.call(),
+            child: Text(AppLocalizations.of(context).cancel, style: TextStyle(fontSize: 16.0, color: Colors.black38)),),
+          OutlinedButton(
+              onPressed: () => _onPositiveActionButtonClick?.call(currentRole ?? selectedRole, isOptionalCheckboxChecked),
+              style: OutlinedButton.styleFrom(
+                  primary: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 55, vertical: 12),
+                  backgroundColor: AppColor.primaryColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
+              child: Text(AppLocalizations.of(context).update, style: TextStyle(fontSize: 16.0, color: Colors.white)))
+        ]);
   }
 
   RoundedRectangleBorder _shape() {
@@ -104,11 +167,15 @@ class SelectRoleModalSheetBuilder {
                           onTap: () => {},
                           child: Wrap(
                             children: [
-                              if(_header != null) _header!,
-                              if(_header != null) Divider(),
-                              ...listRoles
-                                  .map((role) => _getSelectingRoleTile(context, role, selectedRole))
-                                  .toList()
+                              if (_header != null) _header!,
+                              if (_header != null) Divider(),
+                              _buildListRole(),
+                              if ((_optionalCheckboxString != null &&
+                                  _optionalCheckboxString!.isNotEmpty))
+                                _buildCheckboxRow(),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  child: _buildButtonAction())
                             ],
                           )
                       )
@@ -116,10 +183,22 @@ class SelectRoleModalSheetBuilder {
               )
           );
         }
-    );
+        );
   }
 
-  ListTile _getSelectingRoleTile(BuildContext context, SharedSpaceRoleName role, SharedSpaceRoleName selectedRole) {
+  Widget _buildListRole() {
+    return StatefulBuilder(builder: (BuildContext context, StateSetter setState){
+      return Column(
+        children: [
+          ...listRoles
+              .map((role) => _getSelectingRoleTile(context, role, currentRole ?? selectedRole, setState))
+              .toList()
+        ],
+      );
+    });
+  }
+
+  ListTile _getSelectingRoleTile(BuildContext context, SharedSpaceRoleName role, SharedSpaceRoleName selectedRole, StateSetter setState) {
     return ListTile(
       title: Text(role.getRoleName(context),
           style: TextStyle(
@@ -131,11 +210,7 @@ class SelectRoleModalSheetBuilder {
       leading: selectedRole == role
           ? Icon(Icons.check, color: AppColor.primaryColor)
           : SizedBox(),
-      onTap: () {
-        if (_onSelectActionClick != null) {
-          _onSelectActionClick?.call(role);
-        }
-      },
+      onTap: () => setState(() => currentRole = role),
     );
   }
 }

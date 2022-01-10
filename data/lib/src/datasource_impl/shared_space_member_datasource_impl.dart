@@ -116,9 +116,9 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
   }
 
   @override
-  Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request) {
+  Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request, {bool? isOverrideRoleForAll}) {
     return Future.sync(() async {
-      final driveMember = await _linShareHttpClient.updateRoleDriveMember(sharedSpaceId, request);
+      final driveMember = await _linShareHttpClient.updateRoleDriveMember(sharedSpaceId, request, isOverrideRoleForAll: isOverrideRoleForAll);
       return driveMember.toSharedSpaceMember();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {

@@ -2778,6 +2778,27 @@ class AppLocalizations {
       name: 'notification_language_meta_data',
     );
   }
+
+  String get override_this_role_for_all_existing_workgroups {
+    return Intl.message(
+      'Override this role for all existing workgroups',
+      name: 'override_this_role_for_all_existing_workgroups',
+    );
+  }
+
+  String get update {
+    return Intl.message(
+      'Update',
+      name: 'update',
+    );
+  }
+
+  String get edit_default_workgroup_role {
+    return Intl.message(
+      'Edit default workgroup role',
+      name: 'edit_default_workgroup_role',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

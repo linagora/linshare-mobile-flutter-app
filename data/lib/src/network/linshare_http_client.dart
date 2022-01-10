@@ -478,13 +478,13 @@ class LinShareHttpClient {
     return SharedSpaceMemberResponse.fromJson(resultJson);
   }
 
-  Future<SharedSpaceMemberResponse> updateRoleDriveMember(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request) async {
+  Future<SharedSpaceMemberResponse> updateRoleDriveMember(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request, {bool? isOverrideRoleForAll}) async {
     final resultJson = await _dioClient.put(
         Endpoint.sharedSpaces
             .withPathParameter(sharedSpaceId.uuid)
             .withPathParameter('members')
             .withPathParameter(request.account.uuid)
-            .withQueryParameters([BooleanQueryParameter('force', false)])
+            .withQueryParameters([BooleanQueryParameter('force', isOverrideRoleForAll ?? false)])
             .generateEndpointPath(),
         data: request.toBodyRequest().toJson().toString());
     return SharedSpaceMemberResponse.fromJson(resultJson);
