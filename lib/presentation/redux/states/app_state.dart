@@ -54,6 +54,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_request_in
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_archived_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_created_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/signup_authentication_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_recipient_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
@@ -99,6 +100,7 @@ class AppState with EquatableMixin {
   final BiometricAuthenticationLoginState biometricAuthenticationLoginState;
   final UploadRequestGroupState uploadRequestGroupState;
   final UploadRequestGroupDetailsState uploadRequestGroupDetailsState;
+  final UploadRequestRecipientDetailsState uploadRequestRecipientDetailsState;
   final UploadRequestCreationState uploadRequestCreationState;
   final EditUploadRequestState editUploadRequestState;
   final CreatedUploadRequestGroupState createdUploadRequestGroupState;
@@ -140,6 +142,7 @@ class AppState with EquatableMixin {
       required this.sharedSpaceNodeVersionsState,
       required this.uploadRequestGroupState,
       required this.uploadRequestGroupDetailsState,
+      required this.uploadRequestRecipientDetailsState,
       required this.uploadRequestCreationState,
       required this.editUploadRequestState,
       required this.uploadRequestInsideState,
@@ -182,6 +185,7 @@ class AppState with EquatableMixin {
         sharedSpaceNodeVersionsState: SharedSpaceNodeVersionsState.initial(),
         uploadRequestGroupState: UploadRequestGroupState.initial(),
         uploadRequestGroupDetailsState: UploadRequestGroupDetailsState.initial(),
+        uploadRequestRecipientDetailsState: UploadRequestRecipientDetailsState.initial(),
         uploadRequestCreationState: UploadRequestCreationState.initial(),
         editUploadRequestState: EditUploadRequestState.initial(),
         createdUploadRequestGroupState: CreatedUploadRequestGroupState.initial(),
@@ -225,6 +229,7 @@ class AppState with EquatableMixin {
         sharedSpaceNodeVersionsState,
         uploadRequestGroupState,
         uploadRequestGroupDetailsState,
+        uploadRequestRecipientDetailsState,
         uploadRequestCreationState,
         editUploadRequestState,
         createdUploadRequestGroupState,

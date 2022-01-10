@@ -2799,6 +2799,13 @@ class AppLocalizations {
       name: 'edit_default_workgroup_role',
     );
   }
+
+  String get files_uploaded {
+    return Intl.message(
+      'Files uploaded',
+      name: 'files_uploaded',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -684,6 +684,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
   @override
   List<Widget> recipientContextMenuActionTiles(BuildContext context, UploadRequest uploadRequest) {
     return [
+      viewDetailsUploadRequestRecipientAction(context, uploadRequest, (uploadRequest) => _viewModel.goToUploadRequestRecipientDetails(uploadRequest)),
       if (uploadRequest.status == UploadRequestStatus.ENABLED)
         editUploadRequestRecipientAction(
           context,
