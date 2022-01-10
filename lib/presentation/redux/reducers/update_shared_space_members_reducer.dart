@@ -39,4 +39,6 @@ final updateSharedSpaceMembersReducer = combineReducers<UpdateSharedSpaceMembers
           (UpdateSharedSpaceMembersState state, UpdateSharedSpaceMembersAction action) => state.sendViewState(viewState: action.viewState)),
   TypedReducer<UpdateSharedSpaceMembersState, CleanUpdateSharedSpaceMembersStateAction>(
           (UpdateSharedSpaceMembersState state, _) => state.clearViewState()),
+  TypedReducer<UpdateSharedSpaceMembersState, UpdateDriveMembersAction>((UpdateSharedSpaceMembersState state, UpdateDriveMembersAction action) =>
+      state.sendViewState(viewState: action.viewState)),
 ]);
