@@ -31,13 +31,13 @@
 
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/list_tile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 
 typedef DeleteDriveMemberCallback = void Function();
 typedef SelectRoleDriveCallback = void Function();
+typedef SelectRoleWorkgroupCallback = void Function();
 
 class DriveMemberListTileBuilder {
   final String _name;
@@ -50,6 +50,7 @@ class DriveMemberListTileBuilder {
 
   final DeleteDriveMemberCallback? onDeleteMemberCallback;
   final SelectRoleDriveCallback? onSelectedRoleDriveCallback;
+  final SelectRoleWorkgroupCallback? onSelectedRoleWorkgroupCallback;
 
   DriveMemberListTileBuilder(
     this._name,
@@ -61,56 +62,58 @@ class DriveMemberListTileBuilder {
       this.userCurrentDriveRole,
       this.onDeleteMemberCallback,
       this.onSelectedRoleDriveCallback,
+      this.onSelectedRoleWorkgroupCallback,
     }
   );
 
-  ListTile build() {
-    return ListTile(
-      contentPadding: EdgeInsets.only(left: 24, top: 10, bottom: 10, right: 20),
-      leading: LabelAvatarBuilder(_name.characters.first.toUpperCase())
-        .key(Key('label_drive_member_avatar'))
-        .build(),
-      trailing: SharedSpaceOperationRole.deleteDriveMemberRoles.contains(userCurrentDriveRole)
-          ? GestureDetector(
-              onTap: () => _handleDeleteMemberTap(),
-              child: Icon(Icons.close, color: AppColor.deleteMemberIconColor))
-          : SizedBox.shrink(),
-      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: 8),
-          child: Text(_name,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontStyle: FontStyle.normal,
-              color: AppColor.loginTextFieldTextColor))),
-        Text(_email,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-            fontStyle: FontStyle.italic,
-            color: AppColor.documentModifiedDateItemTextColor)),
-        Padding(
-          padding: EdgeInsets.only(top: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: _buildDriveMemberTypeLabel()),
-              Expanded(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(_workgroupRoleName,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontStyle: FontStyle.normal,
-                        color: AppColor.workgroupNodesSurfingBackTitleColor)),
-                  ])),
-            ],
-          )),
-      ]),
-      tileColor: tileColor,
+  Widget build() {
+    return Container(
+      color: tileColor,
+      padding: EdgeInsets.only(left: 20, top: 16, bottom: 8, right: 20),
+      child: Column(
+        children: [
+          Row(children: [
+            LabelAvatarBuilder(_name.characters.first.toUpperCase())
+                .key(Key('label_drive_member_avatar'))
+                .build(),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 8, left: 16),
+                      child: Text(_name,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal,
+                              color: AppColor.loginTextFieldTextColor))),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Text(_email,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                            fontStyle: FontStyle.italic,
+                            color: AppColor.documentModifiedDateItemTextColor)),
+                  ),
+                ])),
+            if (SharedSpaceOperationRole.deleteDriveMemberRoles.contains(userCurrentDriveRole))
+              GestureDetector(
+                  onTap: () => _handleDeleteMemberTap(),
+                  child: Icon(Icons.close, color: AppColor.deleteMemberIconColor))
+          ]),
+          Padding(
+              padding: EdgeInsets.only(top: 8, left: 56),
+              child: Row(
+                children: [
+                  _buildDriveMemberTypeLabel(),
+                  SizedBox(width: 20),
+                  Expanded(child: _buildWorkgroupMemberTypeLabel()),
+                ],
+              ))
+        ],
+      ),
     );
   }
 
@@ -135,6 +138,27 @@ class DriveMemberListTileBuilder {
     );
   }
 
+  Widget _buildWorkgroupMemberTypeLabel() {
+    return GestureDetector(
+      onTap: () => _handleUpdateRoleWorkgroupTap(),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(_workgroupRoleName,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal,
+                  color: AppColor.workgroupNodesSurfingBackTitleColor)),
+          SharedSpaceOperationRole.editDriveMemberRoles
+                  .contains(userCurrentDriveRole)
+              ? Icon(Icons.arrow_drop_down, color: AppColor.primaryColor)
+              : SizedBox.shrink(),
+        ],
+      ),
+    );
+  }
+
   void _handleDeleteMemberTap() {
     if (onDeleteMemberCallback != null) {
       onDeleteMemberCallback?.call();
@@ -145,6 +169,13 @@ class DriveMemberListTileBuilder {
     if (onSelectedRoleDriveCallback != null &&
         SharedSpaceOperationRole.editDriveMemberRoles.contains(userCurrentDriveRole)) {
       onSelectedRoleDriveCallback?.call();
+    }
+  }
+
+  void _handleUpdateRoleWorkgroupTap() {
+    if (onSelectedRoleWorkgroupCallback != null &&
+        SharedSpaceOperationRole.editDriveMemberRoles.contains(userCurrentDriveRole)) {
+      onSelectedRoleWorkgroupCallback?.call();
     }
   }
 }

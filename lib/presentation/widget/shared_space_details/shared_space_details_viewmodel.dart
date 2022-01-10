@@ -278,7 +278,9 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   }
 
   OnlineThunkAction _updateDriveMemberRoleAction(
-      SharedSpaceNodeNested drive, AccountId accountId, SharedSpaceRoleName newRole, SharedSpaceRoleName nestedRoleName) {
+      SharedSpaceNodeNested drive, AccountId accountId,
+      SharedSpaceRoleName newRole, SharedSpaceRoleName nestedRoleName,
+      {bool? isOverrideRoleForAll}) {
     return OnlineThunkAction((Store<AppState> store) async {
       final driveRolesList = store.state.sharedSpaceState.driveRolesList;
       final rolesList = store.state.sharedSpaceState.rolesList;
@@ -302,7 +304,8 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
                   drive.sharedSpaceId,
                   roleDrive.sharedSpaceRoleId,
                   workgroupRole.sharedSpaceRoleId,
-                  LinShareNodeType.DRIVE))
+                  LinShareNodeType.DRIVE),
+              isOverrideRoleForAll: isOverrideRoleForAll)
           .then((result) => result.fold(
               (failure) => store.dispatch(UpdateDriveMembersAction(Left<Failure, Success>(UpdateDriveMemberFailure(UpdateRoleFailed())))),
               (success) {
@@ -310,6 +313,17 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
                 _getAllMember(drive);
               }));
     });
+  }
+
+  void changeWorkgroupInsideDriveMemberRole(SharedSpaceNodeNested drive, SharedSpaceMember fromMember,
+      SharedSpaceRoleName changeToRole, {bool? isOverrideRoleForAll}) {
+    store.dispatch(_updateDriveMemberRoleAction(
+        drive,
+        AccountId(fromMember.account?.accountId.uuid ?? ''),
+        fromMember.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
+        changeToRole,
+        isOverrideRoleForAll: isOverrideRoleForAll));
+    _appNavigation.popBack();
   }
 
   @override
