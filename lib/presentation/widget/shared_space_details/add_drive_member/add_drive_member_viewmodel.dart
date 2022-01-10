@@ -34,6 +34,7 @@ import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_drive_member_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/update_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -50,6 +51,7 @@ class AddDriveMemberViewModel extends BaseViewModel {
   final AddSharedSpaceMemberInteractor _addSharedSpaceMemberInteractor;
   final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
   final DeleteSharedSpaceMemberInteractor _deleteSharedSpaceMemberInteractor;
+  final UpdateDriveMemberInteractor _updateDriveMemberInteractor;
 
   AddDriveMemberArguments? _arguments;
 
@@ -62,6 +64,7 @@ class AddDriveMemberViewModel extends BaseViewModel {
       this._addSharedSpaceMemberInteractor,
       this._getAllSharedSpaceRolesInteractor,
       this._deleteSharedSpaceMemberInteractor,
+      this._updateDriveMemberInteractor,
   ) : super(store);
 
   void initState(AddDriveMemberArguments? arguments) {
@@ -214,6 +217,61 @@ class AddDriveMemberViewModel extends BaseViewModel {
             _refreshListDriveMember(sharedSpaceId);
           }));
     });
+  }
+
+  void changeDriveMemberRole(SharedSpaceNodeNested drive, SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
+    store.dispatch(_updateDriveMemberRoleAction(
+        drive,
+        AccountId(fromMember.account?.accountId.uuid ?? ''),
+        changeToRole,
+        fromMember.nestedRole?.name ?? SharedSpaceRoleName.READER));
+    _appNavigation.popBack();
+  }
+
+  OnlineThunkAction _updateDriveMemberRoleAction(
+      SharedSpaceNodeNested drive, AccountId accountId,
+      SharedSpaceRoleName newRole, SharedSpaceRoleName nestedRoleName,
+      {bool? isOverrideRoleForAll}) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      final driveRolesList = store.state.addDriveMemberState.driveRoleList;
+      final rolesList = store.state.addDriveMemberState.workgroupRoleList;
+      if (rolesList.isEmpty || driveRolesList.isEmpty) {
+        store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(RolesListNotFound()))));
+        return;
+      }
+
+      final workgroupRole = rolesList.firstWhere((_role) => _role.name == nestedRoleName, orElse: () => SharedSpaceRole.initial());
+      final roleDrive = driveRolesList.firstWhere((_role) => _role.name == newRole, orElse: () => SharedSpaceRole.initialDrive());
+      if (roleDrive.sharedSpaceRoleId.uuid.isEmpty || workgroupRole.sharedSpaceRoleId.uuid.isEmpty) {
+        store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(SelectedRoleNotFound()))));
+        return;
+      }
+
+      await _updateDriveMemberInteractor
+        .execute(
+          drive.sharedSpaceId,
+          UpdateDriveMemberRequest(
+              accountId,
+              drive.sharedSpaceId,
+              roleDrive.sharedSpaceRoleId,
+              workgroupRole.sharedSpaceRoleId,
+              LinShareNodeType.DRIVE),
+          isOverrideRoleForAll: isOverrideRoleForAll)
+        .then((result) => result.fold(
+          (failure) => store.dispatch(UpdateDriveMembersAction(Left<Failure, Success>(UpdateDriveMemberFailure(UpdateRoleFailed())))),
+          (success) => _refreshListDriveMember(drive.sharedSpaceId)));
+    });
+  }
+
+  void changeWorkgroupInsideDriveMemberRole(SharedSpaceNodeNested drive, SharedSpaceMember fromMember,
+      SharedSpaceRoleName changeToRole, {bool? isOverrideRoleForAll}) {
+    store.dispatch(_updateDriveMemberRoleAction(
+        drive,
+        AccountId(fromMember.account?.accountId.uuid ?? ''),
+        fromMember.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
+        changeToRole,
+        isOverrideRoleForAll: isOverrideRoleForAll));
+    _appNavigation.popBack();
   }
 
   void backToSharedSpacesDetails() {
