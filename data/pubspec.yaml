@@ -57,7 +57,7 @@ dependencies:
 
   contacts_service:
     git:
-      url: git://github.com/linagora/flutter_contacts.git
+      url: https://github.com/linagora/flutter_contacts.git
       ref: master
 
   # OIDC
