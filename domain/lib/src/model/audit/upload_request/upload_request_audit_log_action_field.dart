@@ -31,47 +31,27 @@
 
 import 'package:domain/domain.dart';
 
-class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
-  final SharedSpaceNodeNested? resource;
-  final SharedSpaceNodeNested? resourceUpdated;
+class UploadRequestAuditLogActionField extends AuditLogActionField {
 
-  SharedSpaceNodeAuditLogEntry(
-      AuditLogEntryId auditLogEntryId,
-      AuditLogResourceId resourceId,
-      AuditLogResourceId fromResourceId,
-      DateTime creationDate,
-      Account? authUser,
-      AuditLogEntryType? type,
-      LogAction? action,
-      LogActionCause? cause,
-      Account? actor,
-      this.resource,
-      this.resourceUpdated
-  ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
+  final UploadRequestField field;
+  final oldValue;
+  final newValue;
+
+  UploadRequestAuditLogActionField({required this.field, this.oldValue, this.newValue}) : super();
 
   @override
-  List<Object?> get props => [
-     ...super.props,
-    resource,
-    resourceUpdated
-  ];
+  List<Object?> get props => [field, oldValue, newValue];
+}
 
-  @override
-  Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
-    return {
-      AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
-      AuditLogActionMessageParam.resourceName : resource != null ? resource?.name : '',
-      AuditLogActionMessageParam.nameVarious : resource != null ? resource?.name : ''
-    };
-  }
-
-  @override
-  String getResourceName() {
-    return resource?.name ?? '';
-  }
-
-  @override
-  List<AuditLogActionField> getListFieldChanged() {
-    return [];
-  }
+enum UploadRequestField {
+  status,
+  notificationLanguage,
+  allowDeletion,
+  allowClosure,
+  maxNumberOfFiles,
+  maxSizePerFile,
+  maxTotalFileSize,
+  notificationDate,
+  expirationDate,
+  activationDate,
 }

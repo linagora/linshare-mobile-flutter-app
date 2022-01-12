@@ -31,11 +31,10 @@
 
 import 'package:domain/domain.dart';
 
-class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
-  final SharedSpaceNodeNested? resource;
-  final SharedSpaceNodeNested? resourceUpdated;
+class UploadRequestURLAuditLogEntry extends AuditLogEntryUser {
+  final UploadRequestURL? resource;
 
-  SharedSpaceNodeAuditLogEntry(
+  UploadRequestURLAuditLogEntry(
       AuditLogEntryId auditLogEntryId,
       AuditLogResourceId resourceId,
       AuditLogResourceId fromResourceId,
@@ -46,28 +45,26 @@ class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
       LogActionCause? cause,
       Account? actor,
       this.resource,
-      this.resourceUpdated
   ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
   List<Object?> get props => [
      ...super.props,
     resource,
-    resourceUpdated
   ];
 
   @override
   Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
     return {
       AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
-      AuditLogActionMessageParam.resourceName : resource != null ? resource?.name : '',
-      AuditLogActionMessageParam.nameVarious : resource != null ? resource?.name : ''
+      AuditLogActionMessageParam.resourceName : resource != null ? resource?.contactMail : '',
+      AuditLogActionMessageParam.nameVarious : resource != null ? resource?.contactMail : ''
     };
   }
 
   @override
   String getResourceName() {
-    return resource?.name ?? '';
+    return resource?.contactMail ?? '';
   }
 
   @override
