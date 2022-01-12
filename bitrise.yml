@@ -160,5 +160,5 @@ app:
     BITRISE_EXPORT_METHOD: development
   - opts:
       is_expand: false
-    SAAS_AVAILABLE: 'false'
+    SAAS_AVAILABLE: 'true'
 
