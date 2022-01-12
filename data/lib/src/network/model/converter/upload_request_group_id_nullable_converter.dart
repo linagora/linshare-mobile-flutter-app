@@ -28,37 +28,17 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/src/datasource/upload_request_datasource.dart';
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class UploadRequestRepositoryImpl implements UploadRequestRepository {
-  final UploadRequestDataSource _uploadRequestDataSource;
-
-  UploadRequestRepositoryImpl(this._uploadRequestDataSource);
-
-  @override
-  Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId uploadRequestGroupId) {
-    return _uploadRequestDataSource.getAllUploadRequests(uploadRequestGroupId);
-  }
+class UploadRequestGroupIdNullableConverter implements JsonConverter<UploadRequestGroupId?, String?> {
+  const UploadRequestGroupIdNullableConverter();
 
   @override
-  Future<UploadRequest> updateUploadRequestState(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace}) {
-    return _uploadRequestDataSource.updateUploadRequestState(uploadRequestId, status, copyToMySpace: copyToMySpace);
-  }
+  UploadRequestGroupId? fromJson(String? json) => json != null ? UploadRequestGroupId(json) : null;
 
   @override
-  Future<UploadRequest> getUploadRequest(UploadRequestId uploadRequestId) {
-    return _uploadRequestDataSource.getUploadRequest(uploadRequestId);
-  }
-
-  @override
-  Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request) {
-    return _uploadRequestDataSource.editUploadRequest(uploadRequestId, request);
-  }
-
-  @override
-  Future<List<AuditLogEntryUser?>> getUploadRequestActivities(UploadRequestId uploadRequestId) {
-    return _uploadRequestDataSource.getUploadRequestActivities(uploadRequestId);
-  }
+  String? toJson(UploadRequestGroupId? object) => object?.uuid;
 }

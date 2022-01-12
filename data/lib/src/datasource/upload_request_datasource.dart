@@ -39,4 +39,6 @@ abstract class UploadRequestDataSource {
   Future<UploadRequest> getUploadRequest(UploadRequestId uploadRequestId);
 
   Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request);
+
+  Future<List<AuditLogEntryUser?>> getUploadRequestActivities(UploadRequestId uploadRequestId);
 }

@@ -31,6 +31,8 @@
 
 import 'package:data/data.dart';
 import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/upload_proposition_request_id_nullable_converter.dart';
+import 'package:data/src/network/model/converter/upload_request_group_id_nullable_converter.dart';
 import 'package:data/src/network/model/converter/upload_request_id_converter.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
@@ -42,11 +44,17 @@ part 'upload_request_response.g.dart';
 @JsonSerializable()
 @DatetimeConverter()
 @UploadRequestIdConverter()
+@UploadRequestGroupIdNullableConverter()
+@UploadPropositionRequestIdNullableConverter()
 class UploadRequestResponse extends Equatable {
   UploadRequestResponse(
       this.uploadRequestId,
       this.label,
       this.body,
+      this.subject,
+      this.statusUpdated,
+      this.uploadPropositionRequestId,
+      this.uploadRequestGroupId,
       this.creationDate,
       this.modificationDate,
       this.activationDate,
@@ -73,7 +81,16 @@ class UploadRequestResponse extends Equatable {
   @JsonKey(name: Attribute.uuid)
   final UploadRequestId uploadRequestId;
 
-  final String label;
+  final String? subject;
+  final bool? statusUpdated;
+
+  @JsonKey(name: Attribute.uploadPropositionRequestUuid)
+  final UploadPropositionRequestId? uploadPropositionRequestId;
+
+  @JsonKey(name: Attribute.uploadRequestGroupUuid)
+  final UploadRequestGroupId? uploadRequestGroupId;
+
+  final String? label;
   final String? body;
   final DateTime creationDate;
   final DateTime modificationDate;
@@ -82,15 +99,15 @@ class UploadRequestResponse extends Equatable {
   final DateTime expiryDate;
   final bool protectedByPassword;
   final bool enableNotification;
-  final bool collective;
+  final bool? collective;
   final GenericUserDto owner;
   final UploadRequestStatus status;
-  final double usedSpace;
-  final int nbrUploadedFiles;
-  final bool pristine;
-  final bool closed;
+  final double? usedSpace;
+  final int? nbrUploadedFiles;
+  final bool? pristine;
+  final bool? closed;
   final String locale;
-  final List<GenericUserDto> recipients;
+  final List<GenericUserDto>? recipients;
   final int? maxFileCount;
   final double? maxDepositSize;
   final double? maxFileSize;
@@ -106,6 +123,10 @@ class UploadRequestResponse extends Equatable {
     uploadRequestId,
     label,
     body,
+    subject,
+    statusUpdated,
+    uploadPropositionRequestId,
+    uploadRequestGroupId,
     creationDate,
     modificationDate,
     activationDate,
@@ -136,6 +157,10 @@ extension UploadRequestResponseExtension on UploadRequestResponse {
       uploadRequestId,
       label,
       body,
+      subject,
+      statusUpdated,
+      uploadPropositionRequestId,
+      uploadRequestGroupId,
       creationDate,
       modificationDate,
       activationDate,
@@ -151,7 +176,7 @@ extension UploadRequestResponseExtension on UploadRequestResponse {
       pristine,
       closed,
       locale,
-      recipients.map((e) => e.toGenericUser()).toList(),
+      recipients?.map((e) => e.toGenericUser()).toList() ?? [],
       maxFileCount,
       maxDepositSize,
       maxFileSize,
