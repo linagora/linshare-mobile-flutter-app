@@ -29,36 +29,61 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/upload_request_datasource.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/upload_request_group_id_converter.dart';
+import 'package:data/src/network/model/converter/upload_request_id_converter.dart';
+import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class UploadRequestRepositoryImpl implements UploadRequestRepository {
-  final UploadRequestDataSource _uploadRequestDataSource;
+part 'upload_request_url_response.g.dart';
 
-  UploadRequestRepositoryImpl(this._uploadRequestDataSource);
+@JsonSerializable()
+@DatetimeConverter()
+@UploadRequestIdConverter()
+@UploadRequestGroupIdConverter()
+class UploadRequestURLResponse extends Equatable {
+  UploadRequestURLResponse(
+      this.uploadRequestId,
+      this.uploadRequestGroupId,
+      this.contactMail,
+      this.creationDate,
+      this.modificationDate,
+  );
+
+  @JsonKey(name: Attribute.uploadRequestUuid)
+  final UploadRequestId uploadRequestId;
+
+  @JsonKey(name: Attribute.uploadRequestGroupUuid)
+  final UploadRequestGroupId uploadRequestGroupId;
+
+  final String? contactMail;
+  final DateTime creationDate;
+  final DateTime modificationDate;
+
+  factory UploadRequestURLResponse.fromJson(Map<String, dynamic> json) => _$UploadRequestURLResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UploadRequestURLResponseToJson(this);
 
   @override
-  Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId uploadRequestGroupId) {
-    return _uploadRequestDataSource.getAllUploadRequests(uploadRequestGroupId);
-  }
+  List<Object?> get props => [
+    uploadRequestId,
+    uploadRequestGroupId,
+    contactMail,
+    creationDate,
+    modificationDate,
+  ];
+}
 
-  @override
-  Future<UploadRequest> updateUploadRequestState(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace}) {
-    return _uploadRequestDataSource.updateUploadRequestState(uploadRequestId, status, copyToMySpace: copyToMySpace);
-  }
-
-  @override
-  Future<UploadRequest> getUploadRequest(UploadRequestId uploadRequestId) {
-    return _uploadRequestDataSource.getUploadRequest(uploadRequestId);
-  }
-
-  @override
-  Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request) {
-    return _uploadRequestDataSource.editUploadRequest(uploadRequestId, request);
-  }
-
-  @override
-  Future<List<AuditLogEntryUser?>> getUploadRequestActivities(UploadRequestId uploadRequestId) {
-    return _uploadRequestDataSource.getUploadRequestActivities(uploadRequestId);
+extension UploadRequestURLResponseExtension on UploadRequestURLResponse {
+  UploadRequestURL toUploadRequestURL() {
+    return UploadRequestURL(
+      uploadRequestId,
+      uploadRequestGroupId,
+      contactMail,
+      creationDate,
+      modificationDate,
+    );
   }
 }
