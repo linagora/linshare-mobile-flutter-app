@@ -65,6 +65,8 @@ import 'package:data/src/network/model/response/user_response.dart';
 import 'package:data/src/network/model/share/received_share_dto.dart';
 import 'package:data/src/network/model/shared_space_activities/shared_space_member_audit_log_entry_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
+import 'package:data/src/network/model/upload_request/upload_request_audit_log_entry_dto.dart';
+import 'package:data/src/network/model/upload_request/upload_request_url_audit_log_entry_dto.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -195,6 +197,10 @@ class LinShareHttpClient {
       return WorkGroupDocumentRevisionAuditLogEntryDto.fromJson(nodeChildJson);
     } else if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP_FOLDER.value) {
       return WorkGroupFolderAuditLogEntryDto.fromJson(nodeChildJson);
+    } else if (nodeChildJson['type'] == AuditLogEntryType.UPLOAD_REQUEST.value) {
+      return UploadRequestAuditLogEntryDto.fromJson(nodeChildJson);
+    } else if (nodeChildJson['type'] == AuditLogEntryType.UPLOAD_REQUEST_URL.value) {
+      return UploadRequestURLAuditLogEntryDto.fromJson(nodeChildJson);
     } else {
       return null;
     }
@@ -823,5 +829,15 @@ class LinShareHttpClient {
             .withPathParameter(uploadRequestGroupId.uuid)
             .generateEndpointPath());
     return UploadRequestGroupResponse.fromJson(resultJson);
+  }
+
+  Future<List<AuditLogEntryUserDto?>> getUploadRequestActivities(UploadRequestId uploadRequestId) async {
+    final membersJson = await _dioClient.get(Endpoint.uploadRequestsRoute
+        .withPathParameter(uploadRequestId.uuid)
+        .withPathParameter('audit')
+        .generateEndpointPath());
+    return membersJson
+      .map<AuditLogEntryUserDto?>((data) => _convertToAuditLogEntryNodeChild(data))
+      .toList();
   }
 }
