@@ -38,11 +38,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
-import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
+import 'package:linshare_flutter_app/presentation/model/notification_language.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_recipient_details_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entry_user_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/upload_request_field_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/upload_request_audit_log_action_field_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
@@ -80,17 +83,53 @@ class _UploadRequestRecipientDetailsWidgetState extends State<UploadRequestRecip
   Widget build(BuildContext context) {
     var arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestRecipientDetailsArguments;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          key: Key('upload_request_recipient_details_arrow_back_button'),
-          icon: Image.asset(imagePath.icArrowBack),
-          onPressed: () => _model.backToUploadRequest(),
-        ),
-        title: Text(arguments.uploadRequest.recipients.first.mail, style: TextStyle(fontSize: 24, color: Colors.white)),
-        backgroundColor: AppColor.primaryColor,
-      ),
-      body: SafeArea(child: _buildDetailsView()),
+    return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              key: Key('upload_request_recipient_details_arrow_back_button'),
+              icon: Image.asset(imagePath.icArrowBack),
+              onPressed: () => _model.backToUploadRequest(),
+            ),
+            centerTitle: true,
+            title: Text(arguments.uploadRequest.recipients.first.mail,
+                style: TextStyle(fontSize: 24, color: Colors.white)),
+            backgroundColor: AppColor.primaryColor,
+          ),
+          body: Column(
+            children: [
+              Container(
+                height: 48.0,
+                color: Colors.white,
+                child: TabBar(
+                  labelColor: AppColor.uploadProgressValueColor,
+                  indicatorColor: AppColor.uploadProgressValueColor,
+                  unselectedLabelColor: AppColor.loginTextFieldTextColor,
+                  tabs: [
+                    _tabTextWidget(AppLocalizations.of(context).details),
+                    _tabTextWidget(AppLocalizations.of(context).activities),
+                  ],
+                ),
+              ),
+              Expanded(
+                  child: TabBarView(children: [
+                StoreConnector<AppState, AppState>(
+                    converter: (store) => store.state,
+                    builder: (_, state) => _detailsTabWidget(state)),
+                StoreConnector<AppState, UploadRequestRecipientDetailsState>(
+                    converter: (store) => store.state.uploadRequestRecipientDetailsState,
+                    builder: (_, state) => _activitiesTabWidget(state.activities)),
+              ]))
+            ],
+          ),
+        ));
+  }
+
+  Text _tabTextWidget(String title) {
+    return Text(
+      title,
+      style: TextStyle(fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, fontSize: 18),
     );
   }
 
@@ -115,21 +154,16 @@ class _UploadRequestRecipientDetailsWidgetState extends State<UploadRequestRecip
     );
   }
 
-  Widget _buildDetailsView() {
-    return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (context, state) {
-        if (state.uploadRequestRecipientDetailsState.uploadRequest == null) {
-          return _buildLoadingView();
-        }
-        return SingleChildScrollView(child: Column(children: [
-          _numberOfUploadedFilesWidget(state.uploadRequestRecipientDetailsState),
-          _messagesUploadRequestGroupWidget(state.uploadRequestRecipientDetailsState),
-          _ownerUploadRequestGroupWidget(state),
-          _metaDataUploadRequestGroupWidget(state.uploadRequestRecipientDetailsState),
-        ]));
-      },
-    );
+  Widget _detailsTabWidget(AppState appState) {
+    if (appState.uploadRequestRecipientDetailsState.uploadRequest == null) {
+      return _buildLoadingView();
+    }
+    return SafeArea(child: SingleChildScrollView(child: Column(children: [
+      _numberOfUploadedFilesWidget(appState.uploadRequestRecipientDetailsState),
+      _messagesUploadRequestGroupWidget(appState.uploadRequestRecipientDetailsState),
+      _ownerUploadRequestGroupWidget(appState),
+      _metaDataUploadRequestGroupWidget(appState.uploadRequestRecipientDetailsState),
+    ])));
   }
 
   Widget _numberOfUploadedFilesWidget(UploadRequestRecipientDetailsState state) {
@@ -165,7 +199,9 @@ class _UploadRequestRecipientDetailsWidgetState extends State<UploadRequestRecip
   }
 
   String _getNumberFileUploaded(UploadRequest? uploadRequest) {
-    if (uploadRequest != null && uploadRequest.nbrUploadedFiles > 999) {
+    if (uploadRequest != null
+        && uploadRequest.nbrUploadedFiles != null
+        && uploadRequest.nbrUploadedFiles! > 999) {
       return '999+';
     }
     return '${uploadRequest?.nbrUploadedFiles ?? 0}';
@@ -286,7 +322,7 @@ class _UploadRequestRecipientDetailsWidgetState extends State<UploadRequestRecip
                 uploadRequest.activationDate.getMMMddyyyyFormatString()),
             _buildItemMetaData(
                 AppLocalizations.of(context).collective,
-                uploadRequest.collective
+                uploadRequest.collective == true
                     ? AppLocalizations.of(context).yes
                     : AppLocalizations.of(context).no),
             _buildItemMetaData(AppLocalizations.of(context).max_total_file_size,
@@ -323,6 +359,104 @@ class _UploadRequestRecipientDetailsWidgetState extends State<UploadRequestRecip
                   color: AppColor.uploadRequestGroupOwnerNameColor,
                   fontWeight: FontWeight.w500,
                   fontSize: 14.0)),
+        ]));
+  }
+
+  Widget _activitiesTabWidget(List<AuditLogEntryUser?>? activitiesList) {
+    return (activitiesList == null || activitiesList.isEmpty)
+        ? SizedBox.shrink()
+        : SafeArea(
+            child: ListView.builder(
+            key: Key('upload_request_activities_list'),
+            padding: EdgeInsets.only(bottom: 30),
+            itemCount: activitiesList.length,
+            itemBuilder: (context, index) {
+              return _buildActivitiesListItem(context, activitiesList[index]);
+            },
+          ));
+  }
+
+  Widget _buildActivitiesListItem(BuildContext context, AuditLogEntryUser? auditLogEntryUser) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, top: 30, right: 16),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          SvgPicture.asset(
+              auditLogEntryUser?.getAuditLogIconPath(imagePath) ??
+                  imagePath.icAddMember,
+              width: 20,
+              height: 20,
+              fit: BoxFit.fill),
+          Expanded(
+              child: Padding(
+                  padding: EdgeInsets.only(left: 8),
+                  child: Text(
+                    auditLogEntryUser?.getResourceName() ?? '',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.uploadFileFileNameTextColor),
+                  )))
+        ]),
+        Divider(),
+        _buildActionDetailsText(auditLogEntryUser?.getActionDetails(
+            context, _model.store.state.account.user!.userId.uuid)),
+        _buildListContentsUpdated(auditLogEntryUser?.getListFieldChanged() ?? []),
+        Padding(
+            padding: EdgeInsets.only(top: 16),
+            child: Text(
+              auditLogEntryUser?.getLogTimeAndByActor(context, _model.store.state.account.user!.userId.uuid) ?? '',
+              style: TextStyle(
+                  fontSize: 13,
+                  color: AppColor.documentModifiedDateItemTextColor),
+            ))
+      ]),
+    );
+  }
+
+  Widget _buildActionDetailsText(Map<AuditLogActionDetail, dynamic>? actionDetails) {
+    return Padding(
+        padding: EdgeInsets.only(top: 0),
+        child: RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor),
+              children: <TextSpan>[
+                TextSpan(
+                    text: actionDetails?[AuditLogActionDetail.TITLE],
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppColor.documentNameItemTextColor)),
+                TextSpan(
+                    text: ' ${actionDetails?[AuditLogActionDetail.DETAIL]}',
+                    style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor))
+              ],
+            )));
+  }
+  
+  Widget _buildListContentsUpdated(List<AuditLogActionField> listField) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      ...listField
+          .whereType<UploadRequestAuditLogActionField>()
+          .map((actionField) => _buildItemContent(actionField))
+          .toList()
+    ]);
+  }
+
+  Widget _buildItemContent(UploadRequestAuditLogActionField actionField) {
+    return Padding(
+        padding: EdgeInsets.only(top: 10),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('${actionField.field.getName(context)}:',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: AppColor.documentModifiedDateItemTextColor)),
+          SizedBox(height: 4),
+          Text(actionField.getValueChanged(context),
+              style: TextStyle(
+                  fontSize: 16,
+                  color: AppColor.documentModifiedDateItemTextColor))
         ]));
   }
 }

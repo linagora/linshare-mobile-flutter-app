@@ -75,7 +75,6 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
           default:
             return {};
         }
-        break;
       case AuditLogEntryType.WORKGROUP_MEMBER:
         switch (clientLogAction) {
           case ClientLogAction.ADDITION:
@@ -117,7 +116,6 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
           default:
             return {};
         }
-        break;
       case AuditLogEntryType.WORKGROUP_FOLDER:
         switch (clientLogAction) {
           case ClientLogAction.CREATE:
@@ -171,7 +169,6 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
           default:
             return {};
         }
-        break;
       case AuditLogEntryType.WORKGROUP_DOCUMENT:
         switch (clientLogAction) {
           case ClientLogAction.DELETE:
@@ -303,7 +300,6 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
           default:
             return {};
         }
-        break;
       case AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION:
         switch (clientLogAction) {
           case ClientLogAction.UPLOAD_REVISION:
@@ -345,7 +341,32 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
           default:
             return {};
         }
-        break;
+      case AuditLogEntryType.UPLOAD_REQUEST:
+        switch (clientLogAction) {
+          case ClientLogAction.CREATE:
+            return {
+              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_create,
+              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_create_upload_request_recipient
+            };
+          case ClientLogAction.UPDATE:
+            return {
+              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_update,
+              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_update_upload_request_recipient
+            };
+          default:
+            return {};
+        }
+      case AuditLogEntryType.UPLOAD_REQUEST_URL:
+        switch (clientLogAction) {
+          case ClientLogAction.CREATE:
+            return {
+              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_create,
+              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_create_upload_request_url(
+                  actionMessages[AuditLogActionMessageParam.resourceName])
+            };
+          default:
+            return {};
+        }
       default:
         return {};
     }

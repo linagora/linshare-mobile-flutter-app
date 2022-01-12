@@ -41,32 +41,38 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 @immutable
 class UploadRequestRecipientDetailsState extends LinShareState with EquatableMixin {
   final UploadRequest? uploadRequest;
+  final List<AuditLogEntryUser?>? activities;
 
   UploadRequestRecipientDetailsState(
       Either<Failure, Success> viewState,
       this.uploadRequest,
+      this.activities,
   ) : super(viewState);
 
   factory UploadRequestRecipientDetailsState.initial() {
-    return UploadRequestRecipientDetailsState(Right(IdleState()), null);
+    return UploadRequestRecipientDetailsState(Right(IdleState()), null, []);
   }
 
   @override
   UploadRequestRecipientDetailsState clearViewState() {
-    return UploadRequestRecipientDetailsState(Right(IdleState()), null);
+    return UploadRequestRecipientDetailsState(Right(IdleState()), null, []);
   }
 
   @override
   UploadRequestRecipientDetailsState sendViewState({required Either<Failure, Success> viewState}) {
-    return UploadRequestRecipientDetailsState(viewState, uploadRequest);
+    return UploadRequestRecipientDetailsState(viewState, uploadRequest, []);
   }
 
   @override
   UploadRequestRecipientDetailsState startLoadingState() {
-    return UploadRequestRecipientDetailsState(Right(LoadingState()), uploadRequest);
+    return UploadRequestRecipientDetailsState(Right(LoadingState()), uploadRequest, activities);
   }
 
   UploadRequestRecipientDetailsState setUploadRequestGroup({required Either<Failure, Success> viewState, UploadRequest? newUploadRequest}) {
-    return UploadRequestRecipientDetailsState(viewState, newUploadRequest);
+    return UploadRequestRecipientDetailsState(viewState, newUploadRequest, activities);
+  }
+
+  UploadRequestRecipientDetailsState setUploadRequestActivities({required Either<Failure, Success> viewState, List<AuditLogEntryUser?>? newActivities}) {
+    return UploadRequestRecipientDetailsState(viewState, uploadRequest, newActivities);
   }
 }

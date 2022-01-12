@@ -32,7 +32,7 @@
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
-import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
+import 'package:linshare_flutter_app/presentation/model/notification_language.dart';
 
 class UploadRequestPresentation extends Equatable {
 
