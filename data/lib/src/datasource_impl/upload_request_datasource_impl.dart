@@ -34,6 +34,8 @@ import 'dart:async';
 import 'package:data/src/datasource/upload_request_datasource.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:data/src/network/model/response/upload_request_response.dart';
+import 'package:data/src/network/model/upload_request/upload_request_audit_log_entry_dto.dart';
+import 'package:data/src/network/model/upload_request/upload_request_url_audit_log_entry_dto.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -103,6 +105,32 @@ class UploadRequestDataSourceImpl implements UploadRequestDataSource {
           throw UploadRequestNotFound();
         } else {
           throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<List<AuditLogEntryUser?>> getUploadRequestActivities(UploadRequestId uploadRequestId) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getUploadRequestActivities(uploadRequestId))
+          .map((auditLogEntryUserDto) {
+            if (auditLogEntryUserDto is UploadRequestAuditLogEntryDto) {
+              return auditLogEntryUserDto.toUploadRequestAuditLogEntry();
+            } else if (auditLogEntryUserDto is UploadRequestURLAuditLogEntryDto) {
+              return auditLogEntryUserDto.toUploadRequestURLAuditLogEntry();
+            }
+            return null;
+          }).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });

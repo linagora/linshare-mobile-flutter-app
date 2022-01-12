@@ -29,36 +29,59 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/datasource/upload_request_datasource.dart';
+import 'package:data/data.dart';
+import 'package:data/src/network/model/converter/audit_log_entry_id_converter.dart';
+import 'package:data/src/network/model/converter/audit_log_resource_id_converter.dart';
+import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/shared_space_activities/audit_log_entry_user_dto.dart';
+import 'package:data/src/network/model/upload_request/upload_request_url_response.dart';
 import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class UploadRequestRepositoryImpl implements UploadRequestRepository {
-  final UploadRequestDataSource _uploadRequestDataSource;
+part 'upload_request_url_audit_log_entry_dto.g.dart';
 
-  UploadRequestRepositoryImpl(this._uploadRequestDataSource);
+@JsonSerializable()
+@DatetimeConverter()
+@AuditLogEntryIdConverter()
+@AuditLogResourceIdConverter()
+class UploadRequestURLAuditLogEntryDto extends AuditLogEntryUserDto {
+
+  final UploadRequestURLResponse? resource;
+
+  UploadRequestURLAuditLogEntryDto(
+      AuditLogEntryId auditLogEntryId,
+      AuditLogResourceId resourceId,
+      AuditLogResourceId fromResourceId,
+      DateTime creationDate,
+      AccountDto? authUser,
+      AuditLogEntryType type,
+      LogAction action,
+      LogActionCause? cause,
+      AccountDto? actor,
+      this.resource,
+  ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
 
   @override
-  Future<List<UploadRequest>> getAllUploadRequests(UploadRequestGroupId uploadRequestGroupId) {
-    return _uploadRequestDataSource.getAllUploadRequests(uploadRequestGroupId);
-  }
+  List<Object?> get props => [
+    ...super.props,
+    resource,
+  ];
 
-  @override
-  Future<UploadRequest> updateUploadRequestState(UploadRequestId uploadRequestId, UploadRequestStatus status, {bool? copyToMySpace}) {
-    return _uploadRequestDataSource.updateUploadRequestState(uploadRequestId, status, copyToMySpace: copyToMySpace);
-  }
+  factory UploadRequestURLAuditLogEntryDto.fromJson(Map<String, dynamic> json) => _$UploadRequestURLAuditLogEntryDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$UploadRequestURLAuditLogEntryDtoToJson(this);
+}
 
-  @override
-  Future<UploadRequest> getUploadRequest(UploadRequestId uploadRequestId) {
-    return _uploadRequestDataSource.getUploadRequest(uploadRequestId);
-  }
-
-  @override
-  Future<UploadRequest> editUploadRequest(UploadRequestId uploadRequestId, EditUploadRequestRecipient request) {
-    return _uploadRequestDataSource.editUploadRequest(uploadRequestId, request);
-  }
-
-  @override
-  Future<List<AuditLogEntryUser?>> getUploadRequestActivities(UploadRequestId uploadRequestId) {
-    return _uploadRequestDataSource.getUploadRequestActivities(uploadRequestId);
-  }
+extension UploadRequestURLAuditLogEntryDtoExtension on UploadRequestURLAuditLogEntryDto {
+  UploadRequestURLAuditLogEntry toUploadRequestURLAuditLogEntry() => UploadRequestURLAuditLogEntry(
+      auditLogEntryId,
+      resourceId,
+      fromResourceId,
+      creationDate ,
+      authUser?.toAccount(),
+      type,
+      action,
+      cause ?? LogActionCause.UNDEFINED,
+      actor?.toAccount(),
+      resource?.toUploadRequestURL(),
+  );
 }
