@@ -32,7 +32,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
-import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
+import 'package:linshare_flutter_app/presentation/model/notification_language.dart';
 
 class DateTimeTextValueNotifier extends ValueNotifier<dartz.Tuple2<DateTime, String>?> {
   DateTimeTextValueNotifier() : super(null);

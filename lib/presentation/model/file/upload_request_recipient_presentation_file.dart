@@ -48,9 +48,9 @@ class UploadRequestPresentationFile extends Equatable implements PresentationFil
 
   static UploadRequestPresentationFile fromUploadRequest(UploadRequest uploadRequest) {
     return UploadRequestPresentationFile(
-      uploadRequest.label,
-      uploadRequest.collective,
-      usedSpace: uploadRequest.usedSpace
+      uploadRequest.label ?? '',
+      uploadRequest.collective ?? false,
+      usedSpace: uploadRequest.usedSpace ?? 0
     );
   }
 

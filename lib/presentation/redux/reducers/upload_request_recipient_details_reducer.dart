@@ -45,4 +45,10 @@ final uploadRequestRecipientDetailsReducer = combineReducers<UploadRequestRecipi
               (failure) => null,
               (success) => (success is GetUploadRequestViewState) ? success.uploadRequest : null),
           viewState: action.viewState)),
+  TypedReducer<UploadRequestRecipientDetailsState, UploadRequestRecipientDetailsGetAllActivitiesAction>((UploadRequestRecipientDetailsState state, UploadRequestRecipientDetailsGetAllActivitiesAction action) =>
+      state.setUploadRequestActivities(
+          newActivities: action.activitiesViewState.fold(
+              (failure) => [],
+              (success) => (success is GetUploadRequestActivitiesViewState) ? success.auditLogEntryUserList : []),
+          viewState: action.activitiesViewState)),
 ]);

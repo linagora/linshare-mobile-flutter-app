@@ -31,7 +31,6 @@
 
 import 'dart:async';
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_recipient_details_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
@@ -45,6 +44,7 @@ import 'package:rxdart/rxdart.dart';
 class UploadRequestRecipientDetailsViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final GetUploadRequestInteractor _getUploadRequestInteractor;
+  final GetUploadRequestActivitiesInteractor _getUploadRequestActivitiesInteractor;
 
   final BehaviorSubject<bool> _isDisplayFullMessages = BehaviorSubject.seeded(false);
   StreamView<bool> get isDisplayFullMessages => _isDisplayFullMessages;
@@ -53,10 +53,12 @@ class UploadRequestRecipientDetailsViewModel extends BaseViewModel {
     Store<AppState> store,
     this._appNavigation,
     this._getUploadRequestInteractor,
+    this._getUploadRequestActivitiesInteractor,
   ) : super(store);
 
   void initState(UploadRequestRecipientDetailsArguments arguments) {
     store.dispatch(_getUploadRequestAction(arguments.uploadRequest));
+    store.dispatch(_getUploadRequestActivitiesAction(arguments.uploadRequest.uploadRequestId));
   }
 
   void backToUploadRequest() {
@@ -66,12 +68,15 @@ class UploadRequestRecipientDetailsViewModel extends BaseViewModel {
   OnlineThunkAction _getUploadRequestAction(UploadRequest uploadRequest) {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartUploadRequestRecipientDetailsLoadingAction());
+      store.dispatch(UploadRequestRecipientDetailsGetUploadRequestAction(
+          await _getUploadRequestInteractor.execute(uploadRequest.uploadRequestId)));
+    });
+  }
 
-      await _getUploadRequestInteractor
-          .execute(uploadRequest.uploadRequestId)
-          .then((response) => response..fold(
-              (failure) => store.dispatch(UploadRequestRecipientDetailsGetUploadRequestAction(Left(failure))),
-              (success) => store.dispatch(UploadRequestRecipientDetailsGetUploadRequestAction(Right(success)))));
+  OnlineThunkAction _getUploadRequestActivitiesAction(UploadRequestId uploadRequestId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(UploadRequestRecipientDetailsGetAllActivitiesAction(
+          await _getUploadRequestActivitiesInteractor.execute(uploadRequestId)));
     });
   }
 

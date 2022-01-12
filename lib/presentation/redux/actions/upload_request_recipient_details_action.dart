@@ -56,3 +56,10 @@ class UploadRequestRecipientDetailsGetUploadRequestAction extends ActionOnline {
 
   UploadRequestRecipientDetailsGetUploadRequestAction(this.viewState);
 }
+
+@immutable
+class UploadRequestRecipientDetailsGetAllActivitiesAction extends ActionOnline {
+  final Either<Failure, Success> activitiesViewState;
+
+  UploadRequestRecipientDetailsGetAllActivitiesAction(this.activitiesViewState);
+}

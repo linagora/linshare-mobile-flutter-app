@@ -18,45 +18,45 @@
 // infringing Linagora intellectual property rights over its trademarks and commercial
 // brands. Other Additional Terms apply, see
 // <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf>
-// for more details.
+// for more DETAILS.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 // FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
-// more details.
+// more DETAILS.
 // You should have received a copy of the GNU Affero General Public License and its
 // applicable Additional Terms for LinShare along with this program. If not, see
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:intl/intl.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 
-extension DateTimeExtension on DateTime {
+extension UploadRequestFieldExtension on UploadRequestField {
 
-  String getMMMddyyyyFormatString() => DateFormat.yMMMd().format(this);
-
-  String getYYYYMMddHHMMFormatString() => DateFormat('yyyy-MM-dd HH:mm').format(this);
-
-  String getYMMMMdFormatWithJm() => DateFormat.yMMMMd().add_jm().format(this);
-
-  DateTime roundUpHour(int numberHourRoundUp) => add(Duration(hours: numberHourRoundUp))
-      .subtract(Duration(minutes: minute, seconds: second, milliseconds: millisecond, microseconds: microsecond));
-
-  DateTime copyWith(
-      {int? year, int? month, int? day, int? hour, int? minute, int? second, int? millisecond, int? microsecond}) {
-    return DateTime(
-      year ?? this.year,
-      month ?? this.month,
-      day ?? this.day,
-      hour ?? this.hour,
-      minute ?? this.minute,
-      second ?? this.second,
-      millisecond ?? this.millisecond,
-      microsecond ?? this.microsecond,
-    );
+  String getName(BuildContext context) {
+    switch(this) {
+      case UploadRequestField.status:
+        return AppLocalizations.of(context).status;
+      case UploadRequestField.notificationLanguage:
+        return AppLocalizations.of(context).notification_language;
+      case UploadRequestField.allowDeletion:
+        return AppLocalizations.of(context).allow_deletion;
+      case UploadRequestField.allowClosure:
+        return AppLocalizations.of(context).allow_closure;
+      case UploadRequestField.maxNumberOfFiles:
+        return AppLocalizations.of(context).max_number_of_files;
+      case UploadRequestField.maxSizePerFile:
+        return AppLocalizations.of(context).max_size_per_file;
+      case UploadRequestField.maxTotalFileSize:
+        return AppLocalizations.of(context).max_total_file_size;
+      case UploadRequestField.notificationDate:
+        return AppLocalizations.of(context).notification_date;
+      case UploadRequestField.expirationDate:
+        return AppLocalizations.of(context).expiration_date;
+      case UploadRequestField.activationDate:
+        return AppLocalizations.of(context).activation_date;
+    }
   }
-
-  String get zuluDateFormat => DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(this);
-
 }

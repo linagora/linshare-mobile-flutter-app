@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/model/nolitication_language.dart';
+import 'package:linshare_flutter_app/presentation/model/notification_language.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/styles.dart';
 import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
