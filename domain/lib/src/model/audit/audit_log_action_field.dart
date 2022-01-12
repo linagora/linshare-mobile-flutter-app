@@ -29,49 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
-  final SharedSpaceNodeNested? resource;
-  final SharedSpaceNodeNested? resourceUpdated;
+abstract class AuditLogActionField with EquatableMixin {
 
-  SharedSpaceNodeAuditLogEntry(
-      AuditLogEntryId auditLogEntryId,
-      AuditLogResourceId resourceId,
-      AuditLogResourceId fromResourceId,
-      DateTime creationDate,
-      Account? authUser,
-      AuditLogEntryType? type,
-      LogAction? action,
-      LogActionCause? cause,
-      Account? actor,
-      this.resource,
-      this.resourceUpdated
-  ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
+  AuditLogActionField();
 
   @override
-  List<Object?> get props => [
-     ...super.props,
-    resource,
-    resourceUpdated
-  ];
-
-  @override
-  Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
-    return {
-      AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
-      AuditLogActionMessageParam.resourceName : resource != null ? resource?.name : '',
-      AuditLogActionMessageParam.nameVarious : resource != null ? resource?.name : ''
-    };
-  }
-
-  @override
-  String getResourceName() {
-    return resource?.name ?? '';
-  }
-
-  @override
-  List<AuditLogActionField> getListFieldChanged() {
-    return [];
-  }
+  List<Object?> get props => [];
 }

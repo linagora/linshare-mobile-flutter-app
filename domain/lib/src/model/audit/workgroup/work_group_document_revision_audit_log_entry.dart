@@ -78,4 +78,9 @@ class WorkGroupDocumentRevisionAuditLogEntry extends AuditLogEntryUser {
   String getResourceName() {
     return resource?.name ?? '';
   }
+
+  @override
+  List<AuditLogActionField> getListFieldChanged() {
+    return [];
+  }
 }
