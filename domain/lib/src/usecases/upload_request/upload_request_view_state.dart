@@ -129,3 +129,21 @@ class EditUploadRequestRecipientFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class GetUploadRequestActivitiesViewState extends ViewState {
+  final List<AuditLogEntryUser?> auditLogEntryUserList;
+
+  GetUploadRequestActivitiesViewState(this.auditLogEntryUserList);
+
+  @override
+  List<Object> get props => [auditLogEntryUserList];
+}
+
+class GetUploadRequestActivitiesFailure extends FeatureFailure {
+  final exception;
+
+  GetUploadRequestActivitiesFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

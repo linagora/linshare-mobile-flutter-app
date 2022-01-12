@@ -29,49 +29,20 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
-  final SharedSpaceNodeNested? resource;
-  final SharedSpaceNodeNested? resourceUpdated;
+class GetUploadRequestActivitiesInteractor {
+  final UploadRequestRepository _uploadRequestRepository;
 
-  SharedSpaceNodeAuditLogEntry(
-      AuditLogEntryId auditLogEntryId,
-      AuditLogResourceId resourceId,
-      AuditLogResourceId fromResourceId,
-      DateTime creationDate,
-      Account? authUser,
-      AuditLogEntryType? type,
-      LogAction? action,
-      LogActionCause? cause,
-      Account? actor,
-      this.resource,
-      this.resourceUpdated
-  ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
+  GetUploadRequestActivitiesInteractor(this._uploadRequestRepository);
 
-  @override
-  List<Object?> get props => [
-     ...super.props,
-    resource,
-    resourceUpdated
-  ];
-
-  @override
-  Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
-    return {
-      AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
-      AuditLogActionMessageParam.resourceName : resource != null ? resource?.name : '',
-      AuditLogActionMessageParam.nameVarious : resource != null ? resource?.name : ''
-    };
-  }
-
-  @override
-  String getResourceName() {
-    return resource?.name ?? '';
-  }
-
-  @override
-  List<AuditLogActionField> getListFieldChanged() {
-    return [];
+  Future<Either<Failure, Success>> execute(UploadRequestId uploadRequestId) async {
+    try {
+      final activities = await _uploadRequestRepository.getUploadRequestActivities(uploadRequestId);
+      return Right<Failure, Success>(GetUploadRequestActivitiesViewState(activities));
+    } catch (exception) {
+      return Left<Failure, Success>(GetUploadRequestActivitiesFailure(exception));
+    }
   }
 }

@@ -45,6 +45,10 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
         return 'WORKGROUP_DOCUMENT';
       case AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION:
         return 'WORKGROUP_DOCUMENT_REVISION';
+      case AuditLogEntryType.UPLOAD_REQUEST:
+        return 'UPLOAD_REQUEST';
+      case AuditLogEntryType.UPLOAD_REQUEST_URL:
+        return 'UPLOAD_REQUEST_URL';
       default:
         return toString();
     }
@@ -82,6 +86,12 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
         return mappingClientLogAction(auditLogEntry.action);
       case AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION:
         return getClientLogActionForCopyDocumentAction(auditLogEntry);
+      case AuditLogEntryType.UPLOAD_REQUEST:
+      case AuditLogEntryType.UPLOAD_REQUEST_URL:
+        if (auditLogEntry.action == LogAction.CREATE) {
+          return ClientLogAction.CREATE;
+        }
+        return ClientLogAction.UPDATE;
       default:
         return ClientLogAction.UPDATE;
     }
