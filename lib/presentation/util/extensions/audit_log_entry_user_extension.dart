@@ -50,6 +50,10 @@ extension AuditLogEntryUserExtension on AuditLogEntryUser {
       case AuditLogEntryType.WORKGROUP_DOCUMENT:
       case AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION:
         return getWorkGroupDocumentAuditLogIconPath(this, imagePath);
+      case AuditLogEntryType.UPLOAD_REQUEST:
+        return imagePath.icAddMember;
+      case AuditLogEntryType.UPLOAD_REQUEST_URL:
+        return imagePath.icContextItemShare;
       default:
         return imagePath.icFileTypeFile;
     }

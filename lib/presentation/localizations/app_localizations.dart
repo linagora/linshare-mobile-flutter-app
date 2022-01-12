@@ -2806,6 +2806,35 @@ class AppLocalizations {
       name: 'files_uploaded',
     );
   }
+
+  String get audit_action_message_create_upload_request_recipient {
+    return Intl.message(
+      'Upload request has been created',
+      name: 'audit_action_message_create_upload_request_recipient',
+    );
+  }
+
+  String audit_action_message_create_upload_request_url(String contactEmail) {
+    return Intl.message(
+        'An upload request email has been sent to: $contactEmail',
+        name: 'audit_action_message_create_upload_request_url',
+        args: [contactEmail]
+    );
+  }
+
+  String get audit_action_message_update_upload_request_recipient {
+    return Intl.message(
+      'Upload request has been updated.',
+      name: 'audit_action_message_update_upload_request_recipient',
+    );
+  }
+
+  String get notification_date {
+    return Intl.message(
+        'Notification date',
+        name: 'notification_date'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
