@@ -72,4 +72,9 @@ class SharedSpaceMemberAuditLogEntry extends AuditLogEntryUser {
   String getResourceName() {
     return resource?.account?.name ?? '';
   }
+
+  @override
+  List<AuditLogActionField> getListFieldChanged() {
+    return [];
+  }
 }

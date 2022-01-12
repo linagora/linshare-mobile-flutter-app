@@ -37,6 +37,10 @@ class UploadRequest with EquatableMixin {
       this.uploadRequestId,
       this.label,
       this.body,
+      this.subject,
+      this.statusUpdated,
+      this.uploadPropositionRequestId,
+      this.uploadRequestGroupId,
       this.creationDate,
       this.modificationDate,
       this.activationDate,
@@ -61,8 +65,12 @@ class UploadRequest with EquatableMixin {
   );
 
   final UploadRequestId uploadRequestId;
-  final String label;
+  final String? label;
   final String? body;
+  final String? subject;
+  final bool? statusUpdated;
+  final UploadPropositionRequestId? uploadPropositionRequestId;
+  final UploadRequestGroupId? uploadRequestGroupId;
   final DateTime creationDate;
   final DateTime modificationDate;
   final DateTime activationDate;
@@ -70,13 +78,13 @@ class UploadRequest with EquatableMixin {
   final DateTime expiryDate;
   final bool protectedByPassword;
   final bool enableNotification;
-  final bool collective;
+  final bool? collective;
   final GenericUser owner;
   final UploadRequestStatus status;
-  final double usedSpace;
-  final int nbrUploadedFiles;
-  final bool pristine;
-  final bool closed;
+  final double? usedSpace;
+  final int? nbrUploadedFiles;
+  final bool? pristine;
+  final bool? closed;
   final String locale;
   final List<GenericUser> recipients;
   final int? maxFileCount;
@@ -90,6 +98,10 @@ class UploadRequest with EquatableMixin {
     uploadRequestId,
     label,
     body,
+    subject,
+    statusUpdated,
+    uploadPropositionRequestId,
+    uploadRequestGroupId,
     creationDate,
     modificationDate,
     activationDate,

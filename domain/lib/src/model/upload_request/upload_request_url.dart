@@ -30,48 +30,29 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class SharedSpaceNodeAuditLogEntry extends AuditLogEntryUser {
-  final SharedSpaceNodeNested? resource;
-  final SharedSpaceNodeNested? resourceUpdated;
+class UploadRequestURL with EquatableMixin {
+  UploadRequestURL(
+      this.uploadRequestId,
+      this.uploadRequestGroupId,
+      this.contactMail,
+      this.creationDate,
+      this.modificationDate,
+  );
 
-  SharedSpaceNodeAuditLogEntry(
-      AuditLogEntryId auditLogEntryId,
-      AuditLogResourceId resourceId,
-      AuditLogResourceId fromResourceId,
-      DateTime creationDate,
-      Account? authUser,
-      AuditLogEntryType? type,
-      LogAction? action,
-      LogActionCause? cause,
-      Account? actor,
-      this.resource,
-      this.resourceUpdated
-  ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
+  final UploadRequestId uploadRequestId;
+  final UploadRequestGroupId uploadRequestGroupId;
+  final String? contactMail;
+  final DateTime creationDate;
+  final DateTime modificationDate;
 
   @override
   List<Object?> get props => [
-     ...super.props,
-    resource,
-    resourceUpdated
+    uploadRequestId,
+    uploadRequestGroupId,
+    contactMail,
+    creationDate,
+    modificationDate,
   ];
-
-  @override
-  Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
-    return {
-      AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
-      AuditLogActionMessageParam.resourceName : resource != null ? resource?.name : '',
-      AuditLogActionMessageParam.nameVarious : resource != null ? resource?.name : ''
-    };
-  }
-
-  @override
-  String getResourceName() {
-    return resource?.name ?? '';
-  }
-
-  @override
-  List<AuditLogActionField> getListFieldChanged() {
-    return [];
-  }
 }

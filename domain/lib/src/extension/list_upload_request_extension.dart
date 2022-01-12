@@ -38,9 +38,15 @@ extension ListUploadRequest on List<UploadRequest> {
         case OrderBy.recipient:
           return ur2.recipients.first.mail.compareToSort(ur1.recipients.first.mail, orderType);
         case OrderBy.files:
-          return ur2.nbrUploadedFiles.compareToSort(ur1.nbrUploadedFiles, orderType);
+          if (ur2.nbrUploadedFiles != null && ur1.nbrUploadedFiles != null) {
+            return ur2.nbrUploadedFiles!.compareToSort(ur1.nbrUploadedFiles!, orderType);
+          }
+          return 0;
         case OrderBy.type:
-          return ur2.collective.compareToSort(ur1.collective, orderType);
+          if (ur2.collective != null && ur1.collective != null) {
+            return ur2.collective!.compareToSort(ur1.collective!, orderType);
+          }
+          return 0;
         case OrderBy.expirationDate:
           return ur2.expiryDate.compareToSort(ur1.expiryDate, orderType);
         case OrderBy.activationDate:
