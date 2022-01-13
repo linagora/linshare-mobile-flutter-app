@@ -56,3 +56,10 @@ class SetUploadRequestFileDetailsAction extends ActionOffline {
 class CleanUploadRequestFileDetailsStateAction extends ActionOffline {
   CleanUploadRequestFileDetailsStateAction();
 }
+
+@immutable
+class UploadRequestEntryDetailsGetAllActivitiesAction extends ActionOnline {
+  final Either<Failure, Success> activitiesViewState;
+
+  UploadRequestEntryDetailsGetAllActivitiesAction(this.activitiesViewState);
+}

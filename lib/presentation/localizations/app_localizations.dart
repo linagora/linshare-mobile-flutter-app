@@ -2835,6 +2835,30 @@ class AppLocalizations {
         name: 'notification_date'
     );
   }
+
+  String audit_action_message_create_upload_request_entry(String resourceName) {
+    return Intl.message(
+        'File $resourceName has been uploaded.',
+        name: 'audit_action_message_create_upload_request_entry',
+        args: [resourceName]
+    );
+  }
+
+  String audit_action_message_download_upload_request_entry_self(String resourceName) {
+    return Intl.message(
+        'You have downloaded the file: $resourceName.',
+        name: 'audit_action_message_download_upload_request_entry_self',
+        args: [resourceName]
+    );
+  }
+
+  String audit_action_message_download_upload_request_entry_other(String authorName, String resourceName) {
+    return Intl.message(
+        '$authorName has downloaded the file: $resourceName.',
+        name: 'audit_action_message_download_upload_request_entry_other',
+        args: [authorName, resourceName]
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

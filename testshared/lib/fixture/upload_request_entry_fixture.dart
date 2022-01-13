@@ -37,6 +37,8 @@ import 'package:http_parser/http_parser.dart';
 
 final uploadRequestEntryResponse1 = UploadRequestEntryResponse(
     UploadRequestEntryId('uploadRequestEntry1'),
+    UploadRequestGroupId('uploadRequestGroup1'),
+    UploadRequestId('uploadRequest1'),
     UploadRequestEntryOwnerResponse(UploadRequestEntryOwnerId('uploadRequestEntryOwnerId'),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
@@ -60,6 +62,8 @@ final uploadRequestEntryResponse1 = UploadRequestEntryResponse(
 
 final uploadRequestEntryResponse2 = UploadRequestEntryResponse(
     UploadRequestEntryId('uploadRequestEntry2'),
+    UploadRequestGroupId('uploadRequestGroup2'),
+    UploadRequestId('uploadRequest2'),
     UploadRequestEntryOwnerResponse(UploadRequestEntryOwnerId('uploadRequestEntryOwnerId'),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
     DateTime.fromMillisecondsSinceEpoch(1604482138188),
