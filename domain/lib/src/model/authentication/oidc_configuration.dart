@@ -50,7 +50,13 @@ class OIDCConfiguration extends Equatable {
     required this.scopes
   });
 
-  String get discoveryUrl => authority + wellKnownOpenId;
+  String get discoveryUrl {
+    if (authority.endsWith('/')) {
+      return authority + wellKnownOpenId;
+    } else {
+      return authority + '/' + wellKnownOpenId;
+    }
+  }
 
   @override
   List<Object?> get props => [authority, clientId, redirectUrl, scopes];
