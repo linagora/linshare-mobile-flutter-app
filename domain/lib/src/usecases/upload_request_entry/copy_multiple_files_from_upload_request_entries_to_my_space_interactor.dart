@@ -40,7 +40,7 @@ class CopyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor {
 
   Future<Either<Failure, Success>> execute(List<UploadRequestEntry> entries) async {
     final copyRequestsList = entries.map((entry) =>
-        CopyRequest(entry.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)).toList();
+        CopyRequest(entry.uploadRequestEntryId!.uuid, SpaceType.UPLOAD_REQUEST)).toList();
     final listResult = await Future.wait(copyRequestsList.map((element) =>
         _copyToMySpaceInteractor.execute(element)));
     if (listResult.length == 1) {

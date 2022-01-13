@@ -184,3 +184,21 @@ class RemoveAllUploadRequestEntriesFailureViewState extends FeatureFailure {
   @override
   List<Object> get props => [resultList];
 }
+
+class GetUploadRequestEntryActivitiesViewState extends ViewState {
+  final List<AuditLogEntryUser?> auditLogEntryUserList;
+
+  GetUploadRequestEntryActivitiesViewState(this.auditLogEntryUserList);
+
+  @override
+  List<Object> get props => [auditLogEntryUserList];
+}
+
+class GetUploadRequestEntryActivitiesFailure extends FeatureFailure {
+  final exception;
+
+  GetUploadRequestEntryActivitiesFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

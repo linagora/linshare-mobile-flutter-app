@@ -53,11 +53,11 @@ void main() {
 
     test('copy multiples files to my space from upload request entries interactor should return success with valid data', () async {
       when(documentRepository.copyToMySpace(
-          CopyRequest(uploadRequestEntry1.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)))
+          CopyRequest(uploadRequestEntry1.uploadRequestEntryId!.uuid, SpaceType.UPLOAD_REQUEST)))
       .thenAnswer((_) async => [document1]);
 
       when(documentRepository.copyToMySpace(
-          CopyRequest(uploadRequestEntry2.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)))
+          CopyRequest(uploadRequestEntry2.uploadRequestEntryId!.uuid, SpaceType.UPLOAD_REQUEST)))
       .thenAnswer((_) async => [document2]);
 
       final result = await _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor.execute([uploadRequestEntry1, uploadRequestEntry2]);
@@ -70,11 +70,11 @@ void main() {
     test('copy multiples files to my space from upload request entries interactor should return success with some failures', () async {
       final exception = DocumentNotFound();
       when(documentRepository.copyToMySpace(
-          CopyRequest(uploadRequestEntry1.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)))
+          CopyRequest(uploadRequestEntry1.uploadRequestEntryId!.uuid, SpaceType.UPLOAD_REQUEST)))
       .thenThrow(exception);
 
       when(documentRepository.copyToMySpace(
-          CopyRequest(uploadRequestEntry2.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)))
+          CopyRequest(uploadRequestEntry2.uploadRequestEntryId!.uuid, SpaceType.UPLOAD_REQUEST)))
       .thenAnswer((_) async => [document2]);
 
       final result = await _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor.execute([uploadRequestEntry1, uploadRequestEntry2]);
@@ -86,7 +86,7 @@ void main() {
 
     test('copy multiples files to my space from upload request entries interactor should return success with one document', () async {
       when(documentRepository.copyToMySpace(
-          CopyRequest(uploadRequestEntry1.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)))
+          CopyRequest(uploadRequestEntry1.uploadRequestEntryId!.uuid, SpaceType.UPLOAD_REQUEST)))
       .thenAnswer((_) async => [document1]);
 
       final result = await _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor.execute([uploadRequestEntry1]);
@@ -99,11 +99,11 @@ void main() {
     test('copy multiples files to my space from upload request entries interactor should fail with only failures', () async {
       final exception = DocumentNotFound();
       when(documentRepository.copyToMySpace(
-          CopyRequest(uploadRequestEntry1.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)))
+          CopyRequest(uploadRequestEntry1.uploadRequestEntryId!.uuid, SpaceType.UPLOAD_REQUEST)))
       .thenThrow(exception);
 
       when(documentRepository.copyToMySpace(
-          CopyRequest(uploadRequestEntry2.uploadRequestEntryId.uuid, SpaceType.UPLOAD_REQUEST)))
+          CopyRequest(uploadRequestEntry2.uploadRequestEntryId!.uuid, SpaceType.UPLOAD_REQUEST)))
       .thenThrow(exception);
 
       final result = await _copyMultipleFilesFromUploadRequestEntriesToMySpaceInteractor.execute([uploadRequestEntry1, uploadRequestEntry2]);

@@ -28,19 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-enum AccountType { INTERNAL, SYSTEM }
+import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-extension AccountTypeExtension on AccountType {
-  String get value {
-    switch (this) {
-      case AccountType.INTERNAL:
-        return 'INTERNAL';
-      case AccountType.SYSTEM:
-        return 'SYSTEM';
-      default:
-        return toString();
-    }
-  }
+class UploadRequestEntryCopy with EquatableMixin {
+
+  final UploadRequestEntryId? uploadRequestEntryId;
+  final String? name;
+  final SpaceType? kind;
+
+  UploadRequestEntryCopy(this.uploadRequestEntryId, this.name, this.kind);
+
+  @override
+  List<Object?> get props => [
+    uploadRequestEntryId,
+    name,
+    kind,
+  ];
 }

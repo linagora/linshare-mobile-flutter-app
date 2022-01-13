@@ -41,7 +41,7 @@ class RemoveMultipleUploadRequestEntryInteractor {
 
   Future<Either<Failure, Success>> execute(List<UploadRequestEntry> entries) async {
     final listResult = await Future.wait(entries.map((entry) =>
-        _removeUploadRequestEntryInteractor.execute(entry.uploadRequestEntryId)));
+        _removeUploadRequestEntryInteractor.execute(entry.uploadRequestEntryId!)));
 
     if (listResult.length == 1) {
       return listResult.single;

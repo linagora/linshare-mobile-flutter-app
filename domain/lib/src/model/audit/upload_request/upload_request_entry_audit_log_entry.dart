@@ -28,19 +28,50 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-enum AccountType { INTERNAL, SYSTEM }
+import 'package:domain/domain.dart';
 
-extension AccountTypeExtension on AccountType {
-  String get value {
-    switch (this) {
-      case AccountType.INTERNAL:
-        return 'INTERNAL';
-      case AccountType.SYSTEM:
-        return 'SYSTEM';
-      default:
-        return toString();
-    }
+class UploadRequestEntryAuditLogEntry extends AuditLogEntryUser {
+  final UploadRequestEntry? resource;
+  final UploadRequestEntryCopy? copiedTo;
+
+  UploadRequestEntryAuditLogEntry(
+      AuditLogEntryId auditLogEntryId,
+      AuditLogResourceId resourceId,
+      AuditLogResourceId fromResourceId,
+      DateTime creationDate,
+      Account? authUser,
+      AuditLogEntryType? type,
+      LogAction? action,
+      LogActionCause? cause,
+      Account? actor,
+      this.resource,
+      this.copiedTo,
+  ) : super(auditLogEntryId, resourceId, fromResourceId, creationDate, authUser, type, action, cause, actor);
+
+  @override
+  List<Object?> get props => [
+     ...super.props,
+    resource,
+    copiedTo,
+  ];
+
+  @override
+  Map<AuditLogActionMessageParam, dynamic> getActionMessageComponents() {
+    return {
+      AuditLogActionMessageParam.authorName : actor != null ? actor?.name : '',
+      AuditLogActionMessageParam.resourceName : resource != null ? resource?.name : '',
+      AuditLogActionMessageParam.nameVarious : resource != null ? resource?.name : ''
+    };
+  }
+
+  @override
+  String getResourceName() {
+    return resource?.name ?? '';
+  }
+
+  @override
+  List<AuditLogActionField> getListFieldChanged() {
+    return [];
   }
 }

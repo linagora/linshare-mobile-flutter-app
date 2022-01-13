@@ -41,4 +41,6 @@ abstract class UploadRequestEntryRepository {
   Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
 
   Future<UploadRequestEntry> removeUploadRequestEntry(UploadRequestEntryId entryId);
+
+  Future<List<AuditLogEntryUser?>> getUploadRequestEntryActivities(UploadRequestEntryId entryId);
 }
