@@ -29,7 +29,9 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_file_details_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
@@ -38,14 +40,26 @@ import 'package:redux/redux.dart';
 
 class UploadRequestFileDetailsViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
+  final GetUploadRequestEntryActivitiesInteractor _getUploadRequestEntryActivitiesInteractor;
 
   UploadRequestFileDetailsViewModel(
       Store<AppState> store,
       this._appNavigation,
+      this._getUploadRequestEntryActivitiesInteractor,
   ) : super(store);
 
   void initState(UploadRequestFileDetailsArguments arguments) {
     store.dispatch(SetUploadRequestFileDetailsAction(arguments.entry));
+    if (arguments.entry.uploadRequestEntryId != null) {
+      store.dispatch(_getUploadRequestActivitiesAction(arguments.entry.uploadRequestEntryId!));
+    }
+  }
+
+  OnlineThunkAction _getUploadRequestActivitiesAction(UploadRequestEntryId entryId) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      store.dispatch(UploadRequestEntryDetailsGetAllActivitiesAction(
+          await _getUploadRequestEntryActivitiesInteractor.execute(entryId)));
+    });
   }
 
   void backToUploadRequestGroup() {

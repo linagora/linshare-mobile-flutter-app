@@ -354,7 +354,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             buildItemTitle(entry.element.name),
-            Align(alignment: Alignment.centerRight, child: buildRecipientText(entry.element.recipient.mail))
+            Align(alignment: Alignment.centerRight, child: buildRecipientText(entry.element.recipient?.mail ?? ''))
           ]),
         ),
         smallScreen:
@@ -364,7 +364,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
       subtitle: _responsiveUtils.isSmallScreen(context)
           ? Transform(
               transform: Matrix4.translationValues(-16, 0.0, 0.0),
-              child: Row(children: [buildRecipientText(entry.element.recipient.mail)]))
+              child: Row(children: [buildRecipientText(entry.element.recipient?.mail ?? '')]))
           : null,
       trailing: selectMode == SelectMode.ACTIVE
           ? Checkbox(

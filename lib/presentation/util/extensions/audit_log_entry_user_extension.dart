@@ -36,6 +36,7 @@ import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entry_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
+import 'package:filesize/filesize.dart';
 
 extension AuditLogEntryUserExtension on AuditLogEntryUser {
 
@@ -49,26 +50,28 @@ extension AuditLogEntryUserExtension on AuditLogEntryUser {
         return imagePath.icFolder;
       case AuditLogEntryType.WORKGROUP_DOCUMENT:
       case AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION:
-        return getWorkGroupDocumentAuditLogIconPath(this, imagePath);
+        return _getWorkGroupDocumentAuditLogIconPath(this, imagePath);
       case AuditLogEntryType.UPLOAD_REQUEST:
         return imagePath.icAddMember;
       case AuditLogEntryType.UPLOAD_REQUEST_URL:
         return imagePath.icContextItemShare;
+      case AuditLogEntryType.UPLOAD_REQUEST_ENTRY:
+        return _getUploadRequestEntryAuditLogIconPath(this, imagePath);
       default:
         return imagePath.icFileTypeFile;
     }
   }
 
-  String getWorkGroupDocumentAuditLogIconPath(AuditLogEntryUser  auditLogEntryUser, AppImagePaths imagePath) {
+  String _getWorkGroupDocumentAuditLogIconPath(AuditLogEntryUser  auditLogEntryUser, AppImagePaths imagePath) {
     if (auditLogEntryUser is WorkGroupDocumentAuditLogEntry) {
-      return getWorkGroupNodeIconPath(imagePath, auditLogEntryUser.resource);
+      return _getWorkGroupNodeIconPath(imagePath, auditLogEntryUser.resource);
     } else if (auditLogEntryUser is WorkGroupDocumentRevisionAuditLogEntry) {
-      return getWorkGroupNodeIconPath(imagePath, auditLogEntryUser.resource);
+      return _getWorkGroupNodeIconPath(imagePath, auditLogEntryUser.resource);
     }
     return imagePath.icFileTypeFile;
   }
 
-  String getWorkGroupNodeIconPath(AppImagePaths imagePath, WorkGroupNode? workGroupNode) {
+  String _getWorkGroupNodeIconPath(AppImagePaths imagePath, WorkGroupNode? workGroupNode) {
     if (workGroupNode is WorkGroupDocument) {
       return workGroupNode.mediaType.getFileTypeImagePath(imagePath);
     }
@@ -96,5 +99,26 @@ extension AuditLogEntryUserExtension on AuditLogEntryUser {
             ? AppLocalizations.of(context).me
             : (actor?.name ?? ''));
     return logTime + ' | ' + byActor;
+  }
+
+  String getFileSize(AuditLogEntryUser auditLogEntryUser) {
+    if (auditLogEntryUser is UploadRequestEntryAuditLogEntry) {
+      return filesize(auditLogEntryUser.resource?.size ?? 0, 1) + ' | ';
+    }
+    return '';
+  }
+
+  String _getUploadRequestEntryAuditLogIconPath(AuditLogEntryUser auditLogEntryUser, AppImagePaths imagePath) {
+    if (auditLogEntryUser is UploadRequestEntryAuditLogEntry) {
+      return _getUploadRequestEntryIconPath(imagePath, auditLogEntryUser.resource);
+    }
+    return imagePath.icFileTypeFile;
+  }
+
+  String _getUploadRequestEntryIconPath(AppImagePaths imagePath, UploadRequestEntry? entry) {
+    if (entry is UploadRequestEntry) {
+      return entry.mediaType.getFileTypeImagePath(imagePath);
+    }
+    return imagePath.icFileTypeFile;
   }
 }

@@ -367,6 +367,48 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
           default:
             return {};
         }
+      case AuditLogEntryType.UPLOAD_REQUEST_ENTRY:
+        switch (clientLogAction) {
+          case ClientLogAction.CREATE:
+            return {
+              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_create,
+              AuditLogActionMessage.DETAILS: AppLocalizations.of(context).audit_action_message_create_upload_request_entry(
+                  actionMessages[AuditLogActionMessageParam.resourceName])
+            };
+          case ClientLogAction.DOWNLOAD:
+            return {
+              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_download,
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_download_upload_request_entry_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName])
+                  : AppLocalizations.of(context).audit_action_message_download_upload_request_entry_other(
+                      actionMessages[AuditLogActionMessageParam.authorName],
+                      actionMessages[AuditLogActionMessageParam.resourceName])
+            };
+          case ClientLogAction.COPY_TO_PERSONAL_SPACE:
+            return {
+              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_copy,
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_copy_document_to_personal_space_self(
+                      actionMessages[AuditLogActionMessageParam.resourceName])
+                  : AppLocalizations.of(context).audit_action_message_copy_document_to_personal_space_other(
+                      actionMessages[AuditLogActionMessageParam.authorName],
+                      actionMessages[AuditLogActionMessageParam.resourceName],
+              )
+            };
+          case ClientLogAction.COPY_TO_SHARED_SPACE:
+            return {
+              AuditLogActionMessage.TITLE: AppLocalizations.of(context).audit_action_title_copy,
+              AuditLogActionMessage.DETAILS: isCurrentUserAuthor
+                  ? AppLocalizations.of(context).audit_action_message_copy_document_to_shared_space_self(
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+                  : AppLocalizations.of(context).audit_action_message_copy_document_to_shared_space_other(
+                      actionMessages[AuditLogActionMessageParam.authorName],
+                      actionMessages[AuditLogActionMessageParam.nameVarious])
+            };
+          default:
+            return {};
+        }
       default:
         return {};
     }
