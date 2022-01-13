@@ -34,16 +34,18 @@ import 'package:equatable/equatable.dart';
 import 'package:http_parser/http_parser.dart';
 
 class UploadRequestEntry with EquatableMixin {
-  final UploadRequestEntryId uploadRequestEntryId;
-  final UploadRequestEntryOwner entryOwner;
-  final GenericUser recipient;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime expirationDate;
+  final UploadRequestEntryId? uploadRequestEntryId;
+  final UploadRequestGroupId? uploadRequestGroupId;
+  final UploadRequestId? uploadRequestId;
+  final UploadRequestEntryOwner? entryOwner;
+  final GenericUser? recipient;
+  final DateTime? creationDate;
+  final DateTime? modificationDate;
+  final DateTime? expirationDate;
   final String name;
-  final String comment;
-  final String metaData;
-  final bool cmisSync;
+  final String? comment;
+  final String? metaData;
+  final bool? cmisSync;
   final int size;
   final MediaType mediaType;
   final String sha256sum;
@@ -52,6 +54,8 @@ class UploadRequestEntry with EquatableMixin {
 
   UploadRequestEntry(
       this.uploadRequestEntryId,
+      this.uploadRequestGroupId,
+      this.uploadRequestId,
       this.entryOwner,
       this.recipient,
       this.creationDate,
@@ -65,10 +69,13 @@ class UploadRequestEntry with EquatableMixin {
       this.mediaType,
       this.sha256sum,
       this.copied,
-      this.ciphered);
+      this.ciphered
+  );
 
   @override
   List<Object?> get props => [
+    uploadRequestGroupId,
+    uploadRequestId,
     entryOwner,
     recipient,
     creationDate,
@@ -85,5 +92,4 @@ class UploadRequestEntry with EquatableMixin {
     copied,
     ciphered,
   ];
-
 }
