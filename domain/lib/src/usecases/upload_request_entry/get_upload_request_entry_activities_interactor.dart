@@ -28,19 +28,21 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-enum AccountType { INTERNAL, SYSTEM }
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
 
-extension AccountTypeExtension on AccountType {
-  String get value {
-    switch (this) {
-      case AccountType.INTERNAL:
-        return 'INTERNAL';
-      case AccountType.SYSTEM:
-        return 'SYSTEM';
-      default:
-        return toString();
+class GetUploadRequestEntryActivitiesInteractor {
+  final UploadRequestEntryRepository _uploadRequestEntryRepository;
+
+  GetUploadRequestEntryActivitiesInteractor(this._uploadRequestEntryRepository);
+
+  Future<Either<Failure, Success>> execute(UploadRequestEntryId entryId) async {
+    try {
+      final activities = await _uploadRequestEntryRepository.getUploadRequestEntryActivities(entryId);
+      return Right<Failure, Success>(GetUploadRequestEntryActivitiesViewState(activities));
+    } catch (exception) {
+      return Left<Failure, Success>(GetUploadRequestEntryActivitiesFailure(exception));
     }
   }
 }

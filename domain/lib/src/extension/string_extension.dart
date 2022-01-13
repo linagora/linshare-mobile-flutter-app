@@ -105,6 +105,8 @@ extension StringExtension on String {
     switch (this) {
       case 'INTERNAL':
         return AccountType.INTERNAL;
+      case 'SYSTEM':
+        return AccountType.SYSTEM;
       default:
         return null;
     }

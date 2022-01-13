@@ -42,9 +42,15 @@ extension ListUploadRequestEntry on List<UploadRequestEntry> {
         case OrderBy.name:
           return ur2.name.compareToSort(ur1.name, orderType);
         case OrderBy.creationDate:
-          return ur2.creationDate.compareToSort(ur1.creationDate, orderType);
+          if (ur2.creationDate != null && ur1.creationDate != null) {
+            return ur2.creationDate!.compareToSort(ur1.creationDate!, orderType);
+          }
+          return 0;
         default:
-          return ur2.modificationDate.compareToSort(ur1.modificationDate, orderType);
+          if (ur2.modificationDate != null && ur1.modificationDate != null) {
+            return ur2.modificationDate!.compareToSort(ur1.modificationDate!, orderType);
+          }
+          return 0;
       }
     });
   }

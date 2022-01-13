@@ -49,6 +49,8 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
         return 'UPLOAD_REQUEST';
       case AuditLogEntryType.UPLOAD_REQUEST_URL:
         return 'UPLOAD_REQUEST_URL';
+      case AuditLogEntryType.UPLOAD_REQUEST_ENTRY:
+        return 'UPLOAD_REQUEST_ENTRY';
       default:
         return toString();
     }
@@ -92,6 +94,8 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
           return ClientLogAction.CREATE;
         }
         return ClientLogAction.UPDATE;
+      case AuditLogEntryType.UPLOAD_REQUEST_ENTRY:
+        return getClientLogActionForCopyDocumentAction(auditLogEntry);
       default:
         return ClientLogAction.UPDATE;
     }
@@ -121,6 +125,14 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
         if (auditLogEntry.copiedFrom != null && auditLogEntry.copiedFrom!.kind == SpaceType.SHARED_SPACE) {
           return ClientLogAction.RESTORE_REVISION;
         }
+      } else if (auditLogEntry is UploadRequestEntryAuditLogEntry) {
+        if (auditLogEntry.copiedTo != null) {
+          if (auditLogEntry.copiedTo!.kind == SpaceType.PERSONAL_SPACE) {
+            return ClientLogAction.COPY_TO_PERSONAL_SPACE;
+          } else {
+            return ClientLogAction.COPY_TO_SHARED_SPACE;
+          }
+        }
       }
 
       return mappingClientLogAction(auditLogEntry.action);
@@ -131,6 +143,9 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
       case LogAction.CREATE:
         if (this == AuditLogEntryType.WORKGROUP_DOCUMENT_REVISION) {
           return ClientLogAction.UPLOAD_REVISION;
+        }
+        if (this == AuditLogEntryType.UPLOAD_REQUEST_ENTRY) {
+          return ClientLogAction.CREATE;
         }
         return ClientLogAction.UPLOAD;
       case LogAction.DELETE:
