@@ -57,4 +57,9 @@ class UploadRequestEntryRepositoryImpl implements UploadRequestEntryRepository {
   Future<UploadRequestEntry> removeUploadRequestEntry(UploadRequestEntryId entryId) {
     return _uploadRequestEntryDataSource.removeUploadRequestEntry(entryId);
   }
+
+  @override
+  Future<List<AuditLogEntryUser?>> getUploadRequestEntryActivities(UploadRequestEntryId entryId) {
+    return _uploadRequestEntryDataSource.getUploadRequestEntryActivities(entryId);
+  }
 }

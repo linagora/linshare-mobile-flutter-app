@@ -36,6 +36,7 @@ import 'package:data/src/datasource/upload_request_entry_datasource.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_download_manager.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/upload_request/upload_request_entry_audit_log_entry_dto.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
@@ -85,7 +86,7 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
     final taskIds = await Future.wait(
         entries.map((entry) async => await FlutterDownloader.enqueue(
         url: Endpoint.uploadRequestsEntriesRoute
-            .downloadServicePath(entry.uploadRequestEntryId.uuid)
+            .downloadServicePath(entry.uploadRequestEntryId!.uuid)
             .generateDownloadUrl(baseUrl),
         savedDir: externalStorageDirPath,
         fileName: entry.name,
@@ -103,7 +104,7 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
   Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken) async {
     return _linShareDownloadManager.downloadFile(
         Endpoint.uploadRequestsEntriesRoute
-            .downloadServicePath(uploadRequestEntry.uploadRequestEntryId.uuid)
+            .downloadServicePath(uploadRequestEntry.uploadRequestEntryId!.uuid)
             .generateDownloadUrl(baseUrl),
         getTemporaryDirectory(),
         uploadRequestEntry.name,
@@ -122,6 +123,30 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
           throw UploadRequestEntryNotFound();
         } else {
           throw UnknownError(error.response?.statusMessage);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<List<AuditLogEntryUser?>> getUploadRequestEntryActivities(UploadRequestEntryId entryId) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getUploadRequestEntryActivities(entryId))
+          .map((auditLogEntryUserDto) {
+            if (auditLogEntryUserDto is UploadRequestEntryAuditLogEntryDto) {
+              return auditLogEntryUserDto.toUploadRequestEntryAuditLogEntry();
+            }
+            return null;
+          }).toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw UploadRequestEntryNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
         }
       });
     });
