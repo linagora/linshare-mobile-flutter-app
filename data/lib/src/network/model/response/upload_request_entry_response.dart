@@ -30,8 +30,10 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/network/model/converter/data_from_json_converter.dart';
-import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/upload_request_entry_id_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
+import 'package:data/src/network/model/converter/upload_request_entry_id_nullable_converter.dart';
+import 'package:data/src/network/model/converter/upload_request_group_id_nullable_converter.dart';
+import 'package:data/src/network/model/converter/upload_request_id_nullable_converter.dart';
 import 'package:data/src/network/model/response/upload_request_entry_owner_response.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
@@ -43,22 +45,30 @@ import 'package:http_parser/http_parser.dart';
 part 'upload_request_entry_response.g.dart';
 
 @JsonSerializable()
-@DatetimeConverter()
-@UploadRequestEntryIdConverter()
+@DatetimeNullableConverter()
+@UploadRequestEntryIdNullableConverter()
+@UploadRequestIdNullableConverter()
+@UploadRequestGroupIdNullableConverter()
 class UploadRequestEntryResponse with EquatableMixin {
 
   @JsonKey(name: Attribute.uuid)
-  final UploadRequestEntryId uploadRequestEntryId;
+  final UploadRequestEntryId? uploadRequestEntryId;
 
-  final UploadRequestEntryOwnerResponse entryOwner;
-  final GenericUserDto recipient;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final DateTime expirationDate;
+  @JsonKey(name: Attribute.uploadRequestGroupUuid)
+  final UploadRequestGroupId? uploadRequestGroupId;
+
+  @JsonKey(name: Attribute.uploadRequestUuid)
+  final UploadRequestId? uploadRequestId;
+
+  final UploadRequestEntryOwnerResponse? entryOwner;
+  final GenericUserDto? recipient;
+  final DateTime? creationDate;
+  final DateTime? modificationDate;
+  final DateTime? expirationDate;
   final String name;
-  final String comment;
-  final String metaData;
-  final bool cmisSync;
+  final String? comment;
+  final String? metaData;
+  final bool? cmisSync;
   final int size;
   final String sha256sum;
   final bool copied;
@@ -69,6 +79,8 @@ class UploadRequestEntryResponse with EquatableMixin {
 
   UploadRequestEntryResponse(
       this.uploadRequestEntryId,
+      this.uploadRequestGroupId,
+      this.uploadRequestId,
       this.entryOwner,
       this.recipient,
       this.creationDate,
@@ -91,6 +103,8 @@ class UploadRequestEntryResponse with EquatableMixin {
   @override
   List<Object?> get props => [
     uploadRequestEntryId,
+    uploadRequestGroupId,
+    uploadRequestId,
     entryOwner,
     recipient,
     creationDate,
@@ -113,8 +127,10 @@ extension UploadRequestEntryResponseExtension on UploadRequestEntryResponse {
   UploadRequestEntry toUploadRequestEntry() {
     return UploadRequestEntry(
         uploadRequestEntryId,
-        entryOwner.toUploadRequestEntryOwner(),
-        recipient.toGenericUser(),
+        uploadRequestGroupId,
+        uploadRequestId,
+        entryOwner?.toUploadRequestEntryOwner(),
+        recipient?.toGenericUser(),
         creationDate,
         modificationDate,
         expirationDate,
@@ -126,6 +142,7 @@ extension UploadRequestEntryResponseExtension on UploadRequestEntryResponse {
         mediaType,
         sha256sum,
         copied,
-        ciphered);
+        ciphered
+    );
   }
 }
