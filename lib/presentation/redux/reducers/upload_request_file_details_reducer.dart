@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_file_details_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_file_details_state.dart';
 import 'package:redux/redux.dart';
@@ -40,4 +41,10 @@ final uploadRequestFileDetailsReducer = combineReducers<UploadRequestFileDetails
   TypedReducer<UploadRequestFileDetailsState, SetUploadRequestFileDetailsAction>((UploadRequestFileDetailsState state, SetUploadRequestFileDetailsAction action) =>
       state.setUploadRequestEntry(newEntry: action.entry)),
   TypedReducer<UploadRequestFileDetailsState, CleanUploadRequestFileDetailsStateAction>((UploadRequestFileDetailsState state, _) => state.clearViewState()),
+  TypedReducer<UploadRequestFileDetailsState, UploadRequestEntryDetailsGetAllActivitiesAction>((UploadRequestFileDetailsState state, UploadRequestEntryDetailsGetAllActivitiesAction action) =>
+      state.setUploadRequestFileActivities(
+          newActivities: action.activitiesViewState.fold(
+              (failure) => [],
+              (success) => (success is GetUploadRequestEntryActivitiesViewState) ? success.auditLogEntryUserList : []),
+          viewState: action.activitiesViewState)),
 ]);

@@ -41,14 +41,16 @@ import 'package:equatable/equatable.dart';
 @immutable
 class UploadRequestFileDetailsState extends LinShareState with EquatableMixin {
   final UploadRequestEntry? entry;
+  final List<AuditLogEntryUser?>? activities;
 
   UploadRequestFileDetailsState(
     Either<Failure, Success> viewState,
-    this.entry
+    this.entry,
+    this.activities,
   ) : super(viewState);
 
   factory UploadRequestFileDetailsState.initial() {
-    return UploadRequestFileDetailsState(Right(IdleState()), null);
+    return UploadRequestFileDetailsState(Right(IdleState()), null, []);
   }
 
   @override
@@ -58,15 +60,19 @@ class UploadRequestFileDetailsState extends LinShareState with EquatableMixin {
 
   @override
   UploadRequestFileDetailsState sendViewState({required Either<Failure, Success> viewState}) {
-    return UploadRequestFileDetailsState(viewState, entry);
+    return UploadRequestFileDetailsState(viewState, entry, activities);
   }
 
   UploadRequestFileDetailsState setUploadRequestEntry({required UploadRequestEntry newEntry}) {
-    return UploadRequestFileDetailsState(viewState, newEntry);
+    return UploadRequestFileDetailsState(viewState, newEntry, activities);
   }
 
   @override
   UploadRequestFileDetailsState startLoadingState() {
-    return UploadRequestFileDetailsState(Right(LoadingState()), entry);
+    return UploadRequestFileDetailsState(Right(LoadingState()), entry, activities);
+  }
+
+  UploadRequestFileDetailsState setUploadRequestFileActivities({required Either<Failure, Success> viewState, List<AuditLogEntryUser?>? newActivities}) {
+    return UploadRequestFileDetailsState(viewState, entry, newActivities);
   }
 }

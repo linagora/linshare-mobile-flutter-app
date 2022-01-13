@@ -367,7 +367,7 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
           transform: Matrix4.translationValues(-16, 0.0, 0.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             buildItemTitle(entry.element.name),
-            Align(alignment: Alignment.centerRight, child: buildRecipientText(entry.element.recipient.mail))
+            Align(alignment: Alignment.centerRight, child: buildRecipientText(entry.element.recipient?.mail ?? ''))
           ]),
         ),
         smallScreen:
@@ -379,7 +379,7 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
               transform: Matrix4.translationValues(-16, 0.0, 0.0),
               child: Row(
                 children: [
-                  buildRecipientText(entry.element.recipient.mail),
+                  buildRecipientText(entry.element.recipient?.mail ?? ''),
                 ],
               ),
             )

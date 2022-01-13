@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:domain/domain.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_request_fi
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entry_user_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_arguments.dart';
@@ -74,29 +76,53 @@ class _UploadRequestFileDetailsWidgetState extends State<UploadRequestFileDetail
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestFileDetailsArguments;
 
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            key: Key('upload_request_file_details_arrow_back_button'),
-            icon: Image.asset(imagePath.icArrowBack),
-            onPressed: () => _model.backToUploadRequestGroup(),
+    return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              key: Key('upload_request_file_details_arrow_back_button'),
+              icon: Image.asset(imagePath.icArrowBack),
+              onPressed: () => _model.backToUploadRequestGroup(),
+            ),
+            centerTitle: true,
+            title: Text(arguments.entry.name,
+                style: TextStyle(fontSize: 24, color: Colors.white)),
+            backgroundColor: AppColor.primaryColor,
           ),
-          centerTitle: true,
-          title: Text(arguments.entry.name,
-              key: Key('upload_request_file_details_title'),
-              style: TextStyle(fontSize: 24, color: Colors.white)),
-          backgroundColor: AppColor.primaryColor,
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: StoreConnector<AppState, UploadRequestFileDetailsState>(
-                converter: (store) => store.state.uploadRequestFileDetailsState,
-                builder: (_, state) => _detailsTabWidget(state),
+          body: Column(
+            children: [
+              Container(
+                height: 48.0,
+                color: Colors.white,
+                child: TabBar(
+                  labelColor: AppColor.uploadProgressValueColor,
+                  indicatorColor: AppColor.uploadProgressValueColor,
+                  unselectedLabelColor: AppColor.loginTextFieldTextColor,
+                  tabs: [
+                    _tabTextWidget(AppLocalizations.of(context).details),
+                    _tabTextWidget(AppLocalizations.of(context).activities),
+                  ],
+                ),
               ),
-            )
-          ],
-        )
+              Expanded(
+                  child: TabBarView(children: [
+                    StoreConnector<AppState, UploadRequestFileDetailsState>(
+                        converter: (store) => store.state.uploadRequestFileDetailsState,
+                        builder: (_, state) => _detailsTabWidget(state)),
+                    StoreConnector<AppState, UploadRequestFileDetailsState>(
+                        converter: (store) => store.state.uploadRequestFileDetailsState,
+                        builder: (_, state) => _activitiesTabWidget(state.activities)),
+                  ]))
+            ],
+          ),
+        ));
+  }
+
+  Text _tabTextWidget(String title) {
+    return Text(
+      title,
+      style: TextStyle(fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, fontSize: 18),
     );
   }
 
@@ -116,24 +142,24 @@ class _UploadRequestFileDetailsWidgetState extends State<UploadRequestFileDetail
           ));
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _uploadRequestFileDetailsTitleWidget(state),
-          Divider(),
-          _uploadedPersonInformation(state.entry),
-          Divider(),
-          Column(
-            children: [
-              _uploadRequestFileInformation(AppLocalizations.of(context).modified,
-                  state.entry?.modificationDate.getMMMddyyyyFormatString() ?? ''),
-              _uploadRequestFileInformation(AppLocalizations.of(context).created,
-                  state.entry?.creationDate.getMMMddyyyyFormatString() ?? ''),
-            ],
-          ),
-        ],
-      ));
+    return SafeArea(child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _uploadRequestFileDetailsTitleWidget(state),
+            Divider(),
+            _uploadedPersonInformation(state.entry),
+            Divider(),
+            Column(
+              children: [
+                _uploadRequestFileInformation(AppLocalizations.of(context).modified,
+                    state.entry?.modificationDate?.getMMMddyyyyFormatString() ?? ''),
+                _uploadRequestFileInformation(AppLocalizations.of(context).created,
+                    state.entry?.creationDate?.getMMMddyyyyFormatString() ?? ''),
+              ],
+            ),
+          ],
+        )));
   }
 
   ListTile _uploadRequestFileDetailsTitleWidget(UploadRequestFileDetailsState state) {
@@ -176,15 +202,108 @@ class _UploadRequestFileDetailsWidgetState extends State<UploadRequestFileDetail
 
   ListTile _uploadedPersonInformation(UploadRequestEntry? entry) {
     return ListTile(
-        leading: LabelAvatarBuilder(entry?.recipient.mail.characters.first ?? '')
+        leading: LabelAvatarBuilder(entry?.recipient?.mail.characters.first ?? '')
             .key(Key('label_upload_request_file_owner_avatar'))
             .build(),
         title: Text(
-            entry?.recipient.mail ?? '',
+            entry?.recipient?.mail ?? '',
             style: TextStyle(
                 color: AppColor.uploadRequestLabelsColor,
                 fontWeight: FontWeight.w500,
                 fontSize: 16.0)),
       );
+  }
+
+  Widget _buildLoadingView() {
+    return StoreConnector<AppState, dartz.Either<Failure, Success>>(
+      converter: (store) => store.state.uploadRequestFileDetailsState.viewState,
+      builder: (context, viewState) {
+        return viewState.fold(
+          (failure) => SizedBox.shrink(),
+          (success) => (success is LoadingState)
+              ? Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor))
+                      )))
+              : SizedBox.shrink());
+      },
+    );
+  }
+
+  Widget _activitiesTabWidget(List<AuditLogEntryUser?>? activitiesList) {
+    return (activitiesList == null || activitiesList.isEmpty)
+        ? _buildLoadingView()
+        : SafeArea(
+            child: ListView.builder(
+              key: Key('upload_request_file_activities_list'),
+              padding: EdgeInsets.only(bottom: 30),
+              itemCount: activitiesList.length,
+              itemBuilder: (context, index) {
+                return _buildActivitiesListItem(context, activitiesList[index]);
+              },
+            )
+          );
+  }
+
+  Widget _buildActivitiesListItem(BuildContext context, AuditLogEntryUser? auditLogEntryUser) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, top: 30, right: 16),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          SvgPicture.asset(
+              auditLogEntryUser?.getAuditLogIconPath(imagePath) ?? imagePath.icFileTypeFile,
+              width: 20,
+              height: 20,
+              fit: BoxFit.fill),
+          Expanded(
+              child: Padding(
+                  padding: EdgeInsets.only(left: 8),
+                  child: Text(
+                    auditLogEntryUser?.getResourceName() ?? '',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.uploadFileFileNameTextColor),
+                  )))
+        ]),
+        Divider(),
+        _buildActionDetailsText(auditLogEntryUser?.getActionDetails(
+            context, _model.store.state.account.user!.userId.uuid)),
+        Padding(
+            padding: EdgeInsets.only(top: 16),
+            child: Text(
+              '${auditLogEntryUser?.getFileSize(auditLogEntryUser)}'
+                  '${auditLogEntryUser?.getLogTimeAndByActor(context, _model.store.state.account.user!.userId.uuid) ?? ''}',
+              style: TextStyle(
+                  fontSize: 13,
+                  color: AppColor.documentModifiedDateItemTextColor),
+            ))
+      ]),
+    );
+  }
+
+  Widget _buildActionDetailsText(Map<AuditLogActionDetail, dynamic>? actionDetails) {
+    return Padding(
+        padding: EdgeInsets.only(top: 0),
+        child: RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor),
+              children: <TextSpan>[
+                TextSpan(
+                    text: actionDetails?[AuditLogActionDetail.TITLE],
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppColor.documentNameItemTextColor)),
+                TextSpan(
+                    text: ' ${actionDetails?[AuditLogActionDetail.DETAIL]}',
+                    style: TextStyle(fontSize: 16, color: AppColor.documentNameItemTextColor))
+              ],
+            )));
   }
 }

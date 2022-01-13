@@ -680,6 +680,7 @@ class WidgetModule {
     getIt.registerFactory(() => UploadRequestFileDetailsViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>(),
+      getIt.get<GetUploadRequestEntryActivitiesInteractor>(),
     ));
   }
 
