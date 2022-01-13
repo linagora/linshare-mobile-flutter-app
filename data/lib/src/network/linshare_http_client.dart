@@ -66,6 +66,7 @@ import 'package:data/src/network/model/share/received_share_dto.dart';
 import 'package:data/src/network/model/shared_space_activities/shared_space_member_audit_log_entry_dto.dart';
 import 'package:data/src/network/model/sharedspacedocument/work_group_node_dto.dart';
 import 'package:data/src/network/model/upload_request/upload_request_audit_log_entry_dto.dart';
+import 'package:data/src/network/model/upload_request/upload_request_entry_audit_log_entry_dto.dart';
 import 'package:data/src/network/model/upload_request/upload_request_url_audit_log_entry_dto.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
@@ -201,6 +202,8 @@ class LinShareHttpClient {
       return UploadRequestAuditLogEntryDto.fromJson(nodeChildJson);
     } else if (nodeChildJson['type'] == AuditLogEntryType.UPLOAD_REQUEST_URL.value) {
       return UploadRequestURLAuditLogEntryDto.fromJson(nodeChildJson);
+    } else if (nodeChildJson['type'] == AuditLogEntryType.UPLOAD_REQUEST_ENTRY.value) {
+      return UploadRequestEntryAuditLogEntryDto.fromJson(nodeChildJson);
     } else {
       return null;
     }
@@ -839,5 +842,15 @@ class LinShareHttpClient {
     return membersJson
       .map<AuditLogEntryUserDto?>((data) => _convertToAuditLogEntryNodeChild(data))
       .toList();
+  }
+
+  Future<List<AuditLogEntryUserDto?>> getUploadRequestEntryActivities(UploadRequestEntryId entryId) async {
+    final membersJson = await _dioClient.get(Endpoint.uploadRequestsEntriesRoute
+        .withPathParameter(entryId.uuid)
+        .withPathParameter('audit')
+        .generateEndpointPath());
+    return membersJson
+        .map<AuditLogEntryUserDto?>((data) => _convertToAuditLogEntryNodeChild(data))
+        .toList();
   }
 }
