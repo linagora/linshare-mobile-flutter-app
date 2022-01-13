@@ -39,6 +39,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/sigup_authentica
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
+import 'package:linshare_flutter_app/presentation/util/environment.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/generate_password_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -148,7 +149,7 @@ class SignUpViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartSignUpAuthenticationLoadingAction());
 
-      await _getSaaSConfigurationInteractor.execute(SaaSType.dev)
+      await _getSaaSConfigurationInteractor.execute(Environment.saasType)
         .then((result) => result.fold(
           (failure) {
             if (failure is GetSaaSConfigurationFailure) {
