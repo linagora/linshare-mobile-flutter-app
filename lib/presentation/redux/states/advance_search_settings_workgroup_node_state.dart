@@ -97,4 +97,17 @@ class AdvancedSearchSettingsWorkgroupNodeState extends LinShareState with Equata
   AdvancedSearchSettingsWorkgroupNodeState applySearch() {
     return AdvancedSearchSettingsWorkgroupNodeState(viewState, AdvanceSearchSetting.fromSearchDestination(SearchDestination.sharedSpace));
   }
+
+  bool isApplyAdvancedSearch() {
+    final isUnSelectedAllKindState = advanceSearchSetting.listKindState?.every(
+        (kindState) => !kindState.selected) ?? true;
+    final isUnSelectedAllDateState = advanceSearchSetting.listModificationDate
+        ?.where((dateState) => dateState.date != AdvancedSearchRequestDate.ANY_TIME)
+        .every((dateState) => !dateState.selected) ?? true;
+    if (isUnSelectedAllKindState && isUnSelectedAllDateState) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
