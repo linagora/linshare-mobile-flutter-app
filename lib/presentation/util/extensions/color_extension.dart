@@ -75,6 +75,11 @@ extension AppColor on Color {
   static const confirmDialogTitleTextColor = Color(0xff7B7B7B);
   static const networkConnectionBackgroundColor = Color(0xff7B7B7B);
   static const searchBottomBarColor = Color(0xffF2F2F2);
+  static const searchBarColor = Color(0xffEBEDF0);
+  static const searchTextColor = Color(0xff000000);
+  static const searchBackButtonColor = Color(0xff007AFF);
+  static const searchFilterButtonColor = Color(0xff99A2AD);
+  static const searchFilterButtonSelectedColor = Color(0xff007AFF);
   static const searchResultsCountTextColor = Color(0xffACACAC);
   static const workGroupDetailsName = Color(0xff070707);
   static const pinCodeTitleColor = Color(0xff1B7EC7);
