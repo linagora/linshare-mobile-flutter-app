@@ -101,24 +101,27 @@ class _HomeWidgetState extends State<HomeWidget> {
         onCancelSearchPressed: () => homeViewModel.cancelSearchState(),
         onNewSearchQuery: (String searchQuery) => homeViewModel.search(searchQuery)),
       drawer: SideMenuDrawerWidget(),
-      body: Column(
-        children: [
-          StoreConnector<AppState, NetworkConnectivityState>(
-              converter: (store) => store.state.networkConnectivityState,
-              builder: (context, data) => _buildNetworkConnectionWidget(context, data)
-          ),
-          StoreConnector<AppState, UploadFileState>(
-              converter: (store) => store.state.uploadFileState,
-              builder: (context, data) => handleUploadWidget(context, data)
-          ),
-          Expanded(
-            child: StoreConnector<AppState, UIState>(
-                converter: (store) => store.state.uiState,
-                distinct: true,
-                builder: (context, uiState) => getHomeWidget(uiState)
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          children: [
+            StoreConnector<AppState, NetworkConnectivityState>(
+                converter: (store) => store.state.networkConnectivityState,
+                builder: (context, data) => _buildNetworkConnectionWidget(context, data)
             ),
-          ),
-        ],
+            StoreConnector<AppState, UploadFileState>(
+                converter: (store) => store.state.uploadFileState,
+                builder: (context, data) => handleUploadWidget(context, data)
+            ),
+            Expanded(
+              child: StoreConnector<AppState, UIState>(
+                  converter: (store) => store.state.uiState,
+                  distinct: true,
+                  builder: (context, uiState) => getHomeWidget(uiState)
+              ),
+            ),
+          ],
+        )
       ),
     );
   }
