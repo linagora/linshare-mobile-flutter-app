@@ -82,12 +82,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 reverse: true,
                 child: Padding(
                   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: Container(
-                    alignment: AlignmentDirectional.center,
-                    child: Column(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: _responsiveUtils.isLandscapeSmallScreen(context) ? double.infinity : MediaQuery.of(context).size.height,
+                      minHeight: MediaQuery.of(context).size.height),
+                    child: Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: 60),
+                          padding: EdgeInsets.only(top: _responsiveUtils.isLandscapeSmallScreen(context) ? 30 : 60),
                           child: Image(
                             image: AssetImage(_imagePath.icLoginLogoStandard),
                             fit: BoxFit.fill,
@@ -96,20 +99,21 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         StoreConnector<AppState, SignUpAuthenticationState>(
                           converter: (store) => store.state.signUpAuthenticationState,
                           builder: (context, state) {
-                            switch(state.signUpFormType) {
+                            switch (state.signUpFormType) {
                               case SignUpFormType.main:
                                 return _buildMainSignUpForm();
                               case SignUpFormType.fillName:
                                 return _buildFillNameForm(context);
                               case SignUpFormType.completed:
-                                return _buildSignUpCompletedForm(context, state);
+                                return _buildSignUpCompletedForm(
+                                    context, state);
                               default:
                                 return _buildMainSignUpForm();
                             }
                           }
                         ),
                       ],
-                    ),
+                    )),
                   )
                 )
               ),
@@ -283,32 +287,35 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     return Column(
       children: [
         Padding(
-        padding: EdgeInsets.only(
-            top: 80,
-            left: _getPaddingHorizontal(context),
-            right: _getPaddingHorizontal(context)),
-        child: Container(
-          width: _getWidthButton(context),
-          child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
-              converter: (store) => store.state.signUpAuthenticationState.viewState,
-              builder: (context, viewState) => (LoginTextInputBuilder(context, _imagePath)
-                  ..key(Key('sign_up_email_input'))
-                  ..onChange((value) => _viewModel.setEmailText(value))
-                  ..textInputAction(TextInputAction.next)
-                  ..title(AppLocalizations.of(context).login_email_title)
-                  ..errorText(_viewModel.getErrorInputString(viewState, context, InputType.email))
-                  ..setErrorString((value) => _viewModel.getErrorValidatorString(context, value, InputType.email))
-                  ..hintText(AppLocalizations.of(context).hint_input_email_login)
-                  ..labelText(AppLocalizations.of(context).hint_input_email_login))
-                .build()),
-        )),
+          padding: EdgeInsets.only(
+              top:  _responsiveUtils.isLandscapeSmallScreen(context) ? 32 : 80,
+              left: _getPaddingHorizontal(context),
+              right: _getPaddingHorizontal(context)),
+          child: Container(
+            width: _getWidthButton(context),
+            child: StoreConnector<AppState, dartz.Either<Failure, Success>>(
+                converter: (store) => store.state.signUpAuthenticationState.viewState,
+                builder: (context, viewState) => (LoginTextInputBuilder(context, _imagePath)
+                    ..key(Key('sign_up_email_input'))
+                    ..onChange((value) => _viewModel.setEmailText(value))
+                    ..textInputAction(TextInputAction.next)
+                    ..title(_responsiveUtils.isLandscapeSmallScreen(context)
+                        ? ''
+                        : AppLocalizations.of(context).login_email_title)
+                    ..errorText(_viewModel.getErrorInputString(viewState, context, InputType.email))
+                    ..setErrorString((value) => _viewModel.getErrorValidatorString(context, value, InputType.email))
+                    ..hintText(AppLocalizations.of(context).hint_input_email_login)
+                    ..labelText(AppLocalizations.of(context).hint_input_email_login))
+                  .build()),
+          )
+        ),
         StoreConnector<AppState, SignUpAuthenticationState>(
           converter: (store) => store.state.signUpAuthenticationState,
           builder: (context, signUpAuthenticationState) =>
             Padding(
               padding: EdgeInsets.only(
-                top: 20,
-                bottom: 24,
+                top: 32,
+                bottom: 20,
                 left: _getPaddingHorizontal(context),
                 right: _getPaddingHorizontal(context)),
               child: signUpAuthenticationState.isSignUpAuthenticationLoading()
@@ -323,7 +330,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            top: 80,
+            top: _responsiveUtils.isLandscapeSmallScreen(context) ? 32 : 80,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: Container(
@@ -334,7 +341,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ..key(Key('login_name_input'))
                     ..onChange((value) => _viewModel.setNameText(value))
                     ..textInputAction(TextInputAction.next)
-                    ..title(AppLocalizations.of(context).sign_up_name_title)
+                    ..title(_responsiveUtils.isLandscapeSmallScreen(context) ? '' : AppLocalizations.of(context).sign_up_name_title)
                     ..errorText(_viewModel.getErrorInputString(viewState, context, InputType.name))
                     ..setErrorString((value) => _viewModel.getErrorValidatorString(context, value, InputType.name))
                     ..hintText(AppLocalizations.of(context).hint_input_sign_up_name)
@@ -343,7 +350,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           )),
         Padding(
           padding: EdgeInsets.only(
-            top: 26,
+            top: 20,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: Container(
@@ -354,7 +361,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ..key(Key('login_surname_input'))
                     ..onChange((value) => _viewModel.setSurnameText(value))
                     ..textInputAction(TextInputAction.next)
-                    ..title(AppLocalizations.of(context).sign_up_surname_title)
+                    ..title(_responsiveUtils.isLandscapeSmallScreen(context) ? '' : AppLocalizations.of(context).sign_up_surname_title)
                     ..errorText(_viewModel.getErrorInputString(viewState, context, InputType.surname))
                     ..setErrorString((value) => _viewModel.getErrorValidatorString(context, value, InputType.surname))
                     ..hintText(AppLocalizations.of(context).hint_input_sign_up_surname)
@@ -381,7 +388,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         Padding(
             padding: EdgeInsets.only(
               top: 32,
-              bottom: 24,
+              bottom: 20,
               left: _getPaddingHorizontal(context),
               right: _getPaddingHorizontal(context)),
             child: StoreConnector<AppState, SignUpAuthenticationState>(
@@ -396,16 +403,17 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   Widget _buildSignUpCompletedForm(BuildContext context, SignUpAuthenticationState state) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(
-            top: 80,
-            left: _getPaddingHorizontal(context),
-            right: _getPaddingHorizontal(context)),
-          child: Center(
-            child: SvgPicture.asset(
-              _imagePath.icEmailSentSignUp,
-              width: 120,
-              fit: BoxFit.fill))),
+        if (!_responsiveUtils.isLandscapeSmallScreen(context))
+          Padding(
+            padding: EdgeInsets.only(
+              top: 80,
+              left: _getPaddingHorizontal(context),
+              right: _getPaddingHorizontal(context)),
+            child: Center(
+              child: SvgPicture.asset(
+                _imagePath.icEmailSentSignUp,
+                width: 120,
+                fit: BoxFit.fill))),
         Padding(
           padding: EdgeInsets.only(
             top: 20,
@@ -434,8 +442,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               .build())),
         Padding(
           padding: EdgeInsets.only(
-            top: 80,
-            bottom: 80,
+            top: _responsiveUtils.isLandscapeSmallScreen(context) ? 20 : 80,
+            bottom: 20,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: StoreConnector<AppState, SignUpAuthenticationState>(
