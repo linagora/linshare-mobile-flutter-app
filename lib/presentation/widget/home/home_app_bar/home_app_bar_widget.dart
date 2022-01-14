@@ -37,6 +37,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
@@ -86,22 +87,31 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, UIState>(
-        converter: (store) => store.state.uiState,
-        builder: (context, uiState) {
-          if (uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
-            return _searchAppBar(context, uiState.searchState.searchDestination, uiState.searchState.destinationName, uiState);
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          if (state.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
+            return _searchAppBar(
+              context,
+              state.uiState.searchState.searchDestination,
+              state.uiState.searchState.destinationName,
+              state.uiState,
+              state.advanceSearchSettingsWorkgroupNodeState);
           }
-          return _homeAppBar(context, uiState);
+          return _homeAppBar(context, state.uiState);
         }
     );
   }
 
-  Widget _searchAppBar(BuildContext context, SearchDestination searchDestination, String destinationName, UIState uiState) {
+  Widget _searchAppBar(BuildContext context,
+      SearchDestination searchDestination,
+      String destinationName,
+      UIState uiState,
+      AdvancedSearchSettingsWorkgroupNodeState advancedSearchSettingState) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Transform(
-        transform: Matrix4.translationValues(-5, 0.0, 0.0),
+        transform: Matrix4.translationValues(-16, 0.0, 0.0),
         child: Stack(
           alignment: Alignment.centerRight,
           children: [
@@ -113,26 +123,31 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
                       border: _searchBorder(),
                       focusedBorder: _searchBorder(),
                       enabledBorder: _searchBorder(),
-                      fillColor: AppColor.searchBottomBarColor,
+                      fillColor: AppColor.searchBarColor,
                       filled: true,
                       contentPadding: searchDestination == SearchDestination.sharedSpace
-                          ? EdgeInsets.fromLTRB(0, 15, 56, 15)
-                          : EdgeInsets.symmetric(vertical: 15),
+                          ? EdgeInsets.fromLTRB(0, 0, 80, 0)
+                          : EdgeInsets.symmetric(vertical: 0),
                       hintText: destinationName,
                       hintStyle: TextStyle(
                           color: AppColor.uploadFileFileSizeTextColor,
-                          fontSize: 16.0),
+                          fontSize: 15.0),
+                      labelStyle: TextStyle(
+                          color: AppColor.searchTextColor,
+                          fontSize: 15.0),
                       prefixIcon: Icon(
                         Icons.search,
                         size: 24.0,
+                        color: AppColor.searchFilterButtonColor,
                       ),
                       suffixIcon: searchDestination != SearchDestination.sharedSpace
                         ? GestureDetector(
-                        onTap: () => _typeAheadController.clear(),
-                          child: Icon(
-                            Icons.cancel,
-                            size: 20.0,
-                          ))
+                            onTap: () => _typeAheadController.clear(),
+                            child: Icon(
+                              Icons.cancel,
+                              size: 20.0,
+                                color: AppColor.searchFilterButtonColor
+                            ))
                         : null
                   )),
               debounceDuration: Duration(milliseconds: 300),
@@ -152,71 +167,62 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
               hideOnLoading: true,
               hideSuggestionsOnKeyboardHide: true,
             ),
-            searchDestination == SearchDestination.sharedSpace
-              ? Container(
+            if (searchDestination == SearchDestination.sharedSpace)
+              Container(
                   alignment: Alignment.centerRight,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      GestureDetector(
-                        onTap: () => _typeAheadController.clear(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Icon(
+                      IconButton(
+                          padding: EdgeInsets.only(left: 16),
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          onPressed: () => _goToAdvanceSearchScreen(searchDestination, uiState),
+                          icon: SvgPicture.asset(imagePath.icFilter,
+                              width: 20.0,
+                              height: 20.0,
+                              color: advancedSearchSettingState.isApplyAdvancedSearch()
+                                  ? AppColor.searchFilterButtonSelectedColor
+                                  : AppColor.searchFilterButtonColor)),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        onPressed: () => _typeAheadController.clear(),
+                        icon: Icon(
                             Icons.cancel,
                             size: 20.0,
-                            color: Colors.grey,
-                          ),
-                        ),
+                            color: AppColor.searchFilterButtonColor),
                       ),
-                      (searchDestination == SearchDestination.sharedSpace)
-                        ? GestureDetector(
-                          onTap: () {
-                            _goToAdvanceSearchScreen(searchDestination, uiState);
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: SvgPicture.asset(
-                                  imagePath.icSearchFilter, width: 20.0, height: 20.0)
-                          )
-                        )
-                        : SizedBox.shrink()
                     ]
-                  ),
-            ) : SizedBox.shrink()
+                  )
+              ),
           ],
         ),
       ),
       centerTitle: true,
       backgroundColor: Colors.white,
-      actions: [
-        Center(
-          child: Padding(
-            padding:
-            const EdgeInsets.only(left: 8.0, right: 16.0),
-            child: GestureDetector(
-                onTap: () {
-                  if (widget.onCancelSearchPressed != null) {
-                    widget.onCancelSearchPressed!();
-                  }
-                  _typeAheadController.clear();
-                },
-                child: Text(
-                  AppLocalizations.of(context).cancel,
-                  style:
-                  TextStyle(color: AppColor.primaryColor, fontSize: 16.0),
-                )),
-          ),
-        )
-      ],
+      leading: IconButton(
+          padding: EdgeInsets.zero,
+          highlightColor: Colors.transparent,
+          onPressed: () {
+            if (widget.onCancelSearchPressed != null) {
+              widget.onCancelSearchPressed!();
+            }
+            _typeAheadController.clear();
+          },
+          icon: SvgPicture.asset(imagePath.icArrowBackRound,
+              width: 30.0,
+              height: 30.0,
+              color: AppColor.searchBackButtonColor)),
     );
   }
 
   OutlineInputBorder _searchBorder() {
     return OutlineInputBorder(
-      borderSide: BorderSide(color: AppColor.searchBottomBarColor, width: 2.0),
+      borderSide: BorderSide(color: AppColor.searchBarColor, width: 0.0),
       borderRadius: const BorderRadius.all(
-        Radius.circular(36.0),
+        Radius.circular(15.0),
       ),
     );
   }
