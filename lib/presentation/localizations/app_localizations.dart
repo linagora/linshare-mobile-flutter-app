@@ -2859,6 +2859,20 @@ class AppLocalizations {
         args: [authorName, resourceName]
     );
   }
+
+  String get file_type {
+    return Intl.message(
+      'File type',
+      name: 'file_type',
+    );
+  }
+
+  String get check_all {
+    return Intl.message(
+      'Check all',
+      name: 'check_all',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

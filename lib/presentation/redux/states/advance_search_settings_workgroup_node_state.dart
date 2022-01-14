@@ -98,6 +98,16 @@ class AdvancedSearchSettingsWorkgroupNodeState extends LinShareState with Equata
     return AdvancedSearchSettingsWorkgroupNodeState(viewState, AdvanceSearchSetting.fromSearchDestination(SearchDestination.sharedSpace));
   }
 
+  AdvancedSearchSettingsWorkgroupNodeState setSelectedAllFileTypeSettings() {
+    final updatedKindList = advanceSearchSetting.listKindState?.map((e) => e.copyWith(kind: e.kind, selected: true)).toList();
+    final updatedAdvanceSearchSetting = advanceSearchSetting.copyWith(newListKindState: updatedKindList);
+    return AdvancedSearchSettingsWorkgroupNodeState(viewState, updatedAdvanceSearchSetting);
+  }
+
+  bool isSelectedAllKindState() {
+    return advanceSearchSetting.listKindState?.every((kindState) => kindState.selected) ?? false;
+  }
+
   bool isApplyAdvancedSearch() {
     final isUnSelectedAllKindState = advanceSearchSetting.listKindState?.every(
         (kindState) => !kindState.selected) ?? true;
