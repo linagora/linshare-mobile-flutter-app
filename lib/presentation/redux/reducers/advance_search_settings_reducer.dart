@@ -35,26 +35,21 @@ import 'package:linshare_flutter_app/presentation/redux/states/advance_search_se
 import 'package:redux/redux.dart';
 
 final advanceSearchSettingsReducer = combineReducers<AdvancedSearchSettingsWorkgroupNodeState>([
-
   TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, StartAdvanceSearchSettingsLoadingAction>(
       (AdvancedSearchSettingsWorkgroupNodeState state, _) => state.startLoadingState()),
-
   TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsAction>(
       (AdvancedSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsAction action) =>
           state.sendViewState(viewState: action.viewState)),
-
   TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSetNewKindStateAction>(
       (AdvancedSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsSetNewKindStateAction action) => state
           .setNewKindState(viewState: action.viewState, newAdvanceSearchKindState: action.newAdvanceSearchKindState)),
-
   TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSetNewDateStateAction>(
       (AdvancedSearchSettingsWorkgroupNodeState state, AdvanceSearchSettingsSetNewDateStateAction action) => state
           .setNewDateState(viewState: action.viewState, newAdvanceSearchDateState: action.newAdvanceSearchDateState)),
-
   TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsResetAllAction>(
           (AdvancedSearchSettingsWorkgroupNodeState state, _) => state.resetAllSettings()),
-
   TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, StartAdvanceSearchSettingsLoadingAction>(
           (AdvancedSearchSettingsWorkgroupNodeState state, _) => state.applySearch()),
-
+  TypedReducer<AdvancedSearchSettingsWorkgroupNodeState, AdvanceSearchSettingsSelectedAllFileTypeAction>(
+          (AdvancedSearchSettingsWorkgroupNodeState state, _) => state.setSelectedAllFileTypeSettings()),
 ]);
