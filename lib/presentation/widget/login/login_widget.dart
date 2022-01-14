@@ -82,34 +82,37 @@ class _LoginWidgetState extends State<LoginWidget> {
                 reverse: true,
                 child: Padding(
                   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Column(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                        maxHeight: _responsiveUtils.isLandscapeSmallScreen(context) ? double.infinity : MediaQuery.of(context).size.height,
+                        minHeight: MediaQuery.of(context).size.height),
+                    child: Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: 60),
-                          child: Image(
-                            image: AssetImage(imagePath.icLoginLogoStandard),
-                            fit: BoxFit.fill,
-                            width: 150,
-                            alignment: Alignment.center)),
+                            padding: EdgeInsets.only(top: _responsiveUtils.isLandscapeSmallScreen(context) ? 30 : 60),
+                            child: Image(
+                                image: AssetImage(imagePath.icLoginLogoStandard),
+                                fit: BoxFit.fill,
+                                width: 150,
+                                alignment: Alignment.center)),
                         StoreConnector<AppState, LoginFormType>(
-                          converter: (store) => store.state.authenticationState.loginFormType,
-                          builder: (context, loginFormType) {
-                            switch(loginFormType) {
-                              case LoginFormType.main:
-                                return _buildMainLoginForm();
-                              case LoginFormType.useOwnServer:
-                                return _buildUseOwnServerLoginForm(context);
-                              case LoginFormType.credentials:
-                                return _buildCredentialsLoginForm(context);
-                              default:
-                                return _buildMainLoginForm();
+                            converter: (store) => store.state.authenticationState.loginFormType,
+                            builder: (context, loginFormType) {
+                              switch(loginFormType) {
+                                case LoginFormType.main:
+                                  return _buildMainLoginForm();
+                                case LoginFormType.useOwnServer:
+                                  return _buildUseOwnServerLoginForm(context);
+                                case LoginFormType.credentials:
+                                  return _buildCredentialsLoginForm(context);
+                                default:
+                                  return _buildMainLoginForm();
+                              }
                             }
-                          }
                         ),
                       ],
-                    ),
+                    )),
                   )
                 )
               ),
@@ -321,19 +324,20 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget _buildMainLoginForm() {
     return Column(
       children: [
-        Container(
-          margin: EdgeInsets.only(
-            top: 114,
-            left: 32,
-            right: 32),
-          width: _getWidthButton(context),
-          child: CenterTextBuilder()
-            .text(AppLocalizations.of(context).login_message_center)
-            .textStyle(TextStyle(fontSize: 15, color: AppColor.loginMessageCenterColor, fontWeight: FontWeight.normal))
-            .build()),
+        if (!_responsiveUtils.isLandscapeSmallScreen(context))
+          Container(
+            margin: EdgeInsets.only(
+              top: 114,
+              left: 32,
+              right: 32),
+            width: _getWidthButton(context),
+            child: CenterTextBuilder()
+              .text(AppLocalizations.of(context).login_message_center)
+              .textStyle(TextStyle(fontSize: 15, color: AppColor.loginMessageCenterColor, fontWeight: FontWeight.normal))
+              .build()),
         Padding(
           padding: EdgeInsets.only(
-            top: 16,
+            top: _responsiveUtils.isLandscapeSmallScreen(context) ? 24 : 16,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: _buildCreateAccountButton(context)),
@@ -350,21 +354,22 @@ class _LoginWidgetState extends State<LoginWidget> {
                 : _buildLoginButton(context, LoginFormType.main, AuthenticationType.saas))),
         Padding(
           padding: EdgeInsets.only(
-            top: _getPaddingTop(context),
+            top: _responsiveUtils.isLandscapeSmallScreen(context) ? 20 : 80,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: _loginUseOwnServerButton(context)),
-        Container(
-          padding: EdgeInsets.only(
-            top: 12,
-            bottom: 24,
-            left: 32,
-            right: 32),
-          width: _getWidthButton(context),
-          child: CenterTextBuilder()
-            .text(AppLocalizations.of(context).login_message_bottom)
-            .textStyle(TextStyle(fontSize: 13, color: AppColor.loginMessageBottomColor))
-            .build()),
+        if (!_responsiveUtils.isLandscapeSmallScreen(context))
+          Container(
+            padding: EdgeInsets.only(
+              top: 12,
+              bottom: 54,
+              left: 32,
+              right: 32),
+            width: _getWidthButton(context),
+            child: CenterTextBuilder()
+              .text(AppLocalizations.of(context).login_message_bottom)
+              .textStyle(TextStyle(fontSize: 13, color: AppColor.loginMessageBottomColor))
+              .build()),
       ],
     );
   }
@@ -374,7 +379,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            top: 114,
+            top: _responsiveUtils.isLandscapeSmallScreen(context) ? 20 : 64,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: Container(
@@ -453,7 +458,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         Padding(
           padding: EdgeInsets.only(
             top: 20,
-            bottom: 24,
+            bottom: 20,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: ValueListenableBuilder(
@@ -481,7 +486,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            top: 80,
+            top: _responsiveUtils.isLandscapeSmallScreen(context) ? 20 : 40,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: Container(
@@ -492,7 +497,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ..key(Key('login_email_input'))
                   ..onChange((value) => loginViewModel.setEmailText(value))
                   ..textInputAction(TextInputAction.next)
-                  ..title(AppLocalizations.of(context).login_email_title)
+                  ..title(_responsiveUtils.isLandscapeSmallScreen(context)
+                      ? ''
+                      : AppLocalizations.of(context).login_email_title)
                   ..errorText(loginViewModel.getErrorInputString(viewState, context, InputType.email))
                   ..setErrorString((value) => loginViewModel.getErrorValidatorString(context, value, InputType.email))
                   ..hintText(AppLocalizations.of(context).hint_input_email_login)
@@ -514,7 +521,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ..passwordInput(true)
                   ..obscureText(true)
                   ..textInputAction(TextInputAction.next)
-                  ..title(AppLocalizations.of(context).login_password_title)
+                  ..title(_responsiveUtils.isLandscapeSmallScreen(context)
+                      ? ''
+                      : AppLocalizations.of(context).login_password_title)
                   ..errorText(loginViewModel.getErrorInputString(viewState, context, InputType.password))
                   ..setErrorString((value) => loginViewModel.getErrorValidatorString(context, value, InputType.password))
                   ..hintText(AppLocalizations.of(context).hint_input_password_login)
@@ -541,7 +550,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         Padding(
           padding: EdgeInsets.only(
             top: 32,
-            bottom: 24,
+            bottom: 20,
             left: _getPaddingHorizontal(context),
             right: _getPaddingHorizontal(context)),
           child: StoreConnector<AppState, AuthenticationState>(
@@ -559,15 +568,5 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   double _getPaddingHorizontal(BuildContext context) {
     return _responsiveUtils.isSmallScreen(context) ? 14 : 0;
-  }
-
-  double _getPaddingTop(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    if (height <= 800) {
-      return 110;
-    } else if (height >= 1024) {
-      return 350;
-    }
-    return  200;
   }
 }
