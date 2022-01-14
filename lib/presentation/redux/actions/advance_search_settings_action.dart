@@ -73,3 +73,7 @@ class AdvanceSearchSettingsApplyAction extends ActionOnline {
   AdvanceSearchSettingsApplyAction();
 }
 
+@immutable
+class AdvanceSearchSettingsSelectedAllFileTypeAction extends ActionOffline {
+  AdvanceSearchSettingsSelectedAllFileTypeAction();
+}

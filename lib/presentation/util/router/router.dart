@@ -111,7 +111,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case RoutePaths.addRecipientsUploadRequestGroup:
       return MaterialPageRoute(builder: (context) => getIt<AddRecipientsUploadRequestGroupWidget>(), settings: settings);
     case RoutePaths.advanceSearchSettings:
-      return MaterialPageRoute(builder: (context) => getIt<AdvanceSearchSettingsWidget>(), settings: settings);
+      return TransparentPageRoute(builder: (context) => getIt<AdvanceSearchSettingsWidget>(), settings: settings);
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

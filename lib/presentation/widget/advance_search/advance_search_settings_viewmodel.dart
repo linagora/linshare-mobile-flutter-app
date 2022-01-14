@@ -74,6 +74,10 @@ class AdvanceSearchSettingsViewModel extends BaseViewModel {
     store.dispatch(AdvanceSearchSettingsResetAllAction());
   }
 
+  void checkAllFileTypeSettings() {
+    store.dispatch(AdvanceSearchSettingsSelectedAllFileTypeAction());
+  }
+
   void applySearch(AdvanceSearchSetting advanceSearchSetting) {
     if(_arguments.searchDestination == SearchDestination.sharedSpace) {
       popBack();

@@ -77,6 +77,9 @@ extension AppColor on Color {
   static const searchBottomBarColor = Color(0xffF2F2F2);
   static const searchBarColor = Color(0xffEBEDF0);
   static const searchTextColor = Color(0xff000000);
+  static const advancedSearchSettingLabelColor = Color(0xff6D7885);
+  static const advancedSearchSettingTextColor = Color(0xff007AFF);
+  static const advancedSearchSettingButtonResetColor = Color(0x14007AFF);
   static const searchBackButtonColor = Color(0xff007AFF);
   static const searchFilterButtonColor = Color(0xff99A2AD);
   static const searchFilterButtonSelectedColor = Color(0xff007AFF);
