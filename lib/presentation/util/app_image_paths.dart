@@ -112,6 +112,7 @@ class AppImagePaths {
   String get icEmailSentSignUp => _getImagePath('ic_email_sent_signup.svg');
   String get icArrowBackRound => _getImagePath('ic_arrow_back_round.svg');
   String get icFilter => _getImagePath('ic_filter.svg');
+  String get icCloseAdvancedSearch => _getImagePath('ic_close_advanced_search.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;

@@ -136,4 +136,42 @@ class ResponsiveUtils {
   }
 
   double getWidthLoginButton() => _loginButtonWidth;
+
+  EdgeInsets getMarginForAdvancedSearch(BuildContext context) {
+    if (isMediumScreen(context)) {
+      return getSizeHeightScreen(context) <= _destinationPickerVerticalMarginMediumScreen * 2
+          ? EdgeInsets.symmetric(horizontal: _destinationPickerHorizontalMarginMediumScreen)
+          : EdgeInsets.symmetric(
+              horizontal: _destinationPickerHorizontalMarginMediumScreen,
+              vertical: _destinationPickerVerticalMarginMediumScreen);
+    } else if (isLargeScreen(context)) {
+      return getSizeHeightScreen(context) <= _destinationPickerVerticalMarginLargeScreen * 2
+          ? EdgeInsets.symmetric(horizontal: _destinationPickerHorizontalMarginLargeScreen)
+          : EdgeInsets.symmetric(
+              horizontal: _destinationPickerHorizontalMarginLargeScreen,
+              vertical: _destinationPickerVerticalMarginLargeScreen);
+    } else {
+      return EdgeInsets.only(top: 320);
+    }
+  }
+
+  BorderRadius getBorderRadiusAdvancedSearchView(BuildContext context) {
+    if (isMediumScreen(context)) {
+      return getSizeHeightScreen(context) <= _destinationPickerVerticalMarginMediumScreen * 2
+          ? BorderRadius.only(
+              topLeft: Radius.circular(_radiusDestinationPickerView),
+              topRight: Radius.circular(_radiusDestinationPickerView))
+          : BorderRadius.circular(_radiusDestinationPickerView);
+    } else if (isLargeScreen(context)) {
+      return getSizeHeightScreen(context) <= _destinationPickerVerticalMarginLargeScreen * 2
+          ? BorderRadius.only(
+              topLeft: Radius.circular(_radiusDestinationPickerView),
+              topRight: Radius.circular(_radiusDestinationPickerView))
+          : BorderRadius.circular(_radiusDestinationPickerView);
+    } else {
+      return BorderRadius.only(
+          topLeft: Radius.circular(_radiusDestinationPickerView),
+          topRight: Radius.circular(_radiusDestinationPickerView));
+    }
+  }
 }
