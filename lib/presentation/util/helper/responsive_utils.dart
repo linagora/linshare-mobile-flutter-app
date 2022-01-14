@@ -74,6 +74,11 @@ class ResponsiveUtils {
       && getSizeWidthScreen(context) < _minLargeWidth;
   }
 
+  bool isLandscapeSmallScreen(BuildContext context) {
+    return MediaQuery.of(context).size.shortestSide < _minMediumWidth
+        && MediaQuery.of(context).orientation == Orientation.landscape;
+  }
+
   EdgeInsets getPaddingListItemForScreen(BuildContext context) {
     return isLargeScreen(context) ? EdgeInsets.symmetric(horizontal: _listItemHorizontalPaddingLargeWidth) : EdgeInsets.zero;
   }
