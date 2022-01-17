@@ -105,4 +105,9 @@ class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
   Future<SharedSpaceNodeNested> createNewWorkSpace(CreateWorkSpaceRequest createWorkSpaceRequest) {
     return _sharedSpaceDataSources[DataSourceType.network]!.createNewWorkSpace(createWorkSpaceRequest);
   }
+
+  @override
+  Future<SharedSpaceNodeNested> renameWorkSpace(SharedSpaceId sharedSpaceId, RenameWorkSpaceRequest renameRequest) {
+    return _sharedSpaceDataSources[DataSourceType.network]!.renameWorkSpace(sharedSpaceId, renameRequest);
+  }
 }

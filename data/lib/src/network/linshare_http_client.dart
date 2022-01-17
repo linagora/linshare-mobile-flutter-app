@@ -568,6 +568,18 @@ class LinShareHttpClient {
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
 
+  Future<SharedSpaceNodeNestedResponse> renameWorkSpace(
+      SharedSpaceId sharedSpaceId,
+      RenameWorkSpaceBodyRequest bodyRequest
+  ) async {
+    final resultJson = await _dioClient.put(
+      Endpoint.sharedSpaces.withPathParameter(sharedSpaceId.uuid).generateEndpointPath(),
+      data: bodyRequest.toJson().toString(),
+    );
+
+    return SharedSpaceNodeNestedResponse.fromJson(resultJson);
+  }
+
   Future<DocumentResponse> editDescriptionDocument(DocumentId documentId, EditDescriptionDocumentRequest request) async {
     final resultJson = await _dioClient.put(
         Endpoint.documents
