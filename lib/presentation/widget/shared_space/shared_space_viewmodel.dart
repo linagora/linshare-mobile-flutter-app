@@ -80,6 +80,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   final GetAllSharedSpaceOfflineInteractor _getAllSharedSpaceOfflineInteractor;
   final CreateNewDriveInteractor _createNewDriveInteractor;
   final CreateNewWorkSpaceInteractor _createNewWorkSpaceInteractor;
+  final RenameWorkSpaceInteractor _renameWorkSpaceInteractor;
 
   late StreamSubscription _storeStreamSubscription;
   late List<SharedSpaceNodeNested> _sharedSpaceNodes;
@@ -103,6 +104,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._getAllSharedSpaceOfflineInteractor,
     this._createNewDriveInteractor,
     this._createNewWorkSpaceInteractor,
+    this._renameWorkSpaceInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -300,6 +302,32 @@ class SharedSpaceViewModel extends BaseViewModel {
         .addHeader(ContextMenuHeaderBuilder(
           Key('drive_context_menu_header'),
           SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(nodeNested)).build())
+        .addTiles(actionTiles)
+        .addFooter(footerAction ?? SizedBox.shrink())
+        .build();
+    };
+  }
+
+  void openWorkspaceContextMenu(BuildContext context, SharedSpaceNodeNested nodeNested, List<Widget> actionTiles, {Widget? footerAction}) {
+    store.dispatch(
+        _handleWorkspaceContextMenuAction(
+            context,
+            nodeNested,
+            actionTiles,
+            footerAction: footerAction));
+  }
+
+  ThunkAction<AppState> _handleWorkspaceContextMenuAction(
+      BuildContext context,
+      SharedSpaceNodeNested nodeNested,
+      List<Widget> actionTiles,
+      {Widget? footerAction}) {
+    return (Store<AppState> store) async {
+      ContextMenuBuilder(context)
+        .addHeader(ContextMenuHeaderBuilder(
+            Key('work_space_context_menu_header'),
+            SharedSpaceNodeNestedPresentationFile.fromSharedSpaceNodeNested(nodeNested))
+          .build())
         .addTiles(actionTiles)
         .addFooter(footerAction ?? SizedBox.shrink())
         .build();
@@ -520,23 +548,6 @@ class SharedSpaceViewModel extends BaseViewModel {
     });
   }
 
-  void openRenameWorkGroupModal(BuildContext context, SharedSpaceNodeNested sharedSpace) {
-    _appNavigation.popBack();
-
-    EditTextModalSheetBuilder()
-      .key(Key('rename_work_group_modal'))
-      .title(AppLocalizations.of(context).rename_node(AppLocalizations.of(context).workgroup.toLowerCase()))
-      .cancelText(AppLocalizations.of(context).cancel)
-      .onConfirmAction(AppLocalizations.of(context).rename,
-        (value) => store.dispatch(_renameWorkGroupAction(context, value, sharedSpace)))
-      .setErrorString(
-        (value) => getErrorString(context, value, LinShareNodeType.WORK_GROUP))
-      .setTextSelection(
-        TextSelection(baseOffset: 0, extentOffset: sharedSpace.name.length),
-        value: sharedSpace.name)
-      .show(context);
-  }
-
   OnlineThunkAction _renameWorkGroupAction(BuildContext context, String newName, SharedSpaceNodeNested sharedSpaceNodeNested) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _renameWorkGroupInteractor
@@ -547,26 +558,47 @@ class SharedSpaceViewModel extends BaseViewModel {
     });
   }
 
-  void openRenameDriveModal(BuildContext context, SharedSpaceNodeNested drive) {
-    _appNavigation.popBack();
-
-    EditTextModalSheetBuilder()
-      .key(Key('rename_drive_modal'))
-      .title(AppLocalizations.of(context).rename_node(AppLocalizations.of(context).drive.toLowerCase()))
-      .cancelText(AppLocalizations.of(context).cancel)
-      .onConfirmAction(AppLocalizations.of(context).rename,
-          (value) => store.dispatch(_renameDriveAction(context, value, drive)))
-      .setErrorString((value) => getErrorString(context, value, LinShareNodeType.DRIVE))
-      .setTextSelection(TextSelection(baseOffset: 0, extentOffset: drive.name.length), value: drive.name)
-      .show(context);
-  }
-
   OnlineThunkAction _renameDriveAction(BuildContext context, String newName, SharedSpaceNodeNested drive) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _renameDriveInteractor
         .execute(
           drive.sharedSpaceId,
           RenameDriveRequest(newName, drive.nodeType!))
+        .then((result) => getAllSharedSpaces(needToGetOldSorter: true));
+    });
+  }
+
+  void openRenameSharedSpaceNodeModal(BuildContext context,
+      SharedSpaceNodeNested nodeNested, LinShareNodeType nodeType) {
+    _appNavigation.popBack();
+
+    EditTextModalSheetBuilder()
+        .key(Key('rename_shared_space_node_modal'))
+        .title(nodeType.getTitleBottomSheetRename(context))
+        .cancelText(AppLocalizations.of(context).cancel)
+        .onConfirmAction(AppLocalizations.of(context).rename,
+            (value) {
+              switch(nodeType) {
+                case LinShareNodeType.DRIVE:
+                  store.dispatch(_renameDriveAction(context, value, nodeNested));
+                  break;
+                case LinShareNodeType.WORK_GROUP:
+                  store.dispatch(_renameWorkGroupAction(context, value, nodeNested));
+                  break;
+                case LinShareNodeType.WORK_SPACE:
+                  store.dispatch(_renameWorkspaceAction(context, value, nodeNested));
+                  break;
+              }
+            })
+        .setErrorString((value) => getErrorString(context, value, nodeType))
+        .setTextSelection(TextSelection(baseOffset: 0, extentOffset: nodeNested.name.length), value: nodeNested.name)
+        .show(context);
+  }
+
+  OnlineThunkAction _renameWorkspaceAction(BuildContext context, String newName, SharedSpaceNodeNested nodeNested) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _renameWorkSpaceInteractor
+        .execute(nodeNested.sharedSpaceId, RenameWorkSpaceRequest(newName, nodeNested.nodeType!))
         .then((result) => getAllSharedSpaces(needToGetOldSorter: true));
     });
   }

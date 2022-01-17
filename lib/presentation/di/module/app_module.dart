@@ -383,6 +383,7 @@ class AppModule {
     getIt.registerFactory(() => CreateWorkGroupInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => CreateNewDriveInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => CreateNewWorkSpaceInteractor(getIt<SharedSpaceRepository>()));
+    getIt.registerFactory(() => RenameWorkSpaceInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => GetAllWorkgroupsInteractor(getIt<SharedSpaceNodeRepository>()));
     getIt.registerFactory(() => GetAllWorkgroupsOfflineInteractor(getIt<SharedSpaceNodeRepository>()));
     getIt.registerFactory(() => RenameSharedSpaceNodeInteractor(getIt<SharedSpaceDocumentRepository>()));
