@@ -103,4 +103,9 @@ class LocalSharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<SharedSpaceNodeNested> createNewWorkSpace(CreateWorkSpaceRequest createWorkSpaceRequest) {
+    throw UnimplementedError();
+  }
 }
