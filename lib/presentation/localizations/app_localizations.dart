@@ -2873,6 +2873,32 @@ class AppLocalizations {
       name: 'check_all',
     );
   }
+
+  String get new_workspace {
+    return Intl.message(
+      'New workspace',
+      name: 'new_workspace',
+    );
+  }
+
+  String get workspace {
+    return Intl.message('Workspace',
+        name: 'workspace');
+  }
+
+  String get create_new_workspace {
+    return Intl.message(
+      'Create new workspace',
+      name: 'create_new_workspace',
+    );
+  }
+
+  String get create_workspace {
+    return Intl.message(
+        'Create Workspace',
+        name: 'create_workspace'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

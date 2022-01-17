@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/shared_space_stat
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -78,6 +79,7 @@ class SharedSpaceViewModel extends BaseViewModel {
   final RenameDriveInteractor _renameDriveInteractor;
   final GetAllSharedSpaceOfflineInteractor _getAllSharedSpaceOfflineInteractor;
   final CreateNewDriveInteractor _createNewDriveInteractor;
+  final CreateNewWorkSpaceInteractor _createNewWorkSpaceInteractor;
 
   late StreamSubscription _storeStreamSubscription;
   late List<SharedSpaceNodeNested> _sharedSpaceNodes;
@@ -100,6 +102,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     this._renameDriveInteractor,
     this._getAllSharedSpaceOfflineInteractor,
     this._createNewDriveInteractor,
+    this._createNewWorkSpaceInteractor,
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.sharedSpaceState.viewState.fold(
@@ -111,7 +114,8 @@ class SharedSpaceViewModel extends BaseViewModel {
                   store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
                   _searchQuery = SearchQuery('');
                 } else if (success is CreateWorkGroupViewState ||
-                    success is CreateNewDriveViewState) {
+                    success is CreateNewDriveViewState ||
+                    success is CreateNewWorkSpaceViewState) {
                   getAllSharedSpaces(needToGetOldSorter: false);
                 }
               });
@@ -382,43 +386,11 @@ class SharedSpaceViewModel extends BaseViewModel {
     );
   }
 
-  void openCreateNewWorkGroup(BuildContext context) {
-    _appNavigation.popBack();
-    store.dispatch(_handleCreateNewWorkgroupModalAction(context));
-  }
-
-  void openCreateNewDrive(BuildContext context) {
-    _appNavigation.popBack();
-    store.dispatch(_handleCreateNewDriveModalAction(context));
-  }
-
-  ThunkAction<AppState> _handleCreateNewDriveModalAction(BuildContext context) {
-    final suggestName = SuggestNameType.DRIVE
-      .suggestNewName(context,
-        _sharedSpaceNodes
-            .where((sharedSpaced) => sharedSpaced.nodeType == LinShareNodeType.DRIVE)
-            .map((sharedSpaced) => sharedSpaced.name).toList()
-    );
-    return (Store<AppState> store) async {
-      EditTextModalSheetBuilder()
-        .key(Key('create_new_drive_modal'))
-        .title(AppLocalizations.of(context).create_new_drive)
-        .cancelText(AppLocalizations.of(context).cancel)
-        .onConfirmAction(AppLocalizations.of(context).create,
-            (value) => this.store.dispatch(_createNewDriveAction(value)))
-        .setErrorString((value) => getErrorString(context, value, LinShareNodeType.DRIVE))
-        .setTextController(
-          TextEditingController.fromValue(
-            TextEditingValue(
-                text: suggestName,
-                selection: TextSelection(
-                    baseOffset: 0,
-                    extentOffset: suggestName.length
-                )
-            ),
-          ))
-        .show(context);
-    };
+  void openCreateNewSharedSpaceNode(BuildContext context, LinShareNodeType nodeType, {bool fromContextMenu = false}) {
+    if (fromContextMenu) {
+      _appNavigation.popBack();
+    }
+    store.dispatch(_handleCreateNewSharedSpaceNodeModalAction(context, nodeType));
   }
 
   OnlineThunkAction _createNewDriveAction(String newName) {
@@ -428,6 +400,56 @@ class SharedSpaceViewModel extends BaseViewModel {
         .then((result) => result.fold(
           (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
           (success) => store.dispatch(SharedSpaceAction(Right(success)))));
+    });
+  }
+
+  String _getSuggestName(BuildContext context, LinShareNodeType nodeType) {
+    return nodeType.suggestNameType
+        .suggestNewName(context, _sharedSpaceNodes
+        .where((sharedSpaced) => sharedSpaced.nodeType == nodeType)
+        .map((sharedSpaced) => sharedSpaced.name)
+        .toList());
+  }
+
+  ThunkAction<AppState> _handleCreateNewSharedSpaceNodeModalAction(
+      BuildContext context, LinShareNodeType nodeType) {
+    final suggestName = _getSuggestName(context, nodeType);
+    return (Store<AppState> store) async {
+      EditTextModalSheetBuilder()
+          .key(Key('create_new_shared_space_node_modal'))
+          .title(nodeType.getTitleBottomSheetCreation(context))
+          .cancelText(AppLocalizations.of(context).cancel)
+          .onConfirmAction(AppLocalizations.of(context).create,
+              (value) {
+                switch(nodeType) {
+                  case LinShareNodeType.DRIVE:
+                    this.store.dispatch(_createNewDriveAction(value));
+                    break;
+                  case LinShareNodeType.WORK_GROUP:
+                    this.store.dispatch(_createNewWorkGroupAction(value));
+                    break;
+                  case LinShareNodeType.WORK_SPACE:
+                    this.store.dispatch(_createNewWorkspaceAction(value));
+                    break;
+                }
+              })
+          .setErrorString((value) => getErrorString(context, value, nodeType))
+          .setTextController(TextEditingController.fromValue(
+            TextEditingValue(
+                text: suggestName,
+                selection: TextSelection(baseOffset: 0, extentOffset: suggestName.length)
+            )))
+          .show(context);
+    };
+  }
+
+  OnlineThunkAction _createNewWorkspaceAction(String newName) {
+    return OnlineThunkAction((Store<AppState> store) async {
+      await _createNewWorkSpaceInteractor
+          .execute(CreateWorkSpaceRequest(newName, LinShareNodeType.WORK_SPACE))
+          .then((result) => result.fold(
+              (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+              (success) => store.dispatch(SharedSpaceAction(Right(success)))));
     });
   }
 
@@ -441,10 +463,6 @@ class SharedSpaceViewModel extends BaseViewModel {
         .addTiles(actionTiles)
         .build();
     };
-  }
-
-  void openCreateNewWorkGroupModal(BuildContext context) {
-    store.dispatch(_handleCreateNewWorkgroupModalAction(context));
   }
 
   void openPopupMenuSorter(BuildContext context, Sorter currentSorter) {
@@ -480,65 +498,12 @@ class SharedSpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> _handleCreateNewWorkgroupModalAction(BuildContext context) {
-    final suggestName = SuggestNameType.WORKGROUP
-        .suggestNewName(
-          context,
-          _sharedSpaceNodes
-              .where((sharedSpaced) => sharedSpaced.nodeType == LinShareNodeType.WORK_GROUP)
-              .map((sharedSpaced) => sharedSpaced.name).toList()
-        );
-    return (Store<AppState> store) async {
-      EditTextModalSheetBuilder()
-          .key(Key('create_new_workgroup_modal'))
-          .title(AppLocalizations.of(context).create_new_workgroup)
-          .cancelText(AppLocalizations.of(context).cancel)
-          .onConfirmAction(AppLocalizations.of(context).create,
-              (value) => this.store.dispatch(_createNewWorkGroupAction(value)))
-          .setErrorString((value) => getErrorString(context, value, LinShareNodeType.WORK_GROUP))
-          .setTextController(
-            TextEditingController.fromValue(
-              TextEditingValue(
-                text: suggestName,
-                selection: TextSelection(
-                  baseOffset: 0,
-                  extentOffset: suggestName.length
-                )
-              ),
-            ))
-          .show(context);
-    };
-  }
-
   String? getErrorString(BuildContext context, String value, LinShareNodeType nodeType) {
     return _verifyNameInteractor
-        .execute(
-          value,
-          [
-            EmptyNameValidator(),
-            if (nodeType == LinShareNodeType.WORK_GROUP) DuplicateNameValidator(_sharedSpaceNodes.map((node) => node.name).toList()),
-            SpecialCharacterValidator()
-          ]
-        )
+        .execute(value, nodeType.getListValidator(_sharedSpaceNodes))
         .fold((failure) {
           if (failure is VerifyNameFailure) {
-            if (failure.exception is EmptyNameException) {
-              if (nodeType == LinShareNodeType.WORK_GROUP) {
-                return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).workgroup);
-              } else {
-                return AppLocalizations.of(context).node_name_not_empty(AppLocalizations.of(context).drive);
-              }
-            } else if (failure.exception is DuplicatedNameException) {
-              return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workgroup);
-            } else if (failure.exception is SpecialCharacterException) {
-              if (nodeType == LinShareNodeType.WORK_GROUP) {
-                return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
-              } else {
-                return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).drive);
-              }
-            } else {
-              return null;
-            }
+            return nodeType.getErrorVerifyName(context, failure.exception);
           } else {
             return null;
           }

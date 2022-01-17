@@ -42,6 +42,8 @@ extension SuggestNameTypeExtension on SuggestNameType {
     switch(this) {
       case SuggestNameType.DRIVE:
         return AppLocalizations.of(context).new_drive;
+      case SuggestNameType.WORK_SPACE:
+        return AppLocalizations.of(context).new_workspace;
       case SuggestNameType.WORKGROUP:
         return AppLocalizations.of(context).new_workgroup;
       case SuggestNameType.WORKGROUP_FOLDER:

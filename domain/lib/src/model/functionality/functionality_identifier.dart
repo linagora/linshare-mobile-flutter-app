@@ -48,6 +48,7 @@ enum FunctionalityIdentifier {
   UPLOAD_REQUEST__PROTECTED_BY_PASSWORD,
   DRIVE,                                         // work with back-end 4.2 and below
   DRIVE__CREATION_RIGHT,
+  WORK_SPACE__CREATION_RIGHT,
   SHARED_SPACE                                   // work with back-end 5.0
 }
 
