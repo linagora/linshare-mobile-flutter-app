@@ -403,6 +403,13 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             _contextDriveMenuActionTiles(context, sharedSpace),
             footerAction: _driveContextMenuFooterAction(sharedSpace.element));
         break;
+      case LinShareNodeType.WORK_SPACE:
+        sharedSpaceViewModel.openWorkspaceContextMenu(
+            context,
+            sharedSpace.element,
+            _contextWorkspaceMenuActionTiles(context, sharedSpace),
+            footerAction: _workSpaceContextMenuFooterAction(sharedSpace.element));
+        break;
       default:
         sharedSpaceViewModel.openContextMenu(
           context,
@@ -418,15 +425,25 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       if (SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.element.sharedSpaceRole.name))
         _addDriveMemberAction(sharedSpace.element),
       if (SharedSpaceOperationRole.renameDriveRoles.contains(sharedSpace.element.sharedSpaceRole.name))
-        _renameDriveAction(context, sharedSpace.element),
+        _renameSharedSpaceNodeAction(context, sharedSpace.element, LinShareNodeType.DRIVE),
     ];
   }
 
   List<Widget> _contextMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
     return [
       if (SharedSpaceOperationRole.renameWorkGroupSharedSpaceRoles.contains(sharedSpace.element.sharedSpaceRole.name))
-        _renameWorkgroupAction(context, sharedSpace.element),
+        _renameSharedSpaceNodeAction(context, sharedSpace.element, LinShareNodeType.WORK_GROUP),
       _sharedSpaceDetailsAction(sharedSpace.element)
+    ];
+  }
+
+  List<Widget> _contextWorkspaceMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
+    return [
+      _sharedSpaceDetailsAction(sharedSpace.element),
+      if (SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.element.sharedSpaceRole.name))
+        _addDriveMemberAction(sharedSpace.element),
+      if (SharedSpaceOperationRole.renameWorkspaceRoles.contains(sharedSpace.element.sharedSpaceRole.name))
+        _renameSharedSpaceNodeAction(context, sharedSpace.element, LinShareNodeType.WORK_SPACE),
     ];
   }
 
@@ -452,21 +469,24 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         : SizedBox.shrink();
   }
 
-  Widget _renameWorkgroupAction(BuildContext context, SharedSpaceNodeNested sharedSpace) {
-    return WorkgroupContextMenuTileBuilder(
-        Key('rename_workgroup_context_menu_action'),
-        SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
-        AppLocalizations.of(context).rename, sharedSpace)
-      .onActionClick((sharedSpace) => sharedSpaceViewModel.openRenameWorkGroupModal(context, sharedSpace))
-      .build();
+  Widget _workSpaceContextMenuFooterAction(SharedSpaceNodeNested sharedSpace) {
+    return SharedSpaceOperationRole.deleteDriveRoles.contains(sharedSpace.sharedSpaceRole.name)
+        ? SimpleContextMenuActionBuilder(
+                Key('delete_work_space_context_menu_action'),
+                SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
+                AppLocalizations.of(context).delete)
+            .onActionClick((data) => sharedSpaceViewModel.removeSharedSpaces(context, [sharedSpace]))
+            .build()
+        : SizedBox.shrink();
   }
 
-  Widget _renameDriveAction(BuildContext context, SharedSpaceNodeNested drive) {
+  Widget _renameSharedSpaceNodeAction(BuildContext context, SharedSpaceNodeNested nodeNested, LinShareNodeType nodeType) {
     return WorkgroupContextMenuTileBuilder(
-        Key('rename_drive_context_menu_action'),
+        Key('rename_shared_space_node_context_menu_action'),
         SvgPicture.asset(imagePath.icRename, width: 24, height: 24, fit: BoxFit.fill),
-        AppLocalizations.of(context).rename, drive)
-      .onActionClick((drive) => sharedSpaceViewModel.openRenameDriveModal(context, drive))
+        AppLocalizations.of(context).rename, nodeNested)
+      .onActionClick((nodeNested) =>
+        sharedSpaceViewModel.openRenameSharedSpaceNodeModal(context, nodeNested, nodeType))
       .build();
   }
 
