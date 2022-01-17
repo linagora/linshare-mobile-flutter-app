@@ -30,21 +30,14 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class GetAllWorkgroupsViewState extends ViewState {
-  final List<SharedSpaceNodeNested> workgroups;
+class CreateWorkSpaceRequest with EquatableMixin {
+  final String name;
+  final LinShareNodeType nodeType;
 
-  GetAllWorkgroupsViewState(this.workgroups);
-
-  @override
-  List<Object> get props => [workgroups];
-}
-
-class GetAllWorkgroupsFailure extends FeatureFailure {
-  final exception;
-
-  GetAllWorkgroupsFailure(this.exception);
+  CreateWorkSpaceRequest(this.name, this.nodeType);
 
   @override
-  List<Object> get props => [exception];
+  List<Object?> get props => [name, nodeType];
 }

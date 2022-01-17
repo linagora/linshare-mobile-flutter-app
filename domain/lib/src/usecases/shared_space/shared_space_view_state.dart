@@ -608,3 +608,39 @@ class UpdateDriveMemberFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class CreateNewDriveViewState extends ViewState {
+  final SharedSpaceNodeNested drive;
+
+  CreateNewDriveViewState(this.drive);
+
+  @override
+  List<Object> get props => [drive];
+}
+
+class CreateNewDriveFailure extends FeatureFailure {
+  final exception;
+
+  CreateNewDriveFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
+class CreateNewWorkSpaceViewState extends ViewState {
+  final SharedSpaceNodeNested workSpace;
+
+  CreateNewWorkSpaceViewState(this.workSpace);
+
+  @override
+  List<Object> get props => [workSpace];
+}
+
+class CreateNewWorkSpaceFailure extends FeatureFailure {
+  final exception;
+
+  CreateNewWorkSpaceFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

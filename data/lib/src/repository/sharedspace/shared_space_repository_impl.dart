@@ -100,4 +100,9 @@ class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
   Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest) {
     return _sharedSpaceDataSources[DataSourceType.network]!.createNewDrive(createDriveRequest);
   }
+
+  @override
+  Future<SharedSpaceNodeNested> createNewWorkSpace(CreateWorkSpaceRequest createWorkSpaceRequest) {
+    return _sharedSpaceDataSources[DataSourceType.network]!.createNewWorkSpace(createWorkSpaceRequest);
+  }
 }
