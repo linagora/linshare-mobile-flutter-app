@@ -486,6 +486,7 @@ export 'src/usecases/workgroup/get_all_workgroups_interactor.dart';
 export 'src/usecases/workgroup/workgroup_view_state.dart';
 export 'src/usecases/workgroup/get_all_workgroups_offline_interactor.dart';
 export 'src/usecases/shared_space/create_new_drive_interactor.dart';
+export 'src/usecases/shared_space/create_new_work_space_interactor.dart';
 export 'src/usecases/quota/save_quota_interactor.dart';
 export 'src/usecases/audit_user/save_last_login_interactor.dart';
 export 'src/usecases/authentication/save_authorized_user_interactor.dart';

@@ -46,6 +46,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_widget.dart';
 import 'package:linshare_flutter_app/presentation/view/background_widgets/background_widget_builder.dart';
@@ -180,7 +181,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
             if (!appState.uiState.isInSearchState() &&
                 appState.sharedSpaceState.selectMode == SelectMode.INACTIVE) {
               return FloatingActionButton(
-                key: Key('shared_space_create_new_workgroup_button'),
+                key: Key('create_new_shared_space_node_button'),
                 onPressed: () => _onPressCreateNewButton(context, appState),
                 backgroundColor: _bindingCreateNewButtonColor(appState),
                 child: SvgPicture.asset(
@@ -197,23 +198,28 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   }
 
   Color _bindingCreateNewButtonColor(AppState appState) {
-    if (!_driveCreationEnable(appState) && !_workgroupCreationEnable(appState)) {
+    if (!_driveCreationEnable(appState) && !_workgroupCreationEnable(appState)
+        && !_workspaceCreationEnable(appState)) {
       return AppColor.disableColor;
     }
     return AppColor.primaryColor;
   }
 
   void _onPressCreateNewButton(BuildContext context, AppState appState) {
-    if (_driveCreationEnable(appState) && _workgroupCreationEnable(appState)) {
-      sharedSpaceViewModel.openCreateNewSharedSpaceMenu(context, _createNewSharedSpaceActionTiles(context));
+    if ((_driveCreationEnable(appState) || _workspaceCreationEnable(appState)) && _workgroupCreationEnable(appState)) {
+      sharedSpaceViewModel.openCreateNewSharedSpaceMenu(context, _createNewSharedSpaceActionTiles(context, appState));
     } else if (_driveCreationEnable(appState) && !_workgroupCreationEnable(appState)) {
-      sharedSpaceViewModel.openCreateNewDrive(context);
-    } else if (!_driveCreationEnable(appState) && _workgroupCreationEnable(appState)) {
-      sharedSpaceViewModel.openCreateNewWorkGroupModal(context);
+      sharedSpaceViewModel.openCreateNewSharedSpaceNode(context, LinShareNodeType.DRIVE);
+    } else if (_workspaceCreationEnable(appState) && !_workgroupCreationEnable(appState)) {
+      sharedSpaceViewModel.openCreateNewSharedSpaceNode(context, LinShareNodeType.WORK_SPACE);
+    } else if ((!_driveCreationEnable(appState) || _workspaceCreationEnable(appState)) && _workgroupCreationEnable(appState)) {
+      sharedSpaceViewModel.openCreateNewSharedSpaceNode(context, LinShareNodeType.WORK_GROUP);
     }
   }
 
   bool _driveCreationEnable(AppState appState) => appState.functionalityState.isDriveCreationEnabled();
+
+  bool _workspaceCreationEnable(AppState appState) => appState.functionalityState.isWorkspaceCreationEnabled();
 
   bool _workgroupCreationEnable(AppState appState) => appState.functionalityState.isCreateWorkgroupEnabled();
 
@@ -541,26 +547,19 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     );
   }
 
-  List<Widget> _createNewSharedSpaceActionTiles(BuildContext context) {
+  List<Widget> _createNewSharedSpaceActionTiles(BuildContext context, AppState appState) {
     return [
-      _createNewDrive(context),
-      _createNewWorkgroup(context)
+      if (_driveCreationEnable(appState)) _createNewSharedSpaceNode(context, LinShareNodeType.DRIVE),
+      if (_workspaceCreationEnable(appState)) _createNewSharedSpaceNode(context, LinShareNodeType.WORK_SPACE),
+      _createNewSharedSpaceNode(context, LinShareNodeType.WORK_GROUP),
     ];
   }
 
-  Widget _createNewWorkgroup(BuildContext context) => SimpleHorizontalContextMenuActionBuilder(
-        Key('create_new_workgroup_context_menu_action'),
-        SvgPicture.asset(imagePath.icWorkgroup, width: 30, height: 30, fit: BoxFit.fill),
-        AppLocalizations.of(context).create_workgroup,
+  Widget _createNewSharedSpaceNode(BuildContext context, LinShareNodeType nodeType) => SimpleHorizontalContextMenuActionBuilder(
+        Key('create_new_shared_space_node_context_menu_action'),
+        SvgPicture.asset(nodeType.getIconNode(imagePath), width: 30, height: 30, fit: BoxFit.fill),
+        nodeType.getNameItemNode(context),
         spaceCenterHeight: 16)
-    .onActionClick((_) => sharedSpaceViewModel.openCreateNewWorkGroup(context))
-    .build();
-
-  Widget _createNewDrive(BuildContext context) => SimpleHorizontalContextMenuActionBuilder(
-        Key('create_new_drive_context_menu_action'),
-        SvgPicture.asset(imagePath.icDrive, width: 30, height: 30, fit: BoxFit.fill),
-        AppLocalizations.of(context).create_drive,
-        spaceCenterHeight: 16)
-    .onActionClick((_) => sharedSpaceViewModel.openCreateNewDrive(context))
+    .onActionClick((_) => sharedSpaceViewModel.openCreateNewSharedSpaceNode(context, nodeType, fromContextMenu: true))
     .build();
 }

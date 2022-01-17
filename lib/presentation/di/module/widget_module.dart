@@ -291,6 +291,7 @@ class WidgetModule {
       getIt<RenameDriveInteractor>(),
       getIt<GetAllSharedSpaceOfflineInteractor>(),
       getIt<CreateNewDriveInteractor>(),
+      getIt<CreateNewWorkSpaceInteractor>(),
     ));
   }
 
