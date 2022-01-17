@@ -470,7 +470,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   }
 
   Widget _workSpaceContextMenuFooterAction(SharedSpaceNodeNested sharedSpace) {
-    return SharedSpaceOperationRole.deleteDriveRoles.contains(sharedSpace.sharedSpaceRole.name)
+    return SharedSpaceOperationRole.deleteWorkspaceRoles.contains(sharedSpace.sharedSpaceRole.name)
         ? SimpleContextMenuActionBuilder(
                 Key('delete_work_space_context_menu_action'),
                 SvgPicture.asset(imagePath.icDelete, width: 24, height: 24, fit: BoxFit.fill),
@@ -529,7 +529,9 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
       if ((sharedSpace.nodeType == LinShareNodeType.DRIVE &&
           SharedSpaceOperationRole.deleteDriveRoles.contains(sharedSpace.sharedSpaceRole.name)) ||
           (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP &&
-          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name))) {
+          SharedSpaceOperationRole.deleteSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name)) ||
+          (sharedSpace.nodeType == LinShareNodeType.WORK_SPACE &&
+          SharedSpaceOperationRole.deleteWorkspaceRoles.contains(sharedSpace.sharedSpaceRole.name)) ) {
         return false;
       }
       return true;
