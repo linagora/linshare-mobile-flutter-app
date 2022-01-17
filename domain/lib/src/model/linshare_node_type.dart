@@ -31,7 +31,7 @@
 //
 
 enum LinShareNodeType {
-  DRIVE, WORK_GROUP
+  DRIVE, WORK_GROUP, WORK_SPACE
 }
 
 extension LinShareNodeTypeExtension on LinShareNodeType {
@@ -41,6 +41,8 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
         return 'DRIVE';
       case LinShareNodeType.WORK_GROUP:
         return 'WORK_GROUP';
+      case LinShareNodeType.WORK_SPACE:
+        return 'WORK_SPACE';
       default:
         return toString();
     }
