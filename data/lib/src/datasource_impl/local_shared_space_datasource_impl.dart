@@ -108,4 +108,9 @@ class LocalSharedSpaceDataSourceImpl implements SharedSpaceDataSource {
   Future<SharedSpaceNodeNested> createNewWorkSpace(CreateWorkSpaceRequest createWorkSpaceRequest) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<SharedSpaceNodeNested> renameWorkSpace(SharedSpaceId sharedSpaceId, RenameWorkSpaceRequest renameRequest) {
+    throw UnimplementedError();
+  }
 }

@@ -52,6 +52,8 @@ abstract class SharedSpaceDataSource {
 
   Future<SharedSpaceNodeNested> renameDrive(SharedSpaceId sharedSpaceId, RenameDriveRequest renameRequest);
 
+  Future<SharedSpaceNodeNested> renameWorkSpace(SharedSpaceId sharedSpaceId, RenameWorkSpaceRequest renameRequest);
+
   Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest);
 
   Future<SharedSpaceNodeNested> createNewWorkSpace(CreateWorkSpaceRequest createWorkSpaceRequest);
