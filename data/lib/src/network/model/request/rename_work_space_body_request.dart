@@ -29,39 +29,26 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class SharedSpaceRepository {
-  Future<List<SharedSpaceNodeNested>> getSharedSpaces();
+class RenameWorkSpaceBodyRequest with EquatableMixin {
+  final String name;
+  final LinShareNodeType nodeType;
 
-  Future<SharedSpaceNodeNested> deleteSharedSpace(SharedSpaceId sharedSpaceId);
+  RenameWorkSpaceBodyRequest(this.name, this.nodeType);
 
-  Future<SharedSpaceNodeNested> getSharedSpace(
-    SharedSpaceId shareSpaceId,
-    {
-      MembersParameter membersParameter = MembersParameter.withMembers,
-      RolesParameter rolesParameter = RolesParameter.withRole
-    }
-  );
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('name'): jsonEncode(name),
+    jsonEncode('nodeType'): jsonEncode(nodeType.value)
+  };
 
-  Future<SharedSpaceNodeNested> createSharedSpaceWorkGroup(CreateWorkGroupRequest createWorkGroupRequest);
+  @override
+  List<Object> get props => [name, nodeType];
+}
 
-  Future<List<SharedSpaceRole>> getSharedSpacesRoles({LinShareNodeType? type});
-
-  Future<SharedSpaceNodeNested> renameWorkGroup(SharedSpaceId sharedSpaceId, RenameWorkGroupRequest renameRequest);
-
-  Future<SharedSpaceNodeNested> renameDrive(SharedSpaceId sharedSpaceId, RenameDriveRequest renameRequest);
-
-  Future<SharedSpaceNodeNested> renameWorkSpace(SharedSpaceId sharedSpaceId, RenameWorkSpaceRequest renameRequest);
-
-  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest);
-
-  Future<SharedSpaceNodeNested> createNewWorkSpace(CreateWorkSpaceRequest createWorkSpaceRequest);
-
-  Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
-
-  Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
-    SharedSpaceId sharedSpaceId,
-    SharedSpaceRole sharedSpaceRole,
-    EnableVersioningWorkGroupRequest enableVersioningWorkGroupRequest);
+extension RenameWorkSpaceRequestExtension on RenameWorkSpaceRequest {
+  RenameWorkSpaceBodyRequest toRenameWorkSpaceBodyRequest() => RenameWorkSpaceBodyRequest(name, nodeType);
 }

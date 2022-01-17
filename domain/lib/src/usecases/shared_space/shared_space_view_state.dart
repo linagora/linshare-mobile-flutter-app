@@ -644,3 +644,21 @@ class CreateNewWorkSpaceFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class RenameWorkSpaceViewState extends ViewState {
+  final SharedSpaceNodeNested workSpace;
+
+  RenameWorkSpaceViewState(this.workSpace);
+
+  @override
+  List<Object> get props => [workSpace];
+}
+
+class RenameWorkSpaceFailure extends FeatureFailure {
+  final exception;
+
+  RenameWorkSpaceFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
