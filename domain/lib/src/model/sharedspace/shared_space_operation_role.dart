@@ -110,6 +110,10 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.DRIVE_ADMIN
   ];
 
+  static const renameWorkspaceRoles = [
+    SharedSpaceRoleName.WORK_SPACE_ADMIN
+  ];
+
   static const previewVersionDocumentSharedSpaceRoles = [
     SharedSpaceRoleName.ADMIN,
     SharedSpaceRoleName.WRITER,
