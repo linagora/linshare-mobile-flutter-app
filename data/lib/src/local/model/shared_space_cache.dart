@@ -37,7 +37,7 @@ import 'package:data/src/local/converter/quota_id_converter.dart';
 import 'package:data/src/local/converter/shared_space_id_converter.dart';
 import 'package:data/src/local/converter/shared_space_role_id_converter.dart';
 import 'package:data/src/local/converter/shared_space_role_name_converter.dart';
-import 'package:data/src/network/model/converter/drive_id_nullable_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_id_nullable_converter.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -52,13 +52,13 @@ part 'shared_space_cache.g.dart';
 @SharedSpaceRoleNameConverter()
 @LinShareNodeTypeConverter()
 @QuotaIdConverter()
-@DriveIdNullableConverter()
+@SharedSpaceIdNullableConverter()
 class SharedSpaceCache with EquatableMixin {
 
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ID)
   final SharedSpaceId sharedSpaceId;
-  @JsonKey(name: SharedSpaceTable.DRIVE_ID)
-  final DriveId? driveId;
+  @JsonKey(name: SharedSpaceTable.PARENT_ID)
+  final SharedSpaceId? parentId;
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ROLE_ID)
   final SharedSpaceRoleId? sharedSpaceRoleId;
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ROLE_NAME)
@@ -80,7 +80,7 @@ class SharedSpaceCache with EquatableMixin {
 
   SharedSpaceCache(
     this.sharedSpaceId,
-    this.driveId,
+    this.parentId,
     this.sharedSpaceRoleId,
     this.sharedSpaceRoleName,
     this.sharedSpaceRoleEnable,
@@ -98,7 +98,7 @@ class SharedSpaceCache with EquatableMixin {
   @override
   List<Object?> get props => [
     sharedSpaceId,
-    driveId,
+    parentId,
     sharedSpaceRoleId,
     sharedSpaceRoleName,
     sharedSpaceRoleEnable,
@@ -115,7 +115,7 @@ extension SharedSpaceCacheExtension on SharedSpaceCache {
   SharedSpaceNodeNested toSharedSpaceNodeNested() {
     return SharedSpaceNodeNested(
         sharedSpaceId,
-        driveId,
+        parentId,
         SharedSpaceRole(sharedSpaceRoleId ?? SharedSpaceRoleId(''), sharedSpaceRoleName ?? SharedSpaceRoleName.READER, enabled: sharedSpaceRoleEnable ?? true),
         creationDate ?? DateTime.now(),
         modificationDate ?? DateTime.now(),

@@ -95,8 +95,8 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
   }
 
   void _getAllMember(SharedSpaceNodeNested sharedSpaceNodeNested) {
-    if (sharedSpaceNodeNested.driveId != null) {
-      store.dispatch(_getDriveMembersAction(sharedSpaceNodeNested.driveId!));
+    if (sharedSpaceNodeNested.parentId != null) {
+      store.dispatch(_getDriveMembersAction(sharedSpaceNodeNested.parentId!));
     }
     store.dispatch(_getSharedSpaceMembersAction(sharedSpaceNodeNested.sharedSpaceId));
   }
@@ -132,11 +132,11 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     });
   }
 
-  OnlineThunkAction _getDriveMembersAction(DriveId driveId) {
+  OnlineThunkAction _getDriveMembersAction(SharedSpaceId parentId) {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartSharedSpaceDetailsLoadingAction());
 
-      await _getAllSharedSpaceMembersInteractor.execute(SharedSpaceId(driveId.uuid))
+      await _getAllSharedSpaceMembersInteractor.execute(parentId)
         .then((result) => result.fold(
           (failure) => store.dispatch(GetAllDriveMembersInsideWorkgroupDetailAction([])),
           (success) => store.dispatch(GetAllDriveMembersInsideWorkgroupDetailAction(

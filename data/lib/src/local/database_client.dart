@@ -57,7 +57,7 @@ class DatabaseClient {
     final path = join(databasePath, DatabaseConfig.databaseName);
     return await openDatabase(
       path,
-      version: DatabaseConfig.dbVersion2_0,
+      version: DatabaseConfig.dbVersion3_0,
       onOpen: (db) {},
       onCreate: (db, version) async {
         final batch = db.batch();
@@ -71,7 +71,11 @@ class DatabaseClient {
         if (newVersion > oldVersion) {
           final batch = db.batch();
           batch.execute(ReceivedShareTable.CREATE);
-          batch.execute(SharedSpaceTable.ADD_NEW_COLUMN_DRIVE_ID);
+          if (oldVersion < DatabaseConfig.dbVersion2_0) {
+            batch.execute(SharedSpaceTable.ADD_NEW_COLUMN_PARENT_ID);
+          } else if (oldVersion < DatabaseConfig.dbVersion3_0) {
+            batch.execute(SharedSpaceTable.RENAME_COLUMN_DRIVE_ID);
+          }
           await batch.commit();
         }
       });

@@ -161,7 +161,6 @@ export 'src/model/sharedspace/shared_space_role_id.dart';
 export 'src/model/sharedspace/shared_space_role_name.dart';
 export 'src/model/sharedspace/thread_id.dart';
 export 'src/model/sharedspace/versioning_parameter.dart';
-export 'src/model/workgroup/drive_id.dart';
 export 'src/model/sharedspacedocument/move_work_group_node_request.dart';
 export 'src/model/sharedspacedocument/rename_work_group_node_request.dart';
 export 'src/model/sharedspacedocument/tree_node.dart';

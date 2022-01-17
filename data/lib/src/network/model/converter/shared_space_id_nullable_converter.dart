@@ -30,13 +30,15 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:equatable/equatable.dart';
+import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class DriveId extends Equatable {
-  final String uuid;
-
-  DriveId(this.uuid);
+class SharedSpaceIdNullableConverter implements JsonConverter<SharedSpaceId?, String?> {
+  const SharedSpaceIdNullableConverter();
 
   @override
-  List<Object> get props => [uuid];
+  SharedSpaceId? fromJson(String? json) => json != null ? SharedSpaceId(json) : null;
+
+  @override
+  String? toJson(SharedSpaceId? spaceId) => spaceId?.uuid;
 }

@@ -158,14 +158,14 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
 
   @override
   Future<bool> disableAvailableOfflineSharedSpaceDocument(
-      DriveId? driveId,
+      SharedSpaceId? parentId,
       SharedSpaceId sharedSpaceId,
       WorkGroupNodeId? parentNodeId,
       WorkGroupNodeId workGroupNodeId,
       String localPath
   ) {
     return _sharedSpaceDocumentDataSources[DataSourceType.local]!.disableAvailableOfflineSharedSpaceDocument(
-      driveId,
+      parentId,
       sharedSpaceId,
       parentNodeId,
       workGroupNodeId,

@@ -38,14 +38,14 @@ class LocalDriveDataSource implements DriveDataSource {
   LocalDriveDataSource(this._sharedSpaceDocumentDatabaseManager);
 
   @override
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId) {
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId) {
     throw UnimplementedError();
   }
 
   @override
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId) {
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId) {
     return Future.sync(() async {
-      final result = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(driveId);
+      final result = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(parentId);
       return result.isNotEmpty
         ? result.map((node) => node.toSharedSpaceNodeNested()).toList()
         : <SharedSpaceNodeNested>[];
