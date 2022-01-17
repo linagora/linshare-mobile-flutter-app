@@ -217,7 +217,7 @@ class DestinationPickerViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartDestinationPickerLoadingAction());
 
-      await _getAllWorkgroupsInteractor.execute(drive.sharedSpaceId.toDriveId())
+      await _getAllWorkgroupsInteractor.execute(drive.sharedSpaceId)
           .then((result) => result.fold(
               (failure) => store.dispatch(DestinationPickerGetAllDriveAction(result, drive, [])),
               (success) {

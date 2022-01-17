@@ -32,9 +32,9 @@
 import 'package:domain/domain.dart';
 
 abstract class DriveDataSource {
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId);
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId);
 
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId);
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId);
 
   Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest);
 }

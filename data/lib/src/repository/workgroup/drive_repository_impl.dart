@@ -39,13 +39,13 @@ class DriveRepositoryImpl implements DriveRepository {
   DriveRepositoryImpl(this._driveDataSources);
 
   @override
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId) {
-    return _driveDataSources[DataSourceType.network]!.getAllWorkgroups(driveId);
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId) {
+    return _driveDataSources[DataSourceType.network]!.getAllWorkgroups(parentId);
   }
 
   @override
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId) {
-    return _driveDataSources[DataSourceType.local]!.getAllWorkgroupsOffline(driveId);
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId) {
+    return _driveDataSources[DataSourceType.local]!.getAllWorkgroupsOffline(parentId);
   }
 
   @override

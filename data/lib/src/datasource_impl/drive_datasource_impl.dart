@@ -40,9 +40,9 @@ class DriveDataSourceImpl implements DriveDataSource {
   DriveDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
 
   @override
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(DriveId driveId) {
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId) {
     return Future.sync(() async {
-      return (await _linShareHttpClient.getAllWorkgroups(driveId))
+      return (await _linShareHttpClient.getAllWorkgroups(parentId))
           .map((sharedSpaceResponse) => sharedSpaceResponse.toSharedSpaceNodeNested())
           .toList();
     }).catchError((error) {
@@ -59,7 +59,7 @@ class DriveDataSourceImpl implements DriveDataSource {
   }
 
   @override
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(DriveId driveId) {
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId) {
     throw UnimplementedError();
   }
 

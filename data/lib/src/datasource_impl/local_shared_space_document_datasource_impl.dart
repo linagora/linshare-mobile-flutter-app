@@ -84,7 +84,7 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
 
   @override
   Future<bool> disableAvailableOfflineSharedSpaceDocument(
-      DriveId? driveId,
+      SharedSpaceId? parentId,
       SharedSpaceId sharedSpaceId,
       WorkGroupNodeId? parentNodeId,
       WorkGroupNodeId workGroupNodeId,
@@ -97,10 +97,10 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
         await _sharedSpaceDocumentDatabaseManager.deleteSharedSpace(sharedSpaceId);
       }
 
-      if (driveId != null) {
-        final workgroupsInsideDrive = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(driveId);
+      if (parentId != null) {
+        final workgroupsInsideDrive = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(parentId);
         if (workgroupsInsideDrive.isNotEmpty) {
-          await _sharedSpaceDocumentDatabaseManager.deleteDrive(driveId);
+          await _sharedSpaceDocumentDatabaseManager.deleteDrive(parentId);
         }
       }
 

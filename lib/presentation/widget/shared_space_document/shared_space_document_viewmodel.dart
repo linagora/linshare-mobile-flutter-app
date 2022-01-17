@@ -1188,7 +1188,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   ThunkAction<AppState> _disableAvailableOfflineSharedSpaceDocumentAction(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
     return (Store<AppState> store) async {
       await _disableAvailableOfflineWorkGroupDocumentInteractor
-        .execute(workGroupDocument, getDrive()?.sharedSpaceId.toDriveId())
+        .execute(workGroupDocument, getDrive()?.sharedSpaceId)
         .then((result) => result.fold(
           (failure) => store.dispatch(SharedSpaceDocumentAction(Left(failure))),
           (success) {

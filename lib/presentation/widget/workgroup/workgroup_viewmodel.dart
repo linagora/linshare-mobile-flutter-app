@@ -133,7 +133,7 @@ class WorkGroupViewModel extends BaseViewModel {
 
       await Future.wait([
         _getSorterInteractor.execute(OrderScreen.insideDrive),
-        _getAllWorkgroupsInteractor.execute(drive!.sharedSpaceId.toDriveId())
+        _getAllWorkgroupsInteractor.execute(drive!.sharedSpaceId)
       ]).then((response) async {
         response[0].fold((failure) {
           store.dispatch(GetSorterInsideDriveAction(Sorter.fromOrderScreen(OrderScreen.insideDrive)));
@@ -160,7 +160,7 @@ class WorkGroupViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartWorkgroupLoadingAction());
 
-      await _getAllWorkgroupsInteractor.execute(drive!.sharedSpaceId.toDriveId())
+      await _getAllWorkgroupsInteractor.execute(drive!.sharedSpaceId)
         .then((result) => result.fold(
           (failure) {
             store.dispatch(GetAllWorkgroupsAction(Left(failure)));
@@ -182,7 +182,7 @@ class WorkGroupViewModel extends BaseViewModel {
 
       await Future.wait([
         _getSorterInteractor.execute(OrderScreen.insideDrive),
-        _getAllWorkgroupsOfflineInteractor.execute(drive!.sharedSpaceId.toDriveId())
+        _getAllWorkgroupsOfflineInteractor.execute(drive!.sharedSpaceId)
       ]).then((response) async {
         response.first.fold(
           (failure) => store.dispatch(GetSorterInsideDriveAction(Sorter.fromOrderScreen(OrderScreen.insideDrive))),
@@ -209,7 +209,7 @@ class WorkGroupViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartWorkgroupLoadingAction());
 
-      await _getAllWorkgroupsOfflineInteractor.execute(drive!.sharedSpaceId.toDriveId())
+      await _getAllWorkgroupsOfflineInteractor.execute(drive!.sharedSpaceId)
         .then((result) => result.fold(
           (failure) {
             store.dispatch(GetAllWorkgroupsAction(Left(failure)));
