@@ -314,7 +314,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   }
 
   Widget _buildItemMember(SharedSpaceNodeNested sharedSpace, SharedSpaceMember member, List<SharedSpaceMember> driveMembers) {
-    final memberType = sharedSpace.driveId != null ? member.getMemberType(driveMembers) : null;
+    final memberType = sharedSpace.parentId != null ? member.getMemberType(driveMembers) : null;
     if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
       return SharedSpaceMemberListTileBuilder(
           context,

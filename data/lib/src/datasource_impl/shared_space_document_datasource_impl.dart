@@ -415,7 +415,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
 
   @override
   Future<bool> disableAvailableOfflineSharedSpaceDocument(
-      DriveId? driveId,
+      SharedSpaceId? parentId,
       SharedSpaceId sharedSpaceId,
       WorkGroupNodeId? parentNodeId,
       WorkGroupNodeId workGroupNodeId,

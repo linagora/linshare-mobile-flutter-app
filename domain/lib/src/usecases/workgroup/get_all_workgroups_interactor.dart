@@ -38,9 +38,9 @@ class GetAllWorkgroupsInteractor {
 
   GetAllWorkgroupsInteractor(this._driveRepository);
 
-  Future<Either<Failure, Success>> execute(DriveId driveId) async {
+  Future<Either<Failure, Success>> execute(SharedSpaceId parentId) async {
     try {
-      final workgroups = await _driveRepository.getAllWorkgroups(driveId);
+      final workgroups = await _driveRepository.getAllWorkgroups(parentId);
       return Right<Failure, Success>(GetAllWorkgroupsViewState(workgroups));
     } catch (exception) {
       return Left<Failure, Success>(GetAllWorkgroupsFailure(exception));
