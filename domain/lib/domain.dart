@@ -262,7 +262,7 @@ export 'src/repository/sort/sort_repository.dart';
 export 'src/repository/upload_request_group/upload_request_group_repository.dart';
 export 'src/repository/upload_request/upload_request_repository.dart';
 export 'src/repository/upload_request_entry/upload_request_entry_repository.dart';
-export 'src/repository/workgroup/drive_repository.dart';
+export 'src/repository/workgroup/shared_space_node_repository.dart';
 export 'src/repository/authentication/saas_console_repository.dart';
 
 // viewState
@@ -482,7 +482,7 @@ export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive
 export 'src/usecases/workgroup/get_all_workgroups_interactor.dart';
 export 'src/usecases/workgroup/workgroup_view_state.dart';
 export 'src/usecases/workgroup/get_all_workgroups_offline_interactor.dart';
-export 'src/usecases/workgroup/create_new_drive_interactor.dart';
+export 'src/usecases/shared_space/create_new_drive_interactor.dart';
 export 'src/usecases/quota/save_quota_interactor.dart';
 export 'src/usecases/audit_user/save_last_login_interactor.dart';
 export 'src/usecases/authentication/save_authorized_user_interactor.dart';

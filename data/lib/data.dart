@@ -31,7 +31,7 @@ export 'src/datasource_impl/audit_user_datasource_impl.dart';
 export 'src/datasource_impl/autocomplete_datasource_impl.dart';
 export 'src/datasource_impl/biometric_datasource_impl.dart';
 export 'src/datasource_impl/contact_datasource_impl.dart';
-export 'src/datasource/drive_datasource.dart';
+export 'src/datasource/shared_space_node_datasource.dart';
 export 'src/datasource/authentication_datasource.dart';
 // data source impl
 export 'src/datasource_impl/authentication_saas_datasource_impl.dart';
@@ -58,8 +58,8 @@ export 'src/datasource_impl/sort_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_entry_datasource_impl.dart';
 export 'src/datasource_impl/upload_request_group_datasource_impl.dart';
-export 'src/datasource_impl/drive_datasource_impl.dart';
-export 'src/datasource_impl/local_drive_datasource.dart';
+export 'src/datasource_impl/shared_space_node_datasource_impl.dart';
+export 'src/datasource_impl/local_shared_space_node_datasource.dart';
 export 'src/datasource_impl/authentication_datasource_impl.dart';
 export 'src/datasource_impl/local_authentication_datasource.dart';
 export 'src/datasource_impl/local_audit_user_datasource.dart';
@@ -202,7 +202,7 @@ export 'src/repository/sort/sort_repository_impl.dart';
 export 'src/repository/upload_request/upload_request_repository_impl.dart';
 export 'src/repository/upload_request_entry/upload_request_entry_repository_impl.dart';
 export 'src/repository/upload_request_group/upload_request_group_repository_impl.dart';
-export 'src/repository/workgroup/drive_repository_impl.dart';
+export 'src/repository/workgroup/shared_space_node_repository_impl.dart';
 export 'src/util/biometric_service.dart';
 export 'src/repository/authentication/saas_console_repository_impl.dart';
 // util

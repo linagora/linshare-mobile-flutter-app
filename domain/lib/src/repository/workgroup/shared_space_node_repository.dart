@@ -31,10 +31,8 @@
 
 import 'package:domain/domain.dart';
 
-abstract class DriveRepository {
+abstract class SharedSpaceNodeRepository {
   Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId);
 
   Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId);
-
-  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest);
 }

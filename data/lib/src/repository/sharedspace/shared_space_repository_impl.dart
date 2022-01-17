@@ -95,4 +95,9 @@ class SharedSpaceRepositoryImpl implements SharedSpaceRepository {
   Future<SharedSpaceNodeNested> renameDrive(SharedSpaceId sharedSpaceId, RenameDriveRequest renameRequest) {
     return _sharedSpaceDataSources[DataSourceType.network]!.renameDrive(sharedSpaceId, renameRequest);
   }
+
+  @override
+  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest) {
+    return _sharedSpaceDataSources[DataSourceType.network]!.createNewDrive(createDriveRequest);
+  }
 }

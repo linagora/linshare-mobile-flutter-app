@@ -52,6 +52,8 @@ abstract class SharedSpaceRepository {
 
   Future<SharedSpaceNodeNested> renameDrive(SharedSpaceId sharedSpaceId, RenameDriveRequest renameRequest);
 
+  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest);
+
   Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
 
   Future<SharedSpaceNodeNested> enableVersioningWorkGroup(
