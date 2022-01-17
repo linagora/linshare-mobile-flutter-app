@@ -28,55 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:data/data.dart';
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class DriveDataSourceImpl implements DriveDataSource {
-  final LinShareHttpClient _linShareHttpClient;
-  final RemoteExceptionThrower _remoteExceptionThrower;
+class CreateNewDriveInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  DriveDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
+  CreateNewDriveInteractor(this._sharedSpaceRepository);
 
-  @override
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId) {
-    return Future.sync(() async {
-      return (await _linShareHttpClient.getAllWorkgroups(parentId))
-          .map((sharedSpaceResponse) => sharedSpaceResponse.toSharedSpaceNodeNested())
-          .toList();
-    }).catchError((error) {
-      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response?.statusCode == 404) {
-          throw SharedSpaceNotFound();
-        } else if (error.response?.statusCode == 403) {
-          throw NotAuthorized();
-        } else {
-          throw UnknownError(error.response?.statusMessage!);
-        }
-      });
-    });
-  }
-
-  @override
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest) {
-    return Future.sync(() async {
-      return (await _linShareHttpClient.createNewDrive(createDriveRequest.toCreateDriveBodyRequest())).toSharedSpaceNodeNested();
-    }).catchError((error) {
-      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response?.statusCode == 404) {
-          throw SharedSpaceNotFound();
-        } else if (error.response?.statusCode == 403) {
-          throw NotAuthorized();
-        } else {
-          throw UnknownError(error.response?.statusMessage!);
-        }
-      });
-    });
+  Future<Either<Failure, Success>> execute(CreateDriveRequest createDriveRequest) async {
+    try {
+      final drive = await _sharedSpaceRepository.createNewDrive(createDriveRequest);
+      return Right<Failure, Success>(CreateNewDriveViewState(drive));
+    } catch (exception) {
+      return Left<Failure, Success>(CreateNewDriveFailure(exception));
+    }
   }
 }

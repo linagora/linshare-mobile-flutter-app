@@ -28,22 +28,33 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:dartz/dartz.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 
-class CreateNewDriveInteractor {
-  final DriveRepository _driveRepository;
+class LocalSharedSpaceNodeDataSource implements SharedSpaceNodeDataSource {
+  final SharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
 
-  CreateNewDriveInteractor(this._driveRepository);
+  LocalSharedSpaceNodeDataSource(this._sharedSpaceDocumentDatabaseManager);
 
-  Future<Either<Failure, Success>> execute(CreateDriveRequest createDriveRequest) async {
-    try {
-      final drive = await _driveRepository.createNewDrive(createDriveRequest);
-      return Right<Failure, Success>(CreateNewDriveViewState(drive));
-    } catch (exception) {
-      return Left<Failure, Success>(CreateNewDriveFailure(exception));
-    }
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId) {
+    return Future.sync(() async {
+      final result = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(parentId);
+      return result.isNotEmpty
+        ? result.map((node) => node.toSharedSpaceNodeNested()).toList()
+        : <SharedSpaceNodeNested>[];
+    }).catchError((error) {
+      if (error is SQLiteDatabaseException) {
+        throw SQLiteDatabaseException();
+      } else {
+        throw LocalUnknownError(error);
+      }
+    });
   }
 }

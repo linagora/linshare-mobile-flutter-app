@@ -32,34 +32,19 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 
-class LocalDriveDataSource implements DriveDataSource {
-  final SharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
+class SharedSpaceNodeRepositoryImpl implements SharedSpaceNodeRepository {
 
-  LocalDriveDataSource(this._sharedSpaceDocumentDatabaseManager);
+  final Map<DataSourceType, SharedSpaceNodeDataSource> _sharedSpaceNodeDataSources;
+
+  SharedSpaceNodeRepositoryImpl(this._sharedSpaceNodeDataSources);
 
   @override
   Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId) {
-    throw UnimplementedError();
+    return _sharedSpaceNodeDataSources[DataSourceType.network]!.getAllWorkgroups(parentId);
   }
 
   @override
   Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId) {
-    return Future.sync(() async {
-      final result = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(parentId);
-      return result.isNotEmpty
-        ? result.map((node) => node.toSharedSpaceNodeNested()).toList()
-        : <SharedSpaceNodeNested>[];
-    }).catchError((error) {
-      if (error is SQLiteDatabaseException) {
-        throw SQLiteDatabaseException();
-      } else {
-        throw LocalUnknownError(error);
-      }
-    });
-  }
-
-  @override
-  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest) {
-    throw UnimplementedError();
+    return _sharedSpaceNodeDataSources[DataSourceType.local]!.getAllWorkgroupsOffline(parentId);
   }
 }
