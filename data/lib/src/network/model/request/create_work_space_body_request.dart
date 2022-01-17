@@ -29,22 +29,26 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:convert';
+
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class GetAllWorkgroupsViewState extends ViewState {
-  final List<SharedSpaceNodeNested> workgroups;
+class CreateWorkSpaceBodyRequest with EquatableMixin {
+  final String name;
+  final LinShareNodeType nodeType;
 
-  GetAllWorkgroupsViewState(this.workgroups);
+  CreateWorkSpaceBodyRequest(this.name, this.nodeType);
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('name'): jsonEncode(name),
+    jsonEncode('nodeType'): jsonEncode(nodeType.value),
+  };
 
   @override
-  List<Object> get props => [workgroups];
+  List<Object> get props => [name, nodeType];
 }
 
-class GetAllWorkgroupsFailure extends FeatureFailure {
-  final exception;
-
-  GetAllWorkgroupsFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+extension CreateWorkSpaceRequestExtension on CreateWorkSpaceRequest {
+  CreateWorkSpaceBodyRequest toCreateWorkSpaceBodyRequest() => CreateWorkSpaceBodyRequest(name, nodeType);
 }

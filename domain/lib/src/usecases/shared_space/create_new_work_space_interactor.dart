@@ -28,23 +28,22 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
-class GetAllWorkgroupsViewState extends ViewState {
-  final List<SharedSpaceNodeNested> workgroups;
+class CreateNewWorkSpaceInteractor {
+  final SharedSpaceRepository _sharedSpaceRepository;
 
-  GetAllWorkgroupsViewState(this.workgroups);
+  CreateNewWorkSpaceInteractor(this._sharedSpaceRepository);
 
-  @override
-  List<Object> get props => [workgroups];
-}
-
-class GetAllWorkgroupsFailure extends FeatureFailure {
-  final exception;
-
-  GetAllWorkgroupsFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
+  Future<Either<Failure, Success>> execute(CreateWorkSpaceRequest createWorkSpaceRequest) async {
+    try {
+      final workSpace = await _sharedSpaceRepository.createNewWorkSpace(createWorkSpaceRequest);
+      return Right<Failure, Success>(CreateNewWorkSpaceViewState(workSpace));
+    } catch (exception) {
+      return Left<Failure, Success>(CreateNewWorkSpaceFailure(exception));
+    }
+  }
 }
