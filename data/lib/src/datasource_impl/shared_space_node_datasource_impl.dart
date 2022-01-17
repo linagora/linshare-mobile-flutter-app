@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -29,12 +29,37 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
-abstract class DriveDataSource {
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId);
+class SharedSpaceNodeDataSourceImpl implements SharedSpaceNodeDataSource {
+  final LinShareHttpClient _linShareHttpClient;
+  final RemoteExceptionThrower _remoteExceptionThrower;
 
-  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId);
+  SharedSpaceNodeDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower);
 
-  Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest);
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroups(SharedSpaceId parentId) {
+    return Future.sync(() async {
+      return (await _linShareHttpClient.getAllWorkgroups(parentId))
+          .map((sharedSpaceResponse) => sharedSpaceResponse.toSharedSpaceNodeNested())
+          .toList();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw SharedSpaceNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
+      });
+    });
+  }
+
+  @override
+  Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId) {
+    throw UnimplementedError();
+  }
 }

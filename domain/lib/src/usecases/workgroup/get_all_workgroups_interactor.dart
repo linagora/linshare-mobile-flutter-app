@@ -34,13 +34,13 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 class GetAllWorkgroupsInteractor {
-  final DriveRepository _driveRepository;
+  final SharedSpaceNodeRepository _sharedSpaceNodeRepository;
 
-  GetAllWorkgroupsInteractor(this._driveRepository);
+  GetAllWorkgroupsInteractor(this._sharedSpaceNodeRepository);
 
   Future<Either<Failure, Success>> execute(SharedSpaceId parentId) async {
     try {
-      final workgroups = await _driveRepository.getAllWorkgroups(parentId);
+      final workgroups = await _sharedSpaceNodeRepository.getAllWorkgroups(parentId);
       return Right<Failure, Success>(GetAllWorkgroupsViewState(workgroups));
     } catch (exception) {
       return Left<Failure, Success>(GetAllWorkgroupsFailure(exception));
