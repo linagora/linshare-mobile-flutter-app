@@ -122,6 +122,7 @@ export 'src/network/model/request/create_work_group_body_request.dart';
 export 'src/network/model/request/move_work_group_node_body_request.dart';
 export 'src/network/model/request/rename_work_group_body_request.dart';
 export 'src/network/model/request/rename_drive_body_request.dart';
+export 'src/network/model/request/rename_work_space_body_request.dart';
 export 'src/network/model/request/rename_work_group_node_body_request.dart';
 export 'src/network/model/request/edit_upload_request_body_request.dart';
 export 'src/network/model/request/edit_upload_request_recipient_body_request.dart';
