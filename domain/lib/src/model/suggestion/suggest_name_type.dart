@@ -31,6 +31,7 @@
 
 enum SuggestNameType {
   DRIVE,
+  WORK_SPACE,
   WORKGROUP,
   WORKGROUP_FOLDER
 }

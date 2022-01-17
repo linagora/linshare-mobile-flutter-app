@@ -86,6 +86,8 @@ extension FunctionalityStateExtension on FunctionalityState {
 
   bool isDriveCreationEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE__CREATION_RIGHT);
 
+  bool isWorkspaceCreationEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_SPACE__CREATION_RIGHT);
+
   bool isUploadRequestEnable() => _isFunctionalityEnable(FunctionalityIdentifier.UPLOAD_REQUEST);
 
   bool _isFunctionalityEnable(FunctionalityIdentifier functionalityIdentifier) {
