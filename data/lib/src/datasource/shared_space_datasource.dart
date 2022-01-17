@@ -54,6 +54,8 @@ abstract class SharedSpaceDataSource {
 
   Future<SharedSpaceNodeNested> createNewDrive(CreateDriveRequest createDriveRequest);
 
+  Future<SharedSpaceNodeNested> createNewWorkSpace(CreateWorkSpaceRequest createWorkSpaceRequest);
+
   Future<List<SharedSpaceNodeNested>> getAllSharedSpacesOffline();
 
   Future<SharedSpaceNodeNested> enableVersioningWorkGroup(

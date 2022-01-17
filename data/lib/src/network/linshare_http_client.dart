@@ -826,6 +826,13 @@ class LinShareHttpClient {
     return SharedSpaceNodeNestedResponse.fromJson(resultJson);
   }
 
+  Future<SharedSpaceNodeNestedResponse> createNewWorkSpace(CreateWorkSpaceBodyRequest createWorkSpaceBodyRequest) async {
+    final resultJson = await _dioClient.post(
+        Endpoint.sharedSpaces.generateEndpointPath(),
+        data: createWorkSpaceBodyRequest.toJson().toString());
+    return SharedSpaceNodeNestedResponse.fromJson(resultJson);
+  }
+
   Future<UploadRequestGroupResponse> getUploadRequestGroup(UploadRequestGroupId uploadRequestGroupId) async {
     final resultJson = await _dioClient.get(
         Endpoint.uploadRequestGroups
