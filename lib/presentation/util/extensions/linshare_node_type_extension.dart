@@ -117,6 +117,17 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
     }
   }
 
+  String getTitleBottomSheetRename(BuildContext context) {
+    switch(this) {
+      case LinShareNodeType.DRIVE:
+        return AppLocalizations.of(context).rename_node(AppLocalizations.of(context).drive.toLowerCase());
+      case LinShareNodeType.WORK_GROUP:
+        return AppLocalizations.of(context).rename_node(AppLocalizations.of(context).workgroup.toLowerCase());
+      case LinShareNodeType.WORK_SPACE:
+        return AppLocalizations.of(context).rename_node(AppLocalizations.of(context).workspace.toLowerCase());
+    }
+  }
+
   String getIconNode(AppImagePaths appImagePaths) {
     switch(this) {
       case LinShareNodeType.DRIVE:
