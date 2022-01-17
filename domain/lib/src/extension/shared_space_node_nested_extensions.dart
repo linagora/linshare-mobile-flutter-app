@@ -37,7 +37,7 @@ extension SharedSpaceNodeNestedExtensions on SharedSpaceNodeNested {
   SharedSpaceNodeNested enableVersioningSharedSpaceNode(VersioningParameter newVersioningParameter) {
     return SharedSpaceNodeNested(
       sharedSpaceId,
-      driveId,
+      parentId,
       sharedSpaceRole,
       creationDate,
       modificationDate,

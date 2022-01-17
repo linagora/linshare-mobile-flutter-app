@@ -173,7 +173,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   Future<List<SharedSpaceCache>> getListSharedSpace() async {
     final res = await _databaseClient.getListDataWithCondition(
       SharedSpaceTable.TABLE_NAME,
-      '${SharedSpaceTable.DRIVE_ID} IS NULL',
+      '${SharedSpaceTable.PARENT_ID} IS NULL',
       null);
 
     return res.isNotEmpty
@@ -181,11 +181,11 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
       : [];
   }
 
-  Future<List<SharedSpaceCache>> getAllWorkgroupsInsideDrive(DriveId driveId) async {
+  Future<List<SharedSpaceCache>> getAllWorkgroupsInsideDrive(SharedSpaceId parentId) async {
     final res = await _databaseClient.getListDataWithCondition(
         SharedSpaceTable.TABLE_NAME,
-        '${SharedSpaceTable.DRIVE_ID} = ?',
-        [driveId.uuid]);
+        '${SharedSpaceTable.PARENT_ID} = ?',
+        [parentId.uuid]);
 
     return res.isNotEmpty
         ? res.map((mapObject) => SharedSpaceCache.fromJson(mapObject)).toList()
@@ -206,8 +206,8 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
     }
   }
 
-  Future<bool> deleteDrive(DriveId driveId) async {
-    final res = await _databaseClient.deleteData(SharedSpaceTable.TABLE_NAME, SharedSpaceTable.SHARED_SPACE_ID, driveId.uuid);
+  Future<bool> deleteDrive(SharedSpaceId sharedSpaceId) async {
+    final res = await _databaseClient.deleteData(SharedSpaceTable.TABLE_NAME, SharedSpaceTable.SHARED_SPACE_ID, sharedSpaceId.uuid);
     return res > 0 ? true : false;
   }
 }

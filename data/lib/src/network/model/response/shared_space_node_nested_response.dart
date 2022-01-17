@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/drive_id_nullable_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_id_nullable_converter.dart';
 import 'package:data/src/network/model/converter/quota_id_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
 import 'package:data/src/network/model/sharedspace/shared_space_role_dto.dart';
@@ -46,11 +46,11 @@ part 'shared_space_node_nested_response.g.dart';
 @DatetimeConverter()
 @QuotaIdConverter()
 @SharedSpaceIdConverter()
-@DriveIdNullableConverter()
+@SharedSpaceIdNullableConverter()
 class SharedSpaceNodeNestedResponse extends Equatable {
   SharedSpaceNodeNestedResponse(
     this.sharedSpaceId,
-    this.driveId,
+    this.parentId,
     this.role,
     this.creationDate,
     this.modificationDate,
@@ -64,7 +64,7 @@ class SharedSpaceNodeNestedResponse extends Equatable {
   final SharedSpaceId sharedSpaceId;
 
   @JsonKey(name: Attribute.parentUuid)
-  final DriveId? driveId;
+  final SharedSpaceId? parentId;
 
   final SharedSpaceRoleDto? role;
   final DateTime creationDate;
@@ -83,7 +83,7 @@ class SharedSpaceNodeNestedResponse extends Equatable {
   @override
   List<Object?> get props => [
     sharedSpaceId,
-    driveId,
+    parentId,
     role,
     creationDate,
     modificationDate,
@@ -98,7 +98,7 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
   SharedSpaceNodeNested toSharedSpaceNodeNested() {
     return SharedSpaceNodeNested(
       sharedSpaceId,
-      driveId,
+      parentId,
       role?.toSharedSpaceRole() ?? SharedSpaceRole.initial(),
       creationDate,
       modificationDate,
@@ -112,7 +112,7 @@ extension SharedSpaceNodeNestedResponseExtension on SharedSpaceNodeNestedRespons
   SharedSpaceNodeNested toSharedSpaceNodeNestedWithRole(SharedSpaceRole newRole) {
     return SharedSpaceNodeNested(
       sharedSpaceId,
-      driveId,
+      parentId,
       newRole,
       creationDate,
       modificationDate,

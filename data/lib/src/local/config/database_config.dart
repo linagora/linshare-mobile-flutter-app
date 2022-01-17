@@ -33,4 +33,5 @@ class DatabaseConfig {
   static final String databaseName = 'linshare_database.db';
   static final int dbVersion1_0 = 1;
   static final int dbVersion2_0 = 2;
+  static final int dbVersion3_0 = 3;
 }

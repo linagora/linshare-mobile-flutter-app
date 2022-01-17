@@ -117,15 +117,25 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
             children: [
               StoreConnector<AppState, SharedSpaceRoleName>(
                 converter: (store) => store.state.addSharedSpaceMembersState.selectedRole,
-                builder: (_, role) =>  FlatButton(
+                builder: (_, role) =>  TextButton(
                     onPressed: () => selectRoleBottomSheet(
                       context, 
                       role, 
                       onNewRoleUpdated: (newRole) {
                         _model.selectRole(newRole);
                       }),
-                    color: AppColor.addSharedSpaceMemberRoleColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36.0)),
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) => AppColor.addSharedSpaceMemberRoleColor,
+                      ),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) => AppColor.addSharedSpaceMemberRoleColor,
+                      ),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(36),
+                        side: BorderSide(width: 0, color: AppColor.addSharedSpaceMemberRoleColor),
+                      )),
+                      elevation: MaterialStateProperty.resolveWith<double>((Set<MaterialState> states) => 0)),
                     child: Row(children: [
                       Text(role.getRoleName(context),
                           style: TextStyle(color: AppColor.primaryColor, fontSize: 14)),
@@ -212,7 +222,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
           itemCount: members.length,
           itemBuilder: (context, index) {
             var member = members[index];
-            final memberType = sharedSpace.driveId != null ? member.getMemberType(driveMembers) : null;
+            final memberType = sharedSpace.parentId != null ? member.getMemberType(driveMembers) : null;
             return SharedSpaceMemberListTileBuilder(
               context,
               member.account?.name ?? '',

@@ -34,6 +34,7 @@ class SharedSpaceTable {
 
   static const String SHARED_SPACE_ID = 'sharedSpaceId';
   static const String DRIVE_ID = 'driveId';
+  static const String PARENT_ID = 'parentId';
   static const String SHARED_SPACE_ROLE_ID = 'sharedSpaceRoleId';
   static const String SHARED_SPACE_ROLE_NAME = 'sharedSpaceRoleName';
   static const String SHARED_SPACE_ROLE_ENABLE = 'sharedSpaceRoleEnable';
@@ -46,7 +47,7 @@ class SharedSpaceTable {
 
   static const String CREATE = '''CREATE TABLE IF NOT EXISTS $TABLE_NAME (
     $SHARED_SPACE_ID TEXT PRIMARY KEY,
-    $DRIVE_ID TEXT,
+    $PARENT_ID TEXT,
     $SHARED_SPACE_ROLE_ID TEXT,
     $SHARED_SPACE_ROLE_NAME TEXT,
     $SHARED_SPACE_ROLE_ENABLE Integer,
@@ -59,4 +60,8 @@ class SharedSpaceTable {
   )''';
 
   static const String ADD_NEW_COLUMN_DRIVE_ID = 'ALTER TABLE $TABLE_NAME ADD COLUMN $DRIVE_ID TEXT';
+
+  static const String ADD_NEW_COLUMN_PARENT_ID = 'ALTER TABLE $TABLE_NAME ADD COLUMN $PARENT_ID TEXT';
+
+  static const String RENAME_COLUMN_DRIVE_ID = 'ALTER TABLE $TABLE_NAME RENAME COLUMN $DRIVE_ID TO $PARENT_ID';
 }
