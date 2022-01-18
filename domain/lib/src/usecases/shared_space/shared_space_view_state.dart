@@ -662,3 +662,20 @@ class RenameWorkSpaceFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class UpdateWorkspaceMemberViewState extends ViewState {
+
+  UpdateWorkspaceMemberViewState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateWorkspaceMemberFailure extends FeatureFailure {
+  final exception;
+
+  UpdateWorkspaceMemberFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}

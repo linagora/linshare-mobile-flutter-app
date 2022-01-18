@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2020 LINAGORA
+// Copyright (C) 2021 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,19 +28,24 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/sharedspace/shared_space_id.dart';
+import 'package:domain/src/state/success.dart';
 
-abstract class SharedSpaceMemberDataSource {
-  Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId);
+class UpdateWorkspaceMemberInteractor {
+  final SharedSpaceMemberRepository _sharedSpaceMemberRepository;
 
-  Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request);
+  UpdateWorkspaceMemberInteractor(this._sharedSpaceMemberRepository);
 
-  Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request);
-
-  Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request, {bool? isOverrideRoleForAll});
-
-  Future<SharedSpaceMember> updateWorkspaceMemberRole(SharedSpaceId sharedSpaceId, UpdateWorkspaceMemberRequest request, {bool? isOverrideRoleForAll});
-
-  Future<SharedSpaceMember> deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId);
+  Future<Either<Failure, Success>> execute(SharedSpaceId sharedSpaceId, UpdateWorkspaceMemberRequest request, {bool? isOverrideRoleForAll}) async {
+    try {
+      await _sharedSpaceMemberRepository.updateWorkspaceMemberRole(sharedSpaceId, request, isOverrideRoleForAll: isOverrideRoleForAll);
+      return Right<Failure, Success>(UpdateWorkspaceMemberViewState());
+    } catch (exception) {
+      return Left<Failure, Success>(UpdateWorkspaceMemberFailure(exception));
+    }
+  }
 }

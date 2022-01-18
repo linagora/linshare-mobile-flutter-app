@@ -53,6 +53,7 @@ class AddSharedSpaceNodeMemberViewModel extends BaseViewModel {
   final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
   final DeleteSharedSpaceMemberInteractor _deleteSharedSpaceMemberInteractor;
   final UpdateDriveMemberInteractor _updateDriveMemberInteractor;
+  final UpdateWorkspaceMemberInteractor _updateWorkspaceMemberInteractor;
 
   AddSharedSpaceNodeMemberArguments? _arguments;
 
@@ -66,6 +67,7 @@ class AddSharedSpaceNodeMemberViewModel extends BaseViewModel {
       this._getAllSharedSpaceRolesInteractor,
       this._deleteSharedSpaceMemberInteractor,
       this._updateDriveMemberInteractor,
+      this._updateWorkspaceMemberInteractor,
   ) : super(store);
 
   void initState(AddSharedSpaceNodeMemberArguments? arguments) {
@@ -226,57 +228,97 @@ class AddSharedSpaceNodeMemberViewModel extends BaseViewModel {
     });
   }
 
-  void changeDriveMemberRole(SharedSpaceNodeNested drive, SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole) {
-    store.dispatch(_updateDriveMemberRoleAction(
-        drive,
+  void changeSharedSpaceNodeMemberRole(SharedSpaceNodeNested nodeNested,
+      SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole, LinShareNodeType nodeType) {
+    store.dispatch(_updateSharedSpaceNodeMemberRoleAction(
+        nodeNested,
         AccountId(fromMember.account?.accountId.uuid ?? ''),
         changeToRole,
-        fromMember.nestedRole?.name ?? SharedSpaceRoleName.READER));
+        fromMember.nestedRole?.name ?? SharedSpaceRoleName.READER,
+        nodeType));
     _appNavigation.popBack();
   }
 
-  OnlineThunkAction _updateDriveMemberRoleAction(
-      SharedSpaceNodeNested drive, AccountId accountId,
+  OnlineThunkAction _updateSharedSpaceNodeMemberRoleAction(
+      SharedSpaceNodeNested nodeNested, AccountId accountId,
       SharedSpaceRoleName newRole, SharedSpaceRoleName nestedRoleName,
-      {bool? isOverrideRoleForAll}) {
+      LinShareNodeType nodeType, {bool? isOverrideRoleForAll}) {
     return OnlineThunkAction((Store<AppState> store) async {
       final nodeNestedRoleList = store.state.addSharedSpaceNodeMemberState.nodeNestedRoleList;
       final rolesList = store.state.addSharedSpaceNodeMemberState.workgroupRoleList;
       if (rolesList.isEmpty || nodeNestedRoleList.isEmpty) {
-        store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(RolesListNotFound()))));
+        switch(nodeType) {
+          case LinShareNodeType.DRIVE:
+            store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(RolesListNotFound()))));
+            break;
+          case LinShareNodeType.WORK_GROUP:
+            store.dispatch(UpdateSharedSpaceMembersAction(Left(UpdateSharedSpaceMemberFailure(RolesListNotFound()))));
+            break;
+          case LinShareNodeType.WORK_SPACE:
+            store.dispatch(UpdateWorkspaceMembersAction(Left(UpdateWorkspaceMemberFailure(RolesListNotFound()))));
+            break;
+        }
         return;
       }
 
       final workgroupRole = rolesList.firstWhere((_role) => _role.name == nestedRoleName, orElse: () => SharedSpaceRole.initial());
-      final roleDrive = nodeNestedRoleList.firstWhere((_role) => _role.name == newRole, orElse: () => SharedSpaceRole.initialDrive());
-      if (roleDrive.sharedSpaceRoleId.uuid.isEmpty || workgroupRole.sharedSpaceRoleId.uuid.isEmpty) {
-        store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(SelectedRoleNotFound()))));
+      final roleNodeNested = nodeNestedRoleList.firstWhere((_role) => _role.name == newRole, orElse: () => nodeType.getDefaultSharedSpaceRole());
+      if (roleNodeNested.sharedSpaceRoleId.uuid.isEmpty || workgroupRole.sharedSpaceRoleId.uuid.isEmpty) {
+        switch(nodeType) {
+          case LinShareNodeType.DRIVE:
+            store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(SelectedRoleNotFound()))));
+            break;
+          case LinShareNodeType.WORK_GROUP:
+            store.dispatch(UpdateSharedSpaceMembersAction(Left(UpdateSharedSpaceMemberFailure(SelectedRoleNotFound()))));
+            break;
+          case LinShareNodeType.WORK_SPACE:
+            store.dispatch(UpdateWorkspaceMembersAction(Left(UpdateWorkspaceMemberFailure(SelectedRoleNotFound()))));
+            break;
+        }
         return;
       }
 
-      await _updateDriveMemberInteractor
-        .execute(
-          drive.sharedSpaceId,
-          UpdateDriveMemberRequest(
-              accountId,
-              drive.sharedSpaceId,
-              roleDrive.sharedSpaceRoleId,
-              workgroupRole.sharedSpaceRoleId,
-              LinShareNodeType.DRIVE),
-          isOverrideRoleForAll: isOverrideRoleForAll)
-        .then((result) => result.fold(
-          (failure) => store.dispatch(UpdateDriveMembersAction(Left<Failure, Success>(UpdateDriveMemberFailure(UpdateRoleFailed())))),
-          (success) => _refreshListMember(drive.sharedSpaceId)));
+        if (nodeType == LinShareNodeType.DRIVE) {
+          await _updateDriveMemberInteractor
+              .execute(
+                  nodeNested.sharedSpaceId,
+                  UpdateDriveMemberRequest(
+                      accountId,
+                      nodeNested.sharedSpaceId,
+                      roleNodeNested.sharedSpaceRoleId,
+                      workgroupRole.sharedSpaceRoleId,
+                      nodeType),
+                  isOverrideRoleForAll: isOverrideRoleForAll)
+              .then((result) => result.fold(
+                  (failure) => store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(UpdateRoleFailed())))),
+                  (success) => _refreshListMember(nodeNested.sharedSpaceId)));
+        } else if (nodeType == LinShareNodeType.WORK_SPACE) {
+          await _updateWorkspaceMemberInteractor
+              .execute(
+                  nodeNested.sharedSpaceId,
+                  UpdateWorkspaceMemberRequest(
+                      accountId,
+                      nodeNested.sharedSpaceId,
+                      roleNodeNested.sharedSpaceRoleId,
+                      workgroupRole.sharedSpaceRoleId,
+                      nodeType),
+                  isOverrideRoleForAll: isOverrideRoleForAll)
+              .then((result) => result.fold(
+                  (failure) => store.dispatch(UpdateWorkspaceMembersAction(Left(UpdateWorkspaceMemberFailure(UpdateRoleFailed())))),
+                  (success) => _refreshListMember(nodeNested.sharedSpaceId)));
+        }
     });
   }
 
-  void changeWorkgroupInsideDriveMemberRole(SharedSpaceNodeNested drive, SharedSpaceMember fromMember,
-      SharedSpaceRoleName changeToRole, {bool? isOverrideRoleForAll}) {
-    store.dispatch(_updateDriveMemberRoleAction(
-        drive,
+  void changeWorkgroupInsideDriveMemberRole(SharedSpaceNodeNested nodeNested,
+      SharedSpaceMember fromMember, SharedSpaceRoleName changeToRole,
+      LinShareNodeType nodeType, {bool? isOverrideRoleForAll}) {
+    store.dispatch(_updateSharedSpaceNodeMemberRoleAction(
+        nodeNested,
         AccountId(fromMember.account?.accountId.uuid ?? ''),
-        fromMember.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
+        fromMember.role?.name ?? nodeType.getDefaultSharedSpaceRole().name,
         changeToRole,
+        nodeType,
         isOverrideRoleForAll: isOverrideRoleForAll));
     _appNavigation.popBack();
   }
