@@ -36,8 +36,16 @@ abstract class AuthenticationException extends RemoteException {
   static final userLocked = 'User is locked';
   static final needAuthenticateWithOTP = 'Need authenticate with OTP';
   static final notFoundSaaSConfiguration = 'Not found saas configuration';
+  static final unsupportedAPIVersion = 'Unsupported this API version';
 
   AuthenticationException(String message) : super(message);
+}
+
+class UnsupportedAPIVersion extends AuthenticationException {
+  UnsupportedAPIVersion() : super(AuthenticationException.unsupportedAPIVersion);
+
+  @override
+  List<Object?> get props => [];
 }
 
 class BadCredentials extends AuthenticationException {
