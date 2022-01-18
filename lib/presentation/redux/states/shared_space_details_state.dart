@@ -42,7 +42,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.da
 class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
   final SharedSpaceNodeNested? sharedSpace;
   final List<SharedSpaceMember> membersList;
-  final List<SharedSpaceMember> driveMembersList;
+  final List<SharedSpaceMember> membersOfParentNodeList;
   final List<AuditLogEntryUser?>? activitiesList;
   final AccountQuota? quota;
 
@@ -50,7 +50,7 @@ class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
       Either<Failure, Success> viewState,
       this.sharedSpace,
       this.membersList,
-      this.driveMembersList,
+      this.membersOfParentNodeList,
       this.activitiesList,
       this.quota
   ) : super(viewState);
@@ -66,35 +66,35 @@ class SharedSpaceDetailsState extends LinShareState with EquatableMixin {
 
   @override
   SharedSpaceDetailsState sendViewState({required Either<Failure, Success> viewState}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, driveMembersList, activitiesList, quota);
+    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, membersOfParentNodeList, activitiesList, quota);
   }
 
   @override
   SharedSpaceDetailsState startLoadingState() {
-    return SharedSpaceDetailsState(Right(LoadingState()), sharedSpace, membersList, driveMembersList, activitiesList, quota);
+    return SharedSpaceDetailsState(Right(LoadingState()), sharedSpace, membersList, membersOfParentNodeList, activitiesList, quota);
   }
 
   SharedSpaceDetailsState setSharedSpaceMembers({required Either<Failure, Success> viewState, required List<SharedSpaceMember> newMembers}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, newMembers, driveMembersList, activitiesList, quota);
+    return SharedSpaceDetailsState(viewState, sharedSpace, newMembers, membersOfParentNodeList, activitiesList, quota);
   }
 
-  SharedSpaceDetailsState setDriveMembers({required List<SharedSpaceMember> newDriveMember}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, newDriveMember, activitiesList, quota);
+  SharedSpaceDetailsState setSharedSpaceNodeMembers({required List<SharedSpaceMember> newMember}) {
+    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, newMember, activitiesList, quota);
   }
 
   SharedSpaceDetailsState setSharedSpace({required Either<Failure, Success> viewState, SharedSpaceNodeNested? newSharedSpace}) {
-    return SharedSpaceDetailsState(viewState, newSharedSpace, membersList, driveMembersList, activitiesList, quota);
+    return SharedSpaceDetailsState(viewState, newSharedSpace, membersList, membersOfParentNodeList, activitiesList, quota);
   }
 
   SharedSpaceDetailsState setSharedSpaceActivities({required Either<Failure, Success> viewState, List<AuditLogEntryUser?>? newActivities}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, driveMembersList, newActivities, quota);
+    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, membersOfParentNodeList, newActivities, quota);
   }
 
   SharedSpaceDetailsState setAccountQuota({required Either<Failure, Success> viewState, AccountQuota? newQuota}) {
-    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, driveMembersList, activitiesList, newQuota);
+    return SharedSpaceDetailsState(viewState, sharedSpace, membersList, membersOfParentNodeList, activitiesList, newQuota);
   }
 
   SharedSpaceDetailsState setSharedSpaceNodeNested({SharedSpaceNodeNested? newSharedSpace}) {
-    return SharedSpaceDetailsState(viewState, newSharedSpace, membersList, driveMembersList, activitiesList, quota);
+    return SharedSpaceDetailsState(viewState, newSharedSpace, membersList, membersOfParentNodeList, activitiesList, quota);
   }
 }

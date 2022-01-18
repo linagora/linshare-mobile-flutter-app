@@ -83,4 +83,17 @@ extension SharedSpaceRoleNameExtension on SharedSpaceRoleName {
         return AppLocalizations.of(context).unknown_role;
     }
   }
+
+  String getWorkspaceRoleName(BuildContext context) {
+    switch (this) {
+      case SharedSpaceRoleName.WORK_SPACE_ADMIN:
+        return AppLocalizations.of(context).workspace_admin;
+      case SharedSpaceRoleName.WORK_SPACE_READER:
+        return AppLocalizations.of(context).workspace_reader;
+      case SharedSpaceRoleName.WORK_SPACE_WRITER:
+        return AppLocalizations.of(context).workspace_writer;
+      default:
+        return AppLocalizations.of(context).unknown_role;
+    }
+  }
 }
