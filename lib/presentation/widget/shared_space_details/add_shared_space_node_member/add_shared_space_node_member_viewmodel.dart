@@ -33,6 +33,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_drive_member_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/delete_shared_space_members_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_details_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/update_shared_space_members_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
@@ -219,10 +220,10 @@ class AddSharedSpaceNodeMemberViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       await _deleteSharedSpaceMemberInteractor.execute(sharedSpaceId, sharedSpaceMemberId)
         .then((result) => result.fold(
-          (failure) => store.dispatch(DeleteSharedSpaceMembersAction(
-              Left<Failure, Success>(DeleteSharedSpaceMemberFailure(DeleteMemberFailed())))),
+          (failure) => store.dispatch(DeleteSharedSpaceMembersAction(Left(DeleteSharedSpaceMemberFailure(DeleteMemberFailed())))),
           (success) {
             store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
+            store.dispatch(SharedSpaceAction(Right(success)));
             _refreshListMember(sharedSpaceId);
           }));
     });
