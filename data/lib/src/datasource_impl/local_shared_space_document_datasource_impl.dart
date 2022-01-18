@@ -98,7 +98,7 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
       }
 
       if (parentId != null) {
-        final workgroupsInsideDrive = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(parentId);
+        final workgroupsInsideDrive = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideSharedSpaceNode(parentId);
         if (workgroupsInsideDrive.isNotEmpty) {
           await _sharedSpaceDocumentDatabaseManager.deleteDrive(parentId);
         }

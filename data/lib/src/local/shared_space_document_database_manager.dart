@@ -181,7 +181,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
       : [];
   }
 
-  Future<List<SharedSpaceCache>> getAllWorkgroupsInsideDrive(SharedSpaceId parentId) async {
+  Future<List<SharedSpaceCache>> getAllWorkgroupsInsideSharedSpaceNode(SharedSpaceId parentId) async {
     final res = await _databaseClient.getListDataWithCondition(
         SharedSpaceTable.TABLE_NAME,
         '${SharedSpaceTable.PARENT_ID} = ?',

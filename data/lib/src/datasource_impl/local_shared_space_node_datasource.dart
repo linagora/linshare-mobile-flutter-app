@@ -45,7 +45,7 @@ class LocalSharedSpaceNodeDataSource implements SharedSpaceNodeDataSource {
   @override
   Future<List<SharedSpaceNodeNested>> getAllWorkgroupsOffline(SharedSpaceId parentId) {
     return Future.sync(() async {
-      final result = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideDrive(parentId);
+      final result = await _sharedSpaceDocumentDatabaseManager.getAllWorkgroupsInsideSharedSpaceNode(parentId);
       return result.isNotEmpty
         ? result.map((node) => node.toSharedSpaceNodeNested()).toList()
         : <SharedSpaceNodeNested>[];
