@@ -39,27 +39,28 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_member_destination.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_member_destination.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_shared_space_node_member_arguments.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
 import 'package:redux/redux.dart';
 
-class AddDriveMemberViewModel extends BaseViewModel {
+class AddSharedSpaceNodeMemberViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final GetSharedSpaceInteractor _getSharedSpaceInteractor;
-  final GetAllSharedSpaceMembersInteractor _getAllDriveMembersInteractor;
+  final GetAllSharedSpaceMembersInteractor _getAllSharedSpaceMembersInteractor;
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
   final AddSharedSpaceMemberInteractor _addSharedSpaceMemberInteractor;
   final GetAllSharedSpaceRolesInteractor _getAllSharedSpaceRolesInteractor;
   final DeleteSharedSpaceMemberInteractor _deleteSharedSpaceMemberInteractor;
   final UpdateDriveMemberInteractor _updateDriveMemberInteractor;
 
-  AddDriveMemberArguments? _arguments;
+  AddSharedSpaceNodeMemberArguments? _arguments;
 
-  AddDriveMemberViewModel(
+  AddSharedSpaceNodeMemberViewModel(
       Store<AppState> store,
       this._appNavigation,
       this._getSharedSpaceInteractor,
-      this._getAllDriveMembersInteractor,
+      this._getAllSharedSpaceMembersInteractor,
       this._getAutoCompleteSharingInteractor,
       this._addSharedSpaceMemberInteractor,
       this._getAllSharedSpaceRolesInteractor,
@@ -67,76 +68,81 @@ class AddDriveMemberViewModel extends BaseViewModel {
       this._updateDriveMemberInteractor,
   ) : super(store);
 
-  void initState(AddDriveMemberArguments? arguments) {
+  void initState(AddSharedSpaceNodeMemberArguments? arguments) {
     _arguments = arguments;
     if (_arguments != null) {
       if (_arguments!.destination == AddMemberDestination.sharedSpaceDetail) {
-        store.dispatch(AddDriveMemberGetDriveAction(Right(SharedSpaceDetailViewState(_arguments!.drive))));
-        store.dispatch(AddDriveMemberGetAllDriveMembersAction(Right(SharedSpaceMembersViewState(_arguments!.members ?? []))));
-        store.dispatch(_getAllDriveRolesAction(_arguments!.drive.sharedSpaceId));
+        store.dispatch(AddSharedSpaceNodeMemberGetNodeNestedAction(Right(SharedSpaceDetailViewState(_arguments!.nodeNested))));
+        store.dispatch(AddSharedSpaceNodeMemberGetAllSharedSpaceNodeMembersAction(Right(SharedSpaceMembersViewState(_arguments!.members ?? []))));
+        store.dispatch(_getAllRolesAction(
+            _arguments!.nodeNested.nodeType!, _arguments!.nodeNested.sharedSpaceId));
       } else {
-        store.dispatch(_getDriveAndAllMemberAction(_arguments!.drive.sharedSpaceId));
+        store.dispatch(_getSharedSpaceNodeAndAllMemberAction(
+            _arguments!.nodeNested.nodeType!, _arguments!.nodeNested.sharedSpaceId));
       }
     }
   }
 
-  OnlineThunkAction _getAllDriveRolesAction(SharedSpaceId sharedSpaceId) {
+  OnlineThunkAction _getAllRolesAction(LinShareNodeType nodeType, SharedSpaceId sharedSpaceId) {
     return OnlineThunkAction((Store<AppState> store) async {
       await Future.wait([
-        _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.DRIVE),
+        _getAllSharedSpaceRolesInteractor.execute(type: nodeType),
         _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.WORK_GROUP),
       ]).then((responses) {
 
-        final driveRoles = responses.first
+        final nodeNestedRoles = responses.first
             .map((success) => success is SharedSpaceRolesViewState ? success.roles : List<SharedSpaceRole>.empty())
             .getOrElse(() => List<SharedSpaceRole>.empty());
         final workgroupRoles = responses.last
             .map((success) => success is SharedSpaceRolesViewState ? success.roles : List<SharedSpaceRole>.empty())
             .getOrElse(() => List<SharedSpaceRole>.empty());
 
-        store.dispatch(AddDriveMemberGetAllRolesAction(driveRoles, workgroupRoles));
+        store.dispatch(AddSharedSpaceNodeMemberGetAllRolesAction(nodeNestedRoles, workgroupRoles));
+        store.dispatch(AddSharedSpaceNodeMemberSetNodeNestedRoleAction(nodeType.getDefaultSharedSpaceRole().name));
       });
     });
   }
 
-  OnlineThunkAction _getDriveAndAllMemberAction(SharedSpaceId sharedSpaceId) {
+  OnlineThunkAction _getSharedSpaceNodeAndAllMemberAction(LinShareNodeType nodeType, SharedSpaceId sharedSpaceId) {
     return OnlineThunkAction((Store<AppState> store) async {
 
-      store.dispatch(StartAddDriveMemberLoadingAction());
+      store.dispatch(StartAddSharedSpaceNodeMemberLoadingAction());
 
       await Future.wait([
         _getSharedSpaceInteractor.execute(sharedSpaceId),
-        _getAllDriveMembersInteractor.execute(sharedSpaceId),
-        _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.DRIVE),
+        _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId),
+        _getAllSharedSpaceRolesInteractor.execute(type: nodeType),
         _getAllSharedSpaceRolesInteractor.execute(type: LinShareNodeType.WORK_GROUP),
       ]).then((responses) {
-        store.dispatch(AddDriveMemberGetDriveAction(responses[0]));
-        store.dispatch(AddDriveMemberGetAllDriveMembersAction(responses[1]));
+        store.dispatch(AddSharedSpaceNodeMemberGetNodeNestedAction(responses[0]));
+        store.dispatch(AddSharedSpaceNodeMemberGetAllSharedSpaceNodeMembersAction(responses[1]));
 
-        final driveRoles = responses[2]
+        final nodeNestedRoles = responses[2]
           .map((success) => success is SharedSpaceRolesViewState ? success.roles : List<SharedSpaceRole>.empty())
           .getOrElse(() => List<SharedSpaceRole>.empty());
         final workgroupRoles = responses[3]
           .map((success) => success is SharedSpaceRolesViewState ? success.roles : List<SharedSpaceRole>.empty())
           .getOrElse(() => List<SharedSpaceRole>.empty());
 
-        store.dispatch(AddDriveMemberGetAllRolesAction(driveRoles, workgroupRoles));
+        store.dispatch(AddSharedSpaceNodeMemberGetAllRolesAction(nodeNestedRoles, workgroupRoles));
+        store.dispatch(AddSharedSpaceNodeMemberSetNodeNestedRoleAction(nodeType.getDefaultSharedSpaceRole().name));
       });
     });
   }
 
-  void selectDriveRole(SharedSpaceRoleName role) {
-    store.dispatch(AddDriveMemberSetDriveRoleAction(role));
+  void selectNodeNestedRole(SharedSpaceRoleName role) {
+    store.dispatch(AddSharedSpaceNodeMemberSetNodeNestedRoleAction(role));
     _appNavigation.popBack();
   }
 
   void selectWorkgroupRole(SharedSpaceRoleName role) {
-    store.dispatch(AddDriveMemberSetWorkgroupRoleAction(role));
+    store.dispatch(AddSharedSpaceNodeMemberSetWorkgroupRoleAction(role));
     _appNavigation.popBack();
   }
 
-  void addDriveMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberAutoCompleteResult autoCompleteResult) {
-    store.dispatch(_addDriveMemberAction(sharedSpaceId, AccountId(autoCompleteResult.userUuid.uuid)));
+  void addSharedSpaceNodeMember(SharedSpaceId sharedSpaceId,
+      LinShareNodeType nodeType, SharedSpaceMemberAutoCompleteResult autoCompleteResult) {
+    store.dispatch(_addSharedSpaceNodeMemberAction(sharedSpaceId, AccountId(autoCompleteResult.userUuid.uuid), nodeType));
   }
 
   Future<List<AutoCompleteResult>> getAutoCompleteSharing(
@@ -152,22 +158,23 @@ class AddDriveMemberViewModel extends BaseViewModel {
           .toList()));
   }
 
-  OnlineThunkAction _addDriveMemberAction(SharedSpaceId sharedSpaceId, AccountId accountId) {
+  OnlineThunkAction _addSharedSpaceNodeMemberAction(SharedSpaceId sharedSpaceId,
+      AccountId accountId, LinShareNodeType nodeType) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final driveRolesList = store.state.addDriveMemberState.driveRoleList;
-      final workgroupRolesList = store.state.addDriveMemberState.workgroupRoleList;
-      if (driveRolesList.isEmpty || workgroupRolesList.isEmpty) {
-        store.dispatch(AddDriveMemberAction(Left(AddSharedSpaceMemberFailure(RolesListNotFound()))));
+      final nodeNestedRoleList = store.state.addSharedSpaceNodeMemberState.nodeNestedRoleList;
+      final workgroupRolesList = store.state.addSharedSpaceNodeMemberState.workgroupRoleList;
+      if (nodeNestedRoleList.isEmpty || workgroupRolesList.isEmpty) {
+        store.dispatch(AddSharedSpaceNodeMemberAction(Left(AddSharedSpaceMemberFailure(RolesListNotFound()))));
         return;
       }
 
-      final selectedDriveRole = store.state.addDriveMemberState.selectedDriveRole;
-      final selectedWorkgroupRole = store.state.addDriveMemberState.selectedWorkgroupRole;
+      final selectedNodeNestedRole = store.state.addSharedSpaceNodeMemberState.selectedNodeNestedRole;
+      final selectedWorkgroupRole = store.state.addSharedSpaceNodeMemberState.selectedWorkgroupRole;
 
-      final roleDrive = driveRolesList.firstWhere((element) => element.name == selectedDriveRole, orElse: () => SharedSpaceRole.initialDrive());
+      final roleNodeNested = nodeNestedRoleList.firstWhere((element) => element.name == selectedNodeNestedRole, orElse: () => nodeType.getDefaultSharedSpaceRole());
       final roleWorkgroup = workgroupRolesList.firstWhere((element) => element.name == selectedWorkgroupRole, orElse: () => SharedSpaceRole.initial());
-      if (roleDrive.sharedSpaceRoleId.uuid.isEmpty || roleWorkgroup.sharedSpaceRoleId.uuid.isEmpty) {
-        store.dispatch(AddDriveMemberAction(Left(AddSharedSpaceMemberFailure(SelectedRoleNotFound()))));
+      if (roleNodeNested.sharedSpaceRoleId.uuid.isEmpty || roleWorkgroup.sharedSpaceRoleId.uuid.isEmpty) {
+        store.dispatch(AddSharedSpaceNodeMemberAction(Left(AddSharedSpaceMemberFailure(SelectedRoleNotFound()))));
         return;
       }
 
@@ -175,23 +182,23 @@ class AddDriveMemberViewModel extends BaseViewModel {
         .execute(sharedSpaceId, AddSharedSpaceMemberRequest(
             accountId,
             sharedSpaceId,
-            roleDrive.sharedSpaceRoleId,
-            type: LinShareNodeType.DRIVE,
+            roleNodeNested.sharedSpaceRoleId,
+            type: nodeType,
             nestedRole: roleWorkgroup.sharedSpaceRoleId))
         .then((result) => result.fold(
-          (failure) => store.dispatch(AddDriveMemberAction(Left(AddSharedSpaceMemberFailure(AddMemberFailed())))),
-          (success) => _refreshListDriveMember(sharedSpaceId)));
+          (failure) => store.dispatch(AddSharedSpaceNodeMemberAction(Left(AddSharedSpaceMemberFailure(AddMemberFailed())))),
+          (success) => _refreshListMember(sharedSpaceId)));
     });
   }
 
-  void _refreshListDriveMember(SharedSpaceId sharedSpaceId) {
-    store.dispatch(_getDriveMembersAction(sharedSpaceId));
+  void _refreshListMember(SharedSpaceId sharedSpaceId) {
+    store.dispatch(_getListMembersAction(sharedSpaceId));
   }
 
-  OnlineThunkAction _getDriveMembersAction(SharedSpaceId sharedSpaceId) {
+  OnlineThunkAction _getListMembersAction(SharedSpaceId sharedSpaceId) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final memberViewState = await _getAllDriveMembersInteractor.execute(sharedSpaceId);
-      store.dispatch(AddDriveMemberGetAllDriveMembersAction(memberViewState));
+      final memberViewState = await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId);
+      store.dispatch(AddSharedSpaceNodeMemberGetAllSharedSpaceNodeMembersAction(memberViewState));
       if (_arguments?.destination == AddMemberDestination.sharedSpaceDetail) {
         store.dispatch(SharedSpaceDetailsGetAllDriveMembersAction(memberViewState));
       }
@@ -214,7 +221,7 @@ class AddDriveMemberViewModel extends BaseViewModel {
               Left<Failure, Success>(DeleteSharedSpaceMemberFailure(DeleteMemberFailed())))),
           (success) {
             store.dispatch(DeleteSharedSpaceMembersAction(Right(success)));
-            _refreshListDriveMember(sharedSpaceId);
+            _refreshListMember(sharedSpaceId);
           }));
     });
   }
@@ -233,15 +240,15 @@ class AddDriveMemberViewModel extends BaseViewModel {
       SharedSpaceRoleName newRole, SharedSpaceRoleName nestedRoleName,
       {bool? isOverrideRoleForAll}) {
     return OnlineThunkAction((Store<AppState> store) async {
-      final driveRolesList = store.state.addDriveMemberState.driveRoleList;
-      final rolesList = store.state.addDriveMemberState.workgroupRoleList;
-      if (rolesList.isEmpty || driveRolesList.isEmpty) {
+      final nodeNestedRoleList = store.state.addSharedSpaceNodeMemberState.nodeNestedRoleList;
+      final rolesList = store.state.addSharedSpaceNodeMemberState.workgroupRoleList;
+      if (rolesList.isEmpty || nodeNestedRoleList.isEmpty) {
         store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(RolesListNotFound()))));
         return;
       }
 
       final workgroupRole = rolesList.firstWhere((_role) => _role.name == nestedRoleName, orElse: () => SharedSpaceRole.initial());
-      final roleDrive = driveRolesList.firstWhere((_role) => _role.name == newRole, orElse: () => SharedSpaceRole.initialDrive());
+      final roleDrive = nodeNestedRoleList.firstWhere((_role) => _role.name == newRole, orElse: () => SharedSpaceRole.initialDrive());
       if (roleDrive.sharedSpaceRoleId.uuid.isEmpty || workgroupRole.sharedSpaceRoleId.uuid.isEmpty) {
         store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(SelectedRoleNotFound()))));
         return;
@@ -259,7 +266,7 @@ class AddDriveMemberViewModel extends BaseViewModel {
           isOverrideRoleForAll: isOverrideRoleForAll)
         .then((result) => result.fold(
           (failure) => store.dispatch(UpdateDriveMembersAction(Left<Failure, Success>(UpdateDriveMemberFailure(UpdateRoleFailed())))),
-          (success) => _refreshListDriveMember(drive.sharedSpaceId)));
+          (success) => _refreshListMember(drive.sharedSpaceId)));
     });
   }
 
@@ -275,13 +282,13 @@ class AddDriveMemberViewModel extends BaseViewModel {
   }
 
   void backToSharedSpacesDetails() {
-    store.dispatch(CleanAddDriveMemberStateAction());
+    store.dispatch(CleanAddSharedSpaceNodeMemberStateAction());
     _appNavigation.popBack();
   }
 
   @override
   void onDisposed() {
-    store.dispatch(CleanAddDriveMemberStateAction());
+    store.dispatch(CleanAddSharedSpaceNodeMemberStateAction());
     super.onDisposed();
   }
 }

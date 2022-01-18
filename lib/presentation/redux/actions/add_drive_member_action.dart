@@ -36,52 +36,52 @@ import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
 @immutable
-class StartAddDriveMemberLoadingAction extends ActionOnline {}
+class StartAddSharedSpaceNodeMemberLoadingAction extends ActionOnline {}
 
 @immutable
-class AddDriveMemberAction extends ActionOnline {
+class AddSharedSpaceNodeMemberAction extends ActionOnline {
   final Either<Failure, Success> viewState;
 
-  AddDriveMemberAction(this.viewState);
+  AddSharedSpaceNodeMemberAction(this.viewState);
 }
 
 @immutable
-class AddDriveMemberGetAllDriveMembersAction extends ActionOnline {
+class AddSharedSpaceNodeMemberGetAllSharedSpaceNodeMembersAction extends ActionOnline {
   final Either<Failure, Success> getMembersViewState;
 
-  AddDriveMemberGetAllDriveMembersAction(this.getMembersViewState);
+  AddSharedSpaceNodeMemberGetAllSharedSpaceNodeMembersAction(this.getMembersViewState);
 }
 
 @immutable
-class AddDriveMemberGetDriveAction extends ActionOnline {
-  final Either<Failure, Success> getDriveViewState;
+class AddSharedSpaceNodeMemberGetNodeNestedAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
 
-  AddDriveMemberGetDriveAction(this.getDriveViewState);
+  AddSharedSpaceNodeMemberGetNodeNestedAction(this.viewState);
 }
 
 @immutable
-class AddDriveMemberSetDriveRoleAction extends ActionOffline {
-  final SharedSpaceRoleName newDriveRole;
+class AddSharedSpaceNodeMemberSetNodeNestedRoleAction extends ActionOffline {
+  final SharedSpaceRoleName newNodeNestedRole;
 
-  AddDriveMemberSetDriveRoleAction(this.newDriveRole);
+  AddSharedSpaceNodeMemberSetNodeNestedRoleAction(this.newNodeNestedRole);
 }
 
 @immutable
-class AddDriveMemberSetWorkgroupRoleAction extends ActionOffline {
+class AddSharedSpaceNodeMemberSetWorkgroupRoleAction extends ActionOffline {
   final SharedSpaceRoleName newWorkgroupRole;
 
-  AddDriveMemberSetWorkgroupRoleAction(this.newWorkgroupRole);
+  AddSharedSpaceNodeMemberSetWorkgroupRoleAction(this.newWorkgroupRole);
 }
 
 @immutable
-class CleanAddDriveMemberStateAction extends ActionOffline {
-  CleanAddDriveMemberStateAction();
+class CleanAddSharedSpaceNodeMemberStateAction extends ActionOffline {
+  CleanAddSharedSpaceNodeMemberStateAction();
 }
 
 @immutable
-class AddDriveMemberGetAllRolesAction extends ActionOffline {
-  final List<SharedSpaceRole> driveRoles;
+class AddSharedSpaceNodeMemberGetAllRolesAction extends ActionOffline {
+  final List<SharedSpaceRole> nodeNestedRoles;
   final List<SharedSpaceRole> workgroupRoles;
 
-  AddDriveMemberGetAllRolesAction(this.driveRoles, this.workgroupRoles);
+  AddSharedSpaceNodeMemberGetAllRolesAction(this.nodeNestedRoles, this.workgroupRoles);
 }

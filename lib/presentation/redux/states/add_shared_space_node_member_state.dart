@@ -39,62 +39,62 @@ import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
 @immutable
-class AddDriveMemberState extends LinShareState with EquatableMixin {
-  final SharedSpaceNodeNested? drive;
+class AddSharedSpaceNodeMemberState extends LinShareState with EquatableMixin {
+  final SharedSpaceNodeNested? nodeNested;
   final List<SharedSpaceMember> membersList;
-  final List<SharedSpaceRole> driveRoleList;
+  final List<SharedSpaceRole> nodeNestedRoleList;
   final List<SharedSpaceRole> workgroupRoleList;
-  final SharedSpaceRoleName selectedDriveRole;
+  final SharedSpaceRoleName selectedNodeNestedRole;
   final SharedSpaceRoleName selectedWorkgroupRole;
 
-  AddDriveMemberState(
-      Either<Failure, Success> viewState, this.drive,
+  AddSharedSpaceNodeMemberState(
+      Either<Failure, Success> viewState, this.nodeNested,
       this.membersList,
-      this.driveRoleList,
+      this.nodeNestedRoleList,
       this.workgroupRoleList,
-      this.selectedDriveRole,
+      this.selectedNodeNestedRole,
       this.selectedWorkgroupRole,
   ) : super(viewState);
 
-  factory AddDriveMemberState.initial() {
-    return AddDriveMemberState(Right(IdleState()), null, [], [], [], SharedSpaceRoleName.DRIVE_READER, SharedSpaceRoleName.READER);
+  factory AddSharedSpaceNodeMemberState.initial() {
+    return AddSharedSpaceNodeMemberState(Right(IdleState()), null, [], [], [], SharedSpaceRoleName.DRIVE_READER, SharedSpaceRoleName.READER);
   }
 
   @override
-  AddDriveMemberState clearViewState() {
-    return AddDriveMemberState(Right(IdleState()), null, [], [], [], SharedSpaceRoleName.DRIVE_READER, SharedSpaceRoleName.READER);
+  AddSharedSpaceNodeMemberState clearViewState() {
+    return AddSharedSpaceNodeMemberState(Right(IdleState()), null, [], [], [], SharedSpaceRoleName.DRIVE_READER, SharedSpaceRoleName.READER);
   }
 
   @override
-  AddDriveMemberState sendViewState(
+  AddSharedSpaceNodeMemberState sendViewState(
       {required Either<Failure, Success> viewState}) {
-    return AddDriveMemberState(viewState, drive, membersList, driveRoleList, workgroupRoleList, selectedDriveRole, selectedWorkgroupRole);
+    return AddSharedSpaceNodeMemberState(viewState, nodeNested, membersList, nodeNestedRoleList, workgroupRoleList, selectedNodeNestedRole, selectedWorkgroupRole);
   }
 
   @override
-  AddDriveMemberState startLoadingState() {
-    return AddDriveMemberState(Right(LoadingState()), drive, membersList, driveRoleList, workgroupRoleList, selectedDriveRole, selectedWorkgroupRole);
+  AddSharedSpaceNodeMemberState startLoadingState() {
+    return AddSharedSpaceNodeMemberState(Right(LoadingState()), nodeNested, membersList, nodeNestedRoleList, workgroupRoleList, selectedNodeNestedRole, selectedWorkgroupRole);
   }
 
-  AddDriveMemberState setDriveMembers(
+  AddSharedSpaceNodeMemberState setNodeNestedMembers(
       {required Either<Failure, Success> viewState, required List<SharedSpaceMember> newMembers}) {
-    return AddDriveMemberState(viewState, drive, newMembers, driveRoleList, workgroupRoleList, selectedDriveRole, selectedWorkgroupRole);
+    return AddSharedSpaceNodeMemberState(viewState, nodeNested, newMembers, nodeNestedRoleList, workgroupRoleList, selectedNodeNestedRole, selectedWorkgroupRole);
   }
 
-  AddDriveMemberState setDrive({required Either<Failure,
-      Success> viewState, SharedSpaceNodeNested? newDrive}) {
-    return AddDriveMemberState(viewState, newDrive, membersList, driveRoleList, workgroupRoleList, selectedDriveRole, selectedWorkgroupRole);
+  AddSharedSpaceNodeMemberState setNodeNested({required Either<Failure,
+      Success> viewState, SharedSpaceNodeNested? newNodeNested}) {
+    return AddSharedSpaceNodeMemberState(viewState, newNodeNested, membersList, nodeNestedRoleList, workgroupRoleList, selectedNodeNestedRole, selectedWorkgroupRole);
   }
 
-  AddDriveMemberState setDriveRoleName(SharedSpaceRoleName newDriveRole) {
-    return AddDriveMemberState(viewState, drive, membersList, driveRoleList, workgroupRoleList, newDriveRole, selectedWorkgroupRole);
+  AddSharedSpaceNodeMemberState setNodeNestedRoleName(SharedSpaceRoleName newNodeNestedRoleName) {
+    return AddSharedSpaceNodeMemberState(viewState, nodeNested, membersList, nodeNestedRoleList, workgroupRoleList, newNodeNestedRoleName, selectedWorkgroupRole);
   }
 
-  AddDriveMemberState setWorkgroupRoleName(SharedSpaceRoleName newWorkgroupRole) {
-    return AddDriveMemberState(viewState, drive, membersList, driveRoleList, workgroupRoleList, selectedDriveRole, newWorkgroupRole);
+  AddSharedSpaceNodeMemberState setWorkgroupRoleName(SharedSpaceRoleName newWorkgroupRole) {
+    return AddSharedSpaceNodeMemberState(viewState, nodeNested, membersList, nodeNestedRoleList, workgroupRoleList, selectedNodeNestedRole, newWorkgroupRole);
   }
 
-  AddDriveMemberState setListRoles({required List<SharedSpaceRole> newDriveRoles, required List<SharedSpaceRole> newWorkgroupRoles}) {
-    return AddDriveMemberState(viewState, drive, membersList, newDriveRoles, newWorkgroupRoles, selectedDriveRole, selectedWorkgroupRole);
+  AddSharedSpaceNodeMemberState setListRoles({required List<SharedSpaceRole> newNodeNestedRoles, required List<SharedSpaceRole> newWorkgroupRoles}) {
+    return AddSharedSpaceNodeMemberState(viewState, nodeNested, membersList, newNodeNestedRoles, newWorkgroupRoles, selectedNodeNestedRole, selectedWorkgroupRole);
   }
 }
