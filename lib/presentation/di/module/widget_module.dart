@@ -91,18 +91,10 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/side_menu/side_menu_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_widget.dart';
@@ -118,9 +110,17 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_group/up
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group/upload_request_group_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_group_add_recipient/add_recipients_upload_request_group_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_group_details/upload_request_group_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/active_close/active_closed_upload_request_inside_view_model.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/archived/archived_upload_request_inside_view_model.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/file_details/upload_request_file_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/pending/pending_upload_request_inside_view_model.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/upload_request_inside/recipient_details/upload_request_recipient_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_widget.dart';
 import 'package:redux/redux.dart';
 
 class WidgetModule {
@@ -173,6 +173,7 @@ class WidgetModule {
       getIt.get<GetTokenOIDCInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
+      getIt.get<DynamicAPIVersionSupportInterceptor>(),
       getIt<GetOIDCConfigurationInteractor>(),
       getIt<VerifyNameInteractor>(),
       getIt<GetSaaSConfigurationInteractor>(),

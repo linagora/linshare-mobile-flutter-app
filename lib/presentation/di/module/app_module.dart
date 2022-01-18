@@ -241,6 +241,9 @@ class AppModule {
       DataSourceType.network : getIt<SharedSpaceNodeDataSource>(),
       DataSourceType.local : getIt<LocalSharedSpaceNodeDataSource>()
     }));
+    getIt.registerFactory<APIRepository>(() => APIRepositoryImp(
+      getIt<SharedPreferences>()
+    ));
   }
 
   void _provideRepository() {
@@ -272,14 +275,18 @@ class AppModule {
     getIt.registerFactory(() => CreatePermanentTokenInteractor(
       getIt<AuthenticationRepository>(),
       getIt<TokenRepository>(),
-      getIt<CredentialRepository>()));
+      getIt<CredentialRepository>(),
+      getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => GetOIDCConfigurationInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => GetTokenOIDCInteractor(
       getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => CreatePermanentTokenOIDCInteractor(
-        getIt<AuthenticationOIDCRepository>(),
-        getIt<TokenRepository>(),
-        getIt<CredentialRepository>()));
+      getIt<AuthenticationOIDCRepository>(),
+      getIt<TokenRepository>(),
+      getIt<CredentialRepository>(),
+      getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => GetQuotaInteractor(getIt<QuotaRepository>()));
     getIt.registerFactory(() => GetCredentialInteractor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
     getIt.registerFactory(() => GetSaaSConfigurationInteractor(getIt<SaaSConsoleRepository>()));
