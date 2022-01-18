@@ -32,22 +32,41 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'dart:core';
+import 'dart:developer' as developer;
 
 class CreatePermanentTokenInteractor {
   final AuthenticationRepository authenticationRepository;
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
+  final APIRepository apiRepository;
 
-  CreatePermanentTokenInteractor(this.authenticationRepository, this.tokenRepository, this.credentialRepository);
+  CreatePermanentTokenInteractor(this.authenticationRepository, this.tokenRepository, this.credentialRepository, this.apiRepository);
 
   Future<Either<Failure, Success>> execute(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
-    try {
-      final token = await authenticationRepository.createPermanentToken(baseUrl, userName, password, otpCode: otpCode);
-      await tokenRepository.persistToken(token);
-      await credentialRepository.saveBaseUrl(baseUrl);
-      return Right(AuthenticationViewState(token));
-    } catch (e) {
-      return Left(AuthenticationFailure(e));
+    for (var i = 0; i <= APIVersionSupported.values.length; i++) {
+      try {
+        developer.log('API: ${APIVersionSupported.values[i]}', name: 'CreatePermanentTokenInteractor');
+        final token = await authenticationRepository.createPermanentToken(
+          baseUrl,
+          APIVersionSupported.values[i],
+          userName,
+          password,
+          otpCode: otpCode);
+        await tokenRepository.persistToken(token);
+        await credentialRepository.saveBaseUrl(baseUrl);
+        await apiRepository.persistAPIVersionSupported(APIVersionSupported.values[i]);
+        return Right(AuthenticationViewState(token, APIVersionSupported.values[i]));
+      } catch (e) {
+        if (e is UnsupportedAPIVersion) {
+          developer.log('UnsupportedAPIVersion: $e', name: 'CreatePermanentTokenInteractor');
+          continue;
+        } else {
+          developer.log('error: $e', name: 'CreatePermanentTokenInteractor');
+          return Left(AuthenticationFailure(e));
+        }
+      }
     }
+    developer.log('API Not found!', name: 'CreatePermanentTokenInteractor');
+    return Left(AuthenticationFailure(ServerNotFound()));
   }
 }

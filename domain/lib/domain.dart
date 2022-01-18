@@ -42,6 +42,7 @@ export 'src/extension/work_group_node_extensions.dart';
 export 'src/extension/list_upload_request_entry_extension.dart';
 
 // model
+export 'src/model/api_version_supported.dart';
 export 'src/model/account/account.dart';
 export 'src/model/account/account_id.dart';
 export 'src/model/account/account_type.dart';
@@ -267,6 +268,7 @@ export 'src/repository/upload_request/upload_request_repository.dart';
 export 'src/repository/upload_request_entry/upload_request_entry_repository.dart';
 export 'src/repository/workgroup/shared_space_node_repository.dart';
 export 'src/repository/authentication/saas_console_repository.dart';
+export 'src/repository/endpoint/api_repository.dart';
 
 // viewState
 export 'src/state/failure.dart';
