@@ -45,9 +45,11 @@ import 'package:linshare_flutter_app/presentation/util/extensions/audit_log_entr
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_member_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/drive_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/shared_space_member_list_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/work_space_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
@@ -143,7 +145,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   }
 
   Widget _detailsTabWidget(SharedSpaceDetailsState state) {
-    if (state.sharedSpace == null || state.quota == null) {
+    if (state.sharedSpace == null) {
       return Container(
           color: AppColor.userTagBackgroundColor,
           child: Align(
@@ -171,15 +173,17 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                   color: AppColor.workGroupDetailsName,
                   fontWeight: FontWeight.normal,
                   fontSize: 14.0)),
-          trailing: Text(
-            filesize(state.quota?.usedSpace.size),
-            style: TextStyle(
-              fontSize: 14,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.normal,
-              color: AppColor.uploadFileFileSizeTextColor,
-            ),
-          ),
+          trailing: state.quota != null
+            ? Text(
+                filesize(state.quota?.usedSpace.size ?? 0),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.normal,
+                  color: AppColor.uploadFileFileSizeTextColor,
+                ),
+              )
+            : null,
         ),
         Divider(),
         Column(
@@ -190,11 +194,9 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
                 state.sharedSpace?.creationDate.getMMMddyyyyFormatString() ?? ''),
             _sharedSpaceInformationTile(
                 AppLocalizations.of(context).my_rights,
-                toBeginningOfSentenceCase(state.sharedSpace?.nodeType == LinShareNodeType.DRIVE
-                    ? state.sharedSpace?.sharedSpaceRole.name.getDriveRoleName(context)
-                    : state.sharedSpace?.sharedSpaceRole.name.getRoleName(context)) ?? ''),
-            if (state.sharedSpace?.nodeType == LinShareNodeType.WORK_GROUP)
-              _sharedSpaceInformationTile(AppLocalizations.of(context).max_file_size, filesize(state.quota?.maxFileSize.size)),
+                toBeginningOfSentenceCase(state.sharedSpace?.nodeType?.getRoleDisplayName(context, state.sharedSpace?.sharedSpaceRole.name)) ?? ''),
+            if (state.sharedSpace?.nodeType == LinShareNodeType.WORK_GROUP && state.quota != null)
+              _sharedSpaceInformationTile(AppLocalizations.of(context).max_file_size, filesize(state.quota?.maxFileSize.size ?? 0)),
           ],
         ),
         Divider(),
@@ -284,7 +286,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
             if(state.sharedSpace == null) {
               return SizedBox.shrink();
             }
-            return _buildItemMember(state.sharedSpace!, member, state.driveMembersList);
+            return _buildItemMember(state.sharedSpace!, member, state.membersOfParentNodeList);
           }),
         floatingActionButton: state.sharedSpace != null && _validateDisplayAddMemberButton(state.sharedSpace!)
             ? FloatingActionButton(
@@ -315,8 +317,8 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
     return false;
   }
 
-  Widget _buildItemMember(SharedSpaceNodeNested sharedSpace, SharedSpaceMember member, List<SharedSpaceMember> driveMembers) {
-    final memberType = sharedSpace.parentId != null ? member.getMemberType(driveMembers) : null;
+  Widget _buildItemMember(SharedSpaceNodeNested sharedSpace, SharedSpaceMember member, List<SharedSpaceMember> membersOfParentNode) {
+    final memberType = sharedSpace.parentId != null ? member.getMemberType(membersOfParentNode) : null;
     if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
       return SharedSpaceMemberListTileBuilder(
           context,
@@ -335,32 +337,61 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
               member.account?.name ?? '',
               sharedSpace.name,
               sharedSpace,
-              sharedSpace.nodeType,
+              sharedSpace.nodeType!,
               member.sharedSpaceMemberId)).build();
     } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
       return DriveMemberListTileBuilder(
           member.account?.name ?? '',
           member.account?.mail ?? '',
-          member.role?.name.getDriveRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+          member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
           member.nestedRole?.name.getWorkgroupRoleNameInsideDriveOrWorkspace(context) ?? AppLocalizations.of(context).unknown_role,
           userCurrentDriveRole: sharedSpace.sharedSpaceRole.name,
-          onSelectedRoleDriveCallback: () => selectDriveMemberRoleBottomSheet(
+          onSelectedRoleDriveCallback: () => selectSharedSpaceNodeMemberRoleBottomSheet(
               context,
-              member.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
+              member.role?.name ?? sharedSpace.nodeType!.getDefaultSharedSpaceRole().name,
               sharedSpace,
+              sharedSpace.nodeType!,
               member),
-          onSelectedRoleWorkgroupCallback: () => selectWorkgroupRoleInsideDriveBottomSheet(
+          onSelectedRoleWorkgroupCallback: () => selectWorkgroupRoleInsideSharedSpaceNodeBottomSheet(
               context,
               member.nestedRole?.name ?? SharedSpaceRoleName.READER,
               sharedSpace,
+              sharedSpace.nodeType!,
               member),
           onDeleteMemberCallback: () => confirmDeleteMember(
             context,
             member.account?.name ?? '',
             sharedSpace.name,
             sharedSpace,
-            sharedSpace.nodeType,
+            sharedSpace.nodeType!,
             member.sharedSpaceMemberId)
+      ).build();
+    } else if (sharedSpace.nodeType == LinShareNodeType.WORK_SPACE) {
+      return WorkspaceMemberListTileBuilder(
+          member.account?.name ?? '',
+          member.account?.mail ?? '',
+          member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+          member.nestedRole?.name.getWorkgroupRoleNameInsideDriveOrWorkspace(context) ?? AppLocalizations.of(context).unknown_role,
+          userCurrentWorkspaceRole: sharedSpace.sharedSpaceRole.name,
+          onSelectedRoleWorkspaceCallback: () => selectSharedSpaceNodeMemberRoleBottomSheet(
+              context,
+              member.role?.name ?? sharedSpace.nodeType!.getDefaultSharedSpaceRole().name,
+              sharedSpace,
+              sharedSpace.nodeType!,
+              member),
+          onSelectedRoleWorkgroupCallback: () => selectWorkgroupRoleInsideSharedSpaceNodeBottomSheet(
+              context,
+              member.nestedRole?.name ?? SharedSpaceRoleName.READER,
+              sharedSpace,
+              sharedSpace.nodeType!,
+              member),
+          onDeleteMemberCallback: () => confirmDeleteMember(
+              context,
+              member.account?.name ?? '',
+              sharedSpace.name,
+              sharedSpace,
+              sharedSpace.nodeType!,
+              member.sharedSpaceMemberId)
       ).build();
     }
     return SizedBox.shrink();
@@ -452,11 +483,9 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
       String memberName,
       String sharedSpaceName,
       SharedSpaceNodeNested sharedSpace,
-      LinShareNodeType? type,
+      LinShareNodeType nodeType,
       SharedSpaceMemberId sharedSpaceMemberId) {
-    final deleteTitle = type == LinShareNodeType.DRIVE
-        ? AppLocalizations.of(context).are_you_sure_you_want_to_delete_drive_member(memberName, sharedSpaceName)
-        : AppLocalizations.of(context).are_you_sure_you_want_to_delete_member(memberName, sharedSpaceName);
+    final deleteTitle = nodeType.getTitleModalSheetDeleteMember(context, memberName, sharedSpaceName);
     ConfirmModalSheetBuilder(appNavigation)
         .key(Key('delete_member_shared_space_confirm_modal'))
         .title(deleteTitle)
@@ -467,45 +496,38 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
         .show(context);
   }
 
-  void selectDriveMemberRoleBottomSheet(
+  void selectSharedSpaceNodeMemberRoleBottomSheet(
       BuildContext context,
       SharedSpaceRoleName selectedRole,
-      SharedSpaceNodeNested drive,
+      SharedSpaceNodeNested nodeNested,
+      LinShareNodeType nodeType,
       SharedSpaceMember member
   ) {
     SelectRoleModalSheetBuilder(
-          key: Key('select_role_on_drive_member_details'),
+          key: Key('select_role_on_shared_space_node_member_details'),
           selectedRole: selectedRole,
-          listRoles: [
-            SharedSpaceRoleName.DRIVE_READER,
-            SharedSpaceRoleName.DRIVE_ADMIN,
-            SharedSpaceRoleName.DRIVE_WRITER
-          ])
-      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_drive_member_header'))
+          listRoles: nodeType.listRoleName)
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_shared_space_node_member_header'))
           .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
           .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
-          .addLabel(AppLocalizations.of(context).role_in_this_drive)
+          .addLabel(nodeType.getTitleRoleAddMember(context))
           .build())
-      .onConfirmAction((role) => _model.changeDriveMemberRole(drive, member, role))
+      .onConfirmAction((role) => _model.changeSharedSpaceNodeMemberRole(nodeNested, member, role, nodeType))
       .show(context);
   }
 
-  void selectWorkgroupRoleInsideDriveBottomSheet(
+  void selectWorkgroupRoleInsideSharedSpaceNodeBottomSheet(
       BuildContext context,
       SharedSpaceRoleName selectedRole,
-      SharedSpaceNodeNested drive,
+      SharedSpaceNodeNested nodeNested,
+      LinShareNodeType nodeType,
       SharedSpaceMember member) {
     SelectRoleWithActionModalSheetBuilder(
         context,
-        key: Key('select_role_on_workgroup_inside_drive_member_details'),
+        key: Key('select_role_on_workgroup_inside_shared_space_node_member_details'),
         selectedRole: selectedRole,
-        listRoles: [
-          SharedSpaceRoleName.READER,
-          SharedSpaceRoleName.ADMIN,
-          SharedSpaceRoleName.CONTRIBUTOR,
-          SharedSpaceRoleName.WRITER
-        ])
-      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_workgroup_inside_drive_member_header'))
+        listRoles: LinShareNodeType.WORK_GROUP.listRoleName)
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_workgroup_inside_shared_space_node_member_header'))
         .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
         .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
         .addLabel(AppLocalizations.of(context).edit_default_workgroup_role)
@@ -513,7 +535,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
       .optionalCheckbox(AppLocalizations.of(context).override_this_role_for_all_existing_workgroups)
       .onNegativeAction(() => appNavigation.popBack())
       .onPositiveAction((role, isOverrideRoleForAll) =>
-        _model.changeWorkgroupInsideDriveMemberRole(drive, member, role, isOverrideRoleForAll: isOverrideRoleForAll))
+        _model.changeMemberRoleWorkgroupInsideSharedSpaceNode(nodeNested, member, role, nodeType, isOverrideRoleForAll: isOverrideRoleForAll))
       .show(context);
   }
 }

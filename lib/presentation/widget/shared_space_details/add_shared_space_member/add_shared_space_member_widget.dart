@@ -99,7 +99,7 @@ class _AddSharedSpaceMemberWidgetState extends State<AddSharedSpaceMemberWidget>
           builder: (_, state) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             if (SharedSpaceOperationRole.addMemberSharedSpaceRoles.contains(state.sharedSpace!.sharedSpaceRole.name))
               _addMemberWidget(state.sharedSpace!, state.membersList),
-            Expanded(child: _membersListWidget(state.sharedSpace!, state.membersList, state.driveMembersList))
+            Expanded(child: _membersListWidget(state.sharedSpace!, state.membersList, state.membersOfParentNodeList))
           ]),
         ));
   }

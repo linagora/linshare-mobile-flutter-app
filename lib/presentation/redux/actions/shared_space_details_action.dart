@@ -58,10 +58,10 @@ class CleanSharedSpaceDetailsStateAction extends ActionOffline {
 }
 
 @immutable
-class SharedSpaceDetailsGetAllSharedSpaceActivitesAction extends ActionOnline {
-  final Either<Failure, Success> getActivitesViewState;
+class SharedSpaceDetailsGetAllSharedSpaceActivitiesAction extends ActionOnline {
+  final Either<Failure, Success> getActivitiesViewState;
 
-  SharedSpaceDetailsGetAllSharedSpaceActivitesAction(this.getActivitesViewState);
+  SharedSpaceDetailsGetAllSharedSpaceActivitiesAction(this.getActivitiesViewState);
 }
 
 @immutable
@@ -86,15 +86,15 @@ class SharedSpaceDetailsEnableVersioningAction extends ActionOnline {
 }
 
 @immutable
-class SharedSpaceDetailsGetAllDriveMembersAction extends ActionOnline {
+class SharedSpaceDetailsGetAllSharedSpaceNodeMembersAction extends ActionOnline {
   final Either<Failure, Success> getMembersViewState;
 
-  SharedSpaceDetailsGetAllDriveMembersAction(this.getMembersViewState);
+  SharedSpaceDetailsGetAllSharedSpaceNodeMembersAction(this.getMembersViewState);
 }
 
 @immutable
-class GetAllDriveMembersInsideWorkgroupDetailAction extends ActionOnline {
-  final List<SharedSpaceMember> driveMembers;
+class WorkgroupDetailsGetAllSharedSpaceNodeMembersAction extends ActionOnline {
+  final List<SharedSpaceMember> members;
 
-  GetAllDriveMembersInsideWorkgroupDetailAction(this.driveMembers);
+  WorkgroupDetailsGetAllSharedSpaceNodeMembersAction(this.members);
 }

@@ -203,7 +203,7 @@ class AddSharedSpaceNodeMemberViewModel extends BaseViewModel {
       final memberViewState = await _getAllSharedSpaceMembersInteractor.execute(sharedSpaceId);
       store.dispatch(AddSharedSpaceNodeMemberGetAllSharedSpaceNodeMembersAction(memberViewState));
       if (_arguments?.destination == AddMemberDestination.sharedSpaceDetail) {
-        store.dispatch(SharedSpaceDetailsGetAllDriveMembersAction(memberViewState));
+        store.dispatch(SharedSpaceDetailsGetAllSharedSpaceNodeMembersAction(memberViewState));
       }
     });
   }
