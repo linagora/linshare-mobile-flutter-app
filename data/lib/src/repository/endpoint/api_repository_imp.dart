@@ -41,9 +41,11 @@ class APIRepositoryImp extends APIRepository {
   APIRepositoryImp(this._sharedPreferences);
 
   @override
-  Future<APIVersionSupported> getAPIVersionSupported() async {
-    // TODO: implement getAPIVersionSupported
-    throw UnimplementedError();
+  Future<APIVersionSupported> getAPIVersionSupported() {
+    return Future.sync(() async {
+      final apiVersion = _sharedPreferences.getString(_supportedAPIVersionKey);
+      return APIVersionSupportedExtensions.fromString(apiVersion);
+    });
   }
 
   @override

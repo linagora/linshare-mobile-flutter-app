@@ -288,7 +288,11 @@ class AppModule {
       getIt<APIRepository>()
     ));
     getIt.registerFactory(() => GetQuotaInteractor(getIt<QuotaRepository>()));
-    getIt.registerFactory(() => GetCredentialInteractor(getIt<TokenRepository>(), getIt<CredentialRepository>()));
+    getIt.registerFactory(() => GetCredentialInteractor(
+      getIt<TokenRepository>(),
+      getIt<CredentialRepository>(),
+      getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => GetSaaSConfigurationInteractor(getIt<SaaSConsoleRepository>()));
     getIt.registerFactory(() => GetSecretTokenInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => VerifyEmailSaaSInteractor(getIt<AuthenticationOIDCRepository>()));
@@ -296,7 +300,9 @@ class AppModule {
     getIt.registerFactory(() => UploadMySpaceDocumentInteractor(
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
-        getIt<CredentialRepository>()));
+        getIt<CredentialRepository>(),
+        getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => GetAllDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => DownloadFileInteractor(
         getIt<DocumentRepository>(),
@@ -321,7 +327,9 @@ class AppModule {
     getIt.registerFactory(() => UploadWorkGroupDocumentInteractor(
         getIt<SharedSpaceDocumentRepository>(),
         getIt<TokenRepository>(),
-        getIt<CredentialRepository>()));
+        getIt<CredentialRepository>(),
+        getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => GetAllChildNodesInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => CopyDocumentsToSharedSpaceInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => CopyMultipleFilesToSharedSpaceInteractor(getIt<CopyDocumentsToSharedSpaceInteractor>()));
