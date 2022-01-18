@@ -34,6 +34,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 
 extension LinShareNodeTypeExtension on LinShareNodeType {
 
@@ -192,6 +193,8 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
         return AppLocalizations.of(context).are_you_sure_you_want_to_delete_drive_member(memberName, nodeNestedName);
       case LinShareNodeType.WORK_SPACE:
         return AppLocalizations.of(context).are_you_sure_you_want_to_delete_work_space_member(memberName, nodeNestedName);
+      case LinShareNodeType.WORK_GROUP:
+        return AppLocalizations.of(context).are_you_sure_you_want_to_delete_member(memberName, nodeNestedName);
       default:
         return '';
     }
@@ -205,6 +208,19 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
         return SharedSpaceRole.initialWorkspace();
       case LinShareNodeType.WORK_GROUP:
         return SharedSpaceRole.initial();
+    }
+  }
+
+  String? getRoleDisplayName(BuildContext context, SharedSpaceRoleName? roleName) {
+    switch(this) {
+      case LinShareNodeType.DRIVE:
+        return roleName?.getDriveRoleName(context);
+      case LinShareNodeType.WORK_SPACE:
+        return roleName?.getWorkspaceRoleName(context);
+      case LinShareNodeType.WORK_GROUP:
+        return roleName?.getRoleName(context);
+      default:
+        return '';
     }
   }
 }

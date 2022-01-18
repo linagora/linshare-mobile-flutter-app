@@ -44,21 +44,21 @@ final sharedSpaceDetailsReducer = combineReducers<SharedSpaceDetailsState>([
                   (failure) => [],
                   (success) => (success is SharedSpaceMembersViewState) ? success.members : []),
           viewState: action.getMembersViewState)),
-  TypedReducer<SharedSpaceDetailsState, SharedSpaceDetailsGetAllDriveMembersAction>((SharedSpaceDetailsState state, SharedSpaceDetailsGetAllDriveMembersAction action) =>
+  TypedReducer<SharedSpaceDetailsState, SharedSpaceDetailsGetAllSharedSpaceNodeMembersAction>((SharedSpaceDetailsState state, SharedSpaceDetailsGetAllSharedSpaceNodeMembersAction action) =>
       state.setSharedSpaceMembers(
           newMembers: action.getMembersViewState.fold(
               (failure) => [],
               (success) => (success is SharedSpaceMembersViewState) ? success.members : []),
           viewState: action.getMembersViewState)),
-  TypedReducer<SharedSpaceDetailsState, GetAllDriveMembersInsideWorkgroupDetailAction>((SharedSpaceDetailsState state, GetAllDriveMembersInsideWorkgroupDetailAction action) =>
-      state.setDriveMembers(newDriveMember: action.driveMembers)),
+  TypedReducer<SharedSpaceDetailsState, WorkgroupDetailsGetAllSharedSpaceNodeMembersAction>((SharedSpaceDetailsState state, WorkgroupDetailsGetAllSharedSpaceNodeMembersAction action) =>
+      state.setSharedSpaceNodeMembers(newMember: action.members)),
   TypedReducer<SharedSpaceDetailsState, CleanSharedSpaceDetailsStateAction>((SharedSpaceDetailsState state, CleanSharedSpaceDetailsStateAction action) => state.clearViewState()),
-  TypedReducer<SharedSpaceDetailsState, SharedSpaceDetailsGetAllSharedSpaceActivitesAction>((SharedSpaceDetailsState state, SharedSpaceDetailsGetAllSharedSpaceActivitesAction action) =>
+  TypedReducer<SharedSpaceDetailsState, SharedSpaceDetailsGetAllSharedSpaceActivitiesAction>((SharedSpaceDetailsState state, SharedSpaceDetailsGetAllSharedSpaceActivitiesAction action) =>
       state.setSharedSpaceActivities(
-          newActivities: action.getActivitesViewState.fold(
+          newActivities: action.getActivitiesViewState.fold(
                   (failure) => [],
                   (success) => (success is SharedSpacesActivitiesViewState) ? success.auditLogEntryUserList : []),
-          viewState: action.getActivitesViewState)),
+          viewState: action.getActivitiesViewState)),
   TypedReducer<SharedSpaceDetailsState, SharedSpaceDetailsGetSharedSpaceDetailsAction>((SharedSpaceDetailsState state, SharedSpaceDetailsGetSharedSpaceDetailsAction action) =>
       state.setSharedSpace(
           newSharedSpace: action.getSharedSpaceViewState.fold(
