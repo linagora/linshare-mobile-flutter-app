@@ -243,7 +243,7 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
           icon: SvgPicture.asset(imagePath.icLinShareMenu),
           onPressed: () => widget.scaffoldKey!.currentState!.openDrawer()),
       actions: [
-        if (uiState.routePath == RoutePaths.sharedSpaceInside && uiState.selectedDrive == null)
+        if (uiState.routePath == RoutePaths.sharedSpaceInside && uiState.selectedParentNode == null)
           Padding(
             padding: EdgeInsets.only(right: 8),
             child: IconButton(
@@ -259,11 +259,11 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
         return AppLocalizations.of(context).my_space_title;
       case RoutePaths.sharedSpace:
         return AppLocalizations.of(context).shared_space;
-      case RoutePaths.insideDrive:
-        return uiState.selectedDrive?.name ?? AppLocalizations.of(context).drive;
+      case RoutePaths.insideSharedSpaceNode:
+        return uiState.selectedParentNode?.name ?? AppLocalizations.of(context).shared_space;
       case RoutePaths.sharedSpaceInside:
-        if (uiState.selectedDrive != null) {
-          return uiState.selectedDrive?.name ?? AppLocalizations.of(context).drive;
+        if (uiState.selectedParentNode != null) {
+          return uiState.selectedParentNode!.name;
         }
         return uiState.selectedSharedSpace?.name ?? AppLocalizations.of(context).shared_space;
       case RoutePaths.account_details:

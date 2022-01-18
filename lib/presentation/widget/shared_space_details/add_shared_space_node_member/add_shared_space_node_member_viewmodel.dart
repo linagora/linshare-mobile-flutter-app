@@ -292,7 +292,10 @@ class AddSharedSpaceNodeMemberViewModel extends BaseViewModel {
                   isOverrideRoleForAll: isOverrideRoleForAll)
               .then((result) => result.fold(
                   (failure) => store.dispatch(UpdateDriveMembersAction(Left(UpdateDriveMemberFailure(UpdateRoleFailed())))),
-                  (success) => _refreshListMember(nodeNested.sharedSpaceId)));
+                  (success) {
+                    store.dispatch(SharedSpaceAction(Right(success)));
+                    _refreshListMember(nodeNested.sharedSpaceId);
+                  }));
         } else if (nodeType == LinShareNodeType.WORK_SPACE) {
           await _updateWorkspaceMemberInteractor
               .execute(
@@ -306,7 +309,10 @@ class AddSharedSpaceNodeMemberViewModel extends BaseViewModel {
                   isOverrideRoleForAll: isOverrideRoleForAll)
               .then((result) => result.fold(
                   (failure) => store.dispatch(UpdateWorkspaceMembersAction(Left(UpdateWorkspaceMemberFailure(UpdateRoleFailed())))),
-                  (success) => _refreshListMember(nodeNested.sharedSpaceId)));
+                  (success) {
+                    store.dispatch(SharedSpaceAction(Right(success)));
+                    _refreshListMember(nodeNested.sharedSpaceId);
+                  }));
         }
     });
   }

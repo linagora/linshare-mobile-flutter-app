@@ -45,7 +45,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 class SharedSpaceDocumentDestinationPickerState extends LinShareState  with EquatableMixin {
   final List<SelectableElement<WorkGroupNode>> workGroupNodeList;
   final SharedSpaceNodeNested? sharedSpaceNodeNested;
-  final SharedSpaceNodeNested? drive;
+  final SharedSpaceNodeNested? parentNode;
   final SharedSpaceDocumentType documentType;
   final WorkGroupNode? workGroupNode;
   final SelectMode selectMode;
@@ -57,7 +57,7 @@ class SharedSpaceDocumentDestinationPickerState extends LinShareState  with Equa
     this.documentType,
     this.workGroupNode,
     this.sharedSpaceNodeNested,
-    this.drive,
+    this.parentNode,
     this.selectMode,
     this.sorter
   ) : super(viewState);
@@ -68,12 +68,12 @@ class SharedSpaceDocumentDestinationPickerState extends LinShareState  with Equa
 
   @override
   SharedSpaceDocumentDestinationPickerState clearViewState() {
-    return SharedSpaceDocumentDestinationPickerState(Right(IdleState()), workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, drive, selectMode, sorter);
+    return SharedSpaceDocumentDestinationPickerState(Right(IdleState()), workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, parentNode, selectMode, sorter);
   }
 
   @override
   SharedSpaceDocumentDestinationPickerState sendViewState({required Either<Failure, Success> viewState}) {
-    return SharedSpaceDocumentDestinationPickerState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, drive, selectMode, sorter);
+    return SharedSpaceDocumentDestinationPickerState(viewState, workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, parentNode, selectMode, sorter);
   }
 
   SharedSpaceDocumentDestinationPickerState setSharedSpaceDocumentArgument({required SharedSpaceDocumentArguments newArguments}) {
@@ -83,7 +83,7 @@ class SharedSpaceDocumentDestinationPickerState extends LinShareState  with Equa
       newArguments.documentType,
       newArguments.workGroupFolder ?? workGroupNode,
       newArguments.sharedSpaceNode,
-      newArguments.drive,
+      newArguments.parentNode,
       selectMode,
       sorter
     );
@@ -103,7 +103,7 @@ class SharedSpaceDocumentDestinationPickerState extends LinShareState  with Equa
       documentType,
       workGroupNode,
       sharedSpaceNodeNested,
-      drive,
+      parentNode,
       selectMode,
       newSorter ?? sorter
     );
@@ -111,7 +111,9 @@ class SharedSpaceDocumentDestinationPickerState extends LinShareState  with Equa
 
   @override
   SharedSpaceDocumentDestinationPickerState startLoadingState() {
-    return SharedSpaceDocumentDestinationPickerState(Right(LoadingState()), workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested, drive, selectMode, sorter);
+    return SharedSpaceDocumentDestinationPickerState(Right(LoadingState()),
+        workGroupNodeList, documentType, workGroupNode, sharedSpaceNodeNested,
+        parentNode, selectMode, sorter);
   }
 
   @override
@@ -121,7 +123,7 @@ class SharedSpaceDocumentDestinationPickerState extends LinShareState  with Equa
     documentType,
     workGroupNode,
     sharedSpaceNodeNested,
-    drive,
+    parentNode,
     sorter
   ];
 }
