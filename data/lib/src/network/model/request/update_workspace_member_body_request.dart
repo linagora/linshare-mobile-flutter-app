@@ -29,18 +29,51 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/network/model/converter/account_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
+import 'package:data/src/network/model/converter/shared_space_role_id_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'dart:convert';
 
-abstract class SharedSpaceMemberDataSource {
-  Future<List<SharedSpaceMember>> getMembers(SharedSpaceId sharedSpaceId);
+part 'update_workspace_member_body_request.g.dart';
 
-  Future<SharedSpaceMember> addMember(SharedSpaceId sharedSpaceId, AddSharedSpaceMemberRequest request);
+@JsonSerializable()
+@AccountIdConverter()
+@SharedSpaceIdConverter()
+@SharedSpaceRoleIdConverter()
+class UpdateWorkspaceMemberBodyRequest with EquatableMixin {
+  final AccountId account;
+  final SharedSpaceId node;
+  final SharedSpaceRoleId role;
+  final SharedSpaceRoleId nestedRole;
+  final LinShareNodeType type;
 
-  Future<SharedSpaceMember> updateMemberRole(SharedSpaceId sharedSpaceId, UpdateSharedSpaceMemberRequest request);
+  UpdateWorkspaceMemberBodyRequest(
+    this.account,
+    this.node,
+    this.role,
+    this.nestedRole,
+    this.type,
+  );
 
-  Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request, {bool? isOverrideRoleForAll});
+  factory UpdateWorkspaceMemberBodyRequest.fromJson(Map<String, dynamic> json) => _$UpdateWorkspaceMemberBodyRequestFromJson(json);
 
-  Future<SharedSpaceMember> updateWorkspaceMemberRole(SharedSpaceId sharedSpaceId, UpdateWorkspaceMemberRequest request, {bool? isOverrideRoleForAll});
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    jsonEncode('account'): { jsonEncode('uuid'): jsonEncode(account.uuid) },
+    jsonEncode('node'): { jsonEncode('uuid'): jsonEncode(node.uuid) },
+    jsonEncode('role'): { jsonEncode('uuid'): jsonEncode(role.uuid) },
+    jsonEncode('nestedRole'): { jsonEncode('uuid'): jsonEncode(nestedRole.uuid) },
+    jsonEncode('type'): jsonEncode(type.value),
+  };
 
-  Future<SharedSpaceMember> deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId);
+  @override
+  List<Object> get props => [account, node, role, nestedRole, type];
+}
+
+extension UpdateWorkspaceMemberExtension on UpdateWorkspaceMemberRequest {
+  UpdateWorkspaceMemberBodyRequest toBodyRequest() {
+    return UpdateWorkspaceMemberBodyRequest(account, node, role, nestedRole, type);
+  }
 }
