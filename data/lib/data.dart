@@ -108,6 +108,7 @@ export 'src/network/config/cookie_interceptors.dart';
 export 'src/network/config/dynamic_url_interceptors.dart';
 export 'src/network/config/endpoint.dart';
 export 'src/network/config/retry_authentication_interceptors.dart';
+export 'src/network/config/dynamic_api_version_support_interceptor.dart';
 // network
 export 'src/network/dio_client.dart';
 export 'src/network/linshare_download_manager.dart';
@@ -207,6 +208,7 @@ export 'src/repository/upload_request_group/upload_request_group_repository_impl
 export 'src/repository/workgroup/shared_space_node_repository_impl.dart';
 export 'src/util/biometric_service.dart';
 export 'src/repository/authentication/saas_console_repository_impl.dart';
+export 'src/repository/endpoint/api_repository_imp.dart';
 // util
 export 'src/util/device_manager.dart';
 export 'src/util/biometric_service.dart';

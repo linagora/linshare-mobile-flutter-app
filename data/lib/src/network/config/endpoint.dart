@@ -33,7 +33,7 @@ import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:domain/domain.dart';
 
 class Endpoint {
-  static final String rootPath = '/linshare/webservice/rest/user/v5';
+  static final String rootPath = '/linshare/webservice/rest/user';
   static final String download = '/download';
   static final String nodes = '/nodes';
   static final String thumbnail = '/thumbnail';
@@ -83,7 +83,7 @@ class Endpoint {
 
 extension ServicePathExtension on ServicePath {
   String generateEndpointPath() {
-    return '${Endpoint.rootPath}$path';
+    return path;
   }
 
   ServicePath withQueryParameters(List<QueryParameter> queryParameters) {
@@ -102,12 +102,8 @@ extension ServicePathExtension on ServicePath {
     return ServicePath('$path/$pathParameter');
   }
 
-  String generateAuthenticationUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
-  }
-
-  String generateUploadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
+  String generateAuthenticationUrl(Uri baseUrl, APIVersionSupported apiVersion) {
+    return baseUrl.origin + Endpoint.rootPath + '/' + apiVersion.value + path;
   }
 
   ServicePath downloadServicePath(String? resourceId) {

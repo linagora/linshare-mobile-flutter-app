@@ -43,7 +43,7 @@ class LocalAuthenticationDataSource implements AuthenticationDataSource{
   LocalAuthenticationDataSource(this._sharedPreferences);
 
   @override
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) {
+  Future<Token> createPermanentToken(Uri baseUrl, APIVersionSupported apiVersion, UserName userName, Password password, {OTPCode? otpCode}) {
     throw UnimplementedError();
   }
 

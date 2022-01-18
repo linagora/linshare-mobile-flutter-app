@@ -33,7 +33,7 @@ import 'package:domain/domain.dart';
 
 abstract class AuthenticationDataSource {
 
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode});
+  Future<Token> createPermanentToken(Uri baseUrl, APIVersionSupported apiVersion, UserName userName, Password password, {OTPCode? otpCode});
 
   Future<bool> deletePermanentToken(Token token);
 

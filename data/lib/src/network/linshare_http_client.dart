@@ -86,6 +86,7 @@ import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
+import 'dart:developer' as developer;
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -94,13 +95,15 @@ class LinShareHttpClient {
 
   Future<PermanentToken> createPermanentToken(
       Uri authenticateUrl,
+      APIVersionSupported apiVersion,
       String userName,
       String password,
       PermanentTokenBodyRequest bodyRequest,
       {OTPCode? otpCode}) async {
+    developer.log('createPermanentToken() API: $apiVersion', name: 'LinShareHttpClient');
     final basicAuth = 'Basic ' + base64Encode(utf8.encode('$userName:$password'));
     final resultJson = await _dioClient.post(
-        Endpoint.authentication.generateAuthenticationUrl(authenticateUrl),
+        Endpoint.authentication.generateAuthenticationUrl(authenticateUrl, apiVersion),
         options: Options(headers: _buildPermanentTokenRequestParam(basicAuth, otpCode: otpCode)),
         data: bodyRequest.toJson());
     return PermanentToken.fromJson(resultJson);
@@ -108,12 +111,13 @@ class LinShareHttpClient {
 
   Future<PermanentToken> createPermanentTokenWithOIDC(
       Uri authenticateUrl,
+      APIVersionSupported apiVersion,
       String oidcToken,
       PermanentTokenBodyRequest bodyRequest,
       {OTPCode? otpCode}) async {
     final bearerAuth = 'Bearer $oidcToken';
     final resultJson = await _dioClient.post(
-        Endpoint.authentication.generateAuthenticationUrl(authenticateUrl),
+        Endpoint.authentication.generateAuthenticationUrl(authenticateUrl, apiVersion),
         options: Options(headers: _buildPermanentTokenRequestParam(bearerAuth, otpCode: otpCode)),
         data: bodyRequest.toJson());
     return PermanentToken.fromJson(resultJson);
