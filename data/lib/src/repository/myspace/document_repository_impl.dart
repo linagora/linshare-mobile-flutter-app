@@ -59,8 +59,8 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl) {
-    return _documentDataSources[DataSourceType.network]!.downloadDocuments(documentIds, token, baseUrl);
+  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl, APIVersionSupported apiVersion) {
+    return _documentDataSources[DataSourceType.network]!.downloadDocuments(documentIds, token, baseUrl, apiVersion);
   }
 
   @override

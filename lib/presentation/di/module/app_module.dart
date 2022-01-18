@@ -307,7 +307,9 @@ class AppModule {
     getIt.registerFactory(() => DownloadFileInteractor(
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
-        getIt<CredentialRepository>()));
+        getIt<CredentialRepository>(),
+        getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => DownloadFileIOSInteractor(
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
@@ -363,11 +365,15 @@ class AppModule {
     getIt.registerFactory(() => DownloadWorkGroupNodeInteractor(
         getIt<SharedSpaceDocumentRepository>(),
         getIt<TokenRepository>(),
-        getIt<CredentialRepository>()));
+        getIt<CredentialRepository>(),
+        getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => DownloadReceivedSharesInteractor(
         getIt<ReceivedShareRepository>(),
         getIt<TokenRepository>(),
-        getIt<CredentialRepository>()));
+        getIt<CredentialRepository>(),
+        getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => DownloadPreviewDocumentInteractor(
         getIt<DocumentRepository>(),
         getIt<TokenRepository>(),
@@ -469,7 +475,9 @@ class AppModule {
     getIt.registerFactory(() => DownloadUploadRequestEntriesInteractor(
         getIt<UploadRequestEntryRepository>(),
         getIt<TokenRepository>(),
-        getIt<CredentialRepository>()));
+        getIt<CredentialRepository>(),
+        getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => DownloadUploadRequestEntryIOSInteractor(
         getIt<UploadRequestEntryRepository>(),
         getIt<TokenRepository>(),
