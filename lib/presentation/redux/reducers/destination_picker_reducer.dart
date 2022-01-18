@@ -60,37 +60,35 @@ final destinationPickerReducer = combineReducers<DestinationPickerState>([
           newSharedSpacesList: action.newSharedSpaces,
           newSorter: action.newSorter)),
   TypedReducer<DestinationPickerState, CleanDestinationPickerStateAction>((DestinationPickerState state, _) => state.clearViewState()),
-  TypedReducer<DestinationPickerState,
-      DestinationPickerGoInsideSharedSpaceAction>((DestinationPickerState state,
-          DestinationPickerGoInsideSharedSpaceAction action) =>
+  TypedReducer<DestinationPickerState, DestinationPickerGoInsideWorkgroupAction>((DestinationPickerState state, DestinationPickerGoInsideWorkgroupAction action) =>
       state.setDestinationPickerState(
           viewState: state.viewState,
           newSharedSpacesList: state.sharedSpacesList,
           routeData: DestinationPickerRouteData(
-              DestinationPickerCurrentView.sharedSpaceInside,
+              DestinationPickerCurrentView.workgroupInside,
               sharedSpaceNodeNested: action.sharedSpace,
-              drive: action.drive))),
-  TypedReducer<DestinationPickerState, DestinationPickerGetAllDriveAction>((DestinationPickerState state, DestinationPickerGetAllDriveAction action) =>
+              parentNode: action.parentNode))),
+  TypedReducer<DestinationPickerState, DestinationPickerGetAllWorkgroupInsideParentNodeAction>((DestinationPickerState state, DestinationPickerGetAllWorkgroupInsideParentNodeAction action) =>
       state.setDestinationPickerState(
           viewState: action.viewState,
           newSharedSpacesList: action.sharedSpacesList,
           routeData: DestinationPickerRouteData(
-              DestinationPickerCurrentView.drive,
-              drive: action.drive))),
+              DestinationPickerCurrentView.sharedSpaceNodeInside,
+              parentNode: action.parentNode))),
   TypedReducer<DestinationPickerState, ClearAllSharedSpaceListStateAction>((DestinationPickerState state, ClearAllSharedSpaceListStateAction action) =>
       state.setDestinationPickerState(
           viewState: Right(IdleState()),
           newSharedSpacesList: [],
           routeData: DestinationPickerRouteData(
               action.currentView,
-              drive: action.drive))),
-  TypedReducer<DestinationPickerState, BackToInsideDriveDestinationAction>((DestinationPickerState state, BackToInsideDriveDestinationAction action) =>
+              parentNode: action.parentNode))),
+  TypedReducer<DestinationPickerState, BackToInsideSharedSpaceNodeDestinationAction>((DestinationPickerState state, BackToInsideSharedSpaceNodeDestinationAction action) =>
       state.setDestinationPickerState(
           viewState: state.viewState,
           newSharedSpacesList: state.sharedSpacesList,
           routeData: DestinationPickerRouteData(
-              DestinationPickerCurrentView.drive,
-              drive: action.drive))),
+              DestinationPickerCurrentView.sharedSpaceNodeInside,
+              parentNode: action.parentNode))),
   TypedReducer<DestinationPickerState, DestinationPickerBackToSharedSpaceAction>(
           (DestinationPickerState state, DestinationPickerBackToSharedSpaceAction action) =>
               state.setDestinationPickerState(

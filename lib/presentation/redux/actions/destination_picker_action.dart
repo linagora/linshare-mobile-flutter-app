@@ -47,11 +47,11 @@ class DestinationPickerAction extends ActionOnline {
 }
 
 @immutable
-class DestinationPickerGoInsideSharedSpaceAction extends ActionOnline {
+class DestinationPickerGoInsideWorkgroupAction extends ActionOnline {
   final SharedSpaceNodeNested sharedSpace;
-  final SharedSpaceNodeNested? drive;
+  final SharedSpaceNodeNested? parentNode;
 
-  DestinationPickerGoInsideSharedSpaceAction(this.sharedSpace, {this.drive});
+  DestinationPickerGoInsideWorkgroupAction(this.sharedSpace, {this.parentNode});
 }
 
 @immutable
@@ -82,27 +82,27 @@ class DestinationPickerGetAllSharedSpacesAction extends ActionOnline {
 }
 
 @immutable
-class DestinationPickerGetAllDriveAction extends ActionOnline {
+class DestinationPickerGetAllWorkgroupInsideParentNodeAction extends ActionOnline {
   final Either<Failure, Success> viewState;
-  final SharedSpaceNodeNested drive;
+  final SharedSpaceNodeNested parentNode;
   final List<SharedSpaceNodeNested> sharedSpacesList;
 
-  DestinationPickerGetAllDriveAction(this.viewState, this.drive, this.sharedSpacesList);
+  DestinationPickerGetAllWorkgroupInsideParentNodeAction(this.viewState, this.parentNode, this.sharedSpacesList);
 }
 
 @immutable
 class ClearAllSharedSpaceListStateAction extends ActionOffline {
-  final SharedSpaceNodeNested? drive;
+  final SharedSpaceNodeNested? parentNode;
   final DestinationPickerCurrentView currentView;
 
-  ClearAllSharedSpaceListStateAction(this.currentView, {this.drive});
+  ClearAllSharedSpaceListStateAction(this.currentView, {this.parentNode});
 }
 
 @immutable
-class BackToInsideDriveDestinationAction extends ActionOffline {
-  final SharedSpaceNodeNested drive;
+class BackToInsideSharedSpaceNodeDestinationAction extends ActionOffline {
+  final SharedSpaceNodeNested parentNode;
 
-  BackToInsideDriveDestinationAction(this.drive);
+  BackToInsideSharedSpaceNodeDestinationAction(this.parentNode);
 }
 
 @immutable
