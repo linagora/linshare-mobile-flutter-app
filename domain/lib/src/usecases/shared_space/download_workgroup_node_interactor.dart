@@ -38,16 +38,17 @@ class DownloadWorkGroupNodeInteractor {
   final SharedSpaceDocumentRepository _sharedSpaceDocumentRepository;
   final TokenRepository _tokenRepository;
   final CredentialRepository _credentialRepository;
+  final APIRepository _apiRepository;
 
-  DownloadWorkGroupNodeInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository);
+  DownloadWorkGroupNodeInteractor(this._sharedSpaceDocumentRepository, this._tokenRepository, this._credentialRepository, this._apiRepository);
 
   Future<Either<Failure, Success>> execute(List<WorkGroupNode> nodes) async {
     try {
       final taskIds = await Future.wait(
-          [_tokenRepository.getToken(), _credentialRepository.getBaseUrl()],
+          [_tokenRepository.getToken(), _credentialRepository.getBaseUrl(), _apiRepository.getAPIVersionSupported()],
           eagerError: true)
         .then((List responses) async => await _sharedSpaceDocumentRepository
-          .downloadNodes(nodes, responses.first, responses.last));
+          .downloadNodes(nodes, responses.first, responses[1], responses.last));
 
       return Right<Failure, Success>(DownloadNodesSuccessViewState(taskIds));
     } catch (exception) {

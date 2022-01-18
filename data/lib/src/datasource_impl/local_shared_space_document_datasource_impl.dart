@@ -170,7 +170,7 @@ class LocalSharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataS
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl) {
+  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl, APIVersionSupported apiVersion) {
     throw UnimplementedError();
   }
 
