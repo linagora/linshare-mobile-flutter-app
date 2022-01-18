@@ -36,12 +36,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 
 typedef OnConfirmActionClick = void Function(bool?);
 
 class ConfirmModalSheetBuilder {
+  final responsiveUtils = getIt<ResponsiveUtils>();
+
   @protected
   final AppNavigation _appNavigation;
 
@@ -108,52 +112,80 @@ class ConfirmModalSheetBuilder {
     });
   }
 
+  RoundedRectangleBorder _shape() {
+    return RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0)
+        )
+    );
+  }
+
+  BoxDecoration _decoration(BuildContext context) {
+    return BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(20.0),
+            topRight: const Radius.circular(20.0)));
+  }
+
   void show(context) {
     showModalBottomSheet(
         useRootNavigator: true,
-        shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        ),
+        shape: _shape(),
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
         context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            key: _key,
-            height: (_optionalCheckboxString == null || _optionalCheckboxString!.isEmpty) ? 208.0 : 240.0,
-            child: Column(
-              children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.only(left: 50, right: 50, top: 48, bottom: 19),
-                    child: Text(
-                      _title,
-                      style: TextStyle(fontSize: 16, color: AppColor.confirmDialogTitleTextColor),
-                      textAlign: TextAlign.center,
-                    )),
-                if ((_optionalCheckboxString != null && _optionalCheckboxString!.isNotEmpty)) _buildCheckboxRow(),
-                Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            primary: AppColor.documentNameItemTextColor,
-                            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-                        onPressed: () => _appNavigation.popBack(),
-                        child: Text(_cancelText, style: TextStyle(fontSize: 14)),
-                      ),
-                      OutlinedButton(
-                          onPressed: () => _onConfirmActionClick(isOptionalCheckboxChecked),
-                          style: OutlinedButton.styleFrom(
-                              primary: Colors.white,
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                              backgroundColor: AppColor.toastErrorBackgroundColor,
-                              shape:
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-                          child: Text(_confirmText))
-                    ])),
-              ],
-            ),
+        builder: (BuildContext context) {
+          return GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: SingleChildScrollView(
+                  child: Container(
+                      key: _key,
+                      padding: EdgeInsets.all(20),
+                      margin: responsiveUtils.getMarginContextMenuForScreen(context),
+                      decoration: _decoration(context),
+                      child: GestureDetector(
+                          onTap: () => {},
+                          child: Wrap(
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(left: 50, right: 50, top: 48, bottom: 19),
+                                  child: Text(
+                                    _title,
+                                    style: TextStyle(fontSize: 16, color: AppColor.confirmDialogTitleTextColor),
+                                    textAlign: TextAlign.center,
+                                  )),
+                              if ((_optionalCheckboxString != null && _optionalCheckboxString!.isNotEmpty)) _buildCheckboxRow(),
+                              Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                                    OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                          primary: AppColor.documentNameItemTextColor,
+                                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                                      onPressed: () => _appNavigation.popBack(),
+                                      child: Text(_cancelText, style: TextStyle(fontSize: 14)),
+                                    ),
+                                    OutlinedButton(
+                                        onPressed: () => _onConfirmActionClick(isOptionalCheckboxChecked),
+                                        style: OutlinedButton.styleFrom(
+                                            primary: Colors.white,
+                                            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                                            backgroundColor: AppColor.toastErrorBackgroundColor,
+                                            shape:
+                                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                                        child: Text(_confirmText))
+                                  ])
+                              ),
+                            ],
+                          )
+                      )
+                  )
+              )
           );
-        });
+        }
+    );
   }
 }
