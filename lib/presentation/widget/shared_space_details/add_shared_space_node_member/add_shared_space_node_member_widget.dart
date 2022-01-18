@@ -37,41 +37,43 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/add_drive_member_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_node_member_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/drive_member_list_tile_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/work_space_member_list_tile_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/select_role_with_action_modal_sheet_builder.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_shared_space_node_member_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_shared_space_node_member_viewmodel.dart';
 
-class AddDriveMemberWidget extends StatefulWidget {
-  AddDriveMemberWidget({Key? key}) : super(key: key);
+class AddSharedSpaceNodeMemberWidget extends StatefulWidget {
+  AddSharedSpaceNodeMemberWidget({Key? key}) : super(key: key);
 
   @override
-  _AddDriveMemberWidgetState createState() => _AddDriveMemberWidgetState();
+  _AddSharedSpaceNodeMemberWidgetState createState() => _AddSharedSpaceNodeMemberWidgetState();
 }
 
-class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
-  final _model = getIt<AddDriveMemberViewModel>();
+class _AddSharedSpaceNodeMemberWidgetState extends State<AddSharedSpaceNodeMemberWidget> {
+  final _model = getIt<AddSharedSpaceNodeMemberViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final TextEditingController _typeAheadController = TextEditingController();
   final appNavigation = getIt<AppNavigation>();
 
-  AddDriveMemberArguments? _arguments;
+  AddSharedSpaceNodeMemberArguments? _arguments;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _arguments = ModalRoute.of(context)?.settings.arguments as AddDriveMemberArguments;
+      _arguments = ModalRoute.of(context)?.settings.arguments as AddSharedSpaceNodeMemberArguments;
       _model.initState(_arguments);
     });
   }
@@ -84,20 +86,20 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _arguments = ModalRoute.of(context)?.settings.arguments as AddDriveMemberArguments;
+    _arguments = ModalRoute.of(context)?.settings.arguments as AddSharedSpaceNodeMemberArguments;
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
-            key: Key('add_drive_member_arrow_back_button'),
+            key: Key('add_shared_space_node_member_arrow_back_button'),
             icon: Image.asset(imagePath.icArrowBack),
             onPressed: () => _model.backToSharedSpacesDetails(),
           ),
           centerTitle: true,
-          title: Text(_arguments?.drive.name ?? '',
-              key: Key('add_drive_member_title'),
+          title: Text(_arguments?.nodeNested.name ?? '',
+              key: Key('add_shared_space_node_member_title'),
               style: TextStyle(fontSize: 24, color: Colors.white)),
           backgroundColor: AppColor.primaryColor,
         ),
@@ -108,15 +110,15 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
               child: Column(
                   children: [
                     _buildLoadingView(),
-                    StoreConnector<AppState, AddDriveMemberState>(
-                        converter: (store) => store.state.addDriveMemberState,
-                        builder: (_, state) => state.drive != null
-                            ? _addMemberWidget(state.drive!, state.membersList)
+                    StoreConnector<AppState, AddSharedSpaceNodeMemberState>(
+                        converter: (store) => store.state.addSharedSpaceNodeMemberState,
+                        builder: (_, state) => state.nodeNested != null
+                            ? _addMemberWidget(state.nodeNested!, state.membersList)
                             : SizedBox.shrink()),
-                    StoreConnector<AppState, AddDriveMemberState>(
-                        converter: (store) => store.state.addDriveMemberState,
-                        builder: (_, state) => state.drive != null
-                            ? _membersListWidget(state.drive!, state.membersList)
+                    StoreConnector<AppState, AddSharedSpaceNodeMemberState>(
+                        converter: (store) => store.state.addSharedSpaceNodeMemberState,
+                        builder: (_, state) => state.nodeNested != null
+                            ? _membersListWidget(state.nodeNested!, state.membersList)
                             : SizedBox.shrink()),
                   ]),
             ),
@@ -127,7 +129,7 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
 
   Widget _buildLoadingView() {
     return StoreConnector<AppState, dartz.Either<Failure, Success>>(
-      converter: (store) => store.state.addDriveMemberState.viewState,
+      converter: (store) => store.state.addSharedSpaceNodeMemberState.viewState,
       builder: (context, viewState) {
         return viewState.fold(
           (failure) => SizedBox.shrink(),
@@ -144,7 +146,7 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
     );
   }
 
-  Padding _addMemberWidget(SharedSpaceNodeNested drive, List<SharedSpaceMember> members) {
+  Padding _addMemberWidget(SharedSpaceNodeNested nodeNested, List<SharedSpaceMember> members) {
     return Padding(
         padding: EdgeInsets.only(top: 24, left: 24, right: 24),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -160,23 +162,18 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(bottom: 8),
-                    child: Text(AppLocalizations.of(context).role_in_this_drive,
+                    child: Text(nodeNested.nodeType?.getTitleRoleAddMember(context) ?? '',
                         style: TextStyle(color: AppColor.addSharedSpaceMemberTitleColor, fontSize: 14))),
                   StoreConnector<AppState, SharedSpaceRoleName>(
-                    converter: (store) => store.state.addDriveMemberState.selectedDriveRole,
+                    converter: (store) => store.state.addSharedSpaceNodeMemberState.selectedNodeNestedRole,
                     builder: (_, role) =>  TextButton(
                         onPressed: () => selectRoleBottomSheet(
                             context,
-                            LinShareNodeType.DRIVE,
+                            nodeNested,
+                            nodeNested.nodeType!,
                             role,
-                            [
-                              SharedSpaceRoleName.DRIVE_READER,
-                              SharedSpaceRoleName.DRIVE_ADMIN,
-                              SharedSpaceRoleName.DRIVE_WRITER
-                            ],
-                            onNewRoleUpdated: (newRole) {
-                              _model.selectDriveRole(newRole);
-                            }),
+                            nodeNested.nodeType!.listRoleName(),
+                            onNewRoleUpdated: (newRole) => _model.selectNodeNestedRole(newRole)),
                         style: ButtonStyle(
                             foregroundColor: MaterialStateProperty.resolveWith<Color>(
                                 (Set<MaterialState> states) => AppColor.addSharedSpaceMemberRoleColor,
@@ -208,10 +205,11 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
                     child: Text(AppLocalizations.of(context).default_role_in_workgroups,
                         style: TextStyle(color: AppColor.addSharedSpaceMemberTitleColor, fontSize: 14))),
                   StoreConnector<AppState, SharedSpaceRoleName>(
-                    converter: (store) => store.state.addDriveMemberState.selectedWorkgroupRole,
+                    converter: (store) => store.state.addSharedSpaceNodeMemberState.selectedWorkgroupRole,
                     builder: (_, role) =>  TextButton(
                         onPressed: () => selectRoleBottomSheet(
                             context,
+                            nodeNested,
                             LinShareNodeType.WORK_GROUP,
                             role,
                             [
@@ -267,7 +265,7 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
                   debounceDuration: Duration(milliseconds: 300),
                   suggestionsCallback: (pattern) async {
                     if (pattern.length >= 3) {
-                      return await _model.getAutoCompleteSharing(pattern, drive, members);
+                      return await _model.getAutoCompleteSharing(pattern, nodeNested, members);
                     }
                     return <AutoCompleteResult>[];
                   },
@@ -291,8 +289,10 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
                   },
                   onSuggestionSelected: (autoCompleteResult) async {
                     _typeAheadController.text = '';
-                    _model.addDriveMember(
-                        drive.sharedSpaceId, autoCompleteResult as SharedSpaceMemberAutoCompleteResult);
+                    _model.addSharedSpaceNodeMember(
+                        nodeNested.sharedSpaceId,
+                        nodeNested.nodeType!,
+                        autoCompleteResult as SharedSpaceMemberAutoCompleteResult);
                   },
                   noItemsFoundBuilder: (context) => Padding(
                     padding: EdgeInsets.all(24.0),
@@ -305,7 +305,7 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
         ]));
   }
 
-  Widget _membersListWidget(SharedSpaceNodeNested drive, List<SharedSpaceMember> members) {
+  Widget _membersListWidget(SharedSpaceNodeNested nodeNested, List<SharedSpaceMember> members) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
           width: double.infinity,
@@ -324,30 +324,67 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
           itemCount: members.length,
           itemBuilder: (context, index) {
             var member = members[index];
-            return DriveMemberListTileBuilder(
-              member.account?.name ?? '',
-              member.account?.mail ?? '',
-              member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
-              member.nestedRole?.name.getWorkgroupRoleNameInsideDrive(context) ?? AppLocalizations.of(context).unknown_role,
-              tileColor: Colors.white,
-              userCurrentDriveRole: drive.sharedSpaceRole.name,
-              onSelectedRoleDriveCallback: () => selectDriveMemberRoleBottomSheet(
-                  context,
-                  member.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
-                  drive,
-                  member),
-              onSelectedRoleWorkgroupCallback: () => selectWorkgroupRoleInsideDriveBottomSheet(
-                  context,
-                  member.nestedRole?.name ?? SharedSpaceRoleName.READER,
-                  drive,
-                  member),
-              onDeleteMemberCallback: () => _confirmDeleteMember(
-                context,
-                member.account?.name ?? '',
-                drive.name,
-                drive.sharedSpaceId,
-                member.sharedSpaceMemberId)
-            ).build();
+            if (nodeNested.nodeType == LinShareNodeType.DRIVE) {
+              return DriveMemberListTileBuilder(
+                  member.account?.name ?? '',
+                  member.account?.mail ?? '',
+                  member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+                  member.nestedRole?.name.getWorkgroupRoleNameInsideDriveOrWorkspace(context) ?? AppLocalizations.of(context).unknown_role,
+                  tileColor: Colors.white,
+                  userCurrentDriveRole: nodeNested.sharedSpaceRole.name,
+                  onSelectedRoleDriveCallback: () =>
+                      selectDriveMemberRoleBottomSheet(
+                          context,
+                          member.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
+                          nodeNested,
+                          member),
+                  onSelectedRoleWorkgroupCallback: () =>
+                      selectWorkgroupRoleInsideDriveBottomSheet(
+                          context,
+                          member.nestedRole?.name ?? SharedSpaceRoleName.READER,
+                          nodeNested,
+                          member),
+                  onDeleteMemberCallback: () =>
+                      _confirmDeleteMember(
+                          context,
+                          member.account?.name ?? '',
+                          nodeNested.name,
+                          nodeNested.sharedSpaceId,
+                          nodeNested.nodeType!,
+                          member.sharedSpaceMemberId)
+              ).build();
+            } else if (nodeNested.nodeType == LinShareNodeType.WORK_SPACE) {
+              return WorkspaceMemberListTileBuilder(
+                  member.account?.name ?? '',
+                  member.account?.mail ?? '',
+                  member.role?.name.getRoleName(context) ?? AppLocalizations.of(context).unknown_role,
+                  member.nestedRole?.name.getWorkgroupRoleNameInsideDriveOrWorkspace(context)
+                      ?? AppLocalizations.of(context).unknown_role,
+                  tileColor: Colors.white,
+                  userCurrentWorkspaceRole: nodeNested.sharedSpaceRole.name,
+                  onSelectedRoleWorkspaceCallback: () =>
+                      selectDriveMemberRoleBottomSheet(
+                          context,
+                          member.role?.name ?? SharedSpaceRoleName.WORK_SPACE_READER,
+                          nodeNested,
+                          member),
+                  onSelectedRoleWorkgroupCallback: () =>
+                      selectWorkgroupRoleInsideDriveBottomSheet(
+                          context,
+                          member.nestedRole?.name ?? SharedSpaceRoleName.READER,
+                          nodeNested,
+                          member),
+                  onDeleteMemberCallback: () =>
+                      _confirmDeleteMember(
+                          context,
+                          member.account?.name ?? '',
+                          nodeNested.name,
+                          nodeNested.sharedSpaceId,
+                          nodeNested.nodeType!,
+                          member.sharedSpaceMemberId)
+              ).build();
+            }
+            return SizedBox.shrink();
           }
       )
     ]);
@@ -355,36 +392,53 @@ class _AddDriveMemberWidgetState extends State<AddDriveMemberWidget> {
 
   void selectRoleBottomSheet(
     BuildContext context,
+    SharedSpaceNodeNested nodeNested,
     LinShareNodeType type,
     SharedSpaceRoleName selectedRole,
     List<SharedSpaceRoleName> listRoles,
     {Function(SharedSpaceRoleName)? onNewRoleUpdated}
   ) {
     SelectRoleModalSheetBuilder(
-          key: Key('select_role_on_add_drive_member'),
+          key: Key('select_role_on_add_shared_space_node_member'),
           selectedRole: selectedRole,
           listRoles: listRoles)
-      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_add_drive_member_header'))
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_add_shared_space_node_member_header'))
           .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
           .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
-          .addLabel(type == LinShareNodeType.DRIVE
-            ? AppLocalizations.of(context).role_in_this_drive
-            : AppLocalizations.of(context).member_default_role_of_all_workgroups_inside_this_drive)
+          .addLabel(_getLabelModalSheetSelectRole(nodeNested, type))
           .build())
       .onConfirmAction((role) => onNewRoleUpdated?.call(role))
       .show(context);
   }
 
+  String _getLabelModalSheetSelectRole(SharedSpaceNodeNested nodeNested, LinShareNodeType type) {
+    switch(type) {
+      case LinShareNodeType.DRIVE:
+        return AppLocalizations.of(context).role_in_this_drive;
+      case LinShareNodeType.WORK_SPACE:
+        return AppLocalizations.of(context).role_in_this_workspace;
+      case LinShareNodeType.WORK_GROUP:
+        if (nodeNested.nodeType == LinShareNodeType.DRIVE) {
+          return AppLocalizations.of(context).member_default_role_of_all_workgroups_inside_this_drive;
+        } else if (nodeNested.nodeType == LinShareNodeType.WORK_SPACE) {
+          return AppLocalizations.of(context).member_default_role_of_all_workgroups_inside_this_workspace;
+        } else {
+          return '';
+        }
+    }
+  }
+
   void _confirmDeleteMember(
       BuildContext context,
       String memberName,
-      String driveName,
+      String nodeNestedName,
       SharedSpaceId sharedSpaceId,
+      LinShareNodeType nodeType,
       SharedSpaceMemberId sharedSpaceMemberId
   ) {
-    final deleteTitle = AppLocalizations.of(context).are_you_sure_you_want_to_delete_drive_member(memberName, driveName);
+    final deleteTitle = nodeType.getTitleModalSheetDeleteMember(context, memberName, nodeNestedName);
     ConfirmModalSheetBuilder(appNavigation)
-        .key(Key('delete_member_drive_confirm_modal'))
+        .key(Key('delete_member_shared_space_node_confirm_modal'))
         .title(deleteTitle)
         .cancelText(AppLocalizations.of(context).cancel)
         .onConfirmAction(AppLocalizations.of(context).delete,

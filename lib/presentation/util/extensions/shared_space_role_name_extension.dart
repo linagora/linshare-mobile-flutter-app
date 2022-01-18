@@ -39,21 +39,24 @@ extension SharedSpaceRoleNameExtension on SharedSpaceRoleName {
     switch (this) {
       case SharedSpaceRoleName.ADMIN:
       case SharedSpaceRoleName.DRIVE_ADMIN:
+      case SharedSpaceRoleName.WORK_SPACE_ADMIN:
         return AppLocalizations.of(context).admin;
       case SharedSpaceRoleName.READER:
       case SharedSpaceRoleName.DRIVE_READER:
+      case SharedSpaceRoleName.WORK_SPACE_READER:
         return AppLocalizations.of(context).reader;
       case SharedSpaceRoleName.CONTRIBUTOR:
         return AppLocalizations.of(context).contributor;
       case SharedSpaceRoleName.WRITER:
       case SharedSpaceRoleName.DRIVE_WRITER:
+      case SharedSpaceRoleName.WORK_SPACE_WRITER:
         return AppLocalizations.of(context).writer;
       default:
         return AppLocalizations.of(context).unknown_role;
     }
   }
 
-  String getWorkgroupRoleNameInsideDrive(BuildContext context) {
+  String getWorkgroupRoleNameInsideDriveOrWorkspace(BuildContext context) {
     switch (this) {
       case SharedSpaceRoleName.ADMIN:
         return AppLocalizations.of(context).workgroup_admin;

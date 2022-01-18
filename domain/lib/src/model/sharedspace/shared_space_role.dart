@@ -52,6 +52,10 @@ class SharedSpaceRole extends Equatable {
     return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.DRIVE_READER);
   }
 
+  factory SharedSpaceRole.initialWorkspace() {
+    return SharedSpaceRole(SharedSpaceRoleId(''), SharedSpaceRoleName.WORK_SPACE_READER);
+  }
+
   @override
   List<Object?> get props => [sharedSpaceRoleId, name, type, enabled];
 }

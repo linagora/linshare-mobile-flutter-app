@@ -33,7 +33,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/add_drive_member_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_node_member_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/advance_search_settings_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
@@ -96,7 +96,7 @@ AppState appStateReducer(AppState state, action) {
         account: accountReducer(state.account, action),
         functionalityState: functionalityReducer(state.functionalityState, action),
         sharedSpaceDetailsState: sharedSpaceDetailsReducer(state.sharedSpaceDetailsState, action),
-        addDriveMemberState: addDriveMemberReducer(state.addDriveMemberState, action),
+        addSharedSpaceNodeMemberState: addSharedSpaceNodeMemberReducer(state.addSharedSpaceNodeMemberState, action),
         addSharedSpaceMembersState: addSharedSpaceMembersReducer(state.addSharedSpaceMembersState, action),
         updateSharedSpaceMembersState: updateSharedSpaceMembersReducer(state.updateSharedSpaceMembersState, action),
         deleteSharedSpaceMembersState: deleteSharedSpaceMembersReducer(state.deleteSharedSpaceMembersState, action),
@@ -143,7 +143,7 @@ AppState appStateReducer(AppState state, action) {
       account: state.account,
       functionalityState: state.functionalityState,
       sharedSpaceDetailsState: state.sharedSpaceDetailsState,
-      addDriveMemberState: state.addDriveMemberState,
+      addSharedSpaceNodeMemberState: state.addSharedSpaceNodeMemberState,
       addSharedSpaceMembersState: state.addSharedSpaceMembersState,
       updateSharedSpaceMembersState: state.updateSharedSpaceMembersState,
       deleteSharedSpaceMembersState: state.deleteSharedSpaceMembersState,

@@ -47,8 +47,8 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_widget.dart
 import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/myspace/document_details/document_details_widget.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_member/add_shared_space_member_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_shared_space_node_member_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_details/shared_space_node_details_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_node_versions/shared_space_node_versions_widget.dart';
@@ -84,8 +84,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => getIt<SecondFactorAuthenticationWidget>(), settings: settings);
     case RoutePaths.addSharedSpaceMember:
       return MaterialPageRoute(builder: (context) => getIt<AddSharedSpaceMemberWidget>(), settings: settings);
-    case RoutePaths.addDriveMember:
-      return MaterialPageRoute(builder: (context) => getIt<AddDriveMemberWidget>(), settings: settings);
+    case RoutePaths.addSharedSpaceNodeMember:
+      return MaterialPageRoute(builder: (context) => getIt<AddSharedSpaceNodeMemberWidget>(), settings: settings);
     case RoutePaths.documentDetails:
       return MaterialPageRoute(builder: (context) => getIt<DocumentDetailsWidget>(), settings: settings);
     case RoutePaths.sharedSpaceNodeDetails:

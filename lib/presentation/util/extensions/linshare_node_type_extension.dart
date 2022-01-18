@@ -148,4 +148,56 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
         return AppLocalizations.of(context).create_workspace;
     }
   }
+
+  String getTitleRoleAddMember(BuildContext context) {
+    switch(this) {
+      case LinShareNodeType.DRIVE:
+        return AppLocalizations.of(context).role_in_this_drive;
+      case LinShareNodeType.WORK_SPACE:
+        return AppLocalizations.of(context).role_in_this_workspace;
+      default:
+        return '';
+    }
+  }
+
+  List<SharedSpaceRoleName> listRoleName() {
+    switch(this) {
+      case LinShareNodeType.DRIVE:
+        return [
+          SharedSpaceRoleName.DRIVE_READER,
+          SharedSpaceRoleName.DRIVE_ADMIN,
+          SharedSpaceRoleName.DRIVE_WRITER
+        ];
+      case LinShareNodeType.WORK_SPACE:
+        return [
+          SharedSpaceRoleName.WORK_SPACE_READER,
+          SharedSpaceRoleName.WORK_SPACE_ADMIN,
+          SharedSpaceRoleName.WORK_SPACE_WRITER
+        ];
+      default:
+        return [];
+    }
+  }
+
+  String getTitleModalSheetDeleteMember(BuildContext context, String memberName, String nodeNestedName) {
+    switch(this) {
+      case LinShareNodeType.DRIVE:
+        return AppLocalizations.of(context).are_you_sure_you_want_to_delete_drive_member(memberName, nodeNestedName);
+      case LinShareNodeType.WORK_SPACE:
+        return AppLocalizations.of(context).are_you_sure_you_want_to_delete_work_space_member(memberName, nodeNestedName);
+      default:
+        return '';
+    }
+  }
+
+  SharedSpaceRole getDefaultSharedSpaceRole() {
+    switch(this) {
+      case LinShareNodeType.DRIVE:
+        return SharedSpaceRole.initialDrive();
+      case LinShareNodeType.WORK_SPACE:
+        return SharedSpaceRole.initialWorkspace();
+      case LinShareNodeType.WORK_GROUP:
+        return SharedSpaceRole.initial();
+    }
+  }
 }

@@ -423,7 +423,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
     return [
       _sharedSpaceDetailsAction(sharedSpace.element),
       if (SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.element.sharedSpaceRole.name))
-        _addDriveMemberAction(sharedSpace.element),
+        _addSharedSpaceNodeMemberAction(sharedSpace.element),
       if (SharedSpaceOperationRole.renameDriveRoles.contains(sharedSpace.element.sharedSpaceRole.name))
         _renameSharedSpaceNodeAction(context, sharedSpace.element, LinShareNodeType.DRIVE),
     ];
@@ -440,8 +440,8 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
   List<Widget> _contextWorkspaceMenuActionTiles(BuildContext context, SelectableElement<SharedSpaceNodeNested> sharedSpace) {
     return [
       _sharedSpaceDetailsAction(sharedSpace.element),
-      if (SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.element.sharedSpaceRole.name))
-        _addDriveMemberAction(sharedSpace.element),
+      if (SharedSpaceOperationRole.addWorkspaceMemberRoles.contains(sharedSpace.element.sharedSpaceRole.name))
+        _addSharedSpaceNodeMemberAction(sharedSpace.element),
       if (SharedSpaceOperationRole.renameWorkspaceRoles.contains(sharedSpace.element.sharedSpaceRole.name))
         _renameSharedSpaceNodeAction(context, sharedSpace.element, LinShareNodeType.WORK_SPACE),
     ];
@@ -499,12 +499,12 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
         .build();
   }
 
-  Widget _addDriveMemberAction(SharedSpaceNodeNested drive) {
+  Widget _addSharedSpaceNodeMemberAction(SharedSpaceNodeNested nodeNested) {
     return SimpleContextMenuActionBuilder(
-          Key('add_drive_member_context_menu_action'),
+          Key('add_shared_space_node_member_context_menu_action'),
           Icon(Icons.person_add, size: 24.0),
           AppLocalizations.of(context).add_a_member)
-      .onActionClick((data) => sharedSpaceViewModel.clickOnAddDriveMember(drive))
+      .onActionClick((data) => sharedSpaceViewModel.clickOnAddSharedSpaceNodeMember(nodeNested))
       .build();
   }
 
