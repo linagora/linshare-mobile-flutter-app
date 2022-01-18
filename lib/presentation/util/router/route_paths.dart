@@ -48,7 +48,7 @@ class RoutePaths {
   static const String enter_otp = 'enter_otp';
   static const String second_factor_authentication = 'second_factor_authentication';
   static const String addSharedSpaceMember = 'add_shared_space_member';
-  static const String addDriveMember = 'add_drive_member';
+  static const String addSharedSpaceNodeMember = 'add_shared_space_node_member';
   static const String documentDetails = 'document_details';
   static const String sharedSpaceNodeDetails = 'shared_space_node_details';
   static const String biometricAuthenticationSetting = 'biometricAuthenticationSetting';

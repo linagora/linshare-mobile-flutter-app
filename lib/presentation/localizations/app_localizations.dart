@@ -2899,6 +2899,28 @@ class AppLocalizations {
         name: 'create_workspace'
     );
   }
+
+  String get role_in_this_workspace {
+    return Intl.message(
+      'Role in this workspace',
+      name: 'role_in_this_workspace',
+    );
+  }
+
+  String get member_default_role_of_all_workgroups_inside_this_workspace {
+    return Intl.message(
+      'Member\'s default role of all workgroups inside this workspace',
+      name: 'member_default_role_of_all_workgroups_inside_this_workspace',
+    );
+  }
+
+  String are_you_sure_you_want_to_delete_work_space_member(String memberName, String workspaceName) {
+    return Intl.message(
+      'Are you sure you want to delete $memberName from the workspace $workspaceName and all related workgroups?',
+      name: 'are_you_sure_you_want_to_delete_drive_member',
+      args: [memberName, workspaceName],
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -59,8 +59,8 @@ import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_moda
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_member_destination.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_member_destination.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_shared_space_node_member_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -400,17 +400,17 @@ class SharedSpaceViewModel extends BaseViewModel {
     );
   }
 
-  void clickOnAddDriveMember(SharedSpaceNodeNested drive) {
+  void clickOnAddSharedSpaceNodeMember(SharedSpaceNodeNested nodeNested) {
     store.dispatch(OnlineThunkAction((Store<AppState> store) async {
-      _goToAddDriveMember(drive);
+      _goToAddSharedSpaceNodeMember(nodeNested);
     }));
   }
 
-  void _goToAddDriveMember(SharedSpaceNodeNested drive) {
+  void _goToAddSharedSpaceNodeMember(SharedSpaceNodeNested nodeNested) {
     _appNavigation.popBack();
     _appNavigation.push(
-        RoutePaths.addDriveMember,
-        arguments: AddDriveMemberArguments(drive, AddMemberDestination.sharedSpaceView)
+        RoutePaths.addSharedSpaceNodeMember,
+        arguments: AddSharedSpaceNodeMemberArguments(nodeNested, AddMemberDestination.sharedSpaceView)
     );
   }
 

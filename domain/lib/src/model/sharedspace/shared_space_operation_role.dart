@@ -68,6 +68,10 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.DRIVE_ADMIN,
   ];
 
+  static const addWorkspaceMemberRoles = [
+    SharedSpaceRoleName.WORK_SPACE_ADMIN,
+  ];
+
   static const addWorkgroupInsideDrive = [
     SharedSpaceRoleName.DRIVE_ADMIN,
     SharedSpaceRoleName.DRIVE_WRITER,
@@ -85,8 +89,16 @@ class SharedSpaceOperationRole {
     SharedSpaceRoleName.DRIVE_ADMIN,
   ];
 
+  static const deleteWorkspaceMemberRoles = [
+    SharedSpaceRoleName.WORK_SPACE_ADMIN,
+  ];
+
   static const editDriveMemberRoles = [
     SharedSpaceRoleName.DRIVE_ADMIN,
+  ];
+
+  static const editWorkspaceMemberRoles = [
+    SharedSpaceRoleName.WORK_SPACE_ADMIN,
   ];
 
   static const deleteNodeSharedSpaceRoles = [

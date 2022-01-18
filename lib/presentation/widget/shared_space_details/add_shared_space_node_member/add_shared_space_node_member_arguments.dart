@@ -31,12 +31,12 @@
 
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_member_destination.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_member_destination.dart';
 
-class AddDriveMemberArguments extends RouterArguments {
-  final SharedSpaceNodeNested drive;
+class AddSharedSpaceNodeMemberArguments extends RouterArguments {
+  final SharedSpaceNodeNested nodeNested;
   final List<SharedSpaceMember>? members;
   final AddMemberDestination destination;
 
-  AddDriveMemberArguments(this.drive, this.destination, {this.members});
+  AddSharedSpaceNodeMemberArguments(this.nodeNested, this.destination, {this.members});
 }
