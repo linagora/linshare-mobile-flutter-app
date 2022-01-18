@@ -57,6 +57,7 @@ class LoginViewModel extends BaseViewModel {
   final GetTokenOIDCInteractor _getTokenOIDCInteractor;
   final AppNavigation _appNavigation;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
+  final DynamicAPIVersionSupportInterceptor _dynamicAPIVersionSupportInterceptor;
   final GetOIDCConfigurationInteractor _getOIDCConfigurationInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
   final GetSaaSConfigurationInteractor _getSaaSConfigurationInteractor;
@@ -68,6 +69,7 @@ class LoginViewModel extends BaseViewModel {
     this._getTokenOIDCInteractor,
     this._appNavigation,
     this._dynamicUrlInterceptors,
+    this._dynamicAPIVersionSupportInterceptor,
     this._getOIDCConfigurationInteractor,
     this._verifyNameInteractor,
     this._getSaaSConfigurationInteractor,
@@ -343,6 +345,7 @@ class LoginViewModel extends BaseViewModel {
       store.dispatch(AuthenticationAction(Right(success)));
 
       _dynamicUrlInterceptors.changeBaseUrl(_urlText.formatURLValid());
+      _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersionSupported;
 
       await _appNavigation.push(
         RoutePaths.authentication,

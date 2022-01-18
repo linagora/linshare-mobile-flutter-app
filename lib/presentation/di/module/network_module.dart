@@ -56,12 +56,14 @@ class NetworkModule {
     getIt.registerSingleton<DynamicUrlInterceptors>(DynamicUrlInterceptors());
     getIt.registerSingleton<CookieInterceptors>(CookieInterceptors());
     getIt.registerSingleton<RetryAuthenticationInterceptors>(RetryAuthenticationInterceptors(getIt<Dio>()));
+    getIt.registerSingleton<DynamicAPIVersionSupportInterceptor>(DynamicAPIVersionSupportInterceptor());
   }
 
   void _provideDio() {
     getIt.registerSingleton(Dio(getIt<BaseOptions>()));
     _provideInterceptors();
     getIt<Dio>().interceptors.add(getIt<DynamicUrlInterceptors>());
+    getIt<Dio>().interceptors.add(getIt<DynamicAPIVersionSupportInterceptor>());
     getIt<Dio>().interceptors.add(getIt<CookieInterceptors>());
     getIt<Dio>().interceptors.add(getIt<RetryAuthenticationInterceptors>());
     if (kDebugMode) {
