@@ -36,6 +36,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
+import '../../mock/repository/authentication/mock_api_repository.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
 import '../../mock/repository/authentication/mock_document_repository.dart';
 import '../../mock/repository/authentication/mock_token_repository.dart';
@@ -45,6 +46,7 @@ void main() {
     late MockDocumentRepository documentRepository;
     late MockTokenRepository tokenRepository;
     late MockCredentialRepository credentialRepository;
+    late MockAPIRepository apiRepository;
     late DownloadFileInteractor downloadFileInteractor;
     late DocumentId documentId;
 
@@ -52,14 +54,15 @@ void main() {
       documentRepository = MockDocumentRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
+      apiRepository = MockAPIRepository();
       documentId = DocumentId('383-384-C');
-      downloadFileInteractor = DownloadFileInteractor(documentRepository, tokenRepository, credentialRepository);
+      downloadFileInteractor = DownloadFileInteractor(documentRepository, tokenRepository, credentialRepository, apiRepository);
     });
 
     test('downloadFileInteractor should return success with correct document ID', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(documentRepository.downloadDocuments([documentId], permanentToken, linShareBaseUrl))
+      when(documentRepository.downloadDocuments([documentId], permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
       final result = await downloadFileInteractor.execute([documentId]);
@@ -74,7 +77,8 @@ void main() {
       final documentId2 = DocumentId('383-384-D');
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(documentRepository.downloadDocuments([documentId, documentId2], permanentToken, linShareBaseUrl))
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(documentRepository.downloadDocuments([documentId, documentId2], permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1'), DownloadTaskId('task_id_2')]);
 
       final result = await downloadFileInteractor.execute([documentId, documentId2]);
@@ -90,8 +94,9 @@ void main() {
     test('downloadFileInteractor should fail with wrong baseUrl', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => wrongUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       final exception = Exception();
-      when(documentRepository.downloadDocuments([documentId], permanentToken, wrongUrl)).thenThrow(exception);
+      when(documentRepository.downloadDocuments([documentId], permanentToken, wrongUrl, APIVersionSupported.v4)).thenThrow(exception);
 
       final result = await downloadFileInteractor.execute([documentId]);
 
@@ -105,7 +110,8 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenThrow(exception);
-      when(documentRepository.downloadDocuments([documentId], permanentToken, wrongUrl)).thenThrow(exception);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(documentRepository.downloadDocuments([documentId], permanentToken, wrongUrl, APIVersionSupported.v4)).thenThrow(exception);
 
       final result = await downloadFileInteractor.execute([documentId]);
 
@@ -119,7 +125,8 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       final exception = Exception();
-      when(documentRepository.downloadDocuments([documentId], wrongToken, linShareBaseUrl)).thenThrow(exception);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(documentRepository.downloadDocuments([documentId], wrongToken, linShareBaseUrl, APIVersionSupported.v4)).thenThrow(exception);
 
       final result = await downloadFileInteractor.execute([documentId]);
 
@@ -133,10 +140,11 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenThrow(exception);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(documentRepository.downloadDocuments([documentId], permanentToken, wrongUrl))
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(documentRepository.downloadDocuments([documentId], permanentToken, wrongUrl, APIVersionSupported.v4))
         .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
-      when(documentRepository.downloadDocuments([documentId], permanentToken, wrongUrl))
+      when(documentRepository.downloadDocuments([documentId], permanentToken, wrongUrl, APIVersionSupported.v4))
         .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
       final result = await downloadFileInteractor.execute([documentId]);

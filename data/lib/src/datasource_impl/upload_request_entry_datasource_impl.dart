@@ -36,12 +36,12 @@ import 'package:data/src/datasource/upload_request_entry_datasource.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_download_manager.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/response/upload_request_entry_response.dart';
 import 'package:data/src/network/model/upload_request/upload_request_entry_audit_log_entry_dto.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:data/src/network/model/response/upload_request_entry_response.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -73,7 +73,7 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> entries, Token token, Uri baseUrl) async {
+  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> entries, Token token, Uri baseUrl, APIVersionSupported apiVersion) async {
     var externalStorageDirPath;
     if (Platform.isAndroid) {
       externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
@@ -87,7 +87,7 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
         entries.map((entry) async => await FlutterDownloader.enqueue(
         url: Endpoint.uploadRequestsEntriesRoute
             .downloadServicePath(entry.uploadRequestEntryId!.uuid)
-            .generateDownloadUrl(baseUrl),
+            .generateDownloadUrl(baseUrl, apiVersion),
         savedDir: externalStorageDirPath,
         fileName: entry.name,
         headers: {Constant.authorization: 'Bearer ${token.token}'},
@@ -105,7 +105,7 @@ class UploadRequestEntryDataSourceImpl implements UploadRequestEntryDataSource {
     return _linShareDownloadManager.downloadFile(
         Endpoint.uploadRequestsEntriesRoute
             .downloadServicePath(uploadRequestEntry.uploadRequestEntryId!.uuid)
-            .generateDownloadUrl(baseUrl),
+            .generateEndpointPath(),
         getTemporaryDirectory(),
         uploadRequestEntry.name,
         token,

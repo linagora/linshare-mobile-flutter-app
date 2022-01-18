@@ -37,6 +37,7 @@ import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../fixture/test_fixture.dart';
+import '../../mock/repository/authentication/mock_api_repository.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
 import '../../mock/repository/authentication/mock_token_repository.dart';
 import '../../mock/repository/received/mock_received_share_repository.dart';
@@ -46,19 +47,22 @@ void main() {
     late MockReceivedShareRepository receivedShareRepository;
     late MockTokenRepository tokenRepository;
     late MockCredentialRepository credentialRepository;
+    late MockAPIRepository apiRepository;
     late DownloadReceivedSharesInteractor downloadReceivedSharesInteractor;
 
     setUp(() {
       receivedShareRepository = MockReceivedShareRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
-      downloadReceivedSharesInteractor = DownloadReceivedSharesInteractor(receivedShareRepository, tokenRepository, credentialRepository);
+      apiRepository = MockAPIRepository();
+      downloadReceivedSharesInteractor = DownloadReceivedSharesInteractor(receivedShareRepository, tokenRepository, credentialRepository, apiRepository);
     });
 
     test('downloadReceivedSharesInteractor should return success with correct received share ID', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], permanentToken, linShareBaseUrl))
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
       final result = await downloadReceivedSharesInteractor.execute([receivedShare1.shareId]);
@@ -72,7 +76,8 @@ void main() {
     test('downloadReceivedSharesInteractor should return success with multiple received share ID', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId, receivedShare2.shareId], permanentToken, linShareBaseUrl))
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId, receivedShare2.shareId], permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1'), DownloadTaskId('task_id_2')]);
 
       final result = await downloadReceivedSharesInteractor.execute([receivedShare1.shareId, receivedShare2.shareId]);
@@ -88,8 +93,9 @@ void main() {
     test('downloadReceivedSharesInteractor should fail with wrong baseUrl', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => wrongUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       final exception = Exception();
-      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], permanentToken, wrongUrl)).thenThrow(exception);
+      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], permanentToken, wrongUrl, APIVersionSupported.v4)).thenThrow(exception);
 
       final result = await downloadReceivedSharesInteractor.execute([receivedShare1.shareId]);
 
@@ -103,7 +109,8 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenThrow(exception);
-      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], permanentToken, wrongUrl)).thenThrow(exception);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], permanentToken, wrongUrl, APIVersionSupported.v4)).thenThrow(exception);
 
       final result = await downloadReceivedSharesInteractor.execute([receivedShare1.shareId]);
 
@@ -116,8 +123,9 @@ void main() {
     test('downloadReceivedSharesInteractor should fail with wrong token', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       final exception = Exception();
-      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], wrongToken, linShareBaseUrl)).thenThrow(exception);
+      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], wrongToken, linShareBaseUrl, APIVersionSupported.v4)).thenThrow(exception);
 
       final result = await downloadReceivedSharesInteractor.execute([receivedShare1.shareId]);
 
@@ -131,7 +139,8 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenThrow(exception);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], permanentToken, wrongUrl))
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(receivedShareRepository.downloadReceivedShares([receivedShare1.shareId], permanentToken, wrongUrl, APIVersionSupported.v4))
         .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
       final result = await downloadReceivedSharesInteractor.execute([receivedShare1.shareId]);
