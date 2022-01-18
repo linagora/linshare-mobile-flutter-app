@@ -36,16 +36,17 @@ class DownloadReceivedSharesInteractor {
   final ReceivedShareRepository _receivedShareRepository;
   final TokenRepository _tokenRepository;
   final CredentialRepository _credentialRepository;
+  final APIRepository _apiRepository;
 
-  DownloadReceivedSharesInteractor(this._receivedShareRepository, this._tokenRepository, this._credentialRepository);
+  DownloadReceivedSharesInteractor(this._receivedShareRepository, this._tokenRepository, this._credentialRepository, this._apiRepository);
 
   Future<Either<Failure, Success>> execute(List<ShareId> shareIds) async {
     try {
       final taskIds = await Future.wait(
-          [_tokenRepository.getToken(), _credentialRepository.getBaseUrl()],
+          [_tokenRepository.getToken(), _credentialRepository.getBaseUrl(), _apiRepository.getAPIVersionSupported()],
           eagerError: true)
         .then((List responses) async => await _receivedShareRepository
-          .downloadReceivedShares(shareIds, responses.first, responses.last));
+          .downloadReceivedShares(shareIds, responses.first, responses[1], responses.last));
 
       return Right<Failure, Success>(DownloadReceivedShareViewState(taskIds));
     } catch (exception) {

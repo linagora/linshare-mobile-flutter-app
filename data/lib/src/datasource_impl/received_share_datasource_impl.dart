@@ -75,7 +75,7 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) async {
+  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl, APIVersionSupported apiVersion) async {
     var externalStorageDirPath;
     if (Platform.isAndroid) {
       externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
@@ -89,7 +89,7 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
         shareIds.map((shareId) async => await FlutterDownloader.enqueue(
             url: Endpoint.receivedShares
               .downloadServicePath(shareId.uuid)
-              .generateDownloadUrl(baseUrl),
+              .generateDownloadUrl(baseUrl, apiVersion),
             savedDir: externalStorageDirPath,
             headers: {Constant.authorization: 'Bearer ${token.token}'},
             showNotification: true,
@@ -108,7 +108,7 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.receivedShares
           .downloadServicePath(receivedShare.shareId.uuid)
-          .generateDownloadUrl(baseUrl);
+          .generateEndpointPath();
     } else {
       downloadUrl = Endpoint.receivedShares
           .withPathParameter(receivedShare.shareId.uuid)
@@ -169,7 +169,7 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
     return _linShareDownloadManager.downloadFile(
         Endpoint.receivedShares
             .downloadServicePath(receivedShare.shareId.uuid)
-            .generateDownloadUrl(baseUrl),
+            .generateEndpointPath(),
         getTemporaryDirectory(),
         receivedShare.name,
         permanentToken,
@@ -187,7 +187,7 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.receivedShares
         .downloadServicePath(shareId.uuid)
-        .generateDownloadUrl(baseUrl);
+        .generateEndpointPath();
     } else {
       downloadUrl = Endpoint.receivedShares
         .withPathParameter(shareId.uuid)
