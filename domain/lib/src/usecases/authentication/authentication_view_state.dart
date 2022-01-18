@@ -34,8 +34,9 @@ import 'package:domain/src/model/authentication/token.dart';
 
 class AuthenticationViewState extends ViewState {
   final Token token;
+  final APIVersionSupported apiVersionSupported;
 
-  AuthenticationViewState(this.token);
+  AuthenticationViewState(this.token, this.apiVersionSupported);
 
   @override
   List<Object> get props => [token];

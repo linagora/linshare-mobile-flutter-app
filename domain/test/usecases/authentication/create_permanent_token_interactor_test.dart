@@ -36,6 +36,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
+import '../../mock/repository/authentication/mock_api_repository.dart';
 import '../../mock/repository/authentication/mock_authentication_repository.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
 import '../../mock/repository/authentication/mock_token_repository.dart';
@@ -47,54 +48,58 @@ void main() {
     late MockAuthenticationRepository authenticationRepository;
     MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
+    MockAPIRepository apiRepository;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
+      apiRepository = MockAPIRepository();
       createPermanentTokenInteractor = CreatePermanentTokenInteractor(
           authenticationRepository,
           tokenRepository,
-          credentialRepository);
+          credentialRepository,
+          apiRepository
+      );
     });
 
     test('createPermanentTokenInteractor should return success with correct data', () async {
-      when(authenticationRepository.createPermanentToken(linShareBaseUrl, userName1, password1))
+      when(authenticationRepository.createPermanentToken(linShareBaseUrl, APIVersionSupported.v4, userName1, password1))
           .thenAnswer((_) async => permanentToken);
       final result = await createPermanentTokenInteractor.execute(linShareBaseUrl, userName1, password1);
-      expect(result, Right<Failure, Success>(AuthenticationViewState(permanentToken)));
+      expect(result, Right<Failure, Success>(AuthenticationViewState(permanentToken, APIVersionSupported.v4)));
     });
 
     test('createPermanentTokenInteractor should failure with wrong url', () async {
-      when(authenticationRepository.createPermanentToken(wrongUrl, userName1, password1))
+      when(authenticationRepository.createPermanentToken(wrongUrl, APIVersionSupported.v4, userName1, password1))
           .thenThrow(ServerNotFound());
       final result = await createPermanentTokenInteractor.execute(wrongUrl, userName1, password1);
       expect(result, Left<Failure, Success>(AuthenticationFailure(ServerNotFound())));
     });
 
     test('createPermanentTokenInteractor should failure with wrong userName', () async {
-      when(authenticationRepository.createPermanentToken(linShareBaseUrl, userName2, password1))
+      when(authenticationRepository.createPermanentToken(linShareBaseUrl, APIVersionSupported.v4, userName2, password1))
           .thenThrow(BadCredentials());
       final result = await createPermanentTokenInteractor.execute(linShareBaseUrl, userName2, password1);
       expect(result, Left<Failure, Success>(AuthenticationFailure(BadCredentials())));
     });
 
     test('createPermanentTokenInteractor should failure with wrong password', () async {
-      when(authenticationRepository.createPermanentToken(linShareBaseUrl, userName1, password2))
+      when(authenticationRepository.createPermanentToken(linShareBaseUrl, APIVersionSupported.v4, userName1, password2))
           .thenThrow(BadCredentials());
       final result = await createPermanentTokenInteractor.execute(linShareBaseUrl, userName1, password2);
       expect(result, Left<Failure, Success>(AuthenticationFailure(BadCredentials())));
     });
 
     test('createPermanentTokenInteractor should failure with connection error', () async {
-      when(authenticationRepository.createPermanentToken(linShareBaseUrl, userName1, password1))
+      when(authenticationRepository.createPermanentToken(linShareBaseUrl, APIVersionSupported.v4, userName1, password1))
           .thenThrow(ConnectError());
       final result = await createPermanentTokenInteractor.execute(linShareBaseUrl, userName1, password1);
       expect(result, Left<Failure, Success>(AuthenticationFailure(ConnectError())));
     });
 
     test('createPermanentTokenInteractor should failure with unknown error', () async {
-      when(authenticationRepository.createPermanentToken(linShareBaseUrl, userName1, password1))
+      when(authenticationRepository.createPermanentToken(linShareBaseUrl, APIVersionSupported.v4, userName1, password1))
           .thenThrow(UnknownError('unknown error'));
       final result = await createPermanentTokenInteractor.execute(linShareBaseUrl, userName1, password1);
       expect(result, Left<Failure, Success>(AuthenticationFailure(UnknownError('unknown error'))));
