@@ -53,7 +53,8 @@ abstract class SharedSpaceDocumentDataSource {
   Future<List<DownloadTaskId>> downloadNodes(
     List<WorkGroupNode> workgroupNodes,
     Token token,
-    Uri baseUrl
+    Uri baseUrl,
+    APIVersionSupported apiVersion
   );
 
   Future<String> downloadNodeIOS(
