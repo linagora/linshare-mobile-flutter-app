@@ -38,19 +38,23 @@ class DownloadUploadRequestEntriesInteractor {
   final UploadRequestEntryRepository _uploadRequestEntryRepository;
   final TokenRepository _tokenRepository;
   final CredentialRepository _credentialRepository;
+  final APIRepository _apiRepository;
 
   DownloadUploadRequestEntriesInteractor(
       this._uploadRequestEntryRepository,
       this._tokenRepository,
-      this._credentialRepository);
+      this._credentialRepository,
+      this._apiRepository);
 
   Future<Either<Failure, Success>> execute(List<UploadRequestEntry> uploadRequestEntry) async {
     try {
       final taskIds = await Future.wait([
-        _tokenRepository.getToken(),
-        _credentialRepository.getBaseUrl()],
-        eagerError: true).then((List responses) async =>
-          await _uploadRequestEntryRepository.downloadUploadRequestEntries(uploadRequestEntry, responses.first, responses.last));
+          _tokenRepository.getToken(),
+          _credentialRepository.getBaseUrl(),
+          _apiRepository.getAPIVersionSupported()
+          ], eagerError: true)
+        .then((List responses) async =>
+          await _uploadRequestEntryRepository.downloadUploadRequestEntries(uploadRequestEntry, responses.first, responses[1], responses.last));
       return Right<Failure, Success>(DownloadEntriesSuccessViewState(taskIds));
     } catch (exception) {
       return Left<Failure, Success>(DownloadEntriesFailure(exception));

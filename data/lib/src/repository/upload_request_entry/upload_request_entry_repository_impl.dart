@@ -44,8 +44,8 @@ class UploadRequestEntryRepositoryImpl implements UploadRequestEntryRepository {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl) {
-    return _uploadRequestEntryDataSource.downloadUploadRequestEntries(uploadRequestEntry, token, baseUrl);
+  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl, APIVersionSupported apiVersion) {
+    return _uploadRequestEntryDataSource.downloadUploadRequestEntries(uploadRequestEntry, token, baseUrl, apiVersion);
   }
 
   @override
