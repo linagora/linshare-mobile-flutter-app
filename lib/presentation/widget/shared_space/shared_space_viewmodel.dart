@@ -117,7 +117,8 @@ class SharedSpaceViewModel extends BaseViewModel {
                   _searchQuery = SearchQuery('');
                 } else if (success is CreateWorkGroupViewState ||
                     success is CreateNewDriveViewState ||
-                    success is CreateNewWorkSpaceViewState) {
+                    success is CreateNewWorkSpaceViewState ||
+                    success is DeleteSharedSpaceMemberViewState) {
                   getAllSharedSpaces(needToGetOldSorter: false);
                 }
               });
