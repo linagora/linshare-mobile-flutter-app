@@ -52,7 +52,7 @@ class LocalReceivedShareDataSource extends ReceivedShareDataSource {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) {
+  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl, APIVersionSupported apiVersionSupported) {
     throw UnimplementedError();
   }
 
