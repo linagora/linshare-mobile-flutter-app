@@ -36,7 +36,7 @@ import 'package:domain/domain.dart';
 abstract class UploadRequestEntryRepository {
   Future<List<UploadRequestEntry>> getAllUploadRequestEntries(UploadRequestId uploadRequestId);
 
-  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl);
+  Future<List<DownloadTaskId>> downloadUploadRequestEntries(List<UploadRequestEntry> uploadRequestEntry, Token token, Uri baseUrl, APIVersionSupported apiVersion);
 
   Future<String> downloadUploadRequestEntryIOS(UploadRequestEntry uploadRequestEntry, Token token, Uri baseUrl, CancelToken cancelToken);
 

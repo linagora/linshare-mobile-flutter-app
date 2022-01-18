@@ -38,6 +38,7 @@ import 'package:test/test.dart';
 import 'package:testshared/fixture/upload_request_entry_fixture.dart';
 
 import '../../fixture/test_fixture.dart';
+import '../../mock/repository/authentication/mock_api_repository.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
 import '../../mock/repository/authentication/mock_token_repository.dart';
 import '../../mock/repository/mock_upload_request_entry_repository.dart';
@@ -47,19 +48,22 @@ void main() {
     late MockUploadRequestEntryRepository uploadRequestEntryRepository;
     late MockTokenRepository tokenRepository;
     late MockCredentialRepository credentialRepository;
+    late APIRepository apiRepository;
     late DownloadUploadRequestEntriesInteractor downloadUploadRequestEntriesInteractor;
 
     setUp(() {
       uploadRequestEntryRepository = MockUploadRequestEntryRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
-      downloadUploadRequestEntriesInteractor = DownloadUploadRequestEntriesInteractor(uploadRequestEntryRepository, tokenRepository, credentialRepository);
+      apiRepository = MockAPIRepository();
+      downloadUploadRequestEntriesInteractor = DownloadUploadRequestEntriesInteractor(uploadRequestEntryRepository, tokenRepository, credentialRepository, apiRepository);
     });
 
     test('download should return success with correct download task ID', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1], permanentToken, linShareBaseUrl))
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1], permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
       final result = await downloadUploadRequestEntriesInteractor.execute([uploadRequestEntry1]);
@@ -73,7 +77,8 @@ void main() {
     test('download should return success with multiple download task ID', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1, uploadRequestEntry2], permanentToken, linShareBaseUrl))
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1, uploadRequestEntry2], permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1'), DownloadTaskId('task_id_2')]);
 
       final result = await downloadUploadRequestEntriesInteractor.execute([uploadRequestEntry1, uploadRequestEntry2]);
@@ -92,7 +97,8 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenThrow(exception);
-      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1], permanentToken, wrongUrl)).thenThrow(exception);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1], permanentToken, wrongUrl, APIVersionSupported.v4)).thenThrow(exception);
 
       final result = await downloadUploadRequestEntriesInteractor.execute([uploadRequestEntry1]);
 
@@ -105,8 +111,9 @@ void main() {
     test('download should fail with wrong token', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       final exception = Exception();
-      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1], wrongToken, linShareBaseUrl)).thenThrow(exception);
+      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1], wrongToken, linShareBaseUrl, APIVersionSupported.v4)).thenThrow(exception);
 
       final result = await downloadUploadRequestEntriesInteractor.execute([uploadRequestEntry1]);
 
@@ -120,7 +127,8 @@ void main() {
       final exception = Exception();
       when(tokenRepository.getToken()).thenThrow(exception);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1], permanentToken, wrongUrl))
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
+      when(uploadRequestEntryRepository.downloadUploadRequestEntries([uploadRequestEntry1], permanentToken, wrongUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 
       final result = await downloadUploadRequestEntriesInteractor.execute([uploadRequestEntry1]);
