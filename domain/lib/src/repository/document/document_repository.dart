@@ -48,7 +48,7 @@ abstract class DocumentRepository {
 
   Future<List<Document>> getAll();
 
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl);
+  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl, APIVersionSupported apiVersion);
 
   Future<List<Share>> share(List<DocumentId> documentIds, List<MailingListId> mailingListIds, List<GenericUser> recipients);
 

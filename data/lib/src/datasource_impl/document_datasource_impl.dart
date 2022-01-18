@@ -76,7 +76,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl) async {
+  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl, APIVersionSupported apiVersion) async {
     var externalStorageDirPath;
     if (Platform.isAndroid) {
       externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
@@ -87,10 +87,10 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     }
 
     final taskIds = await Future.wait(
-        documentIds.map((documentId) async => await FlutterDownloader.enqueue(
+        documentIds.map((documentId) async => await  FlutterDownloader.enqueue(
             url: Endpoint.documents
               .downloadServicePath(documentId.uuid)
-              .generateDownloadUrl(baseUrl),
+              .generateDownloadUrl(baseUrl, apiVersion),
             savedDir: externalStorageDirPath,
             headers: {Constant.authorization: 'Bearer ${token.token}'},
             showNotification: true,
@@ -136,7 +136,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     return _linShareDownloadManager.downloadFile(
         Endpoint.documents
             .downloadServicePath(document.documentId.uuid)
-            .generateDownloadUrl(baseUrl),
+            .generateEndpointPath(),
         getTemporaryDirectory(),
         document.name,
         permanentToken,
@@ -183,7 +183,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.documents
           .downloadServicePath(document.documentId.uuid)
-          .generateDownloadUrl(baseUrl);
+          .generateEndpointPath();
     } else {
       downloadUrl = Endpoint.documents
           .withPathParameter(document.documentId.uuid)
@@ -257,7 +257,7 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.documents
         .downloadServicePath(documentId.uuid)
-        .generateDownloadUrl(baseUrl);
+        .generateEndpointPath();
     } else {
       downloadUrl = Endpoint.documents
         .withPathParameter(documentId.uuid)

@@ -110,8 +110,8 @@ extension ServicePathExtension on ServicePath {
     return ServicePath('$path/$resourceId${Endpoint.download}');
   }
 
-  String generateDownloadUrl(Uri baseUrl) {
-    return baseUrl.origin + generateEndpointPath();
+  String generateDownloadUrl(Uri baseUrl, APIVersionSupported apiVersionSupported) {
+    return baseUrl.origin + Endpoint.rootPath + '/' + apiVersionSupported.value + path;
   }
 
   ServicePath append(ServicePath other) {
