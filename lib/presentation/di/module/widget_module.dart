@@ -258,6 +258,7 @@ class WidgetModule {
       getIt.get<GetCredentialInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
+      getIt.get<DynamicAPIVersionSupportInterceptor>(),
       getIt.get<RetryAuthenticationInterceptors>(),
       getIt.get<UploadFileManager>(),
       getIt<Connectivity>(),

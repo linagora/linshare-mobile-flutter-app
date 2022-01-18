@@ -35,11 +35,12 @@ import 'package:domain/src/model/authentication/token.dart';
 class CredentialViewState extends ViewState {
   final Token token;
   final Uri baseUrl;
+  final APIVersionSupported apiVersion;
 
-  CredentialViewState(this.token, this.baseUrl);
+  CredentialViewState(this.token, this.baseUrl, this.apiVersion);
 
   @override
-  List<Object> get props => [token, baseUrl];
+  List<Object> get props => [token, baseUrl, apiVersion];
 }
 
 class CredentialFailure extends FeatureFailure {

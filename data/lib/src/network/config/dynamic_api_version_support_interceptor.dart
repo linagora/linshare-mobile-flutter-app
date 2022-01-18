@@ -45,6 +45,10 @@ class DynamicAPIVersionSupportInterceptor extends InterceptorsWrapper {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     developer.log('Options Path: ${options.path}', name: 'DynamicAPIVersionSupportInterceptor');
+    if (options.path.contains(_rootPath)) {
+      super.onRequest(options, handler);
+      return;
+    }
     if (!options.path.startsWith('http')) {
       options.path = _rootPath + '/' + _apiVersionSupported.value + options.path;
     }
