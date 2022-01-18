@@ -52,14 +52,18 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
       FileInfo fileInfo,
       Token token,
       Uri baseUrl,
+      APIVersionSupported apiVersion,
       SharedSpaceId sharedSpaceId,
       {WorkGroupNodeId? parentNodeId}) {
     final queryParameters = parentNodeId == null
         ? <QueryParameter>[]
         : [StringQueryParameter('parent', parentNodeId.uuid)];
-    final url = baseUrl.withServicePath(Endpoint.sharedSpaces
+    final url = baseUrl.withServicePath(
+      Endpoint.sharedSpaces
         .withPathParameter('${sharedSpaceId.uuid}${Endpoint.nodes}')
-        .withQueryParameters(queryParameters));
+        .withQueryParameters(queryParameters),
+      apiVersion
+    );
 
     return _fileUploadDataSource.upload(fileInfo, token, url);
   }
