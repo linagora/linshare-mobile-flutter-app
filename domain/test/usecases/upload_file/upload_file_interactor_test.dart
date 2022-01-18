@@ -36,6 +36,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
+import '../../mock/repository/authentication/mock_api_repository.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
 import '../../mock/repository/authentication/mock_document_repository.dart';
 import '../../mock/repository/authentication/mock_token_repository.dart';
@@ -45,6 +46,7 @@ void main() {
     late MockDocumentRepository documentRepository;
     late MockTokenRepository tokenRepository;
     late MockCredentialRepository credentialRepository;
+    late MockAPIRepository apiRepository;
     late UploadMySpaceDocumentInteractor uploadFileInteractor;
     late UploadTaskId uploadTaskId;
 
@@ -52,14 +54,15 @@ void main() {
       documentRepository = MockDocumentRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
+      apiRepository = MockAPIRepository();
       uploadTaskId = UploadTaskId('upload_task_id_1');
-      uploadFileInteractor = UploadMySpaceDocumentInteractor(documentRepository, tokenRepository, credentialRepository);
+      uploadFileInteractor = UploadMySpaceDocumentInteractor(documentRepository, tokenRepository, credentialRepository, apiRepository);
     });
 
     test('uploadFileInteractor should return success with correct data', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(documentRepository.upload(fileInfo1, permanentToken, linShareBaseUrl))
+      when(documentRepository.upload(fileInfo1, permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => uploadTaskId);
 
       final result = await uploadFileInteractor.execute(fileInfo1);
@@ -71,7 +74,7 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => wrongUrl);
       final exception = Exception();
-      when(documentRepository.upload(fileInfo1, permanentToken, wrongUrl))
+      when(documentRepository.upload(fileInfo1, permanentToken, wrongUrl, APIVersionSupported.v4))
           .thenThrow(exception);
 
       final result = await uploadFileInteractor.execute(fileInfo1);
@@ -84,7 +87,7 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       final exception = Exception();
-      when(documentRepository.upload(fileInfo1, wrongToken, linShareBaseUrl))
+      when(documentRepository.upload(fileInfo1, wrongToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenThrow(exception);
 
       final result = await uploadFileInteractor.execute(fileInfo1);
