@@ -40,5 +40,7 @@ abstract class SharedSpaceMemberRepository {
 
   Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request, {bool? isOverrideRoleForAll});
 
+  Future<SharedSpaceMember> updateWorkspaceMemberRole(SharedSpaceId sharedSpaceId, UpdateWorkspaceMemberRequest request, {bool? isOverrideRoleForAll});
+
   Future<SharedSpaceMember> deleteMember(SharedSpaceId sharedSpaceId, SharedSpaceMemberId sharedSpaceMemberId);
 }

@@ -61,4 +61,9 @@ class SharedSpaceMemberRepositoryImpl implements SharedSpaceMemberRepository {
   Future<SharedSpaceMember> updateDriveMemberRole(SharedSpaceId sharedSpaceId, UpdateDriveMemberRequest request, {bool? isOverrideRoleForAll}) {
     return _sharedSpaceMemberDataSource.updateDriveMemberRole(sharedSpaceId, request, isOverrideRoleForAll: isOverrideRoleForAll);
   }
+
+  @override
+  Future<SharedSpaceMember> updateWorkspaceMemberRole(SharedSpaceId sharedSpaceId, UpdateWorkspaceMemberRequest request, {bool? isOverrideRoleForAll}) {
+    return _sharedSpaceMemberDataSource.updateWorkspaceMemberRole(sharedSpaceId, request, isOverrideRoleForAll: isOverrideRoleForAll);
+  }
 }

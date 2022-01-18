@@ -160,7 +160,7 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
     }
   }
 
-  List<SharedSpaceRoleName> listRoleName() {
+  List<SharedSpaceRoleName> get listRoleName {
     switch(this) {
       case LinShareNodeType.DRIVE:
         return [
@@ -173,6 +173,13 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
           SharedSpaceRoleName.WORK_SPACE_READER,
           SharedSpaceRoleName.WORK_SPACE_ADMIN,
           SharedSpaceRoleName.WORK_SPACE_WRITER
+        ];
+      case LinShareNodeType.WORK_GROUP:
+        return [
+          SharedSpaceRoleName.READER,
+          SharedSpaceRoleName.ADMIN,
+          SharedSpaceRoleName.CONTRIBUTOR,
+          SharedSpaceRoleName.WRITER,
         ];
       default:
         return [];
