@@ -366,10 +366,10 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
           if(selectMode == SelectMode.ACTIVE) {
             sharedSpaceViewModel.selectItem(sharedSpace);
           } else {
-            if (sharedSpace.element.nodeType == LinShareNodeType.DRIVE) {
-              sharedSpaceViewModel.openDrive(sharedSpace.element);
+            if (sharedSpace.element.nodeType == LinShareNodeType.WORK_GROUP) {
+              sharedSpaceViewModel.openWorkgroup(sharedSpace.element);
             } else {
-              sharedSpaceViewModel.openSharedSpace(sharedSpace.element);
+              sharedSpaceViewModel.openSharedSpaceNode(sharedSpace.element);
             }
           }
         },

@@ -132,17 +132,17 @@ class _HomeWidgetState extends State<HomeWidget> {
         return getIt<MySpaceWidget>();
       case RoutePaths.sharedSpace:
         return getIt<SharedSpaceWidget>();
-      case RoutePaths.insideDrive:
+      case RoutePaths.insideSharedSpaceNode:
         return getIt<WorkGroupWidget>();
       case RoutePaths.sharedSpaceInside:
         return SharedSpaceDocumentNavigatorWidget(
           Key('shared_space_document_navigator_widget_key'),
           uiState.selectedSharedSpace!,
-          drive: uiState.selectedDrive,
+          parentNode: uiState.selectedParentNode,
           onBackSharedSpaceClickedCallback: () =>
               homeViewModel.store.dispatch(SetCurrentView(RoutePaths.sharedSpace)),
-          onBackToInsideDriveClickedCallback: (drive) =>
-              homeViewModel.store.dispatch(WorkgroupView(RoutePaths.insideDrive, drive))
+          onBackToInsideSharedSpaceNodeClickedCallback: (parentNode) =>
+              homeViewModel.store.dispatch(WorkgroupView(RoutePaths.insideSharedSpaceNode, parentNode))
         );
       case RoutePaths.account_details:
         return getIt<AccountDetailsWidget>();
@@ -184,9 +184,10 @@ class _HomeWidgetState extends State<HomeWidget> {
             Column(
               children: [
                 Expanded(
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () => homeViewModel.clickViewCurrentUploads(),
-                    padding: EdgeInsets.only(left: 16, right: 16),
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.resolveWith<EdgeInsets>((Set<MaterialState> states) => EdgeInsets.only(left: 16, right: 16))),
                     child: Text(
                       AppLocalizations.of(context).uploading_files_view_button,
                       style: TextStyle(

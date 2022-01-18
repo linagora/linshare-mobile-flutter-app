@@ -36,6 +36,7 @@ enum OrderScreen {
   workGroup,
   destinationPicker,
   insideDrive,
+  insideWorkspace,
   receivedShares,
   uploadRequestGroupsCreated,
   uploadRequestGroupsActiveClosed,

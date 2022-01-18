@@ -252,7 +252,7 @@ class HomeViewModel extends BaseViewModel {
         store.state.uiState.searchState.searchDestination == SearchDestination.allSharedSpaces) {
       store.dispatch(SharedSpaceAction(Right(DisableSearchViewState())));
       store.dispatch(CleanSharedSpaceStateAction());
-    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.insideDrive) {
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.insideSharedSpaceNode) {
       store.dispatch(WorkgroupAction(Right(DisableSearchViewState())));
       store.dispatch(CleanWorkgroupStateAction());
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.receivedShares) {
@@ -286,8 +286,8 @@ class HomeViewModel extends BaseViewModel {
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.sharedSpace) {
       store.dispatch(SharedSpaceAction(Right(SearchWorkGroupNodeNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanSharedSpaceStateAction());
-    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.insideDrive) {
-      store.dispatch(WorkgroupAction(Right(SearchWorkgroupInsideDriveNewQuery(SearchQuery(text.trim())))));
+    } else if (store.state.uiState.searchState.searchDestination == SearchDestination.insideSharedSpaceNode) {
+      store.dispatch(WorkgroupAction(Right(SearchWorkgroupInsideSharedSpaceNodeNewQuery(SearchQuery(text.trim())))));
       store.dispatch(CleanWorkgroupStateAction());
     } else if (store.state.uiState.searchState.searchDestination == SearchDestination.allSharedSpaces) {
       store.dispatch(SharedSpaceAction(Right(SearchSharedSpaceNodeNestedNewQuery(SearchQuery(text.trim())))));

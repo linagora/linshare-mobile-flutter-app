@@ -339,6 +339,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
               (failure) => store.dispatch(UpdateDriveMembersAction(Left<Failure, Success>(UpdateDriveMemberFailure(UpdateRoleFailed())))),
               (success) {
                 store.dispatch(_refreshSharedSpaceAction(drive));
+                store.dispatch(SharedSpaceAction(Right(success)));
                 _getAllMember(drive);
               }));
     });
@@ -377,6 +378,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
               (failure) => store.dispatch(UpdateWorkspaceMembersAction(Left(UpdateWorkspaceMemberFailure(UpdateRoleFailed())))),
               (success) {
                 store.dispatch(_refreshSharedSpaceAction(nodeNested));
+                store.dispatch(SharedSpaceAction(Right(success)));
                 _getAllMember(nodeNested);
               }));
     });

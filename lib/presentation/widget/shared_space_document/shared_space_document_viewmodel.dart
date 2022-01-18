@@ -944,10 +944,10 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         : getSharedSpaceDocumentDestinationState().sharedSpaceNodeNested;
   }
 
-  SharedSpaceNodeNested? getDrive() {
+  SharedSpaceNodeNested? get parentNode {
     return _documentArguments.documentUIType == SharedSpaceDocumentUIType.sharedSpace
-        ? getSharedSpaceDocumentState().drive
-        : getSharedSpaceDocumentDestinationState().drive;
+        ? getSharedSpaceDocumentState().parentNode
+        : getSharedSpaceDocumentDestinationState().parentNode;
   }
 
   SharedSpaceDocumentType getSharedSpaceDocumentType() {
@@ -1141,7 +1141,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     store.dispatch(SharedSpaceDocumentSetSyncOfflineModeAction(_workGroupNodesList));
 
     store.dispatch(_makeAvailableOfflineSharedSpaceDocumentAction(
-      getDrive(),
+      parentNode,
       getSharedSpaceNodeNested()!,
       newWorkGroupDocument,
       indexWorkGroupDocument,
@@ -1149,14 +1149,14 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   }
 
   OnlineThunkAction _makeAvailableOfflineSharedSpaceDocumentAction(
-      SharedSpaceNodeNested? drive,
+      SharedSpaceNodeNested? parentNode,
       SharedSpaceNodeNested sharedSpaceNodeNested,
       WorkGroupDocument workGroupDocument,
       int indexWorkGroupDocument,
       {List<TreeNode>? treeNodes}) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _makeAvailableOfflineSharedSpaceDocumentInteractor
-        .execute(drive, sharedSpaceNodeNested, workGroupDocument, treeNodes: treeNodes)
+        .execute(parentNode, sharedSpaceNodeNested, workGroupDocument, treeNodes: treeNodes)
         .then((result) => result.fold(
           (failure) {
             _workGroupNodesList[indexWorkGroupDocument] = workGroupDocument.toSyncOfflineWorkGroupDocument(syncOfflineState: SyncOfflineState.none);
@@ -1188,7 +1188,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   ThunkAction<AppState> _disableAvailableOfflineSharedSpaceDocumentAction(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
     return (Store<AppState> store) async {
       await _disableAvailableOfflineWorkGroupDocumentInteractor
-        .execute(workGroupDocument, getDrive()?.sharedSpaceId)
+        .execute(workGroupDocument, parentNode?.sharedSpaceId)
         .then((result) => result.fold(
           (failure) => store.dispatch(SharedSpaceDocumentAction(Left(failure))),
           (success) {

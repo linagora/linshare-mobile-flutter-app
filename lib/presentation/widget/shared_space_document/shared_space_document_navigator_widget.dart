@@ -42,16 +42,16 @@ import 'package:rxdart/rxdart.dart';
 import '../../util/data_structure/stack.dart' as structure;
 
 typedef OnBackSharedSpaceClickedCallback = void Function();
-typedef OnBackToInsideDriveClickedCallback = void Function(SharedSpaceNodeNested);
+typedef OnBackToInsideSharedSpaceNodeClickedCallback = void Function(SharedSpaceNodeNested);
 typedef OnNodeClickedCallback = void Function(WorkGroupNode clickedNode);
 
 class SharedSpaceDocumentNavigatorWidget extends StatefulWidget {
 
   final SharedSpaceNodeNested sharedSpaceNodeNested;
-  final SharedSpaceNodeNested? drive;
+  final SharedSpaceNodeNested? parentNode;
   final SharedSpaceDocumentUIType sharedSpaceDocumentUIType;
   final OnBackSharedSpaceClickedCallback? onBackSharedSpaceClickedCallback;
-  final OnBackToInsideDriveClickedCallback? onBackToInsideDriveClickedCallback;
+  final OnBackToInsideSharedSpaceNodeClickedCallback? onBackToInsideSharedSpaceNodeClickedCallback;
 
   final BehaviorSubject<SharedSpaceDocumentArguments>? currentNodeObservable;
 
@@ -60,8 +60,8 @@ class SharedSpaceDocumentNavigatorWidget extends StatefulWidget {
     this.sharedSpaceNodeNested,
     {
       this.onBackSharedSpaceClickedCallback,
-      this.onBackToInsideDriveClickedCallback,
-      this.drive,
+      this.onBackToInsideSharedSpaceNodeClickedCallback,
+      this.parentNode,
       this.sharedSpaceDocumentUIType = SharedSpaceDocumentUIType.sharedSpace,
       this.currentNodeObservable
     }
@@ -91,7 +91,7 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
           final rootArgs = SharedSpaceDocumentArguments(
               SharedSpaceDocumentType.root,
               widget.sharedSpaceNodeNested,
-              drive: widget.drive,
+              parentNode: widget.parentNode,
               documentUIType: widget.sharedSpaceDocumentUIType
           );
 
@@ -124,7 +124,7 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
       SharedSpaceDocumentType.children,
       widget.sharedSpaceNodeNested,
       workGroupFolder: workGroupNode as WorkGroupFolder,
-      drive: widget.drive,
+      parentNode: widget.parentNode,
       documentUIType: widget.sharedSpaceDocumentUIType);
 
     argumentStack.push(newArgs);
@@ -148,9 +148,9 @@ class SharedSpaceDocumentNavigatorWidgetState extends State<SharedSpaceDocumentN
         (Route<dynamic> route) => false
       );
     } else {
-      if (widget.drive != null) {
-        if (widget.onBackToInsideDriveClickedCallback != null) {
-          widget.onBackToInsideDriveClickedCallback!(widget.drive!);
+      if (widget.parentNode != null) {
+        if (widget.onBackToInsideSharedSpaceNodeClickedCallback != null) {
+          widget.onBackToInsideSharedSpaceNodeClickedCallback!(widget.parentNode!);
         }
       } else {
         if (widget.onBackSharedSpaceClickedCallback != null) {

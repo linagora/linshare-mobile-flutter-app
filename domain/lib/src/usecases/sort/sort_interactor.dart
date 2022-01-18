@@ -47,6 +47,8 @@ class SortInteractor {
       } else if (filesSorted is List<SharedSpaceNodeNested>) {
         if (sorter.orderScreen == OrderScreen.insideDrive) {
           return Right<Failure, Success>(GetAllWorkgroupsViewState(filesSorted.cast<SharedSpaceNodeNested>()));
+        } else if (sorter.orderScreen == OrderScreen.insideWorkspace) {
+          return Right<Failure, Success>(GetAllWorkgroupsViewState(filesSorted.cast<SharedSpaceNodeNested>()));
         } else {
           return Right<Failure, Success>(SharedSpacesViewState(filesSorted.cast<SharedSpaceNodeNested>()));
         }
@@ -72,6 +74,8 @@ class SortInteractor {
         case OrderScreen.destinationPicker:
           return Left<Failure, Success>(SharedSpacesFailure(exception));
         case OrderScreen.insideDrive:
+          return Left<Failure, Success>(GetAllWorkgroupsFailure(exception));
+        case OrderScreen.insideWorkspace:
           return Left<Failure, Success>(GetAllWorkgroupsFailure(exception));
         case OrderScreen.sharedSpaceDocument:
           return Left<Failure, Success>(GetChildNodesFailure(exception));
