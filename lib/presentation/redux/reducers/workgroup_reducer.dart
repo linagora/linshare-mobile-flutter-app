@@ -44,19 +44,20 @@ final workgroupReducer = combineReducers<WorkgroupState>([
         newSharedSpacesList: action.viewState.fold(
           (failure) => [],
           (success) => (success is GetAllWorkgroupsViewState) ? success.workgroups : []))),
-  TypedReducer<WorkgroupState, WorkgroupInsideDriveSetSearchResultAction>((WorkgroupState state, WorkgroupInsideDriveSetSearchResultAction action) =>
+  TypedReducer<WorkgroupState, WorkgroupInsideSharedSpaceNodeSetSearchResultAction>((WorkgroupState state, WorkgroupInsideSharedSpaceNodeSetSearchResultAction action) =>
       state.setSharedSpaces(newSharedSpacesList: action.sharedSpaceNodes)),
   TypedReducer<WorkgroupState, CleanWorkgroupStateAction>((WorkgroupState state, _) => state.clearViewState()),
   TypedReducer<WorkgroupState, ClearAllListWorkgroupAction>((WorkgroupState state, _) => state.setSharedSpaces(newSharedSpacesList: List.empty())),
-  TypedReducer<WorkgroupState, EnableCreateWorkGroupButtonInsideDriveAction>((WorkgroupState state, _) => state.enableUploadButton()),
-  TypedReducer<WorkgroupState, DisableCreateWorkGroupButtonInsideDriveAction>((WorkgroupState state, _) => state.disableUploadButton()),
-  TypedReducer<WorkgroupState, SelectWorkgroupInsideDriveAction>((WorkgroupState state, SelectWorkgroupInsideDriveAction action) => state.selectSharedSpace(action.selectedSharedSpace)),
-  TypedReducer<WorkgroupState, ClearSelectedWorkgroupsInsideDriveAction>((WorkgroupState state, ClearSelectedWorkgroupsInsideDriveAction action) => state.cancelSelectedSharedSpaces()),
-  TypedReducer<WorkgroupState, SelectAllWorkgroupsInsideDriveAction>((WorkgroupState state, SelectAllWorkgroupsInsideDriveAction action) => state.selectAllSharedSpaces()),
-  TypedReducer<WorkgroupState, UnselectAllWorkgroupsInsideDriveAction>((WorkgroupState state, UnselectAllWorkgroupsInsideDriveAction action) => state.unSelectAllSharedSpaces()),
-  TypedReducer<WorkgroupState, GetSharedSpaceRolesListInsideDriveAction>((WorkgroupState state, GetSharedSpaceRolesListInsideDriveAction action) => state.setSharedSpaceRolesList(action.rolesList)),
-  TypedReducer<WorkgroupState, GetSorterInsideDriveAction>((WorkgroupState state, GetSorterInsideDriveAction action) => state.setNewSorter(newSorter: action.sorter)),
-  TypedReducer<WorkgroupState, SortAllWorkgroupsInsideDriveAction>(
-      (WorkgroupState state, SortAllWorkgroupsInsideDriveAction action) =>
+  TypedReducer<WorkgroupState, EnableCreateWorkGroupButtonInsideSharedSpaceNodeAction>((WorkgroupState state, _) => state.enableUploadButton()),
+  TypedReducer<WorkgroupState, DisableCreateWorkGroupButtonInsideSharedSpaceNodeAction>((WorkgroupState state, _) => state.disableUploadButton()),
+  TypedReducer<WorkgroupState, SelectWorkgroupInsideSharedSpaceNodeAction>((WorkgroupState state, SelectWorkgroupInsideSharedSpaceNodeAction action) => state.selectSharedSpace(action.selectedSharedSpace)),
+  TypedReducer<WorkgroupState, ClearSelectedWorkgroupsInsideSharedSpaceNodeAction>((WorkgroupState state, ClearSelectedWorkgroupsInsideSharedSpaceNodeAction action) => state.cancelSelectedSharedSpaces()),
+  TypedReducer<WorkgroupState, SelectAllWorkgroupsInsideSharedSpaceNodeAction>((WorkgroupState state, SelectAllWorkgroupsInsideSharedSpaceNodeAction action) => state.selectAllSharedSpaces()),
+  TypedReducer<WorkgroupState, UnselectAllWorkgroupsInsideSharedSpaceNodeAction>((WorkgroupState state, UnselectAllWorkgroupsInsideSharedSpaceNodeAction action) => state.unSelectAllSharedSpaces()),
+  TypedReducer<WorkgroupState, GetSharedSpaceRolesListInsideSharedSpaceNodeAction>((WorkgroupState state, GetSharedSpaceRolesListInsideSharedSpaceNodeAction action) => state.setSharedSpaceRolesList(action.rolesList)),
+  TypedReducer<WorkgroupState, GetSorterInsideSharedSpaceNodeAction>((WorkgroupState state, GetSorterInsideSharedSpaceNodeAction action) => state.setNewSorter(newSorter: action.sorter)),
+  TypedReducer<WorkgroupState, SetDefaultSorterInsideSharedSpaceNodeAction>((WorkgroupState state, SetDefaultSorterInsideSharedSpaceNodeAction action) => state.setNewSorter(newSorter: action.sorter)),
+  TypedReducer<WorkgroupState, SortAllWorkgroupsInsideSharedSpaceNodeAction>(
+      (WorkgroupState state, SortAllWorkgroupsInsideSharedSpaceNodeAction action) =>
           state.setSharedSpaces(newSharedSpacesList: action.workgroups, newSorter: action.sorter)),
 ]);

@@ -223,4 +223,15 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
         return '';
     }
   }
+
+  OrderScreen get orderScreen {
+    switch(this) {
+      case LinShareNodeType.DRIVE:
+        return OrderScreen.insideDrive;
+      case LinShareNodeType.WORK_SPACE:
+        return OrderScreen.insideWorkspace;
+      default:
+        return OrderScreen.workGroup;
+    }
+  }
 }

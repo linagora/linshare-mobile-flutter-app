@@ -57,7 +57,7 @@ class WorkgroupState extends LinShareState  with EquatableMixin {
   ) : super(viewState);
 
   factory WorkgroupState.initial() {
-    return WorkgroupState(Right(IdleState()), [], [], SelectMode.INACTIVE, Sorter.fromOrderScreen(OrderScreen.insideDrive));
+    return WorkgroupState(Right(IdleState()), [], [], SelectMode.INACTIVE, Sorter.fromOrderScreen(OrderScreen.insideWorkspace));
   }
 
   @override

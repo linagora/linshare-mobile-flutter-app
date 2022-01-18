@@ -30,31 +30,19 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/usecases/search_workgroup_inside_shared_space_node/search_workgroup_inside_shared_space_node_view_state.dart';
 
-class SearchWorkgroupInsideDriveSuccess extends ViewState {
-  final List<SharedSpaceNodeNested> workgroups;
-
-  SearchWorkgroupInsideDriveSuccess(this.workgroups);
-
-  @override
-  List<Object> get props => [workgroups];
-}
-
-class SearchWorkgroupInsideDriveFailure extends FeatureFailure {
-  final exception;
-
-  SearchWorkgroupInsideDriveFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}
-
-class SearchWorkgroupInsideDriveNewQuery extends ViewState {
-  final SearchQuery searchQuery;
-
-  SearchWorkgroupInsideDriveNewQuery(this.searchQuery);
-
-  @override
-  List<Object> get props => [searchQuery];
+class SearchWorkgroupInsideSharedSpaceNodeInteractor {
+  Future<Either<Failure, Success>> execute(List<SharedSpaceNodeNested> sharedSpaceNodes, SearchQuery searchQuery) async {
+    try {
+      final resultList = sharedSpaceNodes
+          .where((element) => element.name.toLowerCase().contains(searchQuery.value.toLowerCase()))
+          .toList();
+      return Right<Failure, Success>(SearchWorkgroupInsideSharedSpaceNodeSuccess(resultList));
+    } catch (exception) {
+      return Left<Failure, Success>(SearchWorkgroupInsideSharedSpaceNodeFailure(exception));
+    }
+  }
 }

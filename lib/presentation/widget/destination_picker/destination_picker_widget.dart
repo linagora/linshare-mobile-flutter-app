@@ -159,8 +159,8 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
                             return SharedSpaceDocumentNavigatorWidget(
                                 _sharedSpaceDocumentNavigatorKey,
                                 state.routeData.sharedSpaceNodeNested!,
-                                drive: state.routeData.drive,
-                                onBackToInsideDriveClickedCallback: (drive) => _destinationPickerViewModel.backToInsideDriveDestination(drive),
+                                parentNode: state.routeData.drive,
+                                onBackToInsideSharedSpaceNodeClickedCallback: (drive) => _destinationPickerViewModel.backToInsideDriveDestination(drive),
                                 onBackSharedSpaceClickedCallback: () => _destinationPickerViewModel.backToSharedSpace(),
                                 sharedSpaceDocumentUIType: SharedSpaceDocumentUIType.destinationPicker,
                                 currentNodeObservable: _destinationPickerViewModel.currentNodeObservable

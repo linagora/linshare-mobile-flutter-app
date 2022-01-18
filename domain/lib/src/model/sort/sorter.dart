@@ -68,6 +68,8 @@ extension SorterExtension on Sorter {
         return _getListSorterWorkGroups();
       case OrderScreen.insideDrive:
         return _getListSorterInsideDrive();
+      case OrderScreen.insideWorkspace:
+        return _getListSorterInsideWorkspace();
       case OrderScreen.destinationPicker:
         return _getListSorterDestinationPicker();
       case OrderScreen.receivedShares:
@@ -118,6 +120,14 @@ extension SorterExtension on Sorter {
   }
 
   List<Sorter> _getListSorterInsideDrive() {
+    return <Sorter>[
+      Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),
+      Sorter(orderScreen, OrderBy.name, OrderType.descending),
+    ];
+  }
+
+  List<Sorter> _getListSorterInsideWorkspace() {
     return <Sorter>[
       Sorter(orderScreen, OrderBy.modificationDate, OrderType.descending),
       Sorter(orderScreen, OrderBy.creationDate, OrderType.descending),

@@ -342,7 +342,7 @@ class AppModule {
     getIt.registerFactory(() => DownloadMultipleNodeIOSInteractor(getIt<DownloadNodeIOSInteractor>()));
     getIt.registerFactory(() => SearchWorkGroupNodeInteractor());
     getIt.registerFactory(() => SearchSharedSpaceNodeNestedInteractor());
-    getIt.registerFactory(() => SearchWorkgroupInsideDriveInteractor());
+    getIt.registerFactory(() => SearchWorkgroupInsideSharedSpaceNodeInteractor());
     getIt.registerFactory(() => RemoveSharedSpaceInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => RemoveMultipleSharedSpacesInteractor(getIt<RemoveSharedSpaceInteractor>()));
     getIt.registerFactory(() => DownloadWorkGroupNodeInteractor(
