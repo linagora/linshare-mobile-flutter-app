@@ -5,10 +5,11 @@ import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:redux/redux.dart';
+import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
+import '../../domain/test/mock/repository/authentication/mock_api_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_credential_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_document_repository.dart';
 import '../../domain/test/mock/repository/authentication/mock_token_repository.dart';
@@ -25,6 +26,7 @@ void main() {
     late MockDocumentRepository documentRepository;
     MockTokenRepository tokenRepository;
     MockCredentialRepository credentialRepository;
+    MockAPIRepository apiRepository;
     UploadMySpaceDocumentInteractor uploadFileInteractor;
     ShareDocumentInteractor shareDocumentInteractor;
     UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
@@ -38,10 +40,12 @@ void main() {
       documentRepository = MockDocumentRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
+      apiRepository = MockAPIRepository();
       uploadFileInteractor = UploadMySpaceDocumentInteractor(
         documentRepository,
         tokenRepository,
         credentialRepository,
+        apiRepository
       );
       shareDocumentInteractor = ShareDocumentInteractor(documentRepository);
       fileHelper = FileHelper();

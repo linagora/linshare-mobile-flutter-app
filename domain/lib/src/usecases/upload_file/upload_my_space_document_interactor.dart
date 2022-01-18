@@ -40,14 +40,16 @@ class UploadMySpaceDocumentInteractor {
   final DocumentRepository documentRepository;
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
+  final APIRepository apiRepository;
 
-  UploadMySpaceDocumentInteractor(this.documentRepository, this.tokenRepository, this.credentialRepository);
+  UploadMySpaceDocumentInteractor(this.documentRepository, this.tokenRepository, this.credentialRepository, this.apiRepository);
 
   Future<Either<Failure, Success>> execute(FileInfo fileInfo) async {
     try {
       final token = await tokenRepository.getToken();
       final baseUrl = await credentialRepository.getBaseUrl();
-      final uploadTaskId = await documentRepository.upload(fileInfo, token, baseUrl);
+      final apiVersion = await apiRepository.getAPIVersionSupported();
+      final uploadTaskId = await documentRepository.upload(fileInfo, token, baseUrl, apiVersion);
 
       return Right(FileUploadState(uploadTaskId));
     } catch (exception) {

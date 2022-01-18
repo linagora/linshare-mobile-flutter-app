@@ -33,11 +33,7 @@ import 'package:data/src/network/config/endpoint.dart';
 import 'package:domain/domain.dart';
 
 extension UriExtension on Uri {
-  String withServicePath(ServicePath servicePath) {
-    return origin + Endpoint.rootPath + servicePath.path;
-  }
-
-  String withDownloadPath(ServicePath servicePath, DocumentId documentId) {
-    return withServicePath(servicePath) + '/${documentId.uuid}/${Endpoint.download}';
+  String withServicePath(ServicePath servicePath, APIVersionSupported apiVersion) {
+    return origin + Endpoint.rootPath + '/' + apiVersion.value + servicePath.path;
   }
 }

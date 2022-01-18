@@ -37,15 +37,17 @@ class UploadWorkGroupDocumentInteractor {
   final SharedSpaceDocumentRepository sharedSpaceDocumentRepository;
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
+  final APIRepository apiRepository;
 
-  UploadWorkGroupDocumentInteractor(this.sharedSpaceDocumentRepository, this.tokenRepository, this.credentialRepository);
+  UploadWorkGroupDocumentInteractor(this.sharedSpaceDocumentRepository, this.tokenRepository, this.credentialRepository, this.apiRepository);
 
   Future<Either<Failure, Success>> execute(FileInfo fileInfo, SharedSpaceId sharedSpaceId, {WorkGroupNodeId? parentNodeId}) async {
     try {
       final token = await tokenRepository.getToken();
       final baseUrl = await credentialRepository.getBaseUrl();
+      final apiVersion = await apiRepository.getAPIVersionSupported();
       final uploadTaskId = await sharedSpaceDocumentRepository
-          .uploadSharedSpaceDocument(fileInfo, token, baseUrl, sharedSpaceId, parentNodeId: parentNodeId);
+          .uploadSharedSpaceDocument(fileInfo, token, baseUrl, apiVersion, sharedSpaceId, parentNodeId: parentNodeId);
       return Right(FileUploadState(uploadTaskId));
     } catch (exception) {
       return Left<Failure, Success>(WorkGroupDocumentUploadFailure(fileInfo, exception));
