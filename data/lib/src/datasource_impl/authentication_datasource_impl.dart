@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:developer' as developer;
+
 import 'package:data/data.dart';
 import 'package:data/src/network/model/request/permanent_token_body_request.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
@@ -47,11 +49,12 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
   AuthenticationDataSourceImpl(this.linShareHttpClient, this.deviceManager, this._remoteExceptionThrower);
 
   @override
-  Future<Token> createPermanentToken(Uri baseUrl, UserName userName, Password password, {OTPCode? otpCode}) async {
+  Future<Token> createPermanentToken(Uri baseUrl, APIVersionSupported apiVersion, UserName userName, Password password, {OTPCode? otpCode}) async {
     return Future.sync(() async {
       final deviceName = await deviceManager.getDeviceName();
       final permanentToken = await linShareHttpClient.createPermanentToken(
           baseUrl,
+          apiVersion,
           userName.userName,
           password.value,
           PermanentTokenBodyRequest('Token-${deviceManager.getPlatformString()}-$deviceName'),
@@ -59,7 +62,11 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
       return permanentToken.toToken();
     }).catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-          if (error.response?.statusCode == 401) {
+          if (error.response?.statusCode == 404) {
+            developer.log(error.message, name: 'dmm dat day');
+            developer.log(error.response?.data, name: 'dmm dat day');
+            throw UnsupportedAPIVersion();
+          } else if (error.response?.statusCode == 401) {
             final errorCode = error.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
             final authErrorCode = LinShareErrorCode(int.tryParse(errorCode) ?? 1);
             if (authErrorCode.isAuthenticateWithOTPError()) {
