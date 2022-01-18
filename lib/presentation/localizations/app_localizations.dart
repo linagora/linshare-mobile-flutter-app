@@ -2921,6 +2921,21 @@ class AppLocalizations {
       args: [memberName, workspaceName],
     );
   }
+
+  String get workspace_admin {
+    return Intl.message('Workspace Admin',
+        name: 'workspace_admin');
+  }
+
+  String get workspace_reader {
+    return Intl.message('Workspace Reader',
+        name: 'workspace_reader');
+  }
+
+  String get workspace_writer {
+    return Intl.message('Workspace Writer',
+        name: 'workspace_writer');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
