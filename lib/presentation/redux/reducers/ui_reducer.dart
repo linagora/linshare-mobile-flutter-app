@@ -38,9 +38,9 @@ final uiReducer = combineReducers<UIState>([
   TypedReducer<UIState, SetCurrentView>(
           (UIState state, SetCurrentView action) => state.setCurrentView(action.routePath)),
   TypedReducer<UIState, WorkgroupView>(
-          (UIState state, WorkgroupView action) => state.setCurrentView(action.routePath, drive: action.drive)),
+          (UIState state, WorkgroupView action) => state.setCurrentView(action.routePath, parentNode: action.parentNode)),
   TypedReducer<UIState, SharedSpaceInsideView>(
-          (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, drive: action.drive, sharedSpace: action.sharedSpace)),
+          (UIState state, SharedSpaceInsideView action) => state.setCurrentView(action.routePath, parentNode: action.parentNode, sharedSpace: action.sharedSpace)),
   TypedReducer<UIState, UploadRequestInsideView>(
           (UIState state, UploadRequestInsideView action) => state.setCurrentView(action.routePath, uploadRequestGroup: action.uploadRequestGroup)),
   TypedReducer<UIState, ClearCurrentView>(

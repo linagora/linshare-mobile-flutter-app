@@ -482,8 +482,8 @@ export 'src/usecases/upload_request_entry/remove_multiple_upload_request_entry_i
 export 'src/usecases/upload_request_entry/remove_upload_request_entry_interactor.dart';
 export 'src/usecases/upload_request_entry/get_upload_request_entry_activities_interactor.dart';
 export 'src/usecases/authentication/get_oidc_configuration_interactor.dart';
-export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive_view_state.dart';
-export 'src/usecases/search_workgroup_inside_drive/search_workgroup_inside_drive_interactor.dart';
+export 'src/usecases/search_workgroup_inside_shared_space_node/search_workgroup_inside_shared_space_node_interactor.dart';
+export 'src/usecases/search_workgroup_inside_shared_space_node/search_workgroup_inside_shared_space_node_view_state.dart';
 export 'src/usecases/workgroup/get_all_workgroups_interactor.dart';
 export 'src/usecases/workgroup/workgroup_view_state.dart';
 export 'src/usecases/workgroup/get_all_workgroups_offline_interactor.dart';

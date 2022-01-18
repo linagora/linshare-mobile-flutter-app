@@ -58,7 +58,7 @@ import 'package:linshare_flutter_app/presentation/view/search/search_bottom_bar_
 import 'package:linshare_flutter_app/presentation/widget/workgroup/workgroup_viewmodel.dart';
 import 'package:redux/redux.dart';
 
-/// Display view for inside drive
+/// Display view for inside shared space node (Ex: Drive, Workspace)
 class WorkGroupWidget extends StatefulWidget {
   @override
   _WorkGroupWidgetState createState() => _WorkGroupWidgetState();
@@ -73,6 +73,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
   @override
   void initState() {
     super.initState();
+    _viewModel.setDefaultSorter();
     _viewModel.getAllWorkgroups(needToGetOldSorter: true);
   }
 
@@ -164,7 +165,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
               if (!state.uiState.isInSearchState() &&
                   state.workgroupState.selectMode == SelectMode.INACTIVE) {
                 return SearchBottomBarBuilder()
-                    .key(Key('search_bottom_bar_inside_drive'))
+                    .key(Key('search_bottom_bar_inside_shared_space_node'))
                     .onSearchActionClick(() => _viewModel.openSearchState(context))
                     .build();
               }
@@ -175,7 +176,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
           builder: (context, appState) {
             if (_validateDisplayAddWorkgroupButton(appState)) {
               return FloatingActionButton(
-                key: Key('create_new_workgroup_inside_drive_button'),
+                key: Key('create_new_workgroup_inside_shared_space_node_button'),
                 onPressed: () => _viewModel.openCreateNewWorkGroupModal(context),
                 backgroundColor: AppColor.primaryColor,
                 child: SvgPicture.asset(_imagePath.icPlus, width: 24, height: 24,),
@@ -190,7 +191,8 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
   bool _validateDisplayAddWorkgroupButton(AppState appState) {
     if (!appState.uiState.isInSearchState() &&
         appState.workgroupState.selectMode == SelectMode.INACTIVE &&
-        SharedSpaceOperationRole.addWorkgroupInsideDrive.contains(appState.uiState.selectedDrive!.sharedSpaceRole.name)) {
+        (SharedSpaceOperationRole.addWorkgroupInsideDrive.contains(appState.uiState.selectedParentNode!.sharedSpaceRole.name) ||
+        SharedSpaceOperationRole.addWorkgroupInsideWorkspace.contains(appState.uiState.selectedParentNode!.sharedSpaceRole.name))) {
       return true;
     }
     return false;
@@ -313,7 +315,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
 
   Widget _buildNoWorkgroupYet(BuildContext context) {
     return BackgroundWidgetBuilder(context)
-      .key(Key('drive_no_workgroup_yet'))
+      .key(Key('shared_space_node_no_workgroup_yet'))
       .image(SvgPicture.asset(_imagePath.icSharedSpaceNoWorkGroup, width: 120, height: 120, fit: BoxFit.fill))
       .text(AppLocalizations.of(context).do_not_have_any_workgroup).build();
   }

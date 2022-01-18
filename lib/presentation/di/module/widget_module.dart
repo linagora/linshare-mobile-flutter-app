@@ -303,7 +303,7 @@ class WidgetModule {
       getIt.get<AppNavigation>(),
       getIt<GetAllWorkgroupsInteractor>(),
       getIt<GetAllWorkgroupsOfflineInteractor>(),
-      getIt<SearchWorkgroupInsideDriveInteractor>(),
+      getIt<SearchWorkgroupInsideSharedSpaceNodeInteractor>(),
       getIt<RemoveMultipleSharedSpacesInteractor>(),
       getIt<CreateWorkGroupInteractor>(),
       getIt<VerifyNameInteractor>(),

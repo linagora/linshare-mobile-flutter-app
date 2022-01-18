@@ -118,6 +118,8 @@ class SharedSpaceViewModel extends BaseViewModel {
                 } else if (success is CreateWorkGroupViewState ||
                     success is CreateNewDriveViewState ||
                     success is CreateNewWorkSpaceViewState ||
+                    success is UpdateWorkspaceMemberViewState ||
+                    success is UpdateDriveMemberViewState ||
                     success is DeleteSharedSpaceMemberViewState) {
                   getAllSharedSpaces(needToGetOldSorter: false);
                 }
@@ -199,7 +201,7 @@ class SharedSpaceViewModel extends BaseViewModel {
     });
   }
 
-  void openSharedSpace(SharedSpaceNodeNested sharedSpace) {
+  void openWorkgroup(SharedSpaceNodeNested sharedSpace) {
     if (_isInSearchState()) {
       store.dispatch(DisableSearchStateAction());
       store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
@@ -208,13 +210,13 @@ class SharedSpaceViewModel extends BaseViewModel {
     store.dispatch(SharedSpaceInsideView(RoutePaths.sharedSpaceInside, sharedSpace));
   }
 
-  void openDrive(SharedSpaceNodeNested drive) {
+  void openSharedSpaceNode(SharedSpaceNodeNested nodeNested) {
     if (_isInSearchState()) {
       store.dispatch(DisableSearchStateAction());
       store.dispatch((SharedSpaceSetSearchResultAction(_sharedSpaceNodes)));
       _searchQuery = SearchQuery('');
     }
-    store.dispatch(WorkgroupView(RoutePaths.insideDrive, drive));
+    store.dispatch(WorkgroupView(RoutePaths.insideSharedSpaceNode, nodeNested));
   }
 
   void openSearchState(BuildContext context) {

@@ -49,16 +49,16 @@ class SetCurrentView extends ActionOffline {
 }
 
 class SharedSpaceInsideView extends SetCurrentView {
-  final SharedSpaceNodeNested? drive;
+  final SharedSpaceNodeNested? parentNode;
   final SharedSpaceNodeNested sharedSpace;
 
-  SharedSpaceInsideView(String routePath, this.sharedSpace, {this.drive}) : super(routePath);
+  SharedSpaceInsideView(String routePath, this.sharedSpace, {this.parentNode}) : super(routePath);
 }
 
 class WorkgroupView extends SetCurrentView {
-  final SharedSpaceNodeNested drive;
+  final SharedSpaceNodeNested parentNode;
 
-  WorkgroupView(String routePath, this.drive) : super(routePath);
+  WorkgroupView(String routePath, this.parentNode) : super(routePath);
 }
 
 @immutable

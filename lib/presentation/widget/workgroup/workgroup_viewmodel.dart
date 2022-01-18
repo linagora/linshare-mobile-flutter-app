@@ -47,6 +47,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -60,12 +61,12 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_details/sh
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-/// Handle action for inside drive
+/// Handle action for inside selectedParentNode
 class WorkGroupViewModel extends BaseViewModel {
 
   final GetAllWorkgroupsInteractor _getAllWorkgroupsInteractor;
   final GetAllWorkgroupsOfflineInteractor _getAllWorkgroupsOfflineInteractor;
-  final SearchWorkgroupInsideDriveInteractor _searchWorkgroupInsideDriveInteractor;
+  final SearchWorkgroupInsideSharedSpaceNodeInteractor _searchWorkgroupInsideSharedSpaceNodeInteractor;
   final RemoveMultipleSharedSpacesInteractor _removeMultipleSharedSpacesInteractor;
   final CreateWorkGroupInteractor _createWorkGroupInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
@@ -81,14 +82,14 @@ class WorkGroupViewModel extends BaseViewModel {
   SearchQuery _searchQuery = SearchQuery('');
   SearchQuery get searchQuery  => _searchQuery;
 
-  SharedSpaceNodeNested? get drive => store.state.uiState.selectedDrive;
+  SharedSpaceNodeNested? get selectedParentNode => store.state.uiState.selectedParentNode;
 
   WorkGroupViewModel(
     Store<AppState> store,
     this._appNavigation,
     this._getAllWorkgroupsInteractor,
     this._getAllWorkgroupsOfflineInteractor,
-    this._searchWorkgroupInsideDriveInteractor,
+    this._searchWorkgroupInsideSharedSpaceNodeInteractor,
     this._removeMultipleSharedSpacesInteractor,
     this._createWorkGroupInteractor,
     this._verifyNameInteractor,
@@ -99,10 +100,10 @@ class WorkGroupViewModel extends BaseViewModel {
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.workgroupState.viewState.fold((failure) => null, (success) {
-          if (success is SearchWorkgroupInsideDriveNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
+          if (success is SearchWorkgroupInsideSharedSpaceNodeNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
             _search(success.searchQuery);
           } else if (success is DisableSearchViewState) {
-            store.dispatch((WorkgroupInsideDriveSetSearchResultAction(_currentWorkgroups)));
+            store.dispatch((WorkgroupInsideSharedSpaceNodeSetSearchResultAction(_currentWorkgroups)));
             _searchQuery = SearchQuery('');
           } else if (success is CreateWorkGroupViewState) {
             getAllWorkgroups(needToGetOldSorter: false);
@@ -127,20 +128,26 @@ class WorkGroupViewModel extends BaseViewModel {
     }
   }
 
+  void setDefaultSorter() {
+    store.dispatch(SetDefaultSorterInsideSharedSpaceNodeAction(
+        Sorter.fromOrderScreen(selectedParentNode!.nodeType!.orderScreen)));
+  }
+
   OnlineThunkAction _getAllWorkgroupsAndSortAction() {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartWorkgroupLoadingAction());
 
       await Future.wait([
-        _getSorterInteractor.execute(OrderScreen.insideDrive),
-        _getAllWorkgroupsInteractor.execute(drive!.sharedSpaceId)
+        _getSorterInteractor.execute(selectedParentNode!.nodeType!.orderScreen),
+        _getAllWorkgroupsInteractor.execute(selectedParentNode!.sharedSpaceId)
       ]).then((response) async {
         response[0].fold((failure) {
-          store.dispatch(GetSorterInsideDriveAction(Sorter.fromOrderScreen(OrderScreen.insideDrive)));
+          store.dispatch(GetSorterInsideSharedSpaceNodeAction(
+              Sorter.fromOrderScreen(selectedParentNode!.nodeType!.orderScreen)));
         }, (success) {
-          store.dispatch(GetSorterInsideDriveAction(success is GetSorterSuccess
+          store.dispatch(GetSorterInsideSharedSpaceNodeAction(success is GetSorterSuccess
             ? success.sorter
-            : Sorter.fromOrderScreen(OrderScreen.insideDrive)));
+            : Sorter.fromOrderScreen(selectedParentNode!.nodeType!.orderScreen)));
         });
         response[1].fold((failure) {
           store.dispatch(GetAllWorkgroupsAction(Left(failure)));
@@ -160,7 +167,7 @@ class WorkGroupViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartWorkgroupLoadingAction());
 
-      await _getAllWorkgroupsInteractor.execute(drive!.sharedSpaceId)
+      await _getAllWorkgroupsInteractor.execute(selectedParentNode!.sharedSpaceId)
         .then((result) => result.fold(
           (failure) {
             store.dispatch(GetAllWorkgroupsAction(Left(failure)));
@@ -181,14 +188,15 @@ class WorkGroupViewModel extends BaseViewModel {
       store.dispatch(StartWorkgroupLoadingAction());
 
       await Future.wait([
-        _getSorterInteractor.execute(OrderScreen.insideDrive),
-        _getAllWorkgroupsOfflineInteractor.execute(drive!.sharedSpaceId)
+        _getSorterInteractor.execute(selectedParentNode!.nodeType!.orderScreen),
+        _getAllWorkgroupsOfflineInteractor.execute(selectedParentNode!.sharedSpaceId)
       ]).then((response) async {
         response.first.fold(
-          (failure) => store.dispatch(GetSorterInsideDriveAction(Sorter.fromOrderScreen(OrderScreen.insideDrive))),
-          (success) => store.dispatch(GetSorterInsideDriveAction(success is GetSorterSuccess
+          (failure) => store.dispatch(GetSorterInsideSharedSpaceNodeAction(
+              Sorter.fromOrderScreen(selectedParentNode!.nodeType!.orderScreen))),
+          (success) => store.dispatch(GetSorterInsideSharedSpaceNodeAction(success is GetSorterSuccess
             ? success.sorter
-            : Sorter.fromOrderScreen(OrderScreen.insideDrive)))
+            : Sorter.fromOrderScreen(selectedParentNode!.nodeType!.orderScreen)))
           );
         response.last.fold(
           (failure) {
@@ -209,7 +217,7 @@ class WorkGroupViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartWorkgroupLoadingAction());
 
-      await _getAllWorkgroupsOfflineInteractor.execute(drive!.sharedSpaceId)
+      await _getAllWorkgroupsOfflineInteractor.execute(selectedParentNode!.sharedSpaceId)
         .then((result) => result.fold(
           (failure) {
             store.dispatch(GetAllWorkgroupsAction(Left(failure)));
@@ -227,39 +235,39 @@ class WorkGroupViewModel extends BaseViewModel {
   void openWorkgroup(SharedSpaceNodeNested workgroup) {
     if (_isInSearchState()) {
       store.dispatch(DisableSearchStateAction());
-      store.dispatch((WorkgroupInsideDriveSetSearchResultAction(_currentWorkgroups)));
+      store.dispatch((WorkgroupInsideSharedSpaceNodeSetSearchResultAction(_currentWorkgroups)));
       _searchQuery = SearchQuery('');
     }
-    store.dispatch(SharedSpaceInsideView(RoutePaths.sharedSpaceInside, workgroup, drive: drive));
+    store.dispatch(SharedSpaceInsideView(RoutePaths.sharedSpaceInside, workgroup, parentNode: selectedParentNode));
   }
 
   void openSearchState(BuildContext context) {
-    final destinationName = drive?.name ?? AppLocalizations.of(context).shared_space;
-    store.dispatch(EnableSearchStateAction(SearchDestination.insideDrive, AppLocalizations.of(context).search_in(destinationName)));
-    store.dispatch((WorkgroupInsideDriveSetSearchResultAction(List.empty())));
+    final destinationName = selectedParentNode?.name ?? AppLocalizations.of(context).shared_space;
+    store.dispatch(EnableSearchStateAction(SearchDestination.insideSharedSpaceNode, AppLocalizations.of(context).search_in(destinationName)));
+    store.dispatch((WorkgroupInsideSharedSpaceNodeSetSearchResultAction(List.empty())));
   }
 
   void _search(SearchQuery searchQuery) {
     _searchQuery = searchQuery;
     if (searchQuery.value.isNotEmpty) {
-      store.dispatch(_searchWorkgroupInsideDriveAction(_currentWorkgroups, searchQuery));
+      store.dispatch(_searchWorkgroupInsideSharedSpaceNodeAction(_currentWorkgroups, searchQuery));
     } else {
-      store.dispatch(WorkgroupInsideDriveSetSearchResultAction(List.empty()));
+      store.dispatch(WorkgroupInsideSharedSpaceNodeSetSearchResultAction(List.empty()));
     }
   }
 
-  ThunkAction<AppState> _searchWorkgroupInsideDriveAction(List<SharedSpaceNodeNested> sharedSpaceNodes, SearchQuery searchQuery) {
+  ThunkAction<AppState> _searchWorkgroupInsideSharedSpaceNodeAction(List<SharedSpaceNodeNested> sharedSpaceNodes, SearchQuery searchQuery) {
     return (Store<AppState> store) async {
-      await _searchWorkgroupInsideDriveInteractor.execute(sharedSpaceNodes, searchQuery)
+      await _searchWorkgroupInsideSharedSpaceNodeInteractor.execute(sharedSpaceNodes, searchQuery)
         .then((result) => result.fold(
           (failure) {
             if (_isInSearchState()) {
-              store.dispatch(WorkgroupInsideDriveSetSearchResultAction(List.empty()));
+              store.dispatch(WorkgroupInsideSharedSpaceNodeSetSearchResultAction(List.empty()));
             }},
           (success) {
             if (_isInSearchState()) {
-              store.dispatch(WorkgroupInsideDriveSetSearchResultAction(
-                  success is SearchWorkgroupInsideDriveSuccess ? success.workgroups : List.empty()));
+              store.dispatch(WorkgroupInsideSharedSpaceNodeSetSearchResultAction(
+                  success is SearchWorkgroupInsideSharedSpaceNodeSuccess ? success.workgroups : List.empty()));
             }
           })
       );
@@ -329,19 +337,19 @@ class WorkGroupViewModel extends BaseViewModel {
   }
 
   void selectItem(SelectableElement<SharedSpaceNodeNested> selectedSharedSpace) {
-    store.dispatch(SelectWorkgroupInsideDriveAction(selectedSharedSpace));
+    store.dispatch(SelectWorkgroupInsideSharedSpaceNodeAction(selectedSharedSpace));
   }
 
   void toggleSelectAllSharedSpaces() {
     if (store.state.workgroupState.isAllWorkgroupsSelected()) {
-      store.dispatch(UnselectAllWorkgroupsInsideDriveAction());
+      store.dispatch(UnselectAllWorkgroupsInsideSharedSpaceNodeAction());
     } else {
-      store.dispatch(SelectAllWorkgroupsInsideDriveAction());
+      store.dispatch(SelectAllWorkgroupsInsideSharedSpaceNodeAction());
     }
   }
 
   void cancelSelection() {
-    store.dispatch(ClearSelectedWorkgroupsInsideDriveAction());
+    store.dispatch(ClearSelectedWorkgroupsInsideSharedSpaceNodeAction());
   }
 
   void clickOnDetails(SharedSpaceNodeNested sharedSpaceNodeNested) {
@@ -386,11 +394,11 @@ class WorkGroupViewModel extends BaseViewModel {
         _sortInteractor.execute(_currentWorkgroups, sorter)
       ]).then((response) => response[1].fold((failure) {
         _currentWorkgroups = List.empty();
-        store.dispatch(SortAllWorkgroupsInsideDriveAction(_currentWorkgroups, sorter));
+        store.dispatch(SortAllWorkgroupsInsideSharedSpaceNodeAction(_currentWorkgroups, sorter));
       }, (success) {
         _currentWorkgroups =
         success is GetAllWorkgroupsViewState ? success.workgroups : List.empty();
-        store.dispatch(SortAllWorkgroupsInsideDriveAction(_currentWorkgroups, sorter));
+        store.dispatch(SortAllWorkgroupsInsideSharedSpaceNodeAction(_currentWorkgroups, sorter));
       }));
     };
   }
@@ -452,7 +460,7 @@ class WorkGroupViewModel extends BaseViewModel {
   OnlineThunkAction _createNewWorkGroupAction(String newName) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _createWorkGroupInteractor
-          .execute(CreateWorkGroupRequest(newName, LinShareNodeType.WORK_GROUP, parentId: drive?.sharedSpaceId))
+          .execute(CreateWorkGroupRequest(newName, LinShareNodeType.WORK_GROUP, parentId: selectedParentNode?.sharedSpaceId))
           .then((result) => result.fold(
               (failure) => store.dispatch(WorkgroupAction(Left(failure))),
               (success) => store.dispatch(WorkgroupAction(Right(success)))));
