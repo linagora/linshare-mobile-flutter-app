@@ -91,8 +91,8 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl) {
-    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.downloadNodes(workgroupNodes, token, baseUrl);
+  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl, APIVersionSupported apiVersion) {
+    return _sharedSpaceDocumentDataSources[DataSourceType.network]!.downloadNodes(workgroupNodes, token, baseUrl, apiVersion);
   }
 
   @override

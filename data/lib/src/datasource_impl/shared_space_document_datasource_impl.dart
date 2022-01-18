@@ -31,6 +31,7 @@
 //
 
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:data/data.dart';
@@ -143,7 +144,8 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl) async {
+  Future<List<DownloadTaskId>> downloadNodes(List<WorkGroupNode> workgroupNodes, Token token, Uri baseUrl, APIVersionSupported apiVersion) async {
+    developer.log('downloadNodes(): ${workgroupNodes.length}', name: 'SharedSpaceDocumentDataSourceImpl');
     var externalStorageDirPath;
     if (Platform.isAndroid) {
         externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
@@ -159,7 +161,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
                 .withPathParameter(node.sharedSpaceId.uuid)
                 .withPathParameter('nodes')
                 .downloadServicePath(node.workGroupNodeId.uuid)
-                .generateDownloadUrl(baseUrl),
+                .generateDownloadUrl(baseUrl, apiVersion),
             savedDir: externalStorageDirPath,
             headers: {Constant.authorization: 'Bearer ${token.token}'},
             showNotification: true,
@@ -179,7 +181,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
             .withPathParameter(workgroupNode.sharedSpaceId.uuid)
             .withPathParameter('nodes')
             .downloadServicePath(workgroupNode.workGroupNodeId.uuid)
-            .generateDownloadUrl(baseUrl),
+            .generateEndpointPath(),
         getTemporaryDirectory(),
         workgroupNode.name,
         token,
@@ -215,7 +217,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
           .withPathParameter(workGroupDocument.sharedSpaceId.uuid)
           .withPathParameter('nodes')
           .downloadServicePath(workGroupDocument.workGroupNodeId.uuid)
-          .generateDownloadUrl(baseUrl);
+          .generateEndpointPath();
     } else {
       downloadUrl = Endpoint.sharedSpaces
           .withPathParameter(workGroupDocument.sharedSpaceId.uuid)
@@ -307,7 +309,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
         .withPathParameter(sharedSpaceId.uuid)
         .withPathParameter('nodes')
         .downloadServicePath(workGroupNodeId.uuid)
-        .generateDownloadUrl(baseUrl);
+        .generateEndpointPath();
     } else {
       downloadUrl = Endpoint.sharedSpaces
         .withPathParameter(sharedSpaceId.uuid)
