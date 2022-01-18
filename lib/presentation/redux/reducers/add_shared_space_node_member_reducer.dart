@@ -32,32 +32,32 @@
 
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_drive_member_action.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/add_drive_member_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_node_member_state.dart';
 import 'package:redux/redux.dart';
 
-final addDriveMemberReducer = combineReducers<AddDriveMemberState>([
-  TypedReducer<AddDriveMemberState, StartAddDriveMemberLoadingAction>((AddDriveMemberState state, _) =>
+final addSharedSpaceNodeMemberReducer = combineReducers<AddSharedSpaceNodeMemberState>([
+  TypedReducer<AddSharedSpaceNodeMemberState, StartAddSharedSpaceNodeMemberLoadingAction>((AddSharedSpaceNodeMemberState state, _) =>
       state.startLoadingState()),
-  TypedReducer<AddDriveMemberState, AddDriveMemberAction>((AddDriveMemberState state, AddDriveMemberAction action) =>
+  TypedReducer<AddSharedSpaceNodeMemberState, AddSharedSpaceNodeMemberAction>((AddSharedSpaceNodeMemberState state, AddSharedSpaceNodeMemberAction action) =>
       state.sendViewState(viewState: action.viewState)),
-  TypedReducer<AddDriveMemberState, AddDriveMemberGetAllDriveMembersAction>((AddDriveMemberState state, AddDriveMemberGetAllDriveMembersAction action) =>
-      state.setDriveMembers(
+  TypedReducer<AddSharedSpaceNodeMemberState, AddSharedSpaceNodeMemberGetAllSharedSpaceNodeMembersAction>((AddSharedSpaceNodeMemberState state, AddSharedSpaceNodeMemberGetAllSharedSpaceNodeMembersAction action) =>
+      state.setNodeNestedMembers(
           newMembers: action.getMembersViewState.fold(
               (failure) => [],
               (success) => (success is SharedSpaceMembersViewState) ? success.members : []),
           viewState: action.getMembersViewState)),
-  TypedReducer<AddDriveMemberState, AddDriveMemberGetDriveAction>((AddDriveMemberState state, AddDriveMemberGetDriveAction action) =>
-      state.setDrive(
-          newDrive: action.getDriveViewState.fold(
+  TypedReducer<AddSharedSpaceNodeMemberState, AddSharedSpaceNodeMemberGetNodeNestedAction>((AddSharedSpaceNodeMemberState state, AddSharedSpaceNodeMemberGetNodeNestedAction action) =>
+      state.setNodeNested(
+          newNodeNested: action.viewState.fold(
               (failure) => null,
               (success) => (success is SharedSpaceDetailViewState) ? success.sharedSpace : null),
-          viewState: action.getDriveViewState)),
-  TypedReducer<AddDriveMemberState, AddDriveMemberSetDriveRoleAction>((AddDriveMemberState state, AddDriveMemberSetDriveRoleAction action) =>
-      state.setDriveRoleName(action.newDriveRole)),
-  TypedReducer<AddDriveMemberState, AddDriveMemberSetWorkgroupRoleAction>((AddDriveMemberState state, AddDriveMemberSetWorkgroupRoleAction action) =>
+          viewState: action.viewState)),
+  TypedReducer<AddSharedSpaceNodeMemberState, AddSharedSpaceNodeMemberSetNodeNestedRoleAction>((AddSharedSpaceNodeMemberState state, AddSharedSpaceNodeMemberSetNodeNestedRoleAction action) =>
+      state.setNodeNestedRoleName(action.newNodeNestedRole)),
+  TypedReducer<AddSharedSpaceNodeMemberState, AddSharedSpaceNodeMemberSetWorkgroupRoleAction>((AddSharedSpaceNodeMemberState state, AddSharedSpaceNodeMemberSetWorkgroupRoleAction action) =>
       state.setWorkgroupRoleName(action.newWorkgroupRole)),
-  TypedReducer<AddDriveMemberState, AddDriveMemberGetAllRolesAction>((AddDriveMemberState state, AddDriveMemberGetAllRolesAction action) =>
-      state.setListRoles(newDriveRoles: action.driveRoles, newWorkgroupRoles: action.workgroupRoles)),
-  TypedReducer<AddDriveMemberState, CleanAddDriveMemberStateAction>((AddDriveMemberState state, CleanAddDriveMemberStateAction action) =>
+  TypedReducer<AddSharedSpaceNodeMemberState, AddSharedSpaceNodeMemberGetAllRolesAction>((AddSharedSpaceNodeMemberState state, AddSharedSpaceNodeMemberGetAllRolesAction action) =>
+      state.setListRoles(newNodeNestedRoles: action.nodeNestedRoles, newWorkgroupRoles: action.workgroupRoles)),
+  TypedReducer<AddSharedSpaceNodeMemberState, CleanAddSharedSpaceNodeMemberStateAction>((AddSharedSpaceNodeMemberState state, CleanAddSharedSpaceNodeMemberStateAction action) =>
       state.clearViewState()),
 ]);

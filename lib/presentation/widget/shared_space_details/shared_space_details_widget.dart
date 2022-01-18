@@ -299,8 +299,8 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
   void _goToAddMember(SharedSpaceNodeNested sharedSpace, List<SharedSpaceMember> membersList) {
     if (sharedSpace.nodeType == LinShareNodeType.WORK_GROUP) {
       _model.goToAddSharedSpaceMember(sharedSpace, membersList);
-    } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
-      _model.goToAddDriveMember(sharedSpace, membersList);
+    } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE || sharedSpace.nodeType == LinShareNodeType.WORK_SPACE) {
+      _model.goToAddSharedSpaceNodeMember(sharedSpace, membersList);
     }
   }
 
@@ -309,6 +309,8 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
       return SharedSpaceOperationRole.addMemberSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
     } else if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
       return SharedSpaceOperationRole.addDriveMemberRoles.contains(sharedSpace.sharedSpaceRole.name);
+    } else if (sharedSpace.nodeType == LinShareNodeType.WORK_SPACE) {
+      return SharedSpaceOperationRole.addWorkspaceMemberRoles.contains(sharedSpace.sharedSpaceRole.name);
     }
     return false;
   }
@@ -340,7 +342,7 @@ class _SharedSpaceDetailsWidgetState extends State<SharedSpaceDetailsWidget> {
           member.account?.name ?? '',
           member.account?.mail ?? '',
           member.role?.name.getDriveRoleName(context) ?? AppLocalizations.of(context).unknown_role,
-          member.nestedRole?.name.getWorkgroupRoleNameInsideDrive(context) ?? AppLocalizations.of(context).unknown_role,
+          member.nestedRole?.name.getWorkgroupRoleNameInsideDriveOrWorkspace(context) ?? AppLocalizations.of(context).unknown_role,
           userCurrentDriveRole: sharedSpace.sharedSpaceRole.name,
           onSelectedRoleDriveCallback: () => selectDriveMemberRoleBottomSheet(
               context,

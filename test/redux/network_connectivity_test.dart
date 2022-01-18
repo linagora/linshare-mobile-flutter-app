@@ -39,7 +39,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart'
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/app_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/add_drive_member_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_node_member_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
@@ -176,7 +176,7 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     functionalityState: FunctionalityState.initial(),
     addSharedSpaceMembersState: AddSharedSpaceMembersState.initial(),
     sharedSpaceDetailsState: SharedSpaceDetailsState.initial(),
-    addDriveMemberState: AddDriveMemberState.initial(),
+    addSharedSpaceNodeMemberState: AddSharedSpaceNodeMemberState.initial(),
     receivedShareState: ReceivedShareState.initial(),
     biometricAuthenticationLoginState: BiometricAuthenticationLoginState.initial(),
     biometricAuthenticationSettingState: BiometricAuthenticationSettingState.initial(),

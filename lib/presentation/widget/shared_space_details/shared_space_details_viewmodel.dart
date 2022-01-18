@@ -41,8 +41,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_drive_member_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_drive_member/add_member_destination.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_member_destination.dart';
+import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_shared_space_node_member_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
 import 'package:redux/redux.dart';
 
@@ -108,10 +108,10 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
     );
   }
 
-  void goToAddDriveMember(SharedSpaceNodeNested drive, List<SharedSpaceMember> members) {
+  void goToAddSharedSpaceNodeMember(SharedSpaceNodeNested nodeNested, List<SharedSpaceMember> members) {
     _appNavigation.push(
-      RoutePaths.addDriveMember,
-      arguments: AddDriveMemberArguments(drive, AddMemberDestination.sharedSpaceDetail, members: members),
+      RoutePaths.addSharedSpaceNodeMember,
+      arguments: AddSharedSpaceNodeMemberArguments(nodeNested, AddMemberDestination.sharedSpaceDetail, members: members),
     );
   }
 
