@@ -31,6 +31,8 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'package:domain/domain.dart';
+
 enum APIVersionSupported {
   v5, v4, v2
 }
@@ -44,6 +46,21 @@ extension APIVersionSupportedExtensions on APIVersionSupported {
         return 'v4';
       case APIVersionSupported.v2:
         return 'v2';
+    }
+  }
+
+  static APIVersionSupported fromString(String? apiVersionValue) {
+    if (apiVersionValue == null) {
+      throw UnsupportedAPIVersion();
+    }
+    if (apiVersionValue == 'v5') {
+      return APIVersionSupported.v5;
+    } else if (apiVersionValue == 'v4') {
+      return APIVersionSupported.v4;
+    } else if (apiVersionValue == 'v2') {
+      return APIVersionSupported.v2;
+    } else {
+      throw UnsupportedAPIVersion();
     }
   }
 }

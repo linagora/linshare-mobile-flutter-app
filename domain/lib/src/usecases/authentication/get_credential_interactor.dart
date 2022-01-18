@@ -29,24 +29,27 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:core';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
 
 import '../../extension/uri_extension.dart';
 
 class GetCredentialInteractor {
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
+  final APIRepository apiRepository;
 
-  GetCredentialInteractor(this.tokenRepository, this.credentialRepository);
+  GetCredentialInteractor(this.tokenRepository, this.credentialRepository, this.apiRepository);
 
   Future<Either<Failure, Success>> execute() async {
     try {
       final token = await tokenRepository.getToken();
       final baseUrl = await credentialRepository.getBaseUrl();
+      final apiVersion = await apiRepository.getAPIVersionSupported();
       if (isCredentialValid(token, baseUrl)) {
-        return Right(CredentialViewState(token, baseUrl));
+        return Right(CredentialViewState(token, baseUrl, apiVersion));
       } else {
         return Left(CredentialFailure(BadCredentials()));
       }

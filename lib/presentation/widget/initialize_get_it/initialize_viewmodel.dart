@@ -51,6 +51,7 @@ class InitializeViewModel extends BaseViewModel {
   final GetCredentialInteractor _getCredentialInteractor;
   final AppNavigation _appNavigation;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
+  final DynamicAPIVersionSupportInterceptor _dynamicAPIVersionSupportInterceptor;
   final RetryAuthenticationInterceptors _retryInterceptors;
   final UploadFileManager _uploadFileManager;
   final Connectivity _connectivity;
@@ -62,6 +63,7 @@ class InitializeViewModel extends BaseViewModel {
     this._getCredentialInteractor,
     this._appNavigation,
     this._dynamicUrlInterceptors,
+    this._dynamicAPIVersionSupportInterceptor,
     this._retryInterceptors,
     this._uploadFileManager,
     this._connectivity,
@@ -114,6 +116,7 @@ class InitializeViewModel extends BaseViewModel {
   ThunkAction<AppState> _getCredentialSuccessAction(CredentialViewState success) {
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
+      _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersion;
       _retryInterceptors.setPermanentToken(success.token);
       store.dispatch(_getBiometricSetting(success.baseUrl));
     };
