@@ -172,7 +172,7 @@ class _AddSharedSpaceNodeMemberWidgetState extends State<AddSharedSpaceNodeMembe
                             nodeNested,
                             nodeNested.nodeType!,
                             role,
-                            nodeNested.nodeType!.listRoleName(),
+                            nodeNested.nodeType!.listRoleName,
                             onNewRoleUpdated: (newRole) => _model.selectNodeNestedRole(newRole)),
                         style: ButtonStyle(
                             foregroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -333,16 +333,18 @@ class _AddSharedSpaceNodeMemberWidgetState extends State<AddSharedSpaceNodeMembe
                   tileColor: Colors.white,
                   userCurrentDriveRole: nodeNested.sharedSpaceRole.name,
                   onSelectedRoleDriveCallback: () =>
-                      selectDriveMemberRoleBottomSheet(
+                      selectSharedSpaceNodeMemberRoleBottomSheet(
                           context,
                           member.role?.name ?? SharedSpaceRoleName.DRIVE_READER,
                           nodeNested,
+                          nodeNested.nodeType!,
                           member),
                   onSelectedRoleWorkgroupCallback: () =>
-                      selectWorkgroupRoleInsideDriveBottomSheet(
+                      selectWorkgroupRoleInsideSharedSpaceNodeBottomSheet(
                           context,
                           member.nestedRole?.name ?? SharedSpaceRoleName.READER,
                           nodeNested,
+                          nodeNested.nodeType!,
                           member),
                   onDeleteMemberCallback: () =>
                       _confirmDeleteMember(
@@ -363,16 +365,18 @@ class _AddSharedSpaceNodeMemberWidgetState extends State<AddSharedSpaceNodeMembe
                   tileColor: Colors.white,
                   userCurrentWorkspaceRole: nodeNested.sharedSpaceRole.name,
                   onSelectedRoleWorkspaceCallback: () =>
-                      selectDriveMemberRoleBottomSheet(
+                      selectSharedSpaceNodeMemberRoleBottomSheet(
                           context,
                           member.role?.name ?? SharedSpaceRoleName.WORK_SPACE_READER,
                           nodeNested,
+                          nodeNested.nodeType!,
                           member),
                   onSelectedRoleWorkgroupCallback: () =>
-                      selectWorkgroupRoleInsideDriveBottomSheet(
+                      selectWorkgroupRoleInsideSharedSpaceNodeBottomSheet(
                           context,
                           member.nestedRole?.name ?? SharedSpaceRoleName.READER,
                           nodeNested,
+                          nodeNested.nodeType!,
                           member),
                   onDeleteMemberCallback: () =>
                       _confirmDeleteMember(
@@ -446,44 +450,37 @@ class _AddSharedSpaceNodeMemberWidgetState extends State<AddSharedSpaceNodeMembe
         .show(context);
   }
 
-  void selectDriveMemberRoleBottomSheet(
+  void selectSharedSpaceNodeMemberRoleBottomSheet(
       BuildContext context,
       SharedSpaceRoleName selectedRole,
-      SharedSpaceNodeNested drive,
+      SharedSpaceNodeNested nodeNested,
+      LinShareNodeType nodeType,
       SharedSpaceMember member) {
     SelectRoleModalSheetBuilder(
-        key: Key('select_role_on_drive_member_details'),
+        key: Key('select_role_on_shared_space_node_member_details'),
         selectedRole: selectedRole,
-        listRoles: [
-          SharedSpaceRoleName.DRIVE_READER,
-          SharedSpaceRoleName.DRIVE_ADMIN,
-          SharedSpaceRoleName.DRIVE_WRITER
-        ])
-      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_drive_member_header'))
+        listRoles: nodeType.listRoleName)
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_shared_space_node_member_header'))
         .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
         .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
-        .addLabel(AppLocalizations.of(context).role_in_this_drive)
+        .addLabel(nodeType.getTitleRoleAddMember(context))
         .build())
-      .onConfirmAction((role) => _model.changeDriveMemberRole(drive, member, role))
+      .onConfirmAction((role) => _model.changeSharedSpaceNodeMemberRole(nodeNested, member, role, nodeType))
       .show(context);
   }
 
-  void selectWorkgroupRoleInsideDriveBottomSheet(
+  void selectWorkgroupRoleInsideSharedSpaceNodeBottomSheet(
       BuildContext context,
       SharedSpaceRoleName selectedRole,
-      SharedSpaceNodeNested drive,
+      SharedSpaceNodeNested nodeNested,
+      LinShareNodeType nodeType,
       SharedSpaceMember member) {
     SelectRoleWithActionModalSheetBuilder(
         context,
-        key: Key('select_role_on_workgroup_inside_drive_add_member'),
+        key: Key('select_role_on_workgroup_inside_shared_space_node_add_member'),
         selectedRole: selectedRole,
-        listRoles: [
-          SharedSpaceRoleName.READER,
-          SharedSpaceRoleName.ADMIN,
-          SharedSpaceRoleName.CONTRIBUTOR,
-          SharedSpaceRoleName.WRITER
-        ])
-      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_workgroup_inside_drive_add_member_header'))
+        listRoles: LinShareNodeType.WORK_GROUP.listRoleName)
+      .addHeader(SimpleBottomSheetHeaderBuilder(Key('role_on_workgroup_inside_shared_space_node_add_member_header'))
         .addTransformPadding(Matrix4.translationValues(0, -5, 0.0))
         .textStyle(TextStyle(fontSize: 18.0, color: AppColor.uploadFileFileNameTextColor, fontWeight: FontWeight.w500))
         .addLabel(AppLocalizations.of(context).edit_default_workgroup_role)
@@ -491,7 +488,8 @@ class _AddSharedSpaceNodeMemberWidgetState extends State<AddSharedSpaceNodeMembe
       .optionalCheckbox(AppLocalizations.of(context).override_this_role_for_all_existing_workgroups)
       .onNegativeAction(() => appNavigation.popBack())
       .onPositiveAction((role, isOverrideRoleForAll) =>
-        _model.changeWorkgroupInsideDriveMemberRole(drive, member, role, isOverrideRoleForAll: isOverrideRoleForAll))
+        _model.changeWorkgroupInsideDriveMemberRole(nodeNested, member, role,
+            nodeType, isOverrideRoleForAll: isOverrideRoleForAll))
       .show(context);
   }
 }

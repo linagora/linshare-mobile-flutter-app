@@ -53,3 +53,10 @@ class UpdateDriveMembersAction extends ActionOnline {
 
   UpdateDriveMembersAction(this.viewState);
 }
+
+@immutable
+class UpdateWorkspaceMembersAction extends ActionOnline {
+  final Either<Failure, Success> viewState;
+
+  UpdateWorkspaceMembersAction(this.viewState);
+}

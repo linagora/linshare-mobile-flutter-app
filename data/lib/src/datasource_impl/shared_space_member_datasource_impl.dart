@@ -132,4 +132,22 @@ class SharedSpaceMemberDataSourceImpl implements SharedSpaceMemberDataSource {
       });
     });
   }
+
+  @override
+  Future<SharedSpaceMember> updateWorkspaceMemberRole(SharedSpaceId sharedSpaceId, UpdateWorkspaceMemberRequest request, {bool? isOverrideRoleForAll}) {
+    return Future.sync(() async {
+      final member = await _linShareHttpClient.updateRoleWorkspaceMember(sharedSpaceId, request, isOverrideRoleForAll: isOverrideRoleForAll);
+      return member.toSharedSpaceMember();
+    }).catchError((error) {
+      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+        if (error.response?.statusCode == 404) {
+          throw SharedSpaceNotFound();
+        } else if (error.response?.statusCode == 403) {
+          throw NotAuthorized();
+        } else {
+          throw UnknownError(error.response?.statusMessage!);
+        }
+      });
+    });
+  }
 }
