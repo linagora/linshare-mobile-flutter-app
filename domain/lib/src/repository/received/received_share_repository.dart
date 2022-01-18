@@ -40,7 +40,7 @@ abstract class ReceivedShareRepository {
 
   Future<List<ReceivedShare>> getAllReceivedShares();
 
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl);
+  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl, APIVersionSupported apiVersionSupported);
 
   Future<String> downloadPreviewReceivedShare(
     ReceivedShare receivedShare,

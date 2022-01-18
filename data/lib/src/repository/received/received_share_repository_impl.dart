@@ -47,8 +47,8 @@ class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl) {
-    return _receivedShareDataSources[DataSourceType.network]!.downloadReceivedShares(shareIds, token, baseUrl);
+  Future<List<DownloadTaskId>> downloadReceivedShares(List<ShareId> shareIds, Token token, Uri baseUrl, APIVersionSupported apiVersion) {
+    return _receivedShareDataSources[DataSourceType.network]!.downloadReceivedShares(shareIds, token, baseUrl, apiVersion);
   }
 
   @override
