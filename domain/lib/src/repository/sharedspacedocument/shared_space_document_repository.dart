@@ -43,6 +43,7 @@ abstract class SharedSpaceDocumentRepository {
       FileInfo fileInfo,
       Token token,
       Uri baseUrl,
+      APIVersionSupported apiVersion,
       SharedSpaceId sharedSpaceId,
       {WorkGroupNodeId? parentNodeId});
 

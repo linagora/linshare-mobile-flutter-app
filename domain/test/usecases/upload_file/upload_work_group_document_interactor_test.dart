@@ -32,10 +32,11 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
+import '../../mock/repository/authentication/mock_api_repository.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
 import '../../mock/repository/authentication/mock_token_repository.dart';
 import '../../mock/repository/mock_shared_space_document_repository.dart';
@@ -45,6 +46,7 @@ void main() {
     late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
     late MockTokenRepository tokenRepository;
     late MockCredentialRepository credentialRepository;
+    late MockAPIRepository apiRepository;
     late UploadWorkGroupDocumentInteractor uploadWorkGroupDocumentInteractor;
     late UploadTaskId uploadTaskId;
 
@@ -52,18 +54,21 @@ void main() {
       sharedSpaceDocumentRepository = MockSharedSpaceDocumentRepository();
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
+      apiRepository = MockAPIRepository();
       uploadTaskId = UploadTaskId('upload_task_id_1');
       uploadWorkGroupDocumentInteractor = UploadWorkGroupDocumentInteractor(
           sharedSpaceDocumentRepository,
           tokenRepository,
-          credentialRepository);
+          credentialRepository,
+          apiRepository
+      );
     });
 
     test('uploadSharedSpaceDocument should return success with correct data', () async {
       final sharedSpaceId = SharedSpaceId('150e408a-dde9-4315-9a5b-7fe0f251fa83');
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
-      when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, linShareBaseUrl, sharedSpaceId))
+      when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, linShareBaseUrl, APIVersionSupported.v4, sharedSpaceId))
           .thenAnswer((_) async => uploadTaskId);
 
       final result = await uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
@@ -76,7 +81,7 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       final exception = Exception();
-      when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, linShareBaseUrl, wrongSharedSpaceId))
+      when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, linShareBaseUrl, APIVersionSupported.v4, wrongSharedSpaceId))
           .thenThrow(exception);
 
       final result = await uploadWorkGroupDocumentInteractor.execute(fileInfo1, wrongSharedSpaceId);
@@ -89,7 +94,7 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => wrongUrl);
       final exception = Exception();
-      when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, wrongUrl, sharedSpaceId))
+      when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, wrongUrl, APIVersionSupported.v4,  sharedSpaceId))
           .thenThrow(exception);
 
       final result = await uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
@@ -103,7 +108,7 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       final exception = Exception();
-      when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, wrongToken, linShareBaseUrl, sharedSpaceId))
+      when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, wrongToken, linShareBaseUrl, APIVersionSupported.v4, sharedSpaceId))
           .thenThrow(exception);
 
       final result = await uploadWorkGroupDocumentInteractor.execute(fileInfo1, sharedSpaceId);
