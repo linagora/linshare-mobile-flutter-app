@@ -36,6 +36,7 @@ import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../fixture/test_fixture.dart';
+import '../../mock/repository/authentication/mock_api_repository.dart';
 import '../../mock/repository/authentication/mock_credential_repository.dart';
 import '../../mock/repository/authentication/mock_token_repository.dart';
 
@@ -45,18 +46,20 @@ void main() {
     late GetCredentialInteractor getCredentialInteractor;
     late MockTokenRepository tokenRepository;
     late MockCredentialRepository credentialRepository;
+    late MockAPIRepository apiRepository;
 
     setUp(() {
       tokenRepository = MockTokenRepository();
       credentialRepository = MockCredentialRepository();
-      getCredentialInteractor = GetCredentialInteractor(tokenRepository, credentialRepository);
+      apiRepository = MockAPIRepository();
+      getCredentialInteractor = GetCredentialInteractor(tokenRepository, credentialRepository, apiRepository);
     });
 
     test('getCredentialInteractor should return success with correct data', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       final result = await getCredentialInteractor.execute();
-      expect(result, Right(CredentialViewState(permanentToken, linShareBaseUrl)));
+      expect(result, Right(CredentialViewState(permanentToken, linShareBaseUrl, APIVersionSupported.v4)));
     });
 
     test('getCredentialInteractor should failure with no BaseUrl', () async {
