@@ -109,7 +109,7 @@ class LocalDocumentDataSourceImpl extends DocumentDataSource {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl) {
+  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl, APIVersionSupported apiVersion) {
     throw UnimplementedError();
   }
 

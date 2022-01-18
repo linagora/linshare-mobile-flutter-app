@@ -37,16 +37,17 @@ class DownloadFileInteractor {
   final DocumentRepository _documentRepository;
   final TokenRepository _tokenRepository;
   final CredentialRepository _credentialRepository;
+  final APIRepository _apiRepository;
 
-  DownloadFileInteractor(this._documentRepository, this._tokenRepository, this._credentialRepository);
+  DownloadFileInteractor(this._documentRepository, this._tokenRepository, this._credentialRepository, this._apiRepository);
 
   Future<Either<Failure, Success>> execute(List<DocumentId> documentIds) async {
     try {
       final taskIds = await Future.wait(
-          [_tokenRepository.getToken(), _credentialRepository.getBaseUrl()],
+          [_tokenRepository.getToken(), _credentialRepository.getBaseUrl(), _apiRepository.getAPIVersionSupported()],
           eagerError: true)
         .then((List responses) async => await _documentRepository
-          .downloadDocuments(documentIds, responses.first, responses.last));
+          .downloadDocuments(documentIds, responses.first, responses[1], responses.last));
 
       return Right<Failure, Success>(DownloadFileViewState(taskIds));
     } catch (exception) {
