@@ -60,6 +60,7 @@ void main() {
       getIt.get<GetTokenOIDCInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
+      getIt.get<DynamicAPIVersionSupportInterceptor>(),
       getIt<GetOIDCConfigurationInteractor>(),
       getIt<VerifyNameInteractor>(),
       getIt<GetSaaSConfigurationInteractor>(),
@@ -72,7 +73,7 @@ void main() {
         final viewModel = getIt.get<LoginViewModel>();
         final store = getIt.get<Store<AppState>>();
 
-        final authenticationState = AuthenticationViewState(Token('token', TokenId('123456')));
+        final authenticationState = AuthenticationViewState(Token('token', TokenId('123456')), APIVersionSupported.v4);
         store.dispatch(viewModel.loginCredentialsSuccessAction(authenticationState));
 
         expect(
@@ -80,7 +81,6 @@ void main() {
           equals(Right<Failure, Success>(authenticationState))
         );
       });
-
     });
   });
 }
