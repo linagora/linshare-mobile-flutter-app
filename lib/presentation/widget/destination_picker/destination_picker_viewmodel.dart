@@ -186,6 +186,8 @@ class DestinationPickerViewModel extends BaseViewModel {
   bool _validateGetAllSharedSpace(Operation operation, SharedSpaceNodeNested sharedSpace) {
     if (sharedSpace.nodeType == LinShareNodeType.DRIVE) {
       return _isDriveEnable();
+    } else if (sharedSpace.nodeType == LinShareNodeType.WORK_SPACE) {
+      return _isWorkSpaceEnable();
     } else {
       if (operation == Operation.copyFromMySpace || operation == Operation.copyFromReceivedShare) {
         return SharedSpaceOperationRole.copyToSharedSpaceRoles.contains(sharedSpace.sharedSpaceRole.name);
@@ -206,20 +208,24 @@ class DestinationPickerViewModel extends BaseViewModel {
   List<SharedSpaceNodeNested> get currentSharedSpaceList => store.state.destinationPickerState.sharedSpacesList;
 
   bool _isDriveEnable() {
-    return store.state.functionalityState.isDriveEnabled() || store.state.functionalityState.isSharedSpaceEnabledV5();
+    return store.state.functionalityState.isDriveEnabled();
   }
 
-  void getAllDrive(Operation? operation, SharedSpaceNodeNested drive) async {
-    store.dispatch(_getAllDriveAction(operation, drive));
+  bool _isWorkSpaceEnable() {
+    return store.state.functionalityState.isSharedSpaceEnabledV5();
   }
 
-  ThunkAction<AppState> _getAllDriveAction(Operation? operation, SharedSpaceNodeNested drive) {
+  void getAllWorkgroupInsideSharedSpaceNode(Operation? operation, SharedSpaceNodeNested parentNode) async {
+    store.dispatch(_getAllWorkgroupInsideSharedSpaceNodeAction(operation, parentNode));
+  }
+
+  ThunkAction<AppState> _getAllWorkgroupInsideSharedSpaceNodeAction(Operation? operation, SharedSpaceNodeNested parentNode) {
     return (Store<AppState> store) async {
       store.dispatch(StartDestinationPickerLoadingAction());
 
-      await _getAllWorkgroupsInteractor.execute(drive.sharedSpaceId)
+      await _getAllWorkgroupsInteractor.execute(parentNode.sharedSpaceId)
           .then((result) => result.fold(
-              (failure) => store.dispatch(DestinationPickerGetAllDriveAction(result, drive, [])),
+              (failure) => store.dispatch(DestinationPickerGetAllWorkgroupInsideParentNodeAction(result, parentNode, [])),
               (success) {
                  if (success is GetAllWorkgroupsViewState) {
                    final sharedSpacesList = success.workgroups.where((element) {
@@ -239,25 +245,26 @@ class DestinationPickerViewModel extends BaseViewModel {
                       return true;
                    }).toList();
 
-                   store.dispatch(DestinationPickerGetAllDriveAction(result, drive, sharedSpacesList));
+                   store.dispatch(DestinationPickerGetAllWorkgroupInsideParentNodeAction(result, parentNode, sharedSpacesList));
                  } else {
-                   store.dispatch(DestinationPickerGetAllDriveAction(result, drive, []));
+                   store.dispatch(DestinationPickerGetAllWorkgroupInsideParentNodeAction(result, parentNode, []));
                  }
               }));
     };
   }
 
-  void openSharedSpaceInside(SharedSpaceNodeNested sharedSpace, SharedSpaceNodeNested? drive) {
-    store.dispatch(DestinationPickerGoInsideSharedSpaceAction(sharedSpace, drive: drive));
+  void openWorkgroupInside(SharedSpaceNodeNested sharedSpace, SharedSpaceNodeNested? parentNode) {
+    store.dispatch(DestinationPickerGoInsideWorkgroupAction(sharedSpace, parentNode: parentNode));
   }
 
-  void openDrive(SharedSpaceNodeNested drive) {
-    store.dispatch(ClearAllSharedSpaceListStateAction(DestinationPickerCurrentView.drive, drive: drive));
-    getAllDrive(store.state.destinationPickerState.operation, drive);
+  void openSharedSpaceNodeInside(SharedSpaceNodeNested parentNode) {
+    store.dispatch(ClearAllSharedSpaceListStateAction(
+        DestinationPickerCurrentView.sharedSpaceNodeInside, parentNode: parentNode));
+    getAllWorkgroupInsideSharedSpaceNode(store.state.destinationPickerState.operation, parentNode);
   }
 
-  void backToSharedSpace({SharedSpaceNodeNested? drive}) {
-    if (drive != null) {
+  void backToSharedSpace({SharedSpaceNodeNested? parentNode}) {
+    if (parentNode != null) {
       store.dispatch(ClearAllSharedSpaceListStateAction(DestinationPickerCurrentView.sharedSpace));
       getAllSharedSpaces(store.state.destinationPickerState.operation);
     } else {
@@ -269,8 +276,8 @@ class DestinationPickerViewModel extends BaseViewModel {
     store.dispatch(GoToChooseSpaceAction(operation));
   }
 
-  void backToInsideDriveDestination(SharedSpaceNodeNested sharedSpace) {
-    store.dispatch(BackToInsideDriveDestinationAction(sharedSpace));
+  void backToInsideSharedSpaceNodeDestination(SharedSpaceNodeNested parentNode) {
+    store.dispatch(BackToInsideSharedSpaceNodeDestinationAction(parentNode));
   }
 
   void handleOnSharedSpaceBackPress() {
