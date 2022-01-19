@@ -64,6 +64,7 @@ void main() {
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       when(documentRepository.upload(fileInfo1, permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => uploadTaskId);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
 
       final result = await uploadFileInteractor.execute(fileInfo1);
 
@@ -74,6 +75,7 @@ void main() {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => wrongUrl);
       final exception = Exception();
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       when(documentRepository.upload(fileInfo1, permanentToken, wrongUrl, APIVersionSupported.v4))
           .thenThrow(exception);
 
@@ -86,6 +88,7 @@ void main() {
       final wrongToken = Token('token', TokenId('uuid'));
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       final exception = Exception();
       when(documentRepository.upload(fileInfo1, wrongToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenThrow(exception);

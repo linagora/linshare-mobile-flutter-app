@@ -32,7 +32,6 @@
 import 'package:data/data.dart';
 import 'package:data/src/datasource/authentication_oidc_datasource.dart';
 import 'package:domain/domain.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
 
@@ -61,8 +60,8 @@ class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
   }
 
   @override
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode}) {
-    return oidcDataSources.createPermanentTokenWithOIDC(baseUrl, tokenOIDC, otpCode: otpCode);
+  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, APIVersionSupported apiVersion, TokenOIDC tokenOIDC, {OTPCode? otpCode}) {
+    return oidcDataSources.createPermanentTokenWithOIDC(baseUrl, apiVersion, tokenOIDC, otpCode: otpCode);
   }
 
   @override

@@ -62,6 +62,7 @@ void main() {
     test('downloadFileInteractor should return success with correct document ID', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       when(documentRepository.downloadDocuments([documentId], permanentToken, linShareBaseUrl, APIVersionSupported.v4))
           .thenAnswer((_) async => [DownloadTaskId('task_id_1')]);
 

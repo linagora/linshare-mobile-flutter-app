@@ -50,6 +50,7 @@ void main() {
   getIt.registerLazySingleton<GetTokenOIDCInteractor>(() => MockGetTokenSSOInteractor());
   getIt.registerLazySingleton<AppNavigation>(() => MockAppNavigation());
   getIt.registerLazySingleton<DynamicUrlInterceptors>(() => MockDynamicUrlInterceptors());
+  getIt.registerLazySingleton<DynamicAPIVersionSupportInterceptor>(() => MockDynamicAPIVersionSupportInterceptor());
   getIt.registerLazySingleton<GetOIDCConfigurationInteractor>(() => MockGetOIDCConfigurationInteractor());
   getIt.registerLazySingleton<VerifyNameInteractor>(() => MockVerifyNameInteractor());
   getIt.registerLazySingleton<GetSaaSConfigurationInteractor>(() => MockGetSaaSConfigurationInteractor());

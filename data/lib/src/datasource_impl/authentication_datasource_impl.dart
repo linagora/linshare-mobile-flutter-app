@@ -63,8 +63,7 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
     }).catchError((error) {
         _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
           if (error.response?.statusCode == 404) {
-            developer.log(error.message, name: 'dmm dat day');
-            developer.log(error.response?.data, name: 'dmm dat day');
+            developer.log('createPermanentToken(): $error', name: 'AuthenticationDataSourceImpl');
             throw UnsupportedAPIVersion();
           } else if (error.response?.statusCode == 401) {
             final errorCode = error.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';

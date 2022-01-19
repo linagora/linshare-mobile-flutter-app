@@ -50,6 +50,7 @@ class EnterOTPViewModel extends BaseViewModel {
   final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
   final CreatePermanentTokenOIDCInteractor _getPermanentTokenSSOInteractor;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
+  final DynamicAPIVersionSupportInterceptor _dynamicAPIVersionSupportInterceptor;
   final AppToast _appToast;
   late EnterOTPArgument _enterOTPArgument;
 
@@ -59,6 +60,7 @@ class EnterOTPViewModel extends BaseViewModel {
     this._getPermanentTokenInteractor,
     this._getPermanentTokenSSOInteractor,
     this._dynamicUrlInterceptors,
+    this._dynamicAPIVersionSupportInterceptor,
     this._appToast
   ) : super(store);
 
@@ -131,6 +133,7 @@ class EnterOTPViewModel extends BaseViewModel {
   void _loginSuccess(AuthenticationViewState success) async {
     store.dispatch(AuthenticationAction(Right(success)));
     _dynamicUrlInterceptors.changeBaseUrl(_enterOTPArgument.baseUrl.origin);
+    _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersionSupported;
     await _appNavigation.pushAndRemoveAll(RoutePaths.authentication, arguments: AuthenticationArguments(_enterOTPArgument.baseUrl));
   }
 }
