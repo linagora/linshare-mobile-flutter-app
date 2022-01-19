@@ -58,6 +58,7 @@ void main() {
     test('getCredentialInteractor should return success with correct data', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       final result = await getCredentialInteractor.execute();
       expect(result, Right(CredentialViewState(permanentToken, linShareBaseUrl, APIVersionSupported.v4)));
     });

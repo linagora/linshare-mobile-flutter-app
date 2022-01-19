@@ -195,6 +195,7 @@ class WidgetModule {
       getIt<GetTokenOIDCInteractor>(),
       getIt<CreatePermanentTokenOIDCInteractor>(),
       getIt<DynamicUrlInterceptors>(),
+      getIt<DynamicAPIVersionSupportInterceptor>()
     ));
   }
 
@@ -492,6 +493,7 @@ class WidgetModule {
         getIt<CreatePermanentTokenInteractor>(),
         getIt<CreatePermanentTokenOIDCInteractor>(),
         getIt<DynamicUrlInterceptors>(),
+        getIt<DynamicAPIVersionSupportInterceptor>(),
         getIt<AppToast>()
     ));
   }

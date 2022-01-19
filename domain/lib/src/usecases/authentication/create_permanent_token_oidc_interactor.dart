@@ -29,25 +29,50 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:core';
+import 'dart:developer' as developer;
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
 
 class CreatePermanentTokenOIDCInteractor {
   final AuthenticationOIDCRepository authenticationOIDCRepository;
   final TokenRepository tokenRepository;
   final CredentialRepository credentialRepository;
+  final APIRepository apiRepository;
 
-  CreatePermanentTokenOIDCInteractor(this.authenticationOIDCRepository, this.tokenRepository, this.credentialRepository);
+  CreatePermanentTokenOIDCInteractor(
+    this.authenticationOIDCRepository,
+    this.tokenRepository,
+    this.credentialRepository,
+    this.apiRepository
+  );
 
   Future<Either<Failure, Success>> execute(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode}) async {
-    try {
-      final token = await authenticationOIDCRepository.createPermanentTokenWithOIDC(baseUrl, tokenOIDC, otpCode: otpCode);
-      await tokenRepository.persistToken(token);
-      await credentialRepository.saveBaseUrl(baseUrl);
-      return Right(AuthenticationViewState(token));
-    } catch (e) {
-      return Left(AuthenticationFailure(e));
+    for (var i = 0; i <= APIVersionSupported.values.length; i++) {
+      try {
+        developer.log('execute(): $baseUrl in ${APIVersionSupported.values[i]}', name: 'CreatePermanentTokenOIDCInteractor');
+        final token = await authenticationOIDCRepository.createPermanentTokenWithOIDC(
+            baseUrl,
+            APIVersionSupported.values[i],
+            tokenOIDC,
+            otpCode: otpCode);
+        await tokenRepository.persistToken(token);
+        await credentialRepository.saveBaseUrl(baseUrl);
+        developer.log('execute(): detected version ${APIVersionSupported.values[i]}', name: 'CreatePermanentTokenOIDCInteractor');
+        await apiRepository.persistAPIVersionSupported(APIVersionSupported.values[i]);
+        return Right(AuthenticationViewState(token, APIVersionSupported.values[i]));
+      } catch (e) {
+        if (e is UnsupportedAPIVersion) {
+          developer.log('execute(): $e', name: 'CreatePermanentTokenOIDCInteractor');
+          continue;
+        } else {
+          developer.log('execute(): $e', name: 'CreatePermanentTokenOIDCInteractor');
+          return Left(AuthenticationFailure(e));
+        }
+      }
     }
+    developer.log('API Not found!', name: 'CreatePermanentTokenOIDCInteractor');
+    return Left(AuthenticationFailure(ServerNotFound()));
   }
 }
