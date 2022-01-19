@@ -29,9 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:data/src/extensions/share_preferences_extension.dart';
+import 'dart:developer' as developer;
 
 import 'package:data/data.dart';
+import 'package:data/src/extensions/share_preferences_extension.dart';
 import 'package:data/src/local/model/token_oidc_cache.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -94,18 +95,22 @@ class AuthenticationOIDCDataSourceImpl implements AuthenticationOIDCDataSource {
   }
 
   @override
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode}) async {
+  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, APIVersionSupported apiVersion, TokenOIDC tokenOIDC, {OTPCode? otpCode}) async {
     return Future.sync(() async {
       final deviceName = await deviceManager.getDeviceName();
       final permanentToken = await linShareHttpClient.createPermanentTokenWithOIDC(
           baseUrl,
+          apiVersion,
           tokenOIDC.token,
           PermanentTokenBodyRequest('Token-${deviceManager.getPlatformString()}-$deviceName'),
           otpCode: otpCode);
       return permanentToken.toToken();
     }).catchError((error) {
       remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
-        if (error.response?.statusCode == 401) {
+        if (error.response?.statusCode == 404) {
+          developer.log('createPermanentTokenWithOIDC(): $error', name: 'AuthenticationOIDCDataSourceImpl');
+          throw UnsupportedAPIVersion();
+        } else if (error.response?.statusCode == 401) {
           final errorCode = error.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
           final authErrorCode = LinShareErrorCode(int.tryParse(errorCode) ?? 1);
           if (authErrorCode.isAuthenticateWithOTPError()) {

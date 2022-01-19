@@ -66,6 +66,7 @@ class SignUpViewModel extends BaseViewModel {
   final GetTokenOIDCInteractor _getTokenOIDCInteractor;
   final CreatePermanentTokenOIDCInteractor _createPermanentTokenOIDCInteractor;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
+  final DynamicAPIVersionSupportInterceptor _dynamicAPIVersionSupportInterceptor;
 
   SignUpViewModel(
     Store<AppState> store,
@@ -80,6 +81,7 @@ class SignUpViewModel extends BaseViewModel {
     this._getTokenOIDCInteractor,
     this._createPermanentTokenOIDCInteractor,
     this._dynamicUrlInterceptors,
+    this._dynamicAPIVersionSupportInterceptor
   ) : super(store);
 
   String _emailText = '';
@@ -372,6 +374,7 @@ class SignUpViewModel extends BaseViewModel {
       store.dispatch(AuthenticationAction(Right(success)));
 
       _dynamicUrlInterceptors.changeBaseUrl(baseUrl.origin);
+      _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersionSupported;
 
       await _appNavigation.pushAndRemoveAll(
         RoutePaths.authentication,
