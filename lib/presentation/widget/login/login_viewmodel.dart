@@ -309,6 +309,7 @@ class LoginViewModel extends BaseViewModel {
       store.dispatch(AuthenticationAction(Right(success)));
 
       _dynamicUrlInterceptors.changeBaseUrl(baseUrl);
+      _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersionSupported;
 
       await _appNavigation.push(
         RoutePaths.authentication,

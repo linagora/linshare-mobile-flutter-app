@@ -68,6 +68,7 @@ void main() {
       final sharedSpaceId = SharedSpaceId('150e408a-dde9-4315-9a5b-7fe0f251fa83');
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, linShareBaseUrl, APIVersionSupported.v4, sharedSpaceId))
           .thenAnswer((_) async => uploadTaskId);
 
@@ -80,6 +81,7 @@ void main() {
       final wrongSharedSpaceId = SharedSpaceId('wrong');
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       final exception = Exception();
       when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, linShareBaseUrl, APIVersionSupported.v4, wrongSharedSpaceId))
           .thenThrow(exception);
@@ -93,6 +95,7 @@ void main() {
       final sharedSpaceId = SharedSpaceId('150e408a-dde9-4315-9a5b-7fe0f251fa83');
       when(tokenRepository.getToken()).thenAnswer((_) async => permanentToken);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => wrongUrl);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       final exception = Exception();
       when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, permanentToken, wrongUrl, APIVersionSupported.v4,  sharedSpaceId))
           .thenThrow(exception);
@@ -106,6 +109,7 @@ void main() {
       final sharedSpaceId = SharedSpaceId('150e408a-dde9-4315-9a5b-7fe0f251fa83');
       final wrongToken = Token('token', TokenId('uuid'));
       when(tokenRepository.getToken()).thenAnswer((_) async => wrongToken);
+      when(apiRepository.getAPIVersionSupported()).thenAnswer((_) async => APIVersionSupported.v4);
       when(credentialRepository.getBaseUrl()).thenAnswer((_) async => linShareBaseUrl);
       final exception = Exception();
       when(sharedSpaceDocumentRepository.uploadSharedSpaceDocument(fileInfo1, wrongToken, linShareBaseUrl, APIVersionSupported.v4, sharedSpaceId))

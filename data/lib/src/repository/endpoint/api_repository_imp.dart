@@ -31,6 +31,8 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'dart:developer' as developer;
+
 import 'package:domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,6 +52,7 @@ class APIRepositoryImp extends APIRepository {
 
   @override
   Future<void> persistAPIVersionSupported(APIVersionSupported apiVersionSupported) async {
+    developer.log('persistAPIVersionSupported(): $apiVersionSupported', name: 'APIRepositoryImp');
     await _sharedPreferences.setString(_supportedAPIVersionKey, apiVersionSupported.value);
   }
 }

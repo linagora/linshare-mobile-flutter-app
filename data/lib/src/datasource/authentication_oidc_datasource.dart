@@ -46,7 +46,7 @@ abstract class AuthenticationOIDCDataSource {
 
   Future<TokenOIDC?> getStoredTokenOIDC();
 
-  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, TokenOIDC tokenOIDC, {OTPCode? otpCode});
+  Future<Token> createPermanentTokenWithOIDC(Uri baseUrl, APIVersionSupported apiVersion, TokenOIDC tokenOIDC, {OTPCode? otpCode});
 
   Future<OIDCConfiguration?> getOIDCConfiguration(Uri baseUrl);
 

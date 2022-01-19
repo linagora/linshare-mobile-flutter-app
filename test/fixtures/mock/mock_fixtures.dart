@@ -45,6 +45,7 @@ class MockCreatePermanentTokenSSOInteractor extends Mock implements CreatePerman
 class MockGetTokenSSOInteractor extends Mock implements GetTokenOIDCInteractor {}
 class MockAppNavigation extends Mock implements AppNavigation {}
 class MockDynamicUrlInterceptors extends Mock implements DynamicUrlInterceptors {}
+class MockDynamicAPIVersionSupportInterceptor extends Mock implements DynamicAPIVersionSupportInterceptor {}
 class MockUploadWorkGroupDocumentInteractor extends Mock implements UploadWorkGroupDocumentInteractor {}
 class MockAppToast extends Mock implements AppToast {}
 class MockGetOIDCConfigurationInteractor extends Mock implements GetOIDCConfigurationInteractor {}
