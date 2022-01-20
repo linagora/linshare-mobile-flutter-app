@@ -78,44 +78,42 @@ class _LoginWidgetState extends State<LoginWidget> {
         child: SafeArea(
           child: Stack(
             children: [
-              SingleChildScrollView(
-                reverse: true,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        maxHeight: _responsiveUtils.isLandscapeSmallScreen(context) ? double.infinity : MediaQuery.of(context).size.height,
-                        minHeight: MediaQuery.of(context).size.height),
-                    child: Center(child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.only(top: _responsiveUtils.isLandscapeSmallScreen(context) ? 30 : 60),
-                            child: Image(
-                                image: AssetImage(imagePath.icLoginLogoStandard),
-                                fit: BoxFit.fill,
-                                width: 150,
-                                alignment: Alignment.center)),
-                        StoreConnector<AppState, LoginFormType>(
-                            converter: (store) => store.state.authenticationState.loginFormType,
-                            builder: (context, loginFormType) {
-                              switch(loginFormType) {
-                                case LoginFormType.main:
-                                  return _buildMainLoginForm();
-                                case LoginFormType.useOwnServer:
-                                  return _buildUseOwnServerLoginForm(context);
-                                case LoginFormType.credentials:
-                                  return _buildCredentialsLoginForm(context);
-                                default:
-                                  return _buildMainLoginForm();
-                              }
-                            }
-                        ),
-                      ],
-                    )),
+              Center(child: SingleChildScrollView(
+                  reverse: true,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(),
+                        child: Center(child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.only(top: _responsiveUtils.isHeightShortest(context) ? 30 : 0),
+                                child: Image(
+                                    image: AssetImage(imagePath.icLoginLogoStandard),
+                                    fit: BoxFit.fill,
+                                    width: 150,
+                                    alignment: Alignment.center)),
+                            StoreConnector<AppState, LoginFormType>(
+                                converter: (store) => store.state.authenticationState.loginFormType,
+                                builder: (context, loginFormType) {
+                                  switch(loginFormType) {
+                                    case LoginFormType.main:
+                                      return _buildMainLoginForm();
+                                    case LoginFormType.useOwnServer:
+                                      return _buildUseOwnServerLoginForm(context);
+                                    case LoginFormType.credentials:
+                                      return _buildCredentialsLoginForm(context);
+                                    default:
+                                      return _buildMainLoginForm();
+                                  }
+                                }
+                            ),
+                          ],
+                        )),
+                      )
                   )
-                )
-              ),
+              )),
               StoreConnector<AppState, LoginFormType>(
                 converter: (store) => store.state.authenticationState.loginFormType,
                 builder: (context, loginFormType) => loginFormType == LoginFormType.credentials
