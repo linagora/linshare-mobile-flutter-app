@@ -78,45 +78,43 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         child: SafeArea(
           child: Stack(
             children: [
-              SingleChildScrollView(
-                reverse: true,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: _responsiveUtils.isLandscapeSmallScreen(context) ? double.infinity : MediaQuery.of(context).size.height,
-                      minHeight: MediaQuery.of(context).size.height),
-                    child: Center(child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: _responsiveUtils.isLandscapeSmallScreen(context) ? 30 : 60),
-                          child: Image(
-                            image: AssetImage(_imagePath.icLoginLogoStandard),
-                            fit: BoxFit.fill,
-                            width: 150,
-                            alignment: Alignment.center)),
-                        StoreConnector<AppState, SignUpAuthenticationState>(
-                          converter: (store) => store.state.signUpAuthenticationState,
-                          builder: (context, state) {
-                            switch (state.signUpFormType) {
-                              case SignUpFormType.main:
-                                return _buildMainSignUpForm();
-                              case SignUpFormType.fillName:
-                                return _buildFillNameForm(context);
-                              case SignUpFormType.completed:
-                                return _buildSignUpCompletedForm(
-                                    context, state);
-                              default:
-                                return _buildMainSignUpForm();
-                            }
-                          }
-                        ),
-                      ],
-                    )),
+              Center(child: SingleChildScrollView(
+                  reverse: true,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(),
+                        child: Center(child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.only(top: _responsiveUtils.isHeightShortest(context) ? 20 : 0),
+                                child: Image(
+                                    image: AssetImage(_imagePath.icLoginLogoStandard),
+                                    fit: BoxFit.fill,
+                                    width: 150,
+                                    alignment: Alignment.center)),
+                            StoreConnector<AppState, SignUpAuthenticationState>(
+                                converter: (store) => store.state.signUpAuthenticationState,
+                                builder: (context, state) {
+                                  switch (state.signUpFormType) {
+                                    case SignUpFormType.main:
+                                      return _buildMainSignUpForm();
+                                    case SignUpFormType.fillName:
+                                      return _buildFillNameForm(context);
+                                    case SignUpFormType.completed:
+                                      return _buildSignUpCompletedForm(
+                                          context, state);
+                                    default:
+                                      return _buildMainSignUpForm();
+                                  }
+                                }
+                            ),
+                          ],
+                        )),
+                      )
                   )
-                )
-              ),
+              )),
               StoreConnector<AppState, SignUpFormType>(
                 converter: (store) => store.state.signUpAuthenticationState.signUpFormType,
                 builder: (context, loginFormType) => Positioned(
