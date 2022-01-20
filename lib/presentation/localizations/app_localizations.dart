@@ -2917,7 +2917,7 @@ class AppLocalizations {
   String are_you_sure_you_want_to_delete_work_space_member(String memberName, String workspaceName) {
     return Intl.message(
       'Are you sure you want to delete $memberName from the workspace $workspaceName and all related workgroups?',
-      name: 'are_you_sure_you_want_to_delete_drive_member',
+      name: 'are_you_sure_you_want_to_delete_work_space_member',
       args: [memberName, workspaceName],
     );
   }
