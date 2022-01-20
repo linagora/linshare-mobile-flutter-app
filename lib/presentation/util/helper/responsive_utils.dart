@@ -79,6 +79,10 @@ class ResponsiveUtils {
         && MediaQuery.of(context).orientation == Orientation.landscape;
   }
 
+  bool isHeightShortest(BuildContext context) {
+    return MediaQuery.of(context).size.shortestSide < _minMediumWidth;
+  }
+
   EdgeInsets getPaddingListItemForScreen(BuildContext context) {
     return isLargeScreen(context) ? EdgeInsets.symmetric(horizontal: _listItemHorizontalPaddingLargeWidth) : EdgeInsets.zero;
   }
