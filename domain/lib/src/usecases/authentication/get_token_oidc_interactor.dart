@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:core';
+import 'dart:developer' as developer;
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
@@ -50,6 +51,7 @@ class GetTokenOIDCInteractor {
       bool allowInsecureConnections
   ) async {
     try {
+      developer.log('execute(): $clientId-$discoveryUrl', name: 'GetTokenOIDCInteractor');
       final tokenOIDC = await authenticationOIDCRepository.getTokenOIDC(
         clientId,
         redirectUrl,
