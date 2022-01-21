@@ -34,18 +34,20 @@
 import 'package:domain/domain.dart';
 
 class Environment {
-  static const _productEnvironment = 1;
+  static const _productionEnvironment = 1;
   static const _devEnvironment = 2;
   static const _stagingEnvironment = 3;
 
-  static const saasEnvironment = int.fromEnvironment('SAAS_ENVIRONMENT', defaultValue: _stagingEnvironment);
+  static const saasEnvironment = int.fromEnvironment('SAAS_ENVIRONMENT', defaultValue: _productionEnvironment);
 
   static SaaSType get saasType {
     switch(saasEnvironment) {
       case _devEnvironment:
         return SaaSType.dev;
-      default:
+      case _stagingEnvironment:
         return SaaSType.staging;
+      default:
+        return SaaSType.production;
     }
   }
 }
