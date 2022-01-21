@@ -43,6 +43,11 @@ class SaaSConsoleRepositoryImpl extends SaaSConsoleRepository {
   final stagingSignUpBaseUrl = 'https://staging-account.linshare.app';
   final stagingVerifyEmailBaseUrl = 'https://staging-account.linshare.app';
 
+  final prodLoginBaseUrl = 'https://web.linshare.app';
+  final prodSecretBaseUrl = 'https://subscription.linshare.app';
+  final prodSignUpBaseUrl = 'https://account.linshare.app';
+  final prodVerifyEmailBaseUrl = 'https://account.linshare.app';
+
   final companyName = 'My company';
 
   SaaSConsoleRepositoryImpl();
@@ -61,9 +66,17 @@ class SaaSConsoleRepositoryImpl extends SaaSConsoleRepository {
         return SaaSConfiguration(
           loginBaseUrl: Uri.parse(stagingLoginBaseUrl),
           signUpBaseUrl: Uri.parse(stagingSignUpBaseUrl),
-          secretBaseUrl: Uri.parse(secretBaseUrl),
-          verifyEmailBaseUrl: Uri.parse(verifyEmailBaseUrl),
+          secretBaseUrl: Uri.parse(stagingSecretBaseUrl),
+          verifyEmailBaseUrl: Uri.parse(stagingVerifyEmailBaseUrl),
           companyName: companyName);
+      default:
+        return SaaSConfiguration(
+          loginBaseUrl: Uri.parse(prodLoginBaseUrl),
+          signUpBaseUrl: Uri.parse(prodSignUpBaseUrl),
+          secretBaseUrl: Uri.parse(prodSecretBaseUrl),
+          verifyEmailBaseUrl: Uri.parse(prodVerifyEmailBaseUrl),
+          companyName: companyName
+        );
     }
   }
 }
