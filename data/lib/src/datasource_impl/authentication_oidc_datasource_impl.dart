@@ -74,9 +74,12 @@ class AuthenticationOIDCDataSourceImpl implements AuthenticationOIDCDataSource {
             redirectUrl,
             discoveryUrl: discoveryUrl,
             scopes: scopes,
-            preferEphemeralSession: preferEphemeralSessionIOS,
-            promptValues: promptValues,
-            allowInsecureConnections: allowInsecureConnections));
+            preferEphemeralSession: true,
+            promptValues: ['consent'],
+            responseMode: 'query'));
+
+        developer.log('getTokenOIDC(): ${result?.idToken.toString()}', name: 'AuthenticationOIDCDataSourceImpl');
+
         if(result != null) {
           final tokenOIDC = result.toTokenOIDC();
           if (tokenOIDC.isTokenValid()) {

@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/widget/login/authentication_ty
 import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'dart:developer' as developer;
 
 class LoginViewModel extends BaseViewModel {
 
@@ -164,6 +165,7 @@ class LoginViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartAuthenticationSaaSLoadingAction());
 
+      developer.log('_getSaaSConfigurationAction(): env: ${Environment.saasType}', name: 'LoginViewModel');
       await _getSaaSConfigurationInteractor.execute(Environment.saasType)
         .then((result) => result.fold(
           (failure) {
@@ -217,6 +219,7 @@ class LoginViewModel extends BaseViewModel {
           },
           ((success) {
             if (success is GetOIDCConfigurationViewState) {
+              developer.log('_getOIDCConfigurationAction(): ${success.oidcConfiguration} - $baseUrl', name: 'LoginViewModel');
               _getTokenOIDC(context, success.oidcConfiguration, baseUrl, authenticationType);
             }
           })));
