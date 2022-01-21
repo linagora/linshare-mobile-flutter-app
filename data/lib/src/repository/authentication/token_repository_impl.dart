@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:developer' as developer;
+
 import 'package:data/src/extensions/share_preferences_extension.dart';
 import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:domain/domain.dart';
@@ -48,6 +50,7 @@ class TokenRepositoryImpl extends TokenRepository {
 
   @override
   Future removeToken() async {
+    developer.log('removeToken()', name: 'TokenRepositoryImpl');
     await sharedPreferences.remove(keyPermanentToken);
   }
 

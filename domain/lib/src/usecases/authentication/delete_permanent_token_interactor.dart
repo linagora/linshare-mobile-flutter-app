@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:developer' as developer;
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
@@ -51,9 +53,10 @@ class DeletePermanentTokenInteractor {
         tokenRepository.getToken())
         .then((token) => authenticationRepository.deletePermanentToken(token))
         .then((_) => {
-          Future.sync(() => {
-            tokenRepository.removeToken(),
-            credentialRepository.removeBaseUrl()
+          Future.sync(() async {
+            await tokenRepository.removeToken();
+            developer.log('execute(): deleteToken', name: 'DeletePermanentTokenInteractor');
+            await credentialRepository.removeBaseUrl();
           })
         });
       return Right(LogoutViewState());
