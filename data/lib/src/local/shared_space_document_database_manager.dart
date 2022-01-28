@@ -173,7 +173,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   Future<List<SharedSpaceCache>> getListSharedSpace() async {
     final res = await _databaseClient.getListDataWithCondition(
       SharedSpaceTable.TABLE_NAME,
-      '${SharedSpaceTable.PARENT_ID} IS NULL',
+      '${SharedSpaceTable.DRIVE_ID} IS NULL',
       null);
 
     return res.isNotEmpty
@@ -184,7 +184,7 @@ class SharedSpaceDocumentDatabaseManager implements LinShareDatabaseManager<Work
   Future<List<SharedSpaceCache>> getAllWorkgroupsInsideSharedSpaceNode(SharedSpaceId parentId) async {
     final res = await _databaseClient.getListDataWithCondition(
         SharedSpaceTable.TABLE_NAME,
-        '${SharedSpaceTable.PARENT_ID} = ?',
+        '${SharedSpaceTable.DRIVE_ID} = ?',
         [parentId.uuid]);
 
     return res.isNotEmpty

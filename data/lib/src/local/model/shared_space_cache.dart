@@ -57,7 +57,7 @@ class SharedSpaceCache with EquatableMixin {
 
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ID)
   final SharedSpaceId sharedSpaceId;
-  @JsonKey(name: SharedSpaceTable.PARENT_ID)
+  @JsonKey(name: SharedSpaceTable.DRIVE_ID)
   final SharedSpaceId? parentId;
   @JsonKey(name: SharedSpaceTable.SHARED_SPACE_ROLE_ID)
   final SharedSpaceRoleId? sharedSpaceRoleId;
