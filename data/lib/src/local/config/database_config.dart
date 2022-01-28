@@ -34,4 +34,5 @@ class DatabaseConfig {
   static final int dbVersion1_0 = 1;
   static final int dbVersion2_0 = 2;
   static final int dbVersion3_0 = 3;
+  static final int dbVersion4_0 = 4;
 }
