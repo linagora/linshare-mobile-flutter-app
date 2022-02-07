@@ -2936,6 +2936,31 @@ class AppLocalizations {
     return Intl.message('Workspace Writer',
         name: 'workspace_writer');
   }
+
+  String get sign_up_failed {
+    return Intl.message('Sign up Failed',
+        name: 'sign_up_failed');
+  }
+
+  String get sign_up_message_failed {
+    return Intl.message('Unfortunately, something went wrong during your signup.',
+        name: 'sign_up_message_failed');
+  }
+
+  String get sign_up_again {
+    return Intl.message('Sign up again',
+        name: 'sign_up_again');
+  }
+
+  String get contact_technical_support {
+    return Intl.message('Contact technical support',
+        name: 'contact_technical_support');
+  }
+
+  String get contact_technical_support_failed {
+    return Intl.message('Support team is out of reach try again later',
+        name: 'contact_technical_support_failed');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

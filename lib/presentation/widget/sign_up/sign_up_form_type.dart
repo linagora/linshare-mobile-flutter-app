@@ -30,4 +30,4 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum SignUpFormType { main, fillName, completed }
+enum SignUpFormType { main, fillName, completed, failed }

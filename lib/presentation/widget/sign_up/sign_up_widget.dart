@@ -103,8 +103,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                     case SignUpFormType.fillName:
                                       return _buildFillNameForm(context);
                                     case SignUpFormType.completed:
-                                      return _buildSignUpCompletedForm(
-                                          context, state);
+                                      return _buildSignUpCompletedForm(context, state);
+                                    case SignUpFormType.failed:
+                                      return _buildSignUpFailedForm(context, state);
                                     default:
                                       return _buildMainSignUpForm();
                                   }
@@ -117,13 +118,19 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               )),
               StoreConnector<AppState, SignUpFormType>(
                 converter: (store) => store.state.signUpAuthenticationState.signUpFormType,
-                builder: (context, loginFormType) => Positioned(
+                builder: (context, signUpFormType) => Positioned(
                   right: 10,
                   child: IconButton(
                     key: Key('sign_up_close_button'),
                     onPressed: () => _viewModel.handleCloseSignUpPressed(context),
                     icon: SvgPicture.asset(_imagePath.icLoginClose, width: 18, height: 18, fit: BoxFit.fill)
                   ))
+              ),
+              StoreConnector<AppState, SignUpFormType>(
+                  converter: (store) => store.state.signUpAuthenticationState.signUpFormType,
+                  builder: (context, signUpFormType) => Positioned(
+                      left: 0,
+                      child: SvgPicture.asset(_imagePath.icLogoBeta, width: 54, height: 54, fit: BoxFit.fill))
               ),
             ],
           )
@@ -241,9 +248,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           elevation: MaterialStateProperty.resolveWith<double>((Set<MaterialState> states) => 0)
         ),
         child: Text(
-          authenticationType == SignUpAuthenticationType.sendEmail
-              ? AppLocalizations.of(context).sign_up_continue
-              : AppLocalizations.of(context).sign_up_send_me_a_password,
+          authenticationType.getTitleButton(context),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
@@ -277,6 +282,30 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           AppLocalizations.of(context).sign_up_continue,
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 17, color: AppColor.loginDefaultButtonColor, fontWeight: FontWeight.w500)),
+      ),
+    );
+  }
+
+  Widget _signUpContactSupportButton(BuildContext context, SignUpAuthenticationState state) {
+    return SizedBox(
+      key: Key('sign_up_contact_support_button'),
+      width: _getWidthButton(context),
+      height: 48,
+      child: ElevatedButton(
+        onPressed: () => _viewModel.handleSignUpPressed(context, SignUpFormType.failed, SignUpAuthenticationType.contactSupport),
+        style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) => Colors.transparent,
+            ),
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) => Colors.transparent,
+            ),
+            elevation: MaterialStateProperty.resolveWith<double>((Set<MaterialState> states) => 0)
+        ),
+        child: Text(
+            AppLocalizations.of(context).contact_technical_support,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 17, color: AppColor.loginDefaultButtonColor, fontWeight: FontWeight.w500)),
       ),
     );
   }
@@ -449,6 +478,64 @@ class _SignUpWidgetState extends State<SignUpWidget> {
             builder: (context, signUpAuthenticationState) => signUpAuthenticationState.isSignUpAuthenticationLoading()
                 ? _loadingCircularProgress()
                 : _signUpCompletedContinueButton(context, state))),
+      ],
+    );
+  }
+
+  Widget _buildSignUpFailedForm(BuildContext context, SignUpAuthenticationState state) {
+    return Column(
+      children: [
+        if (!_responsiveUtils.isLandscapeSmallScreen(context))
+          Padding(
+              padding: EdgeInsets.only(
+                  top: 80,
+                  left: _getPaddingHorizontal(context),
+                  right: _getPaddingHorizontal(context)),
+              child: Center(
+                  child: SvgPicture.asset(
+                      _imagePath.icSignUpFailed,
+                      width: 90,
+                      height: 90,
+                      fit: BoxFit.fill))),
+        Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: _getPaddingHorizontal(context),
+                right: _getPaddingHorizontal(context)),
+            child: Container(
+                width: _getWidthButton(context),
+                child: CenterTextBuilder()
+                    .text(AppLocalizations.of(context).sign_up_failed)
+                    .textStyle(TextStyle(fontSize: 20, color: AppColor.loginLabelTextFieldColor, fontWeight: FontWeight.bold))
+                    .build())),
+        Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: _getPaddingHorizontal(context),
+                right: _getPaddingHorizontal(context)),
+            child: Container(
+                width: _getWidthButton(context),
+                child: CenterTextBuilder()
+                    .text(AppLocalizations.of(context).sign_up_message_failed)
+                    .textStyle(TextStyle(fontSize: 20, color: AppColor.loginDefaultButtonColor, fontWeight: FontWeight.bold))
+                    .build())),
+        Padding(
+            padding: EdgeInsets.only(
+                top: _responsiveUtils.isLandscapeSmallScreen(context) ? 20 : 80,
+                bottom: 16,
+                left: _getPaddingHorizontal(context),
+                right: _getPaddingHorizontal(context)),
+            child: _buildSignUpButton(context, SignUpFormType.failed, SignUpAuthenticationType.signUpAgain)),
+        Padding(
+            padding: EdgeInsets.only(
+                bottom: 20,
+                left: _getPaddingHorizontal(context),
+                right: _getPaddingHorizontal(context)),
+            child: StoreConnector<AppState, SignUpAuthenticationState>(
+                converter: (store) => store.state.signUpAuthenticationState,
+                builder: (context, signUpAuthenticationState) => signUpAuthenticationState.isSignUpAuthenticationLoading()
+                    ? _loadingCircularProgress()
+                    : _signUpContactSupportButton(context, state))),
       ],
     );
   }
