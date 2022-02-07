@@ -32,10 +32,12 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/generate_password_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
@@ -197,6 +199,8 @@ class WidgetModule {
       getIt<DynamicUrlInterceptors>(),
       getIt<DynamicAPIVersionSupportInterceptor>(),
       getIt<AppToast>(),
+      getIt<FToast>(),
+      getIt<AppImagePaths>(),
     ));
   }
 
