@@ -36,6 +36,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
@@ -555,6 +556,7 @@ class AppModule {
 
   void _provideAppToast() {
     getIt.registerLazySingleton(() => AppToast());
+    getIt.registerLazySingleton(() => FToast());
     getIt.registerLazySingleton(() => ToastMessageHandler());
   }
 

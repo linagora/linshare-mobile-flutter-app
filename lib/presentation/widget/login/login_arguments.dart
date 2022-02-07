@@ -28,60 +28,12 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
 
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
 
-class AppToast {
-  void showToast(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        fontSize: 16,
-        textColor: Colors.white,
-        backgroundColor: AppColor.toastBackgroundColor,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM);
-  }
+class LoginArguments extends RouterArguments {
+  final bool isFirstOpen;
 
-  void showErrorToast(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        fontSize: 16,
-        textColor: Colors.white,
-        backgroundColor: AppColor.toastErrorBackgroundColor,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM);
-  }
-
-  void showToastWithIcon(BuildContext context, FToast fToast, String message, String leftIcon) {
-    fToast.init(context);
-    fToast.showToast(
-      toastDuration: Duration(milliseconds: 1000),
-      child: Material(
-        color: Colors.white,
-        elevation: 10,
-        shadowColor: Colors.black54,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(leftIcon, width: 24, height: 24, fit: BoxFit.fill),
-              Expanded(child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    message,
-                    style: TextStyle(color: Colors.black, fontSize: 15.0, fontWeight: FontWeight.normal),
-                  )
-                )
-              )
-            ],
-          ),
-        ),
-      ),
-      gravity: ToastGravity.BOTTOM);
-  }
+  LoginArguments({ this.isFirstOpen = true });
 }
