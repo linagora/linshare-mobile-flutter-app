@@ -151,6 +151,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                       ))
                   : SizedBox.shrink()
               ),
+              StoreConnector<AppState, LoginFormType>(
+                converter: (store) => store.state.authenticationState.loginFormType,
+                builder: (context, loginFormType) => (AuthenticationOIDCConfig.saasAvailable && loginFormType == LoginFormType.main)
+                  ? Positioned(
+                      left: 0,
+                      child: SvgPicture.asset(imagePath.icLogoBeta, width: 54, height: 54, fit: BoxFit.fill))
+                  : SizedBox.shrink()
+              ),
             ],
           )
         ),
