@@ -195,7 +195,8 @@ class WidgetModule {
       getIt<GetTokenOIDCInteractor>(),
       getIt<CreatePermanentTokenOIDCInteractor>(),
       getIt<DynamicUrlInterceptors>(),
-      getIt<DynamicAPIVersionSupportInterceptor>()
+      getIt<DynamicAPIVersionSupportInterceptor>(),
+      getIt<AppToast>(),
     ));
   }
 
