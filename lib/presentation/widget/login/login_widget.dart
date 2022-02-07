@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.d
 import 'package:linshare_flutter_app/presentation/view/text/login_text_input_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/text/text_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/authentication_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
 
@@ -61,6 +62,19 @@ class _LoginWidgetState extends State<LoginWidget> {
   final loginViewModel = getIt<LoginViewModel>();
   final imagePath = getIt<AppImagePaths>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
+
+  LoginArguments? _arguments;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _arguments = ModalRoute.of(context)?.settings.arguments as LoginArguments;
+      if (_arguments != null) {
+        loginViewModel.initState(context, _arguments!);
+      }
+    });
+  }
 
   @override
   void dispose() {

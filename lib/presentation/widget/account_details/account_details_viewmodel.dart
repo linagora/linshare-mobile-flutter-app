@@ -37,6 +37,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -92,7 +93,7 @@ class AccountDetailsViewModel extends BaseViewModel {
           await _deleteTokenOidcInteractor.execute();
         });
 
-      await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+      await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute, arguments: LoginArguments(isFirstOpen: false));
       store.dispatch(ClearCurrentView());
     };
   }

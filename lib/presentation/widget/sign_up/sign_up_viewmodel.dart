@@ -33,11 +33,13 @@ import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/sigup_authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
 import 'package:linshare_flutter_app/presentation/util/environment.dart';
@@ -70,6 +72,8 @@ class SignUpViewModel extends BaseViewModel {
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
   final DynamicAPIVersionSupportInterceptor _dynamicAPIVersionSupportInterceptor;
   final AppToast _appToast;
+  final FToast _fToast;
+  final AppImagePaths _imagePaths;
 
   SignUpViewModel(
     Store<AppState> store,
@@ -86,6 +90,8 @@ class SignUpViewModel extends BaseViewModel {
     this._dynamicUrlInterceptors,
     this._dynamicAPIVersionSupportInterceptor,
     this._appToast,
+    this._fToast,
+    this._imagePaths,
   ) : super(store);
 
   String _emailText = '';
@@ -149,14 +155,18 @@ class SignUpViewModel extends BaseViewModel {
   void _clearFillNameFormAndFocus(BuildContext context) {
     setNameText('');
     setSurnameText('');
-    FocusScope.of(context).requestFocus();
   }
 
   void _goToContactTechnicalSupport(BuildContext context) async {
     if (await canLaunch(AuthenticationOIDCConfig.contactTechnicalSupport)) {
       await launch(AuthenticationOIDCConfig.contactTechnicalSupport);
     } else {
-      _appToast.showErrorToast(AppLocalizations.of(context).contact_technical_support_failed);
+      _appToast.showToastWithIcon(
+        context,
+        _fToast,
+        AppLocalizations.of(context).contact_technical_support_failed,
+        _imagePaths.icWarning
+      );
     }
   }
 

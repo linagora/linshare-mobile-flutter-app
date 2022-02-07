@@ -42,6 +42,7 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.dart';
 import 'package:redux/redux.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/list_biometric_kind_extension.dart';
 
@@ -74,7 +75,7 @@ class BiometricAuthenticationLoginViewModel extends BaseViewModel {
         _disableBiometricInteractor.execute()
       ]);
     });
-    _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+    _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute, arguments: LoginArguments());
   }
 
   void getAvailableBiometric(BuildContext context) {

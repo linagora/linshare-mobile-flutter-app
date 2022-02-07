@@ -33,6 +33,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_arguments.dart';
 import 'package:redux/src/store.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -51,7 +52,7 @@ class SecondFactorAuthenticationViewModel extends BaseViewModel {
     if (_appNavigation.canPop()) {
       _appNavigation.popBack();
     } else {
-      _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+      _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute, arguments: LoginArguments());
     }
   }
 

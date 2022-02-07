@@ -32,24 +32,30 @@
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
 import 'package:linshare_flutter_app/presentation/util/environment.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/url_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/feedback_dialog.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/enter_otp/enter_otp_argument.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/authentication_type.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'dart:developer' as developer;
+
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginViewModel extends BaseViewModel {
 
@@ -94,6 +100,12 @@ class LoginViewModel extends BaseViewModel {
   UserName _parseUserName(String userName) => UserName(userName);
 
   Password _parsePassword(String password) => Password(password);
+
+  void initState(BuildContext context, LoginArguments arguments) {
+    if (arguments.isFirstOpen) {
+      _showFeedbackDialog(context);
+    }
+  }
 
   void _clearAllValueInput() {
     loginWithSSONotifier.value = false;
@@ -427,6 +439,26 @@ class LoginViewModel extends BaseViewModel {
   void setCheckedLoginWithSSO(bool checked) {
     final newChecked = checked ? false : true;
     loginWithSSONotifier.value = newChecked;
+  }
+
+  void _showFeedbackDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierColor: AppColor.feedbackDialogBackgroundColor,
+        builder: (BuildContext context) => (FeedbackDialog(context, _appNavigation)
+            ..key(Key('feedback_dialog'))
+            ..title(AppLocalizations.of(context).title_feedback_dialog)
+            ..content(AppLocalizations.of(context).message_feedback_dialog)
+            ..actionText(AppLocalizations.of(context).feedback_dialog_button)
+            ..addFeedbackDialogButtonAction(() => _goToContactTechnicalSupport(context)))
+          .build());
+  }
+
+  void _goToContactTechnicalSupport(BuildContext context) async {
+    _appNavigation.popBack();
+    if (await canLaunch(AuthenticationOIDCConfig.contactTechnicalSupport)) {
+      await launch(AuthenticationOIDCConfig.contactTechnicalSupport);
+    }
   }
 
   void handleCloseLoginPressed(BuildContext context) {

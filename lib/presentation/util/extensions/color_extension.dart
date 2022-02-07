@@ -137,4 +137,5 @@ extension AppColor on Color {
   static const workgroupMemberTypeColor = Color(0xffeeeeee);
   static const uploadRequestGroupDetailHeaderColor = Color(0xff218de0);
   static const uploadRequestGroupOwnerNameColor = Color(0xff070707);
+  static const feedbackDialogBackgroundColor = Color(0x99111111);
 }
