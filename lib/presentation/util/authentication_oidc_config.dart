@@ -32,6 +32,7 @@
 class AuthenticationOIDCConfig {
   static const captcha = String.fromEnvironment('CAPTCHA_TOKEN', defaultValue: '');
   static const saasAvailable = bool.fromEnvironment('SAAS_AVAILABLE', defaultValue: false);
+  static const contactTechnicalSupport = 'https://go.crisp.chat/chat/embed/?website_id=536ec501-e0f7-4921-84d4-d3aef943a2cc';
 
   static const allowInsecureConnection = false;
 

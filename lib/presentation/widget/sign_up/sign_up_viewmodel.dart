@@ -38,6 +38,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/authentication_a
 import 'package:linshare_flutter_app/presentation/redux/actions/sigup_authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
 import 'package:linshare_flutter_app/presentation/util/environment.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
@@ -52,6 +53,7 @@ import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_form_ty
 import 'package:linshare_flutter_app/presentation/widget/sign_up/sign_up_operator.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpViewModel extends BaseViewModel {
 
@@ -67,6 +69,7 @@ class SignUpViewModel extends BaseViewModel {
   final CreatePermanentTokenOIDCInteractor _createPermanentTokenOIDCInteractor;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
   final DynamicAPIVersionSupportInterceptor _dynamicAPIVersionSupportInterceptor;
+  final AppToast _appToast;
 
   SignUpViewModel(
     Store<AppState> store,
@@ -81,7 +84,8 @@ class SignUpViewModel extends BaseViewModel {
     this._getTokenOIDCInteractor,
     this._createPermanentTokenOIDCInteractor,
     this._dynamicUrlInterceptors,
-    this._dynamicAPIVersionSupportInterceptor
+    this._dynamicAPIVersionSupportInterceptor,
+    this._appToast,
   ) : super(store);
 
   String _emailText = '';
@@ -132,6 +136,27 @@ class SignUpViewModel extends BaseViewModel {
           }
         }
         break;
+      case SignUpAuthenticationType.signUpAgain:
+        store.dispatch(UpdateSignUpAuthenticationScreenStateAction(SignUpFormType.fillName));
+        _clearFillNameFormAndFocus(context);
+        break;
+      case SignUpAuthenticationType.contactSupport:
+        _goToContactTechnicalSupport(context);
+        break;
+    }
+  }
+
+  void _clearFillNameFormAndFocus(BuildContext context) {
+    setNameText('');
+    setSurnameText('');
+    FocusScope.of(context).requestFocus();
+  }
+
+  void _goToContactTechnicalSupport(BuildContext context) async {
+    if (await canLaunch(AuthenticationOIDCConfig.contactTechnicalSupport)) {
+      await launch(AuthenticationOIDCConfig.contactTechnicalSupport);
+    } else {
+      _appToast.showErrorToast(AppLocalizations.of(context).contact_technical_support_failed);
     }
   }
 
@@ -267,11 +292,14 @@ class SignUpViewModel extends BaseViewModel {
           (failure) {
             if (failure is SignUpForSaaSFailure) {
               _signUpSaaSFailureAction(context, failure);
+              store.dispatch(UpdateSignUpAuthenticationScreenStateAction(SignUpFormType.failed));
             }
           },
           (success) {
             if (success is SignUpForSaaSViewState) {
               store.dispatch(SetSignUpSuccessAction(success.userSaaS, SignUpFormType.completed));
+            } else {
+              store.dispatch(UpdateSignUpAuthenticationScreenStateAction(SignUpFormType.failed));
             }
           }));
     });

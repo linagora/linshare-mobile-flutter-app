@@ -30,4 +30,23 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum SignUpAuthenticationType { sendEmail, sendPassword }
+import 'package:flutter/cupertino.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+
+enum SignUpAuthenticationType { sendEmail, sendPassword, signUpAgain, contactSupport }
+
+extension SignUpAuthenticationTypeExtension on SignUpAuthenticationType {
+
+  String getTitleButton(BuildContext context) {
+    switch(this) {
+      case SignUpAuthenticationType.sendEmail:
+        return AppLocalizations.of(context).sign_up_continue;
+      case SignUpAuthenticationType.sendPassword:
+        return AppLocalizations.of(context).sign_up_send_me_a_password;
+      case SignUpAuthenticationType.signUpAgain:
+        return AppLocalizations.of(context).sign_up_again;
+      case SignUpAuthenticationType.contactSupport:
+        return AppLocalizations.of(context).contact_technical_support;
+    }
+  }
+}
