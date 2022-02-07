@@ -43,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/widget/authentication/authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/biometric_authentication/biometric_authentication_arguments.dart';
+import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_manager.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -126,7 +127,7 @@ class InitializeViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(_resetBiometricSetting());
       store.dispatch(SetCurrentView(RoutePaths.loginRoute));
-      await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute);
+      await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute, arguments: LoginArguments());
     };
   }
 

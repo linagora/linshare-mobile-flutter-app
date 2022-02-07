@@ -2943,7 +2943,7 @@ class AppLocalizations {
   }
 
   String get sign_up_message_failed {
-    return Intl.message('Unfortunately, something went wrong during your signup.',
+    return Intl.message('Unfortunately, something went wrong during\n your signup.',
         name: 'sign_up_message_failed');
   }
 
@@ -2960,6 +2960,21 @@ class AppLocalizations {
   String get contact_technical_support_failed {
     return Intl.message('Support team is out of reach try again later',
         name: 'contact_technical_support_failed');
+  }
+
+  String get title_feedback_dialog {
+    return Intl.message('LinShare Beta',
+        name: 'title_feedback_dialog');
+  }
+
+  String get feedback_dialog_button {
+    return Intl.message('Please, share your feedback',
+        name: 'feedback_dialog_button');
+  }
+
+  String get message_feedback_dialog {
+    return Intl.message('We are testing Linshare SaaS on Beta. We are working hard to fix all the bugs that impact user experience. We rely on your valuable feedback to make Linshare better for everyone.',
+        name: 'message_feedback_dialog');
   }
 }
 

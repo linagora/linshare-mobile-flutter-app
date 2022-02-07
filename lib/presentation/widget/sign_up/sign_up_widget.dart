@@ -252,7 +252,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontWeight: FontWeight.normal,
+            fontWeight: FontWeight.w500,
             color: Colors.white)),
       ),
     );
@@ -517,12 +517,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 width: _getWidthButton(context),
                 child: CenterTextBuilder()
                     .text(AppLocalizations.of(context).sign_up_message_failed)
-                    .textStyle(TextStyle(fontSize: 20, color: AppColor.loginDefaultButtonColor, fontWeight: FontWeight.bold))
+                    .textStyle(TextStyle(fontSize: 14, color: AppColor.loginLabelTextFieldColor, fontWeight: FontWeight.normal))
                     .build())),
         Padding(
             padding: EdgeInsets.only(
                 top: _responsiveUtils.isLandscapeSmallScreen(context) ? 20 : 80,
-                bottom: 16,
+                bottom: 10,
                 left: _getPaddingHorizontal(context),
                 right: _getPaddingHorizontal(context)),
             child: _buildSignUpButton(context, SignUpFormType.failed, SignUpAuthenticationType.signUpAgain)),
