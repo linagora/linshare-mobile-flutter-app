@@ -83,6 +83,7 @@ dependencies:
 
   #filesize
   filesize: 2.0.1
+  data_size: 0.2.0
 
   # share
   share: 2.0.1

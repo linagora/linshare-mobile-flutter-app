@@ -30,8 +30,8 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:dartz/dartz.dart' as dartz;
+import 'package:data_size/data_size.dart';
 import 'package:domain/domain.dart';
-import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -42,11 +42,12 @@ import 'package:linshare_flutter_app/presentation/redux/states/account_state.dar
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:redux/redux.dart';
+
 import 'account_details_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
 class AccountDetailsWidget extends StatefulWidget {
   @override
@@ -183,7 +184,7 @@ class _AccountDetailsWidgetState extends State<AccountDetailsWidget> {
             style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
           ),
           Text(
-            AppLocalizations.of(context).available_space_value(filesize(accountQuota.quota.size), filesize(accountQuota.usedSpace.size)),
+            AppLocalizations.of(context).available_space_value(accountQuota.quota.size.formatByteSize(prefix: Prefix.decimal), accountQuota.usedSpace.size.formatByteSize(prefix: Prefix.decimal)),
             style: TextStyle(fontSize: 16, color: AppColor.documentModifiedDateItemTextColor)
           )
         ]
