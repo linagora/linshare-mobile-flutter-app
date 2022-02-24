@@ -58,27 +58,27 @@ class UploadAndShareFileStateList {
   }
 
   UploadAndShareFileStateList updateElementBy(
-    CompareStateCallback compareCallback,
-    GetNewStateCallback getNewStateCallback,
+    MatchedState matchedState,
+    UpdateFileUploadingState updateFileUploadingState,
   ) {
-    final matchIndex = _uploadingStateFiles.indexWhere((element) => compareCallback(element));
+    final matchIndex = _uploadingStateFiles.indexWhere((element) => matchedState(element));
     if (matchIndex >= 0) {
-      _uploadingStateFiles[matchIndex] = getNewStateCallback(_uploadingStateFiles[matchIndex]);
+      _uploadingStateFiles[matchIndex] = updateFileUploadingState(_uploadingStateFiles[matchIndex]);
     }
     return this;
   }
 
   UploadAndShareFileStateList updateElementByUploadTaskId(
     UploadTaskId uploadTaskId,
-    GetNewStateCallback getNewStateCallback,
+    UpdateFileUploadingState updateFileUploadingState,
   ) {
     return updateElementBy(
       (state) => state?.uploadTaskId == uploadTaskId,
-      getNewStateCallback,
+      updateFileUploadingState,
     );
   }
 
-  UploadAndShareFileState? getElementBy(CompareStateCallback compareCallback) {
+  UploadAndShareFileState? getElementBy(MatchedState compareCallback) {
     return _uploadingStateFiles.firstWhere((element) => compareCallback(element), orElse: () => null);
   }
 

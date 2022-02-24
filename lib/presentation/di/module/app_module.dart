@@ -112,7 +112,8 @@ class AppModule {
         getIt<RemoteExceptionThrower>(),
         getIt<LinShareDownloadManager>()));
     getIt.registerLazySingleton(() => FileUploadDataSourceImpl(
-        getIt.get<FlutterUploader>()));
+        getIt.get<FlowUploader>())
+    );
     getIt.registerFactory(() => ReceivedShareDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>(),
@@ -184,6 +185,7 @@ class AppModule {
   }
 
   void _provideRepositoryImpl() {
+    getIt.registerFactory(() => FlowUploaderImpl(getIt<DioClient>()));
     getIt.registerFactory(() => AuthenticationRepositoryImpl({
       DataSourceType.network : getIt<AuthenticationDataSource>(),
       DataSourceType.local : getIt<LocalAuthenticationDataSource>()
@@ -248,6 +250,7 @@ class AppModule {
   }
 
   void _provideRepository() {
+    getIt.registerFactory<FlowUploader>(() => getIt<FlowUploaderImpl>());
     getIt.registerFactory<AuthenticationRepository>(() => getIt<AuthenticationRepositoryImpl>());
     getIt.registerFactory<AuthenticationOIDCRepository>(() => getIt<AuthenticationOIDCRepositoryImpl>());
     getIt.registerFactory<TokenRepository>(() => getIt<TokenRepositoryImpl>());
@@ -298,12 +301,8 @@ class AppModule {
     getIt.registerFactory(() => GetSecretTokenInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => VerifyEmailSaaSInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => SignUpForSaaSInteractor(getIt<AuthenticationOIDCRepository>()));
-    getIt.registerFactory(() => UploadMySpaceDocumentInteractor(
-        getIt<DocumentRepository>(),
-        getIt<TokenRepository>(),
-        getIt<CredentialRepository>(),
-        getIt<APIRepository>()
-    ));
+    getIt.registerFactory(() => FlowUploadDocumentInteractor(getIt<DocumentRepository>()));
+    getIt.registerFactory(() => FlowUploadWorkGroupDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => GetAllDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => DownloadFileInteractor(
         getIt<DocumentRepository>(),
@@ -327,12 +326,6 @@ class AppModule {
     getIt.registerFactory(() => DeleteTokenOidcInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => GetAllSharedSpacesInteractor(getIt<SharedSpaceRepository>()));
     getIt.registerFactory(() => GetAutoCompleteSharingInteractor(getIt<AutoCompleteRepository>()));
-    getIt.registerFactory(() => UploadWorkGroupDocumentInteractor(
-        getIt<SharedSpaceDocumentRepository>(),
-        getIt<TokenRepository>(),
-        getIt<CredentialRepository>(),
-        getIt<APIRepository>()
-    ));
     getIt.registerFactory(() => GetAllChildNodesInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => CopyDocumentsToSharedSpaceInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => CopyMultipleFilesToSharedSpaceInteractor(getIt<CopyDocumentsToSharedSpaceInteractor>()));
@@ -538,10 +531,9 @@ class AppModule {
     getIt.registerFactory(() => FileHelper());
     getIt.registerLazySingleton(() => UploadShareFileManager(
         getIt.get<Store<AppState>>(),
-        getIt.get<FileUploadDataSourceImpl>().uploadingFileStream,
-        getIt.get<UploadMySpaceDocumentInteractor>(),
+        getIt.get<FlowUploadDocumentInteractor>(),
         getIt.get<ShareDocumentInteractor>(),
-        getIt.get<UploadWorkGroupDocumentInteractor>(),
+        getIt.get<FlowUploadWorkGroupDocumentInteractor>(),
         getIt.get<FileHelper>(),
         getIt.get<GetQuotaInteractor>()));
   }
