@@ -39,13 +39,11 @@ import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
 
 abstract class SharedSpaceDocumentRepository {
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      APIVersionSupported apiVersion,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId? parentNodeId});
+  FlowFile uploadChunks(
+    FileInfo fileInfo,
+    SharedSpaceId sharedSpaceId,
+    {WorkGroupNodeId? parentNodeId}
+  );
 
   Future<List<WorkGroupNode?>> getAllChildNodes(
       SharedSpaceId sharedSpaceId,
