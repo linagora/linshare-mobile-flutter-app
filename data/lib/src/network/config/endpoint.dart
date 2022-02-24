@@ -79,6 +79,8 @@ class Endpoint {
   static final ServicePath verifyEmail = ServicePath('/api/users/email-availability');
 
   static final ServicePath signUp = ServicePath('/api/signup');
+
+  static final ServicePath flow = ServicePath('/flow');
 }
 
 extension ServicePathExtension on ServicePath {
