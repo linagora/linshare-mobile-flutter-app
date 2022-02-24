@@ -29,11 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 
 abstract class FileUploadDataSource {
-  Stream<Either<Failure, Success>> get uploadingFileStream;
-
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, String url);
+  FlowFile uploadChunks(FileInfo fileInfo, {SharedSpaceId? sharedSpaceId, WorkGroupNodeId? parentNodeId});
 }
