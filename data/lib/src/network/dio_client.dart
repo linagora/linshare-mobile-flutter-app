@@ -55,6 +55,21 @@ class DioClient {
         .catchError((error) => throw error);
   }
 
+  Future<Response> getFlow(
+      String path, {
+        Map<String, dynamic>? queryParameters,
+        Options? options,
+        CancelToken? cancelToken,
+        ProgressCallback? onReceiveProgress,
+      }) async {
+    return await _dio.get(
+      path,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      onReceiveProgress: onReceiveProgress);
+  }
+
   Future<dynamic> post(
     String path, {
     data,
