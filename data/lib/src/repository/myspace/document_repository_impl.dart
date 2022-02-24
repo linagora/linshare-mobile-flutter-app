@@ -31,11 +31,10 @@
 
 import 'package:data/src/datasource/document_datasource.dart';
 import 'package:data/src/datasource/file_upload_datasource.dart';
-import 'package:data/src/extensions/uri_extension.dart';
 import 'package:data/src/local/model/data_source_type.dart';
-import 'package:data/src/network/config/endpoint.dart';
 import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/flow/flow_file.dart';
 import 'package:domain/src/model/share/mailing_list_id.dart';
 
 class DocumentRepositoryImpl implements DocumentRepository {
@@ -45,12 +44,8 @@ class DocumentRepositoryImpl implements DocumentRepository {
   DocumentRepositoryImpl(this._documentDataSources, this._fileUploadDataSource);
 
   @override
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl, APIVersionSupported apiVersion) async {
-    return _fileUploadDataSource.upload(
-      fileInfo,
-      token,
-      baseUrl.withServicePath(Endpoint.documents, apiVersion),
-    );
+  FlowFile uploadChunks(FileInfo fileInfo) {
+    return _fileUploadDataSource.uploadChunks(fileInfo);
   }
 
   @override
