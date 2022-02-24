@@ -64,6 +64,7 @@ export 'src/datasource_impl/authentication_datasource_impl.dart';
 export 'src/datasource_impl/local_authentication_datasource.dart';
 export 'src/datasource_impl/local_audit_user_datasource.dart';
 export 'src/datasource_impl/local_quota_datasource.dart';
+export 'src/repository/flow/flow_uploader_impl.dart';
 // exception
 export 'src/exception/biometric_exception_thrower.dart';
 // extension
