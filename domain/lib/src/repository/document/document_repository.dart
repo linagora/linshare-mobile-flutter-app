@@ -37,14 +37,14 @@ import 'package:domain/src/model/authentication/token.dart';
 import 'package:domain/src/model/document/document.dart';
 import 'package:domain/src/model/document/document_id.dart';
 import 'package:domain/src/model/file_info.dart';
+import 'package:domain/src/model/flow/flow_file.dart';
 import 'package:domain/src/model/generic_user.dart';
 import 'package:domain/src/model/share/mailing_list_id.dart';
 import 'package:domain/src/model/share/share.dart';
 import 'package:domain/src/usecases/download_file/download_task_id.dart';
-import 'package:domain/src/usecases/upload_file/file_upload_state.dart';
 
 abstract class DocumentRepository {
-  Future<UploadTaskId> upload(FileInfo fileInfo, Token token, Uri baseUrl, APIVersionSupported apiVersion);
+  FlowFile uploadChunks(FileInfo fileInfo);
 
   Future<List<Document>> getAll();
 
