@@ -101,8 +101,8 @@ enum UploadAndShareAction { upload, uploadAndShare, uploadSharedSpace }
 
 extension UploadAndShareFileStateListExtension on List<UploadAndShareFileState?> {
   List<UploadAndShareFileState?> replaceBy(
-    CompareStateCallback compareCallback,
-    GetNewStateCallback getNewStateCallback,
+    MatchedState compareCallback,
+    UpdateFileUploadingState getNewStateCallback,
   ) {
     final matchIndex = indexWhere((element) => compareCallback(element));
     if (matchIndex >= 0) {
@@ -113,7 +113,7 @@ extension UploadAndShareFileStateListExtension on List<UploadAndShareFileState?>
 
   List<UploadAndShareFileState?> replaceByUploadTaskId(
     UploadTaskId uploadTaskId,
-    GetNewStateCallback getNewStateCallback,
+    UpdateFileUploadingState getNewStateCallback,
   ) {
     return replaceBy(
       (state) => state?.uploadTaskId == uploadTaskId,
@@ -122,5 +122,5 @@ extension UploadAndShareFileStateListExtension on List<UploadAndShareFileState?>
   }
 }
 
-typedef GetNewStateCallback = UploadAndShareFileState? Function(UploadAndShareFileState? currentState);
-typedef CompareStateCallback = bool Function(UploadAndShareFileState? state);
+typedef UpdateFileUploadingState = UploadAndShareFileState? Function(UploadAndShareFileState? currentState);
+typedef MatchedState = bool Function(UploadAndShareFileState? state);

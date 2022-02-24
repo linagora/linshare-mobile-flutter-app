@@ -36,6 +36,7 @@
 
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/manager/quota/verify_quota_manager.dart';
@@ -48,31 +49,32 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:redux/redux.dart';
+import 'dart:developer' as developer;
 
 class UploadShareFileManager {
   UploadShareFileManager(
     this._store,
-    this._uploadingFileStream,
-    this._uploadMySpaceDocumentInteractor,
+    this._flowUploadDocumentInteractor,
     this._shareDocumentInteractor,
-    this._uploadWorkGroupDocumentInteractor,
+    this._flowUploadWorkGroupDocumentInteractor,
     this._fileHelper,
     this._getQuotaInteractor
   ) {
     _verifyQuotaManager = VerifyQuotaManager(_store, _getQuotaInteractor);
-    _handleUploadingFileStream(_uploadingFileStream);
+    _handleFlowProgressState();
   }
 
   final Store<AppState> _store;
 
-  final Stream<Either<Failure, Success>> _uploadingFileStream;
+  final StreamGroup<Either<Failure, Success>> _progressStateStreamGroup
+    = StreamGroup<Either<Failure, Success>>.broadcast();
 
   final UploadAndShareFileStateList _uploadingStateFiles = UploadAndShareFileStateList();
   UploadAndShareFileStateList get uploadingStateFiles => _uploadingStateFiles;
 
-  final UploadMySpaceDocumentInteractor _uploadMySpaceDocumentInteractor;
+  final FlowUploadDocumentInteractor _flowUploadDocumentInteractor;
   final ShareDocumentInteractor _shareDocumentInteractor;
-  final UploadWorkGroupDocumentInteractor _uploadWorkGroupDocumentInteractor;
+  final FlowUploadWorkGroupDocumentInteractor _flowUploadWorkGroupDocumentInteractor;
   final FileHelper _fileHelper;
 
   final GetQuotaInteractor _getQuotaInteractor;
@@ -98,21 +100,15 @@ class UploadShareFileManager {
   }
 
   Future<void> _upload(FileInfo uploadFile, UploadAndShareAction action, {List<AutoCompleteResult>? recipients}) async {
-    (await _uploadMySpaceDocumentInteractor.execute(uploadFile)).fold(
-      (failure) {
-        final state = UploadAndShareFileState.initial(uploadFile, action, UploadTaskId.undefined(), recipients: recipients ?? <AutoCompleteResult>[])
-            .copyWith(uploadStatus: UploadFileStatus.uploadFailed);
-        _uploadingStateFiles.add(state);
+    developer.log('_upload()', name: 'UploadShareFileManager');
+    final flowFile = _flowUploadDocumentInteractor.execute(uploadFile);
 
-        _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
-      },
-      (success) {
-        final uploadTaskId = (success as FileUploadState).taskId;
-        _uploadingStateFiles.add(UploadAndShareFileState.initial(uploadFile, action, uploadTaskId, recipients: recipients ?? <AutoCompleteResult>[]));
+    _uploadingStateFiles.add(UploadAndShareFileState
+        .initial(uploadFile, action, flowFile.uploadTaskId, recipients: recipients ?? <AutoCompleteResult>[]));
 
-        _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
-      },
-    );
+    await _progressStateStreamGroup.add(flowFile.progressState);
+
+    _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
   }
 
   void uploadToSharedSpace(
@@ -130,63 +126,65 @@ class UploadShareFileManager {
     SharedSpaceId sharedSpaceId, {
     WorkGroupNodeId? parentNodeId,
   }) async {
-    (await _uploadWorkGroupDocumentInteractor.execute(uploadFile, sharedSpaceId, parentNodeId: parentNodeId)).fold(
-      (failure) {
-        final state = UploadAndShareFileState.initial(uploadFile, UploadAndShareAction.uploadSharedSpace, UploadTaskId.undefined())
-            .copyWith(uploadStatus: UploadFileStatus.uploadFailed);
-        _uploadingStateFiles.add(state);
+    developer.log('_uploadToSharedSpace()', name: 'UploadShareFileManager');
 
-        _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
-      },
-      (success) {
-        final uploadTaskId = (success as FileUploadState).taskId;
-        _uploadingStateFiles.add(UploadAndShareFileState.initial(uploadFile, UploadAndShareAction.uploadSharedSpace, uploadTaskId));
+    final flowFile = _flowUploadWorkGroupDocumentInteractor
+      .execute(uploadFile, sharedSpaceId, parentNodeId: parentNodeId);
 
-        _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
-      },
-    );
+    final state = UploadAndShareFileState.initial(uploadFile, UploadAndShareAction.uploadSharedSpace, flowFile.uploadTaskId);
+    _uploadingStateFiles.add(state);
+
+    await _progressStateStreamGroup.add(flowFile.progressState);
+
+    _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
   }
 
-  void _handleUploadingFileStream(Stream<Either<Failure, Success>> uploadingFileStream) {
-    uploadingFileStream.listen((resultEvent) {
-        resultEvent.fold(
-          (failure) {
-            if (failure is FileUploadFailure) {
-              _handleUploadFileFailure(failure);
-            }
-          },
-          (success) {
-            if (success is UploadingProgress) {
-              _uploadingStateFiles.updateElementByUploadTaskId(
-                success.uploadTaskId,
-                (currentState) {
-                  return (currentState?.uploadStatus.completed ?? false) ? currentState : currentState?.copyWith(
-                    uploadingProgress: success.progress,
-                    uploadStatus: UploadFileStatus.uploading,
-                  );
-                },
-              );
-            } else if (success is FileUploadSuccess) {
-              _handleUploadFileSucceed(success);
-            }
+  void _handleFlowProgressState() {
+    developer.log('_handleFlowProgressState()', name: 'UploadShareFileManager');
+    _progressStateStreamGroup.stream.listen((flowUploadState) {
+      flowUploadState.fold(
+        (failure) {
+          if (failure is ErrorFlowUploadState) {
+            _uploadingStateFiles.updateElementByUploadTaskId(
+              failure.flowFile.uploadTaskId,
+              (currentState) => currentState?.copyWith(uploadStatus: UploadFileStatus.uploadFailed));
 
-            _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
-          },
-        );
-      },
-      onError: null,
-    );
+            _handleFlowUploadFileFailure(failure);
+            // neu upload and share thi sao
+          }
+        },
+        (success) {
+          if (success is UploadingFlowUploadState) {
+            developer.log('_handleFlowProgressState(): uploading: ${success.progress}', name: 'UploadShareFileManager');
+            _uploadingStateFiles.updateElementByUploadTaskId(
+              success.flowFile.uploadTaskId,
+              (currentState) => (currentState?.uploadStatus.completed ?? false)
+                ? currentState
+                : currentState?.copyWith(
+                    uploadingProgress: (success.progress * 100 / success.total).floor(),
+                    uploadStatus: UploadFileStatus.uploading)
+            );
+
+          } else if (success is SuccessFlowUploadState) {
+            _handleUploadFileSucceed(success);
+            // neu upload and share thi sao
+          }
+
+          _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
+        });
+    });
   }
 
-  void _handleUploadFileSucceed(FileUploadSuccess uploadSuccess) {
-    final fileState = _uploadingStateFiles.getElementByUploadTaskId(uploadSuccess.uploadTaskId);
+  void _handleUploadFileSucceed(SuccessFlowUploadState uploadSuccess) {
+    developer.log('_handleUploadFileSucceed()', name: 'UploadShareFileManager');
+    final fileState = _uploadingStateFiles.getElementByUploadTaskId(uploadSuccess.flowFile.uploadTaskId);
     if (fileState != null) {
       _fileHelper.deleteFile(fileState.file);
       if (fileState.action == UploadAndShareAction.uploadAndShare && fileState.recipients.isNotEmpty) {
-        _shareAfterUploaded(uploadSuccess, fileState.recipients);
+        // _shareAfterUploaded(uploadSuccess, fileState.recipients);
       } else {
         _uploadingStateFiles.updateElementByUploadTaskId(
-          uploadSuccess.uploadTaskId,
+          uploadSuccess.flowFile.uploadTaskId,
           (currentState) {
             final newState = currentState?.copyWith(
               uploadingProgress: 100,
@@ -200,8 +198,8 @@ class UploadShareFileManager {
     }
   }
 
-  void _handleUploadFileFailure(FileUploadFailure uploadFailure) {
-    final fileState = _uploadingStateFiles.getElementByUploadTaskId(uploadFailure.uploadTaskId);
+  void _handleFlowUploadFileFailure(ErrorFlowUploadState errorFlowUploadState) {
+    final fileState = _uploadingStateFiles.getElementByUploadTaskId(errorFlowUploadState.flowFile.uploadTaskId);
     if (fileState != null) {
       _fileHelper.deleteFile(fileState.file);
     }
