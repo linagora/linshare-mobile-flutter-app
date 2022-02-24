@@ -63,6 +63,9 @@ dependencies:
   # OIDC
   flutter_appauth: 2.1.0+1
 
+  # uuid
+  uuid: 3.0.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
