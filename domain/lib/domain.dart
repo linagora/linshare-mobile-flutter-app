@@ -246,6 +246,11 @@ export 'src/model/authentication/saas_secret_token.dart';
 export 'src/model/authentication/signup_request.dart';
 export 'src/model/authentication/user_saas.dart';
 export 'src/model/authentication/plan_request.dart';
+export 'src/model/flow/flow_chunk.dart';
+export 'src/model/flow/flow_file.dart';
+export 'src/usecases/upload_file/flow_upload_state.dart';
+export 'src/model/flow/flow.dart';
+
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
 export 'src/repository/authentication/authentication_oidc_repository.dart';
@@ -269,6 +274,7 @@ export 'src/repository/upload_request_entry/upload_request_entry_repository.dart
 export 'src/repository/workgroup/shared_space_node_repository.dart';
 export 'src/repository/authentication/saas_console_repository.dart';
 export 'src/repository/endpoint/api_repository.dart';
+export 'src/repository/flow/flow_uploader.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -451,8 +457,6 @@ export 'src/usecases/sort/save_sorter_interactor.dart';
 export 'src/usecases/sort/sort_interactor.dart';
 export 'src/usecases/sort/sort_view_state.dart';
 export 'src/usecases/upload_file/file_upload_state.dart';
-export 'src/usecases/upload_file/upload_my_space_document_interactor.dart';
-export 'src/usecases/upload_file/upload_work_group_document_interactor.dart';
 export 'src/usecases/upload_request/get_all_upload_requests_interactor.dart';
 export 'src/usecases/upload_request/update_upload_request_multiple_status_interactor.dart';
 export 'src/usecases/upload_request/update_upload_request_status_interactor.dart';
@@ -503,3 +507,5 @@ export 'src/usecases/authentication/sign_up_for_saas_interactor.dart';
 export 'src/usecases/authentication/verify_email_saas_interactor.dart';
 export 'src/usecases/authentication/log_out_oidc_interactor.dart';
 export 'src/usecases/authentication/delete_token_oidc_interactor.dart';
+export 'src/usecases/upload_file/flow_upload_document_interactor.dart';
+export 'src/usecases/upload_file/flow_upload_work_group_document_interactor.dart';
