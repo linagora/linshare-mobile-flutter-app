@@ -32,10 +32,7 @@
 
 import 'package:data/src/datasource/file_upload_datasource.dart';
 import 'package:data/src/datasource/shared_space_document_datasource.dart';
-import 'package:data/src/extensions/uri_extension.dart';
 import 'package:data/src/local/model/data_source_type.dart';
-import 'package:data/src/network/config/endpoint.dart';
-import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/network/model/request/create_shared_space_node_folder_request.dart';
 import 'package:dio/src/cancel_token.dart';
 import 'package:domain/domain.dart';
@@ -48,24 +45,8 @@ class SharedSpaceDocumentRepositoryImpl implements SharedSpaceDocumentRepository
   SharedSpaceDocumentRepositoryImpl(this._sharedSpaceDocumentDataSources, this._fileUploadDataSource);
 
   @override
-  Future<UploadTaskId> uploadSharedSpaceDocument(
-      FileInfo fileInfo,
-      Token token,
-      Uri baseUrl,
-      APIVersionSupported apiVersion,
-      SharedSpaceId sharedSpaceId,
-      {WorkGroupNodeId? parentNodeId}) {
-    final queryParameters = parentNodeId == null
-        ? <QueryParameter>[]
-        : [StringQueryParameter('parent', parentNodeId.uuid)];
-    final url = baseUrl.withServicePath(
-      Endpoint.sharedSpaces
-        .withPathParameter('${sharedSpaceId.uuid}${Endpoint.nodes}')
-        .withQueryParameters(queryParameters),
-      apiVersion
-    );
-
-    return _fileUploadDataSource.upload(fileInfo, token, url);
+  FlowFile uploadChunks(FileInfo fileInfo, SharedSpaceId sharedSpaceId, {WorkGroupNodeId? parentNodeId}) {
+    return _fileUploadDataSource.uploadChunks(fileInfo, sharedSpaceId: sharedSpaceId, parentNodeId: parentNodeId);
   }
 
   @override
