@@ -44,3 +44,7 @@ class BooleanQueryParameter extends QueryParameter<bool> {
 class StringQueryParameter extends QueryParameter<String> {
   StringQueryParameter(String queryName, String queryValue) : super(queryName, queryValue);
 }
+
+class IntQueryParameter extends QueryParameter<int> {
+  IntQueryParameter(String queryName, int queryValue) : super(queryName, queryValue);
+}
