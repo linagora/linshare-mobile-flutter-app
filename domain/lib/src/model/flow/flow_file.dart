@@ -37,47 +37,53 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/async_task/async_task.dart';
+import 'package:domain/src/model/async_task/async_task_exception.dart';
+import 'package:domain/src/model/async_task/async_task_status.dart';
 import 'package:domain/src/model/flow/flow_chunk.dart';
 import 'package:domain/src/model/flow/flow_chunk_upload_state.dart';
 import 'package:domain/src/repository/flow/flow_uploader.dart';
 import 'package:domain/src/usecases/upload_file/flow_upload_state.dart';
 import 'package:equatable/equatable.dart';
+import 'package:retry/retry.dart';
 
 class FlowFile extends Equatable {
   final UploadTaskId uploadTaskId;
   final FileInfo fileInfo;
-  final FlowUploader flowUploader;
+  final FlowUploader _flowUploader;
   final SharedSpaceId? sharedSpaceId;
   final WorkGroupNodeId? parentNodeId;
 
   final int chunkSize = 1024 * 1024;
   final List<FlowChunk> chunks = List.empty(growable: true);
-  int uploadedByte = 0;
 
   final StreamController<Either<Failure, Success>> _progressStateController = StreamController<Either<Failure, Success>>.broadcast();
 
-  FlowFile(this.uploadTaskId, this.fileInfo, this.flowUploader, {this.sharedSpaceId, this.parentNodeId});
+  int _uploadedByte = 0;
+  Flow? _latestFlow;
+
+  FlowFile(this.uploadTaskId, this.fileInfo, this._flowUploader, {this.sharedSpaceId, this.parentNodeId});
 
   Stream<Either<Failure, Success>> get progressState => _progressStateController.stream;
 
-  void readFile(File file, FlowUploader flowUploader) {
+  void _readFile(File file, FlowUploader flowUploader) {
     var chunkCount = (fileInfo.fileSize / chunkSize).ceil();
     for (var offset = 0; offset < chunkCount; offset++) {
       chunks.add(FlowChunk(offset, this, file, uploadTaskId, flowUploader));
     }
   }
 
-  Future<FlowChunk?> uploadNextChunk() async {
+  Future<FlowChunk?> _uploadNextChunk() async {
     if (chunks.first.status == FlowChunkUploadState.pending) {
       developer.log('uploadNextChunk(): upload first chunk', name: 'FlowFile');
-      await chunks.first.upload(uploadedByte, _progressStateController);
+      _latestFlow = await chunks.first.upload(_uploadedByte, _progressStateController);
       return chunks.first;
     }
 
     try {
       final chunk = chunks.firstWhere((chunk) => chunk.status == FlowChunkUploadState.pending);
       developer.log('uploadNextChunk(): upload chunk $chunk', name: 'FlowFile');
-      await chunk.upload(uploadedByte, _progressStateController);
+      _latestFlow = await chunk.upload(_uploadedByte, _progressStateController);
       return chunk;
     } catch (e) {
       developer.log('uploadNextChunk(): error: $e', name: 'FlowFile');
@@ -85,43 +91,90 @@ class FlowFile extends Equatable {
     }
   }
 
-  void updateProgress(FlowChunk chunk) {
-    developer.log('updateProgress(): currentProgress = $uploadedByte', name: 'FlowFile');
-    uploadedByte += chunk.currentChunkSize;
-    updateEvent(Right(UploadingFlowUploadState(this, uploadedByte, fileInfo.fileSize)));
+  void _updateProgress(FlowChunk chunk) {
+    developer.log('updateProgress(): currentProgress = $_uploadedByte', name: 'FlowFile');
+    _uploadedByte += chunk.currentChunkSize;
+    _updateEvent(Right(UploadingFlowUploadState(this, _uploadedByte, fileInfo.fileSize)));
   }
 
-  void updateEvent(Either<Failure, Success> flowUploadState) {
+  Future<AsyncTask> _getFlowTask(String asyncTaskId) async {
+    developer.log('_getFlowTask(): $asyncTaskId', name: 'FlowFile');
+    final asyncTask = await _flowUploader.getFlowTask(asyncTaskId);
+    if (asyncTask.status == AsyncTaskStatus.PROCESSING) {
+      throw UnderProcessingException();
+    }
+    if (asyncTask.status == AsyncTaskStatus.FAILED) {
+      throw AsyncTaskException(status: asyncTask.status);
+    }
+    return asyncTask;
+  }
+
+  void _updateEvent(Either<Failure, Success> flowUploadState) {
     _progressStateController.add(flowUploadState);
   }
 
-  void handleCompleted() {
+  void _handleCompleted() {
     if (chunks.every((chunk) => chunk.status == FlowChunkUploadState.success)) {
-      developer.log('handleCompleted(): all success', name: 'FlowFile');
-      updateEvent(Right(SuccessFlowUploadState(this)));
+      final asyncTaskId = _getProcessingTaskId();
+      if (asyncTaskId != null) {
+        _handleProcessing(asyncTaskId);
+      } else {
+        _handleSuccess();
+      }
     } else {
       developer.log('handleCompleted(): error', name: 'FlowFile');
-      updateEvent(Left(ErrorFlowUploadState(this)));
+      _updateEvent(Left(ErrorFlowUploadState(this)));
+      _progressStateController.close();
     }
+  }
+
+  Future<void> _handleProcessing(String asyncTaskId) async {
+    _updateEvent(Right(WaitingForProcessingState(this)));
+    try {
+      final asyncTask = await RetryOptions(
+          delayFactor: Duration(milliseconds: 1000),
+          maxAttempts: 3)
+        .retry(
+          () => _getFlowTask(asyncTaskId),
+          retryIf: (exception) => exception is UnderProcessingException
+        );
+      if (asyncTask.resourceUuid != null) {
+        developer.log('_handleProcessing(): success with resourceId = ${asyncTask.resourceUuid}', name: 'FlowFile');
+        _updateEvent(Right(SuccessWithResourceFlowUploadState(this, asyncTask.resourceUuid!)));
+      }
+    } catch (exception) {
+      developer.log('_handleProcessing(): error: $exception', name: 'FlowFile');
+      _updateEvent(Left(ErrorFlowUploadState(this)));
+      await _progressStateController.close();
+    }
+  }
+
+  void _handleSuccess() {
+    developer.log('_handleSuccess()', name: 'FlowFile');
+    _updateEvent(Right(SuccessFlowUploadState(this)));
     _progressStateController.close();
+  }
+
+  String? _getProcessingTaskId() {
+    return _latestFlow?.asyncTaskUuid;
   }
 
   Future<void> upload() async {
     developer.log('upload(): $uploadTaskId', name: 'FlowFile');
-    updateEvent(Right(PendingFlowUploadState(this, 0, fileInfo.fileSize)));
+    _updateEvent(Right(PendingFlowUploadState(this, 0, fileInfo.fileSize)));
     final file = File(fileInfo.filePath + fileInfo.fileName);
-    readFile(file, flowUploader);
+    _readFile(file, _flowUploader);
 
     while (chunks.isNotEmpty) {
-      final chunk = await uploadNextChunk();
+      final chunk = await _uploadNextChunk();
       if (chunk == null) {
-        handleCompleted();
+        _handleCompleted();
         break;
       }
 
       final success = await chunk.test();
       if (success) {
-        updateProgress(chunk);
+        _updateProgress(chunk);
       }
     }
   }

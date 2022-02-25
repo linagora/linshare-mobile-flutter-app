@@ -156,6 +156,7 @@ class UploadShareFileManager {
         (success) {
           if (success is UploadingFlowUploadState) {
             developer.log('_handleFlowProgressState(): uploading: ${success.progress}', name: 'UploadShareFileManager');
+
             _uploadingStateFiles.updateElementByUploadTaskId(
               success.flowFile.uploadTaskId,
               (currentState) => (currentState?.uploadStatus.completed ?? false)
@@ -167,7 +168,6 @@ class UploadShareFileManager {
 
           } else if (success is SuccessFlowUploadState) {
             _handleUploadFileSucceed(success);
-            // neu upload and share thi sao
           }
 
           _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
@@ -181,7 +181,9 @@ class UploadShareFileManager {
     if (fileState != null) {
       _fileHelper.deleteFile(fileState.file);
       if (fileState.action == UploadAndShareAction.uploadAndShare && fileState.recipients.isNotEmpty) {
-        // _shareAfterUploaded(uploadSuccess, fileState.recipients);
+        if (uploadSuccess is SuccessWithResourceFlowUploadState) {
+          _shareAfterUploaded(uploadSuccess, fileState.recipients);
+        }
       } else {
         _uploadingStateFiles.updateElementByUploadTaskId(
           uploadSuccess.flowFile.uploadTaskId,
@@ -206,23 +208,22 @@ class UploadShareFileManager {
   }
 
   void _shareAfterUploaded(
-    FileUploadSuccess fileUploadSuccess,
+    SuccessWithResourceFlowUploadState fileUploadSuccess,
     List<AutoCompleteResult> recipients,
   ) async {
-    final uploadedDocument = fileUploadSuccess.uploadedDocument;
-    if(uploadedDocument == null) return;
-    final shareResult = await _share(recipients, [uploadedDocument.documentId]);
+    final uploadedDocumentId = DocumentId(fileUploadSuccess.resourceId);
+    final shareResult = await _share(recipients, [uploadedDocumentId]);
 
     shareResult.fold(
       (failure) {
         _uploadingStateFiles.updateElementByUploadTaskId(
-          fileUploadSuccess.uploadTaskId,
+          fileUploadSuccess.flowFile.uploadTaskId,
           (currentState) => currentState?.copyWith(uploadStatus: UploadFileStatus.shareFailed),
         );
       },
       (success) {
         _uploadingStateFiles.updateElementByUploadTaskId(
-          fileUploadSuccess.uploadTaskId,
+          fileUploadSuccess.flowFile.uploadTaskId,
           (currentState) => currentState?.copyWith(uploadStatus: UploadFileStatus.succeed),
         );
       },
