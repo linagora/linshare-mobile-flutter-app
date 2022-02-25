@@ -38,10 +38,12 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/dio_client.dart';
+import 'package:data/src/network/model/async_task/async_task_response.dart';
 import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/repository/flow/flow_response.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/async_task/async_task.dart';
 
 class FlowUploaderImpl extends FlowUploader {
   final DioClient _dioClient;
@@ -125,7 +127,7 @@ class FlowUploaderImpl extends FlowUploader {
       Endpoint.flow.generateEndpointPath(),
       data: formData,
       options: Options(
-        headers: _getHeaders(startByte, endByte, _fileSize)
+        headers: _getRangeHeadersForChunkUpload(startByte, endByte, _fileSize)
       ),
       onSendProgress: (progress, total) {
         onSendController.add(Right(UploadingFlowUploadState(flowFile, uploadedByte + progress, flowFile.fileInfo.fileSize)));
@@ -180,6 +182,20 @@ class FlowUploaderImpl extends FlowUploader {
     return FormData.fromMap(formData);
   }
 
-  Map<String, dynamic> _getHeaders(int start, int end, int fileSize) =>
+  Map<String, dynamic> _getRangeHeadersForChunkUpload(int start, int end, int fileSize) =>
       {'Content-Range': 'bytes $start-${end - 1}/$fileSize'};
+
+  @override
+  Future<AsyncTask> getFlowTask(String asyncTaskUuid) async {
+    final asyncTaskJson = await _dioClient.get(
+      Endpoint.flow.withPathParameter(asyncTaskUuid).generateEndpointPath()
+    );
+
+    developer.log('getFlowTask(): 1', name: 'FlowUploaderImpl');
+    final dmm = AsyncTaskResponse.fromJson(asyncTaskJson);
+    developer.log('getFlowTask(): 2 - $dmm', name: 'FlowUploaderImpl');
+    final chot = dmm.toAsyncTask();
+    developer.log('getFlowTask(): 3 - $chot', name: 'FlowUploaderImpl');
+    return chot;
+  }
 }

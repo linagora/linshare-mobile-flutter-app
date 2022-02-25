@@ -73,7 +73,7 @@ class FlowChunk extends Equatable {
     return min(flowFile.fileInfo.fileSize, (offset + 1) * chunkSize);
   }
 
-  Future upload(int uploadedByte, StreamController<Either<Failure, Success>> onSendController) async {
+  Future<Flow> upload(int uploadedByte, StreamController<Either<Failure, Success>> onSendController) async {
     status = FlowChunkUploadState.uploading;
     return _flowUploader.uploadChunk(
       file,

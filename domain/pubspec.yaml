@@ -27,6 +27,9 @@ dependencies:
   # dio
   dio: 4.0.0
 
+  # retry
+  retry: 3.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

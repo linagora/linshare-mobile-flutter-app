@@ -31,62 +31,65 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'package:data/src/local/converter/datetime_converter.dart';
 import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class PendingFlowUploadState extends Success {
-  final FlowFile flowFile;
-  final int progress;
-  final int total;
+part 'async_task_response.g.dart';
 
-  PendingFlowUploadState(this.flowFile, this.progress, this.total);
+@JsonSerializable()
+@DatetimeConverter()
+class AsyncTaskResponse extends Equatable {
+  final String uuid;
 
-  @override
-  List<Object?> get props => [progress, total];
-}
+  final String status;
 
-class UploadingFlowUploadState extends Success {
-  final FlowFile flowFile;
-  final int progress;
-  final int total;
+  final String? errorMsg;
 
-  UploadingFlowUploadState(this.flowFile, this.progress, this.total);
+  final String? errorName;
 
-  @override
-  List<Object?> get props => [flowFile, progress, total];
-}
+  final int? errorCode;
 
-class WaitingForProcessingState extends Success {
-  final FlowFile flowFile;
+  final int? frequency;
 
-  WaitingForProcessingState(this.flowFile);
+  final String? fileName;
 
-  @override
-  List<Object?> get props => [flowFile];
-}
+  final String? resourceUuid;
 
-class SuccessFlowUploadState extends Success {
-  final FlowFile flowFile;
+  final int? transfertDuration;
 
-  SuccessFlowUploadState(this.flowFile);
+  final int? waitingDuration;
 
-  @override
-  List<Object?> get props => [flowFile];
-}
+  final int? processingDuration;
 
-class SuccessWithResourceFlowUploadState extends SuccessFlowUploadState {
-  final String resourceId;
+  AsyncTaskResponse(
+      this.uuid,
+      this.status,
+      this.errorMsg,
+      this.errorName,
+      this.errorCode,
+      this.frequency,
+      this.fileName,
+      this.resourceUuid,
+      this.transfertDuration,
+      this.waitingDuration,
+      this.processingDuration);
 
-  SuccessWithResourceFlowUploadState(flowFile, this.resourceId) : super(flowFile);
+  factory AsyncTaskResponse.fromJson(Map<String, dynamic> json) => _$AsyncTaskResponseFromJson(json);
 
-  @override
-  List<Object?> get props => [flowFile, resourceId];
-}
+  Map<String, dynamic> toJson() => _$AsyncTaskResponseToJson(this);
 
-class ErrorFlowUploadState extends Failure {
-  final FlowFile flowFile;
-
-  ErrorFlowUploadState(this.flowFile);
+  AsyncTask toAsyncTask() => AsyncTask(
+    uuid, status, errorMsg, errorName, errorCode,
+    frequency, fileName, resourceUuid, transfertDuration,
+    waitingDuration, processingDuration
+  );
 
   @override
-  List<Object?> get props => [flowFile];
+  List<Object?> get props => [
+    uuid, status, errorMsg, errorName, errorCode,
+    frequency, fileName, resourceUuid, transfertDuration,
+    waitingDuration, processingDuration
+  ];
 }
