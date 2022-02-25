@@ -31,62 +31,49 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
 
-class PendingFlowUploadState extends Success {
-  final FlowFile flowFile;
-  final int progress;
-  final int total;
+class AsyncTask extends Equatable {
+  final String uuid;
 
-  PendingFlowUploadState(this.flowFile, this.progress, this.total);
+  final String status;
 
-  @override
-  List<Object?> get props => [progress, total];
-}
+  final String? errorMsg;
 
-class UploadingFlowUploadState extends Success {
-  final FlowFile flowFile;
-  final int progress;
-  final int total;
+  final String? errorName;
 
-  UploadingFlowUploadState(this.flowFile, this.progress, this.total);
+  final int? errorCode;
 
-  @override
-  List<Object?> get props => [flowFile, progress, total];
-}
+  final int? frequency;
 
-class WaitingForProcessingState extends Success {
-  final FlowFile flowFile;
+  final String? fileName;
 
-  WaitingForProcessingState(this.flowFile);
+  final String? resourceUuid;
 
-  @override
-  List<Object?> get props => [flowFile];
-}
+  final int? transfertDuration;
 
-class SuccessFlowUploadState extends Success {
-  final FlowFile flowFile;
+  final int? waitingDuration;
 
-  SuccessFlowUploadState(this.flowFile);
+  final int? processingDuration;
 
-  @override
-  List<Object?> get props => [flowFile];
-}
-
-class SuccessWithResourceFlowUploadState extends SuccessFlowUploadState {
-  final String resourceId;
-
-  SuccessWithResourceFlowUploadState(flowFile, this.resourceId) : super(flowFile);
+  AsyncTask(
+      this.uuid,
+      this.status,
+      this.errorMsg,
+      this.errorName,
+      this.errorCode,
+      this.frequency,
+      this.fileName,
+      this.resourceUuid,
+      this.transfertDuration,
+      this.waitingDuration,
+      this.processingDuration);
 
   @override
-  List<Object?> get props => [flowFile, resourceId];
-}
+  List<Object?> get props => [
+    uuid, status, errorMsg, errorName, errorCode,
+    frequency, fileName, resourceUuid,
+    transfertDuration, waitingDuration, processingDuration
+  ];
 
-class ErrorFlowUploadState extends Failure {
-  final FlowFile flowFile;
-
-  ErrorFlowUploadState(this.flowFile);
-
-  @override
-  List<Object?> get props => [flowFile];
 }
