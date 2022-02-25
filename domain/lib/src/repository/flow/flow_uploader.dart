@@ -36,6 +36,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/async_task/async_task.dart';
 import 'package:domain/src/model/flow/flow.dart';
 
 abstract class FlowUploader {
@@ -66,4 +67,6 @@ abstract class FlowUploader {
     {String? sharedSpaceId,
     String? parentNodeId}
   );
+
+  Future<AsyncTask> getFlowTask(String asyncTaskUuid);
 }

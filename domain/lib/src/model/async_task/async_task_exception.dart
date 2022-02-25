@@ -31,62 +31,13 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:domain/domain.dart';
+class AsyncTaskException implements Exception {
+  final String? message;
+  final String? status;
 
-class PendingFlowUploadState extends Success {
-  final FlowFile flowFile;
-  final int progress;
-  final int total;
-
-  PendingFlowUploadState(this.flowFile, this.progress, this.total);
-
-  @override
-  List<Object?> get props => [progress, total];
+  AsyncTaskException({this.message, this.status});
 }
 
-class UploadingFlowUploadState extends Success {
-  final FlowFile flowFile;
-  final int progress;
-  final int total;
-
-  UploadingFlowUploadState(this.flowFile, this.progress, this.total);
-
-  @override
-  List<Object?> get props => [flowFile, progress, total];
-}
-
-class WaitingForProcessingState extends Success {
-  final FlowFile flowFile;
-
-  WaitingForProcessingState(this.flowFile);
-
-  @override
-  List<Object?> get props => [flowFile];
-}
-
-class SuccessFlowUploadState extends Success {
-  final FlowFile flowFile;
-
-  SuccessFlowUploadState(this.flowFile);
-
-  @override
-  List<Object?> get props => [flowFile];
-}
-
-class SuccessWithResourceFlowUploadState extends SuccessFlowUploadState {
-  final String resourceId;
-
-  SuccessWithResourceFlowUploadState(flowFile, this.resourceId) : super(flowFile);
-
-  @override
-  List<Object?> get props => [flowFile, resourceId];
-}
-
-class ErrorFlowUploadState extends Failure {
-  final FlowFile flowFile;
-
-  ErrorFlowUploadState(this.flowFile);
-
-  @override
-  List<Object?> get props => [flowFile];
+class UnderProcessingException extends AsyncTaskException {
+  UnderProcessingException({String? message}) : super(message: message);
 }
