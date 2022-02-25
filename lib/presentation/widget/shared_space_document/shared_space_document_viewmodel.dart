@@ -169,7 +169,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
       });
 
       event.uploadFileState.viewState.fold((failure) => null, (success) {
-        if (success is FileUploadSuccess) {
+        if (success is SuccessFlowUploadState || success is SuccessWithResourceFlowUploadState) {
           getAllWorkGroupNode(needToGetOldSorter: true);
           store.dispatch(CleanUploadStateAction());
         }

@@ -141,10 +141,11 @@ class FlowFile extends Equatable {
       if (asyncTask.resourceUuid != null) {
         developer.log('_handleProcessing(): success with resourceId = ${asyncTask.resourceUuid}', name: 'FlowFile');
         _updateEvent(Right(SuccessWithResourceFlowUploadState(this, asyncTask.resourceUuid!)));
+        await _progressStateController.close();
       }
     } catch (exception) {
-      developer.log('_handleProcessing(): error: $exception', name: 'FlowFile');
-      _updateEvent(Left(ErrorFlowUploadState(this)));
+      developer.log('_handleProcessing(): can not get resourceId: $exception', name: 'FlowFile');
+      _updateEvent(Right(SuccessFlowUploadState(this)));
       await _progressStateController.close();
     }
   }

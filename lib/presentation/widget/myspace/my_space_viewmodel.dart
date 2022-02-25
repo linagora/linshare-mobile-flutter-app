@@ -34,8 +34,8 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:data/data.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -151,7 +151,7 @@ class MySpaceViewModel extends BaseViewModel {
       });
 
       event.uploadFileState.viewState.fold((failure) => null, (success) {
-        if (success is FileUploadSuccess) {
+        if (success is SuccessFlowUploadState || success is SuccessWithResourceFlowUploadState) {
           getAllDocument();
           store.dispatch(CleanUploadStateAction());
         }
