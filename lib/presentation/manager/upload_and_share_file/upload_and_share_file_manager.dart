@@ -35,6 +35,7 @@
 // the Additional Terms applicable to LinShare software.
 
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:async/async.dart';
 import 'package:dartz/dartz.dart';
@@ -49,7 +50,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/helper/file_helper.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:redux/redux.dart';
-import 'dart:developer' as developer;
 
 class UploadShareFileManager {
   UploadShareFileManager(
@@ -150,7 +150,6 @@ class UploadShareFileManager {
               (currentState) => currentState?.copyWith(uploadStatus: UploadFileStatus.uploadFailed));
 
             _handleFlowUploadFileFailure(failure);
-            // neu upload and share thi sao
           }
         },
         (success) {
@@ -168,11 +167,36 @@ class UploadShareFileManager {
 
           } else if (success is SuccessFlowUploadState) {
             _handleUploadFileSucceed(success);
+          } else if (success is SuccessWithResourceFlowUploadState) {
+            _handleUploadFileSucceedWithResource(success);
           }
 
           _store.dispatch(UploadFilesUpdateAction(_uploadingStateFiles.uploadingStateFiles));
         });
     });
+  }
+
+  void _handleUploadFileSucceedWithResource(SuccessWithResourceFlowUploadState successWithResourceFlowUploadState) {
+    developer.log('_handleUploadFileSucceed()', name: 'UploadShareFileManager');
+    final fileState = _uploadingStateFiles.getElementByUploadTaskId(successWithResourceFlowUploadState.flowFile.uploadTaskId);
+    if (fileState != null) {
+      _fileHelper.deleteFile(fileState.file);
+      if (fileState.action == UploadAndShareAction.uploadAndShare && fileState.recipients.isNotEmpty) {
+        _shareAfterUploaded(successWithResourceFlowUploadState, fileState.recipients);
+      } else {
+        _uploadingStateFiles.updateElementByUploadTaskId(
+          successWithResourceFlowUploadState.flowFile.uploadTaskId,
+          (currentState) {
+            final newState = currentState?.copyWith(
+              uploadingProgress: 100,
+              uploadStatus: UploadFileStatus.succeed,
+            );
+            return newState;
+          },
+        );
+      }
+      _store.dispatch(UploadFileAction(Right(successWithResourceFlowUploadState)));
+    }
   }
 
   void _handleUploadFileSucceed(SuccessFlowUploadState uploadSuccess) {
@@ -181,9 +205,11 @@ class UploadShareFileManager {
     if (fileState != null) {
       _fileHelper.deleteFile(fileState.file);
       if (fileState.action == UploadAndShareAction.uploadAndShare && fileState.recipients.isNotEmpty) {
-        if (uploadSuccess is SuccessWithResourceFlowUploadState) {
-          _shareAfterUploaded(uploadSuccess, fileState.recipients);
-        }
+        developer.log('_handleUploadFileSucceed(): can not share without resourceId', name: 'UploadShareFileManager');
+        _uploadingStateFiles.updateElementByUploadTaskId(
+          uploadSuccess.flowFile.uploadTaskId,
+          (currentState) => currentState?.copyWith(uploadStatus: UploadFileStatus.shareFailed),
+        );
       } else {
         _uploadingStateFiles.updateElementByUploadTaskId(
           uploadSuccess.flowFile.uploadTaskId,
