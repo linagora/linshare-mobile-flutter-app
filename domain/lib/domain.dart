@@ -250,6 +250,7 @@ export 'src/model/flow/flow_chunk.dart';
 export 'src/model/flow/flow_file.dart';
 export 'src/usecases/upload_file/flow_upload_state.dart';
 export 'src/model/flow/flow.dart';
+export 'src/model/async_task/async_task.dart';
 
 // repository
 export 'src/repository/authentication/authentication_repository.dart';
