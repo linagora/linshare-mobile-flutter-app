@@ -73,10 +73,11 @@ class SuccessFlowUploadState extends Success {
   List<Object?> get props => [flowFile];
 }
 
-class SuccessWithResourceFlowUploadState extends SuccessFlowUploadState {
+class SuccessWithResourceFlowUploadState extends Success {
+  final FlowFile flowFile;
   final String resourceId;
 
-  SuccessWithResourceFlowUploadState(flowFile, this.resourceId) : super(flowFile);
+  SuccessWithResourceFlowUploadState(this.flowFile, this.resourceId);
 
   @override
   List<Object?> get props => [flowFile, resourceId];

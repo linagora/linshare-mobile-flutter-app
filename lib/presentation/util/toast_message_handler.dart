@@ -166,8 +166,8 @@ class ToastMessageHandler {
   void _handleUploadToastMessage(BuildContext context, UploadFileState uploadFileState) {
     uploadFileState.viewState.fold((failure) {
       if (failure is FilePickerFailure
-          || failure is FileUploadFailure
-          || failure is WorkGroupDocumentUploadFailure) {
+          || failure is ErrorFlowUploadState
+      ) {
         appToast.showToast(AppLocalizations.of(context).upload_failure_text);
       }
 
@@ -184,7 +184,7 @@ class ToastMessageHandler {
       }
       _cleanUploadViewState();
     }, (success) {
-      if (success is FileUploadSuccess || success is WorkGroupDocumentUploadSuccess) {
+      if (success is SuccessFlowUploadState || success is SuccessWithResourceFlowUploadState) {
         appToast.showToast(AppLocalizations.of(context).upload_success_text);
         _cleanUploadViewState();
       }
