@@ -38,6 +38,9 @@ workflows:
         - configuration: Release
     - deploy-to-bitrise-io@1: {}
     - cache-push@2: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
   primary:
     steps:
     - activate-ssh-key@4:
@@ -79,7 +82,7 @@ workflows:
         - build_short_version_string: 3.3.0
         - build_version_offset: alpha$BITRISE_BUILD_NUMBER
         - plist_path: "$BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/Info.plist"
-    - flutter-build@0:
+    - flutter-build@0.14:
         inputs:
         - platform: ios
         - is_debug_mode: 'true'
@@ -119,7 +122,5 @@ app:
   - opts:
       is_expand: false
     BITRISE_GIT_BRANCH: release
-  - opts:
-      is_expand: false
-    SAAS_AVAILABLE: 'true'
+  - SAAS_AVAILABLE: 'true'
 
