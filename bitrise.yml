@@ -94,7 +94,7 @@ workflows:
         - build_version_offset: alpha$BITRISE_BUILD_NUMBER
         - build_short_version_string: 3.3.0
         - plist_path: "$BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/Info.plist"
-    - flutter-build@0:
+    - flutter-build@0.14:
         inputs:
         - is_debug_mode: 'true'
         - ios_additional_params: "--no-sound-null-safety --release"
@@ -158,7 +158,5 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
-  - opts:
-      is_expand: false
-    SAAS_AVAILABLE: 'true'
+  - SAAS_AVAILABLE: 'true'
 
