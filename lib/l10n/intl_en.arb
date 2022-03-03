@@ -2233,5 +2233,307 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "files": "Files",
+  "@files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipient": "Recipient",
+  "@recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipients": "Recipients",
+  "@recipients": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "meta_data": "Meta-data",
+  "@meta_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "number_of_uploaded_files": "{count} file uploaded",
+  "@number_of_uploaded_files": {
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "upload_request_group_modification_date": "Updated at {date}",
+  "@upload_request_group_modification_date": {
+    "type": "text",
+    "placeholders_order": [
+      "date"
+    ],
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "owner": "Owner",
+  "@owner": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "view": "View",
+  "@view": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "created_at": "Created at",
+  "@created_at": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "activated_at": "Activated at",
+  "@activated_at": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "collective": "Collective",
+  "@collective": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_total_file_size": "Max total file size",
+  "@max_total_file_size": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_size_per_file": "Max size per file",
+  "@max_size_per_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_language_meta_data": "Notification language",
+  "@notification_language_meta_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "override_this_role_for_all_existing_workgroups": "Override this role for all existing workgroups",
+  "@override_this_role_for_all_existing_workgroups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "update": "Update",
+  "@update": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit_default_workgroup_role": "Edit default workgroup role",
+  "@edit_default_workgroup_role": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_uploaded": "Files uploaded",
+  "@files_uploaded": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_upload_request_recipient": "Upload request has been created",
+  "@audit_action_message_create_upload_request_recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_upload_request_url": "An upload request email has been sent to: {contactEmail}",
+  "@audit_action_message_create_upload_request_url": {
+    "type": "text",
+    "placeholders_order": [
+      "contactEmail"
+    ],
+    "placeholders": {
+      "contactEmail": {}
+    }
+  },
+  "audit_action_message_update_upload_request_recipient": "Upload request has been updated.",
+  "@audit_action_message_update_upload_request_recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_date": "Notification date",
+  "@notification_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_upload_request_entry": "File {resourceName} has been uploaded.",
+  "@audit_action_message_create_upload_request_entry": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_download_upload_request_entry_self": "You have downloaded the file: {resourceName}.",
+  "@audit_action_message_download_upload_request_entry_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_download_upload_request_entry_other": "{authorName} has downloaded the file: {resourceName}.",
+  "@audit_action_message_download_upload_request_entry_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "file_type": "File type",
+  "@file_type": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "check_all": "Check all",
+  "@check_all": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_workspace": "New workspace",
+  "@new_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace": "Workspace",
+  "@workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_workspace": "Create new workspace",
+  "@create_new_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_workspace": "Create Workspace",
+  "@create_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "role_in_this_workspace": "Role in this workspace",
+  "@role_in_this_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "member_default_role_of_all_workgroups_inside_this_workspace": "Member's default role of all workgroups inside this workspace",
+  "@member_default_role_of_all_workgroups_inside_this_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_work_space_member": "Are you sure you want to delete {memberName} from the workspace {workspaceName} and all related workgroups?",
+  "@are_you_sure_you_want_to_delete_work_space_member": {
+    "type": "text",
+    "placeholders_order": [
+      "memberName",
+      "workspaceName"
+    ],
+    "placeholders": {
+      "memberName": {},
+      "workspaceName": {}
+    }
+  },
+  "workspace_admin": "Workspace Admin",
+  "@workspace_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace_reader": "Workspace Reader",
+  "@workspace_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace_writer": "Workspace Writer",
+  "@workspace_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_failed": "Sign up Failed",
+  "@sign_up_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_message_failed": "Unfortunately, something went wrong during\n your signup.",
+  "@sign_up_message_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_again": "Sign up again",
+  "@sign_up_again": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_technical_support": "Contact technical support",
+  "@contact_technical_support": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_technical_support_failed": "Support team is out of reach try again later",
+  "@contact_technical_support_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "title_feedback_dialog": "LinShare",
+  "@title_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "feedback_dialog_button": "Please, share your feedback",
+  "@feedback_dialog_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_feedback_dialog": "We are running Linshare SaaS. We are working hard to fix all the bugs that impact user experience. We rely on your valuable feedback to make Linshare better for everyone.",
+  "@message_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
