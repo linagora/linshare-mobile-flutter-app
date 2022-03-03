@@ -125,13 +125,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     onPressed: () => _viewModel.handleCloseSignUpPressed(context),
                     icon: SvgPicture.asset(_imagePath.icLoginClose, width: 18, height: 18, fit: BoxFit.fill)
                   ))
-              ),
-              StoreConnector<AppState, SignUpFormType>(
-                  converter: (store) => store.state.signUpAuthenticationState.signUpFormType,
-                  builder: (context, signUpFormType) => Positioned(
-                      left: 0,
-                      child: SvgPicture.asset(_imagePath.icLogoBeta, width: 54, height: 54, fit: BoxFit.fill))
-              ),
+              )
             ],
           )
         ),
