@@ -2963,7 +2963,7 @@ class AppLocalizations {
   }
 
   String get title_feedback_dialog {
-    return Intl.message('LinShare Beta',
+    return Intl.message('LinShare',
         name: 'title_feedback_dialog');
   }
 
@@ -2973,7 +2973,7 @@ class AppLocalizations {
   }
 
   String get message_feedback_dialog {
-    return Intl.message('We are testing Linshare SaaS on Beta. We are working hard to fix all the bugs that impact user experience. We rely on your valuable feedback to make Linshare better for everyone.',
+    return Intl.message('We are running Linshare SaaS. We are working hard to fix all the bugs that impact user experience. We rely on your valuable feedback to make Linshare better for everyone.',
         name: 'message_feedback_dialog');
   }
 }

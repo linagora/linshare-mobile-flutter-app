@@ -136,9 +136,6 @@ class FeedbackDialog {
               ))
           ]),
           Positioned(
-            left: 0,
-            child: SvgPicture.asset(_imagePath.icLogoBeta, width: 74, height: 74, fit: BoxFit.fill)),
-          Positioned(
             right: 0,
             child: IconButton(
               iconSize: 30,
