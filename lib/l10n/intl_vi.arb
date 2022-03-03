@@ -689,7 +689,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "unknown_role": "Unknown Role",
+  "unknown_role": "Không xác định",
   "@unknown_role": {
     "type": "text",
     "placeholders": {}
@@ -993,7 +993,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_personal_space_self": "Bạn đã tạo một bản sao tệp: {resourceName} tại {nameVarious}, từ không  làm việc riêng.",
+  "audit_action_message_copy_document_from_personal_space_self": "Bạn đã tạo một bản sao tệp: {resourceName} tại {nameVarious}, từ không làm việc riêng.",
   "@audit_action_message_copy_document_from_personal_space_self": {
     "type": "text",
     "placeholders": {
@@ -1109,7 +1109,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "second_factor_authentication_is_required_for_your_account": "Tài khoản này yêu cầu Xác thực 2 bước ",
+  "second_factor_authentication_is_required_for_your_account": "Tài khoản này yêu cầu Xác thực 2 bước",
   "@second_factor_authentication_is_required_for_your_account": {
     "type": "text",
     "placeholders": {}
@@ -1320,7 +1320,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "biometric_authentication_localized_reason_disable": "Quét để tắt xác thực nhân trắc học.",
+  "biometric_authentication_localized_reason_disable": "Quét để tắt xác thực nhân trắc học",
   "@biometric_authentication_localized_reason_disable": {
     "type": "text",
     "placeholders": {}
@@ -1433,7 +1433,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "file_cannot_be_switched_to_offline_mode": "Tệp không thể chuyển sang ngoại tuyến sẵn ",
+  "file_cannot_be_switched_to_offline_mode": "Tệp không thể chuyển sang ngoại tuyến sẵn",
   "@file_cannot_be_switched_to_offline_mode": {
     "type": "text",
     "placeholders": {}
@@ -2005,79 +2005,79 @@
     "type": "text",
     "placeholders": {}
   },
-  "add_a_member": "Add a member",
+  "add_a_member": "Thêm thành viên",
   "@add_a_member": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "add_team_members_with_roles": "Add team members with roles",
+  "add_team_members_with_roles": "Thêm thành viên và quyền",
   "@add_team_members_with_roles": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "role_in_this_drive": "Role in this drive",
+  "role_in_this_drive": "Quyền trong ổ đĩa",
   "@role_in_this_drive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "default_role_in_workgroups": "Default role in workgroups",
+  "default_role_in_workgroups": "Quyền mặc định trong nhóm làm việc",
   "@default_role_in_workgroups": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "member_default_role_of_all_workgroups_inside_this_drive": "Member's default role of all workgroups inside this drive",
+  "member_default_role_of_all_workgroups_inside_this_drive": "Quyền mặc định trong nhóm làm việc chung",
   "@member_default_role_of_all_workgroups_inside_this_drive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_admin": "Drive Admin",
+  "drive_admin": "Quản trị viên ổ đĩa",
   "@drive_admin": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_reader": "Drive Reader",
+  "drive_reader": "Quyền đọc ổ đĩa",
   "@drive_reader": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_writer": "Drive Writer",
+  "drive_writer": "Quyền ghi ổ đĩa",
   "@drive_writer": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workgroup_admin": "Workgroup Admin",
+  "workgroup_admin": "Quản trị nhóm làm việc chung",
   "@workgroup_admin": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workgroup_reader": "Workgroup Reader",
+  "workgroup_reader": "Quyền đọc nhóm làm việc chung",
   "@workgroup_reader": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workgroup_writer": "Workgroup Writer",
+  "workgroup_writer": "Quyền ghi nhóm làm việc chung",
   "@workgroup_writer": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workgroup_contributor": "Workgroup Contributor",
+  "workgroup_contributor": "Quyền đóng góp nhóm làm việc chung",
   "@workgroup_contributor": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_drive_member": "Are you sure you want to delete {memberName} from the drive {driveName} and all related workgroups?",
+  "are_you_sure_you_want_to_delete_drive_member": "Đồng ý xoá {memberName} khỏi ổ đĩa {driveName}?",
   "@are_you_sure_you_want_to_delete_drive_member": {
     "type": "text",
     "placeholders_order": [
@@ -2089,19 +2089,19 @@
       "driveName": {}
     }
   },
-  "name_is_required": "Name is required",
+  "name_is_required": "Bắt buộc",
   "@name_is_required": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "surname_is_required": "Surname is required",
+  "surname_is_required": "Bắt buộc",
   "@surname_is_required": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_continue": "Continue",
+  "sign_up_continue": "Tiếp tục",
   "@sign_up_continue": {
     "type": "text",
     "placeholders_order": [],
@@ -2119,31 +2119,31 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_surname_title": "Surname",
+  "sign_up_surname_title": "Họ",
   "@sign_up_surname_title": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "hint_input_sign_up_name": "Enter your name",
+  "hint_input_sign_up_name": "Nhập tên",
   "@hint_input_sign_up_name": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "hint_input_sign_up_surname": "Enter your surname",
+  "hint_input_sign_up_surname": "Nhập họ",
   "@hint_input_sign_up_surname": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_completed_title_center": "Done, check your inbox",
+  "sign_up_completed_title_center": "Hoàn thành, hãy kiểm tra thư điện tử",
   "@sign_up_completed_title_center": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_completed_message_center": "A password has been sent to your email {email}, check your email and\n continue login",
+  "sign_up_completed_message_center": "Mật khẩu đã được gửi đến {email}, hãy kiểm tra hòm thư và\ntiếp tục đăng nhập",
   "@sign_up_completed_message_center": {
     "type": "text",
     "placeholders_order": [
@@ -2153,22 +2153,27 @@
       "email": {}
     }
   },
-  "email_is_not_available": "Email is not available",
+  "email_is_not_available": "Email không hợp lệ",
   "@email_is_not_available": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_member": "Drive member",
+  "drive_member": "Thành viên",
   "@drive_member": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "external_member": "External member",
+  "external_member": "Thành viên bên ngoài",
   "@external_member": {
     "type": "text",
     "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_files_could_not_be_copied_to_my_space": "Không thể sao chép tệp tới Không gian làm việc của tôi",
+  "@the_files_could_not_be_copied_to_my_space": {
+    "type": "text",
     "placeholders": {}
   },
   "files": "Files",
