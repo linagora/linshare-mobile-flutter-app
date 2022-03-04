@@ -20,7 +20,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "email": "электронный адрес",
+  "email": "email",
   "@email": {
     "type": "text",
     "placeholders": {}
@@ -85,27 +85,27 @@
     "type": "text",
     "placeholders": {}
   },
-  "download_to_device":"Загрузить на устройство",
+  "download_to_device": "Загрузить на устройство",
   "@download_to_device": {
     "type": "text",
     "placeholders": {}
   },
-  "share":"Поделиться",
+  "share": "Поделиться",
   "@share": {
     "type": "text",
     "placeholders": {}
   },
-  "title_quick_share":"Быстро поделиться",
+  "title_quick_share": "Быстро поделиться",
   "@title_quick_share": {
     "type": "text",
     "placeholders": {}
   },
-  "add_recipients":"Добавить получателей",
+  "add_recipients": "Добавить получателей",
   "@add_recipients": {
     "type": "text",
     "placeholders": {}
   },
-  "add_people":"Добавить пользователей",
+  "add_people": "Добавить пользователей",
   "@add_people": {
     "type": "text",
     "placeholders": {}
@@ -117,7 +117,7 @@
       "sharesNumber": {}
     }
   },
-  "file_could_not_be_share":"Не удалось поделиться файлом",
+  "file_could_not_be_share": "Не удалось поделиться файлом",
   "@file_could_not_be_share": {
     "type": "text",
     "placeholders": {}
@@ -139,17 +139,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "export_file":"Экспорт файла",
+  "export_file": "Экспорт файла",
   "@export_file": {
     "type": "text",
     "placeholders": {}
   },
-  "preparing_to_export":"Подготовавливаем экспорт",
+  "preparing_to_export": "Подготовка к экспорту",
   "@preparing_to_export": {
     "type": "text",
     "placeholders": {}
   },
-  "cancel":"Отменить",
+  "cancel": "Отмена",
   "@cancel": {
     "type": "text",
     "placeholders": {}
@@ -161,7 +161,7 @@
       "fileName": {}
     }
   },
-  "logout":"Забыть аккаунт",
+  "logout": "Забыть аккаунт",
   "@logout": {
     "type": "text",
     "placeholders": {}
@@ -171,12 +171,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "shared_space":"Рабочие группы",
+  "shared_space": "Рабочие группы",
   "@shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "do_not_have_any_workgroup":"У вас еще нет рабочей группы",
+  "do_not_have_any_workgroup": "У вас еще нет рабочей группы",
   "@do_not_have_any_workgroup": {
     "type": "text",
     "placeholders": {}
@@ -186,7 +186,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "unknown_user":"Неизвестный пользователь",
+  "unknown_user": "Неизвестный пользователь",
   "@unknown_user": {
     "type": "text",
     "placeholders": {}
@@ -240,7 +240,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "browse": "Поиск",
+  "browse": "Просмотреть",
   "@browse": {
     "type": "text",
     "placeholders": {}
