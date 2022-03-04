@@ -1,1 +1,49 @@
-{}
+{
+  "initializing_data": "Inizializzazione dei dati...",
+  "@initializing_data": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "email": "e-mail",
+  "@email": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "downloading_file": "Scarica di {fileName}",
+  "@downloading_file": {
+    "type": "text",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "new_folder": "Nuova cartella",
+  "@new_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "password",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "Cancella",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preparing_to_export": "Preparazione per l'esportazione",
+  "@preparing_to_export": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "browse": "Sfoglia",
+  "@browse": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "photos_and_videos": "Foto e video",
+  "@photos_and_videos": {
+    "type": "text",
+    "placeholders": {}
+  }
+}
