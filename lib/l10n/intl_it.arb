@@ -45,5 +45,154 @@
   "@photos_and_videos": {
     "type": "text",
     "placeholders": {}
+  },
+  "login_text_slogan": "Archivia e condividi i tuoi file da qualsiasi luogo",
+  "@login_text_slogan": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_text_login_to_continue": "Per favore accedi per continuare",
+  "@login_text_login_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_button_login": "Accedi",
+  "@login_button_login": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_file_title": "Carica un file",
+  "@upload_file_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_text_button": "Carica sul Mio Spazio",
+  "@upload_text_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space_title": "Il mio spazio",
+  "@my_space_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_prepare_text": "Preparazione per il caricamento...",
+  "@upload_prepare_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_success_text": "File caricato",
+  "@upload_success_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "wrong_url_message": "L'URL del server non è valido, si prega di riprovare",
+  "@wrong_url_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "credential_error_message": "Autenticazione fallita, l'email o la password non sono valide, riprova",
+  "@credential_error_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_error_login_message": "Si è verificato un errore sconosciuto, per favore riprova",
+  "@unknown_error_login_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "download_to_device": "Scarica sul dispositivo",
+  "@download_to_device": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "share": "Condividi",
+  "@share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_people": "Aggiungi persone",
+  "@add_people": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_recipients": "Aggiungi destinatari",
+  "@add_recipients": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{Il file è stato condiviso con successo}other{I file sono stati condivisi con successo}}",
+  "@file_has_been_successfully_shared": {
+    "type": "text",
+    "placeholders": {
+      "sharesNumber": {}
+    }
+  },
+  "file_could_not_be_share": "Impossibile condividere il file",
+  "@file_could_not_be_share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "item_last_modified": "Modificato {dateString}",
+  "@item_last_modified": {
+    "type": "text",
+    "placeholders": {
+      "dateString": {}
+    }
+  },
+  "export_file": "Esporta il file",
+  "@export_file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logout": "Esci",
+  "@logout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "confirm_remove_account_title": "Sei sicuro di voler uscire da questo account?",
+  "@confirm_remove_account_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_space": "Spazio condiviso",
+  "@shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "do_not_have_any_workgroup": "Non hai ancora alcun gruppo di lavoro",
+  "@do_not_have_any_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "https": "https://",
+  "@https": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space_text_upload_your_files_here": "Carica i tuoi file qui",
+  "@my_space_text_upload_your_files_here": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_failure_text": "Impossibile caricare il file",
+  "@upload_failure_text": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "title_quick_share": "Condivisione rapida",
+  "@title_quick_share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "common_error_occured_message": "Si verifica un errore imprevisto\nSi prega di ricaricare o riprovare più tardi",
+  "@common_error_occured_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_space": "Il mio spazio",
+  "@my_space": {
+    "type": "text",
+    "placeholders": {}
   }
 }
