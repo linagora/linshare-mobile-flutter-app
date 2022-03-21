@@ -5,7 +5,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "login_text_slogan": "Храните и делитесь своими файлами где бы вы не находились.",
+  "login_text_slogan": "Храните и делитесь своими файлами, где бы вы не находились",
   "@login_text_slogan": {
     "type": "text",
     "placeholders": {}
@@ -161,7 +161,7 @@
       "fileName": {}
     }
   },
-  "logout": "Забыть аккаунт",
+  "logout": "Выход",
   "@logout": {
     "type": "text",
     "placeholders": {}
@@ -925,7 +925,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_workgroup_document_self": "Вы удалили файл: {resourceName} из рабочей группы  {nameVarious}.",
+  "audit_action_message_delete_workgroup_document_self": "Вы удалили файл: {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_delete_workgroup_document_self": {
     "type": "text",
     "placeholders": {
@@ -1330,7 +1330,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "version": "Версия {версия}",
+  "version": "Версия {version}",
   "@version": {
     "type": "text",
     "placeholders": {
@@ -1428,7 +1428,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "files_will_no_longer_be_usable_without_be_network": "Файлы больше нельзя будет использовать оффлайн",
+  "files_will_no_longer_be_usable_without_be_network": "Файлы больше нельзя будет использовать оффлайн.",
   "@files_will_no_longer_be_usable_without_be_network": {
     "type": "text",
     "placeholders": {}
@@ -1733,7 +1733,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "biometric_timeout_title": "Установить тайм-аут ",
+  "biometric_timeout_title": "Установить тайм-аут",
   "@biometric_timeout_title": {
     "type": "text",
     "placeholders": {}
@@ -1987,7 +1987,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_drive_member": "Are you sure you want to delete {memberName} from the drive {driveName} and all related workgroups?",
+  "are_you_sure_you_want_to_delete_drive_member": "Вы уверены, что хотите удалить {memberName} с диска {driveName} и все связанные с этим участником рабочие группы?",
   "@are_you_sure_you_want_to_delete_drive_member": {
     "type": "text",
     "placeholders_order": [
@@ -1999,19 +1999,19 @@
       "driveName": {}
     }
   },
-  "name_is_required": "Name is required",
+  "name_is_required": "Укажите имя",
   "@name_is_required": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "surname_is_required": "Surname is required",
+  "surname_is_required": "Укажите фамилию",
   "@surname_is_required": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_continue": "Continue",
+  "sign_up_continue": "Продолжить",
   "@sign_up_continue": {
     "type": "text",
     "placeholders_order": [],
@@ -2029,31 +2029,31 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_surname_title": "Surname",
+  "sign_up_surname_title": "Фамилия",
   "@sign_up_surname_title": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "hint_input_sign_up_name": "Enter your name",
+  "hint_input_sign_up_name": "Введите ваше имя",
   "@hint_input_sign_up_name": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "hint_input_sign_up_surname": "Enter your surname",
+  "hint_input_sign_up_surname": "Введите вашу фамилию",
   "@hint_input_sign_up_surname": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_completed_title_center": "Done, check your inbox",
+  "sign_up_completed_title_center": "Готово, проверьте почту",
   "@sign_up_completed_title_center": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_completed_message_center": "A password has been sent to your email {email}, check your email and\n continue login",
+  "sign_up_completed_message_center": "Пароль был отправлен на ваш e-mail {email}, проверьте свой почтовый ящик и\n продолжите вход",
   "@sign_up_completed_message_center": {
     "type": "text",
     "placeholders_order": [
@@ -2063,19 +2063,19 @@
       "email": {}
     }
   },
-  "email_is_not_available": "Email is not available",
+  "email_is_not_available": "Электронная почта недоступна",
   "@email_is_not_available": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_member": "Drive member",
+  "drive_member": "Участник диска",
   "@drive_member": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "external_member": "External member",
+  "external_member": "Внешний участник",
   "@external_member": {
     "type": "text",
     "placeholders_order": [],
@@ -2087,13 +2087,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "recipient": "Recipient",
+  "recipient": "Получатель",
   "@recipient": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "recipients": "Recipients",
+  "recipients": "Получатели",
   "@recipients": {
     "type": "text",
     "placeholders_order": [],
@@ -2105,7 +2105,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "number_of_uploaded_files": "{count} file uploaded",
+  "number_of_uploaded_files": "{count} файлов загружено",
   "@number_of_uploaded_files": {
     "type": "text",
     "placeholders_order": [
@@ -2115,7 +2115,7 @@
       "count": {}
     }
   },
-  "upload_request_group_modification_date": "Updated at {date}",
+  "upload_request_group_modification_date": "Обновлено {date}",
   "@upload_request_group_modification_date": {
     "type": "text",
     "placeholders_order": [
@@ -2125,7 +2125,7 @@
       "date": {}
     }
   },
-  "owner": "Owner",
+  "owner": "Владелец",
   "@owner": {
     "type": "text",
     "placeholders_order": [],
@@ -2137,43 +2137,43 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "created_at": "Created at",
+  "created_at": "Создано в",
   "@created_at": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "activated_at": "Activated at",
+  "activated_at": "Активировано по адресу",
   "@activated_at": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "collective": "Collective",
+  "collective": "Коллективный",
   "@collective": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "max_total_file_size": "Max total file size",
+  "max_total_file_size": "Максимальный общий размер файла",
   "@max_total_file_size": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "max_size_per_file": "Max size per file",
+  "max_size_per_file": "Максимальный размер одного файла",
   "@max_size_per_file": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "notification_language_meta_data": "Notification language",
+  "notification_language_meta_data": "Язык уведомлений",
   "@notification_language_meta_data": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "override_this_role_for_all_existing_workgroups": "Override this role for all existing workgroups",
+  "override_this_role_for_all_existing_workgroups": "Переопределить эту роль для всех существующих рабочих групп",
   "@override_this_role_for_all_existing_workgroups": {
     "type": "text",
     "placeholders_order": [],
@@ -2185,25 +2185,25 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "edit_default_workgroup_role": "Edit default workgroup role",
+  "edit_default_workgroup_role": "Изменить роль по умолчанию в рабочей группе",
   "@edit_default_workgroup_role": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "files_uploaded": "Files uploaded",
+  "files_uploaded": "Загруженные файлы",
   "@files_uploaded": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audit_action_message_create_upload_request_recipient": "Upload request has been created",
+  "audit_action_message_create_upload_request_recipient": "Запрос на загрузку создан",
   "@audit_action_message_create_upload_request_recipient": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audit_action_message_create_upload_request_url": "An upload request email has been sent to: {contactEmail}",
+  "audit_action_message_create_upload_request_url": "Письмо с запросом на загрузку было отправлено по электронной почте: {contactEmail}",
   "@audit_action_message_create_upload_request_url": {
     "type": "text",
     "placeholders_order": [
@@ -2213,7 +2213,7 @@
       "contactEmail": {}
     }
   },
-  "audit_action_message_update_upload_request_recipient": "Upload request has been updated.",
+  "audit_action_message_update_upload_request_recipient": "Запрос на загрузку был обновлен.",
   "@audit_action_message_update_upload_request_recipient": {
     "type": "text",
     "placeholders_order": [],
@@ -2225,7 +2225,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audit_action_message_create_upload_request_entry": "File {resourceName} has been uploaded.",
+  "audit_action_message_create_upload_request_entry": "Файл {resourceName} был загружен.",
   "@audit_action_message_create_upload_request_entry": {
     "type": "text",
     "placeholders_order": [
@@ -2235,7 +2235,7 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_download_upload_request_entry_self": "You have downloaded the file: {resourceName}.",
+  "audit_action_message_download_upload_request_entry_self": "Вы скачали файл: {resourceName}.",
   "@audit_action_message_download_upload_request_entry_self": {
     "type": "text",
     "placeholders_order": [
@@ -2245,7 +2245,7 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_download_upload_request_entry_other": "{authorName} has downloaded the file: {resourceName}.",
+  "audit_action_message_download_upload_request_entry_other": "{authorName} скачал файл: {resourceName}.",
   "@audit_action_message_download_upload_request_entry_other": {
     "type": "text",
     "placeholders_order": [
@@ -2263,49 +2263,49 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "check_all": "Check all",
+  "check_all": "Проверить все",
   "@check_all": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "new_workspace": "New workspace",
+  "new_workspace": "Новая рабочая среда",
   "@new_workspace": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workspace": "Workspace",
+  "workspace": "Рабочая среда",
   "@workspace": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_new_workspace": "Create new workspace",
+  "create_new_workspace": "Создать новую рабочую среду",
   "@create_new_workspace": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_workspace": "Create Workspace",
+  "create_workspace": "Создать рабочую среду",
   "@create_workspace": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "role_in_this_workspace": "Role in this workspace",
+  "role_in_this_workspace": "Роль в этой рабочей среде",
   "@role_in_this_workspace": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "member_default_role_of_all_workgroups_inside_this_workspace": "Member's default role of all workgroups inside this workspace",
+  "member_default_role_of_all_workgroups_inside_this_workspace": "Роль участника по умолчанию для всех рабочих групп внутри этой рабочей среды",
   "@member_default_role_of_all_workgroups_inside_this_workspace": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_work_space_member": "Are you sure you want to delete {memberName} from the workspace {workspaceName} and all related workgroups?",
+  "are_you_sure_you_want_to_delete_work_space_member": "Вы уверены, что хотите удалить {memberName} из рабочей среды {workspaceName} и всех связанных с этим участником рабочих групп?",
   "@are_you_sure_you_want_to_delete_work_space_member": {
     "type": "text",
     "placeholders_order": [
@@ -2317,49 +2317,49 @@
       "workspaceName": {}
     }
   },
-  "workspace_admin": "Workspace Admin",
+  "workspace_admin": "Администратор рабочей среды",
   "@workspace_admin": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workspace_reader": "Workspace Reader",
+  "workspace_reader": "Читатель рабочей среды",
   "@workspace_reader": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workspace_writer": "Workspace Writer",
+  "workspace_writer": "Автор рабочей среды",
   "@workspace_writer": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_failed": "Sign up Failed",
+  "sign_up_failed": "Зарегистрироваться не удалось",
   "@sign_up_failed": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_message_failed": "Unfortunately, something went wrong during\n your signup.",
+  "sign_up_message_failed": "К сожалению, что-то пошло не так во время\n регистрации.",
   "@sign_up_message_failed": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_again": "Sign up again",
+  "sign_up_again": "Зарегистрируйтесь еще раз",
   "@sign_up_again": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "contact_technical_support": "Contact technical support",
+  "contact_technical_support": "Связаться со службой поддержки",
   "@contact_technical_support": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "contact_technical_support_failed": "Support team is out of reach try again later",
+  "contact_technical_support_failed": "Служба поддержки недоступна, повторите попытку позже",
   "@contact_technical_support_failed": {
     "type": "text",
     "placeholders_order": [],
@@ -2371,14 +2371,86 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "feedback_dialog_button": "Please, share your feedback",
+  "feedback_dialog_button": "Пожалуйста, оставьте отзыв",
   "@feedback_dialog_button": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "message_feedback_dialog": "We are running Linshare SaaS. We are working hard to fix all the bugs that impact user experience. We rely on your valuable feedback to make Linshare better for everyone.",
+  "message_feedback_dialog": "Мы запускаем Linshare SaaS. Мы прилагаем все усилия, чтобы исправить все ошибки, которые влияют на работу пользователей. Мы надеемся на ваши ценные отзывы, чтобы сделать Linshare лучше для всех.",
   "@message_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_a_member": "Добавить участника",
+  "@add_a_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_team_members_with_roles": "Добавить членов команды с ролями",
+  "@add_team_members_with_roles": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_reader": "Читатель диска",
+  "@drive_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_writer": "Автор диска",
+  "@drive_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_admin": "Администратор рабочей группы",
+  "@workgroup_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_reader": "Читатель рабочей группы",
+  "@workgroup_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_contributor": "Участник рабочей группы",
+  "@workgroup_contributor": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "default_role_in_workgroups": "Роль по умолчанию в рабочих группах",
+  "@default_role_in_workgroups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "role_in_this_drive": "Роль на этом диске",
+  "@role_in_this_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "member_default_role_of_all_workgroups_inside_this_drive": "Роль участника по умолчанию для всех рабочих групп внутри этого диска",
+  "@member_default_role_of_all_workgroups_inside_this_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_admin": "Администратор диска",
+  "@drive_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_writer": "Автор рабочей группы",
+  "@workgroup_writer": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
