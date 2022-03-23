@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -123,7 +123,9 @@ dependencies:
   # datetime picker
   flutter_datetime_picker: 1.5.1
 
-  async: 2.6.1
+  async: 2.8.2
+
+  firebase_crashlytics: 2.5.3
 
 dev_dependencies:
   flutter_test:
@@ -132,7 +134,6 @@ dev_dependencies:
     sdk: flutter
   build_runner: 2.0.1
   json_serializable: 4.1.1
-  test: 1.16.8
   mockito: 5.0.10
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -32,8 +32,8 @@
 
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:testshared/fixture/audit_user_fixture.dart';
 
 import 'fixture/mock/mock_fixtures.dart';
