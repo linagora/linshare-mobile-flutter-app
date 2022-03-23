@@ -33,7 +33,7 @@ import 'package:domain/src/model/autocomplete/autocomplete_pattern.dart';
 import 'package:domain/src/repository/contact/contact_repository.dart';
 import 'package:domain/src/usecases/contact/get_device_contact_suggestions_interactor.dart';
 import 'package:domain/src/usecases/contact/get_device_contact_suggestions_view_state.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 

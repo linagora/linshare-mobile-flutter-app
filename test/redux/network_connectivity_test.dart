@@ -33,6 +33,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
@@ -83,7 +84,6 @@ import 'package:linshare_flutter_app/presentation/redux/states/upload_request_in
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:test/test.dart';
 
 void main() {
   group('network_connectivity_test', () {

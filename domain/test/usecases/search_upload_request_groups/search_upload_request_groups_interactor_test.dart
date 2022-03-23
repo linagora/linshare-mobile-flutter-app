@@ -31,9 +31,8 @@
 //
 
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
-import 'package:testshared/testshared.dart';
 
 void main() {
   group('search_upload_request_groups_interactor_test', () {

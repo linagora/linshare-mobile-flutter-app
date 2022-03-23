@@ -32,8 +32,8 @@
 import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:testshared/fixture/my_space_fixture.dart';
 
 import 'package:testshared/fixture/upload_request_group_fixture.dart';

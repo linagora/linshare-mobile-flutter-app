@@ -32,8 +32,8 @@
 
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
 import '../fixture/mock/mock_fixtures.dart';

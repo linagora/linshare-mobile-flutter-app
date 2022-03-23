@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:testshared/fixture/my_space_fixture.dart';
 import 'package:testshared/testshared.dart';
 
