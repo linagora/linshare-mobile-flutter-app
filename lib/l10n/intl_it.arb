@@ -194,5 +194,2297 @@
   "@my_space": {
     "type": "text",
     "placeholders": {}
+  },
+  "advance_search_setting": "Impostazioni di ricerca avanzate",
+  "@advance_search_setting": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_document": "Documento",
+  "@advance_search_type_document": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_spreadsheet": "Foglio elettronico",
+  "@advance_search_type_spreadsheet": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_image": "Immagine",
+  "@advance_search_type_image": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_audio": "Audio",
+  "@advance_search_type_audio": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_archive": "Archivio",
+  "@advance_search_type_archive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_other": "Altro",
+  "@advance_search_type_other": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_any_time": "In qualsiasi momento",
+  "@advance_search_date_any_time": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_month": "Mese scorso",
+  "@advance_search_date_past_month": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "loading": "Caricamento",
+  "@loading": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "back": "Indietro",
+  "@back": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_message_center": "Unisciti ai +10000 utenti attivi che usano LinShare per archiviare e condividere file con facilità",
+  "@login_message_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_an_account": "Crea un account",
+  "@create_an_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_user_own_server_message_center": "Prima di poter procedere, scegli un\n connessione server predefinita",
+  "@login_user_own_server_message_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkbox_text_login_with_sso": "Il mio server sta usando un single sign-on (SSO)",
+  "@checkbox_text_login_with_sso": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_email_title": "E-mail",
+  "@login_email_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_password_title": "Password",
+  "@login_password_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_password_login": "Inserisci la tua password",
+  "@hint_input_password_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_is_required": "L'e-mail è richiesta",
+  "@email_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "use_your_own_server": "Usa il tuo server",
+  "@use_your_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_a_member": "Aggiungi un membro",
+  "@add_a_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "role_in_this_drive": "Ruolo in questo drive",
+  "@role_in_this_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "member_default_role_of_all_workgroups_inside_this_drive": "Ruolo predefinito di membro di tutti i gruppi di lavoro all'interno di questo drive",
+  "@member_default_role_of_all_workgroups_inside_this_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_admin": "Drive Admin",
+  "@drive_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_reader": "Lettore del drive",
+  "@drive_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_writer": "Scrittore del drive",
+  "@drive_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_reader": "Lettore del gruppo di lavoro",
+  "@workgroup_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_contributor": "Contributatore del gruppo di lavoro",
+  "@workgroup_contributor": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "name_is_required": "Il nome è richiesto",
+  "@name_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_name_title": "Nome",
+  "@sign_up_name_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_sign_up_name": "Inserisci il tuo nome",
+  "@hint_input_sign_up_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_sign_up_surname": "Inserisci il tuo cognome",
+  "@hint_input_sign_up_surname": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_completed_title_center": "Fatto, controlla la tua casella di posta",
+  "@sign_up_completed_title_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_completed_message_center": "Una password è stata inviata alla tua email {email}, controlla la tua email e\n continua il login",
+  "@sign_up_completed_message_center": {
+    "type": "text",
+    "placeholders_order": [
+      "email"
+    ],
+    "placeholders": {
+      "email": {}
+    }
+  },
+  "email_is_not_available": "L'e-mail non è disponibile",
+  "@email_is_not_available": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_member": "Membro del drive",
+  "@drive_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "external_member": "Membro esterno",
+  "@external_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files": "File",
+  "@files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipient": "Destinatario",
+  "@recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipients": "Destinatari",
+  "@recipients": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "meta_data": "Meta-dati",
+  "@meta_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "number_of_uploaded_files": "{count} file caricati",
+  "@number_of_uploaded_files": {
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "upload_request_group_modification_date": "Aggiornato il {date}",
+  "@upload_request_group_modification_date": {
+    "type": "text",
+    "placeholders_order": [
+      "date"
+    ],
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "owner": "Proprietario",
+  "@owner": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "view": "Visualizza",
+  "@view": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "created_at": "Creato a",
+  "@created_at": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "activated_at": "Attivato a",
+  "@activated_at": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "collective": "Collettivo",
+  "@collective": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_total_file_size": "Dimensione massima totale del file",
+  "@max_total_file_size": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_language_meta_data": "Lingua di notifiche",
+  "@notification_language_meta_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit_default_workgroup_role": "Modifica il ruolo predefinito del gruppo di lavoro",
+  "@edit_default_workgroup_role": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_uploaded": "File caricati",
+  "@files_uploaded": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_upload_request_url": "Una e-mail con richiesta di caricamento è stata inviata a: {contactEmail}",
+  "@audit_action_message_create_upload_request_url": {
+    "type": "text",
+    "placeholders_order": [
+      "contactEmail"
+    ],
+    "placeholders": {
+      "contactEmail": {}
+    }
+  },
+  "new_workspace": "Nuovo spazio di lavoro",
+  "@new_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace": "Spazio di lavoro",
+  "@workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_work_space_member": "Sei sicuro di voler eliminare {memberName} dallo spazio di lavoro {workspaceName} e tutti i gruppi di lavoro correlati?",
+  "@are_you_sure_you_want_to_delete_work_space_member": {
+    "type": "text",
+    "placeholders_order": [
+      "memberName",
+      "workspaceName"
+    ],
+    "placeholders": {
+      "memberName": {},
+      "workspaceName": {}
+    }
+  },
+  "workspace_admin": "Amministratore dello spazio di lavoro",
+  "@workspace_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_message_failed": "Sfortunatamente, qualcosa è andato storto durante\n la tua registrazione.",
+  "@sign_up_message_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_technical_support": "Contatta il supporto tecnico",
+  "@contact_technical_support": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_technical_support_failed": "Il team di supporto non è raggiungibile, riprova più tardi",
+  "@contact_technical_support_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "title_feedback_dialog": "LinShare",
+  "@title_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "feedback_dialog_button": "Per favore, condividi il tuo feedback",
+  "@feedback_dialog_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_feedback_dialog": "Stiamo eseguendo Linshare SaaS. Stiamo lavorando duramente per risolvere tutti i bug che hanno un impatto sull'esperienza dell'utente. Contiamo sul vostro prezioso feedback per rendere Linshare migliore per tutti.",
+  "@message_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "not_have_received_yet": "Visualizza le condivisioni ricevute",
+  "@not_have_received_yet": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_user": "Utente sconosciuto",
+  "@unknown_user": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_and_share_button": "Carica e condividi",
+  "@upload_and_share_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sharing_single_after_uploaded_success": "Il file viene caricato e condiviso con {recipientName}",
+  "@sharing_single_after_uploaded_success": {
+    "type": "text",
+    "placeholders": {
+      "recipientName": {}
+    }
+  },
+  "sharing_multiple_after_uploaded_success": "Il file viene caricato e condiviso con {numberOfRecipients} persone",
+  "@sharing_multiple_after_uploaded_success": {
+    "type": "text",
+    "placeholders": {
+      "numberOfRecipients": {}
+    }
+  },
+  "sharing_after_uploaded_failure": "Il file sarà pronto per l'upload e la condivisione una volta che la connessione sarà disponibile",
+  "@sharing_after_uploaded_failure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_nodes_surfing_root_back_title": "Torna a Spazio condiviso",
+  "@workgroup_nodes_surfing_root_back_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "workgroup_nodes_surfing_sort_type_title": "Data di modifica",
+  "@workgroup_nodes_surfing_sort_type_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "destination": "Destinazione",
+  "@destination": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_to_workspace": "Carica nello spazio di lavoro",
+  "@upload_to_workspace": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "select_all": "Seleziona tutti",
+  "@select_all": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unselect_all": "Deseleziona tutti",
+  "@unselect_all": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "items": "{numberOfItems,plural, =0{Nessun elemento}=1{{numberOfItems} elemento}other{{numberOfItems} elementi}}",
+  "@items": {
+    "type": "text",
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "items_selected": "{numberOfItems,plural, =1{{numberOfItems} elemento selezionato} other{{numberOfItems} elementi selezionati}}",
+  "@items_selected": {
+    "type": "text",
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "uploading_files_status_title": "Caricamento dei file",
+  "@uploading_files_status_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "uploading_files_view_button": "Visualizza",
+  "@uploading_files_view_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_screen_title": "Caricamenti attuali",
+  "@current_uploads_screen_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_shared_space_tab": "Spazio condiviso",
+  "@current_uploads_shared_space_tab": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_waiting_status": "In attesa",
+  "@current_uploads_waiting_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_uploading_status": "Caricamento",
+  "@current_uploads_uploading_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_share_failed_status": "Condivisione fallita",
+  "@current_uploads_share_failed_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "current_uploads_succeed_status": "Finito",
+  "@current_uploads_succeed_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "pick_the_destination": "Scegli la destinazione",
+  "@pick_the_destination": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "copy_here": "copia qui",
+  "@copy_here": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cannot_copy_file_to_shared_space": "Impossibile copiare file nello spazio condiviso",
+  "@cannot_copy_file_to_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_items_could_not_be_copied_to_shared_space": "Impossibile copiare alcuni elementi nello spazio condiviso",
+  "@some_items_could_not_be_copied_to_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_multiple": "{numberOfItems,plural, =1{Sei sicuro di voler eliminare \"{singleItemName}\"?} other{Sei sicuro di voler eliminare {numberOfItems} elementi?}}",
+  "@are_you_sure_you_want_to_delete_multiple": {
+    "type": "text",
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "the_file_has_been_successfully_deleted": "Il file è stato eliminato correttamente",
+  "@the_file_has_been_successfully_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_could_not_be_deleted": "Impossibile eliminare il file",
+  "@the_file_could_not_be_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_could_not_be_deleted": "Impossibile eliminare i file",
+  "@files_could_not_be_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "downloading_files": "{numberOfFiles,plural, =1{Scarichiamo {numberOfFiles} file}other{Scarichiamo {numberOfFiles} file}}",
+  "@downloading_files": {
+    "type": "text",
+    "placeholders": {
+      "numberOfFiles": {}
+    }
+  },
+  "delete": "Elimina",
+  "@delete": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "can_not_connect_network": "Impossibile connettersi alla rete",
+  "@can_not_connect_network": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "choose": "scegliere",
+  "@choose": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "account_details": "Dettagli dell'account",
+  "@account_details": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "first_name": "Nome",
+  "@first_name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "last_name": "Cognome",
+  "@last_name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "last_login": "Ultimo accesso",
+  "@last_login": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "available_space": "Spazio disponibile",
+  "@available_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "available_space_value": "{usedSpace} su {quota}",
+  "@available_space_value": {
+    "type": "text",
+    "placeholders": {
+      "quota": {},
+      "usedSpace": {}
+    }
+  },
+  "received_shares": "Condivisioni ricevute",
+  "@received_shares": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "received": "Ricevuto",
+  "@received": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "item_created_date": "Creato {dateString}",
+  "@item_created_date": {
+    "type": "text",
+    "placeholders": {
+      "dateString": {}
+    }
+  },
+  "notEnoughQuota": "Hai raggiunto la quota massima di {quota}",
+  "@notEnoughQuota": {
+    "type": "text",
+    "placeholders": {
+      "quota": {}
+    }
+  },
+  "tooBigFiles": "{nbFiles,plural, =1{{firstElementName} ha superato il file max di {quota}}other{Alcuni file hanno superato il file max di {quota}}}",
+  "@tooBigFiles": {
+    "type": "text",
+    "placeholders": {
+      "nbFiles": {},
+      "quota": {},
+      "firstElementName": {}
+    }
+  },
+  "copy_to_my_space": "Copia nel mio spazio",
+  "@copy_to_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_has_been_copied_successfully": "Il file è stato copiato con successo",
+  "@the_file_has_been_copied_successfully": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_could_not_be_copied": "Impossibile copiare il file",
+  "@the_file_could_not_be_copied": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_files_could_not_be_copied_to_my_space": "Impossibile copiare i file nel mio spazio",
+  "@the_files_could_not_be_copied_to_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_items_have_been_copied_to_my_space": "Alcuni elementi sono stati copiati nel mio spazio",
+  "@some_items_have_been_copied_to_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "all_items_have_been_copied_to_my_space": "Tutti gli elementi sono stati copiati nel mio spazio",
+  "@all_items_have_been_copied_to_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search_in_my_space": "Cerca nel mio spazio",
+  "@search_in_my_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search_in_shared_space_files": "Cerca nei file dello Spazio Condiviso",
+  "@search_in_shared_space_files": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "results_count": "{numberOfResults,plural, =0{{numberOfResults} risultato}=1{{numberOfResults} risultato}other{{numberOfResults} risultati}}",
+  "@results_count": {
+    "type": "text",
+    "placeholders": {
+      "numberOfResults": {}
+    }
+  },
+  "no_results_found": "Nessun risultato trovato",
+  "@no_results_found": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_space_has_been_deleted": "Lo spazio condiviso è stato eliminato",
+  "@shared_space_has_been_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "all_shared_spaces_have_been_deleted": "Tutti gli spazi condivisi sono stati eliminati",
+  "@all_shared_spaces_have_been_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preview": "Anteprima",
+  "@preview": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no_preview_available": "Nessuna anteprima disponibile",
+  "@no_preview_available": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preparing_to_preview_file": "Preparazione per l'anteprima del file",
+  "@preparing_to_preview_file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "rename": "Rinominare",
+  "@rename": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "modification_date": "Data di modifica",
+  "@modification_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "size": "Dimensione",
+  "@size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Nome",
+  "@name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared": "Condiviso",
+  "@shared": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "details": "Dettagli",
+  "@details": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "modified": "Modificato",
+  "@modified": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no_description": "Nessuna descrizione",
+  "@no_description": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "created": "Creato",
+  "@created": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "my_rights": "I miei diritti",
+  "@my_rights": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "max_file_size": "Dimensione massima del file",
+  "@max_file_size": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "description": "Descrizione",
+  "@description": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "copy_to": "Copia a",
+  "@copy_to": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "admin": "Admin",
+  "@admin": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "reader": "Lettore",
+  "@reader": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "contributor": "Contributatore",
+  "@contributor": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "writer": "Scrittore",
+  "@writer": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown_role": "Ruolo sconosciuto",
+  "@unknown_role": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "activities": "Attività",
+  "@activities": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_log_actor": "da {actorName}",
+  "@audit_log_actor": {
+    "type": "text",
+    "placeholders": {
+      "actorName": {}
+    }
+  },
+  "audit_action_title_addition": "Addizione:",
+  "@audit_action_title_addition": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_delete": "Eliminare:",
+  "@audit_action_title_delete": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_update": "Aggiornare:",
+  "@audit_action_title_update": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_create": "Creazione:",
+  "@audit_action_title_create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_upload": "Carica il file:",
+  "@audit_action_title_upload": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_copy": "Copiare:",
+  "@audit_action_title_copy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_download": "Scaricare:",
+  "@audit_action_title_download": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_upload_revision": "Versione caricata:",
+  "@audit_action_title_upload_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_message_delete_workgroup_self": "Hai eliminato il gruppo di lavoro: {resourceName}.",
+  "@audit_action_message_delete_workgroup_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_add_member_other": "{authorName} ha aggiunto un nuovo membro: {resourceName} al gruppo di lavoro: {nameVarious}.",
+  "@audit_action_message_add_member_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_member_self": "Hai rimosso il membro : {resourceName} dal gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_delete_member_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_member_other": "{authorName} ha rimosso il membro : {resourceName} dal gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_delete_member_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_member_self": "Hai modificato il membro : {resourceName} del gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_update_member_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_folder_self": "Hai eliminato la cartella : {resourceName} dal gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_delete_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_folder_other": "{authorName} ha eliminato la cartella : {resourceName} dal gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_delete_folder_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_download_folder_self": "Hai scaricato la cartella : {resourceName} dal gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_download_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_download_folder_other": "{authorName} ha scaricato la cartella: {resourceName} dal gruppo di lavoro: {nameVarious}.",
+  "@audit_action_message_download_folder_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_document_self": "Hai eliminato il file: {resourceName} dal gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_delete_workgroup_document_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_document_other": "{authorName} ha eliminato il file: {resourceName} dal gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_delete_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_workgroup_document_self": "Hai modificato il file : {resourceName} del gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_update_workgroup_document_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_workgroup_document_other": "{authorName} ha modificato il file: {resourceName} dal gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_update_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_download_workgroup_document_self": "Hai scaricato il file: {resourceName} dal gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_download_workgroup_document_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_upload_workgroup_document_self": "Hai caricato un nuovo file : {resourceName} nel gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_upload_workgroup_document_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_upload_workgroup_document_other": "{authorName} ha caricato un nuovo file: {resourceName} nel gruppo di lavoro: {nameVarious}.",
+  "@audit_action_message_upload_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space_self": "Hai creato il documento: {resourceName} in {nameVarious}, dal tuo spazio personale.",
+  "@audit_action_message_copy_document_from_personal_space_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space_other": "{authorName} ha creato il documento : {resourceName} in {nameVarious}, dal suo spazio personale.",
+  "@audit_action_message_copy_document_from_personal_space_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_received_share_self": "Hai creato il documento: {resourceName} in {nameVarious}, dalle condivisioni ricevute.",
+  "@audit_action_message_copy_document_from_received_share_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_shared_space_self": "Questo file è stato creato copiando : {resourceName} da un altro gruppo di lavoro.",
+  "@audit_action_message_copy_document_from_shared_space_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_copy_document_from_shared_space_other": "{authorName} ha creato questo file copiando: {resourceName} da un altro gruppo di lavoro.",
+  "@audit_action_message_copy_document_from_shared_space_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_copy_document_to_personal_space_self": "Hai copiato il documento : {resourceName} nel tuo spazio personale.",
+  "@audit_action_message_copy_document_to_personal_space_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_copy_document_to_personal_space_other": "{authorName} ha copiato il documento : {resourceName} nel suo spazio personale.",
+  "@audit_action_message_copy_document_to_personal_space_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_upload_revision": "Una versione del file {resourceName} è stata aggiunta nel gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_upload_revision": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_revision": "La versione del file {resourceName} era stata rimossa dal gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_delete_revision": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_revision_from_shared_space": "Il documento è stato ripristinato con la versione {resourceName}.",
+  "@audit_action_message_copy_revision_from_shared_space": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_download_revision": "{authorName} ha scaricato la versione: {resourceName} dal gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_download_revision": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "me": "Io",
+  "@me": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "second_factor_authentication_is_required_for_your_account": "Per il tuo account è richiesta l'autenticazione del secondo fattore",
+  "@second_factor_authentication_is_required_for_your_account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_enable_second_factor_authentication_to_continue": "Abilita l'autenticazione a secondo fattore per continuare",
+  "@please_enable_second_factor_authentication_to_continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_setup": "Vai a Impostazione",
+  "@go_to_setup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "second_factor_authentication": "AUTENTICAZIONE A SECONDO FATTORE",
+  "@second_factor_authentication": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "input_6_digit_from_free_otp": "Inserisci il codice di 6 cifre nella tua app FreeOTP",
+  "@input_6_digit_from_free_otp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "submit": "Invia",
+  "@submit": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "please_fill_up_all_numbers": "Si prega di riempire tutti i numeri",
+  "@please_fill_up_all_numbers": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalid_otp": "OTP non valido",
+  "@invalid_otp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "user_locked_message": "Scusa! Il tuo account è bloccato\nSi prega di contattare il supporto per sbloccare!",
+  "@user_locked_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_workgroup": "Crea un nuovo gruppo di lavoro",
+  "@create_new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "new_workgroup": "Nuovo gruppo di lavoro",
+  "@new_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "rename_node": "Rinomina {nodeName}",
+  "@rename_node": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "workgroup": "Gruppo di lavoro",
+  "@workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file": "File",
+  "@file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "folder": "Cartella",
+  "@folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "node_name_not_empty": "Il nome {nodeName} non può essere vuoto",
+  "@node_name_not_empty": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_already_exists": "Il nome {nodeName} esiste già",
+  "@node_name_already_exists": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_contain_special_character": "Il nome {nodeName} non può contenere caratteri speciali",
+  "@node_name_contain_special_character": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_contain_last_dot": "Il nome {nodeName} non può terminare per carattere \".\"",
+  "@node_name_contain_last_dot": {
+    "type": "text",
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "create": "Crea",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_team_members": "Aggiungi membri del team",
+  "@add_team_members": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "existing_members": "{nbMembers,plural, =1{Membro esistente: {nbMembers}}other{Membri esistenti: {nbMembers}}}",
+  "@existing_members": {
+    "type": "text",
+    "placeholders": {
+      "nbMembers": {}
+    }
+  },
+  "the_file_has_been_successfully_renamed": "Il file è stato rinominato con successo",
+  "@the_file_has_been_successfully_renamed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_could_not_be_renamed": "Il file non può essere rinominato",
+  "@the_file_could_not_be_renamed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sender": "Mittente",
+  "@sender": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search_in_my_received_shares": "Cerca nelle condivisioni ricevute",
+  "@search_in_my_received_shares": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_member": "Sei sicuro di voler cancellare {memberName} da {workspaceName}?",
+  "@are_you_sure_you_want_to_delete_member": {
+    "type": "text",
+    "placeholders": {
+      "memberName": {},
+      "workspaceName": {}
+    }
+  },
+  "user_could_not_be_removed": "L'utente non può essere rimosso",
+  "@user_could_not_be_removed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "user_is_successfully_removed": "L'utente è stato rimosso con successo",
+  "@user_is_successfully_removed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "expiration": "Scadenza",
+  "@expiration": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_with": "{nbContacts,plural, =0{Condiviso con: {nbContacts} contatto}=1{Condiviso con: {nbContacts} contatto}other{Condiviso con: {nbContacts} contatti}}",
+  "@shared_with": {
+    "type": "text",
+    "placeholders": {
+      "nbContacts": {}
+    }
+  },
+  "modified_by": "Modificato da",
+  "@modified_by": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication": "Autenticazione biometrica",
+  "@biometric_authentication": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "face_id": "Face ID",
+  "@face_id": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_message": "Consenti a {biometricKind} di proteggere l'accesso a questa app",
+  "@biometric_authentication_message": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "biometric_authentication_not_enrolled": "{biometricKind} deve essere abilitato per attivare l'autenticazione biometrica",
+  "@biometric_authentication_not_enrolled": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "biometric_authentication_localized_reason_enable": "Ti prega di autenticarti per abilitare l'autenticazione biometrica per l'applicazione",
+  "@biometric_authentication_localized_reason_enable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "manage_version": "Gestione della versione",
+  "@manage_version": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "version": "Versione {version}",
+  "@version": {
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "touch_id": "TouchID",
+  "@touch_id": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "fingerprint_or_face": "Impronta digitale o faccia",
+  "@fingerprint_or_face": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason": "Scansiona il tuo {biometricKind} per l'autenticazione",
+  "@biometric_authentication_localized_reason": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "or": "Oppure",
+  "@or": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "go_to_sign_in": "Vai a Accedi",
+  "@go_to_sign_in": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_have_been_successfully_duplicated": "I file sono stati duplicati con successo",
+  "@files_have_been_successfully_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_could_not_be_duplicated": "I file non possono essere duplicati",
+  "@files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_files_could_not_be_duplicated": "Alcuni file non possono essere duplicati",
+  "@some_files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "restore": "Ripristinare",
+  "@restore": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "available_offline": "Disponibile offline",
+  "@available_offline": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_will_be_made_available_for_offline_use": "I file saranno resi disponibili per l'uso offline.",
+  "@files_will_be_made_available_for_offline_use": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_will_no_longer_be_usable_without_be_network": "I file non saranno più utilizzabili senza la rete.",
+  "@files_will_no_longer_be_usable_without_be_network": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_sso_button": "Accesso con SSO",
+  "@login_sso_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "pending": "In sospeso",
+  "@pending": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "active_closed": "Attivo / Chiuso",
+  "@active_closed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "archived": "Archiviato",
+  "@archived": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_upload_requests_here": "Crea richieste di caricamento qui",
+  "@create_upload_requests_here": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "activated_date": "Attivato {date}",
+  "@activated_date": {
+    "type": "text",
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "active": "Attivo",
+  "@active": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_new_upload_request": "Aggiungi una nuova richiesta di caricamento",
+  "@add_new_upload_request": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "collective_upload": "Collettivo\nCarica",
+  "@collective_upload": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "individual_upload": "Individuale\nCarica",
+  "@individual_upload": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_collective_upload_request_title": "Caricamento collettivo",
+  "@create_collective_upload_request_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_individual_upload_request_title": "Caricamento individuale",
+  "@create_individual_upload_request_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "email_subject": "Oggetto dell'email",
+  "@email_subject": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "email_message": "Messaggio e-mail",
+  "@email_message": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings": "Impostazioni",
+  "@settings": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "advanced_options": "Opzioni avanzate",
+  "@advanced_options": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "show_less": "Mostra meno",
+  "@show_less": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "activation_date": "Data di attivazione",
+  "@activation_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "expiration_date": "Data di scadenza",
+  "@expiration_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "reminder_date": "Data del promemoria",
+  "@reminder_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "max_number_of_files": "Numero massimo di file",
+  "@max_number_of_files": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "max_size_of_a_file": "Dimensione massima di un file",
+  "@max_size_of_a_file": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "allow_deletion": "Permettere la cancellazione",
+  "@allow_deletion": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "allow_closure": "Permettere la chiusura",
+  "@allow_closure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "notification_language": "Lingua di notifiche",
+  "@notification_language": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "max_number_files_error": "Il numero massimo di file deve essere impostato e inferiore a 1000",
+  "@max_number_files_error": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "max_file_size_error": "La dimensione massima di un file deve essere impostata e inferiore a 100 GB",
+  "@max_file_size_error": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_requests_root_back_title": "Torna a Richieste di caricamento",
+  "@upload_requests_root_back_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_requests_no_files_uploaded": "Nessun file ancora caricato",
+  "@upload_requests_no_files_uploaded": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "status": "Stato",
+  "@status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search_in_upload_request_groups": "Cerca nei gruppi di richiesta di caricamento",
+  "@search_in_upload_request_groups": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "total_size_of_files": "Dimensione totale dei file",
+  "@total_size_of_files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_protected": "Password protetta",
+  "@password_protected": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "total_file_size_error": "La dimensione totale dei file deve essere impostata e inferiore a 100 GB",
+  "@total_file_size_error": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add": "Aggiungi",
+  "@add": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipients_have_been_successfully_added": "I destinatari sono stati aggiunti con successo",
+  "@recipients_have_been_successfully_added": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_cancel_multiple_upload_request": "{numberOfItems,plural, =1{Sei sicuro di voler cancellare \"{singleItemName}\"?}other{Sei sicuro di voler cancellare {numberOfItems} elementi?}}",
+  "@confirm_cancel_multiple_upload_request": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "upload_request_proceed_button": "Procedere",
+  "@upload_request_proceed_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_request_has_been_updated": "La richiesta di caricamento è stata aggiornata",
+  "@upload_request_has_been_updated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "some_upload_requests_have_been_updated": "Alcune richieste di upload sono state aggiornate",
+  "@some_upload_requests_have_been_updated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_request_could_not_be_updated": "Impossibile aggiornare la richiesta di caricamento",
+  "@upload_request_could_not_be_updated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "some_upload_requests_could_not_be_updated": "Impossibile aggiornare alcune richieste di caricamento",
+  "@some_upload_requests_could_not_be_updated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "archive": "Archivio",
+  "@archive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_archive_multiple_upload_request": "{numberOfItems,plural, =1{Sei sicuro di voler archiviare \"{singleItemName}\"?}other{Sei sicuro di voler archiviare {numberOfItems} elementi?}}",
+  "@confirm_archive_multiple_upload_request": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "copy_before_archiving": "Copia tutti i file nel mio spazio personale prima di archiviarli",
+  "@copy_before_archiving": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "close": "Chiudi",
+  "@close": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} secondo}other{{numberOfItems} secondi}}",
+  "@biometric_timeout_second": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} minute}other{{numberOfItems} minuti}}",
+  "@biometric_timeout_minute": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} ora}other{{numberOfItems} ore}}",
+  "@biometric_timeout_hour": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "confirm_close_multiple_upload_request": "{numberOfItems,plural, =1{Sei sicuro di voler chiudere \"{singleItemName}\"?}other{Sei sicuro di voler chiudere {numberOfItems} elementi?}}",
+  "@confirm_close_multiple_upload_request": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "search_in_upload_request_entries": "Cerca in Richieste di caricamento voci",
+  "@search_in_upload_request_entries": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_timeout_title": "Imposta timeout",
+  "@biometric_timeout_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search_in": "Cerca in {node}",
+  "@search_in": {
+    "type": "text",
+    "placeholders_order": [
+      "node"
+    ],
+    "placeholders": {
+      "node": {}
+    }
+  },
+  "move": "Spostare",
+  "@move": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "move_here": "Spostati qui",
+  "@move_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_my_space_tab": "Il mio spazio",
+  "@current_uploads_my_space_tab": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search_in_shared_space": "Cerca nello spazio condiviso",
+  "@search_in_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_new_folder": "Crea una nuova cartella",
+  "@create_new_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shared_spaces_could_not_be_deleted": "{sharedSpacesNumber,plural, =1{Impossibile eliminare lo spazio condiviso}other{Impossibile eliminare gli spazi condivisi}}",
+  "@shared_spaces_could_not_be_deleted": {
+    "type": "text",
+    "placeholders": {
+      "sharedSpacesNumber": {}
+    }
+  },
+  "add_new_file_or_folder": "Aggiungi nuovo file o cartella",
+  "@add_new_file_or_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "members": "Membri",
+  "@members": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_restore_revision": "Ripristinare la versione:",
+  "@audit_action_title_restore_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_delete_revision": "Versione eliminata:",
+  "@audit_action_title_delete_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_title_download_revision": "Versione scaricata:",
+  "@audit_action_title_download_revision": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_message_create_workgroup_self": "Hai creato un nuovo gruppo di lavoro: {resourceName}.",
+  "@audit_action_message_create_workgroup_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_create_workgroup_other": "{authorName} ha creato un nuovo gruppo di lavoro: {resourceName}.",
+  "@audit_action_message_create_workgroup_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_other": "{authorName} ha cancellato il gruppo di lavoro: {resourceName}.",
+  "@audit_action_message_delete_workgroup_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_update_workgroup_self": "Hai modificato il gruppo di lavoro: {resourceName}.",
+  "@audit_action_message_update_workgroup_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_update_workgroup_other": "{authorName} ha modificato il gruppo di lavoro: {resourceName}.",
+  "@audit_action_message_update_workgroup_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_add_member_self": "Hai aggiunto un nuovo membro: {resourceName} al gruppo di lavoro: {nameVarious}.",
+  "@audit_action_message_add_member_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_member_other": "{authorName} ha modificato il membro : {resourceName} del gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_update_member_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_create_folder_self": "Hai creato una nuova cartella: {resourceName} nel gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_create_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_create_folder_other": "{authorName} ha creato una nuova cartella : {resourceName} nel gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_create_folder_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_folder_other": "{authorName} ha modificato la cartella : {resourceName} del gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_update_folder_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_folder_self": "Hai modificato la cartella : {resourceName} del gruppo di lavoro : {nameVarious}.",
+  "@audit_action_message_update_folder_self": {
+    "type": "text",
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "current_uploads_upload_failed_status": "Caricamento fallito",
+  "@current_uploads_upload_failed_status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "copy_to_a_workgroup": "Copia a un gruppo di lavoro",
+  "@copy_to_a_workgroup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "the_file_is_copied_to_a_shared_space": "Il file viene copiato in uno spazio condiviso",
+  "@the_file_is_copied_to_a_shared_space": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "can_not_proceed_while_offline": "Impossibile elaborare offline",
+  "@can_not_proceed_while_offline": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "files_have_been_successfully_deleted": "I file sono stati eliminati con successo",
+  "@files_have_been_successfully_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_items_could_not_be_deleted": "Impossibile eliminare alcuni elementi",
+  "@some_items_could_not_be_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "some_items_are_successfully_deleted": "Alcuni elementi sono stati eliminati con successo",
+  "@some_items_are_successfully_deleted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "account_details_title": "Dettagli dell'account",
+  "@account_details_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_folder": "Crea cartella",
+  "@create_folder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creation_date": "Data di creazione",
+  "@creation_date": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order_by": "Ordinato da",
+  "@order_by": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "audit_action_message_download_workgroup_document_other": "{authorName} ha scaricato il file: {resourceName} dal gruppo di lavoro {nameVarious}.",
+  "@audit_action_message_download_workgroup_document_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_received_share_other": "{authorName} ha creato il documento : {resourceName} in {nameVarious}, dalle sue azioni ricevute.",
+  "@audit_action_message_copy_document_from_received_share_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_to_shared_space_self": "Hai creato un duplicato di questo file in {nameVarious}.",
+  "@audit_action_message_copy_document_to_shared_space_self": {
+    "type": "text",
+    "placeholders": {
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_to_shared_space_other": "{authorName} ha creato un duplicato di questo file in {nameVarious}.",
+  "@audit_action_message_copy_document_to_shared_space_other": {
+    "type": "text",
+    "placeholders": {
+      "authorName": {},
+      "nameVarious": {}
+    }
+  },
+  "fingerprint": "Impronta digitale",
+  "@fingerprint": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "open_with_biometric": "Apri con {biometricKind}",
+  "@open_with_biometric": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "biometric_disabled_in_setting_app": "Abilita {biometricKind} nell'app Impostazioni del tuo telefono per utilizzare l'autenticazione biometrica",
+  "@biometric_disabled_in_setting_app": {
+    "type": "text",
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "touch_id_or_face_id": "TouchID o FaceID",
+  "@touch_id_or_face_id": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "face": "Faccia",
+  "@face": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_is_locked": "L'autenticazione biometrica è bloccata a causa del numero di tentativi superato.",
+  "@biometric_authentication_is_locked": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason_disable": "Ti prega di autenticarti per disabilitare l'autenticazione biometrica per l'applicazione",
+  "@biometric_authentication_localized_reason_disable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "duplicate": "Duplicato",
+  "@duplicate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "login_sso_failed": "Accesso fallito",
+  "@login_sso_failed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "file_cannot_be_switched_to_offline_mode": "Questo file non può essere commutato in modalità offline",
+  "@file_cannot_be_switched_to_offline_mode": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upload_requests": "Richieste di caricamento",
+  "@upload_requests": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create_upload_request_button": "Creare una richiesta di caricamento",
+  "@create_upload_request_button": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "archived_date": "Archiviato {date}",
+  "@archived_date": {
+    "type": "text",
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "expired_closed": "Scaduto / Chiuso",
+  "@expired_closed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "url_is_invalid": "L'URL non è valido",
+  "@url_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_button_apply": "Applica",
+  "@advance_search_button_apply": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "type": "Tipo",
+  "@type": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "advance_search_date_past_week": "Settimana scorsa",
+  "@advance_search_date_past_week": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_email_login": "Inserisci la tua email",
+  "@hint_input_email_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_add_recipients_title": "Stai per aggiungere un destinatario a questa richiesta di caricamento! Attenzione, questa azione non può essere annullata",
+  "@confirm_add_recipients_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_pdf": "PDF",
+  "@advance_search_type_pdf": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_button_reset": "Ripristina",
+  "@advance_search_button_reset": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_is_required": "La password è richiesta",
+  "@password_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_is_invalid": "L'email non è valida",
+  "@email_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_is_invalid": "La password non è valida",
+  "@password_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_writer": "Scrittore del gruppo di lavoro",
+  "@workgroup_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_message_bottom": "Per default ti connetti ai server Linagora. Se non sei sicuro di questa impostazione, contatta il tuo tecnico specializzato.",
+  "@login_message_bottom": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_continue": "Continua",
+  "@sign_up_continue": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_surname_title": "Cognome",
+  "@sign_up_surname_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_day": "Giorno scorso",
+  "@advance_search_date_past_day": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_year": "Anno scorso",
+  "@advance_search_date_past_year": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "this_feature_not_supported": "Questa funzione non è attualmente supportata",
+  "@this_feature_not_supported": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive": "Drive",
+  "@drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_team_members_with_roles": "Aggiungi membri del team con ruoli",
+  "@add_team_members_with_roles": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "default_role_in_workgroups": "Ruolo predefinito nei gruppi di lavoro",
+  "@default_role_in_workgroups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "surname_is_required": "Il cognome è richiesto",
+  "@surname_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_send_me_a_password": "Inviami una password",
+  "@sign_up_send_me_a_password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_admin": "Amministratore del gruppo di lavoro",
+  "@workgroup_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_drive_member": "Sei sicuro di voler eliminare {memberName} dal drive {driveName} e tutti i gruppi di lavoro correlati?",
+  "@are_you_sure_you_want_to_delete_drive_member": {
+    "type": "text",
+    "placeholders_order": [
+      "memberName",
+      "driveName"
+    ],
+    "placeholders": {
+      "memberName": {},
+      "driveName": {}
+    }
+  },
+  "max_size_per_file": "Dimensione massima per file",
+  "@max_size_per_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "override_this_role_for_all_existing_workgroups": "Sovrascrivere questo ruolo per tutti i gruppi di lavoro esistenti",
+  "@override_this_role_for_all_existing_workgroups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "update": "Aggiorna",
+  "@update": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_upload_request_recipient": "La richiesta di caricamento è stata creata",
+  "@audit_action_message_create_upload_request_recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_workspace": "Crea un nuovo spazio di lavoro",
+  "@create_new_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "member_default_role_of_all_workgroups_inside_this_workspace": "Ruolo predefinito di membro di tutti i gruppi di lavoro all'interno di questo spazio di lavoro",
+  "@member_default_role_of_all_workgroups_inside_this_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_date": "Data di notifica",
+  "@notification_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_upload_request_entry": "Il file {resourceName} è stato caricato.",
+  "@audit_action_message_create_upload_request_entry": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_download_upload_request_entry_self": "Hai scaricato il file: {resourceName}.",
+  "@audit_action_message_download_upload_request_entry_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_download_upload_request_entry_other": "{authorName} ha scaricato il file: {resourceName}.",
+  "@audit_action_message_download_upload_request_entry_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "workspace_reader": "Lettore dello spazio di lavoro",
+  "@workspace_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace_writer": "Scrittore dello spazio di lavoro",
+  "@workspace_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_failed": "Registrazione non riuscita",
+  "@sign_up_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_again": "Registrati di nuovo",
+  "@sign_up_again": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file_type": "Tipo di file",
+  "@file_type": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "role_in_this_workspace": "Ruolo in questo spazio di lavoro",
+  "@role_in_this_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_update_upload_request_recipient": "La richiesta di caricamento è stata aggiornata.",
+  "@audit_action_message_update_upload_request_recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "check_all": "Controlla tutti",
+  "@check_all": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_workspace": "Crea uno spazio di lavoro",
+  "@create_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
