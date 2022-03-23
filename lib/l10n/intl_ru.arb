@@ -95,7 +95,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "title_quick_share": "Быстро поделиться",
+  "title_quick_share": "Быстрый обмен",
   "@title_quick_share": {
     "type": "text",
     "placeholders": {}
@@ -110,7 +110,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{Вы успешно поделились файлом}other{The files have been successfully shared}}",
+  "file_has_been_successfully_shared": "{sharesNumber,plural, =1{Вы успешно поделились файлом}other{Вы успешно поделились файлами}}",
   "@file_has_been_successfully_shared": {
     "type": "text",
     "placeholders": {
@@ -210,12 +210,12 @@
       "numberOfRecipients": {}
     }
   },
-  "sharing_after_uploaded_failure": "Файл будет готов для загрузки и после доступ будет предоставлен другим пользователям, как только соединение с сетью будет установлено",
+  "sharing_after_uploaded_failure": "Файл будет готов к загрузке и обмену, как только установится соединение",
   "@sharing_after_uploaded_failure": {
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_nodes_surfing_root_back_title": "Вернуться к рабочим группам",
+  "workgroup_nodes_surfing_root_back_title": "Назад к общему пространству",
   "@workgroup_nodes_surfing_root_back_title": {
     "type": "text",
     "placeholders": {}
@@ -230,7 +230,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "upload_to_workspace": "Загрузить в рабочее пространство",
+  "upload_to_workspace": "Загрузить в рабочую среду",
   "@upload_to_workspace": {
     "type": "text",
     "placeholders": {}
@@ -255,14 +255,14 @@
     "type": "text",
     "placeholders": {}
   },
-  "items": "{numberOfItems,plural, =0{нет предмета}=1{{numberOfItems} элемент}other{{numberOfItems} элементы}}",
+  "items": "{numberOfItems,plural, =0{Нет элементов}=1{{numberOfItems} элемент}other{{numberOfItems} элементов}}",
   "@items": {
     "type": "text",
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "items_selected": "{numberOfItems,plural, =1{{numberOfItems} элемент выбран}other{{numberOfItems} элемента выбрано}}",
+  "items_selected": "{numberOfItems,plural, =1{{numberOfItems} элемент выбран}other{{numberOfItems} элементов выбрано}}",
   "@items_selected": {
     "type": "text",
     "placeholders": {
@@ -289,7 +289,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "current_uploads_shared_space_tab": "Рабочие группы",
+  "current_uploads_shared_space_tab": "Общее пространство",
   "@current_uploads_shared_space_tab": {
     "type": "text",
     "placeholders": {}
@@ -319,7 +319,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "pick_the_destination": "Выберите пункт назначения",
+  "pick_the_destination": "Выберите место назначения",
   "@pick_the_destination": {
     "type": "text",
     "placeholders": {}
@@ -349,7 +349,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_multiple": "{numberOfItems,plural, =1{Вы уверены, что хотите удалить \"{singleItemName}\"?}other{Вы уверены, что хотите удалить {numberOfItems} объекта?}}",
+  "are_you_sure_you_want_to_delete_multiple": "{numberOfItems,plural, =1{Вы уверены, что хотите удалить \"{singleItemName}\"?}other{Вы уверены, что хотите удалить {numberOfItems} объектов?}}",
   "@are_you_sure_you_want_to_delete_multiple": {
     "type": "text",
     "placeholders": {
@@ -387,7 +387,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "downloading_files": "{numberOfFiles,plural, =1{скачивание {numberOfFiles} файла}other{скачивание {numberOfFiles} файлов}}",
+  "downloading_files": "{numberOfFiles,plural, =1{Скачивание {numberOfFiles} файла}other{Скачивание {numberOfFiles} файлов}}",
   "@downloading_files": {
     "type": "text",
     "placeholders": {
@@ -414,12 +414,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "account_details_title": "Детали Aккаунта",
+  "account_details_title": "Детали учетной записи",
   "@account_details_title": {
     "type": "text",
     "placeholders": {}
   },
-  "account_details": "Детали аккаунта",
+  "account_details": "Детали учетной записи",
   "@account_details": {
     "type": "text",
     "placeholders": {}
@@ -457,7 +457,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "received": "Обмен получен",
+  "received": "Получено",
   "@received": {
     "type": "text",
     "placeholders": {}
@@ -520,7 +520,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "results_count": "{numberOfResults,plural, =0{{numberOfResults} результат}=1{{numberOfResults} результат}other{{numberOfResults} результата}}",
+  "results_count": "{numberOfResults,plural, =0{{numberOfResults} результат}=1{{numberOfResults} результат}other{{numberOfResults} результатов}}",
   "@results_count": {
     "type": "text",
     "placeholders": {
@@ -554,7 +554,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "preview": "предварительный просмотр",
+  "preview": "Предварительный просмотр",
   "@preview": {
     "type": "text",
     "placeholders": {}
@@ -1191,28 +1191,28 @@
     "type": "text",
     "placeholders": {}
   },
-  "node_name_not_empty": "Имя {nodeName} не может быть пустым",
+  "node_name_not_empty": "Название {nodeName} не может быть пустым",
   "@node_name_not_empty": {
     "type": "text",
     "placeholders": {
       "nodeName": {}
     }
   },
-  "node_name_already_exists": "{nodeName} имя уже существует",
+  "node_name_already_exists": "Название {nodeName} уже существует",
   "@node_name_already_exists": {
     "type": "text",
     "placeholders": {
       "nodeName": {}
     }
   },
-  "node_name_contain_special_character": "Имя {nodeName} не может содержать специальные символы",
+  "node_name_contain_special_character": "Название {nodeName} не может содержать специальные символы",
   "@node_name_contain_special_character": {
     "type": "text",
     "placeholders": {
       "nodeName": {}
     }
   },
-  "node_name_contain_last_dot": "Имя {nodeName} не может заканчиваться символами \".\"",
+  "node_name_contain_last_dot": "Название {nodeName} не может заканчиваться символами \".\"",
   "@node_name_contain_last_dot": {
     "type": "text",
     "placeholders": {
@@ -1433,7 +1433,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "file_cannot_be_switched_to_offline_mode": "Этот файл не может быть переведен в режиме оффлайн",
+  "file_cannot_be_switched_to_offline_mode": "Этот файл не может быть сменен в режиме оффлайн",
   "@file_cannot_be_switched_to_offline_mode": {
     "type": "text",
     "placeholders": {}
@@ -1592,7 +1592,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "max_number_files_error": "Максимальное количество файлов должно быть задано и меньше 1000",
+  "max_number_files_error": "Максимальное количество файлов должно быть установлено и не превышать 1000",
   "@max_number_files_error": {
     "type": "text",
     "placeholders": {}
@@ -1676,17 +1676,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "some_upload_requests_have_been_updated": "Некоторые запросы на выгрузку были обновлены",
+  "some_upload_requests_have_been_updated": "Некоторые запросы на загрузку были обновлены",
   "@some_upload_requests_have_been_updated": {
     "type": "text",
     "placeholders": {}
   },
-  "upload_request_could_not_be_updated": "Не удалось обновить запрос на выгрузку",
+  "upload_request_could_not_be_updated": "Не удалось обновить запрос на загрузку",
   "@upload_request_could_not_be_updated": {
     "type": "text",
     "placeholders": {}
   },
-  "some_upload_requests_could_not_be_updated": "Некоторые запросы на выгрузку не могут быть обновлены",
+  "some_upload_requests_could_not_be_updated": "Некоторые запросы на загрузку не могут быть обновлены",
   "@some_upload_requests_could_not_be_updated": {
     "type": "text",
     "placeholders": {}
@@ -1696,7 +1696,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "confirm_archive_multiple_upload_request": "{numberOfItems,plural, =1{Вы уверены, что хотите заархивировать \"{singleItemName}\"?}other{Вы уверены, что хотите заархивировать {numberOfItems}?}}",
+  "confirm_archive_multiple_upload_request": "{numberOfItems,plural, =1{Вы уверены, что хотите заархивировать \"{singleItemName}\"?}other{Вы уверены, что хотите заархивировать {numberOfItems} элементов?}}",
   "@confirm_archive_multiple_upload_request": {
     "type": "text",
     "placeholders": {
@@ -1714,7 +1714,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "confirm_close_multiple_upload_request": "{numberOfItems,plural, =1{Вы уверены, что хотите закрыть запрос на загрузку \"{singleItemName}\"?}other{Вы уверены, что хотите закрыть запросы на загрузку {numberOfItems}?}}",
+  "confirm_close_multiple_upload_request": "{numberOfItems,plural, =1{Вы уверены, что хотите закрыть запрос на загрузку \"{singleItemName}\"?}other{Вы уверены, что хотите закрыть запросы на загрузку {numberOfItems} элементов?}}",
   "@confirm_close_multiple_upload_request": {
     "type": "text",
     "placeholders": {
@@ -1728,7 +1728,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "the_files_could_not_be_copied_to_my_space": "Файлы не удалось скопировать в мой личное пространство",
+  "the_files_could_not_be_copied_to_my_space": "Файлы не удалось скопировать в мое пространство",
   "@the_files_could_not_be_copied_to_my_space": {
     "type": "text",
     "placeholders": {}
@@ -1738,7 +1738,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} секунда}other{{numberOfItems} секунды}}",
+  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} секунда}other{{numberOfItems} секунд}}",
   "@biometric_timeout_second": {
     "type": "text",
     "placeholders": {
@@ -1752,7 +1752,7 @@
       "numberOfItems": {}
     }
   },
-  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} час}other{{numberOfItems} часы}}",
+  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} час}other{{numberOfItems} часов}}",
   "@biometric_timeout_hour": {
     "type": "text",
     "placeholders": {
@@ -2017,13 +2017,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_send_me_a_password": "Send me a password",
+  "sign_up_send_me_a_password": "Отправьте мне пароль",
   "@sign_up_send_me_a_password": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_name_title": "Name",
+  "sign_up_name_title": "Имя",
   "@sign_up_name_title": {
     "type": "text",
     "placeholders_order": [],
@@ -2081,7 +2081,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "files": "Files",
+  "files": "Файлы",
   "@files": {
     "type": "text",
     "placeholders_order": [],
@@ -2099,7 +2099,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "meta_data": "Meta-data",
+  "meta_data": "Мета-данные",
   "@meta_data": {
     "type": "text",
     "placeholders_order": [],
@@ -2131,7 +2131,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "view": "View",
+  "view": "Просмотр",
   "@view": {
     "type": "text",
     "placeholders_order": [],
@@ -2179,7 +2179,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "update": "Update",
+  "update": "Обновление",
   "@update": {
     "type": "text",
     "placeholders_order": [],
@@ -2219,7 +2219,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "notification_date": "Notification date",
+  "notification_date": "Дата уведомления",
   "@notification_date": {
     "type": "text",
     "placeholders_order": [],
@@ -2257,7 +2257,7 @@
       "resourceName": {}
     }
   },
-  "file_type": "File type",
+  "file_type": "Тип файла",
   "@file_type": {
     "type": "text",
     "placeholders_order": [],
