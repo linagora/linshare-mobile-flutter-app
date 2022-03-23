@@ -34,8 +34,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/shared_space/download_workgroup_node_interactor.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:testshared/fixture/shared_space_document_fixture.dart';
 
 import '../../fixture/test_fixture.dart';

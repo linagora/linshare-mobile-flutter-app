@@ -34,8 +34,8 @@ import 'package:data/src/datasource_impl/quota_datasource_impl.dart';
 import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 
 import '../fixture/mock/mock_fixtures.dart';
 import '../fixture/quota_fixture.dart';

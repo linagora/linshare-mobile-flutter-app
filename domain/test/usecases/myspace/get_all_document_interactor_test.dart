@@ -34,8 +34,8 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/myspace/get_all_document_interactor.dart';
 import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../mock/repository/authentication/mock_document_repository.dart';

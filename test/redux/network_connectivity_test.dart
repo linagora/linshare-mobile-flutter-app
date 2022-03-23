@@ -33,15 +33,16 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/app_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/account_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_node_member_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_recipients_upload_request_group_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_node_member_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
@@ -60,30 +61,29 @@ import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart'
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_request_file_details_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_details_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_active_closed_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_archived_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_created_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/signup_authentication_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/upload_request_recipient_details_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_node_versions_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/signup_authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/update_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_file_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_creation_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_file_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_active_closed_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_archived_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_created_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_group_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_active_closed_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_archived_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_created_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/upload_request_inside_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/upload_request_recipient_details_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:test/test.dart';
 
 void main() {
   group('network_connectivity_test', () {

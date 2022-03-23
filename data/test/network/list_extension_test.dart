@@ -30,9 +30,9 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/extensions/list_extension.dart';
-import 'package:test/test.dart';
+import 'package:data/src/network/model/query/query_parameter.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('list_extension_test', () {

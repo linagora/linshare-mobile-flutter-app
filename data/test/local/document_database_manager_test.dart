@@ -30,10 +30,10 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'package:data/src/local/config/document_table.dart';
 import 'package:data/data.dart';
+import 'package:data/src/local/config/document_table.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:testshared/testshared.dart';
 
 import '../fixture/mock/mock_fixtures.dart';
