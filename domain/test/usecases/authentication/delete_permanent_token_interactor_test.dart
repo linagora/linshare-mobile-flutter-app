@@ -34,8 +34,8 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/authentication/logout_exception.dart';
 import 'package:domain/src/usecases/authentication/logout_view_state.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 
 import '../../fixture/test_fixture.dart';
 import '../../mock/repository/authentication/mock_authentication_repository.dart';

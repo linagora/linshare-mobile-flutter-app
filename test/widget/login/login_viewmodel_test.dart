@@ -32,12 +32,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/widget/login/login_viewmodel.dart';
 import 'package:redux/redux.dart';
-import 'package:test/test.dart';
 
 import '../../fixtures/mock/mock_fixtures.dart';
 import '../../fixtures/test_redux_module.dart';

@@ -36,13 +36,13 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:linshare_flutter_app/presentation/manager/quota/verify_quota_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/account_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:mockito/mockito.dart';
 import 'package:redux/redux.dart';
-import 'package:test/test.dart';
 
 import '../../domain/test/fixture/test_fixture.dart';
 import '../../domain/test/mock/repository/quota/mock_quota_repository.dart';

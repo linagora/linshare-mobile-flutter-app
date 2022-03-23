@@ -32,10 +32,10 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:testshared/fixture/upload_request_fixture.dart';
 import 'package:testshared/fixture/upload_request_entry_fixture.dart';
+import 'package:testshared/fixture/upload_request_fixture.dart';
 
 import '../../mock/repository/mock_upload_request_entry_repository.dart';
 

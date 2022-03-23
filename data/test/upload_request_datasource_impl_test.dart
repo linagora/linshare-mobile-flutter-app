@@ -32,11 +32,11 @@
 import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
-
 import 'package:testshared/fixture/upload_request_fixture.dart';
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
+
 import 'fixture/mock/mock_fixtures.dart';
 
 void main() {
