@@ -28,29 +28,29 @@ dependencies:
   device_info: 2.0.0
 
   # shared_preferences
-  shared_preferences: 2.0.5
+  shared_preferences: 2.0.13
 
   # flutter_downloader
-  flutter_downloader: 1.7.0
+  flutter_downloader: 1.7.3
 
   # path_provider
-  path_provider: 2.0.1
+  path_provider: 2.0.9
 
   # rxdart
-  rxdart: 0.26.0
+  rxdart: 0.27.3
 
   # dartz
-  dartz: 0.10.0-nullsafety.1
+  dartz: 0.10.1
 
-  equatable: 2.0.0
+  equatable: 2.0.3
 
   external_path: 1.0.1
 
   # local_auth
-  local_auth: 1.1.5
+  local_auth: 1.1.11
 
   # SQLite
-  sqflite: 2.0.0+3
+  sqflite: 2.0.2
 
   contacts_service:
     git:
