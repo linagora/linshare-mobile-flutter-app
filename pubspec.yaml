@@ -60,9 +60,6 @@ dependencies:
   # file_picker
   file_picker: 3.0.1
 
-  # flutter_uploader
-  flutter_uploader: 1.2.1
-
   # flutter toast
   fluttertoast: 8.0.6
 
