@@ -14,6 +14,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		B8EC328027EC6B5800775439 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8EC327F27EC6B5800775439 /* GoogleService-Info.plist */; };
 		CF02DF86256283DB005EDE4A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CF02DF85256283CA005EDE4A /* libsqlite3.tbd */; };
 		CF0E3E6C2542EC0200DE0A66 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0E3E6B2542EC0200DE0A66 /* ShareViewController.swift */; };
 		CF0E3E6F2542EC0200DE0A66 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF0E3E6D2542EC0200DE0A66 /* MainInterface.storyboard */; };
@@ -70,6 +71,7 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B8EC327F27EC6B5800775439 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Documents/LinagoraProject/LinShare/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CF02DF85256283CA005EDE4A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		CF0E3E692542EC0200DE0A66 /* LinshareShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LinshareShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF0E3E6B2542EC0200DE0A66 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				B8EC327F27EC6B5800775439 /* GoogleService-Info.plist */,
 				CF0E3E7A2542EC5400DE0A66 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -195,6 +198,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				EDE1E624E7DBDC093A4D01BE /* [CP] Embed Pods Frameworks */,
 				CF0E3E742542EC0200DE0A66 /* Embed App Extensions */,
+				B8EC328127EC747000775439 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -268,6 +272,7 @@
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				B8EC328027EC6B5800775439 /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
@@ -310,7 +315,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		B8EC328127EC747000775439 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"Symbols Directory\"\necho \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\n#Firebase\n\"${PODS_ROOT}/FirebaseCrashlytics/upload-symbols\" -gsp \"${PROJECT_DIR}/Runner/GoogleService-Info.plist\" -p ios \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n";
 		};
 		C529D5CD860C1783909B4DDA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

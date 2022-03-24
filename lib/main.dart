@@ -29,7 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
@@ -38,8 +42,6 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/util/router/router.dart' as router;
 import 'package:linshare_flutter_app/presentation/widget/initialize_get_it//initialize_get_it_widget.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_driver/driver_extension.dart';
-import 'package:flutter/foundation.dart';
 
 import 'presentation/redux/states/app_state.dart';
 import 'presentation/util/extensions/color_extension.dart';
@@ -48,8 +50,13 @@ import 'presentation/widget/initialize/initialize_widget.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setUpGetIt();
+  await Firebase.initializeApp();
   if (kProfileMode) {
     enableFlutterDriverExtension();
+  }
+  if (kDebugMode) {
+    await FirebaseCrashlytics.instance
+      .setCrashlyticsCollectionEnabled(false);
   }
   runApp(LinShareApp());
 }
