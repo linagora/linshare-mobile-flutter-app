@@ -35,7 +35,6 @@ import 'package:device_info/device_info.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
@@ -69,7 +68,6 @@ class AppModule {
     _provideDeviceManager();
     _provideAppImagePaths();
     _provideFileManager();
-    _provideFileUploader();
     _provideResponsiveManager();
     _provideAppToast();
     _provideNetworkStateComponent();
@@ -536,10 +534,6 @@ class AppModule {
         getIt.get<FlowUploadWorkGroupDocumentInteractor>(),
         getIt.get<FileHelper>(),
         getIt.get<GetQuotaInteractor>()));
-  }
-
-  void _provideFileUploader() {
-    getIt.registerLazySingleton(() => FlutterUploader());
   }
 
   void _provideResponsiveManager() {
