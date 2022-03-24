@@ -122,3 +122,6 @@ messages_fr.dart
 messages_messages.dart
 messages_ru.dart
 messages_vi.dart
+
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
