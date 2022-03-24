@@ -46,7 +46,7 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/sharedspace/shared_space_id.dart';
 import 'package:domain/src/model/sharedspacedocument/work_group_node_id.dart';
-import 'package:ext_storage/ext_storage.dart';
+import 'package:external_path/external_path.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -148,7 +148,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
     developer.log('downloadNodes(): ${workgroupNodes.length}', name: 'SharedSpaceDocumentDataSourceImpl');
     var externalStorageDirPath;
     if (Platform.isAndroid) {
-        externalStorageDirPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+        externalStorageDirPath = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
     } else if (Platform.isIOS) {
         externalStorageDirPath = (await getApplicationDocumentsDirectory()).absolute.path;
     } else {
