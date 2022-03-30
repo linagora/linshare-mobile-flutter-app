@@ -53,6 +53,7 @@ import 'package:linshare_flutter_app/presentation/widget/shared_space_document/s
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_ui_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/destination_type.dart';
 import 'package:redux/redux.dart';
+
 import 'destination_picker_action/negative_destination_picker_action.dart';
 import 'destination_picker_viewmodel.dart';
 
@@ -345,7 +346,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
             onPressed: () {
               action is NegativeDestinationPickerAction
                 ? action.actionClick(null)
-                : action.actionClick(_destinationPickerViewModel.currentNodeObservable.valueWrapper?.value);
+                : action.actionClick(_destinationPickerViewModel.currentNodeObservable.value);
             },
             child: action.actionWidget));
       }

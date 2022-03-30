@@ -33,20 +33,22 @@ import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'shared_space_member_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient])
 void main() {
   group('test shared spaces member dataSource', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    late MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late SharedSpaceMemberDataSourceImpl _sharedSpaceMemberDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _sharedSpaceMemberDataSourceImpl = SharedSpaceMemberDataSourceImpl(
         _linShareHttpClient,
         _remoteExceptionThrower
@@ -69,10 +71,11 @@ void main() {
       when(_linShareHttpClient.getSharedSpaceMembers(sharedSpaceId1))
           .thenThrow(error);
 
-      await _sharedSpaceMemberDataSourceImpl.getMembers(sharedSpaceId1)
-          .catchError((error) {
-            expect(error, isA<SharedSpaceNotFound>());
-          });
+      try {
+        await _sharedSpaceMemberDataSourceImpl.getMembers(sharedSpaceId1);
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
     test('addMember should return success with valid data', () async {
@@ -103,11 +106,11 @@ void main() {
 
       when(_linShareHttpClient.addSharedSpaceMember(sharedSpaceId1, request))
           .thenThrow(error);
-
-      await _sharedSpaceMemberDataSourceImpl.addMember(sharedSpaceId1, request)
-          .catchError((error) {
-            expect(error, isA<SharedSpaceNotFound>());
-          });
+      try {
+        await _sharedSpaceMemberDataSourceImpl.addMember(sharedSpaceId1, request);
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
     test('updateRoleSharedSpaceMember should return success with valid data', () async {
@@ -138,11 +141,12 @@ void main() {
 
       when(_linShareHttpClient.updateRoleSharedSpaceMember(sharedSpaceId1, request))
           .thenThrow(error);
-
-      await _sharedSpaceMemberDataSourceImpl.updateMemberRole(sharedSpaceId1, request)
-          .catchError((error) {
-            expect(error, isA<SharedSpaceNotFound>());
-          });
+      try {
+        await _sharedSpaceMemberDataSourceImpl
+          .updateMemberRole(sharedSpaceId1, request);
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
     test('updateRoleSharedSpaceMember should throw NotAuthorized when linShareHttpClient response error with 403', () async {
@@ -159,11 +163,12 @@ void main() {
 
       when(_linShareHttpClient.updateRoleSharedSpaceMember(sharedSpaceId1, request))
           .thenThrow(error);
-
-      await _sharedSpaceMemberDataSourceImpl.updateMemberRole(sharedSpaceId1, request)
-          .catchError((error) {
-            expect(error, isA<NotAuthorized>());
-          });
+      try {
+        await _sharedSpaceMemberDataSourceImpl
+          .updateMemberRole(sharedSpaceId1, request);
+      } catch(error) {
+        expect(error, isA<NotAuthorized>());
+      }
     });
 
     test('deleteSharedSpaceMember should return success with valid data', () async {
@@ -183,10 +188,12 @@ void main() {
       when(_linShareHttpClient.deleteSharedSpaceMember(sharedSpaceId1, sharedMemberId1))
           .thenThrow(error);
 
-      await _sharedSpaceMemberDataSourceImpl.deleteMember(sharedSpaceId1, sharedMemberId1)
-          .catchError((error) {
-            expect(error, isA<SharedSpaceMemberNotFound>());
-          });
+      try {
+        await _sharedSpaceMemberDataSourceImpl
+          .deleteMember(sharedSpaceId1, sharedMemberId1);
+      } catch(error) {
+        expect(error, isA<SharedSpaceMemberNotFound>());
+      }
     });
 
     test('deleteSharedSpaceMember should throw NotAuthorized when linShareHttpClient response error with 403', () async {
@@ -198,10 +205,12 @@ void main() {
       when(_linShareHttpClient.deleteSharedSpaceMember(sharedSpaceId1, sharedMemberId1))
           .thenThrow(error);
 
-      await _sharedSpaceMemberDataSourceImpl.deleteMember(sharedSpaceId1, sharedMemberId1)
-          .catchError((error) {
-            expect(error, isA<NotAuthorized>());
-          });
+      try {
+        await _sharedSpaceMemberDataSourceImpl
+          .deleteMember(sharedSpaceId1, sharedMemberId1);
+      } catch(error) {
+        expect(error, isA<NotAuthorized>());
+      }
     });
 
   });
