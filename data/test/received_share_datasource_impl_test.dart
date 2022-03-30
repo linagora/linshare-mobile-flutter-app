@@ -33,11 +33,13 @@ import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'received_share_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient, LinShareDownloadManager])
 void main() {
   getAllReceivedSharesTest();
   getReceivedShareTest();
@@ -48,12 +50,12 @@ void getAllReceivedSharesTest() {
   group('received_share_datasource_impl getAll test', () {
     late MockLinShareHttpClient _linShareHttpClient;
     late ReceivedShareDataSourceImpl _receivedShareDataSourceImpl;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _receivedShareDataSourceImpl = ReceivedShareDataSourceImpl(
           _linShareHttpClient,
@@ -77,10 +79,11 @@ void getAllReceivedSharesTest() {
       when(_linShareHttpClient.getReceivedShares())
           .thenThrow(error);
 
-      await _receivedShareDataSourceImpl.getAllReceivedShares()
-          .catchError((error) {
-            expect(error, isA<ReceivedSharesNotFound>());
-          });
+      try {
+        await _receivedShareDataSourceImpl.getAllReceivedShares();
+      } catch(error) {
+        expect(error, isA<ReceivedSharesNotFound>());
+      }
     });
   });
 }
@@ -89,12 +92,12 @@ void getReceivedShareTest() {
   group('received_share_datasource_impl get received share test', () {
     late MockLinShareHttpClient _linShareHttpClient;
     late ReceivedShareDataSourceImpl _receivedShareDataSourceImpl;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _receivedShareDataSourceImpl = ReceivedShareDataSourceImpl(
           _linShareHttpClient,
@@ -118,10 +121,12 @@ void getReceivedShareTest() {
       when(_linShareHttpClient.getReceivedShare(receivedShare1.shareId))
           .thenThrow(error);
 
-      await _receivedShareDataSourceImpl.getReceivedShare(receivedShare1.shareId)
-          .catchError((error) {
-            expect(error, isA<ReceivedShareNotFound>());
-          });
+      try {
+        await _receivedShareDataSourceImpl.getReceivedShare(
+            receivedShare1.shareId);
+      } catch(error) {
+        expect(error, isA<ReceivedShareNotFound>());
+      }
     });
   });
 }
@@ -131,11 +136,11 @@ void _removeReceivedShareTest() {
     late MockLinShareHttpClient _linShareHttpClient;
     late ReceivedShareDataSourceImpl _receivedShareDataSourceImpl;
     MockLinShareDownloadManager _linShareDownloadManager;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _receivedShareDataSourceImpl = ReceivedShareDataSourceImpl(
         _linShareHttpClient,
@@ -160,11 +165,12 @@ void _removeReceivedShareTest() {
       when(_linShareHttpClient.removeReceivedShare(receivedShare1.shareId))
         .thenThrow(error);
 
-      await _receivedShareDataSourceImpl
-        .remove(receivedShare1.shareId)
-        .catchError((error) {
-          expect(error, isA<ReceivedShareNotFound>());
-        });
+      try {
+        await _receivedShareDataSourceImpl
+            .remove(receivedShare1.shareId);
+      } catch(error) {
+        expect(error, isA<ReceivedShareNotFound>());
+      }
     });
   });
 }

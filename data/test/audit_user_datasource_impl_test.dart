@@ -33,20 +33,22 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/audit_user_fixture.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'audit_user_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient])
 void main() {
   group('audit_user_datasource_impl_test', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    late MockRemoteExceptionThrower _remoteExceptionThrower;
+    late RemoteExceptionThrower _remoteExceptionThrower;
     late AuditUserDataSourceImpl _auditUserDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _auditUserDataSourceImpl = AuditUserDataSourceImpl(
         _linShareHttpClient,
         _remoteExceptionThrower
@@ -65,10 +67,11 @@ void main() {
       when(_linShareHttpClient.getAuditAuthenticationEntryUser())
         .thenThrow(Exception());
 
-      await _auditUserDataSourceImpl.getLastLogin()
-        .catchError((error) {
-          expect(error, isA<UnknownError>());
-        });
+      try {
+        await _auditUserDataSourceImpl.getLastLogin();
+      } catch(error) {
+        expect(error, isA<UnknownError>());
+      }
     });
   });
 }

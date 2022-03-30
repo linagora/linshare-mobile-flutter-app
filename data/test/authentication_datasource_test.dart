@@ -34,116 +34,26 @@ import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'authentication_datasource_test.mocks.dart';
 import 'fixture/user_fixture.dart';
 
+@GenerateMocks([DeviceManager, LinShareHttpClient])
 void main() {
   group('test authentication dataSource', () {
     late MockDeviceManager _deviceManager;
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    late RemoteExceptionThrower _remoteExceptionThrower;
     late AuthenticationDataSourceImpl _authenticationDataSource;
 
     setUp(() {
       _deviceManager = MockDeviceManager();
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _authenticationDataSource = AuthenticationDataSourceImpl(_linShareHttpClient, _deviceManager, _remoteExceptionThrower);
     });
-
-    //TODO: Null-safety : Wait a solution replace for argThat
-    /*
-    test('createPermanentToken should create permanentToken success', () async {
-      when(_deviceManager.getDeviceUUID())
-        .thenAnswer((_) async => Future.value('12345-bde44'));
-      when(_deviceManager.getPlatformString())
-        .thenAnswer((_) => 'IOS-App');
-      when(_linShareHttpClient.createPermanentToken(
-          Uri.parse('http://linshare.test'),
-          'user1@linsahre.org',
-          '123456',
-          argThat(isA<PermanentTokenBodyRequest>())!))
-        .thenAnswer((_) => Future.value(PermanentToken('token', TokenId('12345-5555'))));
-
-      var token = await _authenticationDataSource.createPermanentToken(
-          Uri.parse('http://linshare.test'),
-          UserName('user1@linsahre.org'),
-          Password('123456'));
-
-      expect(token, Token('token', TokenId('12345-5555')));
-    });
-
-    test('createPermanentToken should throw UnknownError when deviceManager throw an exception', () async {
-      when(_deviceManager.getDeviceUUID())
-        .thenThrow(Exception());
-      when(_deviceManager.getPlatformString())
-        .thenAnswer((_) => 'IOS-App');
-      when(_linShareHttpClient.createPermanentToken(
-          Uri.parse('http://linshare.test'),
-          'user1@linshare.org',
-          '123456',
-          argThat(isA<PermanentTokenBodyRequest>())!))
-        .thenAnswer((_) => Future.value(PermanentToken('token', TokenId('12345-5555'))));
-
-      await _authenticationDataSource.createPermanentToken(
-          Uri.parse('http://linshare.test'),
-          UserName('user1@linshare.org'),
-          Password('123456'))
-        .catchError((error) => expect(error, isA<UnknownError>()));
-    });
-
-    test('createPermanentToken should throw BadCredential when linShareHttpClient response error with 401', () async {
-      var error = DioError(
-        type: DioErrorType.response,
-        response: Response(statusCode: 401, requestOptions: RequestOptions(path: '')),
-        requestOptions: RequestOptions(path: '')
-      );
-      when(_deviceManager.getDeviceUUID())
-          .thenAnswer((_) async => Future.value('12345-bde44'));
-      when(_deviceManager.getPlatformString())
-          .thenAnswer((_) => 'IOS-App');
-      when(_linShareHttpClient.createPermanentToken(
-          Uri.parse('http://linshare.test'),
-          'user1@linsahre.org',
-          '123456',
-          argThat(isA<PermanentTokenBodyRequest>())!))
-        .thenThrow(error);
-
-      await _authenticationDataSource.createPermanentToken(
-          Uri.parse('http://linshare.test'),
-          UserName('user1@linsahre.org'),
-          Password('123456'))
-        .catchError((error) {
-          expect(error, isA<BadCredentials>());
-        });
-    });
-
-    test('deletePermanentToken should success', () async {
-      when(_linShareHttpClient.deletePermanentToken(argThat(isA<PermanentToken>())!))
-        .thenAnswer((_) async => true);
-
-      var deleteResult = await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')));
-
-      expect(deleteResult, true);
-    });
-
-    test('deletePermanentToken should throw RequestedTokenNotFound when linShareHttpClient response is 404', () async {
-      var error = DioError(
-        type: DioErrorType.response,
-        response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')),
-        requestOptions: RequestOptions(path: '')
-      );
-      when(_linShareHttpClient.deletePermanentToken(argThat(isA<PermanentToken>())!))
-        .thenThrow(error);
-
-      await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')))
-        .catchError((error) {
-          expect(error, isA<RequestedTokenNotFound>());
-        });
-    });
-    */
 
     test('deletePermanentToken should throw MissingRequiredFields when linShareHttpClient response error is 400', () async {
       var error = DioError(
@@ -151,13 +61,15 @@ void main() {
         response: Response(statusCode: 400, requestOptions: RequestOptions(path: '')),
         requestOptions: RequestOptions(path: '')
       );
-      when(_linShareHttpClient.deletePermanentToken(PermanentToken('', TokenId(''))))
+      final token = Token('token', TokenId('12345-5555'));
+      when(_linShareHttpClient.deletePermanentToken(argThat(isA<PermanentToken>())))
           .thenThrow(error);
 
-      await _authenticationDataSource.deletePermanentToken(Token('token', TokenId('12345-5555')))
-          .catchError((error) {
-            expect(error, isA<MissingRequiredFields>());
-          });
+      try {
+        await _authenticationDataSource.deletePermanentToken(token);
+      } catch(error) {
+        expect(error, isA<MissingRequiredFields>());
+      }
     });
 
 
@@ -175,10 +87,11 @@ void main() {
       when(_linShareHttpClient.getAuthorizedUser())
         .thenAnswer((_) async => null);
 
-      await _authenticationDataSource.getAuthorizedUser()
-        .catchError((error) {
-          expect(error, isA<NotAuthorizedUser>());
-        });
+      try {
+        await _authenticationDataSource.getAuthorizedUser();
+      } catch(error) {
+        expect(error, isA<NotAuthorizedUser>());
+      }
     });
   });
 }

@@ -44,6 +44,8 @@ class RemoteExceptionThrower {
           handler != null ? handler(exception) : throw UnknownError(exception.message);
           break;
       }
+    } else if (exception is NotAuthorizedUser) {
+      throw exception;
     } else {
       throw UnknownError(exception.toString());
     }

@@ -32,11 +32,13 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'local_shared_space_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceDocumentDatabaseManager])
 void main() {
   group('test local shared spaces documents datasource impl', () {
     late MockSharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
@@ -71,12 +73,17 @@ void main() {
       when(_sharedSpaceDocumentDatabaseManager.insertData(workGroupDocument, '123'))
           .thenThrow(error);
 
-      await _localSharedSpaceDocumentDataSourceImpl.makeAvailableOfflineSharedSpaceDocument(
-          null,
-          sharedSpaceNodeNested,
-          workGroupDocument,
-          '123'
-      ).catchError((error) => expect(error, isA<SQLiteDatabaseException>()));
+      try {
+        await _localSharedSpaceDocumentDataSourceImpl
+            .makeAvailableOfflineSharedSpaceDocument(
+            null,
+            sharedSpaceNodeNested,
+            workGroupDocument,
+            '123'
+        );
+      } catch(error) {
+        expect(error, isA<SQLiteDatabaseException>());
+      }
     });
 
     test('getSharesSpaceDocumentOffline Should Return Success Node', () async {
@@ -96,9 +103,14 @@ void main() {
       when(_sharedSpaceDocumentDatabaseManager.getData(workGroupDocument.workGroupNodeId.uuid))
           .thenThrow(error);
 
-      await _localSharedSpaceDocumentDataSourceImpl.getSharesSpaceDocumentOffline(
-          workGroupDocument.workGroupNodeId
-      ).catchError((error) => expect(error, isA<SQLiteDatabaseException>()));
+      try {
+        await _localSharedSpaceDocumentDataSourceImpl
+            .getSharesSpaceDocumentOffline(
+            workGroupDocument.workGroupNodeId
+        );
+      } catch(error) {
+        expect(error, isA<SQLiteDatabaseException>());
+      }
     });
 
     test('getAllSharedSpaceDocumentOffline Should Return Success List Node', () async {
@@ -123,12 +135,15 @@ void main() {
         workGroupNodeIdOffline1
       )).thenThrow(error);
 
-      await _localSharedSpaceDocumentDataSourceImpl.getAllSharedSpaceDocumentOffline(
-        sharedSpaceIdOffline1,
-        workGroupNodeIdOffline1
-      ).catchError((error) {
+      try {
+        await _localSharedSpaceDocumentDataSourceImpl
+            .getAllSharedSpaceDocumentOffline(
+            sharedSpaceIdOffline1,
+            workGroupNodeIdOffline1
+        );
+      } catch(error) {
         expect(error, isA<SQLiteDatabaseException>());
-      });
+      }
     });
 
     test('deleteAllData Should Return Success TRUE', () async {
@@ -144,9 +159,11 @@ void main() {
 
       when(_sharedSpaceDocumentDatabaseManager.deleteAllData()).thenThrow(error);
 
-      await _localSharedSpaceDocumentDataSourceImpl.deleteAllData().catchError((error) {
+      try {
+        await _localSharedSpaceDocumentDataSourceImpl.deleteAllData();
+      } catch(error) {
         expect(error, isA<SQLiteDatabaseException>());
-      });
+      }
     });
 
   });

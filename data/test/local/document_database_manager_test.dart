@@ -33,11 +33,13 @@
 import 'package:data/data.dart';
 import 'package:data/src/local/config/document_table.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../fixture/mock/mock_fixtures.dart';
+import 'document_database_manager_test.mocks.dart';
 
+@GenerateMocks([DatabaseClient])
 void main() {
   group('linshare_database_manager_test', () {
     late MockDatabaseClient databaseClient;
@@ -60,9 +62,11 @@ void main() {
     test('addDocument should fail when response error', () async {
       when(databaseClient.insertData(DocumentTable.TABLE_NAME, document1.toSyncOfflineDocument(localPath: '').toDocumentCache().toJson()))
           .thenThrow(Exception());
-
-      await documentDatabaseManager.insertData(document1, '')
-          .catchError((error) => expect(error, isA<Exception>()));
+      try {
+        await documentDatabaseManager.insertData(document1, '');
+      } catch(error) {
+        expect(error, isA<Exception>());
+      }
     });
 
     test('updateDocument should return success with valid data', () async {
@@ -86,8 +90,11 @@ void main() {
           document1.toSyncOfflineDocument(localPath: '').toDocumentCache().toJson()))
         .thenThrow(Exception());
 
-      await documentDatabaseManager.updateData(document1, '')
-          .catchError((error) => expect(error, isA<Exception>()));
+      try {
+        await documentDatabaseManager.updateData(document1, '');
+      } catch(error) {
+        expect(error, isA<Exception>());
+      }
     });
   });
 }

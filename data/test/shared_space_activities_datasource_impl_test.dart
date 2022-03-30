@@ -33,20 +33,22 @@ import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/shared_space_activities_fixture.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'shared_space_activities_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient])
 void main() {
   group('test shared spaces activities dataSource', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late SharedSpaceActivitiesDataSourceImpl _sharedSpaceActivitiesDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _sharedSpaceActivitiesDataSourceImpl = SharedSpaceActivitiesDataSourceImpl(
         _linShareHttpClient,
         _remoteExceptionThrower
@@ -66,13 +68,15 @@ void main() {
           type: DioErrorType.response,
           response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
-      when(_linShareHttpClient.getSharedSpaces())
+      when(_linShareHttpClient.getSharedSpaceActivities(argThat(isA<SharedSpaceId>())))
           .thenThrow(error);
 
-      await _sharedSpaceActivitiesDataSourceImpl.getSharedSpaceActivities(sharedSpaceIdForAuditLog)
-          .catchError((error) {
-            expect(error, isA<SharedSpaceActivitiesNotFound>());
-          });
+      try {
+        await _sharedSpaceActivitiesDataSourceImpl.getSharedSpaceActivities(
+            sharedSpaceIdForAuditLog);
+      } catch(error) {
+        expect(error, isA<SharedSpaceActivitiesNotFound>());
+      }
     });
 
     test('getSharedSpaceActivities should throw SharedSpaceActivitiesNotFound when linShareHttpClient response error with 403', () async {
@@ -80,13 +84,15 @@ void main() {
           type: DioErrorType.response,
           response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
       );
-      when(_linShareHttpClient.getSharedSpaces())
+      when(_linShareHttpClient.getSharedSpaceActivities(argThat(isA<SharedSpaceId>())))
           .thenThrow(error);
 
-      await _sharedSpaceActivitiesDataSourceImpl.getSharedSpaceActivities(sharedSpaceIdForAuditLog)
-          .catchError((error) {
-            expect(error, isA<NotAuthorized>());
-          });
+      try {
+        await _sharedSpaceActivitiesDataSourceImpl.getSharedSpaceActivities(
+            sharedSpaceIdForAuditLog);
+      } catch(error) {
+        expect(error, isA<NotAuthorized>());
+      }
     });
   });
 }

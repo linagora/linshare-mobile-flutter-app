@@ -33,12 +33,14 @@ import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/my_space_fixture.dart';
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'upload_request_group_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient])
 void main() {
   getAllUploadRequestGroupsTest();
   addRecipientsTest();
@@ -50,12 +52,12 @@ void main() {
 void getAllUploadRequestGroupsTest() {
   group('upload_request_group_datasource_impl getAll test', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _uploadRequestGroupDataSourceImpl =
           UploadRequestGroupDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
     });
@@ -78,10 +80,12 @@ void getAllUploadRequestGroupsTest() {
       when(_linShareHttpClient.getAllUploadRequestGroups([UploadRequestStatus.CREATED]))
           .thenThrow(error);
 
-      await _uploadRequestGroupDataSourceImpl
-          .getUploadRequestGroups([UploadRequestStatus.CREATED]).catchError((error) {
+      try {
+        await _uploadRequestGroupDataSourceImpl
+            .getUploadRequestGroups([UploadRequestStatus.CREATED]);
+      } catch(error) {
         expect(error, isA<MissingRequiredFields>());
-      });
+      }
     });
 
     test('addNewUploadRequest should return success with valid Collective request', () async {
@@ -111,10 +115,13 @@ void getAllUploadRequestGroupsTest() {
       when(_linShareHttpClient.addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1))
           .thenThrow(error);
 
-      await _uploadRequestGroupDataSourceImpl
-          .addNewUploadRequest(UploadRequestCreationType.INDIVIDUAL, addUploadRequest1).catchError((error) {
-        expect(error, isA<ServerNotFound>());
-      });
+      try {
+        await _uploadRequestGroupDataSourceImpl
+            .addNewUploadRequest(
+            UploadRequestCreationType.INDIVIDUAL, addUploadRequest1);
+      } catch(error) {
+        expect(error, isA<UploadRequestCreateFailed>());
+      }
     });
 
   });
@@ -123,12 +130,12 @@ void getAllUploadRequestGroupsTest() {
 void addRecipientsTest() {
   group('upload_request_group_datasource_impl addRecipients test', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _uploadRequestGroupDataSourceImpl =
           UploadRequestGroupDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
     });
@@ -142,21 +149,6 @@ void addRecipientsTest() {
       expect(result, uploadRequestGroupResponse1.toUploadRequestGroup());
     });
 
-    test('addRecipients should throw MissingRequiredFields when linShareHttpClient response error with 400', () async {
-      final error = DioError(
-          type: DioErrorType.response,
-          response: Response(statusCode: 400, requestOptions: RequestOptions(path: '')),
-          requestOptions: RequestOptions(path: ''));
-
-      when(_linShareHttpClient.addRecipientsToUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]))
-          .thenThrow(error);
-
-      await _uploadRequestGroupDataSourceImpl
-          .addRecipients(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]).catchError((error) {
-        expect(error, isA<MissingRequiredFields>());
-      });
-    });
-
     test('addRecipients should throw exception when linShareHttpClient response error with 404', () async {
       final error = DioError(
           type: DioErrorType.response,
@@ -166,10 +158,13 @@ void addRecipientsTest() {
       when(_linShareHttpClient.addRecipientsToUploadRequestGroup(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]))
           .thenThrow(error);
 
-      await _uploadRequestGroupDataSourceImpl
-          .addRecipients(uploadRequestGroup1.uploadRequestGroupId, [genericUser1, genericUser]).catchError((error) {
-        expect(error, isA<ServerNotFound>());
-      });
+      try {
+        await _uploadRequestGroupDataSourceImpl
+          .addRecipients(uploadRequestGroup1.uploadRequestGroupId,
+            [genericUser1, genericUser]);
+      } catch(error) {
+        expect(error, isA<UploadRequestGroupsNotFound>());
+      }
     });
   });
 }
@@ -178,11 +173,11 @@ void cancelUploadRequestGroupTest() {
   group('cancel upload_request_group test', () {
     late MockLinShareHttpClient _linShareHttpClient;
     late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _uploadRequestGroupDataSourceImpl = UploadRequestGroupDataSourceImpl(
           _linShareHttpClient,
           _remoteExceptionThrower);
@@ -205,10 +200,12 @@ void cancelUploadRequestGroupTest() {
       when(_linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup1.uploadRequestGroupId, UploadRequestStatus.CANCELED))
           .thenThrow(error);
 
-      await _uploadRequestGroupDataSourceImpl.updateUploadRequestGroupState(
-          uploadRequestGroup1, UploadRequestStatus.CANCELED).catchError((error) {
-            expect(error, isA<UploadRequestGroupsNotFound>());
-      });
+      try {
+        await _uploadRequestGroupDataSourceImpl.updateUploadRequestGroupState(
+            uploadRequestGroup1, UploadRequestStatus.CANCELED);
+      } catch(error) {
+        expect(error, isA<UploadRequestGroupsNotFound>());
+      }
     });
 
   });
@@ -217,12 +214,12 @@ void cancelUploadRequestGroupTest() {
 void archiveUploadRequestGroupTest() {
   group('archive upload_request_group test', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _uploadRequestGroupDataSourceImpl =
           UploadRequestGroupDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
     });
@@ -245,10 +242,13 @@ void archiveUploadRequestGroupTest() {
       when(_linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup1.uploadRequestGroupId, UploadRequestStatus.ARCHIVED))
           .thenThrow(error);
 
-      await _uploadRequestGroupDataSourceImpl
-          .updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.ARCHIVED).catchError((error) {
+      try {
+        await _uploadRequestGroupDataSourceImpl
+            .updateUploadRequestGroupState(
+            uploadRequestGroup1, UploadRequestStatus.ARCHIVED);
+      } catch(error) {
         expect(error, isA<UploadRequestGroupsNotFound>());
-      });
+      }
     });
   });
 }
@@ -256,12 +256,12 @@ void archiveUploadRequestGroupTest() {
 void closeUploadRequestGroupTest() {
   group('close upload_request_group test', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late UploadRequestGroupDataSourceImpl _uploadRequestGroupDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _uploadRequestGroupDataSourceImpl =
           UploadRequestGroupDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
     });
@@ -284,10 +284,13 @@ void closeUploadRequestGroupTest() {
       when(_linShareHttpClient.updateUploadRequestGroupStatus(uploadRequestGroup1.uploadRequestGroupId, UploadRequestStatus.CLOSED))
           .thenThrow(error);
 
-      await _uploadRequestGroupDataSourceImpl
-          .updateUploadRequestGroupState(uploadRequestGroup1, UploadRequestStatus.CLOSED).catchError((error) {
+      try {
+        await _uploadRequestGroupDataSourceImpl
+            .updateUploadRequestGroupState(
+            uploadRequestGroup1, UploadRequestStatus.CLOSED);
+      } catch(error) {
         expect(error, isA<UploadRequestGroupsNotFound>());
-      });
+      }
     });
   });
 }
