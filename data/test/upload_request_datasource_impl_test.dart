@@ -33,12 +33,14 @@ import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-
 import 'package:testshared/fixture/upload_request_fixture.dart';
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
-import 'fixture/mock/mock_fixtures.dart';
 
+import 'upload_request_datasource_impl_test.mocks.dart';
+
+@GenerateMocks([LinShareHttpClient])
 void main() {
   getAllUploadRequestTest();
 }
@@ -46,12 +48,12 @@ void main() {
 void getAllUploadRequestTest() {
   group('upload_request_datasource_impl getAll test', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late UploadRequestDataSourceImpl _uploadRequestDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _uploadRequestDataSourceImpl = UploadRequestDataSourceImpl(_linShareHttpClient, _remoteExceptionThrower);
     });
 
@@ -73,10 +75,12 @@ void getAllUploadRequestTest() {
       when(_linShareHttpClient.getAllUploadRequests(uploadRequestGroupIdWrong1))
           .thenThrow(error);
 
-      await _uploadRequestDataSourceImpl
-          .getAllUploadRequests(uploadRequestGroupIdWrong1).catchError((error) {
+      try {
+        await _uploadRequestDataSourceImpl
+            .getAllUploadRequests(uploadRequestGroupIdWrong1);
+      } catch(error) {
         expect(error, isA<UploadRequestNotFound>());
-      });
+      }
     });
 
   });

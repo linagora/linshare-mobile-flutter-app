@@ -34,11 +34,13 @@ import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'autocomplete_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient])
 void main() {
   group('autocomplete_datasource_impl_test', () {
     late LinShareHttpClient linShareHttpClient;
@@ -47,7 +49,7 @@ void main() {
 
     setUp(() {
       linShareHttpClient = MockLinShareHttpClient();
-      remoteExceptionThrower = MockRemoteExceptionThrower();
+      remoteExceptionThrower = RemoteExceptionThrower();
       autoCompleteDataSourceImpl = AutoCompleteDataSourceImpl(linShareHttpClient, remoteExceptionThrower);
     });
 
@@ -67,10 +69,12 @@ void main() {
       when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('user'), AutoCompleteType.SHARING))
           .thenThrow(error);
 
-      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('user'), AutoCompleteType.SHARING)
-          .catchError((error) {
-            expect(error, isA<DocumentNotFound>());
-          });
+      try {
+        await autoCompleteDataSourceImpl.getAutoComplete(
+            AutoCompletePattern('user'), AutoCompleteType.SHARING);
+      } catch(error) {
+        expect(error, isA<DocumentNotFound>());
+      }
     });
 
     test('getAutoComplete should throw DocumentNotFound when linShareHttpClient response error with 500 with errCode 1000', () async {
@@ -81,20 +85,24 @@ void main() {
       when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(error);
 
-      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING)
-          .catchError((error) {
-            expect(error, isA<InvalidPatternMinimumCharactersLengthException>());
-          });
+      try {
+        await autoCompleteDataSourceImpl.getAutoComplete(
+            AutoCompletePattern('us'), AutoCompleteType.SHARING);
+      } catch(error) {
+        expect(error, isA<InvalidPatternMinimumCharactersLengthException>());
+      }
     });
 
     test('getAutoComplete should throw exception when linShareHttpClient throw exception', () async {
       when(linShareHttpClient.getSharingAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING))
           .thenThrow(Exception());
 
-      await autoCompleteDataSourceImpl.getAutoComplete(AutoCompletePattern('us'), AutoCompleteType.SHARING)
-          .catchError((error) {
-            expect(error, isA<UnknownError>());
-          });
+      try {
+        await autoCompleteDataSourceImpl.getAutoComplete(
+            AutoCompletePattern('us'), AutoCompleteType.SHARING);
+      } catch(error) {
+        expect(error, isA<UnknownError>());
+      }
     });
   });
 }

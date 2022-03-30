@@ -29,17 +29,20 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
 import 'package:data/src/datasource_impl/biometric_datasource_impl.dart';
 import 'package:data/src/util/constant.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'biometric_datasource_impl_test.mocks.dart';
 import 'fixture/biometric_fixture.dart';
-import 'fixture/mock/mock_fixtures.dart';
 
+@GenerateMocks([BiometricService, LocalBiometricService])
 void main() {
   isAvailable();
   getAvailableBiometric();
@@ -52,7 +55,7 @@ void isAvailable() {
   group('biometric_data_source_impl isAvailable test', () {
     late BiometricDataSourceImpl _biometricDataSourceImpl;
     late MockLocalBiometricService _localBiometricService;
-    MockBiometricExceptionThrower _biometricExceptionThrower;
+    late BiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
@@ -60,7 +63,7 @@ void isAvailable() {
 
       _sharedPreferences = await SharedPreferences.getInstance();
       _localBiometricService = MockLocalBiometricService();
-      _biometricExceptionThrower = MockBiometricExceptionThrower();
+      _biometricExceptionThrower = BiometricExceptionThrower();
       _biometricDataSourceImpl = BiometricDataSourceImpl(_localBiometricService, _biometricExceptionThrower, _sharedPreferences);
     }
 
@@ -84,8 +87,11 @@ void isAvailable() {
 
       when(_localBiometricService.isAvailable()).thenThrow(error);
 
-      await _biometricDataSourceImpl.isAvailable()
-          .catchError((error) => expect(error, isA<BiometricNotAvailable>()));
+      try {
+        await _biometricDataSourceImpl.isAvailable();
+      } catch(error) {
+        expect(error, isA<BiometricNotAvailable>());
+      }
     });
   });
 }
@@ -94,7 +100,7 @@ void getAvailableBiometric() {
   group('biometric_data_source_impl getAvailableBiometrics test', () {
     late BiometricDataSourceImpl _biometricDataSourceImpl;
     late MockLocalBiometricService _localBiometricService;
-    MockBiometricExceptionThrower _biometricExceptionThrower;
+    BiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
@@ -102,7 +108,7 @@ void getAvailableBiometric() {
 
       _sharedPreferences = await SharedPreferences.getInstance();
       _localBiometricService = MockLocalBiometricService();
-      _biometricExceptionThrower = MockBiometricExceptionThrower();
+      _biometricExceptionThrower = BiometricExceptionThrower();
       _biometricDataSourceImpl = BiometricDataSourceImpl(_localBiometricService, _biometricExceptionThrower, _sharedPreferences);
     }
 
@@ -126,8 +132,11 @@ void getAvailableBiometric() {
 
       when(_localBiometricService.getAvailableBiometrics()).thenThrow(error);
 
-      await _biometricDataSourceImpl.getAvailableBiometrics()
-          .catchError((error) => expect(error, isA<BiometricNotEnrolled>()));
+      try {
+        await _biometricDataSourceImpl.getAvailableBiometrics();
+      } catch(error) {
+        expect(error, isA<BiometricNotEnrolled>());
+      }
     });
   });
 }
@@ -136,7 +145,7 @@ void getBiometricSetting() {
   group('biometric_data_source_impl getBiometricSetting test', () {
     late BiometricDataSourceImpl _biometricDataSourceImpl;
     MockLocalBiometricService _localBiometricService;
-    MockBiometricExceptionThrower _biometricExceptionThrower;
+    BiometricExceptionThrower _biometricExceptionThrower;
     late SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
@@ -147,7 +156,7 @@ void getBiometricSetting() {
 
       _sharedPreferences = await SharedPreferences.getInstance();
       _localBiometricService = MockLocalBiometricService();
-      _biometricExceptionThrower = MockBiometricExceptionThrower();
+      _biometricExceptionThrower = BiometricExceptionThrower();
       _biometricDataSourceImpl = BiometricDataSourceImpl(_localBiometricService, _biometricExceptionThrower, _sharedPreferences);
     }
 
@@ -169,7 +178,7 @@ void saveBiometricSetting() {
   group('biometric_data_source_impl saveBiometricSetting test', () {
     late BiometricDataSourceImpl _biometricDataSourceImpl;
     MockLocalBiometricService _localBiometricService;
-    MockBiometricExceptionThrower _biometricExceptionThrower;
+    BiometricExceptionThrower _biometricExceptionThrower;
     late SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
@@ -177,7 +186,7 @@ void saveBiometricSetting() {
 
       _sharedPreferences = await SharedPreferences.getInstance();
       _localBiometricService = MockLocalBiometricService();
-      _biometricExceptionThrower = MockBiometricExceptionThrower();
+      _biometricExceptionThrower = BiometricExceptionThrower();
       _biometricDataSourceImpl = BiometricDataSourceImpl(_localBiometricService, _biometricExceptionThrower, _sharedPreferences);
     }
 
@@ -200,7 +209,7 @@ void authenticate() {
   group('biometric_data_source_impl authenticate test', () {
     late BiometricDataSourceImpl _biometricDataSourceImpl;
     late MockLocalBiometricService _localBiometricService;
-    MockBiometricExceptionThrower _biometricExceptionThrower;
+    BiometricExceptionThrower _biometricExceptionThrower;
     SharedPreferences _sharedPreferences;
 
     Future _initDataSource() async {
@@ -208,7 +217,7 @@ void authenticate() {
 
       _sharedPreferences = await SharedPreferences.getInstance();
       _localBiometricService = MockLocalBiometricService();
-      _biometricExceptionThrower = MockBiometricExceptionThrower();
+      _biometricExceptionThrower = BiometricExceptionThrower();
       _biometricDataSourceImpl = BiometricDataSourceImpl(_localBiometricService, _biometricExceptionThrower, _sharedPreferences);
     }
 
@@ -232,8 +241,12 @@ void authenticate() {
 
       when(_localBiometricService.authenticate('Please authenticate to open app')).thenThrow(error);
 
-      await _biometricDataSourceImpl.authenticate('Please authenticate to open app')
-          .catchError((error) => expect(error, isA<BiometricNotEnrolled>()));
+      try {
+        await _biometricDataSourceImpl.authenticate(
+            'Please authenticate to open app');
+      } catch(error) {
+        expect(error, isA<BiometricNotEnrolled>());
+      }
     });
   });
 }

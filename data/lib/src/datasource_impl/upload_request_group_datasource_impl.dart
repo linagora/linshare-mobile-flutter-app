@@ -33,10 +33,10 @@ import 'dart:async';
 
 import 'package:data/src/datasource/upload_request_group_datasource.dart';
 import 'package:data/src/network/linshare_http_client.dart';
+import 'package:data/src/network/model/response/upload_request_group_response.dart';
 import 'package:data/src/network/remote_exception_thrower.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:data/src/network/model/response/upload_request_group_response.dart';
 
 class UploadRequestGroupDataSourceImpl implements UploadRequestGroupDataSource {
   final LinShareHttpClient _linShareHttpClient;
@@ -53,6 +53,8 @@ class UploadRequestGroupDataSourceImpl implements UploadRequestGroupDataSource {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw UploadRequestGroupsNotFound();
+        } else if (error.response?.statusCode == 400) {
+          throw MissingRequiredFields();
         } else {
           throw UnknownError(error.response?.statusMessage);
         }

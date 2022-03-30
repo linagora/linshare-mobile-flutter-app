@@ -32,11 +32,13 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'local_shared_space_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceDocumentDatabaseManager])
 void main() {
   group('test shared spaces dataSource', () {
     late MockSharedSpaceDocumentDatabaseManager _sharedSpaceDocumentDatabaseManager;
@@ -59,12 +61,14 @@ void main() {
     test('getAllSharedSpaces should throw SQLiteDatabaseException when getListSharedSpace response error', () async {
       final error = SQLiteDatabaseException();
 
-      when(_sharedSpaceDocumentDatabaseManager.getListSharedSpace()).thenThrow(error);
+      when(_sharedSpaceDocumentDatabaseManager.getListSharedSpace()).thenThrow(
+          error);
 
-      await _localSharedSpaceDataSourceImpl.getAllSharedSpacesOffline()
-        .catchError((error) {
-          expect(error, isA<SQLiteDatabaseException>());
-        });
+      try {
+        await _localSharedSpaceDataSourceImpl.getAllSharedSpacesOffline();
+      } catch(error) {
+        expect(error, isA<SQLiteDatabaseException>());
+      }
     });
   });
 }
