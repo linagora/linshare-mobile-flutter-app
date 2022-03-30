@@ -68,6 +68,10 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
+        } else if (error.response?.statusCode == 400) {
+          throw MissingRequiredFields();
+        } else if (error.response?.statusCode == 500) {
+          throw InternalServerError();
         } else {
           throw UnknownError(error.response?.statusMessage!);
         }

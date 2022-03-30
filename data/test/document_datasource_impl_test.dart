@@ -34,11 +34,13 @@ import 'package:data/src/network/model/request/copy_body_request.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'document_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient, LinShareDownloadManager, DocumentDatabaseManager])
 void main() {
   getAllDocumentTest();
   shareDocumentTest();
@@ -54,12 +56,12 @@ void getAllDocumentTest() {
   group('document_datasource_impl getAll test', () {
     late MockLinShareHttpClient _linShareHttpClient;
     late DocumentDataSourceImpl _documentDataSourceImpl;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
@@ -83,10 +85,11 @@ void getAllDocumentTest() {
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
-      await _documentDataSourceImpl.getAll()
-          .catchError((error) {
-            expect(error, isA<MissingRequiredFields>());
-          });
+      try {
+        await _documentDataSourceImpl.getAll();
+      } catch(error) {
+        expect(error, isA<MissingRequiredFields>());
+      }
     });
 
     test('getAllDocument should throw DataNotFound when linShareHttpClient response error with 404', () async {
@@ -96,11 +99,11 @@ void getAllDocumentTest() {
       );
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
-
-      await _documentDataSourceImpl.getAll()
-          .catchError((error) {
-            expect(error, isA<DocumentNotFound>());
-          });
+      try {
+        await _documentDataSourceImpl.getAll();
+      } catch(error) {
+        expect(error, isA<DocumentNotFound>());
+      }
     });
 
     test('getAllDocument should throw InternalServerError when linShareHttpClient response error with 500', () async {
@@ -111,10 +114,11 @@ void getAllDocumentTest() {
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
-      await _documentDataSourceImpl.getAll()
-          .catchError((error) {
-            expect(error, isA<InternalServerError>());
-          });
+      try {
+        await _documentDataSourceImpl.getAll();
+      } catch(error) {
+        expect(error, isA<InternalServerError>());
+      }
     });
 
     test('getAllDocument should throw ServerNotFound when linShareHttpClient response server not found', () async {
@@ -122,10 +126,11 @@ void getAllDocumentTest() {
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
-      await _documentDataSourceImpl.getAll()
-          .catchError((error) {
-            expect(error, isA<ServerNotFound>());
-          });
+      try {
+        await _documentDataSourceImpl.getAll();
+      } catch(error) {
+        expect(error, isA<ServerNotFound>());
+      }
     });
 
     test('getAllDocument should throw ConnectError when linShareHttpClient response connect timeout', () async {
@@ -133,20 +138,22 @@ void getAllDocumentTest() {
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(error);
 
-      await _documentDataSourceImpl.getAll()
-          .catchError((error) {
-            expect(error, isA<ConnectError>());
-          });
+      try {
+        await _documentDataSourceImpl.getAll();
+      } catch(error) {
+        expect(error, isA<ConnectError>());
+      }
     });
 
     test('getAllDocument should throw UnknownError when linShareHttpClient throw exception', () async {
       when(_linShareHttpClient.getAllDocument())
           .thenThrow(Exception());
 
-      await _documentDataSourceImpl.getAll()
-          .catchError((error) {
-            expect(error, isA<UnknownError>());
-          });
+      try {
+        await _documentDataSourceImpl.getAll();
+      } catch(error) {
+        expect(error, isA<UnknownError>());
+      }
     });
   });
 }
@@ -156,11 +163,11 @@ void shareDocumentTest() {
     late MockLinShareHttpClient _linShareHttpClient;
     late DocumentDataSourceImpl _documentDataSourceImpl;
     MockLinShareDownloadManager _linShareDownloadManager;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
@@ -273,11 +280,11 @@ void removeDocumentTest() {
     late MockLinShareHttpClient _linShareHttpClient;
     late DocumentDataSourceImpl _documentDataSourceImpl;
     MockLinShareDownloadManager _linShareDownloadManager;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
@@ -301,10 +308,11 @@ void removeDocumentTest() {
       when(_linShareHttpClient.removeDocument(document1.documentId))
           .thenThrow(error);
 
-      await _documentDataSourceImpl.remove(document1.documentId)
-          .catchError((error) {
-            expect(error, isA<DocumentNotFound>());
-          });
+      try {
+        await _documentDataSourceImpl.remove(document1.documentId);
+      } catch(error) {
+        expect(error, isA<DocumentNotFound>());
+      }
     });
 
     test('copy to my space should return success with valid data', () async {
@@ -325,10 +333,11 @@ void removeDocumentTest() {
       when(_linShareHttpClient.copyToMySpace(copyRequest.toCopyBodyRequest()))
           .thenThrow(error);
 
-      await _documentDataSourceImpl.copyToMySpace(copyRequest)
-          .catchError((error) {
-            expect(error, isA<DocumentNotFound>());
-          });
+      try {
+        await _documentDataSourceImpl.copyToMySpace(copyRequest);
+      } catch(error) {
+        expect(error, isA<DocumentNotFound>());
+      }
     });
   });
 }
@@ -337,12 +346,12 @@ void renameDocumentTest() {
   group('rename document test', () {
     late MockLinShareHttpClient _linShareHttpClient;
     late DocumentDataSourceImpl _documentDataSourceImpl;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
@@ -366,10 +375,12 @@ void renameDocumentTest() {
       when(_linShareHttpClient.renameDocument(document1.documentId, RenameDocumentRequest(document1.name)))
           .thenThrow(error);
 
-      await _documentDataSourceImpl.rename(document1.documentId, RenameDocumentRequest(document1.name))
-          .catchError((error) {
-            expect(error, isA<DocumentNotFound>());
-          });
+      try {
+        await _documentDataSourceImpl.rename(
+            document1.documentId, RenameDocumentRequest(document1.name));
+      } catch(error) {
+        expect(error, isA<DocumentNotFound>());
+      }
     });
   });
 }
@@ -378,12 +389,12 @@ void getDocumentTest() {
   group('get document test', () {
     late MockLinShareHttpClient _linShareHttpClient;
     late DocumentDataSourceImpl _documentDataSourceImpl;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
@@ -407,8 +418,12 @@ void getDocumentTest() {
       when(_linShareHttpClient.getDocument(documentDetailsResponse1.documentId))
           .thenThrow(error);
 
-      await _documentDataSourceImpl.getDocument(documentDetailsResponse1.documentId)
-          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+      try {
+        await _documentDataSourceImpl.getDocument(
+            documentDetailsResponse1.documentId);
+      } catch(error) {
+        expect(error, isA<DocumentNotFound>());
+      }
     });
   });
 }
@@ -416,13 +431,13 @@ void getDocumentTest() {
 void editDescriptionDocumentTest() {
   group('edit description document test', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late DocumentDataSourceImpl _documentDataSourceImpl;
     MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _documentDataSourceImpl = DocumentDataSourceImpl(
           _linShareHttpClient,
@@ -447,8 +462,13 @@ void editDescriptionDocumentTest() {
       when(_linShareHttpClient.editDescriptionDocument(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description')))
           .thenThrow(error);
 
-      await _documentDataSourceImpl.editDescription(document1.documentId, EditDescriptionDocumentRequest(document1.name, 'A New Description'))
-          .catchError((error) => expect(error, isA<DocumentNotFound>()));
+      try {
+        await _documentDataSourceImpl.editDescription(document1.documentId,
+            EditDescriptionDocumentRequest(
+                document1.name, 'A New Description'));
+      } catch(error) {
+        expect(error, isA<DocumentNotFound>());
+      }
     });
   });
 }
@@ -495,9 +515,11 @@ void deleteAllOfflineDocumentsTest() {
       final error = SQLiteDatabaseException();
       when(_documentDatabaseManager.deleteAllData()).thenThrow(error);
 
-      await _localDocumentDataSourceImpl.deleteAllData().catchError((error) {
+      try {
+        await _localDocumentDataSourceImpl.deleteAllData();
+      } catch(error) {
         expect(error, isA<SQLiteDatabaseException>());
-      });
+      }
     });
   });
 }

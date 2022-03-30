@@ -30,25 +30,28 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:data/data.dart';
 import 'package:data/src/datasource_impl/quota_datasource_impl.dart';
 import 'package:data/src/network/model/response/account_quota_response.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../fixture/mock/mock_fixtures.dart';
 import '../fixture/quota_fixture.dart';
+import 'quota_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient])
 void main() {
   group('quota_datasource_impl_test', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    late MockRemoteExceptionThrower _remoteExceptionThrower;
+    late RemoteExceptionThrower _remoteExceptionThrower;
     late QuotaDataSourceImpl _quotaDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _quotaDataSourceImpl = QuotaDataSourceImpl(
         _linShareHttpClient,
         _remoteExceptionThrower
@@ -72,20 +75,22 @@ void main() {
       when(_linShareHttpClient.findQuota(quotaId1))
         .thenThrow(error);
 
-      await _quotaDataSourceImpl.findQuota(quotaId1)
-        .catchError((error) {
-          expect(error, isA<QuotaNotFound>());
-        });
+      try {
+        await _quotaDataSourceImpl.findQuota(quotaId1);
+      } catch(error) {
+        expect(error, isA<QuotaNotFound>());
+      }
     });
 
     test('findQuota should throw UnknownError when linShareHttpClient throw exception', () async {
       when(_linShareHttpClient.findQuota(quotaId1))
         .thenThrow(Exception());
 
-      await _quotaDataSourceImpl.findQuota(quotaId1)
-        .catchError((error) {
-          expect(error, isA<UnknownError>());
-        });
+      try {
+        await _quotaDataSourceImpl.findQuota(quotaId1);
+      } catch(error) {
+        expect(error, isA<UnknownError>());
+      }
     });
   });
 }

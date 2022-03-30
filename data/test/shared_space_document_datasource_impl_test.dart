@@ -34,21 +34,23 @@ import 'package:data/src/network/model/request/copy_body_request.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'shared_space_document_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient, LinShareDownloadManager])
 void main() {
   group('test shared spaces documents', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    late RemoteExceptionThrower _remoteExceptionThrower;
     late SharedSpaceDocumentDataSourceImpl _sharedSpaceDataSourceImpl;
-    MockLinShareDownloadManager _linShareDownloadManager;
+    late MockLinShareDownloadManager _linShareDownloadManager;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _linShareDownloadManager = MockLinShareDownloadManager();
       _sharedSpaceDataSourceImpl = SharedSpaceDocumentDataSourceImpl(
           _linShareHttpClient,
@@ -73,11 +75,11 @@ void main() {
       when(_linShareHttpClient.getWorkGroupChildNodes(sharedSpaceId1))
           .thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getAllChildNodes(sharedSpaceId1)
-          .catchError((error) {
-            expect(error, isA<GetChildNodesNotFoundException>());
-          });;
-
+      try {
+        await _sharedSpaceDataSourceImpl.getAllChildNodes(sharedSpaceId1);
+      } catch(error) {
+        expect(error, isA<GetChildNodesNotFoundException>());
+      }
     });
 
     test('Copy To SharedSpace Should Return Success Copied Document', () async {
@@ -116,12 +118,14 @@ void main() {
           sharedSpaceId1,
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.copyToSharedSpace(
-          CopyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
-          sharedSpaceId1
-      ).catchError((error) {
+      try {
+        await _sharedSpaceDataSourceImpl.copyToSharedSpace(
+            CopyRequest(document1.documentId.uuid, SpaceType.SHARED_SPACE),
+            sharedSpaceId1
+        );
+      } catch(error) {
         expect(error, isA<WorkGroupNodeNotFoundException>());
-      });;
+      }
     });
 
     test('Remove Shared Space Node Should Return Success Deleted Node', () async {
@@ -149,12 +153,14 @@ void main() {
         sharedSpaceFolder1.workGroupNodeId
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.removeSharedSpaceNode(
-        sharedSpaceFolder1.sharedSpaceId,
-        sharedSpaceFolder1.workGroupNodeId
-      ).catchError((error) {
+      try {
+        await _sharedSpaceDataSourceImpl.removeSharedSpaceNode(
+            sharedSpaceFolder1.sharedSpaceId,
+            sharedSpaceFolder1.workGroupNodeId
+        );
+      } catch(error) {
         expect(error, isA<WorkGroupNodeNotFoundException>());
-      });
+      }
     });
 
     test('Create Folder Should Return Success Created Folder', () async {
@@ -218,17 +224,19 @@ void main() {
     test('Created Folder Should Throw Exception When Fail', () async {
       final error = DioError(type: DioErrorType.response, response: Response(statusCode: 404, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: ''));
       when(_linShareHttpClient.createSharedSpaceNodeFolder(
-        sharedSpaceFolder1.sharedSpaceId,
-        CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId)
+        argThat(isA<SharedSpaceId>()),
+        argThat(isA<CreateSharedSpaceNodeFolderRequest>())
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl
+      try {
+        await _sharedSpaceDataSourceImpl
           .createSharedSpaceFolder(
             sharedSpaceFolder1.sharedSpaceId,
             CreateSharedSpaceNodeFolderRequest('Dat is good', sharedSpaceFolder1.workGroupNodeId)
-          ).catchError((error) {
-            expect(error, isA<WorkGroupNodeNotFoundException>());
-          });
+        );
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
     test('Rename Shared Space Node Should Return Success Renamed Node', () async {
@@ -259,13 +267,16 @@ void main() {
           RenameWorkGroupNodeBodyRequest(workGroupDocumentDto.name, WorkGroupNodeType.DOCUMENT)
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.renameSharedSpaceNode(
-          workGroupDocumentDto.sharedSpaceId,
-          workGroupDocumentDto.workGroupNodeId,
-          RenameWorkGroupNodeRequest(workGroupDocumentDto.name!, WorkGroupNodeType.DOCUMENT)
-      ).catchError((error) {
+      try {
+        await _sharedSpaceDataSourceImpl.renameSharedSpaceNode(
+            workGroupDocumentDto.sharedSpaceId,
+            workGroupDocumentDto.workGroupNodeId,
+            RenameWorkGroupNodeRequest(
+                workGroupDocumentDto.name!, WorkGroupNodeType.DOCUMENT)
+        );
+      } catch(error) {
         expect(error, isA<WorkGroupNodeNotFoundException>());
-      });
+      }
     });
 
     test('Get Shared Space Node Should Return Success Node', () async {
@@ -293,12 +304,14 @@ void main() {
           workGroupDocumentDto.workGroupNodeId,
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getWorkGroupNode(
+      try {
+        await _sharedSpaceDataSourceImpl.getWorkGroupNode(
           workGroupDocumentDto.sharedSpaceId,
           workGroupDocumentDto.workGroupNodeId,
-      ).catchError((error) {
+        );
+      } catch(error) {
         expect(error, isA<WorkGroupNodeNotFoundException>());
-      });
+      }
     });
 
     test('GetWorkGroupNode With hasTreePath is true Should Return Success Node', () async {
@@ -329,13 +342,15 @@ void main() {
         hasTreePath: true
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getWorkGroupNode(
-        workGroupFolderDto.sharedSpaceId,
-        workGroupFolderDto.workGroupNodeId,
-        hasTreePath: true
-      ).catchError((error) {
+      try {
+        await _sharedSpaceDataSourceImpl.getWorkGroupNode(
+            workGroupFolderDto.sharedSpaceId,
+            workGroupFolderDto.workGroupNodeId,
+            hasTreePath: true
+        );
+      } catch(error) {
         expect(error, isA<WorkGroupNodeNotFoundException>());
-      });
+      }
     });
 
     test('getRealSharedSpaceRootNode should return success with complete data', () async {
@@ -363,10 +378,12 @@ void main() {
           hasTreePath: true
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getRealSharedSpaceRootNode(sharedSpaceId1)
-          .catchError((error) {
+      try {
+        await _sharedSpaceDataSourceImpl.getRealSharedSpaceRootNode(
+            sharedSpaceId1);
+      } catch(error) {
         expect(error, isA<SharedSpaceNodeNotFound>());
-      });
+      }
     });
 
     test('getRealSharedSpaceRootNode should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
@@ -380,10 +397,12 @@ void main() {
           hasTreePath: true
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getRealSharedSpaceRootNode(sharedSpaceId1)
-          .catchError((error) {
+      try {
+        await _sharedSpaceDataSourceImpl.getRealSharedSpaceRootNode(
+            sharedSpaceId1);
+      } catch(error) {
         expect(error, isA<NotAuthorized>());
-      });
+      }
     });
 
     test('Move Shared Space Node Should Return Success Node', () async {
@@ -411,12 +430,13 @@ void main() {
           sharedSpaceId1
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.moveWorkgroupNode(
-          moveWorkGroupNodeRequest,
-          sharedSpaceId1
-      ).catchError((error) {
+      try {
+        await _sharedSpaceDataSourceImpl.moveWorkgroupNode(
+            moveWorkGroupNodeRequest,
+            sharedSpaceId1);
+      } catch(error) {
         expect(error, isA<WorkGroupNodeNotFoundException>());
-      });
+      }
     });
 
   });

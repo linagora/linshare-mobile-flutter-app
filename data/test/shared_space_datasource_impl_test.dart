@@ -34,20 +34,22 @@ import 'package:data/src/network/model/sharedspace/versioning_parameter_dto.dart
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import 'fixture/mock/mock_fixtures.dart';
+import 'shared_space_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient])
 void main() {
   group('test shared spaces dataSource', () {
     late MockLinShareHttpClient _linShareHttpClient;
-    MockRemoteExceptionThrower _remoteExceptionThrower;
+    RemoteExceptionThrower _remoteExceptionThrower;
     late SharedSpaceDataSourceImpl _sharedSpaceDataSourceImpl;
 
     setUp(() {
       _linShareHttpClient = MockLinShareHttpClient();
-      _remoteExceptionThrower = MockRemoteExceptionThrower();
+      _remoteExceptionThrower = RemoteExceptionThrower();
       _sharedSpaceDataSourceImpl = SharedSpaceDataSourceImpl(
         _linShareHttpClient,
         _remoteExceptionThrower
@@ -70,10 +72,11 @@ void main() {
       when(_linShareHttpClient.getSharedSpaces())
           .thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getSharedSpaces()
-          .catchError((error) {
-            expect(error, isA<SharedSpaceNotFound>());
-          });
+      try {
+        await _sharedSpaceDataSourceImpl.getSharedSpaces();
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
     test('getAllSharedSpaces should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
@@ -84,10 +87,11 @@ void main() {
       when(_linShareHttpClient.getSharedSpaces())
           .thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getSharedSpaces()
-          .catchError((error) {
-            expect(error, isA<NotAuthorized>());
-          });
+      try {
+        await _sharedSpaceDataSourceImpl.getSharedSpaces();
+      } catch(error) {
+        expect(error, isA<NotAuthorized>());
+      }
     });
 
     test('delete shared space should return success with valid data', () async {
@@ -106,10 +110,12 @@ void main() {
       when(_linShareHttpClient.deleteSharedSpace(sharedSpace1.sharedSpaceId))
           .thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.deleteSharedSpace(sharedSpace1.sharedSpaceId)
-          .catchError((error) {
-            expect(error, isA<SharedSpaceNotFound>());
-          });
+      try {
+        await _sharedSpaceDataSourceImpl.deleteSharedSpace(
+            sharedSpace1.sharedSpaceId);
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
     test('delete shared space should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
@@ -120,10 +126,12 @@ void main() {
       when(_linShareHttpClient.deleteSharedSpace(sharedSpace1.sharedSpaceId))
           .thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.deleteSharedSpace(sharedSpace1.sharedSpaceId)
-          .catchError((error) {
-            expect(error, isA<NotAuthorized>());
-          });
+      try {
+        await _sharedSpaceDataSourceImpl.deleteSharedSpace(
+            sharedSpace1.sharedSpaceId);
+      } catch(error) {
+        expect(error, isA<NotAuthorized>());
+      }
     });
 
     test('getSharedSpace should return success with valid data', () async {
@@ -159,10 +167,11 @@ void main() {
         sharedSpaceId1
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getSharedSpace(sharedSpaceId1)
-          .catchError((error) {
-            expect(error, isA<SharedSpaceNotFound>());
-          });
+      try {
+        await _sharedSpaceDataSourceImpl.getSharedSpace(sharedSpaceId1);
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
     test('getSharedSpace should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
@@ -173,10 +182,11 @@ void main() {
       when(_linShareHttpClient.getSharedSpace(sharedSpaceId1))
           .thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.getSharedSpace(sharedSpaceId1)
-          .catchError((error) {
-            expect(error, isA<NotAuthorized>());
-          });
+      try {
+        await _sharedSpaceDataSourceImpl.getSharedSpace(sharedSpaceId1);
+      } catch(error) {
+        expect(error, isA<NotAuthorized>());
+      }
     });
 
     test('create shared space work group should return success with valid data', () async {
@@ -195,10 +205,13 @@ void main() {
       when(_linShareHttpClient.createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
           .thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))
-          .catchError((error) {
-            expect(error, isA<SharedSpaceNotFound>());
-          });
+      try {
+        await _sharedSpaceDataSourceImpl.createSharedSpaceWorkGroup(
+            CreateWorkGroupRequest(
+                sharedSpace1.name, LinShareNodeType.WORK_GROUP));
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
     test('create shared space should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
@@ -209,10 +222,13 @@ void main() {
       when(_linShareHttpClient.createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
           .thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.createSharedSpaceWorkGroup(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP))
-          .catchError((error) {
-            expect(error, isA<NotAuthorized>());
-          });
+      try {
+        await _sharedSpaceDataSourceImpl.createSharedSpaceWorkGroup(
+            CreateWorkGroupRequest(
+                sharedSpace1.name, LinShareNodeType.WORK_GROUP));
+      } catch(error) {
+        expect(error, isA<NotAuthorized>());
+      }
     });
 
     test('Rename WorkGroup Should Return Success Renamed', () async {
@@ -240,10 +256,16 @@ void main() {
         RenameWorkGroupBodyRequest(sharedSpace1.name, VersioningParameterDto(sharedSpace1.versioningParameters.enable), sharedSpace1.nodeType!)
       )).thenThrow(error);
 
-      await _sharedSpaceDataSourceImpl.renameWorkGroup(
-        sharedSpace1.sharedSpaceId,
-        RenameWorkGroupRequest(sharedSpace1.name, sharedSpace1.versioningParameters, sharedSpace1.nodeType!)
-      ).catchError((error) => expect(error, isA<SharedSpaceNotFound>()));
+      try {
+        await _sharedSpaceDataSourceImpl.renameWorkGroup(
+            sharedSpace1.sharedSpaceId,
+            RenameWorkGroupRequest(
+                sharedSpace1.name, sharedSpace1.versioningParameters,
+                sharedSpace1.nodeType!)
+        );
+      } catch(error) {
+        expect(error, isA<SharedSpaceNotFound>());
+      }
     });
 
   });

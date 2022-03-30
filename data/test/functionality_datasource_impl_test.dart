@@ -34,12 +34,14 @@ import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
 import 'fixture/functionality_fixture.dart';
-import 'fixture/mock/mock_fixtures.dart';
+import 'functionality_datasource_impl_test.mocks.dart';
 
+@GenerateMocks([LinShareHttpClient])
 void main() {
   late LinShareHttpClient linShareHttpClient;
   RemoteExceptionThrower remoteExceptionThrower;
@@ -47,7 +49,7 @@ void main() {
 
   setUp(() {
     linShareHttpClient = MockLinShareHttpClient();
-    remoteExceptionThrower = MockRemoteExceptionThrower();
+    remoteExceptionThrower = RemoteExceptionThrower();
     functionalityDataSourceImpl = FunctionalityDataSourceImpl(linShareHttpClient, remoteExceptionThrower);
   });
 
@@ -66,9 +68,10 @@ void main() {
     );
     when(linShareHttpClient.getAllFunctionality()).thenThrow(error);
 
-    await functionalityDataSourceImpl.getAll()
-      .catchError((error) {
-        expect(error, isA<NotAuthorized>());
-      });
+    try {
+      await functionalityDataSourceImpl.getAll();
+    } catch(error) {
+      expect(error, isA<NotAuthorized>());
+    }
   });
 }

@@ -30,14 +30,17 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'package:data/data.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/linshare_http_client.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../fixture/mock/mock_fixtures.dart';
+import 'linshare_http_client_test.mocks.dart';
 
+@GenerateMocks([DioClient])
 void main() {
   group('linshare_http_client_test', () {
     late MockDioClient dioClient;
@@ -61,9 +64,11 @@ void main() {
       when(dioClient.get(Endpoint.documents.generateEndpointPath()))
           .thenThrow(Exception());
 
-      await linShareHttpClient.getAllDocument().catchError((error) {
+      try {
+        await linShareHttpClient.getAllDocument();
+      } catch(error) {
         expect(error, isA<Exception>());
-      });
+      }
     });
   });
 }
