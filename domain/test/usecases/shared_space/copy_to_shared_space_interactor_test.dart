@@ -33,11 +33,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/mock_shared_space_document_repository.dart';
+import 'copy_to_shared_space_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceDocumentRepository])
 void main() {
   group('copy_to_shared_space_interactor tests', () {
     late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;

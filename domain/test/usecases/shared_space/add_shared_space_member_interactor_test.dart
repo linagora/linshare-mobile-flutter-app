@@ -33,11 +33,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/shared_space/mock_shared_space_member_repository.dart';
+import 'add_shared_space_member_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceMemberRepository])
 void main() {
   group('add_shared_space_member_interactor test', () {
     late MockSharedSpaceMemberRepository sharedSpaceMemberRepository;
@@ -63,8 +65,10 @@ void main() {
       final result = await addSharedSpaceMemberInteractor.execute(sharedSpaceId1, request);
       final sharedSpaceMember = result
           .map((success) => (success as AddSharedSpaceMemberViewState).member)
-          .getOrElse((() => null) as SharedSpaceMember Function());
-      expect(sharedSpaceMember, sharedSpaceMember1);
+          .fold(
+            (left) => throw Exception('[test failed]: ${left.toString()}'),
+            (right) => expect(right, sharedSpaceMember1)
+          );
     });
 
     test('add_shared_space_member_interactor should fail when addMember fail', () async {

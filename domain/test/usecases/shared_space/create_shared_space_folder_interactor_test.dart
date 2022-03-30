@@ -34,11 +34,13 @@ import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/shared_space_document_fixture.dart';
 
-import '../../mock/repository/mock_shared_space_document_repository.dart';
+import 'create_shared_space_folder_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceDocumentRepository])
 void main() {
   group('create_shared_space_folder_interactor test', () {
     late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;
@@ -61,10 +63,11 @@ void main() {
         request
       );
 
-      final WorkGroupFolder? folder = result
-          .map((success) => (success as CreateSharedSpaceFolderViewState).workGroupFolder)
-          .getOrElse((() => null) as WorkGroupFolder Function());
-      expect(folder, workGroupFolder1);
+      result
+        .map((success) => (success as CreateSharedSpaceFolderViewState).workGroupFolder)
+        .fold(
+          (l) => throw Exception('test failed'),
+          (r) => expect(r, workGroupFolder1));
     });
 
     test('Create Shared Space Folder should return success with valid data no parent id', () async {
@@ -80,10 +83,11 @@ void main() {
         requestNoParentId
       );
 
-      final workGroups = result
-          .map((success) => (success as CreateSharedSpaceFolderViewState).workGroupFolder)
-          .getOrElse((() => null) as WorkGroupFolder Function());
-      expect(workGroups, workGroupFolder1);
+      result
+        .map((success) => (success as CreateSharedSpaceFolderViewState).workGroupFolder)
+        .fold(
+          (l) => throw Exception('test failed'),
+          (r) => expect(r, workGroupFolder1));
     });
 
     test('Create Shared Space Folder interactor should fail when createSharedSpaceFolder fail', () async {

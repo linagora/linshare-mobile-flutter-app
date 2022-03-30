@@ -32,11 +32,13 @@
 
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/my_space_fixture.dart';
 
-import '../../mock/repository/authentication/mock_document_repository.dart';
+import 'remove_multiple_documents_interactor_test.mocks.dart';
 
+@GenerateMocks([DocumentRepository])
 void main() {
   group('remove_multiple_documents_interactor tests', () {
     late MockDocumentRepository documentRepository;

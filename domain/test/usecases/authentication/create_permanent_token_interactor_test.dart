@@ -33,22 +33,21 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/authentication/mock_api_repository.dart';
-import '../../mock/repository/authentication/mock_authentication_repository.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
+import 'create_permanent_token_interactor_test.mocks.dart';
 
+@GenerateMocks([AuthenticationRepository, TokenRepository, CredentialRepository, APIRepository])
 void main() {
 
   group('create_permanent_token_interactor_test', () {
     late CreatePermanentTokenInteractor createPermanentTokenInteractor;
-    late MockAuthenticationRepository authenticationRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
-    MockAPIRepository apiRepository;
+    late AuthenticationRepository authenticationRepository;
+    late TokenRepository tokenRepository;
+    late CredentialRepository credentialRepository;
+    late APIRepository apiRepository;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
@@ -66,6 +65,8 @@ void main() {
     test('createPermanentTokenInteractor should return success with correct data', () async {
       when(authenticationRepository.createPermanentToken(linShareBaseUrl, APIVersionSupported.v5, userName1, password1))
           .thenAnswer((_) async => permanentToken);
+      when(tokenRepository.persistToken(permanentToken)).thenAnswer((_) => Future.delayed(Duration(milliseconds: 100)));
+      when(credentialRepository.saveBaseUrl(linShareBaseUrl)).thenAnswer((_) => Future.delayed(Duration(milliseconds: 100)));
       final result = await createPermanentTokenInteractor.execute(linShareBaseUrl, userName1, password1);
       expect(result, Right<Failure, Success>(AuthenticationViewState(permanentToken, APIVersionSupported.v4)));
     });
