@@ -35,11 +35,13 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/received/received_share_view_state.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/received/mock_received_share_repository.dart';
+import 'get_received_share_interactor_test.mocks.dart';
 
+@GenerateMocks([ReceivedShareRepository])
 void main() {
   group('get_all_received_interactor', () {
     late MockReceivedShareRepository receivedShareRepository;

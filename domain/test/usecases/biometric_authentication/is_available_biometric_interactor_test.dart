@@ -31,10 +31,12 @@
 
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../mock/repository/biometric_authentication/mock_biometric_repository.dart';
+import 'authentication_biometric_interactor_test.mocks.dart';
 
+@GenerateMocks([BiometricRepository])
 void main() {
   group('is_available_biometric_interactor_test', () {
     late MockBiometricRepository biometricRepository;

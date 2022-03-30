@@ -33,12 +33,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/authentication/mock_authentication_repository.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
+import 'get_authorized_user_interactor_test.mocks.dart';
 
+@GenerateMocks([AuthenticationRepository, CredentialRepository])
 void main() {
 
   group('get_authorized_user_interactor_test', () {

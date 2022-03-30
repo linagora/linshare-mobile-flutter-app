@@ -33,12 +33,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/mock_upload_request_group_repository.dart';
+import 'add_recipients_upload_request_group_interactor_test.mocks.dart';
 
+@GenerateMocks([UploadRequestGroupRepository])
 void main() {
   group('add_recipients_upload_request_group_interactor test', () {
     late MockUploadRequestGroupRepository uploadRequestGroupRepository;
@@ -60,11 +62,11 @@ void main() {
         [genericUser1, genericUser]
       );
 
-      final uploadRequestGroup = result
-          .map((success) => (success as AddRecipientsToUploadRequestGroupViewState).uploadRequestGroup)
-          .getOrElse((() => null) as UploadRequestGroup Function());
-
-      expect(uploadRequestGroup, uploadRequestGroup1);
+      result
+        .map((success) => (success as AddRecipientsToUploadRequestGroupViewState).uploadRequestGroup)
+        .fold(
+          (left) => throw Exception('[test failed] + ${left.toString()}'),
+          (right) => expect(right, uploadRequestGroup1));
     });
 
     test('addRecipientsToUploadRequestGroupInteractor should fail when addRecipients fail', () async {

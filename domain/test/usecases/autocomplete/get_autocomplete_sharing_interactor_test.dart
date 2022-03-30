@@ -33,11 +33,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/mock_autocomplete_repository.dart';
+import 'get_autocomplete_sharing_interactor_test.mocks.dart';
 
+@GenerateMocks([AutoCompleteRepository])
 void main() {
   group('get_autocomplete_sharing_interactor_test', () {
     late AutoCompleteRepository autoCompleteRepository;

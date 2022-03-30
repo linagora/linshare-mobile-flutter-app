@@ -34,11 +34,13 @@ import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/shared_space/mock_shared_space_repository.dart';
+import 'create_work_group_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceRepository])
 void main() {
   group('create_work_group_interactor test', () {
     late MockSharedSpaceRepository sharedSpaceRepository;
@@ -55,10 +57,11 @@ void main() {
 
       final result = await createWorkGroupInteractor.execute(CreateWorkGroupRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP));
 
-      final SharedSpaceNodeNested? sharedSpace = result
-          .map((success) => (success as CreateWorkGroupViewState).sharedSpaceNodeNested)
-          .getOrElse((() => null) as SharedSpaceNodeNested Function());
-      expect(sharedSpace, sharedSpaceResponse1.toSharedSpaceNodeNested());
+      result
+        .map((success) => (success as CreateWorkGroupViewState).sharedSpaceNodeNested)
+        .fold(
+          (left) => throw Exception('[Test failed]: ${left.toString()}'),
+          (right) => expect(right, sharedSpaceResponse1.toSharedSpaceNodeNested()));
     });
 
     test('Create Work Group interactor should fail when createSharedSpaceWorkGroup fail', () async {
