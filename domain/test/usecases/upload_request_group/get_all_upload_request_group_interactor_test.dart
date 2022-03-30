@@ -33,11 +33,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/upload_request_group_fixture.dart';
 
-import '../../mock/repository/mock_upload_request_group_repository.dart';
+import 'get_all_upload_request_group_interactor_test.mocks.dart';
 
+@GenerateMocks([UploadRequestGroupRepository])
 void main() {
   group('get_all_upload_request_group_interactor_test', () {
     late MockUploadRequestGroupRepository uploadRequestGroupRepository;

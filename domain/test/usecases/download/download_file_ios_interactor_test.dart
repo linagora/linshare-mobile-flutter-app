@@ -34,14 +34,14 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_document_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
+import 'download_file_ios_interactor_test.mocks.dart';
 
+@GenerateMocks([DocumentRepository, TokenRepository, CredentialRepository])
 void main() {
   group('download_file_ios_interactor_test', () {
     late MockDocumentRepository documentRepository;

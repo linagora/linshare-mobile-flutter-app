@@ -34,11 +34,13 @@ import 'package:domain/src/repository/contact/contact_repository.dart';
 import 'package:domain/src/usecases/contact/get_device_contact_suggestions_interactor.dart';
 import 'package:domain/src/usecases/contact/get_device_contact_suggestions_view_state.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/mock_contact_repository.dart';
+import '../autocomplete/get_autocomplete_sharing_with_device_contact_interactor_test.mocks.dart';
 
+@GenerateMocks([ContactRepository])
 void main() {
   group('get_device_contact_suggestions_interactor_test', () {
     late ContactRepository contactRepository;

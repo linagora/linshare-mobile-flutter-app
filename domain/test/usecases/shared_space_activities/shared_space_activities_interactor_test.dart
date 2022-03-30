@@ -32,12 +32,14 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/shared_space_activities/mock_shared_space_activities_repository.dart';
+import 'shared_space_activities_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceActivitiesRepository])
 void main() {
   group('test shared space activities interactor', () {
     late MockSharedSpaceActivitiesRepository _sharedSpaceActivitiesRepository;

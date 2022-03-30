@@ -33,13 +33,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/authentication/mock_api_repository.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
+import '../authentication/get_credential_interactor_test.mocks.dart';
 
+@GenerateMocks([TokenRepository, CredentialRepository, APIRepository])
 void main() {
 
   group('get_credential_interactor_test', () {

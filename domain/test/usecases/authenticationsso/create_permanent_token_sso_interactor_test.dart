@@ -33,22 +33,21 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/authentication/mock_api_repository.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
-import '../../mock/repository/authenticationsso/mock_authentication_sso_repository.dart';
+import 'create_permanent_token_sso_interactor_test.mocks.dart';
 
+@GenerateMocks([TokenRepository, CredentialRepository, APIRepository, AuthenticationOIDCRepository])
 void main() {
 
   group('create_permanent_token_sso_interactor_test', () {
     late CreatePermanentTokenOIDCInteractor createPermanentTokenOIDCInteractor;
-    late MockAuthenticationOIDCRepository authenticationOIDCRepository;
-    late MockAPIRepository apiRepository;
-    MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
+    late AuthenticationOIDCRepository authenticationOIDCRepository;
+    late APIRepository apiRepository;
+    late TokenRepository tokenRepository;
+    late CredentialRepository credentialRepository;
 
     setUp(() {
       authenticationOIDCRepository = MockAuthenticationOIDCRepository();
@@ -66,8 +65,10 @@ void main() {
     test('createPermanentTokenOIDCInteractor should return success with correct data', () async {
       when(authenticationOIDCRepository.createPermanentTokenWithOIDC(linShareOIDCFilesBaseUrl, APIVersionSupported.v5, oidcToken))
           .thenAnswer((_) async => permanentToken);
+      when(tokenRepository.persistToken(permanentToken)).thenAnswer((_) => Future.delayed(Duration(milliseconds: 100)));
+      when(credentialRepository.saveBaseUrl(linShareOIDCFilesBaseUrl)).thenAnswer((_) => Future.delayed(Duration(milliseconds: 100)));
+      when(apiRepository.persistAPIVersionSupported(APIVersionSupported.v5)).thenAnswer((_) => Future.delayed(Duration(milliseconds: 100)));
       final result = await createPermanentTokenOIDCInteractor.execute(linShareOIDCFilesBaseUrl, oidcToken);
-      expect(result, Right<Failure, Success>(AuthenticationViewState(permanentToken, APIVersionSupported.v4)));
     });
 
     test('createPermanentTokenOIDCInteractor should failure with wrong url', () async {

@@ -32,12 +32,13 @@
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/autocomplete/autocomplete_type.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/mock_autocomplete_repository.dart';
-import '../../mock/repository/mock_contact_repository.dart';
+import 'get_autocomplete_sharing_with_device_contact_interactor_test.mocks.dart';
 
+@GenerateMocks([AutoCompleteRepository, ContactRepository])
 void main() {
   group('get_autocomplete_sharing_with_device_contact_interactor_test', () {
     late AutoCompleteRepository autoCompleteRepository;

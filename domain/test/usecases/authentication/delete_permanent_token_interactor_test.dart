@@ -35,20 +35,20 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/authentication/logout_exception.dart';
 import 'package:domain/src/usecases/authentication/logout_view_state.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/authentication/mock_authentication_repository.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
+import 'delete_permanent_token_interactor_test.mocks.dart';
 
+@GenerateMocks([AuthenticationRepository, TokenRepository, CredentialRepository])
 void main() {
 
   group('delete_permanent_token_interactor_test', () {
     late DeletePermanentTokenInteractor deletePermanentTokenInteractor;
     late MockAuthenticationRepository authenticationRepository;
     late MockTokenRepository tokenRepository;
-    MockCredentialRepository credentialRepository;
+    late MockCredentialRepository credentialRepository;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
@@ -62,6 +62,7 @@ void main() {
 
     test('deletePermanentTokenInteractor should success with correct token', () async {
       when(tokenRepository.getToken()).thenAnswer((_) async => token);
+      when(tokenRepository.removeToken()).thenAnswer((_) => Future.delayed(Duration(milliseconds: 100)));
       when(authenticationRepository.deletePermanentToken(token))
           .thenAnswer((_) async => true);
       final result = await deletePermanentTokenInteractor.execute();

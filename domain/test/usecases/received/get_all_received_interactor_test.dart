@@ -35,11 +35,13 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/received/received_share_view_state.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/received/mock_received_share_repository.dart';
+import 'get_all_received_interactor_test.mocks.dart';
 
+@GenerateMocks([ReceivedShareRepository])
 void main() {
   group('get_all_received_interactor', () {
     late MockReceivedShareRepository receivedShareRepository;
@@ -52,13 +54,16 @@ void main() {
 
     test('get all receives interactor should return success with receive list', () async {
       when(receivedShareRepository.getAllReceivedShares()).thenAnswer((_) async => [receivedShare1, receivedShare2]);
+      when(receivedShareRepository.getAllReceivedShareOffline()).thenAnswer((_) async => []);
+      when(receivedShareRepository.getReceivedShareOffline(receivedShare1.shareId)).thenAnswer((_) async => null);
+      when(receivedShareRepository.getReceivedShareOffline(receivedShare2.shareId)).thenAnswer((_) async => null);
 
       final result = await getAllReceivedSharesInteractor.execute();
 
-      final sharedSpacesList = result.map((success) => (success as GetAllReceivedShareSuccess).receivedShares)
-          .getOrElse(() => []);
-
-      expect(sharedSpacesList, containsAllInOrder([receivedShare1, receivedShare2]));
+      result.map((success) => (success as GetAllReceivedShareSuccess).receivedShares)
+        .fold(
+          (left) => throw Exception('test failed ' + left.toString()),
+          (right) => expect(right, containsAllInOrder([receivedShare1, receivedShare2])));
     });
 
 

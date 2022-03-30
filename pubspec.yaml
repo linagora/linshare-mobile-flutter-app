@@ -34,7 +34,7 @@ dependencies:
 
   # Http client
   dio: 4.0.0
-  json_annotation: 4.0.1
+  json_annotation: 4.4.0
 
   #get_it
   get_it: 7.1.3
@@ -46,13 +46,13 @@ dependencies:
   redux_thunk: 0.4.0
 
   #  either
-  dartz: 0.10.0-nullsafety.1
+  dartz: 0.10.1
 
   # shared_preferences
-  shared_preferences: 2.0.5
+  shared_preferences: 2.0.13
 
   #rxdart
-  rxdart: 0.26.0
+  rxdart: 0.27.3
 
   # device_info
   device_info: 2.0.0
@@ -70,13 +70,13 @@ dependencies:
   receive_sharing_intent: 1.4.5
 
   # intl
-  intl_generator: 0.2.0+0
+  intl_generator: 0.2.1
 
   # flutter_svg
   flutter_svg: 0.22.0
 
   # flutter_downloader
-  flutter_downloader: 1.7.0
+  flutter_downloader: 1.7.3
 
   #filesize
   filesize: 2.0.1
@@ -106,7 +106,7 @@ dependencies:
   pin_code_fields: 7.2.0
 
   # local_auth
-  local_auth: 1.1.5
+  local_auth: 1.1.11
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -130,9 +130,9 @@ dev_dependencies:
     sdk: flutter
   flutter_driver:
     sdk: flutter
-  build_runner: 2.0.1
-  json_serializable: 4.1.1
-  mockito: 5.0.10
+  build_runner: 2.1.7
+  json_serializable: 6.1.4
+  mockito: 5.0.17
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

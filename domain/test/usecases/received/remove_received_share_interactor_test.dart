@@ -32,11 +32,13 @@
 
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/received_share_fixture.dart';
 
-import '../../mock/repository/received/mock_received_share_repository.dart';
+import 'remove_received_share_interactor_test.mocks.dart';
 
+@GenerateMocks([ReceivedShareRepository])
 void main() {
   group('remove_received_share_interactor_test', () {
     late RemoveReceivedShareInteractor removeReceivedShareInteractor;

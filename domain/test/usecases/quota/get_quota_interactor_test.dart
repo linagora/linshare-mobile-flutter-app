@@ -34,11 +34,13 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/quota/get_quota_interactor.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/quota/mock_quota_repository.dart';
+import 'get_quota_interactor_test.mocks.dart';
 
+@GenerateMocks([QuotaRepository])
 void main() {
   group('get_quota_interactor_test', () {
     late MockQuotaRepository quotaRepository;
