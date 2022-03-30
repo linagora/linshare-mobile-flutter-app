@@ -35,14 +35,14 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/shared_space/download_node_ios_interactor.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
-import '../../mock/repository/mock_shared_space_document_repository.dart';
+import 'download_node_ios_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceDocumentRepository, TokenRepository, CredentialRepository])
 void main() {
   group('download_node_ios_interactor_test', () {
     late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;

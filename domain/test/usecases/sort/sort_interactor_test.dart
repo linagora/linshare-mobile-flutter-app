@@ -33,12 +33,14 @@
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/sort/sort_interactor.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/mock_sort_repository.dart';
+import 'sort_interactor_test.mocks.dart';
 
+@GenerateMocks([SortRepository])
 void main() {
   group('sort_interactor_test', () {
     late MockSortRepository sortRepository;

@@ -32,14 +32,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/mock_shared_space_document_repository.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
+import 'make_available_offline_shared_space_document_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceDocumentRepository, TokenRepository, CredentialRepository])
 void main() {
   group('MakeAvailableOfflineSharedSpaceDocumentInteractor test', () {
     late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;

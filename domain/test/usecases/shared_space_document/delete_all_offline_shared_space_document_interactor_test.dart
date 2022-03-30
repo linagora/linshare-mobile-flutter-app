@@ -32,10 +32,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../mock/repository/mock_shared_space_document_repository.dart';
+import 'delete_all_offline_shared_space_document_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceDocumentRepository])
 void main() {
   group('DeleteAllSharedSpaceOfflineInteractor test', () {
     late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;

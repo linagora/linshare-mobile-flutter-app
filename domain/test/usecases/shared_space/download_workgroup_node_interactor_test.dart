@@ -35,15 +35,14 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/shared_space/download_workgroup_node_interactor.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/fixture/shared_space_document_fixture.dart';
 
 import '../../fixture/test_fixture.dart';
-import '../../mock/repository/authentication/mock_api_repository.dart';
-import '../../mock/repository/authentication/mock_credential_repository.dart';
-import '../../mock/repository/authentication/mock_token_repository.dart';
-import '../../mock/repository/mock_shared_space_document_repository.dart';
+import 'download_workgroup_node_interactor_test.mocks.dart';
 
+@GenerateMocks([SharedSpaceDocumentRepository, CredentialRepository, TokenRepository, APIRepository])
 void main() {
   group('download_workgroup_node_interactor_test', () {
     late MockSharedSpaceDocumentRepository sharedSpaceDocumentRepository;

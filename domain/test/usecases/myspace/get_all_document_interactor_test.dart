@@ -35,11 +35,13 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/usecases/myspace/get_all_document_interactor.dart';
 import 'package:domain/src/usecases/myspace/my_space_view_state.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/authentication/mock_document_repository.dart';
+import 'get_all_document_interactor_test.mocks.dart';
 
+@GenerateMocks([DocumentRepository])
 void main() {
   group('get_all_document_interactor_test', () {
     late MockDocumentRepository documentRepository;
@@ -52,15 +54,17 @@ void main() {
 
     test('getAllDocumentInteractor should return success with documentList', () async {
       when(documentRepository.getAll()).thenAnswer((_) async => [document1, document2, document3]);
-
+      when(documentRepository.getDocumentOffline(document1.documentId)).thenAnswer((_) async => null);
+      when(documentRepository.getDocumentOffline(document2.documentId)).thenAnswer((_) async => null);
+      when(documentRepository.getDocumentOffline(document3.documentId)).thenAnswer((_) async => null);
       final result = await getAllDocumentInteractor.execute();
 
-      final documentList = result.map((success) => (success as MySpaceViewState).documentList)
-          .getOrElse(() => []);
-
-      expect(
-          documentList,
-          containsAllInOrder([document1, document2, document3]));
+      result.map((success) => (success as MySpaceViewState).documentList)
+        .fold(
+          (left) => throw Exception('[test failed]: ${left.toString()}'),
+          (right) => expect(
+              right,
+              containsAllInOrder([document1, document2, document3])));
     });
 
     test('getAllDocumentInteractor should fail when get all failed', () async {

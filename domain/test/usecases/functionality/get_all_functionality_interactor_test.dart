@@ -32,11 +32,13 @@
 
 import 'package:domain/domain.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testshared/testshared.dart';
 
-import '../../mock/repository/mock_functionality_repository.dart';
+import 'get_all_functionality_interactor_test.mocks.dart';
 
+@GenerateMocks([FunctionalityRepository])
 void main() {
   group('get all functionality test', () {
     late FunctionalityRepository functionalityRepository;
