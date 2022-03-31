@@ -29,9 +29,12 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:developer' as developer;
+
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
@@ -53,8 +56,6 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.d
 import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'dart:developer' as developer;
-
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginViewModel extends BaseViewModel {
@@ -387,15 +388,16 @@ class LoginViewModel extends BaseViewModel {
   }
 
   void handleBackButtonLoginPressed(BuildContext context, LoginFormType loginFormType) {
-    FocusScope.of(context).unfocus();
-
-    if (loginFormType == LoginFormType.useOwnServer) {
-      store.dispatch(UpdateAuthenticationScreenStateAction(LoginFormType.main));
-    } else if (loginFormType == LoginFormType.credentials) {
-      setEmailText('');
-      setPasswordText('');
-      store.dispatch(UpdateAuthenticationScreenStateAction(LoginFormType.useOwnServer));
-    }
+    // FocusScope.of(context).unfocus();
+    //
+    // if (loginFormType == LoginFormType.useOwnServer) {
+    //   store.dispatch(UpdateAuthenticationScreenStateAction(LoginFormType.main));
+    // } else if (loginFormType == LoginFormType.credentials) {
+    //   setEmailText('');
+    //   setPasswordText('');
+    //   store.dispatch(UpdateAuthenticationScreenStateAction(LoginFormType.useOwnServer));
+    // }
+    FirebaseCrashlytics.instance.crash();
   }
 
   String? getErrorValidatorString(BuildContext context, String value, InputType inputType) {
