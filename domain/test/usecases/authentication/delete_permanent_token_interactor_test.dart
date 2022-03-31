@@ -65,6 +65,7 @@ void main() {
       when(tokenRepository.removeToken()).thenAnswer((_) => Future.delayed(Duration(milliseconds: 100)));
       when(authenticationRepository.deletePermanentToken(token))
           .thenAnswer((_) async => true);
+      when(credentialRepository.removeBaseUrl()).thenAnswer((_) => Future.delayed(Duration(milliseconds: 100)));
       final result = await deletePermanentTokenInteractor.execute();
       expect(result, Right<Failure, Success>(LogoutViewState()));
     });
