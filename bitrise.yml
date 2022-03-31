@@ -23,6 +23,14 @@ workflows:
     - flutter-analyze@0:
         inputs:
         - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION"
+    - file-downloader@1:
+        inputs:
+          - destination: "$BITRISE_FLUTTER_PROJECT_LOCATION/android/app/google-services.json"
+          - source: "$BITRISEIO_GOOGLE_SERVICES_ANDROID_URL"
+    - file-downloader@1:
+        inputs:
+          - destination: "$BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/GoogleService-Info.plist"
+          - source: "$BITRISEIO_GOOGLE_SERVICES_IOS_URL"
     - flutter-test@0:
         inputs:
         - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION"
