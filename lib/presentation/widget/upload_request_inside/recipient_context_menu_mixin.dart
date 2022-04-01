@@ -96,7 +96,7 @@ mixin RecipientContextMenuMixin {
   Widget moreActionMultipleSelection(List<UploadRequest> uploadRequests, Function onActionClick) {
     return UploadRequestMultipleSelectionActionBuilder(
           Key('upload_request_multiple_selection_more_action'),
-          SvgPicture.asset(imagePath.icMoreVertical, width: 24, height: 24, fit: BoxFit.fill),
+          SvgPicture.asset(imagePath.icMoreVertical, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
           uploadRequests)
       .onActionClick((_) => onActionClick.call())
       .build();

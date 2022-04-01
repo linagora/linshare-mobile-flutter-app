@@ -152,7 +152,7 @@ class _SharedSpaceNodeVersionsWidgetState extends State<SharedSpaceNodeVersionsW
                       style: TextStyle(fontSize: 14, color: AppColor.unselectedElementColor))),
               trailing: IconButton(
                   icon: SvgPicture.asset(imagePath.icContextMenu,
-                      width: 24, height: 24, fit: BoxFit.fill),
+                      width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
                   onPressed: () => _model.openContextMenu(
                       context,
                       versionsList[index],

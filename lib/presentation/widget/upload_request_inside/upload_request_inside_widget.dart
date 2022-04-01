@@ -76,7 +76,7 @@ abstract class UploadRequestInsideWidgetState extends State<UploadRequestInsideW
                       alignment: Alignment.center,
                       heightFactor: 24,
                       widthFactor: 24,
-                      child: SvgPicture.asset(imagePath.icBackBlue, width: 24, height: 24),
+                      child: SvgPicture.asset(imagePath.icBackBlue, width: 24, height: 24, color: AppColor.primaryColor),
                     ),
                   ),
                 ),

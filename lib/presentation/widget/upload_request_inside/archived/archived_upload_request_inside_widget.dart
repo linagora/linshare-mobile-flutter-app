@@ -330,7 +330,9 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
                 imagePath.icContextMenu,
                 width: 24,
                 height: 24,
-                fit: BoxFit.fill),
+                fit: BoxFit.fill,
+                color: AppColor.primaryColor
+              ),
               onPressed: () => openRecipientContextMenu(context, uploadRequest.element)),
     );
   }
@@ -390,7 +392,7 @@ class _ArchivedUploadRequestInsideWidgetState extends UploadRequestInsideWidgetS
               onChanged: (bool? value) => _viewModel.selectEntry(entry),
               activeColor: AppColor.primaryColor)
           : IconButton(
-              icon: SvgPicture.asset(imagePath.icContextMenu, width: 24, height: 24, fit: BoxFit.fill),
+              icon: SvgPicture.asset(imagePath.icContextMenu, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
               onPressed: () => openFileContextMenu(context, entry.element)
       ),
     );

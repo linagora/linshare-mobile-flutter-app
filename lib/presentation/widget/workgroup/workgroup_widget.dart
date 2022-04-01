@@ -40,8 +40,8 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
@@ -218,7 +218,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
                       alignment: Alignment.center,
                       heightFactor: 24,
                       widthFactor: 24,
-                      child: SvgPicture.asset(_imagePath.icBackBlue, width: 24, height: 24),
+                      child: SvgPicture.asset(_imagePath.icBackBlue, width: 24, height: 24, color: AppColor.primaryColor),
                     ),
                   ),
                 ),
@@ -392,6 +392,7 @@ class _WorkGroupWidgetState extends State<WorkGroupWidget> {
                         width: 24,
                         height: 24,
                         fit: BoxFit.fill,
+                        color: AppColor.primaryColor
                       ),
                       onPressed: () => _viewModel.openContextMenu(
                           context,
