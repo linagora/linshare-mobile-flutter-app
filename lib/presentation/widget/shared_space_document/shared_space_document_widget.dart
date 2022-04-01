@@ -201,7 +201,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                     alignment: Alignment.center,
                     heightFactor: 24,
                     widthFactor: 24,
-                    child: SvgPicture.asset(imagePath.icBackBlue, width: 24, height: 24),
+                    child: SvgPicture.asset(imagePath.icBackBlue, width: 24, height: 24, color: AppColor.primaryColor),
                   ),
                 ),
               ),
@@ -407,6 +407,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
                 width: 24,
                 height: 24,
                 fit: BoxFit.fill,
+                color: AppColor.primaryColor,
               ),
               workGroupNodes)
           .onActionClick((documents) => sharedSpaceDocumentViewModel.openMoreActionBottomMenu(
@@ -628,7 +629,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               imagePath.icContextMenu,
               width: 24,
               height: 24,
-              fit: BoxFit.fill),
+              fit: BoxFit.fill, color: AppColor.primaryColor),
             onPressed: () => sharedSpaceDocumentViewModel.openWorkGroupNodeContextMenu(
               context,
               node.element,
@@ -859,7 +860,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   Widget addNewFolderAction() {
     return SimpleHorizontalContextMenuActionBuilder(
               Key('add_new_folder_context_menu_action'),
-              SvgPicture.asset(imagePath.icCreateFolder, width: 24, height: 24, fit: BoxFit.fill),
+              SvgPicture.asset(imagePath.icCreateFolder, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
               AppLocalizations.of(context).create_folder)
           .onActionClick((_) => sharedSpaceDocumentViewModel.openCreateFolderModal(context))
           .build();
@@ -869,7 +870,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
     return SimpleHorizontalContextMenuActionBuilder(
               Key('upload_file_context_menu_action'),
               SvgPicture.asset(imagePath.icPublish,
-                  width: 24, height: 24, fit: BoxFit.fill),
+                  width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
               AppLocalizations.of(context).upload_file_title)
           .onActionClick((_) => sharedSpaceDocumentViewModel.openUploadFileMenu(context, uploadFileMenuActionTiles(context)))
           .build();

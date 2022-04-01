@@ -73,6 +73,7 @@ class SearchBottomBarBuilder {
                       _imagePath.icSearchBlue,
                       width: 32,
                       height: 32,
+                      color: AppColor.primaryColor,
                     ),
                   ),
                 ),

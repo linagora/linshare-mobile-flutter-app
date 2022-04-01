@@ -35,9 +35,9 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/toolbar/toolbar_builder.dart' as toolbar;
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_viewmodel.dart';
-import 'package:linshare_flutter_app/presentation/view/toolbar/toolbar_builder.dart' as toolbar;
 
 class SecondFactorAuthenticationWidget extends StatelessWidget {
   final imagePath = getIt<AppImagePaths>();
@@ -130,6 +130,7 @@ class SecondFactorAuthenticationWidget extends StatelessWidget {
               imagePath.icSecurity,
               width: 60,
               height: 74,
+              color: AppColor.primaryColor,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 22),

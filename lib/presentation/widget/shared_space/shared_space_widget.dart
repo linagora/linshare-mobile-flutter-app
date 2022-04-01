@@ -388,6 +388,7 @@ class _SharedSpaceWidgetState extends State<SharedSpaceWidget> {
                         width: 24,
                         height: 24,
                         fit: BoxFit.fill,
+                        color: AppColor.primaryColor,
                       ),
                       onPressed: () => _onPressContextMenu(context, sharedSpace));
             }),

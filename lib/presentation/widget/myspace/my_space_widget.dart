@@ -343,6 +343,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
                   width: 24,
                   height: 24,
                   fit: BoxFit.fill,
+                  color: AppColor.primaryColor,
                 ),
                 onPressed: () => mySpaceViewModel.openContextMenu(
                     context, document.element, _contextMenuActionTiles(context, document.element, positionDocument),
@@ -375,6 +376,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
               width: 16,
               height: 16,
               fit: BoxFit.fill,
+              color: AppColor.primaryColor,
             ),
           )
         : SizedBox.shrink();
@@ -610,6 +612,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
           width: 24,
           height: 24,
           fit: BoxFit.fill,
+          color: AppColor.primaryColor,
         ),
         documents)
         .onActionClick((documents) => mySpaceViewModel.openMoreActionBottomMenu(

@@ -323,6 +323,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
                         width: 24,
                         height: 24,
                         fit: BoxFit.fill,
+                        color: AppColor.primaryColor,
                       ),
                       onPressed: () => receivedShareViewModel.openContextMenu(
                         context,
@@ -557,7 +558,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   Widget _moreActionMultipleSelection(BuildContext context, List<ReceivedShare> receivedShares) {
     return ReceivedShareMultipleSelectionActionBuilder(
         Key('multiple_selection_more_action'),
-        SvgPicture.asset(imagePath.icMoreVertical, width: 24, height: 24, fit: BoxFit.fill,),
+        SvgPicture.asset(imagePath.icMoreVertical, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
         receivedShares)
     .onActionClick((receivedShares) => receivedShareViewModel.openMoreActionBottomMenu(
         context,
