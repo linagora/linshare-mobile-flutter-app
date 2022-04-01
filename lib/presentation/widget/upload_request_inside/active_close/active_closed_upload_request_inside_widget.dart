@@ -372,7 +372,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
               onChanged: (bool? value) => _viewModel.selectEntry(entry),
               activeColor: AppColor.primaryColor)
           : IconButton(
-              icon: SvgPicture.asset(imagePath.icContextMenu, width: 24, height: 24, fit: BoxFit.fill),
+              icon: SvgPicture.asset(imagePath.icContextMenu, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
               onPressed: () => openFileContextMenu(context, entry.element)
       ),
     );
@@ -436,7 +436,9 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
                 imagePath.icContextMenu,
                 width: 24,
                 height: 24,
-                fit: BoxFit.fill),
+                fit: BoxFit.fill,
+                color: AppColor.primaryColor,
+              ),
               onPressed: () => openRecipientContextMenu(context, uploadRequest.element)),
     );
   }
@@ -561,6 +563,7 @@ class _ActiveCloseUploadRequestInsideWidgetState extends UploadRequestInsideWidg
           width: 24,
           height: 24,
           fit: BoxFit.fill,
+          color: AppColor.primaryColor,
         ),
         entries)
       .onActionClick((entries) => _viewModel.openMoreActionEntryBottomMenu(
