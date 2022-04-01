@@ -40,11 +40,12 @@ import 'package:linshare_flutter_app/presentation/localizations/app_localization
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/list_biometric_kind_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/authentication_biometric_state_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/biometric_authentication_timeout_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/list_biometric_kind_extension.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/biometric_timeout_modal_sheet_builder.dart';
+
 import 'biometric_authentication_setting_viewmodel.dart';
 
 class BiometricAuthenticationSettingWidget extends StatefulWidget {
@@ -106,7 +107,8 @@ class _BiometricAuthenticationSettingState extends State<BiometricAuthentication
                         _getIconBiometricAuthenticationState(biometricState),
                         width: 52,
                         height: 32,
-                        fit: BoxFit.fill))
+                        fit: BoxFit.fill,
+                        color: AppColor.primaryColor,))
                   ]
                 ),
                 Padding(

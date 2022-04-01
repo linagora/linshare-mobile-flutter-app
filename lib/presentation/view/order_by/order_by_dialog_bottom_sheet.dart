@@ -34,9 +34,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
-import 'package:linshare_flutter_app/presentation/view/context_menu/sorter_menu_action_builder.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/order_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/order_by_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/order_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/view/context_menu/sorter_menu_action_builder.dart';
 
 typedef OnSelectSorterAction = void Function(Sorter sorterSelected);
 
@@ -68,7 +69,7 @@ class OrderByDialogBottomSheetBuilder {
     return SorterMenuTileBuilder(
             Key(sorter.orderBy.toString()),
             SvgPicture.asset(sorter.orderType.getSortIconPath(imagePath),
-                width: 18, height: 18, fit: BoxFit.fill),
+                width: 18, height: 18, fit: BoxFit.fill, color: AppColor.primaryColor),
             sorter.orderBy.getName(context),
             sorter,
             sorter.orderBy == currentSorter.orderBy

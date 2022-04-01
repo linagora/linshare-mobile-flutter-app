@@ -87,6 +87,7 @@ class UploadRequestGroupTileBuilder {
             width: 24,
             height: 24,
             fit: BoxFit.fill,
+            color: AppColor.primaryColor,
           ),
           onPressed: () => onMenuOptionPressCallback?.call()),
       onLongPress: () => onTileLongPressCallback?.call());

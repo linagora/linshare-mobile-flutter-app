@@ -292,7 +292,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
         } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpace) {
           if (state.operation == Operation.upload || state.operation == Operation.copyTo) {
             return IconButton(
-                icon: SvgPicture.asset(_imagePath.icBackBlue),
+                icon: SvgPicture.asset(_imagePath.icBackBlue, color: AppColor.primaryColor),
                 onPressed: () => _destinationPickerViewModel.backToChooseSpaceDestination(state.operation));
           }
           return IconButton(
@@ -300,11 +300,11 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
               onPressed: () => _destinationPickerViewModel.handleOnSharedSpaceBackPress());
         } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.sharedSpaceNodeInside) {
           return IconButton(
-              icon: SvgPicture.asset(_imagePath.icBackBlue),
+              icon: SvgPicture.asset(_imagePath.icBackBlue, color: AppColor.primaryColor),
               onPressed: () => _destinationPickerViewModel.backToSharedSpace(parentNode: state.routeData.parentNode));
         } else if (state.routeData.destinationPickerCurrentView == DestinationPickerCurrentView.workgroupInside) {
           return IconButton(
-              icon: SvgPicture.asset(_imagePath.icBackBlue),
+              icon: SvgPicture.asset(_imagePath.icBackBlue, color: AppColor.primaryColor),
               onPressed: () => _sharedSpaceDocumentNavigatorKey.currentState?.wantToBack());
         }
         return SizedBox.shrink();
@@ -319,7 +319,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
           return Padding(
             padding: EdgeInsets.only(right: 8),
             child: IconButton(
-              icon: SvgPicture.asset(_imagePath.icCreateFolder, width: 20, height: 20, fit: BoxFit.fill),
+              icon: SvgPicture.asset(_imagePath.icCreateFolder, width: 20, height: 20, fit: BoxFit.fill, color: AppColor.primaryColor),
               onPressed: () => _destinationPickerViewModel.openCreateFolderModal(context)));
         }
         return SizedBox.shrink();
