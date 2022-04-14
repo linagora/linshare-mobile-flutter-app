@@ -1,1 +1,1430 @@
-{}
+{
+  "my_space_text_upload_your_files_here": "Last opp filene dine her",
+  "@my_space_text_upload_your_files_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_success_text": "Opplastet",
+  "@upload_success_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unknown_error_login_message": "Ukjent feil. Prøv igjen.",
+  "@unknown_error_login_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "download_to_device": "Last ned til enheten",
+  "@download_to_device": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "share": "Del",
+  "@share": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_people": "Legg til folk",
+  "@add_people": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "not_have_received_yet": "Vis dine mottatte delinger",
+  "@not_have_received_yet": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unknown_user": "Ukjent bruker",
+  "@unknown_user": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_and_share_button": "Last opp og del",
+  "@upload_and_share_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sharing_after_uploaded_failure": "Filen er klar for opplasting og deling når en tilkobling blir tilgjengelig",
+  "@sharing_after_uploaded_failure": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "uploading_files_status_title": "Laster opp filer",
+  "@uploading_files_status_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "uploading_files_view_button": "Vis",
+  "@uploading_files_view_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_screen_title": "Nåværende opplastinger",
+  "@current_uploads_screen_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_waiting_status": "Venter …",
+  "@current_uploads_waiting_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_uploading_status": "Laster opp …",
+  "@current_uploads_uploading_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_upload_failed_status": "Mislykket opplasting",
+  "@current_uploads_upload_failed_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_share_failed_status": "Deling mislykket",
+  "@current_uploads_share_failed_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "copy_here": "kopier her",
+  "@copy_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "delete": "Slett",
+  "@delete": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "last_name": "Etternavn",
+  "@last_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "last_login": "Siste innlogging",
+  "@last_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "available_space": "Tilgjengelig lagringsplass",
+  "@available_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "received_shares": "Mottatte delinger",
+  "@received_shares": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "preview": "Forhåndsvisning",
+  "@preview": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "no_preview_available": "Ingen forhåndsvisning tilgjengelig",
+  "@no_preview_available": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "name": "Navn",
+  "@name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "admin": "Administrator",
+  "@admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "writer": "Skribent",
+  "@writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unknown_role": "Ukjent rolle",
+  "@unknown_role": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "activities": "Aktiviteter",
+  "@activities": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_log_actor": "av {actorName}",
+  "@audit_log_actor": {
+    "type": "text",
+    "placeholders_order": [
+      "actorName"
+    ],
+    "placeholders": {
+      "actorName": {}
+    }
+  },
+  "audit_action_message_create_workgroup_self": "Du har opprettet en ny arbeidsgruppe: {resourceName}",
+  "@audit_action_message_create_workgroup_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_update_workgroup_self": "Du har redigert arbeidsgruppen: {resourceName}.",
+  "@audit_action_message_update_workgroup_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "invalid_otp": "Ugyldig OTP",
+  "@invalid_otp": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_workgroup": "Opprett ny arbeidsgruppe",
+  "@create_new_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file": "Fil",
+  "@file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "restore": "Gjenopprett",
+  "@restore": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "available_offline": "Tilgjengelig frakoblet",
+  "@available_offline": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "activation_date": "Aktiveringsdato",
+  "@activation_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "expiration_date": "Utløpsdato",
+  "@expiration_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "allow_deletion": "Tillat sletting",
+  "@allow_deletion": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "allow_closure": "Tillat lukking",
+  "@allow_closure": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_language": "Merknadsspråk",
+  "@notification_language": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add": "Legg til",
+  "@add": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_request_proceed_button": "Fortsett",
+  "@upload_request_proceed_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "close": "Lukk",
+  "@close": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_timeout_title": "Sett tidsavbrudd",
+  "@biometric_timeout_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "move": "Flytt",
+  "@move": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_day": "Forrige dag",
+  "@advance_search_date_past_day": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_week": "Forrige uke",
+  "@advance_search_date_past_week": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_month": "Forrige måned",
+  "@advance_search_date_past_month": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_year": "Forrige år",
+  "@advance_search_date_past_year": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_button_reset": "Tilbakestill",
+  "@advance_search_button_reset": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "save": "Lagre",
+  "@save": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yes": "Ja",
+  "@yes": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_an_account": "Opprett en konto",
+  "@create_an_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_is_invalid": "E-postadressen er ugyldig",
+  "@email_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_team_members_with_roles": "Legg til lagmedlemmer med roller",
+  "@add_team_members_with_roles": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_continue": "Fortsett",
+  "@sign_up_continue": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_send_me_a_password": "Send meg et passord",
+  "@sign_up_send_me_a_password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "title_feedback_dialog": "LinShare",
+  "@title_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "title_quick_share": "Hurtigdeling",
+  "@title_quick_share": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_text_slogan": "Lagre og del filer fra hvor som helst",
+  "@login_text_slogan": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_file_title": "Last opp fil",
+  "@upload_file_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_prepare_text": "Forbereder opplasting …",
+  "@upload_prepare_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password": "passord",
+  "@password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_button_login": "Logg inn",
+  "@login_button_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_text_login_to_continue": "Logg inn for å fortsette",
+  "@login_text_login_to_continue": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email": "e-post",
+  "@email": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_failure_text": "Klarte ikke å laste opp fil",
+  "@upload_failure_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "wrong_url_message": "Tjener-nettadressen er ikke gyldig. Prøv igjen.",
+  "@wrong_url_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "common_error_occured_message": "Uventet feil.\nLast inn igjen eller prøv igjen senere.",
+  "@common_error_occured_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_recipients": "Legg til mottagere",
+  "@add_recipients": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file_could_not_be_share": "Kunne ikke dele filen",
+  "@file_could_not_be_share": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "item_last_modified": "Endret {dateString}",
+  "@item_last_modified": {
+    "type": "text",
+    "placeholders_order": [
+      "dateString"
+    ],
+    "placeholders": {
+      "dateString": {}
+    }
+  },
+  "logout": "Logg ut",
+  "@logout": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_remove_account_title": "Logg ut av denne kontoen?",
+  "@confirm_remove_account_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "do_not_have_any_workgroup": "Du har ingen arbeidsgruppe enda",
+  "@do_not_have_any_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sharing_single_after_uploaded_success": "Filen er opplastet og delt med {recipientName}",
+  "@sharing_single_after_uploaded_success": {
+    "type": "text",
+    "placeholders_order": [
+      "recipientName"
+    ],
+    "placeholders": {
+      "recipientName": {}
+    }
+  },
+  "cancel": "Avbryt",
+  "@cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloading_file": "Laster ned {fileName} …",
+  "@downloading_file": {
+    "type": "text",
+    "placeholders_order": [
+      "fileName"
+    ],
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "browse": "Utforsk",
+  "@browse": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "export_file": "Eksporter fil",
+  "@export_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "preparing_to_export": "Forbereder eksportering …",
+  "@preparing_to_export": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "received": "Mottatt",
+  "@received": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "item_created_date": "Opprettet {dateString}",
+  "@item_created_date": {
+    "type": "text",
+    "placeholders_order": [
+      "dateString"
+    ],
+    "placeholders": {
+      "dateString": {}
+    }
+  },
+  "order_by": "Sorter etter",
+  "@order_by": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sharing_multiple_after_uploaded_success": "Filen er opplastet og delt med {numberOfRecipients} folk",
+  "@sharing_multiple_after_uploaded_success": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfRecipients"
+    ],
+    "placeholders": {
+      "numberOfRecipients": {}
+    }
+  },
+  "destination": "Mål",
+  "@destination": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_to_workspace": "Last opp til arbeidsområde",
+  "@upload_to_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "photos_and_videos": "Bilder og videoer",
+  "@photos_and_videos": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_could_not_be_deleted": "Kunne ikke slette filen",
+  "@the_file_could_not_be_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "can_not_connect_network": "Kan ikke koble til nettverket",
+  "@can_not_connect_network": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "available_space_value": "{usedSpace} på {quota}",
+  "@available_space_value": {
+    "type": "text",
+    "placeholders_order": [
+      "quota",
+      "usedSpace"
+    ],
+    "placeholders": {
+      "quota": {},
+      "usedSpace": {}
+    }
+  },
+  "details": "Detaljer",
+  "@details": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_nodes_surfing_sort_type_title": "Endringsdato",
+  "@workgroup_nodes_surfing_sort_type_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "copy_to_a_workgroup": "Kopier til arbeidsgruppe",
+  "@copy_to_a_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_folder": "Opprett ny mappe",
+  "@create_new_folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "modification_date": "Endringsdato",
+  "@modification_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "select_all": "Velg alle",
+  "@select_all": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unselect_all": "Fravelg alle",
+  "@unselect_all": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pick_the_destination": "Velg målet",
+  "@pick_the_destination": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_has_been_successfully_deleted": "Filen har blitt slettet",
+  "@the_file_has_been_successfully_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "choose": "velg",
+  "@choose": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "account_details": "Kontodetaljer",
+  "@account_details": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "first_name": "Fornavn",
+  "@first_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "preparing_to_preview_file": "Forbereder forhåndsvisning av fil",
+  "@preparing_to_preview_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_have_been_successfully_deleted": "Slettet noen filer",
+  "@files_have_been_successfully_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_succeed_status": "Fullført",
+  "@current_uploads_succeed_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_could_not_be_deleted": "Kunne ikke slette filene",
+  "@files_could_not_be_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "account_details_title": "Kontodetaljer",
+  "@account_details_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_could_not_be_copied": "Kunne ikke kopiere filen",
+  "@the_file_could_not_be_copied": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_new_file_or_folder": "Legg til ny fil eller mappe",
+  "@add_new_file_or_folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_folder": "Opprett mappe",
+  "@create_folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_folder": "Ny mappe",
+  "@new_folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "rename": "Gi nytt navn",
+  "@rename": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "created": "Opprettet",
+  "@created": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "creation_date": "Opprettelsesdato",
+  "@creation_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "size": "Størrelse",
+  "@size": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shared": "Delt",
+  "@shared": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "my_rights": "Mine rettigheter",
+  "@my_rights": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "copy_to": "Kopier til",
+  "@copy_to": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_workgroup_other": "{authorName} har opprettet en ny arbeidsgruppe: {resourceName}",
+  "@audit_action_message_create_workgroup_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "members": "Medlemmer",
+  "@members": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "modified": "Endringsdato",
+  "@modified": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_file_size": "Maks. filstørrelse",
+  "@max_file_size": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "description": "Beskrivelse",
+  "@description": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reader": "Leser",
+  "@reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_workgroup_self": "Du har slettet arbeidsgruppen: {resourceName}",
+  "@audit_action_message_delete_workgroup_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_update_workgroup_other": "{authorName} har redigert arbeidsgruppen: {resourceName}",
+  "@audit_action_message_update_workgroup_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "no_description": "Ingen beskrivelse",
+  "@no_description": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contributor": "Bidragsyter",
+  "@contributor": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_delete": "Slett:",
+  "@audit_action_title_delete": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_add_member_self": "Du lar lagt til et nytt medlem: {resourceName} i arbeidsgruppen: {nameVarious}",
+  "@audit_action_message_add_member_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "biometric_authentication_localized_reason": "Skann {biometricKind} for identitetsbekreftelse",
+  "@biometric_authentication_localized_reason": {
+    "type": "text",
+    "placeholders_order": [
+      "biometricKind"
+    ],
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "audit_action_message_add_member_other": "{authorName} har lagt til et nytt medlem: {resourceName} til i arbeidsgruppen: {nameVarious}.",
+  "@audit_action_message_add_member_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "me": "Meg",
+  "@me": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_member_self": "Du har fjernet medlemmet: {resourceName} fra arbeidsgruppen: {nameVarious}.",
+  "@audit_action_message_delete_member_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "go_to_setup": "Gå til oppsett",
+  "@go_to_setup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_workgroup": "Ny arbeidsgruppe",
+  "@new_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create": "Opprett",
+  "@create": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup": "Arbeidsgruppe",
+  "@workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "folder": "Mappe",
+  "@folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_update_member_self": "Du har redigert medlemmet: {resourceName} fra arbeidsgruppen: {nameVarious}.",
+  "@audit_action_message_update_member_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "password_protected": "Passordbeskyttet",
+  "@password_protected": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_member_other": "{authorName} har fjernet medlemmet: {resourceName} fra arbeidsgruppen: {nameVarious}.",
+  "@audit_action_message_delete_member_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "submit": "Send inn",
+  "@submit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_folder_other": "{authorName} har opprettet en ny mappe: {resourceName} i arbeidsgruppen {nameVarious}.",
+  "@audit_action_message_create_folder_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "please_fill_up_all_numbers": "Fyll inn alle numrene",
+  "@please_fill_up_all_numbers": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "version": "Versjon {version}",
+  "@version": {
+    "type": "text",
+    "placeholders_order": [
+      "version"
+    ],
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "node_name_not_empty": "{nodeName} må ha et navn",
+  "@node_name_not_empty": {
+    "type": "text",
+    "placeholders_order": [
+      "nodeName"
+    ],
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_already_exists": "{nodeName} har et navn som allerede finnes",
+  "@node_name_already_exists": {
+    "type": "text",
+    "placeholders_order": [
+      "nodeName"
+    ],
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "manage_version": "Håndter versjon",
+  "@manage_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "face": "Ansikt",
+  "@face": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "touch_id": "TouchID",
+  "@touch_id": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_number_of_files": "Maks. antall filer",
+  "@max_number_of_files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_button_apply": "Bruk",
+  "@advance_search_button_apply": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "touch_id_or_face_id": "TouchID eller FaceID",
+  "@touch_id_or_face_id": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "open_with_biometric": "Åpne med {biometricKind}",
+  "@open_with_biometric": {
+    "type": "text",
+    "placeholders_order": [
+      "biometricKind"
+    ],
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "fingerprint_or_face": "Fingeravtrykk eller ansikt",
+  "@fingerprint_or_face": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "or": "Eller",
+  "@or": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "go_to_sign_in": "Gå til innlogging",
+  "@go_to_sign_in": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reminder_date": "Påminnelsesdato",
+  "@reminder_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings": "Innstillinger",
+  "@settings": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_message": "E-postmelding",
+  "@email_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advanced_options": "Avanserte innstillinger",
+  "@advanced_options": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_size_of_a_file": "Maks. filstørrelse",
+  "@max_size_of_a_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "status": "Status",
+  "@status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "type": "Type",
+  "@type": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "move_here": "Flytt hit",
+  "@move_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_setting": "Avanserte søkeinnstillinger",
+  "@advance_search_setting": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_document": "Dokument",
+  "@advance_search_type_document": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_pdf": "PDF",
+  "@advance_search_type_pdf": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_spreadsheet": "Regneark",
+  "@advance_search_type_spreadsheet": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_image": "Bilde",
+  "@advance_search_type_image": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_audio": "Lyd",
+  "@advance_search_type_audio": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit": "Rediger",
+  "@edit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_email_title": "E-post",
+  "@login_email_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_email_login": "Skriv inn e-postadressen din",
+  "@hint_input_email_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search_in": "Søk i {node}",
+  "@search_in": {
+    "type": "text",
+    "placeholders_order": [
+      "node"
+    ],
+    "placeholders": {
+      "node": {}
+    }
+  },
+  "no": "Nei",
+  "@no": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "back": "Tilbake",
+  "@back": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_password_title": "Passord",
+  "@login_password_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_is_required": "E-postadresse kreves",
+  "@email_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "this_feature_not_supported": "Denne funksjonen er ikke støttet for øyeblikket",
+  "@this_feature_not_supported": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_password_login": "Skriv inn passordet ditt",
+  "@hint_input_password_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "url_is_invalid": "Nettadressen er ugyldig",
+  "@url_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_is_invalid": "Passordet er ugyldig",
+  "@password_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_is_required": "Passord kreves",
+  "@password_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "default_role_in_workgroups": "Forvalgt rolle i arbeidsgrupper",
+  "@default_role_in_workgroups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_sign_up_surname": "Skriv inn etternavnet ditt",
+  "@hint_input_sign_up_surname": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files": "Filer",
+  "@files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_download_upload_request_entry_other": "{authorName} har lastet ned filen: {resourceName}.",
+  "@audit_action_message_download_upload_request_entry_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "sign_up_name_title": "Navn",
+  "@sign_up_name_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "use_your_own_server": "Bruk din egen tjener",
+  "@use_your_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_workgroup": "Opprett arbeidsgruppe",
+  "@create_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_a_member": "Legg til et medlem",
+  "@add_a_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_surname_title": "Etternavn",
+  "@sign_up_surname_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_sign_up_name": "Skriv inn navnet ditt",
+  "@hint_input_sign_up_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "owner": "Eier",
+  "@owner": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "view": "Vis",
+  "@view": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "created_at": "Opprettet",
+  "@created_at": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipient": "Mottager",
+  "@recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipients": "Mottagere",
+  "@recipients": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "meta_data": "Matadata",
+  "@meta_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_total_file_size": "Maks. total filstørrelse",
+  "@max_total_file_size": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_size_per_file": "Maks. størrelse per fil",
+  "@max_size_per_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_date": "Merknadsdato",
+  "@notification_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_workspace": "Opprett nytt arbeidsområde",
+  "@create_new_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "role_in_this_workspace": "Rolle i dette arbeidsområdet",
+  "@role_in_this_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "feedback_dialog_button": "Del din tilbakemelding",
+  "@feedback_dialog_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "activated_at": "Aktivert",
+  "@activated_at": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_language_meta_data": "Merknadsspråk",
+  "@notification_language_meta_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_workspace": "Ny arbeidsområde",
+  "@new_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace": "Arbeidsområde",
+  "@workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_workspace": "Opprett arbeidsområde",
+  "@create_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file_type": "Filtype",
+  "@file_type": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  }
+}
