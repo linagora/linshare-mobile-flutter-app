@@ -80,7 +80,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "unknown_error_login_message": "Lỗi không xác định, hãy thử lại",
+  "unknown_error_login_message": "Vui lòng thử lại",
   "@unknown_error_login_message": {
     "type": "text",
     "placeholders": {}
@@ -394,7 +394,7 @@
       "numberOfFiles": {}
     }
   },
-  "delete": "Xóa",
+  "delete": "Xoá",
   "@delete": {
     "type": "text",
     "placeholders": {}
@@ -1860,7 +1860,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "edit": "Chỉnh sửa",
+  "edit": "Sửa",
   "@edit": {
     "type": "text",
     "placeholders": {}
