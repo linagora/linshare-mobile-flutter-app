@@ -80,7 +80,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "unknown_error_login_message": "Произошла неизвестная ошибка, пожалуйста, попробуйте еще раз",
+  "unknown_error_login_message": "Произошла неизвестная ошибка. Пожалуйста, попробуйте еще раз",
   "@unknown_error_login_message": {
     "type": "text",
     "placeholders": {}
@@ -1149,7 +1149,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "user_locked_message": "Извините, но ваша учетная запись заблокирована!\nПожалуйста, обратитесь в службу поддержки, чтобы её разблокировать.",
+  "user_locked_message": "Извините, но ваша учетная запись заблокирована\nПожалуйста, обратитесь в службу поддержки, чтобы её разблокировать!",
   "@user_locked_message": {
     "type": "text",
     "placeholders": {}
@@ -2451,6 +2451,84 @@
   },
   "workgroup_writer": "Автор рабочей группы",
   "@workgroup_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_want_to_remove_this_version": "Вы уверены, что хотите удалить эту версию? Обратите внимание, это действие нельзя отменить.",
+  "@are_you_sure_want_to_remove_this_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "versioning_enable": "Включить управление версиями",
+  "@versioning_enable": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit": "Редактировать",
+  "@edit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "save": "Сохранить",
+  "@save": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yes": "Да",
+  "@yes": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "no": "Нет",
+  "@no": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_successfully": "Запрос на загрузку успешно обновлен!",
+  "@the_upload_request_has_been_updated_successfully": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_failed": "Не удалось обновить запрос на загрузку",
+  "@the_upload_request_has_been_updated_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "canceled": "Отменено",
+  "@canceled": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_workgroup": "Создать рабочую группу",
+  "@create_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_drive": "Создать Диск",
+  "@create_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_drive": "Создать новый диск",
+  "@create_new_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_drive": "Новый диск",
+  "@new_drive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
