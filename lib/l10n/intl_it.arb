@@ -96,7 +96,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "unknown_error_login_message": "Si è verificato un errore sconosciuto, per favore riprova",
+  "unknown_error_login_message": "Si è verificato un errore sconosciuto. Si prega di riprovare",
   "@unknown_error_login_message": {
     "type": "text",
     "placeholders": {}
@@ -1892,7 +1892,7 @@
       "node": {}
     }
   },
-  "move": "Spostare",
+  "move": "Muovi",
   "@move": {
     "type": "text",
     "placeholders_order": [],
@@ -2483,6 +2483,84 @@
   },
   "create_workspace": "Crea uno spazio di lavoro",
   "@create_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "versioning_enable": "Abilita il controllo delle versioni",
+  "@versioning_enable": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_want_to_remove_this_version": "Sei sicuro di voler rimuovere questa versione? Attenzione, questa azione non può essere annullata.",
+  "@are_you_sure_want_to_remove_this_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "no": "No",
+  "@no": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_successfully": "La richiesta di caricamento è stata aggiornata con successo!",
+  "@the_upload_request_has_been_updated_successfully": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit": "Modifica",
+  "@edit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "save": "Salva",
+  "@save": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yes": "Sì",
+  "@yes": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_failed": "La richiesta di caricamento non è stata aggiornata",
+  "@the_upload_request_has_been_updated_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "canceled": "Annullato",
+  "@canceled": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_drive": "Crea un Drive",
+  "@create_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_workgroup": "Crea un gruppo di lavoro",
+  "@create_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_drive": "Crea un nuovo drive",
+  "@create_new_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_drive": "Nuovo drive",
+  "@new_drive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
