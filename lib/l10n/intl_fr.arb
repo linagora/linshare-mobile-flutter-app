@@ -1,6 +1,6 @@
 {
   "@@last_modified": "2021-07-15T14:47:42.745402",
-  "initializing_data": "Initialisation des données ...",
+  "initializing_data": "Initialisation des données…",
   "@initializing_data": {
     "type": "text",
     "placeholders": {}
@@ -80,32 +80,32 @@
     "type": "text",
     "placeholders": {}
   },
-  "unknown_error_login_message": "Une erreur inconnue est survenue, veuillez réessayer",
+  "unknown_error_login_message": "Une erreur inconnue s'est produite. Veuillez réessayer",
   "@unknown_error_login_message": {
     "type": "text",
     "placeholders": {}
   },
-  "download_to_device":"Télécharger sur l'appareil",
+  "download_to_device": "Télécharger sur l'appareil",
   "@download_to_device": {
     "type": "text",
     "placeholders": {}
   },
-  "share":"Partager",
+  "share": "Partager",
   "@share": {
     "type": "text",
     "placeholders": {}
   },
-  "title_quick_share":"Partager rapidement",
+  "title_quick_share": "Partager rapidement",
   "@title_quick_share": {
     "type": "text",
     "placeholders": {}
   },
-  "add_recipients":"Ajouter des destinataires",
+  "add_recipients": "Ajouter des destinataires",
   "@add_recipients": {
     "type": "text",
     "placeholders": {}
   },
-  "add_people":"Ajouter des utilisateurs",
+  "add_people": "Ajouter des utilisateurs",
   "@add_people": {
     "type": "text",
     "placeholders": {}
@@ -117,7 +117,7 @@
       "sharesNumber": {}
     }
   },
-  "file_could_not_be_share":"Le fichier n'a pas pu être partagé",
+  "file_could_not_be_share": "Le fichier n'a pas pu être partagé",
   "@file_could_not_be_share": {
     "type": "text",
     "placeholders": {}
@@ -139,17 +139,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "export_file":"Exporter le fichier",
+  "export_file": "Exporter le fichier",
   "@export_file": {
     "type": "text",
     "placeholders": {}
   },
-  "preparing_to_export":"Préparation de l'export",
+  "preparing_to_export": "Préparation de l'export",
   "@preparing_to_export": {
     "type": "text",
     "placeholders": {}
   },
-  "cancel":"Annuler",
+  "cancel": "Annuler",
   "@cancel": {
     "type": "text",
     "placeholders": {}
@@ -161,7 +161,7 @@
       "fileName": {}
     }
   },
-  "logout":"Se déconnecter",
+  "logout": "Se déconnecter",
   "@logout": {
     "type": "text",
     "placeholders": {}
@@ -171,12 +171,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "shared_space":"Espace Commun",
+  "shared_space": "Espace Commun",
   "@shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "do_not_have_any_workgroup":"Vous n'avez pas encore de Groupe De Travail",
+  "do_not_have_any_workgroup": "Vous n'avez pas encore de Groupe De Travail",
   "@do_not_have_any_workgroup": {
     "type": "text",
     "placeholders": {}
@@ -186,7 +186,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "unknown_user":"Utilisateur inconnu",
+  "unknown_user": "Utilisateur inconnu",
   "@unknown_user": {
     "type": "text",
     "placeholders": {}
@@ -2456,6 +2456,12 @@
   },
   "message_feedback_dialog": "We are running Linshare SaaS. We are working hard to fix all the bugs that impact user experience. We rely on your valuable feedback to make Linshare better for everyone.",
   "@message_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit": "Modifier",
+  "@edit": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
