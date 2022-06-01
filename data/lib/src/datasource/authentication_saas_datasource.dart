@@ -34,7 +34,5 @@ import 'package:domain/domain.dart';
 abstract class AuthenticationSaaSDataSource {
   Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest);
 
-  Future<bool> verifyEmailSaaS(Uri baseUrl, String email);
-
   Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest);
 }

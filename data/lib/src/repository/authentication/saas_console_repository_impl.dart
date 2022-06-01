@@ -36,17 +36,14 @@ class SaaSConsoleRepositoryImpl extends SaaSConsoleRepository {
   final loginBaseUrl = 'https://user.linshare-saas-on-commit.integration-linshare.org';
   final secretBaseUrl = 'https://subscription-twakeconsole.dev-linshare.lin-saas.dev';
   final signUpBaseUrl = 'https://account-twakeconsole.dev-linshare.lin-saas.dev';
-  final verifyEmailBaseUrl = 'https://account-twakeconsole.dev-linshare.lin-saas.dev';
 
   final stagingLoginBaseUrl = 'https://staging-web.linshare.app';
   final stagingSecretBaseUrl = 'https://staging-subscription.linshare.app';
   final stagingSignUpBaseUrl = 'https://staging-account.linshare.app';
-  final stagingVerifyEmailBaseUrl = 'https://staging-account.linshare.app';
 
   final prodLoginBaseUrl = 'https://web.linshare.app';
   final prodSecretBaseUrl = 'https://subscription.linshare.app';
   final prodSignUpBaseUrl = 'https://account.linshare.app';
-  final prodVerifyEmailBaseUrl = 'https://account.linshare.app';
 
   final companyName = 'My company';
 
@@ -60,21 +57,18 @@ class SaaSConsoleRepositoryImpl extends SaaSConsoleRepository {
           loginBaseUrl: Uri.parse(loginBaseUrl),
           signUpBaseUrl: Uri.parse(signUpBaseUrl),
           secretBaseUrl: Uri.parse(secretBaseUrl),
-          verifyEmailBaseUrl: Uri.parse(verifyEmailBaseUrl),
           companyName: companyName);
       case SaaSType.staging:
         return SaaSConfiguration(
           loginBaseUrl: Uri.parse(stagingLoginBaseUrl),
           signUpBaseUrl: Uri.parse(stagingSignUpBaseUrl),
           secretBaseUrl: Uri.parse(stagingSecretBaseUrl),
-          verifyEmailBaseUrl: Uri.parse(stagingVerifyEmailBaseUrl),
           companyName: companyName);
       default:
         return SaaSConfiguration(
           loginBaseUrl: Uri.parse(prodLoginBaseUrl),
           signUpBaseUrl: Uri.parse(prodSignUpBaseUrl),
           secretBaseUrl: Uri.parse(prodSecretBaseUrl),
-          verifyEmailBaseUrl: Uri.parse(prodVerifyEmailBaseUrl),
           companyName: companyName
         );
     }

@@ -32,7 +32,6 @@
 import 'dart:async';
 
 import 'package:data/data.dart';
-import 'package:data/src/network/model/request/verify_email_request.dart';
 
 class SaaSHttpClient {
   final DioClient _dioClient;
@@ -44,15 +43,6 @@ class SaaSHttpClient {
       Endpoint.secretToken.generateBaseUrl(baseUrl),
       data: planBodyRequest.toJson().toString());
     return SecretTokenResponse.fromJson(result);
-  }
-
-  Future<VerifyEmailResponse> verifyEmailSaaS(Uri baseUrl, String email) async {
-    final result = await _dioClient.post(
-      Endpoint.verifyEmail
-        .generateBaseUrl(baseUrl),
-      data: VerifyEmailRequest(email).toJson().toString()
-    );
-    return VerifyEmailResponse.fromJson(result);
   }
 
   Future<UserSaaSResponse> signUpForSaaS(Uri baseUrl, SignUpBodyRequest signUpBodyRequest) async {
