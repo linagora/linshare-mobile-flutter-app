@@ -176,22 +176,3 @@ class SignUpForSaaSFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
-
-class VerifyEmailSaaSViewState extends ViewState {
-
-  final bool isEmailAvailable;
-
-  VerifyEmailSaaSViewState(this.isEmailAvailable);
-
-  @override
-  List<Object> get props => [isEmailAvailable];
-}
-
-class VerifyEmailSaaSFailure extends FeatureFailure {
-  final exception;
-
-  VerifyEmailSaaSFailure(this.exception);
-
-  @override
-  List<Object> get props => [exception];
-}

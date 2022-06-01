@@ -65,7 +65,6 @@ class SignUpViewModel extends BaseViewModel {
   final GetSaaSConfigurationInteractor _getSaaSConfigurationInteractor;
   final GetOIDCConfigurationInteractor _getOIDCConfigurationInteractor;
   final GetSecretTokenInteractor _getSecretTokenInteractor;
-  final VerifyEmailSaaSInteractor _verifyEmailSaaSInteractor;
   final SignUpForSaaSInteractor _signUpForSaaSInteractor;
   final GetTokenOIDCInteractor _getTokenOIDCInteractor;
   final CreatePermanentTokenOIDCInteractor _createPermanentTokenOIDCInteractor;
@@ -83,7 +82,6 @@ class SignUpViewModel extends BaseViewModel {
     this._getSaaSConfigurationInteractor,
     this._getOIDCConfigurationInteractor,
     this._getSecretTokenInteractor,
-    this._verifyEmailSaaSInteractor,
     this._signUpForSaaSInteractor,
     this._getTokenOIDCInteractor,
     this._createPermanentTokenOIDCInteractor,
@@ -224,22 +222,10 @@ class SignUpViewModel extends BaseViewModel {
     return OnlineThunkAction((Store<AppState> store) async {
       store.dispatch(StartSignUpAuthenticationLoadingAction());
 
-      await _verifyEmailSaaSInteractor.execute(saaSConfiguration.verifyEmailBaseUrl, email)
-        .then((result) => result.fold(
-          (failure) {
-            if (failure is VerifyEmailSaaSFailure) {
-              store.dispatch(SignUpAuthenticationAction(Left(AuthenticationFailure(LoginEmailInvalidException()))));
-            }
-          },
-          (success) {
-            if (success is VerifyEmailSaaSViewState) {
-              if (success.isEmailAvailable) {
-                store.dispatch(UpdateSignUpAuthenticationScreenStateAction(SignUpFormType.fillName));
-              } else {
-                store.dispatch(SignUpAuthenticationAction(Left(AuthenticationFailure(EmailNotAvailableException()))));
-              }
-            }
-          }));
+      _verifyNameInteractor.execute(email, InputType.email.getValidator()).fold(
+        (failure) => store.dispatch(SignUpAuthenticationAction(Left(AuthenticationFailure(LoginEmailInvalidException())))),
+        (success) => store.dispatch(UpdateSignUpAuthenticationScreenStateAction(SignUpFormType.fillName))
+      );
     });
   }
 

@@ -297,7 +297,6 @@ class AppModule {
     ));
     getIt.registerFactory(() => GetSaaSConfigurationInteractor(getIt<SaaSConsoleRepository>()));
     getIt.registerFactory(() => GetSecretTokenInteractor(getIt<AuthenticationOIDCRepository>()));
-    getIt.registerFactory(() => VerifyEmailSaaSInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => SignUpForSaaSInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => FlowUploadDocumentInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => FlowUploadWorkGroupDocumentInteractor(getIt<SharedSpaceDocumentRepository>()));
