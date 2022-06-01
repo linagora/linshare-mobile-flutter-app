@@ -36,17 +36,15 @@ class SaaSConfiguration extends Equatable {
   final Uri loginBaseUrl;
   final Uri signUpBaseUrl;
   final Uri secretBaseUrl;
-  final Uri verifyEmailBaseUrl;
   final String companyName;
 
   SaaSConfiguration({
     required this.loginBaseUrl,
     required this.signUpBaseUrl,
     required this.secretBaseUrl,
-    required this.verifyEmailBaseUrl,
     required this.companyName,
   });
 
   @override
-  List<Object?> get props => [loginBaseUrl, signUpBaseUrl, secretBaseUrl, verifyEmailBaseUrl, companyName];
+  List<Object?> get props => [loginBaseUrl, signUpBaseUrl, secretBaseUrl, companyName];
 }
