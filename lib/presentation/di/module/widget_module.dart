@@ -192,7 +192,6 @@ class WidgetModule {
       getIt<GetSaaSConfigurationInteractor>(),
       getIt<GetOIDCConfigurationInteractor>(),
       getIt<GetSecretTokenInteractor>(),
-      getIt<VerifyEmailSaaSInteractor>(),
       getIt<SignUpForSaaSInteractor>(),
       getIt<GetTokenOIDCInteractor>(),
       getIt<CreatePermanentTokenOIDCInteractor>(),

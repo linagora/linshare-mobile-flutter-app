@@ -76,8 +76,6 @@ class Endpoint {
 
   static final ServicePath secretToken = ServicePath('/api/subscriptions/reservation');
 
-  static final ServicePath verifyEmail = ServicePath('/api/users/email-availability');
-
   static final ServicePath signUp = ServicePath('/api/signup');
 
   static final ServicePath flow = ServicePath('/flow');

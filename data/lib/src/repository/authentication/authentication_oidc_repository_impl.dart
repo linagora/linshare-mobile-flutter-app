@@ -75,11 +75,6 @@ class AuthenticationOIDCRepositoryImpl extends AuthenticationOIDCRepository {
   }
 
   @override
-  Future<bool> verifyEmailSaaS(Uri baseUrl, String email) {
-    return saaSDataSource.verifyEmailSaaS(baseUrl, email);
-  }
-
-  @override
   Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest) {
     return saaSDataSource.signUpForSaaS(baseUrl, signUpRequest);
   }

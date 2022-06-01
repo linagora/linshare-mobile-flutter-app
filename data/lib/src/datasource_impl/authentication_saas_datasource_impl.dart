@@ -53,18 +53,6 @@ class AuthenticationSaaSDataSourceImpl implements AuthenticationSaaSDataSource {
   }
 
   @override
-  Future<bool> verifyEmailSaaS(Uri baseUrl, String email)  {
-    return Future.sync(() async {
-      final result = await saaSHttpClient.verifyEmailSaaS(baseUrl, email);
-      return result.isEmailValid();
-    }).catchError((error) {
-      remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
-        throw UnknownError(error.response?.statusMessage!);
-      });
-    });
-  }
-
-  @override
   Future<UserSaaS> signUpForSaaS(Uri baseUrl, SignUpRequest signUpRequest)  {
     return Future.sync(() async {
       final result = await saaSHttpClient.signUpForSaaS(baseUrl, signUpRequest.toSignUpBodyRequest());

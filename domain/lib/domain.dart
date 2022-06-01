@@ -505,7 +505,6 @@ export 'src/usecases/upload_request_entry/download_upload_request_entry_interact
 export 'src/usecases/authentication/get_saas_configuration_interactor.dart';
 export 'src/usecases/authentication/get_secret_token_interactor.dart';
 export 'src/usecases/authentication/sign_up_for_saas_interactor.dart';
-export 'src/usecases/authentication/verify_email_saas_interactor.dart';
 export 'src/usecases/authentication/log_out_oidc_interactor.dart';
 export 'src/usecases/authentication/delete_token_oidc_interactor.dart';
 export 'src/usecases/upload_file/flow_upload_document_interactor.dart';
