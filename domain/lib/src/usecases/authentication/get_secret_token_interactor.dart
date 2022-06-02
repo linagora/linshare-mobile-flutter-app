@@ -29,18 +29,19 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:core';
+
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'dart:core';
 
 class GetSecretTokenInteractor {
   final AuthenticationOIDCRepository authenticationOIDCRepository;
 
   GetSecretTokenInteractor(this.authenticationOIDCRepository);
 
-  Future<Either<Failure, Success>> execute(Uri baseUrl, PlanRequest planRequest) async {
+  Future<Either<Failure, Success>> execute(Uri secretBaseUrl, PlanRequest planRequest) async {
     try {
-      final secretToken = await authenticationOIDCRepository.getSaaSSecretToken(baseUrl, planRequest);
+      final secretToken = await authenticationOIDCRepository.getSaaSSecretToken(secretBaseUrl, planRequest);
       return Right<Failure, Success>(GetSecretTokenViewState(secretToken));
     } catch (exception) {
       return Left<Failure, Success>(GetSecretTokenFailure(exception));

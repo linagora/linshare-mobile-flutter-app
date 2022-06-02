@@ -33,11 +33,13 @@ import 'package:equatable/equatable.dart';
 
 class PlanRequest with EquatableMixin {
   final String planId;
+  final String code;
+  final int? planQuantity;
 
-  PlanRequest(this.planId);
+  PlanRequest(this.planId, this.code, {this.planQuantity});
 
-  factory PlanRequest.free() => PlanRequest('free');
+  factory PlanRequest.free() => PlanRequest('linshare-free', 'linshare');
 
   @override
-  List<Object> get props => [planId];
+  List<Object> get props => [planId, code];
 }

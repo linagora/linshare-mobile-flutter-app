@@ -33,6 +33,8 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class SignUpRequest with EquatableMixin {
+  static const _assignedToOwner = ['linshare'];
+  
   final String email;
   final String name;
   final String surname;
@@ -41,6 +43,7 @@ class SignUpRequest with EquatableMixin {
   final String locale;
   final String captchaResponseToken;
   final SaaSSecretToken secretToken;
+  final List<String> applicationsAssignedToOwner;
 
   SignUpRequest(
       this.email,
@@ -51,6 +54,7 @@ class SignUpRequest with EquatableMixin {
       this.locale,
       this.captchaResponseToken,
       this.secretToken,
+      {this.applicationsAssignedToOwner = _assignedToOwner}
   );
 
   @override

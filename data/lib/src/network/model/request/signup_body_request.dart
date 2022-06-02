@@ -30,11 +30,15 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'dart:convert';
-
+import 'package:data/src/network/model/converter/saas_secret_token_converter.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'signup_body_request.g.dart';
+
+@SaaSSecretTokenConverter()
+@JsonSerializable(explicitToJson: true)
 class SignUpBodyRequest with EquatableMixin {
 
   final String email;
@@ -45,6 +49,7 @@ class SignUpBodyRequest with EquatableMixin {
   final String locale;
   final String captchaResponseToken;
   final SaaSSecretToken secretToken;
+  final List<String> applicationsAssignedToOwner;
 
   SignUpBodyRequest(
       this.email,
@@ -54,19 +59,13 @@ class SignUpBodyRequest with EquatableMixin {
       this.password,
       this.locale,
       this.captchaResponseToken,
-      this.secretToken
+      this.secretToken,
+      this.applicationsAssignedToOwner
   );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
-    jsonEncode('email'): jsonEncode(email),
-    jsonEncode('name'): jsonEncode(name),
-    jsonEncode('surname'): jsonEncode(surname),
-    jsonEncode('companyName'): jsonEncode(companyName),
-    jsonEncode('password'): jsonEncode(password),
-    jsonEncode('locale'): jsonEncode(locale),
-    jsonEncode('captchaResponseToken'): jsonEncode(captchaResponseToken),
-    jsonEncode('secretToken'): jsonEncode(secretToken.value),
-  };
+  factory SignUpBodyRequest.fromJson(Map<String, dynamic> json) => _$SignUpBodyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SignUpBodyRequestToJson(this);
 
   @override
   List<Object> get props => [email, name, surname, secretToken];
@@ -81,5 +80,7 @@ extension SignUpRequestExtension on SignUpRequest {
       password,
       locale,
       captchaResponseToken,
-      secretToken);
+      secretToken,
+      applicationsAssignedToOwner
+  );
 }
