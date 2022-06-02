@@ -30,25 +30,32 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-import 'dart:convert';
-
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'plan_body_request.g.dart';
+
+@JsonSerializable()
 class PlanBodyRequest with EquatableMixin {
 
   final String planId;
 
-  PlanBodyRequest(this.planId);
+  final String code;
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
-    jsonEncode('planId'): jsonEncode(planId)
-  };
+  @JsonKey(includeIfNull: false)
+  final int? planQuantity;
+
+  PlanBodyRequest(this.planId, this.code, {this.planQuantity});
+
+  factory PlanBodyRequest.fromJson(Map<String, dynamic> json) => _$PlanBodyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PlanBodyRequestToJson(this);
 
   @override
-  List<Object> get props => [planId];
+  List<Object> get props => [planId, code];
 }
 
 extension PlanRequestExtension on PlanRequest {
-  PlanBodyRequest toPlanBodyRequest() => PlanBodyRequest(planId);
+  PlanBodyRequest toPlanBodyRequest() => PlanBodyRequest(planId, code, planQuantity: planQuantity);
 }

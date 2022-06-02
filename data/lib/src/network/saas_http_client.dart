@@ -32,23 +32,25 @@
 import 'dart:async';
 
 import 'package:data/data.dart';
+import 'package:data/src/network/model/request/subscription_body_request.dart';
+import 'dart:developer' as developer;
 
 class SaaSHttpClient {
   final DioClient _dioClient;
 
   SaaSHttpClient(this._dioClient);
 
-  Future<SecretTokenResponse> getSaaSSecretToken(Uri baseUrl, PlanBodyRequest planBodyRequest) async {
+  Future<SecretTokenResponse> getSaaSSecretToken(Uri baseUrl, SubscriptionBodyRequest subscriptionBodyRequest) async {
     final result = await _dioClient.post(
       Endpoint.secretToken.generateBaseUrl(baseUrl),
-      data: planBodyRequest.toJson().toString());
+      data: subscriptionBodyRequest.toJson());
     return SecretTokenResponse.fromJson(result);
   }
 
   Future<UserSaaSResponse> signUpForSaaS(Uri baseUrl, SignUpBodyRequest signUpBodyRequest) async {
     final result = await _dioClient.post(
       Endpoint.signUp.generateBaseUrl(baseUrl),
-      data: signUpBodyRequest.toJson().toString());
+      data: signUpBodyRequest.toJson());
     return UserSaaSResponse.fromJson(result);
   }
 }

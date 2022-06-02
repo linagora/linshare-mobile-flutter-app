@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/data.dart';
+import 'package:data/src/network/model/request/subscription_body_request.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
@@ -43,7 +44,7 @@ class AuthenticationSaaSDataSourceImpl implements AuthenticationSaaSDataSource {
   @override
   Future<SaaSSecretToken> getSaaSSecretToken(Uri baseUrl, PlanRequest planRequest) {
     return Future.sync(() async {
-      final result = await saaSHttpClient.getSaaSSecretToken(baseUrl, planRequest.toPlanBodyRequest());
+      final result = await saaSHttpClient.getSaaSSecretToken(baseUrl, SubscriptionBodyRequest([planRequest.toPlanBodyRequest()]));
       return result.secretToken;
     }).catchError((error) {
       remoteExceptionThrower.throwRemoteException(error, handler: (DioError dioError) {
