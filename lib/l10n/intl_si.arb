@@ -1,1 +1,3056 @@
-{}
+{
+  "initializing_data": "",
+  "@initializing_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_text_login_to_continue": "",
+  "@login_text_login_to_continue": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "https": "",
+  "@https": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_file_title": "",
+  "@upload_file_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_text_slogan": "",
+  "@login_text_slogan": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_prepare_text": "",
+  "@upload_prepare_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_success_text": "",
+  "@upload_success_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "wrong_url_message": "",
+  "@wrong_url_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "credential_error_message": "",
+  "@credential_error_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unknown_error_login_message": "",
+  "@unknown_error_login_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "share": "",
+  "@share": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "title_quick_share": "",
+  "@title_quick_share": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_recipients": "",
+  "@add_recipients": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "download_to_device": "",
+  "@download_to_device": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_people": "",
+  "@add_people": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file_could_not_be_share": "",
+  "@file_could_not_be_share": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "some_items_could_not_be_deleted": "",
+  "@some_items_could_not_be_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloading_files": "",
+  "@downloading_files": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfFiles"
+    ],
+    "placeholders": {
+      "numberOfFiles": {}
+    }
+  },
+  "delete": "",
+  "@delete": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "can_not_connect_network": "",
+  "@can_not_connect_network": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "can_not_proceed_while_offline": "",
+  "@can_not_proceed_while_offline": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "choose": "",
+  "@choose": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "account_details_title": "",
+  "@account_details_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "account_details": "",
+  "@account_details": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "no_description": "",
+  "@no_description": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unknown_role": "",
+  "@unknown_role": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_create": "",
+  "@audit_action_title_create": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_download": "",
+  "@audit_action_title_download": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_revision": "",
+  "@audit_action_message_delete_revision": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "please_enable_second_factor_authentication_to_continue": "",
+  "@please_enable_second_factor_authentication_to_continue": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "second_factor_authentication": "",
+  "@second_factor_authentication": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "input_6_digit_from_free_otp": "",
+  "@input_6_digit_from_free_otp": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "please_fill_up_all_numbers": "",
+  "@please_fill_up_all_numbers": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create": "",
+  "@create": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "rename_node": "",
+  "@rename_node": {
+    "type": "text",
+    "placeholders_order": [
+      "nodeName"
+    ],
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "workgroup": "",
+  "@workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file": "",
+  "@file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "folder": "",
+  "@folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "node_name_not_empty": "",
+  "@node_name_not_empty": {
+    "type": "text",
+    "placeholders_order": [
+      "nodeName"
+    ],
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_already_exists": "",
+  "@node_name_already_exists": {
+    "type": "text",
+    "placeholders_order": [
+      "nodeName"
+    ],
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_contain_special_character": "",
+  "@node_name_contain_special_character": {
+    "type": "text",
+    "placeholders_order": [
+      "nodeName"
+    ],
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "node_name_contain_last_dot": "",
+  "@node_name_contain_last_dot": {
+    "type": "text",
+    "placeholders_order": [
+      "nodeName"
+    ],
+    "placeholders": {
+      "nodeName": {}
+    }
+  },
+  "add_team_members": "",
+  "@add_team_members": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "existing_members": "",
+  "@existing_members": {
+    "type": "text",
+    "placeholders_order": [
+      "nbMembers"
+    ],
+    "placeholders": {
+      "nbMembers": {}
+    }
+  },
+  "or": "",
+  "@or": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sender": "",
+  "@sender": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search_in_my_received_shares": "",
+  "@search_in_my_received_shares": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_member": "",
+  "@are_you_sure_you_want_to_delete_member": {
+    "type": "text",
+    "placeholders_order": [
+      "memberName",
+      "workspaceName"
+    ],
+    "placeholders": {
+      "memberName": {},
+      "workspaceName": {}
+    }
+  },
+  "biometric_authentication_is_locked": "",
+  "@biometric_authentication_is_locked": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file_cannot_be_switched_to_offline_mode": "",
+  "@file_cannot_be_switched_to_offline_mode": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_sso_button": "",
+  "@login_sso_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pending": "",
+  "@pending": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "active_closed": "",
+  "@active_closed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "archived": "",
+  "@archived": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "archived_date": "",
+  "@archived_date": {
+    "type": "text",
+    "placeholders_order": [
+      "date"
+    ],
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "active": "",
+  "@active": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advanced_options": "",
+  "@advanced_options": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reminder_date": "",
+  "@reminder_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "allow_deletion": "",
+  "@allow_deletion": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_protected": "",
+  "@password_protected": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "archive": "",
+  "@archive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_request_could_not_be_updated": "",
+  "@upload_request_could_not_be_updated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "some_upload_requests_could_not_be_updated": "",
+  "@some_upload_requests_could_not_be_updated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_archive_multiple_upload_request": "",
+  "@confirm_archive_multiple_upload_request": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "copy_before_archiving": "",
+  "@copy_before_archiving": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "close": "",
+  "@close": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_close_multiple_upload_request": "",
+  "@confirm_close_multiple_upload_request": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "biometric_timeout_title": "",
+  "@biometric_timeout_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_timeout_second": "",
+  "@biometric_timeout_second": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "biometric_timeout_minute": "",
+  "@biometric_timeout_minute": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "biometric_timeout_hour": "",
+  "@biometric_timeout_hour": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "search_in": "",
+  "@search_in": {
+    "type": "text",
+    "placeholders_order": [
+      "node"
+    ],
+    "placeholders": {
+      "node": {}
+    }
+  },
+  "move": "",
+  "@move": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "move_here": "",
+  "@move_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "versioning_enable": "",
+  "@versioning_enable": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_want_to_remove_this_version": "",
+  "@are_you_sure_want_to_remove_this_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_setting": "",
+  "@advance_search_setting": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_document": "",
+  "@advance_search_type_document": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_pdf": "",
+  "@advance_search_type_pdf": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_image": "",
+  "@advance_search_type_image": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_archive": "",
+  "@advance_search_type_archive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_other": "",
+  "@advance_search_type_other": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_year": "",
+  "@advance_search_date_past_year": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_button_reset": "",
+  "@advance_search_button_reset": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_button_apply": "",
+  "@advance_search_button_apply": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit": "",
+  "@edit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_member": "",
+  "@drive_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_surname_title": "",
+  "@sign_up_surname_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_sign_up_name": "",
+  "@hint_input_sign_up_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_sign_up_surname": "",
+  "@hint_input_sign_up_surname": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_completed_title_center": "",
+  "@sign_up_completed_title_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_completed_message_center": "",
+  "@sign_up_completed_message_center": {
+    "type": "text",
+    "placeholders_order": [
+      "email"
+    ],
+    "placeholders": {
+      "email": {}
+    }
+  },
+  "email_is_not_available": "",
+  "@email_is_not_available": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "external_member": "",
+  "@external_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files": "",
+  "@files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_request_group_modification_date": "",
+  "@upload_request_group_modification_date": {
+    "type": "text",
+    "placeholders_order": [
+      "date"
+    ],
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "view": "",
+  "@view": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipients": "",
+  "@recipients": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "meta_data": "",
+  "@meta_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_total_file_size": "",
+  "@max_total_file_size": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_language_meta_data": "",
+  "@notification_language_meta_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "override_this_role_for_all_existing_workgroups": "",
+  "@override_this_role_for_all_existing_workgroups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "edit_default_workgroup_role": "",
+  "@edit_default_workgroup_role": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_uploaded": "",
+  "@files_uploaded": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_upload_request_url": "",
+  "@audit_action_message_create_upload_request_url": {
+    "type": "text",
+    "placeholders_order": [
+      "contactEmail"
+    ],
+    "placeholders": {
+      "contactEmail": {}
+    }
+  },
+  "audit_action_message_update_upload_request_recipient": "",
+  "@audit_action_message_update_upload_request_recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "check_all": "",
+  "@check_all": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_download_upload_request_entry_other": "",
+  "@audit_action_message_download_upload_request_entry_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "file_type": "",
+  "@file_type": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_workspace": "",
+  "@new_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace": "",
+  "@workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_workspace": "",
+  "@create_new_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_workspace": "",
+  "@create_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "role_in_this_workspace": "",
+  "@role_in_this_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_work_space_member": "",
+  "@are_you_sure_you_want_to_delete_work_space_member": {
+    "type": "text",
+    "placeholders_order": [
+      "memberName",
+      "workspaceName"
+    ],
+    "placeholders": {
+      "memberName": {},
+      "workspaceName": {}
+    }
+  },
+  "workspace_admin": "",
+  "@workspace_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace_reader": "",
+  "@workspace_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workspace_writer": "",
+  "@workspace_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_failed": "",
+  "@sign_up_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_message_failed": "",
+  "@sign_up_message_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_again": "",
+  "@sign_up_again": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_technical_support": "",
+  "@contact_technical_support": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_technical_support_failed": "",
+  "@contact_technical_support_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_is_copied_to_a_shared_space": "",
+  "@the_file_is_copied_to_a_shared_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_uploading_status": "",
+  "@current_uploads_uploading_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "order_by": "",
+  "@order_by": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "photos_and_videos": "",
+  "@photos_and_videos": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_could_not_be_deleted": "",
+  "@files_could_not_be_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_remove_account_title": "",
+  "@confirm_remove_account_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_folder": "",
+  "@create_folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_folder": "",
+  "@new_folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "last_login": "",
+  "@last_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "last_name": "",
+  "@last_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_to_workspace": "",
+  "@upload_to_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shared_space": "",
+  "@shared_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reader": "",
+  "@reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloading_file": "",
+  "@downloading_file": {
+    "type": "text",
+    "placeholders_order": [
+      "fileName"
+    ],
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "copy_to": "",
+  "@copy_to": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_is_required": "",
+  "@email_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "name": "",
+  "@name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "preview": "",
+  "@preview": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_a_member": "",
+  "@add_a_member": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_upload_workgroup_document_self": "",
+  "@audit_action_message_upload_workgroup_document_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "canceled": "",
+  "@canceled": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_waiting_status": "",
+  "@current_uploads_waiting_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_has_been_successfully_deleted": "",
+  "@the_file_has_been_successfully_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_name_title": "",
+  "@sign_up_name_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hint_input_password_login": "",
+  "@hint_input_password_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "modified": "",
+  "@modified": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_language": "",
+  "@notification_language": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search_in_shared_space_files": "",
+  "@search_in_shared_space_files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_update_folder_other": "",
+  "@audit_action_message_update_folder_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "modification_date": "",
+  "@modification_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cancel": "",
+  "@cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "surname_is_required": "",
+  "@surname_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "activities": "",
+  "@activities": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "logout": "",
+  "@logout": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_writer": "",
+  "@workgroup_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_file_size": "",
+  "@max_file_size": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_member_other": "",
+  "@audit_action_message_delete_member_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "hint_input_email_login": "",
+  "@hint_input_email_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "allow_closure": "",
+  "@allow_closure": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_shared_space_tab": "",
+  "@current_uploads_shared_space_tab": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "select_all": "",
+  "@select_all": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_and_share_button": "",
+  "@upload_and_share_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unselect_all": "",
+  "@unselect_all": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "description": "",
+  "@description": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_copy_document_to_shared_space_other": "",
+  "@audit_action_message_copy_document_to_shared_space_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "nameVarious": {}
+    }
+  },
+  "workgroup_nodes_surfing_root_back_title": "",
+  "@workgroup_nodes_surfing_root_back_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "common_error_occured_message": "",
+  "@common_error_occured_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_drive": "",
+  "@new_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_folder_other": "",
+  "@audit_action_message_create_folder_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "login_message_bottom": "",
+  "@login_message_bottom": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "duplicate": "",
+  "@duplicate": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "details": "",
+  "@details": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pick_the_destination": "",
+  "@pick_the_destination": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_multiple": "",
+  "@are_you_sure_you_want_to_delete_multiple": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "create_an_account": "",
+  "@create_an_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_workgroup": "",
+  "@create_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_failed": "",
+  "@the_upload_request_has_been_updated_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_nodes_surfing_sort_type_title": "",
+  "@workgroup_nodes_surfing_sort_type_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "no_results_found": "",
+  "@no_results_found": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_delete": "",
+  "@audit_action_title_delete": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "size": "",
+  "@size": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "creation_date": "",
+  "@creation_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_password_title": "",
+  "@login_password_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_folder_other": "",
+  "@audit_action_message_delete_folder_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "email_message": "",
+  "@email_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_update_workgroup_document_self": "",
+  "@audit_action_message_update_workgroup_document_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "browse": "",
+  "@browse": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "manage_version": "",
+  "@manage_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_authentication_not_enrolled": "",
+  "@biometric_authentication_not_enrolled": {
+    "type": "text",
+    "placeholders_order": [
+      "biometricKind"
+    ],
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "use_your_own_server": "",
+  "@use_your_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_contributor": "",
+  "@workgroup_contributor": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_is_required": "",
+  "@password_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "uploading_files_status_title": "",
+  "@uploading_files_status_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_new_workgroup": "",
+  "@create_new_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "items_selected": "",
+  "@items_selected": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "some_items_could_not_be_copied_to_shared_space": "",
+  "@some_items_could_not_be_copied_to_shared_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "available_space": "",
+  "@available_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_have_been_successfully_duplicated": "",
+  "@files_have_been_successfully_duplicated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "show_less": "",
+  "@show_less": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search_in_upload_request_groups": "",
+  "@search_in_upload_request_groups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_folder_self": "",
+  "@audit_action_message_create_folder_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "my_rights": "",
+  "@my_rights": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_copy_document_to_personal_space_other": "",
+  "@audit_action_message_copy_document_to_personal_space_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "do_not_have_any_workgroup": "",
+  "@do_not_have_any_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "received_shares": "",
+  "@received_shares": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_member_self": "",
+  "@audit_action_message_delete_member_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_document_self": "",
+  "@audit_action_message_delete_workgroup_document_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_to_personal_space_self": "",
+  "@audit_action_message_copy_document_to_personal_space_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "items": "",
+  "@items": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems"
+    ],
+    "placeholders": {
+      "numberOfItems": {}
+    }
+  },
+  "all_shared_spaces_have_been_deleted": "",
+  "@all_shared_spaces_have_been_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_drive": "",
+  "@create_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_update": "",
+  "@audit_action_title_update": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_has_been_successfully_renamed": "",
+  "@the_file_has_been_successfully_renamed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recipient": "",
+  "@recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "submit": "",
+  "@submit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "open_with_biometric": "",
+  "@open_with_biometric": {
+    "type": "text",
+    "placeholders_order": [
+      "biometricKind"
+    ],
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "search_in_my_space": "",
+  "@search_in_my_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_upload_request_button": "",
+  "@create_upload_request_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "my_space_text_upload_your_files_here": "",
+  "@my_space_text_upload_your_files_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_could_not_be_deleted": "",
+  "@the_file_could_not_be_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "new_workgroup": "",
+  "@new_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "preparing_to_preview_file": "",
+  "@preparing_to_preview_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_update_workgroup_self": "",
+  "@audit_action_message_update_workgroup_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "no_preview_available": "",
+  "@no_preview_available": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search_in_shared_space": "",
+  "@search_in_shared_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_my_space_tab": "",
+  "@current_uploads_my_space_tab": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "results_count": "",
+  "@results_count": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfResults"
+    ],
+    "placeholders": {
+      "numberOfResults": {}
+    }
+  },
+  "activated_at": "",
+  "@activated_at": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "collective_upload": "",
+  "@collective_upload": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_upload_revision": "",
+  "@audit_action_title_upload_revision": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file_has_been_successfully_shared": "",
+  "@file_has_been_successfully_shared": {
+    "type": "text",
+    "placeholders_order": [
+      "sharesNumber"
+    ],
+    "placeholders": {
+      "sharesNumber": {}
+    }
+  },
+  "tooBigFiles": "",
+  "@tooBigFiles": {
+    "type": "text",
+    "placeholders_order": [
+      "nbFiles",
+      "quota",
+      "firstElementName"
+    ],
+    "placeholders": {
+      "nbFiles": {},
+      "quota": {},
+      "firstElementName": {}
+    }
+  },
+  "recipients_have_been_successfully_added": "",
+  "@recipients_have_been_successfully_added": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "export_file": "",
+  "@export_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unknown_user": "",
+  "@unknown_user": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password_is_invalid": "",
+  "@password_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "update": "",
+  "@update": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_email_title": "",
+  "@login_email_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "user_is_successfully_removed": "",
+  "@user_is_successfully_removed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "go_to_setup": "",
+  "@go_to_setup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "go_to_sign_in": "",
+  "@go_to_sign_in": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_workgroup_self": "",
+  "@audit_action_message_create_workgroup_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "shared": "",
+  "@shared": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_workgroup_document_other": "",
+  "@audit_action_message_delete_workgroup_document_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "sign_up_send_me_a_password": "",
+  "@sign_up_send_me_a_password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_could_not_be_duplicated": "",
+  "@files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "type": "",
+  "@type": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason": "",
+  "@biometric_authentication_localized_reason": {
+    "type": "text",
+    "placeholders_order": [
+      "biometricKind"
+    ],
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "modified_by": "",
+  "@modified_by": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_week": "",
+  "@advance_search_date_past_week": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_download_revision": "",
+  "@audit_action_title_download_revision": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "writer": "",
+  "@writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "fingerprint_or_face": "",
+  "@fingerprint_or_face": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "all_items_have_been_copied_to_my_space": "",
+  "@all_items_have_been_copied_to_my_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "available_space_value": "",
+  "@available_space_value": {
+    "type": "text",
+    "placeholders_order": [
+      "quota",
+      "usedSpace"
+    ],
+    "placeholders": {
+      "quota": {},
+      "usedSpace": {}
+    }
+  },
+  "audit_action_message_upload_revision": "",
+  "@audit_action_message_upload_revision": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "number_of_uploaded_files": "",
+  "@number_of_uploaded_files": {
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no": "",
+  "@no": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add_new_upload_request": "",
+  "@add_new_upload_request": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "created_at": "",
+  "@created_at": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "this_feature_not_supported": "",
+  "@this_feature_not_supported": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "some_items_have_been_copied_to_my_space": "",
+  "@some_items_have_been_copied_to_my_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_upload_failed_status": "",
+  "@current_uploads_upload_failed_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yes": "",
+  "@yes": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "some_upload_requests_have_been_updated": "",
+  "@some_upload_requests_have_been_updated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_admin": "",
+  "@workgroup_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_copy_document_from_personal_space_self": "",
+  "@audit_action_message_copy_document_from_personal_space_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "create_upload_requests_here": "",
+  "@create_upload_requests_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_size_per_file": "",
+  "@max_size_per_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "available_offline": "",
+  "@available_offline": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_delete_drive_member": "",
+  "@are_you_sure_you_want_to_delete_drive_member": {
+    "type": "text",
+    "placeholders_order": [
+      "memberName",
+      "driveName"
+    ],
+    "placeholders": {
+      "memberName": {},
+      "driveName": {}
+    }
+  },
+  "audit_action_message_create_workgroup_other": "",
+  "@audit_action_message_create_workgroup_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "activation_date": "",
+  "@activation_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "version": "",
+  "@version": {
+    "type": "text",
+    "placeholders_order": [
+      "version"
+    ],
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "create_new_drive": "",
+  "@create_new_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "destination": "",
+  "@destination": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_will_be_made_available_for_offline_use": "",
+  "@files_will_be_made_available_for_offline_use": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_create_upload_request_recipient": "",
+  "@audit_action_message_create_upload_request_recipient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_number_files_error": "",
+  "@max_number_files_error": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "copy_to_a_workgroup": "",
+  "@copy_to_a_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_text_button": "",
+  "@upload_text_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "admin": "",
+  "@admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shared_spaces_could_not_be_deleted": "",
+  "@shared_spaces_could_not_be_deleted": {
+    "type": "text",
+    "placeholders_order": [
+      "sharedSpacesNumber"
+    ],
+    "placeholders": {
+      "sharedSpacesNumber": {}
+    }
+  },
+  "advance_search_type_spreadsheet": "",
+  "@advance_search_type_spreadsheet": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_requests": "",
+  "@upload_requests": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "uploading_files_view_button": "",
+  "@uploading_files_view_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "face": "",
+  "@face": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "individual_upload": "",
+  "@individual_upload": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_file_size_error": "",
+  "@max_file_size_error": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_requests_no_files_uploaded": "",
+  "@upload_requests_no_files_uploaded": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "members": "",
+  "@members": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_request_has_been_updated": "",
+  "@upload_request_has_been_updated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "activated_date": "",
+  "@activated_date": {
+    "type": "text",
+    "placeholders_order": [
+      "date"
+    ],
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "sharing_multiple_after_uploaded_success": "",
+  "@sharing_multiple_after_uploaded_success": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfRecipients"
+    ],
+    "placeholders": {
+      "numberOfRecipients": {}
+    }
+  },
+  "files_have_been_successfully_deleted": "",
+  "@files_have_been_successfully_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sharing_after_uploaded_failure": "",
+  "@sharing_after_uploaded_failure": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_message_center": "",
+  "@login_message_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_disabled_in_setting_app": "",
+  "@biometric_disabled_in_setting_app": {
+    "type": "text",
+    "placeholders_order": [
+      "biometricKind"
+    ],
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "add_team_members_with_roles": "",
+  "@add_team_members_with_roles": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_restore_revision": "",
+  "@audit_action_title_restore_revision": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_could_not_be_copied": "",
+  "@the_file_could_not_be_copied": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search_in_upload_request_entries": "",
+  "@search_in_upload_request_entries": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_reader": "",
+  "@drive_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "restore": "",
+  "@restore": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password": "",
+  "@password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "workgroup_reader": "",
+  "@workgroup_reader": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "my_space": "",
+  "@my_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_size_of_a_file": "",
+  "@max_size_of_a_file": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "member_default_role_of_all_workgroups_inside_this_workspace": "",
+  "@member_default_role_of_all_workgroups_inside_this_workspace": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkbox_text_login_with_sso": "",
+  "@checkbox_text_login_with_sso": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_button_login": "",
+  "@login_button_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sign_up_continue": "",
+  "@sign_up_continue": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_is_invalid": "",
+  "@email_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "drive_admin": "",
+  "@drive_admin": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "touch_id": "",
+  "@touch_id": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "first_name": "",
+  "@first_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_workgroup_self": "",
+  "@audit_action_message_delete_workgroup_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "create_new_folder": "",
+  "@create_new_folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_files_could_not_be_copied_to_my_space": "",
+  "@the_files_could_not_be_copied_to_my_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_has_been_copied_successfully": "",
+  "@the_file_has_been_copied_successfully": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email": "",
+  "@email": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "url_is_invalid": "",
+  "@url_is_invalid": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings": "",
+  "@settings": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_update_workgroup_document_other": "",
+  "@audit_action_message_update_workgroup_document_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "upload_requests_root_back_title": "",
+  "@upload_requests_root_back_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "item_last_modified": "",
+  "@item_last_modified": {
+    "type": "text",
+    "placeholders_order": [
+      "dateString"
+    ],
+    "placeholders": {
+      "dateString": {}
+    }
+  },
+  "role_in_this_drive": "",
+  "@role_in_this_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_day": "",
+  "@advance_search_date_past_day": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "status": "",
+  "@status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_succeed_status": "",
+  "@current_uploads_succeed_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "item_created_date": "",
+  "@item_created_date": {
+    "type": "text",
+    "placeholders_order": [
+      "dateString"
+    ],
+    "placeholders": {
+      "dateString": {}
+    }
+  },
+  "some_items_are_successfully_deleted": "",
+  "@some_items_are_successfully_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_delete_folder_self": "",
+  "@audit_action_message_delete_folder_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "some_files_could_not_be_duplicated": "",
+  "@some_files_could_not_be_duplicated": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "max_number_of_files": "",
+  "@max_number_of_files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_individual_upload_request_title": "",
+  "@create_individual_upload_request_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_type_audio": "",
+  "@advance_search_type_audio": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_update_member_other": "",
+  "@audit_action_message_update_member_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "advance_search_date_any_time": "",
+  "@advance_search_date_any_time": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "second_factor_authentication_is_required_for_your_account": "",
+  "@second_factor_authentication_is_required_for_your_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_share_failed_status": "",
+  "@current_uploads_share_failed_status": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "fingerprint": "",
+  "@fingerprint": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "expired_closed": "",
+  "@expired_closed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason_disable": "",
+  "@biometric_authentication_localized_reason_disable": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current_uploads_screen_title": "",
+  "@current_uploads_screen_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_copy_document_from_received_share_self": "",
+  "@audit_action_message_copy_document_from_received_share_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "confirm_add_recipients_title": "",
+  "@confirm_add_recipients_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_download_workgroup_document_other": "",
+  "@audit_action_message_download_workgroup_document_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "drive": "",
+  "@drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "upload_failure_text": "",
+  "@upload_failure_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contributor": "",
+  "@contributor": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "copy_here": "",
+  "@copy_here": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm_cancel_multiple_upload_request": "",
+  "@confirm_cancel_multiple_upload_request": {
+    "type": "text",
+    "placeholders_order": [
+      "numberOfItems",
+      "singleItemName"
+    ],
+    "placeholders": {
+      "numberOfItems": {},
+      "singleItemName": {}
+    }
+  },
+  "audit_action_message_add_member_self": "",
+  "@audit_action_message_add_member_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "total_size_of_files": "",
+  "@total_size_of_files": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "feedback_dialog_button": "",
+  "@feedback_dialog_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "owner": "",
+  "@owner": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_delete_revision": "",
+  "@audit_action_title_delete_revision": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_update_member_self": "",
+  "@audit_action_message_update_member_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "face_id": "",
+  "@face_id": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "created": "",
+  "@created": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "create_collective_upload_request_title": "",
+  "@create_collective_upload_request_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_upload_request_has_been_updated_successfully": "",
+  "@the_upload_request_has_been_updated_successfully": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "member_default_role_of_all_workgroups_inside_this_drive": "",
+  "@member_default_role_of_all_workgroups_inside_this_drive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "preparing_to_export": "",
+  "@preparing_to_export": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_copy_document_from_shared_space_other": "",
+  "@audit_action_message_copy_document_from_shared_space_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "sharing_single_after_uploaded_success": "",
+  "@sharing_single_after_uploaded_success": {
+    "type": "text",
+    "placeholders_order": [
+      "recipientName"
+    ],
+    "placeholders": {
+      "recipientName": {}
+    }
+  },
+  "add": "",
+  "@add": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "collective": "",
+  "@collective": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "user_could_not_be_removed": "",
+  "@user_could_not_be_removed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_copy_document_from_received_share_other": "",
+  "@audit_action_message_copy_document_from_received_share_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "total_file_size_error": "",
+  "@total_file_size_error": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_log_actor": "",
+  "@audit_log_actor": {
+    "type": "text",
+    "placeholders_order": [
+      "actorName"
+    ],
+    "placeholders": {
+      "actorName": {}
+    }
+  },
+  "audit_action_message_download_revision": "",
+  "@audit_action_message_download_revision": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_create_upload_request_entry": "",
+  "@audit_action_message_create_upload_request_entry": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "upload_request_proceed_button": "",
+  "@upload_request_proceed_button": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notEnoughQuota": "",
+  "@notEnoughQuota": {
+    "type": "text",
+    "placeholders_order": [
+      "quota"
+    ],
+    "placeholders": {
+      "quota": {}
+    }
+  },
+  "audit_action_message_delete_workgroup_other": "",
+  "@audit_action_message_delete_workgroup_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_copy_document_to_shared_space_self": "",
+  "@audit_action_message_copy_document_to_shared_space_self": {
+    "type": "text",
+    "placeholders_order": [
+      "nameVarious"
+    ],
+    "placeholders": {
+      "nameVarious": {}
+    }
+  },
+  "default_role_in_workgroups": "",
+  "@default_role_in_workgroups": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "expiration_date": "",
+  "@expiration_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_authentication_localized_reason_enable": "",
+  "@biometric_authentication_localized_reason_enable": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "loading": "",
+  "@loading": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_add_member_other": "",
+  "@audit_action_message_add_member_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_shared_space_self": "",
+  "@audit_action_message_copy_document_from_shared_space_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_message_upload_workgroup_document_other": "",
+  "@audit_action_message_upload_workgroup_document_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "not_have_received_yet": "",
+  "@not_have_received_yet": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "title_feedback_dialog": "",
+  "@title_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_download_upload_request_entry_self": "",
+  "@audit_action_message_download_upload_request_entry_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "audit_action_title_addition": "",
+  "@audit_action_title_addition": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "save": "",
+  "@save": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shared_space_has_been_deleted": "",
+  "@shared_space_has_been_deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "back": "",
+  "@back": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "rename": "",
+  "@rename": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_download_folder_other": "",
+  "@audit_action_message_download_folder_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "biometric_authentication": "",
+  "@biometric_authentication": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_download_folder_self": "",
+  "@audit_action_message_download_folder_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_update_workgroup_other": "",
+  "@audit_action_message_update_workgroup_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {}
+    }
+  },
+  "add_new_file_or_folder": "",
+  "@add_new_file_or_folder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_upload": "",
+  "@audit_action_title_upload": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "my_space_title": "",
+  "@my_space_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cannot_copy_file_to_shared_space": "",
+  "@cannot_copy_file_to_shared_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "name_is_required": "",
+  "@name_is_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_user_own_server_message_center": "",
+  "@login_user_own_server_message_center": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shared_with": "",
+  "@shared_with": {
+    "type": "text",
+    "placeholders_order": [
+      "nbContacts"
+    ],
+    "placeholders": {
+      "nbContacts": {}
+    }
+  },
+  "audit_action_message_update_folder_self": "",
+  "@audit_action_message_update_folder_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "received": "",
+  "@received": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notification_date": "",
+  "@notification_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "copy_to_my_space": "",
+  "@copy_to_my_space": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "expiration": "",
+  "@expiration": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "invalid_otp": "",
+  "@invalid_otp": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_download_workgroup_document_self": "",
+  "@audit_action_message_download_workgroup_document_self": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "audit_action_message_copy_document_from_personal_space_other": "",
+  "@audit_action_message_copy_document_from_personal_space_other": {
+    "type": "text",
+    "placeholders_order": [
+      "authorName",
+      "resourceName",
+      "nameVarious"
+    ],
+    "placeholders": {
+      "authorName": {},
+      "resourceName": {},
+      "nameVarious": {}
+    }
+  },
+  "me": "",
+  "@me": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advance_search_date_past_month": "",
+  "@advance_search_date_past_month": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "email_subject": "",
+  "@email_subject": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "touch_id_or_face_id": "",
+  "@touch_id_or_face_id": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_title_copy": "",
+  "@audit_action_title_copy": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "biometric_authentication_message": "",
+  "@biometric_authentication_message": {
+    "type": "text",
+    "placeholders_order": [
+      "biometricKind"
+    ],
+    "placeholders": {
+      "biometricKind": {}
+    }
+  },
+  "login_sso_failed": "",
+  "@login_sso_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "the_file_could_not_be_renamed": "",
+  "@the_file_could_not_be_renamed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "files_will_no_longer_be_usable_without_be_network": "",
+  "@files_will_no_longer_be_usable_without_be_network": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "user_locked_message": "",
+  "@user_locked_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audit_action_message_copy_revision_from_shared_space": "",
+  "@audit_action_message_copy_revision_from_shared_space": {
+    "type": "text",
+    "placeholders_order": [
+      "resourceName"
+    ],
+    "placeholders": {
+      "resourceName": {}
+    }
+  },
+  "drive_writer": "",
+  "@drive_writer": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_feedback_dialog": "",
+  "@message_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  }
+}
