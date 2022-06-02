@@ -34,8 +34,8 @@ import 'package:domain/domain.dart';
 class SaaSConsoleRepositoryImpl extends SaaSConsoleRepository {
 
   final loginBaseUrl = 'https://user.linshare-saas-on-commit.integration-linshare.org';
-  final secretBaseUrl = 'https://subscription-twakeconsole.dev-linshare.lin-saas.dev';
-  final signUpBaseUrl = 'https://account-twakeconsole.dev-linshare.lin-saas.dev';
+  final secretBaseUrl = 'https://dev-subscription.twake.app';
+  final signUpBaseUrl = 'https://dev-account.twake.app';
 
   final stagingLoginBaseUrl = 'https://staging-web.linshare.app';
   final stagingSecretBaseUrl = 'https://staging-subscription.linshare.app';
