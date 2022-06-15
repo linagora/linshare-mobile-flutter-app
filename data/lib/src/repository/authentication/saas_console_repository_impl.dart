@@ -38,8 +38,8 @@ class SaaSConsoleRepositoryImpl extends SaaSConsoleRepository {
   final signUpBaseUrl = 'https://dev-account.twake.app';
 
   final stagingLoginBaseUrl = 'https://staging-web.linshare.app';
-  final stagingSecretBaseUrl = 'https://staging-subscription.linshare.app';
-  final stagingSignUpBaseUrl = 'https://staging-account.linshare.app';
+  final stagingSecretBaseUrl = 'https://staging-subscription.twake.app';
+  final stagingSignUpBaseUrl = 'https://staging-account.twake.app';
 
   final prodLoginBaseUrl = 'https://web.linshare.app';
   final prodSecretBaseUrl = 'https://subscription.linshare.app';
