@@ -37,7 +37,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'subscription_body_request.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class SubscriptionBodyRequest with EquatableMixin {
 
   @JsonKey(includeIfNull: false)
