@@ -70,6 +70,7 @@ import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/rename_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
@@ -88,6 +89,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
+import 'package:path/path.dart' as path;
 
 class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
@@ -774,7 +776,9 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
         ? AppLocalizations.of(context).file
         : AppLocalizations.of(context).folder;
 
-    EditTextModalSheetBuilder()
+    final nameWithoutExtension = path.basenameWithoutExtension(workGroupNode.name);
+
+    RenameModalSheetBuilder(workGroupNode.name)
         .key(Key('rename_work_group_node_modal'))
         .title(AppLocalizations.of(context).rename_node(nodeName.toLowerCase()))
         .cancelText(AppLocalizations.of(context).cancel)
@@ -784,8 +788,8 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
             (value) => _getErrorString(context, workGroupNode, value))
         .setTextController(TextEditingController.fromValue(
           TextEditingValue(
-              text: workGroupNode.name,
-              selection: TextSelection(baseOffset: 0, extentOffset: workGroupNode.name.length)),
+              text: nameWithoutExtension,
+              selection: TextSelection(baseOffset: 0, extentOffset: nameWithoutExtension.length)),
         ))
         .show(context);
   }

@@ -62,7 +62,7 @@ import 'package:linshare_flutter_app/presentation/view/header/context_menu_heade
 import 'package:linshare_flutter_app/presentation/view/header/more_action_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/rename_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/copy_destination_picker_action.dart';
@@ -71,6 +71,7 @@ import 'package:linshare_flutter_app/presentation/widget/destination_picker/dest
 import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 import 'package:open_file/open_file.dart' as open_file;
+import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -337,7 +338,9 @@ class MySpaceViewModel extends BaseViewModel {
   void renameDocument(BuildContext context, Document document) {
     _appNavigation.popBack();
 
-    EditTextModalSheetBuilder()
+    final name = path.basenameWithoutExtension(document.name);
+
+    RenameModalSheetBuilder(document.name)
         .key(Key('rename_modal_sheet'))
         .title(AppLocalizations.of(context).rename_node(AppLocalizations.of(context).file.toLowerCase()))
         .cancelText(AppLocalizations.of(context).cancel)
@@ -347,10 +350,10 @@ class MySpaceViewModel extends BaseViewModel {
         .setTextController(
           TextEditingController.fromValue(
             TextEditingValue(
-                text: document.name,
+                text: name,
                 selection: TextSelection(
                     baseOffset: 0,
-                    extentOffset: document.name.length
+                    extentOffset: name.length
                 )
             ),
           ))
