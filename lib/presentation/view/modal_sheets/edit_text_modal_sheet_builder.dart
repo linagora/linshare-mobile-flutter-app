@@ -46,7 +46,7 @@ typedef SetErrorString = String? Function(String);
 
 class EditTextModalSheetBuilder {
   @protected
-  late TextEditingController _textController;
+  late TextEditingController textController;
 
   @protected
   late Key _key;
@@ -98,12 +98,12 @@ class EditTextModalSheetBuilder {
   }
 
   EditTextModalSheetBuilder setTextController(TextEditingController textEditingController) {
-    _textController = textEditingController;
+    textController = textEditingController;
     return this;
   }
 
   EditTextModalSheetBuilder setTextSelection(TextSelection textSelection, {required String value}) {
-    _textController = TextEditingController.fromValue(TextEditingValue(text: value, selection: textSelection));
+    textController = TextEditingController.fromValue(TextEditingValue(text: value, selection: textSelection));
     return this;
   }
 
@@ -132,10 +132,12 @@ class EditTextModalSheetBuilder {
     if (_error == null || (_error != null && _error!.isEmpty)) {
       Navigator.pop(context);
       if (_onConfirmActionClick != null) {
-        _onConfirmActionClick!(_textController.text);
+        _onConfirmActionClick!(newConfirmedName);
       }
     }
   }
+
+  String get newConfirmedName => textController.text;
 
   void _onCancelButtonPress(BuildContext context) {
     Navigator.pop(context);
@@ -169,7 +171,7 @@ class EditTextModalSheetBuilder {
                             keyboardType: TextInputType.visiblePassword,
                             onChanged: (value) => _onTextChanged(value, setState),
                             autofocus: true,
-                            controller: _textController,
+                            controller: textController,
                             decoration: InputDecoration(
                                 errorText: _error,
                                 enabledBorder: UnderlineInputBorder(
