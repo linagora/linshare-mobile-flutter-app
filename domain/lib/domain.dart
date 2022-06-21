@@ -277,6 +277,7 @@ export 'src/repository/workgroup/shared_space_node_repository.dart';
 export 'src/repository/authentication/saas_console_repository.dart';
 export 'src/repository/endpoint/api_repository.dart';
 export 'src/repository/flow/flow_uploader.dart';
+export 'src/repository/settings/setting_repository.dart';
 
 // viewState
 export 'src/state/failure.dart';
@@ -291,6 +292,7 @@ export 'src/usecases/authentication/saas_configuration_view_state.dart';
 // exception
 export 'src/usecases/authentication/authentication_exception.dart';
 export 'src/usecases/authentication/authentication_view_state.dart';
+export 'src/repository/settings/settings_exceptions.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';
