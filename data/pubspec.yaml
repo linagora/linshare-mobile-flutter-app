@@ -5,8 +5,7 @@ author:
 homepage: 'https://www.linshare.org'
 
 environment:
-  sdk: '>=2.16.0 <3.0.0'
-  flutter: ">=1.17.0 <2.0.0"
+  sdk: ">=2.16.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -62,6 +61,8 @@ dependencies:
 
   # uuid
   uuid: 3.0.6
+
+  hive: 2.0.4
 
 dev_dependencies:
   flutter_test:
