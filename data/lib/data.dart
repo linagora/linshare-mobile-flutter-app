@@ -222,3 +222,6 @@ export 'src/util/constant.dart';
 export 'src/util/device_manager.dart';
 export 'src/util/local_biometric_service.dart';
 export 'src/util/oidc_parser.dart';
+
+// hive
+export 'package:data/src/local/hive/config/hive_cache_config.dart';
