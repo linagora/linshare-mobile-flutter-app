@@ -44,10 +44,10 @@ import 'package:linshare_flutter_app/presentation/view/upload_request/combo_box_
 import 'package:linshare_flutter_app/presentation/view/upload_request/date_time_input_field_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/upload_request/date_time_no_change_input_field_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/upload_request/email_message_input_field_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/upload_request/number_input_field_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/upload_request/file_size_input_field_builder.dart';
-import 'package:linshare_flutter_app/presentation/view/upload_request/upload_request_view_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/upload_request/number_input_field_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/upload_request/pair_text_input_field_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/upload_request/upload_request_view_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_arguments.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_type.dart';
 import 'package:linshare_flutter_app/presentation/widget/edit_upload_request/edit_upload_request_viewmodel.dart';
@@ -71,7 +71,7 @@ class _EditUploadRequestWidgetState extends State<EditUploadRequestWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context)?.settings.arguments as EditUploadRequestArguments;
       _model.initialize(context, _arguments);
     });

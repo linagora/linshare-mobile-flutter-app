@@ -85,7 +85,7 @@ class _PendingUploadRequestInsideWidgetState extends UploadRequestInsideWidgetSt
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestArguments;
       if (_arguments != null) {
         _viewModel.initState(_arguments!);

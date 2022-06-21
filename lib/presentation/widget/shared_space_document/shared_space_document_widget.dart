@@ -99,7 +99,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context)?.settings.arguments as SharedSpaceDocumentArguments;
       if (_arguments != null) {
         sharedSpaceDocumentViewModel.initial(_arguments!);

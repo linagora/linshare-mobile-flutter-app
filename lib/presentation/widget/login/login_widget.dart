@@ -68,7 +68,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context)?.settings.arguments as LoginArguments;
       if (_arguments != null) {
         loginViewModel.initState(context, _arguments!);

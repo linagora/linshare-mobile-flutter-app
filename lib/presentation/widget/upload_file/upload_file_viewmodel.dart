@@ -211,7 +211,7 @@ class UploadFileViewModel extends BaseViewModel {
     if (_uploadDestinationTypeObservable.value == DestinationType.workGroup) {
       _uploadToSharedSpace(_uploadFilesArgument!);
     } else {
-      if (_autoCompleteResultListObservable.value == null || _autoCompleteResultListObservable.value!.isEmpty) {
+      if (_autoCompleteResultListObservable.value.isEmpty) {
         _uploadShareFileManager.justUploadFiles(_uploadFilesArgument!);
       } else {
         _uploadShareFileManager.uploadFilesThenShare(
@@ -282,7 +282,7 @@ class UploadFileViewModel extends BaseViewModel {
         case ShareButtonType.uploadAndShare:
           await _uploadShareFileManager.uploadFilesThenShare(
             uploadFiles,
-            _autoCompleteResultListObservable.value!,
+            _autoCompleteResultListObservable.value,
           );
           break;
         case ShareButtonType.workGroup:
