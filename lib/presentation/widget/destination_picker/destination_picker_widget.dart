@@ -75,7 +75,7 @@ class _DestinationPickerWidgetState extends State<DestinationPickerWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         _destinationPickerArguments = ModalRoute.of(context)?.settings.arguments as DestinationPickerArguments;
         if (_destinationPickerArguments != null) {

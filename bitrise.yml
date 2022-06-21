@@ -41,7 +41,7 @@ workflows:
       - cache-push@2: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.1.x
   primary:
     steps:
       - activate-ssh-key@4:
@@ -49,7 +49,7 @@ workflows:
       - git-clone@6: {}
       - flutter-installer@0:
           inputs:
-            - installation_bundle_url: https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_2.10.0-stable.zip
+            - installation_bundle_url: https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.0.1-stable.zip
             - is_update: 'false'
       - cache-pull@2: {}
       - script@1:
@@ -158,6 +158,9 @@ workflows:
             - footer_icon: ''
             - icon_url_on_error: ''
             - webhook_url: "$TWAKE_WEBHOOK_API"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.1.x
 app:
   envs:
     - opts:
@@ -173,3 +176,6 @@ app:
         is_expand: false
       BITRISE_EXPORT_METHOD: development
     - SAAS_AVAILABLE: 'true'
+meta:
+  bitrise.io:
+    stack: osx-xcode-13.1.x

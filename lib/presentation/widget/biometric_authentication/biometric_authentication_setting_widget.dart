@@ -60,13 +60,13 @@ class _BiometricAuthenticationSettingState extends State<BiometricAuthentication
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _biometricAuthenticationSettingViewModel.getBiometricSettings(context);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

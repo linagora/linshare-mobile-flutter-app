@@ -69,7 +69,7 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestCreationArguments;
       _model.initialize(_arguments);
     });

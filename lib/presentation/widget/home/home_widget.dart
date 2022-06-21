@@ -78,14 +78,14 @@ class _HomeWidgetState extends State<HomeWidget> {
     }).setPausedCallBack(() async {
       homeViewModel.resetBiometricAuthenticationTimer();
     });
-    WidgetsBinding.instance?.addObserver(_lifecycleEventHandler);
+    WidgetsBinding.instance.addObserver(_lifecycleEventHandler);
   }
 
   @override
   void dispose() {
     homeViewModel.onDisposed();
     _toastMessageHandler.cancelSubscription();
-    WidgetsBinding.instance?.removeObserver(_lifecycleEventHandler);
+    WidgetsBinding.instance.removeObserver(_lifecycleEventHandler);
     super.dispose();
   }
 
