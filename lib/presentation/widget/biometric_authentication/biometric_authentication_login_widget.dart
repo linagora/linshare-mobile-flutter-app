@@ -57,7 +57,7 @@ class _BiometricAuthenticationLoginState extends State<BiometricAuthenticationLo
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _biometricAuthenticationLoginViewModel.getAvailableBiometric(context);
     });
   }

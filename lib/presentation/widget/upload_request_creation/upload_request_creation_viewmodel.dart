@@ -45,7 +45,9 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_g
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/list_functionalities_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/string_extensions.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
@@ -54,8 +56,6 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_creation
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/string_extensions.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 
 class UploadRequestCreationViewModel extends BaseViewModel {
 
@@ -436,7 +436,7 @@ class UploadRequestCreationViewModel extends BaseViewModel {
       required bool enableNotification
     }
   ) {
-    final listEmails = _autoCompleteResultListObservable.value?.map((e) => e.getSuggestionMail()).toList() ?? [];
+    final listEmails = _autoCompleteResultListObservable.value.map((e) => e.getSuggestionMail()).toList();
     final emailSubject = _emailSubjectObservable.value.toString();
     final addUploadRequest = AddUploadRequest(
         listEmails,

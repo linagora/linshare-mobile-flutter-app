@@ -41,8 +41,8 @@ import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/shared_space_role_name_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/avatar/label_avatar_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/custom_list_tiles/drive_member_list_tile_builder.dart';
@@ -72,7 +72,7 @@ class _AddSharedSpaceNodeMemberWidgetState extends State<AddSharedSpaceNodeMembe
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _arguments = ModalRoute.of(context)?.settings.arguments as AddSharedSpaceNodeMemberArguments;
       _model.initState(_arguments);
     });
