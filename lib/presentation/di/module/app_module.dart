@@ -75,6 +75,12 @@ class AppModule {
     _provideBiometric();
     _provideOfflineMode();
     _provideObservers();
+    _provideHive();
+  }
+
+  void _provideHive() {
+    getIt.registerSingleton(() => AppModeCacheClient());
+    getIt.registerSingleton(() => CachingManager(getIt<AppModeCacheClient>()));
   }
 
   void _provideDataSourceImpl() {
@@ -162,6 +168,7 @@ class AppModule {
     getIt.registerFactory<AuthenticationDataSource>(() => getIt<AuthenticationDataSourceImpl>());
     getIt.registerFactory<AuthenticationOIDCDataSource>(() => getIt<AuthenticationOIDCDataSourceImpl>());
     getIt.registerFactory<AuthenticationSaaSDataSource>(() => getIt<AuthenticationSaaSDataSourceImpl>());
+    getIt.registerFactory<SettingsDatasource>(() => getIt<HiveSettingsDatasource>());
     getIt.registerFactory<DocumentDataSource>(() => getIt<DocumentDataSourceImpl>());
     getIt.registerFactory<SharedSpaceDataSource>(() => getIt<SharedSpaceDataSourceImpl>());
     getIt.registerFactory<AutoCompleteDataSource>(() => getIt<AutoCompleteDataSourceImpl>());
@@ -194,6 +201,7 @@ class AppModule {
     ));
     getIt.registerFactory(() => TokenRepositoryImpl(getIt<SharedPreferences>()));
     getIt.registerFactory(() => CredentialRepositoryImpl(getIt<SharedPreferences>()));
+    getIt.registerFactory(() => SettingsRepositoryImpl(getIt<SettingsDatasource>()));
     getIt.registerFactory(() => SaaSConsoleRepositoryImpl());
     getIt.registerFactory(() => DocumentRepositoryImpl(
       {
@@ -248,6 +256,7 @@ class AppModule {
   }
 
   void _provideRepository() {
+    getIt.registerFactory<SettingsRepository>(() => getIt<SettingsRepositoryImpl>());
     getIt.registerFactory<FlowUploader>(() => getIt<FlowUploaderImpl>());
     getIt.registerFactory<AuthenticationRepository>(() => getIt<AuthenticationRepositoryImpl>());
     getIt.registerFactory<AuthenticationOIDCRepository>(() => getIt<AuthenticationOIDCRepositoryImpl>());
@@ -294,6 +303,9 @@ class AppModule {
       getIt<TokenRepository>(),
       getIt<CredentialRepository>(),
       getIt<APIRepository>()
+    ));
+    getIt.registerFactory(() => GetAppModeInteractor(
+      getIt<SettingsRepository>()
     ));
     getIt.registerFactory(() => GetSaaSConfigurationInteractor(getIt<SaaSConsoleRepository>()));
     getIt.registerFactory(() => GetSecretTokenInteractor(getIt<AuthenticationOIDCRepository>()));
