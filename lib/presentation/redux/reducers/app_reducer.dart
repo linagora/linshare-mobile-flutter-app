@@ -33,13 +33,13 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_node_member_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_node_member_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/advance_search_settings_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_login_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_setting_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/edit_upload_request_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/functionality_reducer.dart';
@@ -47,30 +47,31 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/my_space_reduce
 import 'package:linshare_flutter_app/presentation/redux/reducers/network_connectivity_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/received_share_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/received_shares_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/settings_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/share_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_document_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_file_details_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_details_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_active_closed_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_archived_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_created_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/signup_authentication_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_recipient_details_reducer.dart';
-import 'package:linshare_flutter_app/presentation/redux/reducers/workgroup_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_node_versions_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/shared_space_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/signup_authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/ui_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/update_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_file_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_creation_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_file_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_active_closed_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_archived_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_created_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_details_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_group_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_active_closed_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_archived_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_created_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_inside_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/upload_request_recipient_details_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/workgroup_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 
@@ -80,6 +81,7 @@ import 'document_details_reducer.dart';
 AppState appStateReducer(AppState state, action) {
   if (canExecuteAction(state, action)) {
     return AppState(
+        settingsState: settingsReducer(state.settingsState, action),
         uiState: uiReducer(state.uiState, action),
         authenticationState: authenticationReducer(state.authenticationState, action),
         signUpAuthenticationState: signupAuthenticationReducer(state.signUpAuthenticationState, action),
@@ -125,6 +127,7 @@ AppState appStateReducer(AppState state, action) {
   }
 
   return AppState(
+      settingsState: state.settingsState,
       uiState: state.uiState,
       authenticationState: state.authenticationState,
       signUpAuthenticationState: state.signUpAuthenticationState,
