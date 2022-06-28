@@ -57,6 +57,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.da
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/received_share_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/settings_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/share_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
@@ -161,6 +162,7 @@ class MockOnlineAction extends ActionOnline {}
 
 AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState networkConnectivityState, {MySpaceState? mySpaceState}) {
   return AppState(
+    settingsState: SettingsState.initial(),
     authenticationState: AuthenticationState.initial(),
     signUpAuthenticationState: SignUpAuthenticationState.initial(),
     uploadFileState: UploadFileState.initial(),
