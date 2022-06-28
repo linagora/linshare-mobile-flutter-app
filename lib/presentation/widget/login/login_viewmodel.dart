@@ -62,6 +62,7 @@ class LoginViewModel extends BaseViewModel {
   final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
   final CreatePermanentTokenOIDCInteractor _createPermanentTokenOIDCInteractor;
   final GetTokenOIDCInteractor _getTokenOIDCInteractor;
+  final SetAppModeInteractor _setAppModeInteractor;
   final AppNavigation _appNavigation;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
   final DynamicAPIVersionSupportInterceptor _dynamicAPIVersionSupportInterceptor;
@@ -74,6 +75,7 @@ class LoginViewModel extends BaseViewModel {
     this._getPermanentTokenInteractor,
     this._createPermanentTokenOIDCInteractor,
     this._getTokenOIDCInteractor,
+    this._setAppModeInteractor,
     this._appNavigation,
     this._dynamicUrlInterceptors,
     this._dynamicAPIVersionSupportInterceptor,
@@ -321,6 +323,8 @@ class LoginViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _loginOIDCSuccessAction(String baseUrl, AuthenticationViewState success, AuthenticationType authenticationType) {
     return (Store<AppState> store) async {
+      await _setAppModeInteractor.execute(Uri.parse(baseUrl), authenticationType.getRelevantAppMode());
+
       store.dispatch(AuthenticationAction(Right(success)));
 
       _dynamicUrlInterceptors.changeBaseUrl(baseUrl);
@@ -350,14 +354,15 @@ class LoginViewModel extends BaseViewModel {
           },
           (success) {
             if(success is AuthenticationViewState) {
-              return store.dispatch(loginCredentialsSuccessAction(success));
+              return store.dispatch(loginCredentialsSuccessAction(baseUrl, success));
             }
           }));
     };
   }
 
-  ThunkAction<AppState> loginCredentialsSuccessAction(AuthenticationViewState success) {
+  ThunkAction<AppState> loginCredentialsSuccessAction(Uri baseUrl, AuthenticationViewState success) {
     return (Store<AppState> store) async {
+      await _setAppModeInteractor.execute(baseUrl, AppMode.OwnServer);
       store.dispatch(AuthenticationAction(Right(success)));
 
       _dynamicUrlInterceptors.changeBaseUrl(_urlText.formatURLValid());

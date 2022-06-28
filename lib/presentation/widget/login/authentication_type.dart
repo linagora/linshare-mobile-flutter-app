@@ -30,4 +30,19 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum AuthenticationType { saas, credentials, sso, none }
+import 'package:domain/domain.dart';
+
+enum AuthenticationType {
+  saas,
+  credentials,
+  sso,
+  none;
+
+  AppMode getRelevantAppMode() {
+    if (this == AuthenticationType.saas) {
+      return AppMode.SaaS;
+    } else  {
+      return AppMode.OwnServer;
+    }
+  }
+}
