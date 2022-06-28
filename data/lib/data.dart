@@ -3,11 +3,16 @@ library data;
 export 'package:data/src/network/model/response/shared_space_member_node_dto.dart';
 export 'package:data/src/network/model/response/shared_space_member_response.dart';
 
+// hive
+export 'src/local/hive/caching_manager.dart';
+export 'src/local/hive/app_mode_cache_client.dart';
+
 export 'src/datasource/audit_user_datasource.dart';
 export 'src/datasource/authentication_datasource.dart';
 // data source
 export 'src/datasource/authentication_oidc_datasource.dart';
 export 'src/datasource/authentication_saas_datasource.dart';
+export 'src/datasource/settings_datasource.dart';
 export 'src/datasource/autocomplete_datasource.dart';
 export 'src/datasource/biometric_datasource.dart';
 export 'src/datasource/contact_datasource.dart';
@@ -34,6 +39,7 @@ export 'src/datasource_impl/authentication_datasource_impl.dart';
 export 'src/datasource_impl/authentication_oidc_datasource_impl.dart';
 // data source impl
 export 'src/datasource_impl/authentication_saas_datasource_impl.dart';
+export 'src/datasource_impl/hive_settings_datasource.dart';
 export 'src/datasource_impl/autocomplete_datasource_impl.dart';
 export 'src/datasource_impl/autocomplete_datasource_impl.dart';
 export 'src/datasource_impl/biometric_datasource_impl.dart';
@@ -191,6 +197,7 @@ export 'src/repository/authentication/authentication_oidc_repository_impl.dart';
 // repository
 export 'src/repository/authentication/authentication_repository_impl.dart';
 export 'src/repository/authentication/credential_repository_impl.dart';
+export 'src/repository/settings/settings_repository_impl.dart';
 export 'src/repository/authentication/saas_console_repository_impl.dart';
 export 'src/repository/authentication/token_repository_impl.dart';
 export 'src/repository/autocomplete/autocomplete_repository_impl.dart';
