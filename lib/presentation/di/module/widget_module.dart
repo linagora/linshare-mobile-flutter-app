@@ -173,6 +173,7 @@ class WidgetModule {
       getIt.get<CreatePermanentTokenInteractor>(),
       getIt.get<CreatePermanentTokenOIDCInteractor>(),
       getIt.get<GetTokenOIDCInteractor>(),
+      getIt.get<SetAppModeInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
       getIt.get<DynamicAPIVersionSupportInterceptor>(),

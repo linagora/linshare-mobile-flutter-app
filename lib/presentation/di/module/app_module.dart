@@ -308,6 +308,9 @@ class AppModule {
     getIt.registerFactory(() => GetAppModeInteractor(
       getIt<SettingsRepository>()
     ));
+    getIt.registerFactory(() => SetAppModeInteractor(
+      getIt<SettingsRepository>()
+    ));
     getIt.registerFactory(() => GetSaaSConfigurationInteractor(getIt<SaaSConsoleRepository>()));
     getIt.registerFactory(() => GetSecretTokenInteractor(getIt<AuthenticationOIDCRepository>()));
     getIt.registerFactory(() => SignUpForSaaSInteractor(getIt<AuthenticationOIDCRepository>()));
