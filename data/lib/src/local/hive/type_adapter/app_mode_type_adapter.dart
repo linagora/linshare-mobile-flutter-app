@@ -31,15 +31,16 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
+import 'dart:developer' as developer;
+
 import 'package:data/src/local/hive/config/hive_constants.dart';
 import 'package:domain/domain.dart';
 import 'package:hive/hive.dart';
-import 'dart:developer' as developer;
 
 class AppModeTypeAdapter extends TypeAdapter<AppMode> {
   @override
   AppMode read(BinaryReader reader) {
-    final value = reader.read(HiveConstants.AppModeIdentity);
+    final value = reader.read();
     developer.log('read(): $value', name: 'AppModeTypeAdapter');
     return AppMode.fromString(value);
   }
@@ -49,7 +50,7 @@ class AppModeTypeAdapter extends TypeAdapter<AppMode> {
 
   @override
   void write(BinaryWriter writer, AppMode obj) {
-    developer.log('write(): $obj', name: 'AppModeTypeAdapter');
+    developer.log('write(): ${obj.name}', name: 'AppModeTypeAdapter');
     writer.write(obj.name);
   }
 }
