@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -58,6 +59,7 @@ void main() async {
     await FirebaseCrashlytics.instance
       .setCrashlyticsCollectionEnabled(false);
   }
+  await HiveCacheConfig().setUp();
   runApp(LinShareApp());
 }
 
