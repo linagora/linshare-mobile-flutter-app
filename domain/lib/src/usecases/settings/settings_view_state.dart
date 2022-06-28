@@ -57,3 +57,18 @@ class GetAppModeSettingsFailure extends SettingsFailureState {
   List<Object?> get props => [exception];
 }
 
+class SetAppModeSettingsSucceeded extends ViewState {
+  SetAppModeSettingsSucceeded();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class SetAppModeSettingFailure extends FeatureFailure {
+  final exception;
+
+  SetAppModeSettingFailure(this.exception);
+
+  @override
+  List<Object?> get props => [];
+}
