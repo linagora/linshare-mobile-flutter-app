@@ -261,6 +261,7 @@ class WidgetModule {
     getIt.registerFactory(() => InitializeViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<GetCredentialInteractor>(),
+      getIt.get<GetAppModeInteractor>(),
       getIt.get<AppNavigation>(),
       getIt.get<DynamicUrlInterceptors>(),
       getIt.get<DynamicAPIVersionSupportInterceptor>(),
