@@ -30,12 +30,14 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:connectivity/connectivity.dart';
+import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:linshare_flutter_app/presentation/model/biometric_boot_source.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/network_connectivity_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/settings/app_mode_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -50,6 +52,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 class InitializeViewModel extends BaseViewModel {
   final GetCredentialInteractor _getCredentialInteractor;
+  final GetAppModeInteractor _getAppModeInteractor;
   final AppNavigation _appNavigation;
   final DynamicUrlInterceptors _dynamicUrlInterceptors;
   final DynamicAPIVersionSupportInterceptor _dynamicAPIVersionSupportInterceptor;
@@ -62,6 +65,7 @@ class InitializeViewModel extends BaseViewModel {
   InitializeViewModel(
     Store<AppState> store,
     this._getCredentialInteractor,
+    this._getAppModeInteractor,
     this._appNavigation,
     this._dynamicUrlInterceptors,
     this._dynamicAPIVersionSupportInterceptor,
@@ -119,7 +123,7 @@ class InitializeViewModel extends BaseViewModel {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersion;
       _retryInterceptors.setPermanentToken(success.token);
-      store.dispatch(_getBiometricSetting(success.baseUrl));
+      store.dispatch(_getAppModeAction(success.baseUrl));
     };
   }
 
@@ -128,6 +132,24 @@ class InitializeViewModel extends BaseViewModel {
       store.dispatch(_resetBiometricSetting());
       store.dispatch(SetCurrentView(RoutePaths.loginRoute));
       await _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute, arguments: LoginArguments());
+    };
+  }
+
+  ThunkAction<AppState> _getAppModeAction(Uri baseUrl) {
+    return (Store<AppState> store) async {
+      await _getAppModeInteractor.execute(baseUrl).then((appModeState) {
+        appModeState.fold(
+          (left) => store.dispatch(_getCredentialFailureAction(CredentialFailure('Can not get AppMode'))),
+          (right) {
+            if (right is GetAppModeSettingsSuccess) {
+              store.dispatch(GetAppModeSucceededAction(Right(right)));
+              store.dispatch(_getBiometricSetting(baseUrl));
+            } else {
+              store.dispatch(_getCredentialFailureAction(CredentialFailure('Can not get AppMode')));
+            }
+          }
+        );
+      });
     };
   }
 
