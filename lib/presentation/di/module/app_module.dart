@@ -57,6 +57,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppModule {
   AppModule() {
+    _provideHive();
     _provideAppAuth();
     _provideDataSourceImpl();
     _provideDataSource();
@@ -75,12 +76,11 @@ class AppModule {
     _provideBiometric();
     _provideOfflineMode();
     _provideObservers();
-    _provideHive();
   }
 
   void _provideHive() {
-    getIt.registerSingleton(() => AppModeCacheClient());
-    getIt.registerSingleton(() => CachingManager(getIt<AppModeCacheClient>()));
+    getIt.registerFactory(() => AppModeCacheClient());
+    getIt.registerFactory(() => CachingManager(getIt<AppModeCacheClient>()));
   }
 
   void _provideDataSourceImpl() {
@@ -101,6 +101,7 @@ class AppModule {
         getIt<DeviceManager>(),
         getIt<RemoteExceptionThrower>()));
     getIt.registerLazySingleton(() => LocalAuthenticationDataSource(getIt<SharedPreferences>()));
+    getIt.registerFactory(() => HiveSettingsDatasource(getIt<AppModeCacheClient>()));
     getIt.registerFactory(() => DocumentDataSourceImpl(
         getIt<LinShareHttpClient>(),
         getIt<RemoteExceptionThrower>(),
