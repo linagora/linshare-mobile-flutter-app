@@ -33,7 +33,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/usecases/authentication/settings_view_state.dart';
+import 'package:domain/src/usecases/settings/settings_view_state.dart';
 
 class GetAppModeInteractor {
   final SettingsRepository _settingsRepository;

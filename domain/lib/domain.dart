@@ -512,5 +512,6 @@ export 'src/usecases/authentication/log_out_oidc_interactor.dart';
 export 'src/usecases/authentication/delete_token_oidc_interactor.dart';
 export 'src/usecases/upload_file/flow_upload_document_interactor.dart';
 export 'src/usecases/upload_file/flow_upload_work_group_document_interactor.dart';
-export 'src/usecases/authentication/get_app_mode_interactor.dart';
-export 'src/usecases/authentication/settings_view_state.dart';
+export 'src/usecases/settings/get_app_mode_interactor.dart';
+export 'src/usecases/settings/settings_view_state.dart';
+export 'src/usecases/settings/set_app_mode_interactor.dart';
