@@ -36,6 +36,8 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/shared_space_node_nested_presentation_file.dart';
@@ -45,11 +47,13 @@ import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_act
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -57,6 +61,8 @@ import 'package:linshare_flutter_app/presentation/view/header/context_menu_heade
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/modal_card.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/reach_limitation_alert.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/add_shared_space_node_member/add_member_destination.dart';
@@ -72,6 +78,8 @@ class SharedSpaceViewModel extends BaseViewModel {
   final CreateWorkGroupInteractor _createWorkGroupInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
   final AppNavigation _appNavigation;
+  final AppToast _appToast;
+  final FToast _fToast;
   final SortInteractor _sortInteractor;
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
@@ -87,10 +95,13 @@ class SharedSpaceViewModel extends BaseViewModel {
 
   SearchQuery _searchQuery = SearchQuery('');
   SearchQuery get searchQuery  => _searchQuery;
+  final _imagePath = getIt<AppImagePaths>();
 
   SharedSpaceViewModel(
     Store<AppState> store,
     this._appNavigation,
+    this._appToast,
+    this._fToast,
     this._getAllSharedSpacesInteractor,
     this._searchSharedSpaceNodeNestedInteractor,
     this._removeMultipleSharedSpacesInteractor,
@@ -460,7 +471,7 @@ class SharedSpaceViewModel extends BaseViewModel {
                     this.store.dispatch(_createNewWorkGroupAction(value));
                     break;
                   case LinShareNodeType.WORK_SPACE:
-                    this.store.dispatch(_createNewWorkspaceAction(value));
+                    this.store.dispatch(_createNewWorkspaceAction(context, value));
                     break;
                 }
               })
@@ -474,14 +485,47 @@ class SharedSpaceViewModel extends BaseViewModel {
     };
   }
 
-  OnlineThunkAction _createNewWorkspaceAction(String newName) {
+  OnlineThunkAction _createNewWorkspaceAction(BuildContext context, String newName) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _createNewWorkSpaceInteractor
           .execute(CreateWorkSpaceRequest(newName, LinShareNodeType.WORK_SPACE))
           .then((result) => result.fold(
-              (failure) => store.dispatch(SharedSpaceAction(Left(failure))),
+              (failure) {
+                if (failure is WorkSpaceReachLimitFailure) {
+                  _showWorkSpaceLimitationMessage(context, store);
+                } else {
+                  store.dispatch(SharedSpaceAction(Left(failure)));
+                }
+              },
               (success) => store.dispatch(SharedSpaceAction(Right(success)))));
     });
+  }
+
+  void _showWorkSpaceLimitationMessage(BuildContext context, Store<AppState> store) {
+    if (store.state.settingsState.appMode == AppMode.SaaS) {
+      showModalBottomSheet(
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (context) {
+            return ModalCardWidget(
+              child: ReachLimitationAlert(
+                AppLocalizations.of(context).failed_request,
+                AppLocalizations.of(context).reach_workspace_limit_message,
+                AppLocalizations.of(context).contact_now,
+                _appNavigation
+              )
+            );
+          }
+      );
+    } else {
+      _appToast.showToastWithIcon(
+        context,
+        _fToast,
+        AppLocalizations.of(context).reach_workspace_limit_message_own_server,
+        _imagePath.icWarningLimitationToast,
+        duration: Duration(milliseconds: 1500)
+      );
+    }
   }
 
   void openCreateNewSharedSpaceMenu(BuildContext context, List<Widget> actionTiles) {

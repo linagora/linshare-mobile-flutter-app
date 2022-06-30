@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2022-03-23T16:19:05.779288",
+  "@@last_modified": "2022-06-30T15:06:39.952524",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -3050,6 +3050,30 @@
   },
   "message_feedback_dialog": "We are running Linshare SaaS. We are working hard to fix all the bugs that impact user experience. We rely on your valuable feedback to make Linshare better for everyone.",
   "@message_feedback_dialog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "failed_request": "Failed request",
+  "@failed_request": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_workspace_limit_message": "You have reached maximum number of upload requests. Please contact your company owner to upgrade plan first",
+  "@reach_workspace_limit_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_now": "Contact Now",
+  "@contact_now": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_workspace_limit_message_own_server": "You have reached maximum number of workspaces",
+  "@reach_workspace_limit_message_own_server": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
