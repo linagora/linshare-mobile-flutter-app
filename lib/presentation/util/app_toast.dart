@@ -55,10 +55,10 @@ class AppToast {
         gravity: ToastGravity.BOTTOM);
   }
 
-  void showToastWithIcon(BuildContext context, FToast fToast, String message, String leftIcon) {
+  void showToastWithIcon(BuildContext context, FToast fToast, String message, String leftIcon, {Duration? duration}) {
     fToast.init(context);
     fToast.showToast(
-      toastDuration: Duration(milliseconds: 1000),
+      toastDuration: duration ?? Duration(milliseconds: 1000),
       child: Material(
         color: Colors.white,
         elevation: 10,

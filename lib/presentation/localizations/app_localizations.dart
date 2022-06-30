@@ -2976,6 +2976,25 @@ class AppLocalizations {
     return Intl.message('We are running Linshare SaaS. We are working hard to fix all the bugs that impact user experience. We rely on your valuable feedback to make Linshare better for everyone.',
         name: 'message_feedback_dialog');
   }
+  
+  String get failed_request {
+    return Intl.message('Failed request', name: 'failed_request');
+  }
+
+  String get reach_workspace_limit_message {
+    return Intl.message('You have reached maximum number of upload requests. Please contact your company owner to upgrade plan first', name: 'reach_workspace_limit_message');
+  }
+  
+  String get contact_now {
+    return Intl.message('Contact Now', name: 'contact_now');
+  }
+  
+  String get reach_workspace_limit_message_own_server {
+    return Intl.message(
+      'You have reached maximum number of workspaces',
+      name: 'reach_workspace_limit_message_own_server'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
