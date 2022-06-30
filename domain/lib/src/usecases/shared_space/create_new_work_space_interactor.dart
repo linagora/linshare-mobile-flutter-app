@@ -43,6 +43,9 @@ class CreateNewWorkSpaceInteractor {
       final workSpace = await _sharedSpaceRepository.createNewWorkSpace(createWorkSpaceRequest);
       return Right<Failure, Success>(CreateNewWorkSpaceViewState(workSpace));
     } catch (exception) {
+      if (exception is WorkSpaceReachLimit) {
+        return Left<Failure, Success>(WorkSpaceReachLimitFailure(exception));
+      }
       return Left<Failure, Success>(CreateNewWorkSpaceFailure(exception));
     }
   }

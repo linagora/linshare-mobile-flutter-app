@@ -36,6 +36,7 @@ abstract class SharedSpaceException extends RemoteException {
   static final SharedSpaceNotFound = 'SharedSpace not found';
   static final SharedSpaceNodeNotFound = 'SharedSpaceNode not found';
   static final SharedSpaceRolesNotFound = 'SharedSpace roles not found';
+  static final WorkSpaceReachLimit = 'WorkSpace reach limit';
 
   SharedSpaceException(String message) : super(message);
 }
@@ -59,4 +60,11 @@ class SharedSpaceNodeNotFound extends SharedSpaceException {
 
   @override
   List<Object> get props => [];
+}
+
+class WorkSpaceReachLimit extends SharedSpaceException {
+  WorkSpaceReachLimit() : super(SharedSpaceException.WorkSpaceReachLimit);
+
+  @override
+  List<Object?> get props => [message];
 }
