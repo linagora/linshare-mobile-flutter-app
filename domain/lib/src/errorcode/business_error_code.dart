@@ -36,4 +36,5 @@ class BusinessErrorCode {
   static final invalidPatternMinimumCharactersLength = LinShareErrorCode(1000);
   static final missingOTPAuthentication = [LinShareErrorCode(1002), LinShareErrorCode(1003)];
   static final authenErrorUserLocked = [LinShareErrorCode(1004)];
+  static final workspaceLimit = LinShareErrorCode(50016);
 }

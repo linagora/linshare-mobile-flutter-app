@@ -51,6 +51,8 @@ class RemoteExceptionThrower {
     }
   }
 
-  LinShareErrorCode getErrorCodeFromErrorResponse(Map<String, dynamic> responseMap) =>
-      LinShareErrorCode(responseMap['errCode'] as int);
+  LinShareErrorCode getErrorCodeFromErrorResponse(Map<String, dynamic> responseMap) {
+    final errorCode = responseMap['errCode'] != null ? (responseMap['errCode'] as int) : -1;
+    return LinShareErrorCode(errorCode);
+  }
 }

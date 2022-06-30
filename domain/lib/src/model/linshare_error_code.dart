@@ -34,9 +34,7 @@ import 'package:domain/domain.dart';
 import 'package:domain/src/model/base_error_code.dart';
 
 class LinShareErrorCode extends BaseErrorCode {
-  LinShareErrorCode(int value) : super(value) {
-    assert(value >= 0, 'linShareErrorCode must not be negative');
-  }
+  LinShareErrorCode(int value) : super(value);
 }
 
 extension LinShareErrorCodeExtension on LinShareErrorCode {
