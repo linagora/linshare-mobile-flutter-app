@@ -116,6 +116,8 @@ class AppImagePaths {
   String get icSignUpFailed => _getImagePath('ic_signup_failed.svg');
   String get icCloseDialog => _getImagePath('ic_close_dialog.svg');
   String get icWarning => _getImagePath('ic_warning.svg');
+  String get icWarningLimitation => _getImagePath('ic_warning_limitation.svg');
+  String get icWarningLimitationToast => _getImagePath('ic_reach_limitation_warning_toast.svg');
 
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;
