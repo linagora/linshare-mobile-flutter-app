@@ -288,6 +288,8 @@ class WidgetModule {
     getIt.registerFactory(() => SharedSpaceViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<AppNavigation>(),
+      getIt<AppToast>(),
+      getIt<FToast>(),
       getIt.get<GetAllSharedSpacesInteractor>(),
       getIt<SearchSharedSpaceNodeNestedInteractor>(),
       getIt.get<RemoveMultipleSharedSpacesInteractor>(),
