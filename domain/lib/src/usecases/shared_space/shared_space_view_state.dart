@@ -645,6 +645,15 @@ class CreateNewWorkSpaceFailure extends FeatureFailure {
   List<Object> get props => [exception];
 }
 
+class WorkSpaceReachLimitFailure extends FeatureFailure {
+  final exception;
+
+  WorkSpaceReachLimitFailure(this.exception);
+
+  @override
+  List<Object?> get props => [exception];
+}
+
 class RenameWorkSpaceViewState extends ViewState {
   final SharedSpaceNodeNested workSpace;
 
