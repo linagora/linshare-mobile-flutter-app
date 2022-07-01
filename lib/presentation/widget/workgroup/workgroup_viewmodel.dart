@@ -36,18 +36,22 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/file/shared_space_node_nested_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
-import 'package:linshare_flutter_app/presentation/redux/actions/workgroup_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/workgroup_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
-import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/workgroup_state.dart';
+import 'package:linshare_flutter_app/presentation/saas/saas_utils.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
+import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
+import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/context_menu/context_menu_builder.dart';
@@ -55,6 +59,8 @@ import 'package:linshare_flutter_app/presentation/view/header/context_menu_heade
 import 'package:linshare_flutter_app/presentation/view/header/simple_bottom_sheet_header_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/edit_text_modal_sheet_builder.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/modal_card.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/reach_limitation_alert.dart';
 import 'package:linshare_flutter_app/presentation/view/order_by/order_by_dialog_bottom_sheet.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space_details/shared_space_details_arguments.dart';
@@ -71,10 +77,13 @@ class WorkGroupViewModel extends BaseViewModel {
   final CreateWorkGroupInteractor _createWorkGroupInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
   final AppNavigation _appNavigation;
+  final AppToast _appToast;
+  final FToast _fToast;
   final SortInteractor _sortInteractor;
   final GetSorterInteractor _getSorterInteractor;
   final SaveSorterInteractor _saveSorterInteractor;
   final RenameWorkGroupInteractor _renameWorkGroupInteractor;
+  final AppImagePaths _imagePaths;
 
   late StreamSubscription _storeStreamSubscription;
   late List<SharedSpaceNodeNested> _currentWorkgroups;
@@ -92,11 +101,14 @@ class WorkGroupViewModel extends BaseViewModel {
     this._searchWorkgroupInsideSharedSpaceNodeInteractor,
     this._removeMultipleSharedSpacesInteractor,
     this._createWorkGroupInteractor,
+    this._appToast,
+    this._fToast,
     this._verifyNameInteractor,
     this._sortInteractor,
     this._getSorterInteractor,
     this._saveSorterInteractor,
     this._renameWorkGroupInteractor,
+    this._imagePaths
   ) : super(store) {
     _storeStreamSubscription = store.onChange.listen((event) {
       event.workgroupState.viewState.fold((failure) => null, (success) {
@@ -414,7 +426,7 @@ class WorkGroupViewModel extends BaseViewModel {
           .cancelText(AppLocalizations.of(context).cancel)
           .onConfirmAction(
               AppLocalizations.of(context).create,
-              (value) => this.store.dispatch(_createNewWorkGroupAction(value)))
+              (value) => this.store.dispatch(_createNewWorkGroupAction(context, value)))
           .setErrorString((value) => getErrorString(context, value))
           .setTextController(
             TextEditingController.fromValue(
@@ -457,12 +469,18 @@ class WorkGroupViewModel extends BaseViewModel {
     }, (success) => null);
   }
 
-  OnlineThunkAction _createNewWorkGroupAction(String newName) {
+  OnlineThunkAction _createNewWorkGroupAction(BuildContext context, String newName) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _createWorkGroupInteractor
           .execute(CreateWorkGroupRequest(newName, LinShareNodeType.WORK_GROUP, parentId: selectedParentNode?.sharedSpaceId))
           .then((result) => result.fold(
-              (failure) => store.dispatch(WorkgroupAction(Left(failure))),
+              (failure) => {
+                if (failure is NestedWorkgroupLimitation) {
+                  _showNestedWorkgroupLimitationMessage(context, store)
+                } else {
+                  store.dispatch(WorkgroupAction(Left(failure)))
+                }
+              },
               (success) => store.dispatch(WorkgroupAction(Right(success)))));
     });
   }
@@ -507,5 +525,33 @@ class WorkGroupViewModel extends BaseViewModel {
     _storeStreamSubscription.cancel();
     _searchQuery = SearchQuery('');
     super.onDisposed();
+  }
+
+  void _showNestedWorkgroupLimitationMessage(BuildContext context, Store<AppState> store) {
+    if (store.state.settingsState.appMode == AppMode.SaaS) {
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return ModalCardWidget(
+              child: ReachLimitationAlert(
+              AppLocalizations.of(context).failed_request,
+              AppLocalizations.of(context).reach_nested_workgroup_limit_message_saas,
+              AppLocalizations.of(context).contact_now,
+              _appNavigation,
+              onContactNowPress: () => SaaSUtils.goToConsoleHomepage(_appNavigation, context),
+            )
+          );
+        }
+      );
+    } else {
+      _appToast.showToastWithIcon(
+          context,
+          _fToast,
+          AppLocalizations.of(context).reach_nested_workgroup_limit_message_own_server,
+          _imagePaths.icWarningLimitationToast,
+          duration: Duration(milliseconds: 1500)
+      );
+    }
   }
 }

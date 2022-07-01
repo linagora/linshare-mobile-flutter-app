@@ -360,6 +360,15 @@ class CreateWorkGroupViewState extends ViewState {
   List<Object> get props => [sharedSpaceNodeNested];
 }
 
+class NestedWorkgroupLimitation extends FeatureFailure {
+  final exception;
+
+  NestedWorkgroupLimitation(this.exception);
+
+  @override
+  List<Object?> get props => [exception];
+}
+
 class CreateWorkGroupFailure extends FeatureFailure {
   final exception;
 

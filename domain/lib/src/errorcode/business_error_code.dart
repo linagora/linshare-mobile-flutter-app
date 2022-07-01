@@ -37,4 +37,6 @@ class BusinessErrorCode {
   static final missingOTPAuthentication = [LinShareErrorCode(1002), LinShareErrorCode(1003)];
   static final authenErrorUserLocked = [LinShareErrorCode(1004)];
   static final workspaceLimit = LinShareErrorCode(50016);
+  static final nestedWorkgroupLimit = LinShareErrorCode(55508);
+  static final uploadRequestLimitReach = LinShareErrorCode(31416);
 }

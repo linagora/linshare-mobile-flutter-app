@@ -43,6 +43,9 @@ class CreateWorkGroupInteractor {
       final sharedSpaceWorkGroup = await _sharedSpaceRepository.createSharedSpaceWorkGroup(createWorkGroupRequest);
       return Right<Failure, Success>(CreateWorkGroupViewState(sharedSpaceWorkGroup));
     } catch (exception) {
+      if (exception is NestedWorkgroupReachLimit) {
+        return Left<Failure, Success>(NestedWorkgroupLimitation(exception));
+      }
       return Left<Failure, Success>(CreateWorkGroupFailure(exception));
     }
   }

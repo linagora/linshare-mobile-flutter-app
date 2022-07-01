@@ -214,10 +214,17 @@ void main() {
       }
     });
 
-    test('create shared space should throw SharedSpacesNotFound when linShareHttpClient response error with 403', () async {
+    test('create shared space should throw NestedWorkgroupReachLimit when linShareHttpClient response error with 403 errCode = 55508', () async {
       final error = DioError(
           type: DioErrorType.response,
-          response: Response(statusCode: 403, requestOptions: RequestOptions(path: '')), requestOptions: RequestOptions(path: '')
+          response: Response(
+            statusCode: 403,
+            data: {
+              'errCode': 55508
+            },
+            requestOptions: RequestOptions(path: '')
+          ),
+          requestOptions: RequestOptions(path: '')
       );
       when(_linShareHttpClient.createSharedSpaceWorkGroup(CreateWorkGroupBodyRequest(sharedSpace1.name, LinShareNodeType.WORK_GROUP)))
           .thenThrow(error);
@@ -227,7 +234,7 @@ void main() {
             CreateWorkGroupRequest(
                 sharedSpace1.name, LinShareNodeType.WORK_GROUP));
       } catch(error) {
-        expect(error, isA<NotAuthorized>());
+        expect(error, isA<NestedWorkgroupReachLimit>());
       }
     });
 
