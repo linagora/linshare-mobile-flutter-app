@@ -43,6 +43,9 @@ class AddNewUploadRequestInteractor {
       final uploadRequestGroup = await _uploadRequestGroupRepository.addNewUploadRequest(creationType, addUploadRequest);
       return Right<Failure, Success>(AddNewUploadRequestViewState(uploadRequestGroup));
     } catch (exception) {
+      if (exception is UploadRequestLimitException) {
+        return Left<Failure, Success>(UploadRequestLimitFailure(exception));
+      }
       return Left<Failure, Success>(AddNewUploadRequestFailure(exception));
     }
   }
