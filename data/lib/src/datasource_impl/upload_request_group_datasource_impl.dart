@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:data/src/datasource/upload_request_group_datasource.dart';
 import 'package:data/src/network/linshare_http_client.dart';
@@ -71,6 +72,14 @@ class UploadRequestGroupDataSourceImpl implements UploadRequestGroupDataSource {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw UploadRequestCreateFailed();
+        } else if (error.response?.statusCode == 403) {
+          developer.log('addNewUploadRequest(): ${error.message}', name: 'UploadRequestGroupDataSourceImpl');
+          final errorCode = _remoteExceptionThrower.getErrorCodeFromErrorResponse(error.response?.data);
+          if (errorCode == BusinessErrorCode.uploadRequestLimitReach) {
+            throw UploadRequestLimitException();
+          } else {
+            throw NotAuthorized();
+          }
         } else {
           throw UnknownError(error.response?.statusMessage);
         }

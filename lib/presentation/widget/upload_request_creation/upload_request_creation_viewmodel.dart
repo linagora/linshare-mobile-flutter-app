@@ -34,7 +34,9 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/file_size_type.dart';
 import 'package:linshare_flutter_app/presentation/model/notification_language.dart';
@@ -44,12 +46,16 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_c
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/saas/saas_utils.dart';
+import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/datetime_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/list_functionalities_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/string_extensions.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/modal_card.dart';
+import 'package:linshare_flutter_app/presentation/view/modal_sheets/reach_limitation_alert.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_request_creation/upload_request_creation_arguments.dart';
@@ -65,6 +71,8 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   final AddNewUploadRequestInteractor _addNewUploadRequestInteractor;
   final GetAllUploadRequestGroupsInteractor _getAllUploadRequestGroupsInteractor;
   final AppToast _appToast;
+  final FToast _fToast;
+  final AppImagePaths _imagePaths;
 
   // auto complete
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
@@ -130,6 +138,8 @@ class UploadRequestCreationViewModel extends BaseViewModel {
     this._getAutoCompleteSharingInteractor,
     this._getAutoCompleteSharingWithDeviceContactInteractor,
     this._appToast,
+    this._fToast,
+    this._imagePaths
   ) : super(store) {
     _autoCompleteResultListSubscription = Rx.combineLatest2(_autoCompleteResultListObservable, _emailSubjectObservable, (List<AutoCompleteResult> shareMails, String emailSubject) {
       return (shareMails.isNotEmpty && emailSubject.isNotEmpty);
@@ -404,6 +414,7 @@ class UploadRequestCreationViewModel extends BaseViewModel {
     final protectedByPassword = _protectPasswordSetting != null ? passwordProtectNotifier.value : null;
 
     _createUploadRequestAction(
+      context,
       arguments?.type ?? UploadRequestCreationType.COLLECTIVE,
       maxFileCount: numberFiles,
       maxFileSize: fileSizeInByte,
@@ -420,6 +431,7 @@ class UploadRequestCreationViewModel extends BaseViewModel {
   }
 
   void _createUploadRequestAction(
+    BuildContext context,
     UploadRequestCreationType creationType,
     {
       required int? maxFileCount,
@@ -453,16 +465,20 @@ class UploadRequestCreationViewModel extends BaseViewModel {
         locale,
         protectedByPassword,
         enableNotification);
-    store.dispatch(_addNewUploadRequest(creationType, addUploadRequest));
+    store.dispatch(_addNewUploadRequest(context, creationType, addUploadRequest));
   }
 
-  OnlineThunkAction _addNewUploadRequest(UploadRequestCreationType creationType, AddUploadRequest addUploadRequest) {
+  OnlineThunkAction _addNewUploadRequest(BuildContext context, UploadRequestCreationType creationType, AddUploadRequest addUploadRequest) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _addNewUploadRequestInteractor.execute(creationType, addUploadRequest)
         .then((result) => result.fold(
           (failure) {
-            store.dispatch(UploadRequestGroupAction(Left(failure)));
-            backToUploadRequestGroup();
+            if (failure is UploadRequestLimitFailure) {
+              _showUploadRequestLimitationMessage(context, store);
+            } else {
+              store.dispatch(UploadRequestGroupAction(Left(failure)));
+              backToUploadRequestGroup();
+            }
           },
           (success) {
             store.dispatch(UploadRequestGroupAction(Right(success)));
@@ -529,5 +545,33 @@ class UploadRequestCreationViewModel extends BaseViewModel {
     _autoCompleteResultListSubscription.cancel();
     _disposeValueNotifier();
     super.onDisposed();
+  }
+
+  void _showUploadRequestLimitationMessage(BuildContext context, Store<AppState> store) {
+    if (store.state.settingsState.appMode == AppMode.SaaS) {
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return ModalCardWidget(
+              child: ReachLimitationAlert(
+                AppLocalizations.of(context).failed_request,
+                AppLocalizations.of(context).reach_upload_request_limit_message_saas,
+                AppLocalizations.of(context).contact_now,
+                _appNavigation,
+                onContactNowPress: () => SaaSUtils.goToConsoleHomepage(_appNavigation, context),
+              )
+          );
+        }
+      );
+    } else {
+      _appToast.showToastWithIcon(
+          context,
+          _fToast,
+          AppLocalizations.of(context).reach_upload_request_limit_message_own_server,
+          _imagePaths.icWarningLimitationToast,
+          duration: Duration(milliseconds: 1500)
+      );
+    }
   }
 }

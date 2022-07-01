@@ -30,6 +30,8 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'dart:developer' as developer;
+
 import 'package:data/data.dart';
 import 'package:data/src/datasource/functionality_datasource.dart';
 import 'package:data/src/network/model/functionality/functionality_boolean_dto.dart';
@@ -55,6 +57,7 @@ class FunctionalityDataSourceImpl implements FunctionalityDataSource {
       final functionalityDtoList = await _linShareHttpClient.getAllFunctionality();
 
       return functionalityDtoList.map((data) {
+        developer.log('getAll(): $data', name: 'FunctionalityDataSourceImpl');
         if (data is FunctionalityBooleanDto) {
           return data.toFunctionalityBoolean();
         } else if (data is FunctionalityIntegerDto) {

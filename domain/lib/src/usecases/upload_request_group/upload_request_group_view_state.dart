@@ -67,6 +67,15 @@ class AddNewUploadRequestFailure extends FeatureFailure {
   List<Object> get props => [exception];
 }
 
+class UploadRequestLimitFailure extends FeatureFailure {
+  final exception;
+
+  UploadRequestLimitFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
+}
+
 class AddRecipientsToUploadRequestGroupViewState extends ViewState {
   final UploadRequestGroup uploadRequestGroup;
 
