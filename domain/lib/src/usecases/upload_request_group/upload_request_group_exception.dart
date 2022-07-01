@@ -36,6 +36,7 @@ abstract class UploadRequestGroupException extends RemoteException {
   static final UploadRequestGroupsNotFound = 'Upload Request Groups not found';
   static final UploadRequestCreationFailed = 'Upload Request Create Failed';
   static final UploadRequestEditFailed = 'Upload Request Edit Failed';
+  static final UploadRequestLimit = 'Upload request reach limitation';
 
   UploadRequestGroupException(String message) : super(message);
 }
@@ -57,6 +58,13 @@ class UploadRequestCreateFailed extends UploadRequestGroupException {
 
 class UploadRequestEditFailed extends UploadRequestGroupException {
   UploadRequestEditFailed() : super(UploadRequestGroupException.UploadRequestEditFailed);
+
+  @override
+  List<Object> get props => [];
+}
+
+class UploadRequestLimitException extends UploadRequestGroupException {
+  UploadRequestLimitException() : super(UploadRequestGroupException.UploadRequestLimit);
 
   @override
   List<Object> get props => [];

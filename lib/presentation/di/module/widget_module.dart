@@ -620,6 +620,8 @@ class WidgetModule {
         getIt.get<GetAutoCompleteSharingInteractor>(),
         getIt.get<GetAutoCompleteSharingWithDeviceContactInteractor>(),
         getIt.get<AppToast>(),
+        getIt.get<FToast>(),
+        getIt.get<AppImagePaths>()
     ));
   }
 

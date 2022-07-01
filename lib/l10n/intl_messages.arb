@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2022-07-01T16:36:09.503264",
+  "@@last_modified": "2022-07-01T18:03:09.553325",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -3086,6 +3086,18 @@
   },
   "reach_nested_workgroup_limit_message_own_server": "You have reached maximum number of workgroups in this workspace",
   "@reach_nested_workgroup_limit_message_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_upload_request_limit_message_saas": "You have reached maximum number of upload requests. Please contact your company owner to upgrade plan first",
+  "@reach_upload_request_limit_message_saas": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_upload_request_limit_message_own_server": "You have reached maximum number of upload requests",
+  "@reach_upload_request_limit_message_own_server": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

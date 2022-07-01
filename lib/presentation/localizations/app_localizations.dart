@@ -3009,6 +3009,20 @@ class AppLocalizations {
       name: 'reach_nested_workgroup_limit_message_own_server'
     );
   }
+
+  String get reach_upload_request_limit_message_saas {
+    return Intl.message(
+        'You have reached maximum number of upload requests. Please contact your company owner to upgrade plan first',
+        name: 'reach_upload_request_limit_message_saas'
+    );
+  }
+
+  String get reach_upload_request_limit_message_own_server {
+    return Intl.message(
+        'You have reached maximum number of upload requests',
+        name: 'reach_upload_request_limit_message_own_server'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
