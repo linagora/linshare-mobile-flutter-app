@@ -50,6 +50,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/functionality_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/saas/saas_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/linshare_node_type_extension.dart';
@@ -512,7 +513,8 @@ class SharedSpaceViewModel extends BaseViewModel {
                 AppLocalizations.of(context).failed_request,
                 AppLocalizations.of(context).reach_workspace_limit_message,
                 AppLocalizations.of(context).contact_now,
-                _appNavigation
+                _appNavigation,
+                onContactNowPress: () => SaaSUtils.goToConsoleHomepage(_appNavigation, context),
               )
             );
           }

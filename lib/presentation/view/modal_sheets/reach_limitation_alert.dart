@@ -40,6 +40,8 @@ import 'package:linshare_flutter_app/presentation/util/extensions/color_extensio
 import 'package:linshare_flutter_app/presentation/util/helper/responsive_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 
+typedef OnContactNowPress = void Function();
+
 class ReachLimitationAlert extends StatelessWidget {
   final _imagePath = getIt<AppImagePaths>();
   final _responsiveUtils = getIt<ResponsiveUtils>();
@@ -49,12 +51,14 @@ class ReachLimitationAlert extends StatelessWidget {
       this._actionText,
       this._appNavigation, {
       Key? key,
+      this.onContactNowPress
   }) : super(key: key);
 
   final String title;
   final String _content;
   final String _actionText;
   final AppNavigation _appNavigation;
+  final OnContactNowPress? onContactNowPress;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +112,7 @@ class ReachLimitationAlert extends StatelessWidget {
                     color: AppColor.primaryColor)),
               ),
               OutlinedButton(
-                onPressed: () => throw UnimplementedError(),
+                onPressed: () => onContactNowPress?.call(),
                 style: OutlinedButton.styleFrom(
                   fixedSize: Size.fromHeight(48),
                   primary: AppColor.loginDefaultButtonColor,

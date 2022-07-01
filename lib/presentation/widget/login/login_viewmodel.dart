@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:developer' as developer;
+
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
@@ -37,6 +39,7 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/saas/saas_utils.dart';
 import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
 import 'package:linshare_flutter_app/presentation/util/environment.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
@@ -53,9 +56,6 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.d
 import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'dart:developer' as developer;
-
-import 'package:url_launcher/url_launcher.dart';
 
 class LoginViewModel extends BaseViewModel {
 
@@ -455,15 +455,8 @@ class LoginViewModel extends BaseViewModel {
             ..title(AppLocalizations.of(context).title_feedback_dialog)
             ..content(AppLocalizations.of(context).message_feedback_dialog)
             ..actionText(AppLocalizations.of(context).feedback_dialog_button)
-            ..addFeedbackDialogButtonAction(() => _goToContactTechnicalSupport(context)))
+            ..addFeedbackDialogButtonAction(() => SaaSUtils.goToContactTechnicalSupport(_appNavigation, context)))
           .build());
-  }
-
-  void _goToContactTechnicalSupport(BuildContext context) async {
-    _appNavigation.popBack();
-    if (await canLaunch(AuthenticationOIDCConfig.contactTechnicalSupport)) {
-      await launch(AuthenticationOIDCConfig.contactTechnicalSupport);
-    }
   }
 
   void handleCloseLoginPressed(BuildContext context) {
