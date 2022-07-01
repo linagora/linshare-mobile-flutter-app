@@ -32,47 +32,23 @@
  */
 
 import 'package:flutter/widgets.dart';
+import 'package:linshare_flutter_app/presentation/util/authentication_oidc_config.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-class ModalCardWidget extends StatelessWidget {
-  final Widget child;
-
-  const ModalCardWidget({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 42.0),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildHandle(context),
-          child
-        ],
-      ),
-    );
+class SaaSUtils {
+  static const consoleHomepage = 'https://console.twake.app';
+  static void goToContactTechnicalSupport(AppNavigation appNavigation, BuildContext context) async {
+    appNavigation.popBack();
+    if (await canLaunchUrlString(AuthenticationOIDCConfig.contactTechnicalSupport)) {
+      await launchUrlString(AuthenticationOIDCConfig.contactTechnicalSupport);
+    }
   }
 
-  Widget _buildHandle(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.25,
-      child: Container(
-        margin: const EdgeInsets.symmetric(
-          vertical: 12.0,
-        ),
-        child: Container(
-          height: 5.0,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(2.5)),
-          ),
-        ),
-      ),
-    );
+  static void goToConsoleHomepage(AppNavigation appNavigation, BuildContext context) async {
+    appNavigation.popBack();
+    if (await canLaunchUrlString(consoleHomepage)) {
+      await launchUrlString(consoleHomepage);
+    }
   }
 }
