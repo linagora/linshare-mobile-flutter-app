@@ -317,11 +317,14 @@ class WidgetModule {
       getIt<SearchWorkgroupInsideSharedSpaceNodeInteractor>(),
       getIt<RemoveMultipleSharedSpacesInteractor>(),
       getIt<CreateWorkGroupInteractor>(),
+      getIt<AppToast>(),
+      getIt<FToast>(),
       getIt<VerifyNameInteractor>(),
       getIt<SortInteractor>(),
       getIt<GetSorterInteractor>(),
       getIt<SaveSorterInteractor>(),
       getIt<RenameWorkGroupInteractor>(),
+      getIt<AppImagePaths>()
     ));
   }
 

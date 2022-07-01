@@ -111,7 +111,13 @@ class SharedSpaceDataSourceImpl implements SharedSpaceDataSource {
         if (error.response?.statusCode == 404) {
           throw SharedSpaceNotFound();
         } else if (error.response?.statusCode == 403) {
-          throw NotAuthorized();
+          developer.log('createNewWorkSpace(): ${error.message}', name: 'SharedSpaceDataSourceImpl');
+          final errorCode = _remoteExceptionThrower.getErrorCodeFromErrorResponse(error.response?.data);
+          if (errorCode == BusinessErrorCode.nestedWorkgroupLimit) {
+            throw NestedWorkgroupReachLimit();
+          } else {
+            throw NotAuthorized();
+          }
         } else {
           throw UnknownError(error.response?.statusMessage!);
         }
