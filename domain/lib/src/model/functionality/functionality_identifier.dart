@@ -51,6 +51,7 @@ enum FunctionalityIdentifier {
   WORK_SPACE__CREATION_RIGHT,
   SHARED_SPACE,                                  // work with back-end 5.0
   SHARED_SPACE__WORKSPACE_LIMIT,
+  SHARED_SPACE__NESTED_WORKGROUPS_LIMIT
 }
 
 extension FunctionalityIdentifierExtension on FunctionalityIdentifier {

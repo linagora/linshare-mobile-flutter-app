@@ -293,6 +293,7 @@ export 'src/usecases/authentication/saas_configuration_view_state.dart';
 export 'src/usecases/authentication/authentication_exception.dart';
 export 'src/usecases/authentication/authentication_view_state.dart';
 export 'src/repository/settings/settings_exceptions.dart';
+export 'src/usecases/workgroup/workgroup_exception.dart';
 
 // interactor
 export 'src/usecases/authentication/create_permanent_token_interactor.dart';

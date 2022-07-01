@@ -2995,6 +2995,20 @@ class AppLocalizations {
       name: 'reach_workspace_limit_message_own_server'
     );
   }
+
+  String get reach_nested_workgroup_limit_message_saas {
+    return Intl.message(
+        'You have reached maximum number of workgroups in this workspace. Please contact your company owner to upgrade plan first',
+        name: 'reach_nested_workgroup_limit_message_saas'
+    );
+  }
+
+  String get reach_nested_workgroup_limit_message_own_server {
+    return Intl.message(
+      'You have reached maximum number of workgroups in this workspace',
+      name: 'reach_nested_workgroup_limit_message_own_server'
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
