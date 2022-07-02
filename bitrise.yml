@@ -48,7 +48,7 @@ workflows:
     - cache-push@2: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.1.x
   primary:
     steps:
     - activate-ssh-key@4:
@@ -86,6 +86,10 @@ workflows:
         inputs:
         - additional_params: ''
         - project_location: "$BITRISE_FLUTTER_PROJECT_LOCATION/data"
+    - file-downloader@1:
+        inputs:
+        - source: "$BITRISEIO_GOOGLE_SERVICES_IOS_URL"
+        - destination: "$BITRISE_FLUTTER_PROJECT_LOCATION/ios/Runner/GoogleService-Info.plist"
     - certificate-and-profile-installer@1:
         is_always_run: true
     - set-xcode-build-number@1:
@@ -116,6 +120,9 @@ workflows:
         - password: "$APPLEID_PASSWORD"
         - connection: 'off'
         - app_password: "$APPLE_SPECIFIC_PASSWORD"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.1.x
 app:
   envs:
   - opts:
@@ -134,4 +141,6 @@ app:
       is_expand: false
     BITRISE_GIT_BRANCH: release
   - SAAS_AVAILABLE: 'true'
-
+meta:
+  bitrise.io:
+    stack: osx-xcode-13.1.x
