@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:data/src/local/hive/type_adapter/app_mode_type_adapter.dart';
@@ -8,6 +9,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 class HiveCacheConfig {
 
   Future setUp({String? cachePath}) async {
+    developer.log('setUp(): ', name: 'HiveCacheConfig');
     await initializeDatabase(databasePath: cachePath);
     registerAdapter();
   }

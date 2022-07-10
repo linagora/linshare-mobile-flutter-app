@@ -47,6 +47,7 @@ import 'package:redux/redux.dart';
 import 'presentation/redux/states/app_state.dart';
 import 'presentation/util/extensions/color_extension.dart';
 import 'presentation/widget/initialize/initialize_widget.dart';
+import 'dart:developer' as developer;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +61,7 @@ void main() async {
       .setCrashlyticsCollectionEnabled(false);
   }
   await HiveCacheConfig().setUp();
+  developer.log('main(): after setUp', name: 'main');
   runApp(LinShareApp());
 }
 
@@ -99,8 +101,10 @@ class LinShareApp extends StatelessWidget {
             future: getIt.allReady(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                developer.log('build(): snapshot: ${snapshot.hasData}', name: 'LinShareApp');
                 return getIt<InitializeWidget>();
               } else {
+                developer.log('build(): what???', name: 'LinShareApp');
                 return InitializeGetItWidget();
               }
             }),
