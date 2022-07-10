@@ -29,6 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:developer' as developer;
+
 import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
@@ -82,6 +84,7 @@ class InitializeViewModel extends BaseViewModel {
   }
 
   void _initFlutterDownloader() {
+    developer.log('_initFlutterDownloader(): ', name: 'InitializeViewModel');
     FlutterDownloader.initialize(debug: kDebugMode)
       .then((_) => FlutterDownloader.registerCallback(downloadCallback));
   }
@@ -89,6 +92,7 @@ class InitializeViewModel extends BaseViewModel {
   static void downloadCallback(String id, DownloadTaskStatus status, int progress) {}
 
   void _getNetworkConnectivityState() async {
+    developer.log('_getNetworkConnectivityState(): ', name: 'InitializeViewModel');
     store.dispatch(SetNetworkConnectivityStateAction(await _connectivity.checkConnectivity()));
   }
 
@@ -103,14 +107,17 @@ class InitializeViewModel extends BaseViewModel {
   }
 
   ThunkAction<AppState> _getCredentialAction() {
+    developer.log('_getCredentialAction(): ', name: 'InitializeViewModel');
     return (Store<AppState> store) async {
       await _getCredentialInteractor.execute().then((result) => result.fold(
           (left) {
+            developer.log('_getCredentialAction(): $left', name: 'InitializeViewModel');
             if(left is CredentialFailure) {
               return store.dispatch(_getCredentialFailureAction(left));
             }
           },
           (right) {
+            developer.log('_getCredentialAction(): $right', name: 'InitializeViewModel');
             if(right is CredentialViewState) {
               return store.dispatch(_getCredentialSuccessAction((right)));
             }
@@ -119,6 +126,7 @@ class InitializeViewModel extends BaseViewModel {
   }
 
   ThunkAction<AppState> _getCredentialSuccessAction(CredentialViewState success) {
+    developer.log('_getCredentialSuccessAction(): $success', name: 'InitializeViewModel');
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersion;
@@ -128,6 +136,7 @@ class InitializeViewModel extends BaseViewModel {
   }
 
   ThunkAction<AppState> _getCredentialFailureAction(CredentialFailure failure) {
+    developer.log('_getCredentialFailureAction(): $failure', name: 'InitializeViewModel');
     return (Store<AppState> store) async {
       store.dispatch(_resetBiometricSetting());
       store.dispatch(SetCurrentView(RoutePaths.loginRoute));
@@ -136,6 +145,7 @@ class InitializeViewModel extends BaseViewModel {
   }
 
   ThunkAction<AppState> _getAppModeAction(Uri baseUrl) {
+    developer.log('_getAppModeAction(): $baseUrl', name: 'InitializeViewModel');
     return (Store<AppState> store) async {
       await _getAppModeInteractor.execute(baseUrl).then((appModeState) {
         appModeState.fold(
