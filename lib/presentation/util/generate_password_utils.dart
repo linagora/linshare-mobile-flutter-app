@@ -1,6 +1,8 @@
 import 'dart:math';
 
 class GeneratePasswordUtils {
+  static const int _minPasswordLength = 32;
+
   String get generateSaaSPassword {
     final generator = Random.secure();
     var pass = <int>[];
@@ -9,7 +11,7 @@ class GeneratePasswordUtils {
     pass.add(generator.nextInt(10) + 48);
     pass.add(generator.nextInt(6) + 59);
 
-    final cycles = generator.nextInt(10) + 10;
+    final cycles = generator.nextInt(10) + _minPasswordLength;
 
     for (var i = 0; i < cycles; i++) {
       pass.add(generator.nextInt(26) + (i % 2 == 0 ? 97 : 65));
