@@ -31,6 +31,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'dart:developer' as developer;
 
 class AuthenticationBiometricInteractor {
 
@@ -43,6 +44,7 @@ class AuthenticationBiometricInteractor {
       final isAuthenticated = await _biometricRepository.authenticate(localizedReason, androidSettingArgument: androidSettingArgument, iosSettingArgument: iosSettingArgument);
       return Right<Failure, Success>(AuthenticationBiometricViewState(isAuthenticated ? AuthenticationBiometricState.authenticated : AuthenticationBiometricState.unauthenticated));
     } catch (exception) {
+      developer.log('execute(): exception = $exception', name: 'AuthenticationBiometricInteractor');
       if (exception is BiometricNotEnrolled) {
         return Right<Failure, Success>(AuthenticationBiometricViewState(AuthenticationBiometricState.unEnrolled));
       } else if (exception is BiometricLockedOut) {
