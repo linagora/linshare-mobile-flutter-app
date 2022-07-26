@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:developer' as developer;
 
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -107,8 +108,7 @@ class _BiometricAuthenticationSettingState extends State<BiometricAuthentication
                         _getIconBiometricAuthenticationState(biometricState),
                         width: 52,
                         height: 32,
-                        fit: BoxFit.fill,
-                        color: AppColor.primaryColor,))
+                        fit: BoxFit.fill))
                   ]
                 ),
                 Padding(
@@ -184,9 +184,12 @@ class _BiometricAuthenticationSettingState extends State<BiometricAuthentication
   }
 
   String _getIconBiometricAuthenticationState(BiometricAuthenticationSettingState biometricAuthenticationSettingState) {
+    developer.log('_getIconBiometricAuthenticationState(): authenticationState = ${biometricAuthenticationSettingState.authenticationBiometricState}', name: '_BiometricAuthenticationSettingState');
     if (biometricAuthenticationSettingState.authenticationBiometricState.isAuthenticateReady()) {
+      developer.log('_getIconBiometricAuthenticationState(): dmm Ready state = ${biometricAuthenticationSettingState.biometricState}', name: '_BiometricAuthenticationSettingState');
       return biometricAuthenticationSettingState.biometricState == BiometricState.enabled ? _imagePath.icSwitchOn : _imagePath.icSwitchOff;
     } else {
+      developer.log('_getIconBiometricAuthenticationState(): dmm disable', name: '_BiometricAuthenticationSettingState');
       return _imagePath.icSwitchDisabled;
     }
   }
