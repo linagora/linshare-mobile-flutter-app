@@ -46,7 +46,7 @@ dependencies:
   external_path: 1.0.1
 
   # local_auth
-  local_auth: 1.1.11
+  local_auth: 2.1.0
 
   # SQLite
   sqflite: 2.0.2
