@@ -58,7 +58,7 @@ dependencies:
   device_info: 2.0.0
 
   # file_picker
-  file_picker: 3.0.1
+  file_picker: 4.6.1
 
   # flutter toast
   fluttertoast: 8.0.6
@@ -106,13 +106,13 @@ dependencies:
   pin_code_fields: 7.2.0
 
   # local_auth
-  local_auth: 1.1.11
+  local_auth: 2.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: 1.0.2
   pedantic: 1.11.0
-  permission_handler: 7.0.0
+  permission_handler: 9.2.0
 
   # OIDC
   flutter_appauth: 2.1.0+1
