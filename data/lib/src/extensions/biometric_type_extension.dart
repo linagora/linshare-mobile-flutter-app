@@ -29,17 +29,24 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:developer' as developer;
+
 import 'package:domain/domain.dart';
 import 'package:local_auth/local_auth.dart';
 
 extension BiometricTypeExtension on BiometricType {
 
   BiometricKind getBiometricKind() {
+    developer.log('getBiometricKind(): $this', name: 'BiometricTypeExtension');
     switch(this) {
       case BiometricType.fingerprint:
         return BiometricKind.fingerprint;
       case BiometricType.face:
         return BiometricKind.faceId;
+      case BiometricType.strong:
+        return BiometricKind.strong;
+      case BiometricType.weak:
+        return BiometricKind.weak;
       default:
         return BiometricKind.none;
     }
