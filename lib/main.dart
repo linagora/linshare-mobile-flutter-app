@@ -61,7 +61,6 @@ void main() async {
       .setCrashlyticsCollectionEnabled(false);
   }
   await HiveCacheConfig().setUp();
-  developer.log('main(): after setUp', name: 'main');
   runApp(LinShareApp());
 }
 
@@ -101,10 +100,8 @@ class LinShareApp extends StatelessWidget {
             future: getIt.allReady(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                developer.log('build(): snapshot: ${snapshot.hasData}', name: 'LinShareApp');
                 return getIt<InitializeWidget>();
               } else {
-                developer.log('build(): what???', name: 'LinShareApp');
                 return InitializeGetItWidget();
               }
             }),
