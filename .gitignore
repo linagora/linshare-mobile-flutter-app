@@ -113,6 +113,8 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+!pubspec.lock
+!ios/**/Podfile.lock
 
 #generated file
 *.g.dart
@@ -123,6 +125,6 @@ messages_messages.dart
 messages_ru.dart
 messages_vi.dart
 
-/android/app/google-services.json
-/ios/Runner/GoogleService-Info.plist
+/android/**/google-services.json
+/ios/**/GoogleService-Info.plist
 *.mocks.dart
