@@ -245,7 +245,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "select_all": "Tất cả",
+  "select_all": "Chọn tất cả",
   "@select_all": {
     "type": "text",
     "placeholders": {}
@@ -1164,7 +1164,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "create": "Tạo",
+  "create": "Tạo mới",
   "@create": {
     "type": "text",
     "placeholders": {}
