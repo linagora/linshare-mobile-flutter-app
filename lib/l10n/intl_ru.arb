@@ -2532,5 +2532,53 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "failed_request": "Неудачный запрос",
+  "@failed_request": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_now": "Связаться",
+  "@contact_now": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_workspace_limit_message_own_server": "Вы достигли максимального количества рабочих сред",
+  "@reach_workspace_limit_message_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_nested_workgroup_limit_message_saas": "Вы достигли максимального количества рабочих групп в этой рабочей среде. Свяжитесь с владельцем вашей компании, чтобы обновить план",
+  "@reach_nested_workgroup_limit_message_saas": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_nested_workgroup_limit_message_own_server": "Вы достигли максимального количества рабочих групп в этой рабочей среде",
+  "@reach_nested_workgroup_limit_message_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_upload_request_limit_message_saas": "Вы достигли максимального количества запросов на загрузку. Свяжитесь с владельцем вашей компании, чтобы обновить план",
+  "@reach_upload_request_limit_message_saas": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_upload_request_limit_message_own_server": "Вы достигли максимального количества запросов на загрузку",
+  "@reach_upload_request_limit_message_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_workspace_limit_message": "Вы достигли максимального количества запросов на загрузку. Свяжитесь с владельцем вашей компании, чтобы обновить план",
+  "@reach_workspace_limit_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
