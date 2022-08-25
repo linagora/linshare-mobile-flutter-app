@@ -7,6 +7,7 @@ simple solution completely intuitive.
     * Linshare allows employees to upload files into their space
     * Linshare can share files with internal or external collaborators
     * Linshare offers several features to securely exchange
+    * Test CI
    
 More information on http://www.linshare.org/
 
