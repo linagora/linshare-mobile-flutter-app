@@ -2182,7 +2182,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "recipient": "Recipient",
+  "recipient": "Nguời nhận",
   "@recipient": {
     "type": "text",
     "placeholders_order": [],
