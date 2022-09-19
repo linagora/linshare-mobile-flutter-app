@@ -2164,7 +2164,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "recipient": "Recipient",
+  "recipient": "Destinataire",
   "@recipient": {
     "type": "text",
     "placeholders_order": [],
