@@ -1,5 +1,5 @@
 {
-  "password": "",
+  "password": "pasvorto",
   "@password": {
     "type": "text",
     "placeholders_order": [],
@@ -39,7 +39,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "downloading_file": "",
+  "downloading_file": "Elŝutante {fileName}",
   "@downloading_file": {
     "type": "text",
     "placeholders_order": [
@@ -49,19 +49,19 @@
       "fileName": {}
     }
   },
-  "logout": "",
+  "logout": "Adiaŭi",
   "@logout": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "browse": "",
+  "browse": "Foliumi",
   "@browse": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "select_all": "",
+  "select_all": "Elekti ĉion",
   "@select_all": {
     "type": "text",
     "placeholders_order": [],
@@ -95,7 +95,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "uploading_files_view_button": "",
+  "uploading_files_view_button": "Vidi",
   "@uploading_files_view_button": {
     "type": "text",
     "placeholders_order": [],
@@ -141,19 +141,19 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "new_folder": "",
+  "new_folder": "Nova dosierujo",
   "@new_folder": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "rename": "",
+  "rename": "Ŝanĝi nomon",
   "@rename": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "my_rights": "",
+  "my_rights": "Miaj rajtoj",
   "@my_rights": {
     "type": "text",
     "placeholders_order": [],
@@ -177,13 +177,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "details": "",
+  "details": "Detaloj",
   "@details": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "no_description": "",
+  "no_description": "Neniu priskribo",
   "@no_description": {
     "type": "text",
     "placeholders_order": [],
@@ -195,7 +195,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "contributor": "",
+  "contributor": "Kontribuanto",
   "@contributor": {
     "type": "text",
     "placeholders_order": [],
@@ -207,19 +207,19 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audit_action_title_copy": "",
+  "audit_action_title_copy": "Kopii:",
   "@audit_action_title_copy": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audit_action_title_download": "",
+  "audit_action_title_download": "Elŝuto:",
   "@audit_action_title_download": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audit_action_title_upload_revision": "",
+  "audit_action_title_upload_revision": "Alŝutita versio:",
   "@audit_action_title_upload_revision": {
     "type": "text",
     "placeholders_order": [],
@@ -429,7 +429,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sender": "",
+  "sender": "Sendinto",
   "@sender": {
     "type": "text",
     "placeholders_order": [],
@@ -441,7 +441,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "modified_by": "",
+  "modified_by": "Modifita de",
   "@modified_by": {
     "type": "text",
     "placeholders_order": [],
@@ -465,7 +465,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "status": "",
+  "status": "Stato",
   "@status": {
     "type": "text",
     "placeholders_order": [],
@@ -549,7 +549,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_document": "",
+  "advance_search_type_document": "Dokumento",
   "@advance_search_type_document": {
     "type": "text",
     "placeholders_order": [],
@@ -637,7 +637,7 @@
       "count": {}
     }
   },
-  "view": "",
+  "view": "Vidi",
   "@view": {
     "type": "text",
     "placeholders_order": [],
@@ -735,7 +735,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workspace": "",
+  "workspace": "Laborejo",
   "@workspace": {
     "type": "text",
     "placeholders_order": [],
@@ -807,13 +807,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "last_name": "",
+  "last_name": "Familia nomo",
   "@last_name": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "account_details": "",
+  "account_details": "Detaloj pri konto",
   "@account_details": {
     "type": "text",
     "placeholders_order": [],
@@ -843,7 +843,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "active": "",
+  "active": "Aktiva",
   "@active": {
     "type": "text",
     "placeholders_order": [],
@@ -935,7 +935,7 @@
       "nameVarious": {}
     }
   },
-  "https": "",
+  "https": "https://",
   "@https": {
     "type": "text",
     "placeholders_order": [],
@@ -963,7 +963,7 @@
       "biometricKind": {}
     }
   },
-  "login_button_login": "",
+  "login_button_login": "Saluti",
   "@login_button_login": {
     "type": "text",
     "placeholders_order": [],
@@ -975,7 +975,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "file": "",
+  "file": "Dosiero",
   "@file": {
     "type": "text",
     "placeholders_order": [],
@@ -987,7 +987,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "delete": "",
+  "delete": "Forviŝi",
   "@delete": {
     "type": "text",
     "placeholders_order": [],
@@ -1017,7 +1017,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create": "",
+  "create": "Krei",
   "@create": {
     "type": "text",
     "placeholders_order": [],
@@ -1057,7 +1057,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "current_uploads_waiting_status": "",
+  "current_uploads_waiting_status": "Atendante",
   "@current_uploads_waiting_status": {
     "type": "text",
     "placeholders_order": [],
@@ -1101,7 +1101,7 @@
       "singleItemName": {}
     }
   },
-  "upload_file_title": "",
+  "upload_file_title": "Alŝuti dosieron",
   "@upload_file_title": {
     "type": "text",
     "placeholders_order": [],
@@ -1131,7 +1131,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "choose": "",
+  "choose": "elekti",
   "@choose": {
     "type": "text",
     "placeholders_order": [],
@@ -1219,7 +1219,7 @@
       "nodeName": {}
     }
   },
-  "current_uploads_uploading_status": "",
+  "current_uploads_uploading_status": "Alŝutante",
   "@current_uploads_uploading_status": {
     "type": "text",
     "placeholders_order": [],
@@ -1439,7 +1439,7 @@
       "nameVarious": {}
     }
   },
-  "current_uploads_succeed_status": "",
+  "current_uploads_succeed_status": "Finita",
   "@current_uploads_succeed_status": {
     "type": "text",
     "placeholders_order": [],
@@ -1497,7 +1497,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "update": "",
+  "update": "Ĝisdatigi",
   "@update": {
     "type": "text",
     "placeholders_order": [],
@@ -1543,13 +1543,13 @@
       "resourceName": {}
     }
   },
-  "modified": "",
+  "modified": "Modifita",
   "@modified": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "photos_and_videos": "",
+  "photos_and_videos": "Fotoj kaj filmoj",
   "@photos_and_videos": {
     "type": "text",
     "placeholders_order": [],
@@ -1583,7 +1583,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "destination": "",
+  "destination": "Celo",
   "@destination": {
     "type": "text",
     "placeholders_order": [],
@@ -1595,7 +1595,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "workgroup": "",
+  "workgroup": "Laborgrupo",
   "@workgroup": {
     "type": "text",
     "placeholders_order": [],
@@ -1619,7 +1619,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "submit": "",
+  "submit": "Submeti",
   "@submit": {
     "type": "text",
     "placeholders_order": [],
@@ -1663,7 +1663,7 @@
       "numberOfItems": {}
     }
   },
-  "description": "",
+  "description": "Priskribo",
   "@description": {
     "type": "text",
     "placeholders_order": [],
@@ -1739,7 +1739,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "unknown_user": "",
+  "unknown_user": "Nekonata uzanto",
   "@unknown_user": {
     "type": "text",
     "placeholders_order": [],
@@ -1773,7 +1773,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audit_log_actor": "",
+  "audit_log_actor": "far {actorName}",
   "@audit_log_actor": {
     "type": "text",
     "placeholders_order": [
@@ -1815,7 +1815,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "account_details_title": "",
+  "account_details_title": "Detaloj pri konto",
   "@account_details_title": {
     "type": "text",
     "placeholders_order": [],
@@ -1861,7 +1861,7 @@
       "recipientName": {}
     }
   },
-  "save": "",
+  "save": "Konservi",
   "@save": {
     "type": "text",
     "placeholders_order": [],
@@ -1909,7 +1909,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "preview": "",
+  "preview": "Antaŭrigardi",
   "@preview": {
     "type": "text",
     "placeholders_order": [],
@@ -1937,13 +1937,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "current_uploads_my_space_tab": "",
+  "current_uploads_my_space_tab": "Mia spaco",
   "@current_uploads_my_space_tab": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "first_name": "",
+  "first_name": "Antaŭnomo",
   "@first_name": {
     "type": "text",
     "placeholders_order": [],
@@ -2067,13 +2067,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "new_workgroup": "",
+  "new_workgroup": "Nova laborgrupo",
   "@new_workgroup": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "received": "",
+  "received": "Ricevita",
   "@received": {
     "type": "text",
     "placeholders_order": [],
@@ -2137,7 +2137,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "size": "",
+  "size": "Grando",
   "@size": {
     "type": "text",
     "placeholders_order": [],
@@ -2149,7 +2149,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "cancel": "",
+  "cancel": "Nuligi",
   "@cancel": {
     "type": "text",
     "placeholders_order": [],
@@ -2211,7 +2211,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "close": "",
+  "close": "Fermi",
   "@close": {
     "type": "text",
     "placeholders_order": [],
@@ -2361,7 +2361,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "me": "",
+  "me": "Mi",
   "@me": {
     "type": "text",
     "placeholders_order": [],
@@ -2413,7 +2413,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_pdf": "",
+  "advance_search_type_pdf": "PDF",
   "@advance_search_type_pdf": {
     "type": "text",
     "placeholders_order": [],
@@ -2441,7 +2441,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "unknown_role": "",
+  "unknown_role": "Nekonata rolo",
   "@unknown_role": {
     "type": "text",
     "placeholders_order": [],
@@ -2475,7 +2475,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "folder": "",
+  "folder": "Dosierujo",
   "@folder": {
     "type": "text",
     "placeholders_order": [],
@@ -2499,13 +2499,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_archive": "",
+  "advance_search_type_archive": "Arkivo",
   "@advance_search_type_archive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "settings": "",
+  "settings": "Agordoj",
   "@settings": {
     "type": "text",
     "placeholders_order": [],
@@ -2547,7 +2547,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audit_action_title_upload": "",
+  "audit_action_title_upload": "Alŝuti dosieron:",
   "@audit_action_title_upload": {
     "type": "text",
     "placeholders_order": [],
@@ -2587,7 +2587,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "copy_to": "",
+  "copy_to": "Kopii al",
   "@copy_to": {
     "type": "text",
     "placeholders_order": [],
@@ -2671,7 +2671,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "move": "",
+  "move": "Movi",
   "@move": {
     "type": "text",
     "placeholders_order": [],
@@ -2737,7 +2737,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "edit": "",
+  "edit": "Redakti",
   "@edit": {
     "type": "text",
     "placeholders_order": [],
@@ -2771,7 +2771,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "title_feedback_dialog": "",
+  "title_feedback_dialog": "LinShare",
   "@title_feedback_dialog": {
     "type": "text",
     "placeholders_order": [],
@@ -2817,13 +2817,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "members": "",
+  "members": "Membroj",
   "@members": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "back": "",
+  "back": "Reen",
   "@back": {
     "type": "text",
     "placeholders_order": [],
@@ -2851,13 +2851,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "created": "",
+  "created": "Kreita",
   "@created": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "advance_search_type_other": "",
+  "advance_search_type_other": "Alia",
   "@advance_search_type_other": {
     "type": "text",
     "placeholders_order": [],
@@ -2945,13 +2945,13 @@
       "nameVarious": {}
     }
   },
-  "no": "",
+  "no": "Ne",
   "@no": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "admin": "",
+  "admin": "Administranto",
   "@admin": {
     "type": "text",
     "placeholders_order": [],
@@ -2963,7 +2963,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "yes": "",
+  "yes": "Jes",
   "@yes": {
     "type": "text",
     "placeholders_order": [],
@@ -2981,7 +2981,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_name_title": "",
+  "sign_up_name_title": "Nomo",
   "@sign_up_name_title": {
     "type": "text",
     "placeholders_order": [],
@@ -2999,7 +2999,7 @@
       "resourceName": {}
     }
   },
-  "name": "",
+  "name": "Nomo",
   "@name": {
     "type": "text",
     "placeholders_order": [],
@@ -3023,7 +3023,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "shared_space": "",
+  "shared_space": "Komuna spaco",
   "@shared_space": {
     "type": "text",
     "placeholders_order": [],
