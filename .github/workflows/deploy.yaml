@@ -46,11 +46,13 @@ jobs:
           CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_BASE64 }}
           PROVISION_PROFILE_BASE64: ${{ secrets.PROVISION_PROFILE_BASE64 }}
           SHAREEXT_PROVISION_PROFILE_BASE64: ${{ secrets.SHAREEXT_PROVISION_PROFILE_BASE64 }}
+          APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY_BASE64 }}
         run: |
           echo -n "$GOOGLE_SERVICES_PLIST" > Runner/GoogleService-Info.plist
           echo -n "$CERTIFICATE_BASE64" | base64 --decode --output cert.p12
           echo -n "$PROVISION_PROFILE_BASE64" | base64 --decode --output buildpp.mobileprovision
           echo -n "$SHAREEXT_PROVISION_PROFILE_BASE64" | base64 --decode --output shareextpp.mobileprovision
+          echo -n "$APPLE_API_KEY_BASE64" | base64 --decode --output apiKey.p8
         working-directory: ios
 
       - name: Setup Fastlane (Android)
@@ -113,9 +115,8 @@ jobs:
           SAAS_AVAILABLE: "true"
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
-          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APPLE_SPECIFIC_PASSWORD }}
           PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
-          APPLE_APP_ID: ${{ secrets.APPLE_APP_ID }}
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
         run: |
           parallel 'cd {} && bundle exec fastlane release' ::: android ios

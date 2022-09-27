@@ -21,6 +21,12 @@ import_certificate(
   certificate_password: ENV["CERTIFICATE_PASSWORD"],
   keychain_name: ENV["MATCH_KEYCHAIN_NAME"]
 )
+# App Store Connect API setup
+app_store_connect_api_key(
+  key_id: ENV["APPLE_KEY_ID"],
+  issuer_id: ENV["APPLE_ISSUER_ID"],
+  key_filepath: "./apiKey.p8"
+)
 # 2 provisioning profiles, 1 for the main app and 1 for the share extension
 install_provisioning_profile(path: "buildpp.mobileprovision")
 install_provisioning_profile(path: "shareextpp.mobileprovision")
@@ -60,13 +66,11 @@ platform :ios do
 
   desc "Build and deploy release version"
   lane :release do
-    latest_build_number = 100 # Hardcode for now
-    version_number = last_git_tag.gsub("v", "")
     increment_build_number(
-      build_number: latest_build_number + ENV['GITHUB_RUN_NUMBER'].to_i
+      build_number: latest_testflight_build_number + 1
     )
     increment_version_number(
-      version_number: version_number
+      version_number: last_git_tag.gsub("v", "")
     )
     update_code_signing_settings(
       use_automatic_signing: false,
@@ -87,7 +91,6 @@ platform :ios do
     build_app(
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
-      codesigning_identity: "Apple Distribution: Linagora",
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
@@ -96,12 +99,9 @@ platform :ios do
         }
       }
     )
-    # We don't have api keys, so using command line for now
-    sh "xcrun altool --upload-app -f ../LinShare.ipa -t ios -u $FASTLANE_USER -p $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"
-    # upload_to_testflight(
-    #   apple_id: ENV["APPLE_APP_ID"],
-    #   skip_waiting_for_build_processing: true,
-    #   ipa: "ios/LinShare.ipa"
-    # )
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      ipa: "LinShare.ipa"
+    )
   end
 end
