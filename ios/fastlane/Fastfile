@@ -21,12 +21,6 @@ import_certificate(
   certificate_password: ENV["CERTIFICATE_PASSWORD"],
   keychain_name: ENV["MATCH_KEYCHAIN_NAME"]
 )
-# App Store Connect API setup
-app_store_connect_api_key(
-  key_id: ENV["APPLE_KEY_ID"],
-  issuer_id: ENV["APPLE_ISSUER_ID"],
-  key_filepath: "./apiKey.p8"
-)
 # 2 provisioning profiles, 1 for the main app and 1 for the share extension
 install_provisioning_profile(path: "buildpp.mobileprovision")
 install_provisioning_profile(path: "shareextpp.mobileprovision")
@@ -66,6 +60,12 @@ platform :ios do
 
   desc "Build and deploy release version"
   lane :release do
+    # App Store Connect API setup
+    app_store_connect_api_key(
+      key_id: ENV["APPLE_KEY_ID"],
+      issuer_id: ENV["APPLE_ISSUER_ID"],
+      key_filepath: "./apiKey.p8"
+    )
     increment_build_number(
       build_number: latest_testflight_build_number + 1
     )
