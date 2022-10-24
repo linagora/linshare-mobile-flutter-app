@@ -43,7 +43,7 @@ class LocalFilePicker {
           return FileInfo(
             _getSingleFileNameWithExtension(platformFile),
             _getSingleFilePathWithoutFileName(platformFile),
-            platformFile.size ?? 0,
+            platformFile.size,
           );
         }).toList();
 
@@ -57,7 +57,7 @@ class LocalFilePicker {
   }
 
   String _getSingleFileNameWithExtension(PlatformFile platformFile) {
-    return platformFile.name ?? '';
+    return platformFile.name;
   }
 
   String _getSingleFilePathWithoutFileName(PlatformFile platformFile) {

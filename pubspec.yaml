@@ -58,7 +58,7 @@ dependencies:
   device_info: 2.0.0
 
   # file_picker
-  file_picker: 4.6.1
+  file_picker: 5.2.2
 
   # flutter toast
   fluttertoast: 8.0.6
@@ -98,7 +98,7 @@ dependencies:
   connectivity: 3.0.3
 
   # open_file
-  open_file: 3.2.0
+  better_open_file: 3.6.4
   # url_launcher
   url_launcher: 6.1.3
 
@@ -112,7 +112,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: 1.0.2
   pedantic: 1.11.0
-  permission_handler: 9.2.0
+  permission_handler: 10.2.0
 
   # OIDC
   flutter_appauth: 2.1.0+1
