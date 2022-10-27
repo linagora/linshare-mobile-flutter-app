@@ -419,7 +419,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
 
   List<Widget> _contextMenuActionTiles(BuildContext context, Document document, int positionDocument) {
     return [
-      if (Platform.isIOS) _exportFileAction(context, document),
+      _exportFileAction(context, document),
       if (Platform.isAndroid) _downloadAction(document),
       _shareAction([document]),
       _makeAvailableOffline(document, positionDocument),
@@ -549,7 +549,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   List<Widget> _multipleSelectionActions(List<Document> documents) {
     return [
       _shareMultipleSelection(documents),
-      _downloadMultipleSelection(documents),
+      if (Platform.isAndroid || documents.length == 1) _downloadMultipleSelection(documents),
       _removeMultipleSelection(documents),
       _moreActionMultipleSelection(documents)
     ];
@@ -627,7 +627,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     return [
       _shareAction(documents, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadMultiFilesAction(context, documents),
-      if (Platform.isIOS) _exportMultiFilesAction(context, documents),
+      if (documents.length == 1) _exportMultiFilesAction(context, documents),
       _copyToWorkGroupAction(context, documents, itemSelectionType: ItemSelectionType.multiple),
       _duplicateAction(context, documents, itemSelectionType: ItemSelectionType.multiple)
     ];
