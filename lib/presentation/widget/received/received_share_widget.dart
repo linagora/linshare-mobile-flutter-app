@@ -448,7 +448,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   List<Widget> _multipleSelectionActions(BuildContext context, List<ReceivedShare> receivedShares) {
     return [
       if (Platform.isAndroid) _downloadMultipleSelection(receivedShares),
-      _exportMultipleSelection(receivedShares),
+      if (receivedShares.length == 1) _exportMultipleSelection(receivedShares),
       _copyToMySpaceMultipleSelection(receivedShares),
       _removeMultipleSelection(receivedShares),
       _moreActionMultipleSelection(context, receivedShares)
@@ -571,7 +571,7 @@ class _ReceivedShareWidgetState extends State<ReceivedShareWidget> {
   List<Widget> _moreActionList(BuildContext context, List<ReceivedShare> receivedShares) {
     return [
       if (Platform.isAndroid) _downloadAction(receivedShares, itemSelectionType: ItemSelectionType.multiple),
-      _exportFileAction(receivedShares, itemSelectionType: ItemSelectionType.multiple),
+      if (receivedShares.length == 1) _exportFileAction(receivedShares, itemSelectionType: ItemSelectionType.multiple),
       _copyToMySpaceAction(receivedShares, itemSelectionType: ItemSelectionType.multiple),
       _copyToWorkGroupAction(context, receivedShares, itemSelectionType: ItemSelectionType.multiple),
     ];
