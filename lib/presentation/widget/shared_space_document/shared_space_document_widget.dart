@@ -369,7 +369,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   }
 
   Widget _downloadFileMultipleSelection(List<WorkGroupNode> workGroupNodes) {
-    if (Platform.isAndroid || workGroupNodes.whereType<WorkGroupFolder>().toList().isNotEmpty) {
+    if (workGroupNodes.whereType<WorkGroupFolder>().toList().isNotEmpty || workGroupNodes.length != 1) {
       return SizedBox.shrink();
     }
     return WorkGroupNodeMultipleSelectionActionBuilder(
@@ -422,7 +422,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
 
   List<Widget> _moreActionList(BuildContext context, List<WorkGroupNode> workGroupNodes) {
     return [
-      if (Platform.isIOS) _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
+      if (workGroupNodes.length == 1) _exportFileAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
       if (Platform.isAndroid) _downloadFilesAction(workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
       _copyToAction(context, workGroupNodes, itemSelectionType: ItemSelectionType.multiple),
       if (SharedSpaceOperationRole.duplicateNodeSharedSpaceRoles.contains(_arguments?.sharedSpaceNode.sharedSpaceRole.name)) _duplicateMultipleSelection(workGroupNodes),
@@ -726,7 +726,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
 
   List<Widget> _contextMenuDocumentActionTiles(BuildContext context, WorkGroupDocument workGroupDocument, int indexWorkGroupDocument) {
     return [
-      if (Platform.isIOS) _exportFileAction([workGroupDocument]),
+      _exportFileAction([workGroupDocument]),
       if (Platform.isAndroid) _downloadFilesAction([workGroupDocument]),
       _previewWorkGroupDocumentAction(workGroupDocument),
       _makeAvailableOfflineSharedSpaceDocument(workGroupDocument, indexWorkGroupDocument),
