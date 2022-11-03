@@ -29,9 +29,11 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
+import 'dart:developer' as developer;
+
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 class CookieInterceptors extends InterceptorsWrapper {
   var _jSessionId = '';
@@ -44,26 +46,34 @@ class CookieInterceptors extends InterceptorsWrapper {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _extractSessionIdFromHeader(response.headers);
+    extractSessionIdFromHeader(response.headers);
     super.onResponse(response, handler);
   }
 
   @override
   void onError(DioError dioError, ErrorInterceptorHandler handler) {
     if(dioError.response != null) {
-      _extractSessionIdFromHeader(dioError.response!.headers);
+      extractSessionIdFromHeader(dioError.response!.headers);
     }
     super.onError(dioError, handler);
   }
 
-  void _extractSessionIdFromHeader(Headers headers) {
-    final cookieHeader = headers.value('set-cookie');
-    if (cookieHeader != null) {
-      Right(cookieHeader)
-          .map((cookie) => cookie.split(';'))
-          .map((headers) => headers.firstWhere((element) => element.contains(Constant.jSessionId)))
-          .map((validElement) => validElement.substring(Constant.jSessionId.length + 1))
-          .map((jSessionId) => _jSessionId = jSessionId);
+  @visibleForTesting
+  void extractSessionIdFromHeader(Headers headers) {
+    final cookieHeader = headers['set-cookie'];
+    developer.log('_extractSessionIdFromHeader(): ${cookieHeader?.length}', name: 'CookieInterceptors');
+    if (cookieHeader != null && cookieHeader.isNotEmpty) {
+      final jSessionIdValues = cookieHeader.firstWhere((element) => element.contains(Constant.jSessionId)).split(';');
+      if (jSessionIdValues.length > 1) {
+        final jSessionId = jSessionIdValues.firstWhere((element) => element.contains(Constant.jSessionId));
+        _jSessionId = jSessionId.substring(Constant.jSessionId.length + 1);
+      } else if (jSessionIdValues.length == 1){
+        developer.log('extractSessionIdFromHeader(): $jSessionIdValues', name: 'CookieInterceptors');
+        _jSessionId = jSessionIdValues[0].substring(Constant.jSessionId.length + 1);
+      }
     }
   }
+
+  @visibleForTesting
+  get jSessionId => _jSessionId;
 }
