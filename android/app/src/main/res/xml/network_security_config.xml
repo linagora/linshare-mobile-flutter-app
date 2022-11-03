@@ -32,7 +32,7 @@
 <!--  the Additional Terms applicable to LinShare software. -->
 
 <network-security-config>
-    <base-config cleartextTrafficPermitted="false">
+    <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <!-- Trust preinstalled CAs -->
             <certificates src="system"/>
