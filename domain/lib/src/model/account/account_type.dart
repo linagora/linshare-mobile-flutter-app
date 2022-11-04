@@ -30,7 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum AccountType { INTERNAL, SYSTEM }
+enum AccountType { INTERNAL, SYSTEM, GUEST }
 
 extension AccountTypeExtension on AccountType {
   String get value {
@@ -39,6 +39,8 @@ extension AccountTypeExtension on AccountType {
         return 'INTERNAL';
       case AccountType.SYSTEM:
         return 'SYSTEM';
+      case AccountType.GUEST:
+        return 'GUEST';
       default:
         return toString();
     }

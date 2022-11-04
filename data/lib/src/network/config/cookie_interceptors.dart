@@ -60,17 +60,26 @@ class CookieInterceptors extends InterceptorsWrapper {
 
   @visibleForTesting
   void extractSessionIdFromHeader(Headers headers) {
-    final cookieHeader = headers['set-cookie'];
-    developer.log('_extractSessionIdFromHeader(): ${cookieHeader?.length}', name: 'CookieInterceptors');
-    if (cookieHeader != null && cookieHeader.isNotEmpty) {
-      final jSessionIdValues = cookieHeader.firstWhere((element) => element.contains(Constant.jSessionId)).split(';');
-      if (jSessionIdValues.length > 1) {
-        final jSessionId = jSessionIdValues.firstWhere((element) => element.contains(Constant.jSessionId));
-        _jSessionId = jSessionId.substring(Constant.jSessionId.length + 1);
-      } else if (jSessionIdValues.length == 1){
-        developer.log('extractSessionIdFromHeader(): $jSessionIdValues', name: 'CookieInterceptors');
-        _jSessionId = jSessionIdValues[0].substring(Constant.jSessionId.length + 1);
+    try {
+      final cookieHeader = headers['set-cookie'];
+      developer.log('_extractSessionIdFromHeader(): ${cookieHeader?.length}',
+          name: 'CookieInterceptors');
+      if (cookieHeader != null && cookieHeader.isNotEmpty) {
+        final jSessionIdValues = cookieHeader.firstWhere((element) =>
+            element.contains(Constant.jSessionId)).split(';');
+        if (jSessionIdValues.length > 1) {
+          final jSessionId = jSessionIdValues.firstWhere((element) =>
+              element.contains(Constant.jSessionId));
+          _jSessionId = jSessionId.substring(Constant.jSessionId.length + 1);
+        } else if (jSessionIdValues.length == 1) {
+          developer.log('extractSessionIdFromHeader(): $jSessionIdValues',
+              name: 'CookieInterceptors');
+          _jSessionId =
+              jSessionIdValues[0].substring(Constant.jSessionId.length + 1);
+        }
       }
+    } catch (e) {
+      developer.log('CookieInterceptors::extractSessionIdFromHeader(): [Error] $e', error: e);
     }
   }
 
