@@ -32,6 +32,7 @@
 import 'dart:io';
 
 import 'package:data/data.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
@@ -62,6 +63,12 @@ class NetworkModule {
   void _provideDio() {
     getIt.registerSingleton(Dio(getIt<BaseOptions>()));
     _provideInterceptors();
+    if (Platform.isAndroid) {
+      (getIt<Dio>().httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+    }
     getIt<Dio>().interceptors.add(getIt<DynamicUrlInterceptors>());
     getIt<Dio>().interceptors.add(getIt<DynamicAPIVersionSupportInterceptor>());
     getIt<Dio>().interceptors.add(getIt<CookieInterceptors>());
