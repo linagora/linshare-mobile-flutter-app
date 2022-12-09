@@ -10,7 +10,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "login_text_login_to_continue": "Пожалуйста, введите ваш логин",
+  "login_text_login_to_continue": "Пожалуйста, введите логин",
   "@login_text_login_to_continue": {
     "type": "text",
     "placeholders": {}
@@ -35,7 +35,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "upload_file_title": "Загрузка файла",
+  "upload_file_title": "Загрузить файл",
   "@upload_file_title": {
     "type": "text",
     "placeholders": {}
@@ -55,7 +55,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "my_space_text_upload_your_files_here": "Загрузите ваши файлы здесь",
+  "my_space_text_upload_your_files_here": "Загрузите ваши файлы",
   "@my_space_text_upload_your_files_here": {
     "type": "text",
     "placeholders": {}
@@ -134,7 +134,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "common_error_occured_message": "Произошла непредвиденная ошибка\nПожалуйста, перезагрузите приложение или повторите попытку позже",
+  "common_error_occured_message": "Произошла ошибка\nПожалуйста, перезагрузите приложение или повторите попытку позже",
   "@common_error_occured_message": {
     "type": "text",
     "placeholders": {}
