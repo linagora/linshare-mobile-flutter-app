@@ -171,7 +171,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "shared_space": "Рабочие группы",
+  "shared_space": "Общее пространство",
   "@shared_space": {
     "type": "text",
     "placeholders": {}
@@ -181,7 +181,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "not_have_received_yet": "Посмотреть полученные вами файлы",
+  "not_have_received_yet": "Посмотреть полученные файлы",
   "@not_have_received_yet": {
     "type": "text",
     "placeholders": {}
@@ -215,7 +215,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "workgroup_nodes_surfing_root_back_title": "Назад к общему пространству",
+  "workgroup_nodes_surfing_root_back_title": "Вернуться к общему пространству",
   "@workgroup_nodes_surfing_root_back_title": {
     "type": "text",
     "placeholders": {}
@@ -344,7 +344,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "some_items_could_not_be_copied_to_shared_space": "Некоторые элементы не могут быть скопированы в рабочие группы",
+  "some_items_could_not_be_copied_to_shared_space": "Некоторые элементы не могут быть скопированы в общее пространство",
   "@some_items_could_not_be_copied_to_shared_space": {
     "type": "text",
     "placeholders": {}
@@ -357,12 +357,12 @@
       "singleItemName": {}
     }
   },
-  "the_file_has_been_successfully_deleted": "Файл был успешно удален",
+  "the_file_has_been_successfully_deleted": "Файл успешно удален",
   "@the_file_has_been_successfully_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "files_have_been_successfully_deleted": "Файлы были успешно удалены",
+  "files_have_been_successfully_deleted": "Файлы успешно удалены",
   "@files_have_been_successfully_deleted": {
     "type": "text",
     "placeholders": {}
@@ -409,17 +409,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "choose": "Выберите",
+  "choose": "выберите",
   "@choose": {
     "type": "text",
     "placeholders": {}
   },
-  "account_details_title": "Детали учетной записи",
+  "account_details_title": "Информация учетной записи",
   "@account_details_title": {
     "type": "text",
     "placeholders": {}
   },
-  "account_details": "Детали учетной записи",
+  "account_details": "Информация учетной записи",
   "@account_details": {
     "type": "text",
     "placeholders": {}
@@ -515,12 +515,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "search_in_shared_space_files": "Искать в файлах рабочих групп",
+  "search_in_shared_space_files": "Искать в файлах общего пространства",
   "@search_in_shared_space_files": {
     "type": "text",
     "placeholders": {}
   },
-  "results_count": "{numberOfResults,plural, =0{{numberOfResults} результат}=1{{numberOfResults} результат}other{{numberOfResults} результатов}}",
+  "results_count": "{numberOfResults,plural, =0{{numberOfResults} результатов}=1{{numberOfResults} результат}other{{numberOfResults} результатов}}",
   "@results_count": {
     "type": "text",
     "placeholders": {
@@ -532,24 +532,24 @@
     "type": "text",
     "placeholders": {}
   },
-  "search_in_shared_space": "Искать в рабочих группах",
+  "search_in_shared_space": "Искать в общем пространстве",
   "@search_in_shared_space": {
     "type": "text",
     "placeholders": {}
   },
-  "shared_spaces_could_not_be_deleted": "{sharedSpacesNumber,plural, =1{Рабочая группа не может быть удалена}other{Рабочие группы не могут быть удалены}}",
+  "shared_spaces_could_not_be_deleted": "{sharedSpacesNumber,plural, =1{Общее пространство не может быть удалено}other{Общие пространства не могут быть удалены}}",
   "@shared_spaces_could_not_be_deleted": {
     "type": "text",
     "placeholders": {
       "sharedSpacesNumber": {}
     }
   },
-  "shared_space_has_been_deleted": "Рабочая группа удалена",
+  "shared_space_has_been_deleted": "Общее пространство удалено",
   "@shared_space_has_been_deleted": {
     "type": "text",
     "placeholders": {}
   },
-  "all_shared_spaces_have_been_deleted": "Все рабочие группы удалены",
+  "all_shared_spaces_have_been_deleted": "Все общие пространства удалены",
   "@all_shared_spaces_have_been_deleted": {
     "type": "text",
     "placeholders": {}
@@ -609,7 +609,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "name": "Имя",
+  "name": "Название",
   "@name": {
     "type": "text",
     "placeholders": {}
@@ -798,7 +798,7 @@
       "resourceName": {}
     }
   },
-  "audit_action_message_update_workgroup_other": "{authorName} редактировал(а) рабочую группу: {resourceName}.",
+  "audit_action_message_update_workgroup_other": "{authorName} изменил(а) рабочую группу: {resourceName}.",
   "@audit_action_message_update_workgroup_other": {
     "type": "text",
     "placeholders": {
@@ -831,7 +831,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_delete_member_other": "{authorName} удалил(а) участника {resourceName} из Рабочей группы {nameVarious}.",
+  "audit_action_message_delete_member_other": "{authorName} удалил(а) участника {resourceName} из рабочей группы {nameVarious}.",
   "@audit_action_message_delete_member_other": {
     "type": "text",
     "placeholders": {
@@ -1010,7 +1010,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_document_from_received_share_self": "Вы создали документ {resourceName} в {nameVarious}, скопировав его из полученных вами файлов.",
+  "audit_action_message_copy_document_from_received_share_self": "Вы создали документ {resourceName} в {nameVarious}, скопировав его из полученных файлов.",
   "@audit_action_message_copy_document_from_received_share_self": {
     "type": "text",
     "placeholders": {
@@ -1088,7 +1088,7 @@
       "nameVarious": {}
     }
   },
-  "audit_action_message_copy_revision_from_shared_space": "Документ был восстановлен с версии {resourceName}.",
+  "audit_action_message_copy_revision_from_shared_space": "Документ был восстановлен до версии {resourceName}.",
   "@audit_action_message_copy_revision_from_shared_space": {
     "type": "text",
     "placeholders": {
@@ -1129,7 +1129,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "input_6_digit_from_free_otp": "Введите 6-значный код в вашем приложении FreeOTP",
+  "input_6_digit_from_free_otp": "Введите 6-значный код в приложении FreeOTP",
   "@input_6_digit_from_free_otp": {
     "type": "text",
     "placeholders": {}
@@ -1139,7 +1139,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "please_fill_up_all_numbers": "Пожалуйста, введите все числа",
+  "please_fill_up_all_numbers": "Пожалуйста, введите все цифры",
   "@please_fill_up_all_numbers": {
     "type": "text",
     "placeholders": {}
@@ -1212,7 +1212,7 @@
       "nodeName": {}
     }
   },
-  "node_name_contain_last_dot": "Название {nodeName} не может заканчиваться символами \".\"",
+  "node_name_contain_last_dot": "Название {nodeName} не может заканчиваться символом \".\"",
   "@node_name_contain_last_dot": {
     "type": "text",
     "placeholders": {
@@ -1398,7 +1398,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "files_have_been_successfully_duplicated": "Файлы были успешно дублированы",
+  "files_have_been_successfully_duplicated": "Файлы успешно дублированы",
   "@files_have_been_successfully_duplicated": {
     "type": "text",
     "placeholders": {}
@@ -1443,7 +1443,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "login_sso_failed": "Вход не удался",
+  "login_sso_failed": "Не удалось войти",
   "@login_sso_failed": {
     "type": "text",
     "placeholders": {}
@@ -1458,7 +1458,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "active_closed": "Активный / Закрытый",
+  "active_closed": "Активные / Закрытые",
   "@active_closed": {
     "type": "text",
     "placeholders": {}
@@ -1487,12 +1487,12 @@
       "date": {}
     }
   },
-  "active": "Активный",
+  "active": "Активные",
   "@active": {
     "type": "text",
     "placeholders": {}
   },
-  "expired_closed": "Окончен / Закрыт",
+  "expired_closed": "Окончены / Закрыты",
   "@expired_closed": {
     "type": "text",
     "placeholders": {}
@@ -1547,7 +1547,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "show_less": "Показать меньше",
+  "show_less": "Свернуть",
   "@show_less": {
     "type": "text",
     "placeholders": {}
@@ -1733,26 +1733,26 @@
     "type": "text",
     "placeholders": {}
   },
-  "biometric_timeout_title": "Установить тайм-аут",
+  "biometric_timeout_title": "Установить лимит времени",
   "@biometric_timeout_title": {
     "type": "text",
     "placeholders": {}
   },
-  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} секунда}other{{numberOfItems} секунд}}",
+  "biometric_timeout_second": "{numberOfItems,plural, =1{{numberOfItems} секунда}other{{numberOfItems} секунд(ы)}}",
   "@biometric_timeout_second": {
     "type": "text",
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} минута}other{{numberOfItems} минуты}}",
+  "biometric_timeout_minute": "{numberOfItems,plural, =1{{numberOfItems} минута}other{{numberOfItems} минут(ы)}}",
   "@biometric_timeout_minute": {
     "type": "text",
     "placeholders": {
       "numberOfItems": {}
     }
   },
-  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} час}other{{numberOfItems} часов}}",
+  "biometric_timeout_hour": "{numberOfItems,plural, =1{{numberOfItems} час}other{{numberOfItems} часа(ов)}}",
   "@biometric_timeout_hour": {
     "type": "text",
     "placeholders": {
@@ -1816,7 +1816,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "advance_search_date_any_time": "Любое время",
+  "advance_search_date_any_time": "Все время",
   "@advance_search_date_any_time": {
     "type": "text",
     "placeholders": {}
@@ -2053,7 +2053,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "sign_up_completed_message_center": "Пароль был отправлен на ваш e-mail {email}, проверьте свой почтовый ящик и\n продолжите вход",
+  "sign_up_completed_message_center": "Пароль был отправлен на ваш e-mail {email}, проверьте почтовый ящик и\n продолжите вход",
   "@sign_up_completed_message_center": {
     "type": "text",
     "placeholders_order": [
@@ -2143,7 +2143,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "activated_at": "Активировано по адресу",
+  "activated_at": "Активировано в",
   "@activated_at": {
     "type": "text",
     "placeholders_order": [],
@@ -2155,7 +2155,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "max_total_file_size": "Максимальный общий размер файла",
+  "max_total_file_size": "Максимальный общий размер файлов",
   "@max_total_file_size": {
     "type": "text",
     "placeholders_order": [],
@@ -2455,7 +2455,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "are_you_sure_want_to_remove_this_version": "Вы уверены, что хотите удалить эту версию? Обратите внимание, это действие нельзя отменить.",
+  "are_you_sure_want_to_remove_this_version": "Вы уверены, что хотите удалить эту версию? Это действие нельзя отменить.",
   "@are_you_sure_want_to_remove_this_version": {
     "type": "text",
     "placeholders_order": [],
