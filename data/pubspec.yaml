@@ -57,7 +57,7 @@ dependencies:
       ref: master
 
   # OIDC
-  flutter_appauth: 2.1.0+1
+  flutter_appauth: 4.0.0
 
   # uuid
   uuid: 3.0.6
