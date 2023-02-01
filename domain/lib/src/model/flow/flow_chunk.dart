@@ -32,9 +32,11 @@
  */
 
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:math';
 
+import 'package:async/async.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:domain/src/model/flow/flow_chunk_upload_state.dart';
@@ -58,6 +60,7 @@ class FlowChunk extends Equatable {
   FlowChunkUploadState status = FlowChunkUploadState.pending;
 
   bool error = false;
+  ChunkedStreamReader<int>? _chunkedStreamReader;
 
   final FlowUploader _flowUploader;
 
@@ -75,8 +78,9 @@ class FlowChunk extends Equatable {
 
   Future<Flow> upload(int uploadedByte, StreamController<Either<Failure, Success>> onSendController) async {
     status = FlowChunkUploadState.uploading;
+    _chunkedStreamReader = ChunkedStreamReader(file.openRead(startByte, endByte));
     return _flowUploader.uploadChunk(
-      file,
+      _chunkedStreamReader!,
       offset + 1,
       chunkSize,
       currentChunkSize,
@@ -108,9 +112,15 @@ class FlowChunk extends Equatable {
     if (isSuccess) {
       status = FlowChunkUploadState.success;
     } else {
+      developer.log('test(): update status error for offset $offset', name: 'FlowChunk');
       status = FlowChunkUploadState.error;
     }
     return isSuccess;
+  }
+
+  void completed() {
+    developer.log('completed()', name: 'FlowChunk');
+    _chunkedStreamReader?.cancel();
   }
 
   @override
