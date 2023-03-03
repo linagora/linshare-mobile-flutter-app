@@ -97,3 +97,18 @@ jobs:
           APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
         run: bundle exec fastlane release
         working-directory: ${{ matrix.os }}
+
+      - name: Preparing APK for release
+        if: matrix.os == 'android'
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: cp build/app/outputs/flutter-apk/app-release.apk Linshare-${VERSION}.apk
+
+      - name: Create Github release
+        if: matrix.os == 'android'
+        uses: softprops/action-gh-release@v1
+        with:
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          files: |
+            Linshare-${{ github.ref_name }}.apk
