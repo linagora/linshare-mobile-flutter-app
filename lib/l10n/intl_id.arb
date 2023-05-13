@@ -1,1 +1,8 @@
-{}
+{
+  "initializing_data": "Memuat data...",
+  "@initializing_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  }
+}
