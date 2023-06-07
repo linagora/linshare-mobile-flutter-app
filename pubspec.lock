@@ -691,6 +691,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.17"
+  native_flutter_proxy:
+    dependency: "direct main"
+    description:
+      name: native_flutter_proxy
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.15"
   package_config:
     dependency: transitive
     description:
