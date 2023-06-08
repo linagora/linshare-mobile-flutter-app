@@ -72,6 +72,7 @@ jobs:
           APPLE_CERTIFICATES_SSH_KEY: ${{ secrets.APPLE_CERTIFICATES_SSH_KEY }}
           CAPTCHA_TOKEN: ${{ secrets.CAPTCHA_TOKEN }}
           SAAS_AVAILABLE: "true"
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: bundle exec fastlane dev
         working-directory: ${{ matrix.os }}
 
