@@ -20,7 +20,7 @@ default_platform(:android)
 platform :android do
   desc "Build development version"
   lane :dev do
-    sh "flutter build apk --verbose --release --no-sound-null-safety --dart-define=CAPTCHA_TOKEN=$CAPTCHA_TOKEN --dart-define=SAAS_AVAILABLE=$SAAS_AVAILABLE"
+    sh "flutter build apk --verbose --debug"
   end
 
   desc "Build and deploy release version"
