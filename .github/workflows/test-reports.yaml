@@ -1,0 +1,22 @@
+on:
+  workflow_run:
+    workflows:
+      - "Analyze and test"
+    types:
+      - completed
+
+name: Test Reports
+
+jobs:
+  upload-reports:
+    name: Upload test reports
+    runs-on: ubuntu-latest
+    if: success() || failure() # Always upload report
+    steps:
+      - uses: dorny/test-reporter@v1
+        with:
+          artifact: test-reports
+          name: Flutter Tests
+          path: "*.json"
+          reporter: flutter-json
+          only-summary: "true"

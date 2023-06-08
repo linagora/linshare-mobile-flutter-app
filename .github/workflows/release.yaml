@@ -6,15 +6,9 @@ on:
 name: Release
 
 jobs:
-  analyze-test:
-    name: Analyze and test
-    uses: ./.github/workflows/analyze-test.yaml
-
   release:
     name: Release
     if: startsWith(github.ref, 'refs/tags/v')
-    needs:
-      - analyze-test
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
