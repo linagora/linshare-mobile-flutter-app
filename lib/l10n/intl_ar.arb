@@ -134,5 +134,17 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "yes": "نعم",
+  "@yes": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "no": "لا",
+  "@no": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
