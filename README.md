@@ -17,4 +17,11 @@ More information on http://www.linshare.org/
 ### Build:
 - Flutter `3.0.5`
 - Run `prebuild.sh` https://github.com/linagora/linshare-mobile-flutter-app/blob/master/prebuild.sh
+
+### Download:
+- You can install the app via stores:
+  - App store: https://apps.apple.com/vn/app/linshare/id1534003175
+  - Play store: https://play.google.com/store/apps/details?id=com.linagora.android.linshare
+
+- or Download in [Release](https://github.com/linagora/linshare-mobile-flutter-app/releases)
   
