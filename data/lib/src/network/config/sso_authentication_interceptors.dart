@@ -29,55 +29,53 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'dart:core';
+import 'dart:developer' as developer;
 
-import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
-import '../../extension/uri_extension.dart';
+class SSOAuthenticationInterceptors extends InterceptorsWrapper {
+  static const int _max_retry_count = 3;
+  static const String RETRY_KEY = 'Retry';
+  static const String AUTHORIZATION_KEY = 'Authorization';
+  final Dio _dio;
+  TokenOIDC? _tokenOIDC;
 
-class GetCredentialInteractor {
-  final TokenRepository tokenRepository;
-  final AuthenticationOIDCRepository authenticationOIDCRepository;
-  final CredentialRepository credentialRepository;
-  final APIRepository apiRepository;
+  SSOAuthenticationInterceptors(this._dio);
 
-  GetCredentialInteractor(
-    this.tokenRepository,
-    this.authenticationOIDCRepository,
-    this.credentialRepository,
-    this.apiRepository,
-  );
+  void setPermanentTokenOIDC(TokenOIDC tokenOIDC){
+    developer.log('TokenOIDC: ${tokenOIDC.token}', name: 'SSOAuthenticationInterceptors');
+    _tokenOIDC = tokenOIDC;
+  }
 
-  Future<Either<Failure, Success>> execute() async {
-    try {
-      final apiVersion = await apiRepository.getAPIVersionSupported();
-      final baseUrl = await credentialRepository.getBaseUrl();
-      final config = await authenticationOIDCRepository.getOIDCConfiguration(baseUrl);
-      if (config != null && config.authority.contains('sso.linagora.com')) {
-        final tokenOIDC = await authenticationOIDCRepository.getStoredTokenOIDC();
-        if (isCredentialTokenOIDCValid(tokenOIDC, baseUrl)) {
-          return Right(CredentialViewState(tokenOIDC: tokenOIDC, baseUrl, apiVersion));
-        } else {
-          return Left(CredentialFailure(BadCredentials()));
-        }
-      } else {
-        final token = await tokenRepository.getToken();
-        if (isCredentialTokenValid(token, baseUrl)) {
-          return Right(CredentialViewState(token: token, baseUrl, apiVersion));
-        } else {
-          return Left(CredentialFailure(BadCredentials()));
-        }
-      }
-    } catch (exception) {
-      return Left(CredentialFailure(BadCredentials()));
+  @override
+  void onError(DioError dioError, ErrorInterceptorHandler handler) async {
+    final requestOptions = dioError.requestOptions;
+    final extraInRequest = requestOptions.extra;
+    var retries = extraInRequest[RETRY_KEY] ?? 0;
+    if (_isAuthenticationError(dioError, retries)) {
+      retries++;
+
+      requestOptions.headers.addAll({AUTHORIZATION_KEY: _getTokenAsBearerHeader(_tokenOIDC?.token)});
+      requestOptions.extra = {RETRY_KEY: retries};
+
+      final response = await _dio.fetch(requestOptions);
+      return handler.resolve(response);
+
+    } else {
+      super.onError(dioError, handler);
     }
   }
 
-  bool isCredentialTokenValid(Token token, Uri baseUrl) => token.isTokenValid() && baseUrl.isBaseUrlValid();
+  bool _isAuthenticationError(DioError dioError, int retryCount) {
+    if (dioError.type == DioErrorType.response &&
+        dioError.response?.statusCode == 401 &&
+        _tokenOIDC != null &&
+        retryCount < _max_retry_count) {
+      return true;
+    }
+    return false;
+  }
 
-  bool isCredentialTokenOIDCValid(TokenOIDC? tokenOIDC, Uri baseUrl) =>
-    tokenOIDC != null
-    && tokenOIDC.isTokenValid()
-    && baseUrl.isBaseUrlValid();
+  String _getTokenAsBearerHeader(String? token) => 'Bearer $token';
 }
