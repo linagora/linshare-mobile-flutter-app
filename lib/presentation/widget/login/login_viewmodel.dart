@@ -34,7 +34,6 @@ import 'dart:developer' as developer;
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
@@ -61,6 +60,7 @@ class LoginViewModel extends BaseViewModel {
 
   final CreatePermanentTokenInteractor _getPermanentTokenInteractor;
   final CreatePermanentTokenOIDCInteractor _createPermanentTokenOIDCInteractor;
+  final TokenOIDCInterator _tokenOIDCInteractor;
   final GetTokenOIDCInteractor _getTokenOIDCInteractor;
   final SetAppModeInteractor _setAppModeInteractor;
   final AppNavigation _appNavigation;
@@ -69,6 +69,7 @@ class LoginViewModel extends BaseViewModel {
   final GetOIDCConfigurationInteractor _getOIDCConfigurationInteractor;
   final VerifyNameInteractor _verifyNameInteractor;
   final GetSaaSConfigurationInteractor _getSaaSConfigurationInteractor;
+  final SSOAuthenticationInterceptors _authenticationInterceptors;
 
   LoginViewModel(
     Store<AppState> store,
@@ -82,6 +83,8 @@ class LoginViewModel extends BaseViewModel {
     this._getOIDCConfigurationInteractor,
     this._verifyNameInteractor,
     this._getSaaSConfigurationInteractor,
+    this._tokenOIDCInteractor,
+    this._authenticationInterceptors,
   ) : super(store);
 
   final ValueNotifier<bool> loginWithSSONotifier = ValueNotifier<bool>(false);
@@ -246,8 +249,9 @@ class LoginViewModel extends BaseViewModel {
       String baseUrl,
       AuthenticationType authenticationType
   ) {
-    store.dispatch(_getTokenOIDCAction(
+    store.dispatch( _getTokenOIDCAction(
         context,
+        oidcConfiguration.authority,
         oidcConfiguration.clientId,
         oidcConfiguration.redirectUrl,
         oidcConfiguration.discoveryUrl,
@@ -261,6 +265,7 @@ class LoginViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _getTokenOIDCAction(
       BuildContext context,
+      String authority,
       String clientId,
       String redirectUrl,
       String discoveryUrl,
@@ -288,13 +293,45 @@ class LoginViewModel extends BaseViewModel {
           },
           (success) {
             if (success is GetTokenOIDCViewState) {
-              return store.dispatch(_getPermanentTokenOIDCAction(
-                context,
-                success.tokenOIDC,
-                baseUrl,
-                authenticationType));
+              if (authority.contains('https://sso.linagora.com/')) {
+                return store.dispatch(_applyTokenOIDCAction(
+                      context,
+                      success.tokenOIDC,
+                      baseUrl,
+                      authenticationType,
+                    ));
+                  } else {
+                return store.dispatch(_getPermanentTokenOIDCAction(
+                    context,
+                    success.tokenOIDC,
+                    baseUrl,
+                    authenticationType));
+              }
             }
             }));
+    };
+  }
+
+  ThunkAction<AppState> _applyTokenOIDCAction(
+      BuildContext context,
+      TokenOIDC tokenOIDC,
+      String baseUrl,
+      AuthenticationType authenticationType
+      ) {
+    return (Store<AppState> store) async {
+      await _tokenOIDCInteractor
+          .execute(_parseUri(baseUrl), tokenOIDC)
+          .then((result) => result.fold(
+              (failure) {
+            if (failure is AuthenticationFailure) {
+              _loginOIDCFailureAction(context, failure, authenticationType);
+            }
+          },
+              (success) {
+            if (success is AuthenticationOIDCViewState) {
+              return store.dispatch(_loginOIDCSuccessAction(baseUrl, success, authenticationType));
+            }
+          }));
     };
   }
 
@@ -315,18 +352,32 @@ class LoginViewModel extends BaseViewModel {
           },
           (success) {
             if (success is AuthenticationViewState) {
-              return store.dispatch(_loginOIDCSuccessAction(baseUrl, success, authenticationType));
+              return store.dispatch(_loginPermanentTokenOIDCSuccessAction(baseUrl, success, authenticationType));
             }
           }));
     };
   }
 
-  ThunkAction<AppState> _loginOIDCSuccessAction(String baseUrl, AuthenticationViewState success, AuthenticationType authenticationType) {
+  ThunkAction<AppState> _loginPermanentTokenOIDCSuccessAction(String baseUrl, AuthenticationViewState success, AuthenticationType authenticationType) {
     return (Store<AppState> store) async {
       await _setAppModeInteractor.execute(Uri.parse(baseUrl), authenticationType.getRelevantAppMode());
 
       store.dispatch(AuthenticationAction(Right(success)));
 
+      _dynamicUrlInterceptors.changeBaseUrl(baseUrl);
+      _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersionSupported;
+      await _appNavigation.push(
+          RoutePaths.authentication,
+          arguments: AuthenticationArguments(_parseUri(baseUrl)));
+    };
+  }
+
+  ThunkAction<AppState> _loginOIDCSuccessAction(String baseUrl, AuthenticationOIDCViewState success, AuthenticationType authenticationType) {
+    return (Store<AppState> store) async {
+      await _setAppModeInteractor.execute(Uri.parse(baseUrl), authenticationType.getRelevantAppMode());
+
+      store.dispatch(AuthenticationAction(Right(success)));
+      _authenticationInterceptors.setPermanentTokenOIDC(success.tokenOIDC);
       _dynamicUrlInterceptors.changeBaseUrl(baseUrl);
       _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersionSupported;
 

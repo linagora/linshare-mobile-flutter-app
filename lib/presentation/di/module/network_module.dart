@@ -56,6 +56,7 @@ class NetworkModule {
     getIt.registerSingleton<DynamicUrlInterceptors>(DynamicUrlInterceptors());
     getIt.registerSingleton<CookieInterceptors>(CookieInterceptors());
     getIt.registerSingleton<RetryAuthenticationInterceptors>(RetryAuthenticationInterceptors(getIt<Dio>()));
+    getIt.registerSingleton<SSOAuthenticationInterceptors>(SSOAuthenticationInterceptors(getIt<Dio>()));
     getIt.registerSingleton<DynamicAPIVersionSupportInterceptor>(DynamicAPIVersionSupportInterceptor());
   }
 
@@ -66,8 +67,9 @@ class NetworkModule {
     getIt<Dio>().interceptors.add(getIt<DynamicAPIVersionSupportInterceptor>());
     getIt<Dio>().interceptors.add(getIt<CookieInterceptors>());
     getIt<Dio>().interceptors.add(getIt<RetryAuthenticationInterceptors>());
+    getIt<Dio>().interceptors.add(getIt<SSOAuthenticationInterceptors>());
     if (kDebugMode) {
-      getIt<Dio>().interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+      getIt<Dio>().interceptors.add(LogInterceptor(requestBody: true, responseBody: true, requestHeader: true));
     };
   }
 

@@ -299,9 +299,16 @@ class AppModule {
       getIt<CredentialRepository>(),
       getIt<APIRepository>()
     ));
+    getIt.registerFactory(() => TokenOIDCInterator(
+      getIt<AuthenticationOIDCRepository>(),
+      getIt<TokenRepository>(),
+      getIt<CredentialRepository>(),
+      getIt<APIRepository>()
+    ));
     getIt.registerFactory(() => GetQuotaInteractor(getIt<QuotaRepository>()));
     getIt.registerFactory(() => GetCredentialInteractor(
       getIt<TokenRepository>(),
+      getIt<AuthenticationOIDCRepository>(),
       getIt<CredentialRepository>(),
       getIt<APIRepository>()
     ));

@@ -180,6 +180,8 @@ class WidgetModule {
       getIt<GetOIDCConfigurationInteractor>(),
       getIt<VerifyNameInteractor>(),
       getIt<GetSaaSConfigurationInteractor>(),
+      getIt<TokenOIDCInterator>(),
+      getIt<SSOAuthenticationInterceptors>(),
     ));
   }
 
@@ -271,6 +273,7 @@ class WidgetModule {
       getIt<Connectivity>(),
       getIt<GetBiometricSettingInteractor>(),
       getIt<DisableBiometricInteractor>(),
+      getIt<SSOAuthenticationInterceptors>(),
     ));
   }
 

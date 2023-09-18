@@ -63,6 +63,8 @@ class InitializeViewModel extends BaseViewModel {
   final Connectivity _connectivity;
   final GetBiometricSettingInteractor _getBiometricSettingInteractor;
   final DisableBiometricInteractor _disableBiometricInteractor;
+  final SSOAuthenticationInterceptors _authenticationInterceptors;
+
 
   InitializeViewModel(
     Store<AppState> store,
@@ -76,6 +78,7 @@ class InitializeViewModel extends BaseViewModel {
     this._connectivity,
     this._getBiometricSettingInteractor,
     this._disableBiometricInteractor,
+    this._authenticationInterceptors,
   ) : super(store) {
     _initFlutterDownloader();
     _getNetworkConnectivityState();
@@ -130,7 +133,13 @@ class InitializeViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       _dynamicUrlInterceptors.changeBaseUrl(success.baseUrl.origin);
       _dynamicAPIVersionSupportInterceptor.supportAPI = success.apiVersion;
-      _retryInterceptors.setPermanentToken(success.token);
+      if (success.tokenOIDC != null) {
+        developer.log('_getCredentialSuccessAction(): setPermanentTokenOIDC');
+        _authenticationInterceptors.setPermanentTokenOIDC(success.tokenOIDC!);
+      }
+      if (success.token != null) {
+        _retryInterceptors.setPermanentToken(success.token!);
+      }
       store.dispatch(_getAppModeAction(success.baseUrl));
     };
   }
