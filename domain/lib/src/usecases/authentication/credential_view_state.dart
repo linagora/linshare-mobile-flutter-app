@@ -30,17 +30,22 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
 
 class CredentialViewState extends ViewState {
-  final Token token;
+  final Token? token;
+  final TokenOIDC? tokenOIDC;
   final Uri baseUrl;
   final APIVersionSupported apiVersion;
 
-  CredentialViewState(this.token, this.baseUrl, this.apiVersion);
+  CredentialViewState(
+    this.baseUrl,
+    this.apiVersion, {
+    this.token,
+    this.tokenOIDC,
+  });
 
   @override
-  List<Object> get props => [token, baseUrl, apiVersion];
+  List<Object?> get props => [token, tokenOIDC, baseUrl, apiVersion];
 }
 
 class CredentialFailure extends FeatureFailure {

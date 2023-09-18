@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/authentication/token.dart';
 
 class AuthenticationViewState extends ViewState {
   final Token token;
@@ -40,6 +39,16 @@ class AuthenticationViewState extends ViewState {
 
   @override
   List<Object> get props => [token];
+}
+
+class AuthenticationOIDCViewState extends ViewState {
+  final TokenOIDC tokenOIDC;
+  final APIVersionSupported apiVersionSupported;
+
+  AuthenticationOIDCViewState(this.tokenOIDC, this.apiVersionSupported);
+
+  @override
+  List<Object> get props => [tokenOIDC];
 }
 
 class AuthenticationFailure extends FeatureFailure {
