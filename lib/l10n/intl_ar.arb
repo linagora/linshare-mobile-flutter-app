@@ -146,5 +146,11 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "login_text_slogan": "تخزين ومشاركة ملفاتك من أي مكان",
+  "@login_text_slogan": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
