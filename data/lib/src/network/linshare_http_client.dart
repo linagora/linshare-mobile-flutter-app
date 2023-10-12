@@ -31,6 +31,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:data/data.dart';
@@ -77,8 +78,8 @@ import 'model/request/add_shared_space_member_body_request.dart';
 import 'model/request/add_upload_body_request.dart';
 import 'model/request/copy_body_request.dart';
 import 'model/request/create_shared_space_node_folder_request.dart';
-import 'model/request/update_shared_space_member_body_request.dart';
 import 'model/request/update_drive_member_body_request.dart';
+import 'model/request/update_shared_space_member_body_request.dart';
 import 'model/request/update_workspace_member_body_request.dart';
 import 'model/response/document_details_response.dart';
 import 'model/response/upload_request_response.dart';
@@ -86,7 +87,6 @@ import 'model/response/user_response.dart';
 import 'model/share/share_dto.dart';
 import 'model/sharedspacedocument/work_group_document_dto.dart';
 import 'model/sharedspacedocument/work_group_folder_dto.dart';
-import 'dart:developer' as developer;
 
 class LinShareHttpClient {
   final DioClient _dioClient;
@@ -112,20 +112,25 @@ class LinShareHttpClient {
   Future<PermanentToken> createPermanentTokenWithOIDC(
       Uri authenticateUrl,
       APIVersionSupported apiVersion,
-      String oidcToken,
+      TokenOIDC oidcToken,
       PermanentTokenBodyRequest bodyRequest,
       {OTPCode? otpCode}) async {
-    final bearerAuth = 'Bearer $oidcToken';
+    final bearerAuth = 'Bearer ${oidcToken.token}';
     final resultJson = await _dioClient.post(
         Endpoint.authentication.generateAuthenticationUrl(authenticateUrl, apiVersion),
-        options: Options(headers: _buildPermanentTokenRequestParam(bearerAuth, otpCode: otpCode)),
+        options: Options(headers: _buildPermanentTokenRequestParam(bearerAuth, otpCode: otpCode, tokenId: oidcToken.tokenId.uuid)),
         data: bodyRequest.toJson());
     return PermanentToken.fromJson(resultJson);
   }
 
-  Map<String, dynamic> _buildPermanentTokenRequestParam(String authorizationHeader, {OTPCode? otpCode}) {
+  Map<String, dynamic> _buildPermanentTokenRequestParam(String authorizationHeader, {OTPCode? otpCode, String? tokenId}) {
     final headerParam = _dioClient.getHeaders();
     headerParam[HttpHeaders.authorizationHeader] = authorizationHeader;
+    headerParam['X-LinShare-Auth-Provider'] = 'Oidc-Jwt';
+    headerParam['X-LinShare-Client-App'] = 'Linshare-Web';
+    if (tokenId != null) {
+      headerParam['X-Linshare-Id-Token'] = tokenId;
+    }
     if (otpCode != null && otpCode.value.isNotEmpty) {
       headerParam[Constant.linShare2FAPin] = otpCode.value;
     }

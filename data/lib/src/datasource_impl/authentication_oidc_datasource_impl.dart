@@ -104,7 +104,7 @@ class AuthenticationOIDCDataSourceImpl implements AuthenticationOIDCDataSource {
       final permanentToken = await linShareHttpClient.createPermanentTokenWithOIDC(
           baseUrl,
           apiVersion,
-          tokenOIDC.token,
+          tokenOIDC,
           PermanentTokenBodyRequest('Token-${deviceManager.getPlatformString()}-$deviceName'),
           otpCode: otpCode);
       return permanentToken.toToken();
