@@ -84,6 +84,7 @@ jobs:
           APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
         run: bundle exec fastlane release
         working-directory: ${{ matrix.os }}
+        continue-on-error: true
 
       - name: Preparing APK for release
         if: matrix.os == 'android'
