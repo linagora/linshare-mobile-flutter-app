@@ -152,5 +152,11 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "canceled": "ألغيت",
+  "@canceled": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }
