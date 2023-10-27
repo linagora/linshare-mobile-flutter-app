@@ -1900,7 +1900,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "canceled": "Huỷ bỏ",
+  "canceled": "Huỷ",
   "@canceled": {
     "type": "text",
     "placeholders": {}
