@@ -64,6 +64,7 @@ class AuthenticationOIDCDataSourceImpl implements AuthenticationOIDCDataSource {
     String clientId,
     String redirectUrl,
     String discoveryUrl,
+    String oidcTokenType,
     List<String> scopes,
     bool preferEphemeralSessionIOS,
     List<String>? promptValues,
@@ -81,7 +82,7 @@ class AuthenticationOIDCDataSourceImpl implements AuthenticationOIDCDataSource {
         developer.log('getTokenOIDC(): ${result?.idToken.toString()}', name: 'AuthenticationOIDCDataSourceImpl');
 
         if(result != null) {
-          final tokenOIDC = result.toTokenOIDC();
+          final tokenOIDC = result.toTokenOIDC(oidcTokenType);
           if (tokenOIDC.isTokenValid()) {
               return tokenOIDC;
           } else {

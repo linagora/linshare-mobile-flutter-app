@@ -338,6 +338,7 @@ class SignUpViewModel extends BaseViewModel {
         oidcConfiguration.clientId,
         oidcConfiguration.redirectUrl,
         oidcConfiguration.discoveryUrl,
+        oidcConfiguration.oidcTokenType,
         oidcConfiguration.scopes,
         AuthenticationOIDCConfig.preferEphemeralSessionIOS,
         AuthenticationOIDCConfig.promptValues,
@@ -350,6 +351,7 @@ class SignUpViewModel extends BaseViewModel {
       String clientId,
       String redirectUrl,
       String discoveryUrl,
+      String oidcTokenType,
       List<String> scopes,
       bool preferEphemeralSessionIOS,
       List<String>? promptValues,
@@ -360,7 +362,7 @@ class SignUpViewModel extends BaseViewModel {
       store.dispatch(StartSignUpAuthenticationLoadingAction());
 
       await _getTokenOIDCInteractor
-        .execute(clientId, redirectUrl, discoveryUrl, scopes, preferEphemeralSessionIOS, promptValues, allowInsecureConnections)
+        .execute(clientId, redirectUrl, discoveryUrl, oidcTokenType, scopes, preferEphemeralSessionIOS, promptValues, allowInsecureConnections)
         .then((result) => result.fold(
           (failure) {
             if (failure is GetTokenOIDCFailure) {

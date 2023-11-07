@@ -39,4 +39,8 @@ class Constant {
   static const biometricSettingState = 'biometric_setting_state';
   static const biometricSettingTimeoutMilliseconds = 'biometric_setting_timeout_milliseconds';
   static const defaultBiometricAuthenticationTimeoutInMilliseconds = 3 * 60 * 1000;
+  static const linshareAuthProviderHeader = 'X-LinShare-Auth-Provider';
+  static const linshareClientAppHeader = 'X-LinShare-Client-App';
+  static const linshareClientAppValue = 'Linshare-Web';
+  static const linshareTokenIdHeader = 'X-Linshare-Id-Token';
 }

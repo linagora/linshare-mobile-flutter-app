@@ -31,6 +31,7 @@
 //
 
 import 'package:domain/domain.dart';
+import 'package:domain/src/model/constant.dart';
 import 'package:domain/src/model/quota/quota_id.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -47,8 +48,8 @@ final password1 = Password('qwedsazxc');
 final userName2 = UserName('user2@linshare.org');
 final password2 = Password('qwedsasca');
 final permanentToken = Token(permanentTokenString, TokenId(tokenUUID));
-final oidcToken = TokenOIDC('afbe3891a4e1b48f4b4d3bbb1962ba86', TokenId('uuid'), DateTime.now(), 'refresh-token');
-final oidcTokenWrong = TokenOIDC('abc123', TokenId('uuid'), DateTime.now(), 'refresh-token');
+final oidcToken = TokenOIDC('afbe3891a4e1b48f4b4d3bbb1962ba86', TokenId('uuid'), DateTime.now(), 'refresh-token', DomainConstant.opaqueOidc);
+final oidcTokenWrong = TokenOIDC('abc123', TokenId('uuid'), DateTime.now(), 'refresh-token', DomainConstant.opaqueOidc);
 
 const baseUrlSupported = 'https://linshare-integration-4-files.linagora.com/';
 final linShareOIDCFilesBaseUrl = Uri.parse(baseUrlSupported);

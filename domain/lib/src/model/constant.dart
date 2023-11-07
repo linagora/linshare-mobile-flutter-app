@@ -2,7 +2,7 @@
  * LinShare is an open source filesharing software, part of the LinPKI software
  * suite, developed by Linagora.
  *
- * Copyright (C) 2021 LINAGORA
+ * Copyright (C) 2023 LINAGORA
  *
  * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free Software
@@ -31,37 +31,8 @@
  *  the Additional Terms applicable to LinShare software.
  */
 
-import 'package:data/src/local/converter/token_id_converter.dart';
-import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
-
-part 'token_oidc_cache.g.dart';
-
-@JsonSerializable()
-@TokenIdConverter()
-class TokenOIDCCache with EquatableMixin {
-
-  final String token;
-  final TokenId tokenId;
-  final DateTime expiredTime;
-  final String refreshToken;
-  final String oidcTokenType;
-
-  TokenOIDCCache(this.token, this.tokenId, this.expiredTime, this.refreshToken, this.oidcTokenType);
-
-  factory TokenOIDCCache.fromJson(Map<String, dynamic> json) => _$TokenOIDCCacheFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TokenOIDCCacheToJson(this);
-
-  TokenOIDC toTokenOIDC() => TokenOIDC(token, tokenId, expiredTime, refreshToken, this.oidcTokenType);
-
-  @override
-  List<Object?> get props => [token, tokenId, expiredTime, refreshToken];
+class DomainConstant {
+  static const opaqueOidc = 'Oidc-Opaque';
+  static const jwtOidc = 'Oidc-Jwt';
 }
 
-extension TokenOIDCExtension on TokenOIDC {
-  TokenOIDCCache toTokenOIDCCache() {
-    return TokenOIDCCache(token, tokenId, expiredTime, refreshToken, oidcTokenType);
-  }
-}
