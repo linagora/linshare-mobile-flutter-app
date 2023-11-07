@@ -32,11 +32,7 @@
 import 'dart:developer' as developer;
 
 import 'package:data/data.dart';
-import 'package:data/src/network/model/request/permanent_token_body_request.dart';
-import 'package:data/src/network/model/response/permanent_token.dart';
 import 'package:data/src/network/model/response/user_response.dart';
-import 'package:data/src/util/constant.dart';
-import 'package:data/src/util/device_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 

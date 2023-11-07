@@ -33,15 +33,16 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class TokenOIDC extends Equatable {
-  const TokenOIDC(this.token, this.tokenId, this.expiredTime, this.refreshToken);
+  const TokenOIDC(this.token, this.tokenId, this.expiredTime, this.refreshToken, this.oidcTokenType);
 
   final String token;
   final TokenId tokenId;
   final DateTime expiredTime;
   final String refreshToken;
+  final String oidcTokenType;
 
   @override
-  List<Object> get props => [token, tokenId, expiredTime, refreshToken];
+  List<Object> get props => [token, tokenId, expiredTime, refreshToken, oidcTokenType];
 
   @override
   bool get stringify => true;
