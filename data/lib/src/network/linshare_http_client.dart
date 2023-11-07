@@ -118,18 +118,20 @@ class LinShareHttpClient {
     final bearerAuth = 'Bearer ${oidcToken.token}';
     final resultJson = await _dioClient.post(
         Endpoint.authentication.generateAuthenticationUrl(authenticateUrl, apiVersion),
-        options: Options(headers: _buildPermanentTokenRequestParam(bearerAuth, otpCode: otpCode, tokenId: oidcToken.tokenId.uuid)),
+        options: Options(headers: _buildPermanentTokenRequestParam(bearerAuth, otpCode: otpCode, tokenOidcType: oidcToken.oidcTokenType, tokenId: oidcToken.tokenId.uuid)),
         data: bodyRequest.toJson());
     return PermanentToken.fromJson(resultJson);
   }
 
-  Map<String, dynamic> _buildPermanentTokenRequestParam(String authorizationHeader, {OTPCode? otpCode, String? tokenId}) {
+  Map<String, dynamic> _buildPermanentTokenRequestParam(String authorizationHeader, {OTPCode? otpCode, String? tokenOidcType,String? tokenId}) {
     final headerParam = _dioClient.getHeaders();
     headerParam[HttpHeaders.authorizationHeader] = authorizationHeader;
-    headerParam['X-LinShare-Auth-Provider'] = 'Oidc-Jwt';
-    headerParam['X-LinShare-Client-App'] = 'Linshare-Web';
+    if (tokenOidcType != null) {
+      headerParam[Constant.linshareAuthProviderHeader] = tokenOidcType;
+    }
+    headerParam[Constant.linshareClientAppHeader] = Constant.linshareClientAppValue;
     if (tokenId != null) {
-      headerParam['X-Linshare-Id-Token'] = tokenId;
+      headerParam[Constant.linshareTokenIdHeader] = tokenId;
     }
     if (otpCode != null && otpCode.value.isNotEmpty) {
       headerParam[Constant.linShare2FAPin] = otpCode.value;

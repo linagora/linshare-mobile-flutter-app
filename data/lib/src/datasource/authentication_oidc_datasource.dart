@@ -37,6 +37,7 @@ abstract class AuthenticationOIDCDataSource {
     String clientId,
     String redirectUrl,
     String discoveryUrl,
+    String oidcTokenType,
     List<String> scopes,
     bool preferEphemeralSessionIOS,
     List<String>? promptValues,
