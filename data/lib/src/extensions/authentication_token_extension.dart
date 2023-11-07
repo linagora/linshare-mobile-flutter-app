@@ -34,11 +34,13 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 
 extension AuthorizationTokenResponseExtension on AuthorizationTokenResponse {
 
-  TokenOIDC toTokenOIDC() {
+  TokenOIDC toTokenOIDC(String? oidcTokenType) {
     return TokenOIDC(
       accessToken ?? '',
       TokenId(idToken ?? ''),
       accessTokenExpirationDateTime ?? DateTime.now(),
-      refreshToken ?? '');
+      refreshToken ?? '',
+      oidcTokenType ?? DomainConstant.opaqueOidc,
+    );
   }
 }

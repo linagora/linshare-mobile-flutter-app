@@ -43,6 +43,7 @@ void main() {
       clientId: 'linshare-mobile',
       responseType: 'code',
       logoutRedirectUri: 'linshare.mobile://oauthredirect',
+      oidcTokenType: 'Oidc-Jwt',
       scopes: ['openid', 'email', 'profile'],
     );
 
@@ -90,6 +91,7 @@ void main() {
       
             mobileOidcEnabled: false,
             mobileOidcSetting: {
+              oidcToken: 'JWT',
               authority: 'https://auth.linshare.local/',
               client_id: 'linshare-mobile',
               redirect_url: 'linshare.mobile://oauthredirect',

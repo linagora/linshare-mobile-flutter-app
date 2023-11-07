@@ -40,6 +40,7 @@ class OIDCConfiguration extends Equatable {
   final String redirectUrl = redirectOidc;
   final String logoutRedirectUri;
   final String responseType;
+  final String oidcTokenType;
   final List<String> scopes;
 
   OIDCConfiguration({
@@ -47,6 +48,7 @@ class OIDCConfiguration extends Equatable {
     required this.clientId,
     required this.logoutRedirectUri,
     required this.responseType,
+    required this.oidcTokenType,
     required this.scopes
   });
 
@@ -59,5 +61,5 @@ class OIDCConfiguration extends Equatable {
   }
 
   @override
-  List<Object?> get props => [authority, clientId, redirectUrl, scopes];
+  List<Object?> get props => [authority, clientId, redirectUrl, oidcTokenType, scopes];
 }
