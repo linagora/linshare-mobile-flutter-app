@@ -144,9 +144,9 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
       case LinShareNodeType.DRIVE:
         return AppLocalizations.of(context).create_drive;
       case LinShareNodeType.WORK_GROUP:
-        return AppLocalizations.of(context).create_workgroup;
+        return AppLocalizations.of(context).create_new_workgroup;
       case LinShareNodeType.WORK_SPACE:
-        return AppLocalizations.of(context).create_workspace;
+        return AppLocalizations.of(context).create_new_workspace;
     }
   }
 
