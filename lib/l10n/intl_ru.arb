@@ -1453,7 +1453,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "pending": "В ожидании",
+  "pending": "Ожидание",
   "@pending": {
     "type": "text",
     "placeholders": {}
