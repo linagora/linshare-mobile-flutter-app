@@ -1453,7 +1453,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "pending": "Đang chờ",
+  "pending": "Đang chờ xử lý",
   "@pending": {
     "type": "text",
     "placeholders": {}
