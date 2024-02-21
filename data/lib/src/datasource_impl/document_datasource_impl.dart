@@ -57,15 +57,19 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   final RemoteExceptionThrower _remoteExceptionThrower;
   final LinShareDownloadManager _linShareDownloadManager;
 
-  DocumentDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower, this._linShareDownloadManager);
+  DocumentDataSourceImpl(this._linShareHttpClient, this._remoteExceptionThrower,
+      this._linShareDownloadManager);
 
   @override
   Future<List<Document>> getAll() async {
     return Future.sync(() async {
       final documentResponseList = await _linShareHttpClient.getAllDocument();
-      return documentResponseList.map((documentResponse) => documentResponse.toDocument()).toList();
+      return documentResponseList
+          .map((documentResponse) => documentResponse.toDocument())
+          .toList();
     }).catchError((error) {
-      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else if (error.response?.statusCode == 400) {
@@ -80,24 +84,29 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds, Token token, Uri baseUrl, APIVersionSupported apiVersion) async {
+  Future<List<DownloadTaskId>> downloadDocuments(List<DocumentId> documentIds,
+      Token token, Uri baseUrl, APIVersionSupported apiVersion) async {
     var externalStorageDirPath;
     if (Platform.isAndroid) {
-      externalStorageDirPath = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
+      externalStorageDirPath =
+          await ExternalPath.getExternalStoragePublicDirectory(
+              ExternalPath.DIRECTORY_DOWNLOADS);
     } else if (Platform.isIOS) {
-      externalStorageDirPath = (await getApplicationDocumentsDirectory()).absolute.path;
+      externalStorageDirPath =
+          (await getApplicationDocumentsDirectory()).absolute.path;
     } else {
       throw DeviceNotSupportedException();
     }
 
-    final taskIds = await Future.wait(
-        documentIds.map((documentId) async => await  FlutterDownloader.enqueue(
+    final taskIds = await Future.wait(documentIds.map((documentId) async =>
+        await FlutterDownloader.enqueue(
             url: Endpoint.documents
-              .downloadServicePath(documentId.uuid)
-              .generateDownloadUrl(baseUrl, apiVersion),
+                .downloadServicePath(documentId.uuid)
+                .generateDownloadUrl(baseUrl, apiVersion),
             savedDir: externalStorageDirPath,
             headers: {Constant.authorization: 'Bearer ${token.token}'},
             showNotification: true,
+            saveInPublicStorage: true,
             openFileFromNotification: true)));
 
     return taskIds
@@ -107,17 +116,18 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<List<Share>> share(
-      List<DocumentId> documentIds,
-      List<MailingListId> mailingListIds,
-      List<GenericUser> recipients
-  ) {
+  Future<List<Share>> share(List<DocumentId> documentIds,
+      List<MailingListId> mailingListIds, List<GenericUser> recipients) {
     return Future.sync(() async {
       final shareDocumentBodyRequest = ShareDocumentBodyRequest(
           documentIds.map((data) => ShareIdDto(data.uuid)).toList(),
           mailingListIds.map((data) => MailingListIdDto(data.uuid)).toList(),
-          recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName)).toList());
-      final shareList = await _linShareHttpClient.shareDocument(shareDocumentBodyRequest);
+          recipients
+              .map((data) => GenericUserDto(data.mail,
+                  lastName: data.lastName, firstName: data.firstName))
+              .toList());
+      final shareList =
+          await _linShareHttpClient.shareDocument(shareDocumentBodyRequest);
       return shareList.map((data) => data.toShare()).toList();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error,
@@ -136,7 +146,8 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<String> downloadDocumentIOS(Document document, Token permanentToken, Uri baseUrl, CancelToken cancelToken) async {
+  Future<String> downloadDocumentIOS(Document document, Token permanentToken,
+      Uri baseUrl, CancelToken cancelToken) async {
     return _linShareDownloadManager.downloadFile(
         Endpoint.documents
             .downloadServicePath(document.documentId.uuid)
@@ -150,10 +161,12 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   @override
   Future<Document> remove(DocumentId documentId) async {
     return Future.sync(() async {
-      final documentResponse = await _linShareHttpClient.removeDocument(documentId);
+      final documentResponse =
+          await _linShareHttpClient.removeDocument(documentId);
       return documentResponse.toDocument();
     }).catchError((error) {
-      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
@@ -166,13 +179,18 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   @override
   Future<List<Document>> copyToMySpace(CopyRequest copyRequest) async {
     return Future.sync(() async {
-      final documentsResponse = await _linShareHttpClient.copyToMySpace(copyRequest.toCopyBodyRequest());
-      return documentsResponse.map((response) => response.toDocument()).toList();
+      final documentsResponse = await _linShareHttpClient
+          .copyToMySpace(copyRequest.toCopyBodyRequest());
+      return documentsResponse
+          .map((response) => response.toDocument())
+          .toList();
     }).catchError((error) {
-      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
-        } if (error.response?.statusCode == 403) {
+        }
+        if (error.response?.statusCode == 403) {
           throw NotAuthorized();
         } else {
           throw UnknownError(error.response?.statusMessage!);
@@ -182,7 +200,12 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<String> downloadPreviewDocument(Document document, DownloadPreviewType downloadPreviewType, Token permanentToken, Uri baseUrl, CancelToken cancelToken) {
+  Future<String> downloadPreviewDocument(
+      Document document,
+      DownloadPreviewType downloadPreviewType,
+      Token permanentToken,
+      Uri baseUrl,
+      CancelToken cancelToken) {
     var downloadUrl;
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.documents
@@ -192,24 +215,30 @@ class DocumentDataSourceImpl implements DocumentDataSource {
       downloadUrl = Endpoint.documents
           .withPathParameter(document.documentId.uuid)
           .withPathParameter(Endpoint.thumbnail)
-          .withPathParameter(downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
+          .withPathParameter(downloadPreviewType == DownloadPreviewType.image
+              ? 'medium?base64=false'
+              : 'pdf')
           .generateEndpointPath();
     }
     return _linShareDownloadManager.downloadFile(
         downloadUrl,
         getTemporaryDirectory(),
-        document.name + '${downloadPreviewType == DownloadPreviewType.thumbnail ? '.pdf' : ''}',
+        document.name +
+            '${downloadPreviewType == DownloadPreviewType.thumbnail ? '.pdf' : ''}',
         permanentToken,
         cancelToken: cancelToken);
   }
 
   @override
-  Future<Document> rename(DocumentId documentId, RenameDocumentRequest renameDocumentRequest) {
+  Future<Document> rename(
+      DocumentId documentId, RenameDocumentRequest renameDocumentRequest) {
     return Future.sync(() async {
-      final documentResponse = await _linShareHttpClient.renameDocument(documentId, renameDocumentRequest);
+      final documentResponse = await _linShareHttpClient.renameDocument(
+          documentId, renameDocumentRequest);
       return documentResponse.toDocument();
     }).catchError((error) {
-      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
@@ -222,9 +251,11 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   @override
   Future<DocumentDetails> getDocument(DocumentId documentId) {
     return Future.sync(() async {
-      return (await _linShareHttpClient.getDocument(documentId)).toDocumentDetails();
+      return (await _linShareHttpClient.getDocument(documentId))
+          .toDocumentDetails();
     }).catchError((error) {
-      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
@@ -235,12 +266,15 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<Document> editDescription(DocumentId documentId, EditDescriptionDocumentRequest request) {
+  Future<Document> editDescription(
+      DocumentId documentId, EditDescriptionDocumentRequest request) {
     return Future.sync(() async {
-      final documentResponse = await _linShareHttpClient.editDescriptionDocument(documentId, request);
+      final documentResponse = await _linShareHttpClient
+          .editDescriptionDocument(documentId, request);
       return documentResponse.toDocument();
     }).catchError((error) {
-      _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+      _remoteExceptionThrower.throwRemoteException(error,
+          handler: (DioError error) {
         if (error.response?.statusCode == 404) {
           throw DocumentNotFound();
         } else {
@@ -260,20 +294,19 @@ class DocumentDataSourceImpl implements DocumentDataSource {
     var downloadUrl;
     if (downloadPreviewType == DownloadPreviewType.original) {
       downloadUrl = Endpoint.documents
-        .downloadServicePath(documentId.uuid)
-        .generateEndpointPath();
+          .downloadServicePath(documentId.uuid)
+          .generateEndpointPath();
     } else {
       downloadUrl = Endpoint.documents
-        .withPathParameter(documentId.uuid)
-        .withPathParameter(Endpoint.thumbnail)
-        .withPathParameter(downloadPreviewType == DownloadPreviewType.image ? 'medium?base64=false' : 'pdf')
-        .generateEndpointPath();
+          .withPathParameter(documentId.uuid)
+          .withPathParameter(Endpoint.thumbnail)
+          .withPathParameter(downloadPreviewType == DownloadPreviewType.image
+              ? 'medium?base64=false'
+              : 'pdf')
+          .generateEndpointPath();
     }
-    return _linShareDownloadManager.downloadFile(
-      downloadUrl,
-      getApplicationSupportDirectory(),
-      documentName,
-      permanentToken);
+    return _linShareDownloadManager.downloadFile(downloadUrl,
+        getApplicationSupportDirectory(), documentName, permanentToken);
   }
 
   @override
@@ -287,7 +320,8 @@ class DocumentDataSourceImpl implements DocumentDataSource {
   }
 
   @override
-  Future<bool> disableAvailableOffline(DocumentId documentId, String localPath) {
+  Future<bool> disableAvailableOffline(
+      DocumentId documentId, String localPath) {
     throw UnimplementedError();
   }
 
