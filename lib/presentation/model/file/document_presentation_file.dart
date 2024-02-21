@@ -51,7 +51,7 @@ class DocumentPresentationFile extends Equatable implements PresentationFile {
   final String description;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final DateTime expirationDate;
+  final DateTime? expirationDate;
   final bool ciphered;
   final String name;
   final int size;
@@ -102,28 +102,24 @@ class DocumentPresentationFile extends Equatable implements PresentationFile {
 
   @override
   Widget fileIcon() {
-    return SvgPicture.asset(
-      mediaType.getFileTypeImagePath(imagePath),
-      width: 16,
-      height: 20,
-      fit: BoxFit.fill
-    );
+    return SvgPicture.asset(mediaType.getFileTypeImagePath(imagePath),
+        width: 16, height: 20, fit: BoxFit.fill);
   }
 
   bool isShared() => shared != 0;
 
   @override
   List<Object> get props => [
-    documentId,
-    description,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    ciphered,
-    name,
-    size,
-    sha256sum,
-    hasThumbnail,
-    shared
-  ];
+        documentId,
+        description,
+        creationDate,
+        modificationDate,
+        expirationDate!,
+        ciphered,
+        name,
+        size,
+        sha256sum,
+        hasThumbnail,
+        shared
+      ];
 }

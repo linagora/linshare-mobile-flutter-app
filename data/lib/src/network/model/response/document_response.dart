@@ -37,11 +37,13 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 
 part 'document_response.g.dart';
 
 @JsonSerializable()
 @DatetimeConverter()
+@DatetimeNullableConverter()
 class DocumentResponse extends Equatable {
   DocumentResponse(
       this.documentId,
@@ -57,13 +59,16 @@ class DocumentResponse extends Equatable {
       this.shared,
       this.mediaType);
 
-  @JsonKey(name: Attribute.uuid, fromJson: documentIdFromJson, toJson: documentIdToJson)
+  @JsonKey(
+      name: Attribute.uuid,
+      fromJson: documentIdFromJson,
+      toJson: documentIdToJson)
   final DocumentId documentId;
 
   final String description;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final DateTime expirationDate;
+  final DateTime? expirationDate;
   final bool ciphered;
   final String name;
   final int size;
@@ -71,10 +76,14 @@ class DocumentResponse extends Equatable {
   final bool hasThumbnail;
   final int shared;
 
-  @JsonKey(name: Attribute.type, fromJson: mediaTypeFromJson, toJson: mediaTypeToJson)
+  @JsonKey(
+      name: Attribute.type,
+      fromJson: mediaTypeFromJson,
+      toJson: mediaTypeToJson)
   final MediaType mediaType;
 
-  factory DocumentResponse.fromJson(Map<String, dynamic> json) => _$DocumentResponseFromJson(json);
+  factory DocumentResponse.fromJson(Map<String, dynamic> json) =>
+      _$DocumentResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$DocumentResponseToJson(this);
 
@@ -84,7 +93,7 @@ class DocumentResponse extends Equatable {
         description,
         creationDate,
         modificationDate,
-        expirationDate,
+        expirationDate!,
         ciphered,
         name,
         size,

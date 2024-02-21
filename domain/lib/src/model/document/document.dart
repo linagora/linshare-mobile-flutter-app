@@ -40,7 +40,7 @@ class Document extends Equatable {
   final String description;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final DateTime expirationDate;
+  final DateTime? expirationDate;
   final bool ciphered;
   final String name;
   final int size;
@@ -64,11 +64,8 @@ class Document extends Equatable {
       this.hasThumbnail,
       this.shared,
       this.mediaType,
-      {
-        this.localPath,
-        this.syncOfflineState
-      }
-  );
+      {this.localPath,
+      this.syncOfflineState});
 
   bool isShared() => shared != 0;
 
@@ -76,18 +73,18 @@ class Document extends Equatable {
 
   @override
   List<Object?> get props => [
-    documentId,
-    description,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    ciphered,
-    name,
-    size,
-    sha256sum,
-    hasThumbnail,
-    mediaType,
-    localPath,
-    syncOfflineState
-  ];
+        documentId,
+        description,
+        creationDate,
+        modificationDate,
+        expirationDate,
+        ciphered,
+        name,
+        size,
+        sha256sum,
+        hasThumbnail,
+        mediaType,
+        localPath,
+        syncOfflineState
+      ];
 }

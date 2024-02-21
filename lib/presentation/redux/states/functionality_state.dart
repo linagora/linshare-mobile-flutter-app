@@ -36,18 +36,21 @@ import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:collection/collection.dart';
 
 @immutable
 class FunctionalityState extends LinShareState {
   final List<Functionality?> functionalityList;
 
-  FunctionalityState(Either<Failure, Success> viewState, this.functionalityList) : super(viewState);
+  FunctionalityState(Either<Failure, Success> viewState, this.functionalityList)
+      : super(viewState);
 
   factory FunctionalityState.initial() {
     return FunctionalityState(Right(IdleState()), []);
   }
 
-  FunctionalityState setFunctionalityList(List<Functionality> functionalityList) {
+  FunctionalityState setFunctionalityList(
+      List<Functionality> functionalityList) {
     return FunctionalityState(viewState, functionalityList);
   }
 
@@ -57,7 +60,8 @@ class FunctionalityState extends LinShareState {
   }
 
   @override
-  FunctionalityState sendViewState({required Either<Failure, Success> viewState}) {
+  FunctionalityState sendViewState(
+      {required Either<Failure, Success> viewState}) {
     return FunctionalityState(viewState, functionalityList);
   }
 
@@ -76,24 +80,30 @@ extension FunctionalityStateExtension on FunctionalityState {
     return (isWorkGroupEnabled() || isDriveEnabled());
   }
 
-  bool isSharedSpaceEnabledV5() => _isFunctionalityEnable(FunctionalityIdentifier.SHARED_SPACE);
+  bool isSharedSpaceEnabledV5() =>
+      _isFunctionalityEnable(FunctionalityIdentifier.SHARED_SPACE);
 
-  bool isWorkGroupEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP);
+  bool isWorkGroupEnabled() =>
+      _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP);
 
-  bool isCreateWorkgroupEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_GROUP__CREATION_RIGHT);
+  bool isCreateWorkgroupEnabled() => _isFunctionalityEnable(
+      FunctionalityIdentifier.WORK_GROUP__CREATION_RIGHT);
 
-  bool isDriveEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE);
+  bool isDriveEnabled() =>
+      _isFunctionalityEnable(FunctionalityIdentifier.DRIVE);
 
-  bool isDriveCreationEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.DRIVE__CREATION_RIGHT);
+  bool isDriveCreationEnabled() =>
+      _isFunctionalityEnable(FunctionalityIdentifier.DRIVE__CREATION_RIGHT);
 
-  bool isWorkspaceCreationEnabled() => _isFunctionalityEnable(FunctionalityIdentifier.WORK_SPACE__CREATION_RIGHT);
+  bool isWorkspaceCreationEnabled() => _isFunctionalityEnable(
+      FunctionalityIdentifier.WORK_SPACE__CREATION_RIGHT);
 
-  bool isUploadRequestEnable() => _isFunctionalityEnable(FunctionalityIdentifier.UPLOAD_REQUEST);
+  bool isUploadRequestEnable() =>
+      _isFunctionalityEnable(FunctionalityIdentifier.UPLOAD_REQUEST);
 
   bool _isFunctionalityEnable(FunctionalityIdentifier functionalityIdentifier) {
-    final functionality = functionalityList.firstWhere(
-            (element) => (element != null && element.identifier == functionalityIdentifier),
-        orElse: () => null);
+    final functionality = functionalityList.firstWhereOrNull((element) =>
+        (element != null && element.identifier == functionalityIdentifier));
     if (functionality != null) {
       return functionality.enable;
     }
@@ -105,7 +115,8 @@ extension FunctionalityStateExtension on FunctionalityState {
         .where((element) =>
             element != null &&
             element.enable &&
-            element.identifier.name.contains(FunctionalityIdentifier.UPLOAD_REQUEST.name))
+            element.identifier.name
+                .contains(FunctionalityIdentifier.UPLOAD_REQUEST.name))
         .toList();
   }
 }

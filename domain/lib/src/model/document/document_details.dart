@@ -48,35 +48,34 @@ class DocumentDetails extends Document {
       hasThumbnail,
       shared,
       mediaType,
-      this.shares
-  ) : super(
-    documentId,
-    description,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    ciphered,
-    name,
-    size,
-    sha256sum,
-    hasThumbnail,
-    shared,
-    mediaType
-  );
+      this.shares)
+      : super(
+            documentId,
+            description,
+            creationDate,
+            modificationDate,
+            expirationDate,
+            ciphered,
+            name,
+            size,
+            sha256sum,
+            hasThumbnail,
+            shared,
+            mediaType);
 
   @override
-  List<Object> get props => [
-    documentId,
-    description,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    ciphered,
-    name,
-    size,
-    sha256sum,
-    hasThumbnail,
-    shared,
-    shares
-  ];
+  List<Object?> get props => [
+        documentId,
+        description,
+        creationDate,
+        modificationDate,
+        expirationDate,
+        ciphered,
+        name,
+        size,
+        sha256sum,
+        hasThumbnail,
+        shared,
+        shares
+      ];
 }

@@ -36,6 +36,7 @@ import 'package:data/src/network/model/share/document_details_received_share_dto
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 
 import 'document_response.dart';
 
@@ -43,59 +44,60 @@ part 'document_details_response.g.dart';
 
 @JsonSerializable()
 @DatetimeConverter()
+@DatetimeNullableConverter()
 class DocumentDetailsResponse extends DocumentResponse {
   DocumentDetailsResponse(
-    DocumentId documentId,
-    String description,
-    DateTime creationDate,
-    DateTime modificationDate,
-    DateTime expirationDate,
-    bool ciphered,
-    String name,
-    int size,
-    String sha256sum,
-    bool hasThumbnail,
-    int shared,
-    MediaType mediaType,
-    this.shares
-  ) : super(
-    documentId,
-    description,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    ciphered,
-    name,
-    size,
-    sha256sum,
-    hasThumbnail,
-    shared,
-    mediaType
-  );
+      DocumentId documentId,
+      String description,
+      DateTime creationDate,
+      DateTime modificationDate,
+      DateTime? expirationDate,
+      bool ciphered,
+      String name,
+      int size,
+      String sha256sum,
+      bool hasThumbnail,
+      int shared,
+      MediaType mediaType,
+      this.shares)
+      : super(
+            documentId,
+            description,
+            creationDate,
+            modificationDate,
+            expirationDate,
+            ciphered,
+            name,
+            size,
+            sha256sum,
+            hasThumbnail,
+            shared,
+            mediaType);
 
   final List<DocumentDetailsReceivedShareDto> shares;
 
   @override
-  factory DocumentDetailsResponse.fromJson(Map<String, dynamic> json) => _$DocumentDetailsResponseFromJson(json);
+  factory DocumentDetailsResponse.fromJson(Map<String, dynamic> json) =>
+      _$DocumentDetailsResponseFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$DocumentDetailsResponseToJson(this);
 
   @override
   List<Object> get props => [
-    documentId,
-    description,
-    creationDate,
-    modificationDate,
-    expirationDate,
-    ciphered,
-    name,
-    size,
-    sha256sum,
-    hasThumbnail,
-    shared,
-    shares
-  ];
+        documentId,
+        description,
+        creationDate,
+        modificationDate,
+        expirationDate!,
+        ciphered,
+        name,
+        size,
+        sha256sum,
+        hasThumbnail,
+        shared,
+        shares
+      ];
 }
 
 extension DocumentDetailsResponseExtension on DocumentDetailsResponse {
@@ -113,6 +115,10 @@ extension DocumentDetailsResponseExtension on DocumentDetailsResponse {
         hasThumbnail,
         shared,
         mediaType,
-        shares.isNotEmpty ? shares.map((share) => share.toDocumentDetailsReceivedShare()).toList() : []);
+        shares.isNotEmpty
+            ? shares
+                .map((share) => share.toDocumentDetailsReceivedShare())
+                .toList()
+            : []);
   }
 }

@@ -61,8 +61,9 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      var arguments = ModalRoute.of(context)?.settings.arguments as DocumentDetailsArguments;
-        _model.initState(arguments);
+      var arguments = ModalRoute.of(context)?.settings.arguments
+          as DocumentDetailsArguments;
+      _model.initState(arguments);
     });
 
     super.initState();
@@ -76,7 +77,8 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)?.settings.arguments as DocumentDetailsArguments;
+    final arguments =
+        ModalRoute.of(context)?.settings.arguments as DocumentDetailsArguments;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -99,8 +101,7 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
               ),
             )
           ],
-        )
-    );
+        ));
   }
 
   Widget _detailsTabWidget(DocumentDetailsState state) {
@@ -120,37 +121,47 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _documentDetailsTitleTileWidget(state),
-          Divider(),
-          Column(
-            children: [
-              _documentInformationTile(AppLocalizations.of(context).modified,
-                  state.document?.modificationDate.getMMMddyyyyFormatString() ?? ''),
-              _documentInformationTile(AppLocalizations.of(context).created,
-                  state.document?.creationDate.getMMMddyyyyFormatString() ?? ''),
-              _documentInformationTile(AppLocalizations.of(context).expiration,
-                  state.document?.creationDate.getMMMddyyyyFormatString() ?? ''),
-            ],
-          ),
-          Divider(),
-          _descriptionWidget(state),
-          _sharedWidget(state)
-        ],
-      ));
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _documentDetailsTitleTileWidget(state),
+        Divider(),
+        Column(
+          children: [
+            _documentInformationTile(
+                AppLocalizations.of(context).modified,
+                state.document?.modificationDate.getMMMddyyyyFormatString() ??
+                    ''),
+            _documentInformationTile(AppLocalizations.of(context).created,
+                state.document?.creationDate.getMMMddyyyyFormatString() ?? ''),
+            _documentInformationTile(
+                AppLocalizations.of(context).expiration,
+                state.document?.expirationDate?.getMMMddyyyyFormatString() ??
+                    ''),
+          ],
+        ),
+        Divider(),
+        _descriptionWidget(state),
+        _sharedWidget(state)
+      ],
+    ));
   }
 
   ListTile _documentDetailsTitleTileWidget(DocumentDetailsState state) {
     return ListTile(
       leading: Padding(
           padding: EdgeInsets.only(left: 10),
-          child: SvgPicture.asset(state.document?.mediaType.getFileTypeImagePath(imagePath) ?? imagePath.icFileTypeFile,
-              width: 20, height: 24, fit: BoxFit.fill)),
+          child: SvgPicture.asset(
+              state.document?.mediaType.getFileTypeImagePath(imagePath) ??
+                  imagePath.icFileTypeFile,
+              width: 20,
+              height: 24,
+              fit: BoxFit.fill)),
       title: Text(state.document?.name ?? '',
           style: TextStyle(
-              color: AppColor.workGroupDetailsName, fontWeight: FontWeight.normal, fontSize: 14.0)),
+              color: AppColor.workGroupDetailsName,
+              fontWeight: FontWeight.normal,
+              fontSize: 14.0)),
       trailing: Text(
         filesize(state.document?.size),
         style: TextStyle(
@@ -172,7 +183,9 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
             padding: EdgeInsets.only(left: 16),
             height: 56,
             color: AppColor.topBarBackgroundColor,
-            child: Text(AppLocalizations.of(context).shared_with(state.document?.shares.length ?? 0),
+            child: Text(
+                AppLocalizations.of(context)
+                    .shared_with(state.document?.shares.length ?? 0),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.normal,
@@ -185,7 +198,8 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
               itemCount: state.document?.shares.length,
               itemBuilder: (context, index) {
                 var recipient = state.document?.shares[index].recipient;
-                return DocumentRecipientListTileBuilder(recipient?.fullName() ?? '', recipient?.mail ?? '')
+                return DocumentRecipientListTileBuilder(
+                        recipient?.fullName() ?? '', recipient?.mail ?? '')
                     .build();
               })
         ]));
@@ -208,13 +222,17 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
                       fontSize: 16,
                       color: AppColor.workGroupDetailsName)),
               IconButton(
-                icon: state.isEditingDescription ? Icon(Icons.check) : Icon(Icons.edit),
+                icon: state.isEditingDescription
+                    ? Icon(Icons.check)
+                    : Icon(Icons.edit),
                 onPressed: () => {
-                  if (state.isEditingDescription) {
-                      _model.editDescription(context, state.document, _editDescriptionController.text)
-                  } else {
-                    _model.toggleDescriptionEditing()
-                  }
+                  if (state.isEditingDescription)
+                    {
+                      _model.editDescription(context, state.document,
+                          _editDescriptionController.text)
+                    }
+                  else
+                    {_model.toggleDescriptionEditing()}
                 },
               )
             ]),
@@ -226,17 +244,21 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
                         style: TextStyle(fontSize: 16),
                         scrollPadding: EdgeInsets.only(bottom: 65),
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).no_description,
+                            hintText:
+                                AppLocalizations.of(context).no_description,
                             hintStyle: TextStyle(fontStyle: FontStyle.italic)),
                         controller: _editDescriptionController,
-                        onSubmitted: (value) => _model.editDescription(context, state.document, value))
+                        onSubmitted: (value) => _model.editDescription(
+                            context, state.document, value))
                     : Padding(
                         padding: EdgeInsets.only(top: 14.5),
                         child: Text(
-                            (state.document == null || state.document!.description.isEmpty)
+                            (state.document == null ||
+                                    state.document!.description.isEmpty)
                                 ? AppLocalizations.of(context).no_description
                                 : state.document!.description,
-                            style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic)))),
+                            style: TextStyle(
+                                fontSize: 16, fontStyle: FontStyle.italic)))),
           ],
         ));
   }
