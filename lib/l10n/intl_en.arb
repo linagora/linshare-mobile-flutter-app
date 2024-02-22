@@ -2584,7 +2584,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_workgroup": "",
+  "create_workgroup": "Create Workgroup",
   "@create_workgroup": {
     "type": "text",
     "placeholders_order": [],
