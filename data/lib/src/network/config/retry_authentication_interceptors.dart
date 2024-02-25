@@ -50,6 +50,7 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     final requestOptions = dioError.requestOptions;
     final extraInRequest = requestOptions.extra;
     var retries = extraInRequest[RETRY_KEY] ?? 0;
+    try{
     if (_isAuthenticationError(dioError, retries)) {
       retries++;
 
@@ -62,6 +63,9 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     } else {
       super.onError(dioError, handler);
     }
+  }catch(exception){
+      super.onError(dioError, handler);
+  }
   }
 
   bool _isAuthenticationError(DioError dioError, int retryCount) {

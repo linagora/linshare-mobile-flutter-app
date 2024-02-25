@@ -91,7 +91,13 @@ class AuthenticationViewModel extends BaseViewModel {
       _appNavigation.popAndPush(
         RoutePaths.second_factor_authentication,
         arguments: SecondFactorAuthenticationArguments(_authenticationArguments!.baseUrl));
-    } else {
+    }else if (failure is GetAuthorizedUserFailure &&
+        failure.exception is NotAuthorizedUser) {
+      store.dispatch(logoutAction());
+      _appNavigation.pushAndRemoveAll(RoutePaths.loginRoute,
+          );
+    } 
+    else {
       store.dispatch(initializeHomeView(_appNavigation, _authenticationArguments!.baseUrl));
     }
   }

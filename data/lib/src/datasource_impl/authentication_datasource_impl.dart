@@ -103,6 +103,9 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
       return userRes.toUser();
     }).catchError((error) {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
+          if(error.response!.statusCode==401){
+            throw NotAuthorizedUser();
+          }
         throw UnknownError(error.response?.statusMessage!);
       });
     });
