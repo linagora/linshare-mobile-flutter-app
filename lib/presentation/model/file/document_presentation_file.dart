@@ -51,7 +51,7 @@ class DocumentPresentationFile extends Equatable implements PresentationFile {
   final String description;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final DateTime expirationDate;
+  final DateTime? expirationDate;
   final bool ciphered;
   final String name;
   final int size;
@@ -113,7 +113,7 @@ class DocumentPresentationFile extends Equatable implements PresentationFile {
   bool isShared() => shared != 0;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     documentId,
     description,
     creationDate,

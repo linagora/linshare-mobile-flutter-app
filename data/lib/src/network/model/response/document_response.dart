@@ -32,6 +32,7 @@
 
 import 'package:data/src/network/model/converter/data_from_json_converter.dart';
 import 'package:data/src/network/model/converter/datetime_converter.dart';
+import 'package:data/src/network/model/converter/datetime_nullable_converter.dart';
 import 'package:data/src/util/attribute.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
@@ -42,6 +43,7 @@ part 'document_response.g.dart';
 
 @JsonSerializable()
 @DatetimeConverter()
+@DatetimeNullableConverter()
 class DocumentResponse extends Equatable {
   DocumentResponse(
       this.documentId,
@@ -63,7 +65,7 @@ class DocumentResponse extends Equatable {
   final String description;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final DateTime expirationDate;
+  final DateTime? expirationDate;
   final bool ciphered;
   final String name;
   final int size;
@@ -79,7 +81,7 @@ class DocumentResponse extends Equatable {
   Map<String, dynamic> toJson() => _$DocumentResponseToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         documentId,
         description,
         creationDate,

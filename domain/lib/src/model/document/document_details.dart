@@ -65,7 +65,7 @@ class DocumentDetails extends Document {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     documentId,
     description,
     creationDate,

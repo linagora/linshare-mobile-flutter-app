@@ -40,7 +40,7 @@ class Document extends Equatable {
   final String description;
   final DateTime creationDate;
   final DateTime modificationDate;
-  final DateTime expirationDate;
+  final DateTime? expirationDate;
   final bool ciphered;
   final String name;
   final int size;
