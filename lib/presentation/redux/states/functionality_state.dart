@@ -36,6 +36,7 @@ import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:flutter/foundation.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
+import 'package:collection/collection.dart';
 
 @immutable
 class FunctionalityState extends LinShareState {
@@ -91,9 +92,9 @@ extension FunctionalityStateExtension on FunctionalityState {
   bool isUploadRequestEnable() => _isFunctionalityEnable(FunctionalityIdentifier.UPLOAD_REQUEST);
 
   bool _isFunctionalityEnable(FunctionalityIdentifier functionalityIdentifier) {
-    final functionality = functionalityList.firstWhere(
-            (element) => (element != null && element.identifier == functionalityIdentifier),
-        orElse: () => null);
+    final functionality = functionalityList.firstWhereOrNull(
+            (element) => (element != null && element.identifier == functionalityIdentifier));
+ 
     if (functionality != null) {
       return functionality.enable;
     }
