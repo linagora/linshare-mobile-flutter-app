@@ -132,7 +132,7 @@ class _DocumentDetailsWidgetState extends State<DocumentDetailsWidget> {
               _documentInformationTile(AppLocalizations.of(context).created,
                   state.document?.creationDate.getMMMddyyyyFormatString() ?? ''),
               _documentInformationTile(AppLocalizations.of(context).expiration,
-                  state.document?.expirationDate?.getMMMddyyyyFormatString() ?? AppLocalizations.of(context).no_results_found),
+                  state.document?.expirationDate?.getMMMddyyyyFormatString() ?? '',
             ],
           ),
           Divider(),
