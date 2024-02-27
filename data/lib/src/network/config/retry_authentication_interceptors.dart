@@ -64,6 +64,9 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
       super.onError(dioError, handler);
     }
   }catch(exception){
+    if(retries>=_max_retry_count){
+      _permanentToken=null;
+    }
       super.onError(dioError, handler);
   }
   }
