@@ -77,8 +77,16 @@ class GenericUserDto {
     };
 }
 
+
 extension GenericUserDtoExtension on GenericUserDto {
   GenericUser toGenericUser() {
     return GenericUser(_mail ?? '', firstName: _firstName, lastName: _lastName, userId: userId);
   }
+
+ Map<String, dynamic> toAddRecipientJson() =>
+    {
+      jsonEncode('mail'): jsonEncode(_mail),
+      jsonEncode('lastName'): jsonEncode(lastName.fold(() => '', (lastName) => lastName)),
+      jsonEncode('firstName'): jsonEncode(firstName.fold(() => '', (firstName) => firstName)),
+    };
 }

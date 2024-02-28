@@ -691,7 +691,7 @@ class LinShareHttpClient {
             .withPathParameter(uploadRequestGroupId.uuid)
             .withPathParameter(Endpoint.recipents)
             .generateEndpointPath(),
-        data: recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName).toJson()).toList().toString());
+        data: recipients.map((data) => GenericUserDto(data.mail, lastName: data.lastName, firstName: data.firstName).toAddRecipientJson()).toList().toString());
     return UploadRequestGroupResponse.fromJson(resultJson);
   }
 
