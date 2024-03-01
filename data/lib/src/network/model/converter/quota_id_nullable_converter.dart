@@ -31,41 +31,14 @@
 //
 
 import 'package:domain/domain.dart';
-import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class SharedSpaceNodeNested extends Equatable {
-  final SharedSpaceId sharedSpaceId;
-  final SharedSpaceId? parentId;
-  final SharedSpaceRole sharedSpaceRole;
-  final DateTime creationDate;
-  final DateTime modificationDate;
-  final String name;
-  final LinShareNodeType? nodeType;
-  final QuotaId? quotaId;
-  final VersioningParameter versioningParameters;
-
-  SharedSpaceNodeNested(
-    this.sharedSpaceId,
-    this.parentId,
-    this.sharedSpaceRole,
-    this.creationDate,
-    this.modificationDate,
-    this.name,
-    this.nodeType,
-    this.quotaId,
-    this.versioningParameters
-  );
+class QuotaIdNullableConverter implements JsonConverter<QuotaId?, String?> {
+  const QuotaIdNullableConverter();
 
   @override
-  List<Object?> get props => [
-    sharedSpaceId,
-    parentId,
-    sharedSpaceRole,
-    creationDate,
-    modificationDate,
-    name,
-    nodeType,
-    quotaId,
-    versioningParameters
-  ];
+  QuotaId? fromJson(String? json) =>  json!=null ? QuotaId(json) : QuotaId.initial() ;
+
+  @override
+  String? toJson(QuotaId? object) => object?.uuid;
 }
