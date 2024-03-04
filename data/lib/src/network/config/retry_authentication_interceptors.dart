@@ -29,8 +29,10 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
 
 class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   static const int _max_retry_count = 3;
@@ -50,10 +52,11 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     final requestOptions = dioError.requestOptions;
     final extraInRequest = requestOptions.extra;
     var retries = extraInRequest[RETRY_KEY] ?? 0;
+    var errorCode = dioError.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
+    debugPrint("$errorCode----------------------------------------------------");
     try{
-    if (_isAuthenticationError(dioError, retries)) {
+    if (_isAuthenticationError(dioError, retries) && errorCode !='1005')  {
       retries++;
-
       requestOptions.headers.addAll({AUTHORIZATION_KEY: _getTokenAsBearerHeader(_permanentToken?.token)});
       requestOptions.extra = {RETRY_KEY: retries};
 
@@ -64,9 +67,6 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
       super.onError(dioError, handler);
     }
   }catch(exception){
-    if(retries>=_max_retry_count){
-      _permanentToken=null;
-    }
       super.onError(dioError, handler);
   }
   }

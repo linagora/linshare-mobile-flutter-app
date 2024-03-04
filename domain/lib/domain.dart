@@ -293,6 +293,7 @@ export 'src/usecases/authentication/create_permanent_token_interactor.dart';
 export 'src/usecases/authentication/create_permanent_token_oidc_interactor.dart';
 export 'src/usecases/authentication/credential_view_state.dart';
 export 'src/usecases/authentication/delete_permanent_token_interactor.dart';
+export 'src/usecases/authentication/remove_permanent_token_interactor.dart';
 export 'src/usecases/authentication/delete_token_oidc_interactor.dart';
 export 'src/usecases/authentication/get_authorized_user_interactor.dart';
 export 'src/usecases/authentication/get_credential_interactor.dart';
