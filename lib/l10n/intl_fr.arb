@@ -176,7 +176,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "do_not_have_any_workgroup": "Vous n'avez pas encore de Groupe De Travail",
+  "do_not_have_any_workgroup": "Vous n'avez pas encore de Groupe de travail",
   "@do_not_have_any_workgroup": {
     "type": "text",
     "placeholders": {}
@@ -329,7 +329,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "copy_to_a_workgroup": "Copier dans un Groupe De Travail",
+  "copy_to_a_workgroup": "Copier dans un Espace de travail",
   "@copy_to_a_workgroup": {
     "type": "text",
     "placeholders": {}
@@ -761,7 +761,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "audit_action_message_create_workgroup_self": "Vous avez créé un nouvel Espace de Travail : {resourceName}.",
+  "audit_action_message_create_workgroup_self": "Vous avez créé un nouvel Espace de travail : {resourceName}.",
   "@audit_action_message_create_workgroup_self": {
     "type": "text",
     "placeholders": {
@@ -2004,7 +2004,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "role_in_this_drive": "Role in this drive",
+  "role_in_this_drive": "Rôle dans ce Drive",
   "@role_in_this_drive": {
     "type": "text",
     "placeholders_order": [],
@@ -2016,25 +2016,25 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "member_default_role_of_all_workgroups_inside_this_drive": "Member's default role of all workgroups inside this drive",
+  "member_default_role_of_all_workgroups_inside_this_drive": "Rôle par défaut des membres des Espaces de travail de ce Drive",
   "@member_default_role_of_all_workgroups_inside_this_drive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_admin": "Drive Admin",
+  "drive_admin": "Administrateur du Drive",
   "@drive_admin": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_reader": "Drive Reader",
+  "drive_reader": "Lecture du Drive",
   "@drive_reader": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_writer": "Drive Writer",
+  "drive_writer": "Écriture dans le Drive",
   "@drive_writer": {
     "type": "text",
     "placeholders_order": [],
@@ -2064,7 +2064,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "are_you_sure_you_want_to_delete_drive_member": "Are you sure you want to delete {memberName} from the drive {driveName} and all related workgroups?",
+  "are_you_sure_you_want_to_delete_drive_member": "Confirmez-vous vouloir retirer {memberName} du Drive {driveName} et de tous les Espaces de travail associés ?",
   "@are_you_sure_you_want_to_delete_drive_member": {
     "type": "text",
     "placeholders_order": [
@@ -2146,7 +2146,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "drive_member": "Drive member",
+  "drive_member": "Membre du Drive",
   "@drive_member": {
     "type": "text",
     "placeholders_order": [],
@@ -2466,13 +2466,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "versioning_enable": "",
+  "versioning_enable": "Versionnage activé",
   "@versioning_enable": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "are_you_sure_want_to_remove_this_version": "",
+  "are_you_sure_want_to_remove_this_version": "Confirmez-vous vouloir supprimer cette version ? Attention, cette action est irréversible.",
   "@are_you_sure_want_to_remove_this_version": {
     "type": "text",
     "placeholders_order": [],
@@ -2484,56 +2484,104 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "yes": "",
+  "yes": "Oui",
   "@yes": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "no": "",
+  "no": "Non",
   "@no": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "the_upload_request_has_been_updated_successfully": "",
+  "the_upload_request_has_been_updated_successfully": "La demande d'envoi a bien été mise à jour !",
   "@the_upload_request_has_been_updated_successfully": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "the_upload_request_has_been_updated_failed": "",
+  "the_upload_request_has_been_updated_failed": "La mise à jour de la demande d'envoi a échoué",
   "@the_upload_request_has_been_updated_failed": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "canceled": "",
+  "canceled": "Annulé",
   "@canceled": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_new_drive": "",
+  "create_new_drive": "Créer un nouveau Drive",
   "@create_new_drive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_drive": "",
+  "create_drive": "Créer le Drive",
   "@create_drive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "new_drive": "",
+  "new_drive": "Nouveau Drive",
   "@new_drive": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_workgroup": "",
+  "create_workgroup": "Créer un Espace de travail",
   "@create_workgroup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "failed_request": "Échec de la requête",
+  "@failed_request": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "contact_now": "Contacter maintenant",
+  "@contact_now": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_workspace_limit_message": "Vous avez atteint le nombre maximal de demandes d'envoi de fichiers. Veuillez d'abord contacter le responsable de votre organisation pour mettre à niveau le plan.",
+  "@reach_workspace_limit_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_workspace_limit_message_own_server": "Vous avez atteint le nombre maximal d'Espaces de travail",
+  "@reach_workspace_limit_message_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_nested_workgroup_limit_message_saas": "Vous avez atteint le nombre maximal de groupes de travail dans cet espace de travail. Veuillez d'abord contacter le propriétaire de votre organisation pour mettre à niveau le plan.",
+  "@reach_nested_workgroup_limit_message_saas": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_nested_workgroup_limit_message_own_server": "Vous avez atteint le nombre maximum de groupes de travail dans cet espace de travail",
+  "@reach_nested_workgroup_limit_message_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_upload_request_limit_message_saas": "Vous avez atteint le nombre maximal de demandes d'envoi. Veuillez contacter le responsable de votre organisation pour mettre à niveau le plan.",
+  "@reach_upload_request_limit_message_saas": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reach_upload_request_limit_message_own_server": "Vous avez atteint le nombre maximal de demandes d'envoi",
+  "@reach_upload_request_limit_message_own_server": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
