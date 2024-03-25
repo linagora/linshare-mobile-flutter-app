@@ -30,21 +30,19 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
-enum WorkGroupNodeType {
-  FOLDER,
-  DOCUMENT,
-  DOCUMENT_REVISION
-}
+enum WorkGroupNodeType { ROOT_FOLDER, FOLDER, DOCUMENT, DOCUMENT_REVISION }
 
 extension WorkGroupNodeTypeExtension on WorkGroupNodeType {
   String get value {
-    switch(this) {
+    switch (this) {
       case WorkGroupNodeType.FOLDER:
         return 'FOLDER';
       case WorkGroupNodeType.DOCUMENT:
         return 'DOCUMENT';
       case WorkGroupNodeType.DOCUMENT_REVISION:
         return 'DOCUMENT_REVISION';
+      case WorkGroupNodeType.ROOT_FOLDER:
+        return 'ROOT_FOLDER';
       default:
         return toString();
     }
