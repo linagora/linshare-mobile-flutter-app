@@ -86,7 +86,7 @@ class UploadRequestGroupResponse extends Equatable {
   final bool canClose;
   final bool canEditExpiryDate;
   final bool protectedByPassword;
-  final String? mailMessageId;
+  final String mailMessageId;
   final bool enableNotification;
   final bool collective;
   final GenericUserDto owner;
