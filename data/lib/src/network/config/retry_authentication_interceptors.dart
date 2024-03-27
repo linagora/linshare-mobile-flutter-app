@@ -32,7 +32,6 @@
 import 'package:data/src/util/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
 
 class RetryAuthenticationInterceptors extends InterceptorsWrapper {
   static const int _max_retry_count = 3;
@@ -53,7 +52,6 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     final extraInRequest = requestOptions.extra;
     var retries = extraInRequest[RETRY_KEY] ?? 0;
     var errorCode = dioError.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
-    debugPrint("$errorCode----------------------------------------------------");
     try{
     if (_isAuthenticationError(dioError, retries) && errorCode !='1005')  {
       retries++;
@@ -64,7 +62,7 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
       return handler.resolve(response);
 
     } else {
-      super.onError(dioError, handler);
+      return handler.reject(dioError);
     }
   }catch(exception){
       super.onError(dioError, handler);
