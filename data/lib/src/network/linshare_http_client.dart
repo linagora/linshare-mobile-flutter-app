@@ -285,7 +285,7 @@ class LinShareHttpClient {
   }
 
   WorkGroupNodeDto _convertToWorkGroupNodeChild(Map<String, dynamic> nodeChildJson) {
-    if (nodeChildJson['type'] == WorkGroupNodeType.FOLDER.value) {
+    if (nodeChildJson['type'] == WorkGroupNodeType.FOLDER.value || nodeChildJson['type'] == WorkGroupNodeType.ROOT_FOLDER.value ) {
       return WorkGroupNodeFolderDto.fromJson(nodeChildJson);
     }
 
