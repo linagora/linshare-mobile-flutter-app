@@ -41,7 +41,7 @@ class SharedSpaceNodeNested extends Equatable {
   final DateTime modificationDate;
   final String name;
   final LinShareNodeType? nodeType;
-  final QuotaId? quotaId;
+  final QuotaId quotaId;
   final VersioningParameter versioningParameters;
 
   SharedSpaceNodeNested(

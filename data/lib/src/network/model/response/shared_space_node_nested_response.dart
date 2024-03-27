@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:data/src/network/model/converter/datetime_converter.dart';
-import 'package:data/src/network/model/converter/quota_id_nullable_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_nullable_converter.dart';
 import 'package:data/src/network/model/converter/quota_id_converter.dart';
 import 'package:data/src/network/model/converter/shared_space_id_converter.dart';
@@ -48,7 +47,6 @@ part 'shared_space_node_nested_response.g.dart';
 @QuotaIdConverter()
 @SharedSpaceIdConverter()
 @SharedSpaceIdNullableConverter()
-@QuotaIdNullableConverter()
 class SharedSpaceNodeNestedResponse extends Equatable {
   SharedSpaceNodeNestedResponse(
     this.sharedSpaceId,
@@ -75,7 +73,7 @@ class SharedSpaceNodeNestedResponse extends Equatable {
   final LinShareNodeType? nodeType;
 
   @JsonKey(name: Attribute.quotaUuid)
-  final QuotaId? quotaId;
+  final QuotaId quotaId;
 
   final VersioningParameterDto? versioningParameters;
 
