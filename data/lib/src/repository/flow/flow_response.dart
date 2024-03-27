@@ -40,7 +40,6 @@ part 'flow_response.g.dart';
 @JsonSerializable()
 class FlowResponse with EquatableMixin {
   final int chunkNumber;
-  @JsonKey(name:"lastChunk")
   final bool isLastChunk;
   final bool chunkUploadSuccess;
   final String? fileName;

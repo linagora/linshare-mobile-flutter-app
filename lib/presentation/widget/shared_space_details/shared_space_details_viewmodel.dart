@@ -162,7 +162,7 @@ class SharedSpaceDetailsViewModel extends BaseViewModel {
 
       await sharedSpaceViewState.fold((_) => null, (success) async {
         if (success is SharedSpaceDetailViewState) {
-          store.dispatch(_getAccountQuotaAction(success.sharedSpace.quotaId!));
+          store.dispatch(_getAccountQuotaAction(success.sharedSpace.quotaId));
         }
       });
     });
