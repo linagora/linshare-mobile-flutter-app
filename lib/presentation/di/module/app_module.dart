@@ -332,6 +332,9 @@ class AppModule {
       getIt<AuthenticationRepository>(),
       getIt<TokenRepository>(),
       getIt<CredentialRepository>()));
+    getIt.registerFactory(() => RemovePermanentTokenInteractor(
+        getIt<TokenRepository>(),
+        getIt<CredentialRepository>()));
     getIt.registerFactory(() => LogoutOidcInteractor(
       getIt<AuthenticationOIDCRepository>(),
       getIt<CredentialRepository>()

@@ -493,6 +493,7 @@ class WidgetModule {
         getIt<DeletePermanentTokenInteractor>(),
         getIt<AppNavigation>(),
         getIt<SaveAuthorizedUserInteractor>(),
+        getIt<RemovePermanentTokenInteractor>()
     ));
   }
 
