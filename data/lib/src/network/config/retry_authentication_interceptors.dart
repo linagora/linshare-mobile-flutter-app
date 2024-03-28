@@ -52,8 +52,9 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     final extraInRequest = requestOptions.extra;
     var retries = extraInRequest[RETRY_KEY] ?? 0;
     var errorCode = dioError.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
+    final authErrorCode = LinShareErrorCode(int.tryParse(errorCode) ?? 1);
     try{
-    if (_isAuthenticationError(dioError, retries) && errorCode !='1005')  {
+    if (_isAuthenticationError(dioError, retries) && !authErrorCode.isTokenDeleted())  {
       retries++;
       requestOptions.headers.addAll({AUTHORIZATION_KEY: _getTokenAsBearerHeader(_permanentToken?.token)});
       requestOptions.extra = {RETRY_KEY: retries};

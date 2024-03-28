@@ -43,4 +43,6 @@ extension LinShareErrorCodeExtension on LinShareErrorCode {
 
   bool isAuthenticateErrorUserLocked() =>
       BusinessErrorCode.authenErrorUserLocked.contains(this);
+  bool isTokenDeleted()=>
+      BusinessErrorCode.noValidTokenFound.contains(this);
 }
