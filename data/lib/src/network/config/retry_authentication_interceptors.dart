@@ -65,7 +65,7 @@ class RetryAuthenticationInterceptors extends InterceptorsWrapper {
     } else {
       return handler.reject(dioError);
     }
-  }catch(exception){
+  } catch(exception) {
       super.onError(dioError, handler);
   }
   }
