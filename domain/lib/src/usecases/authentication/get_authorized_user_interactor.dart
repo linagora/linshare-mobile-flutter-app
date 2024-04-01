@@ -45,7 +45,7 @@ class GetAuthorizedInteractor {
           .onError((error, stackTrace) {
             if(error is NotAuthorizedUser){
                 throw error;
-            }else{
+            } else {
                return authenticationRepository.getAuthorizedUserOffline();
             }
           });
