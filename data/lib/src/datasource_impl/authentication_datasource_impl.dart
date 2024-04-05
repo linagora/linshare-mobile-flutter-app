@@ -35,7 +35,6 @@ import 'package:data/data.dart';
 import 'package:data/src/network/model/response/user_response.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
 
 class AuthenticationDataSourceImpl implements AuthenticationDataSource {
 
@@ -106,7 +105,7 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
       _remoteExceptionThrower.throwRemoteException(error, handler: (DioError error) {
         final errorCode = error.response?.headers.value(Constant.linShareAuthErrorCode) ?? '1';
         final authErrorCode = LinShareErrorCode(int.tryParse(errorCode) ?? 1);
-          if(authErrorCode.value==1000){
+          if(authErrorCode.canNotGetJwt()){
             throw NotAuthorizedUser();
           }
         throw UnknownError(error.response?.statusMessage!);
