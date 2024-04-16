@@ -165,6 +165,7 @@ class SharedSpaceDocumentDataSourceImpl implements SharedSpaceDocumentDataSource
             savedDir: externalStorageDirPath,
             headers: {Constant.authorization: 'Bearer ${token.token}'},
             showNotification: true,
+            saveInPublicStorage: true,
             openFileFromNotification: true)));
 
       return taskIds
