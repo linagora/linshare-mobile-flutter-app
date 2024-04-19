@@ -795,12 +795,13 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   }
 
   String? _getErrorString(BuildContext context, WorkGroupNode? workGroupNode, String value) {
-    if(workGroupNode == null) {
-      return '';
+    var listName = <String>[];
+
+    if (workGroupNode != null) {
+      listName = workGroupNode is WorkGroupDocument
+          ? _workGroupNodesList.whereType<WorkGroupDocument>().map((node) => node.name).toList()
+          : _workGroupNodesList.whereType<WorkGroupFolder>().map((node) => node.name).toList();
     }
-    final listName = workGroupNode is WorkGroupDocument
-        ? _workGroupNodesList.whereType<WorkGroupDocument>().map((node) => node.name).toList()
-        : _workGroupNodesList.whereType<WorkGroupFolder>().map((node) => node.name).toList();
 
     return _verifyNameInteractor.execute(value, [
       EmptyNameValidator(),
