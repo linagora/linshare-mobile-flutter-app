@@ -2376,13 +2376,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_new_workspace": "Create new workspace",
+  "create_new_workspace": "Tạo không gian làm việc mới",
   "@create_new_workspace": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_workspace": "Create Workspace",
+  "create_workspace": "Tạo không gian làm việc",
   "@create_workspace": {
     "type": "text",
     "placeholders_order": [],
