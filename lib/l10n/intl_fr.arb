@@ -2358,13 +2358,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_new_workspace": "Create new workspace",
+  "create_new_workspace": "Créer un nouvel espace de travail",
   "@create_new_workspace": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "create_workspace": "Create Workspace",
+  "create_workspace": "Créer un espace de travail",
   "@create_workspace": {
     "type": "text",
     "placeholders_order": [],
