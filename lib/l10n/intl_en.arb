@@ -2542,7 +2542,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "save": "",
+  "save": "Save",
   "@save": {
     "type": "text",
     "placeholders_order": [],
@@ -2590,7 +2590,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "edit": "",
+  "edit": "Edit",
   "@edit": {
     "type": "text",
     "placeholders_order": [],
