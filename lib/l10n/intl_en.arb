@@ -2548,7 +2548,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "no": "",
+  "no": "No",
   "@no": {
     "type": "text",
     "placeholders_order": [],
@@ -2572,7 +2572,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "are_you_sure_want_to_remove_this_version": "",
+  "are_you_sure_want_to_remove_this_version": "Are you sure want to remove this version? Beware, this action cannot be undone.",
   "@are_you_sure_want_to_remove_this_version": {
     "type": "text",
     "placeholders_order": [],
@@ -2602,7 +2602,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "yes": "",
+  "yes": "Yes",
   "@yes": {
     "type": "text",
     "placeholders_order": [],
