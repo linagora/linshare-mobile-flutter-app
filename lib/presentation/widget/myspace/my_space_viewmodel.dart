@@ -76,6 +76,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:share/share.dart' as share_library;
+import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 import 'document_details/document_details_arguments.dart';
 
@@ -439,7 +440,10 @@ class MySpaceViewModel extends BaseViewModel {
     _appNavigation.popBack();
     store.dispatch(_pickFileAction(context, fileType));
   }
-
+  void openCameraPicker(BuildContext context) {
+    _appNavigation.popBack();
+    store.dispatch(_openCameraAction(context));
+  }
   void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles, {required Widget footerAction}) {
     store.dispatch(_handleContextMenuAction(context, document, actionTiles, footerAction: footerAction));
   }
@@ -731,6 +735,35 @@ class MySpaceViewModel extends BaseViewModel {
       store.dispatch(UploadFileAction(Right(success)));
       await _appNavigation.push(RoutePaths.uploadDocumentRoute,
           arguments: UploadFileArguments(success.pickedFiles));
+    };
+  }
+
+  ThunkAction<AppState> _openCameraAction(BuildContext context) {
+    return (Store<AppState> store) async {
+      store.dispatch(InsideAppAction(
+          actionInsideAppType: ActionInsideAppType.USING_CAMERA));
+      await CameraPicker.pickFromCamera(
+        context,
+        pickerConfig: CameraPickerConfig(
+            onEntitySaving: (
+              BuildContext context,
+              CameraPickerViewType viewType,
+              File file,
+            ) {
+              var _fileToBeHandle = file;
+              debugPrint(file.absolute.path);
+              Navigator.of(context)
+                ..pop()
+                ..pop();
+            },
+            textDelegate: cameraPickerTextDelegateFromLocale(
+                Localizations.localeOf(context)),
+            theme: Theme.of(context),
+            enableRecording: true),
+      ).then((result) {
+        store.dispatch(
+            InsideAppAction(actionInsideAppType: ActionInsideAppType.NONE));
+      }).onError((error, stackTrace) => null);
     };
   }
 

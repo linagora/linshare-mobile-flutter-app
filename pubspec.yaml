@@ -121,6 +121,9 @@ dependencies:
   # datetime picker
   flutter_datetime_picker: 1.5.1
 
+  # camera picker
+  wechat_camera_picker: 3.8.0
+
   async: 2.8.2
 
   firebase_core: 1.19.1
