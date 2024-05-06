@@ -473,8 +473,8 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   List<Widget> _uploadFileMenuActionTiles(BuildContext context) {
     return [
       _pickPhotoAndVideoAction(context),
+      _browseFileAction(context),
       _openCameraPickerAction(context),
-      _browseFileAction(context)
     ];
   }
 
@@ -491,10 +491,10 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   Widget _openCameraPickerAction(BuildContext context) {
     return SimpleContextMenuActionBuilder(
         Key('pick_from_camera_context_menu_action'),
-        SvgPicture.asset(imagePath.icPhotoLibrary,
+        SvgPicture.asset(imagePath.icCamera,
             width: 24, height: 24, fit: BoxFit.fill),
         //AppLocalizations.of(context).photos_and_videos
-        'Open camera' )
+        'Take a photo' )
         .onActionClick((_) => mySpaceViewModel.openCameraPicker(context))
         .build();
   }
