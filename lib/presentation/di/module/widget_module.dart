@@ -37,6 +37,8 @@ import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync_offline_manager.dart';
 import 'package:linshare_flutter_app/presentation/manager/upload_and_share_file/upload_and_share_file_manager.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/util/audio_recorder.dart';
+import 'package:linshare_flutter_app/presentation/util/media_picker_from_camera.dart';
 import 'package:linshare_flutter_app/presentation/util/app_image_paths.dart';
 import 'package:linshare_flutter_app/presentation/util/app_toast.dart';
 import 'package:linshare_flutter_app/presentation/util/generate_password_utils.dart';
@@ -78,6 +80,8 @@ import 'package:linshare_flutter_app/presentation/widget/received/received_share
 import 'package:linshare_flutter_app/presentation/widget/received/received_share_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/received_share_details/received_share_details_widget.dart';
+import 'package:linshare_flutter_app/presentation/widget/record_audio/record_audio_viewmodel.dart';
+import 'package:linshare_flutter_app/presentation/widget/record_audio/record_audio_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/second_factor_authentication/second_factor_authentication_widget.dart';
 import 'package:linshare_flutter_app/presentation/widget/shared_space/shared_space_viewmodel.dart';
@@ -164,6 +168,7 @@ class WidgetModule {
     _provideAdvanceSearchWidgetComponent();
     _provideUploadRequestGroupDetailsWidgetComponent();
     _provideUploadRequestRecipientDetailsWidgetComponent();
+    _provideRecordAudioWidgetComponent();
   }
 
   void _provideLoginComponent() {
@@ -223,6 +228,7 @@ class WidgetModule {
     getIt.registerFactory(() => MySpaceViewModel(
       getIt.get<Store<AppState>>(),
       getIt.get<LocalFilePicker>(),
+      getIt.get<MediaPickerFromCamera>(),
       getIt.get<AppNavigation>(),
       getIt.get<GetAllDocumentInteractor>(),
       getIt.get<DownloadFileInteractor>(),
@@ -333,6 +339,7 @@ class WidgetModule {
         getIt.get<Store<AppState>>(),
         getIt.get<AppNavigation>(),
         getIt.get<LocalFilePicker>(),
+        getIt.get<MediaPickerFromCamera>(),
         getIt.get<VerifyNameInteractor>(),
         getIt.get<GetAllChildNodesInteractor>(),
         getIt.get<CreateSharedSpaceFolderInteractor>(),
@@ -767,5 +774,13 @@ class WidgetModule {
       getIt.get<GetUploadRequestInteractor>(),
       getIt.get<GetUploadRequestActivitiesInteractor>(),
     ));
+  }
+  void _provideRecordAudioWidgetComponent() {
+    getIt.registerFactory(() => RecordAudioWidget());
+    getIt.registerFactory(() => RecordAudioViewModel(
+          getIt.get<Store<AppState>>(),
+          getIt.get<AppNavigation>(),
+          getIt.get<AudioRecorder>(),
+        ));
   }
 }

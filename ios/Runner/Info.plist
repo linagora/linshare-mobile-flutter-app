@@ -9,6 +9,12 @@
     </array>
 	<key>NSContactsUsageDescription</key>
 	<string>You can choose to share files with these contacts.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>your can take photos and videos and upload them directly</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>your usage description here</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>Record voice message and upload directly</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

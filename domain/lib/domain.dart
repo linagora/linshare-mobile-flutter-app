@@ -513,3 +513,5 @@ export 'src/usecases/workgroup/get_all_workgroups_offline_interactor.dart';
 export 'src/usecases/workgroup/workgroup_exception.dart';
 export 'src/usecases/workgroup/workgroup_view_state.dart';
 export 'src/usecases/received/remove_deleted_received_share_from_local_database.dart';
+export 'src/usecases/media_picker_from_camera/media_picker_viewstate.dart';
+export 'src/usecases/audio_recorder/audio_recorder_viewstate.dart';

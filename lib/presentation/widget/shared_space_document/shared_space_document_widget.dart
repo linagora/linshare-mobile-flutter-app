@@ -853,7 +853,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   List<Widget> addNewFileOrFolderMenuActionTiles(BuildContext context) {
     return [
       uploadFileAction(),
-      addNewFolderAction()
+      addNewFolderAction(),
+      takePhotoAction()
     ];
   }
 
@@ -875,7 +876,16 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
           .onActionClick((_) => sharedSpaceDocumentViewModel.openUploadFileMenu(context, uploadFileMenuActionTiles(context)))
           .build();
   }
-
+    Widget takePhotoAction() {
+    return SimpleHorizontalContextMenuActionBuilder(
+              Key('take_photo_context_menu_action'),
+              SvgPicture.asset(imagePath.icCamera,
+                  width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
+              //AppLocalizations.of(context).upload_file_title
+              'Take a photo')
+          .onActionClick((_) => sharedSpaceDocumentViewModel.openCameraPicker(context))
+          .build();
+  }
   List<Widget> uploadFileMenuActionTiles(BuildContext context) {
     return [
       pickPhotoAndVideoAction(),
