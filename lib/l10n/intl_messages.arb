@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2022-07-01T18:03:09.553325",
+  "@@last_modified": "2024-11-12T10:15:33.090622",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -3098,6 +3098,24 @@
   },
   "reach_upload_request_limit_message_own_server": "You have reached maximum number of upload requests",
   "@reach_upload_request_limit_message_own_server": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "camera": "Camera",
+  "@camera": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audio_recording": "Audio recording",
+  "@audio_recording": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "you_cant_delete_the_last_version": "You can't delete the last version, try to delete the whole document",
+  "@you_cant_delete_the_last_version": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

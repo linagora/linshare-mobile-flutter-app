@@ -3023,6 +3023,14 @@ class AppLocalizations {
         name: 'reach_upload_request_limit_message_own_server'
     );
   }
+
+  String get camera {
+    return Intl.message('Camera', name: 'camera');
+  }
+
+  String get audio_recording {
+    return Intl.message('Audio recording', name: 'audio_recording');
+  }
   
   String get you_cant_delete_the_last_version {
     return Intl.message(

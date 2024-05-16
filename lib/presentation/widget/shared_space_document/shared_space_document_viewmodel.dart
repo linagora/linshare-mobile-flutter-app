@@ -59,6 +59,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/shared_space_document_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/media_Picker_From_Camera.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/advance_search_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/suggest_name_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
@@ -94,6 +95,7 @@ import 'package:share/share.dart' as share_library;
 class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final LocalFilePicker _localFilePicker;
+  final MediaPickerFromCamera _mediaPickerFromCamera;
   final VerifyNameInteractor _verifyNameInteractor;
   final GetAllChildNodesInteractor _getAllChildNodesInteractor;
   final CreateSharedSpaceFolderInteractor _createSharedSpaceFolderInteractor;
@@ -132,6 +134,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     Store<AppState> store,
     this._appNavigation,
     this._localFilePicker,
+    this._mediaPickerFromCamera,
     this._verifyNameInteractor,
     this._getAllChildNodesInteractor,
     this._createSharedSpaceFolderInteractor,
@@ -470,6 +473,21 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
       );
     };
   }
+  
+   void openCameraPicker(BuildContext context) {
+    _appNavigation.popBack();
+    store.dispatch(_openCameraAction(context));
+  }
+
+  ThunkAction<AppState> _openCameraAction(BuildContext context) {
+    return (Store<AppState> store) async {
+      store.dispatch(InsideAppAction(actionInsideAppType: ActionInsideAppType.USING_CAMERA));
+      await _mediaPickerFromCamera.pickMediaFromCamera(context).then((result) {
+        store.dispatch(InsideAppAction(actionInsideAppType: ActionInsideAppType.NONE));
+        result.fold((failure) => store.dispatch(UploadFileAction(Left(failure))), (success) => store.dispatch(_pickFileSuccessAction(success)));
+      });
+    };
+  }
 
   void openSearchState(BuildContext context) {
     var destinationName = AppLocalizations.of(context).shared_space;
@@ -484,7 +502,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _handleAddNewFileOrFolderMenuAction(BuildContext context, List<Widget> actionTiles) {
     return (Store<AppState> store) async {
-      ContextMenuBuilder(context, areTilesHorizontal: true)
+      ContextMenuBuilder(context, areTilesHorizontal: true,alignment: MainAxisAlignment.spaceEvenly)
           .addHeader(SimpleBottomSheetHeaderBuilder(
                   Key('add_new_file_or_folders_bottom_sheet_header_builder'))
               .addLabel(AppLocalizations.of(context).add_new_file_or_folder)
