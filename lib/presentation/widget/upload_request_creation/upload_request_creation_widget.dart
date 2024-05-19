@@ -169,7 +169,7 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
                         ..addOnSizeTypeNotifier(_model.totalFileSizeTypeNotifier))
                       .build()
                     : null)
-                ..addPasswordProtectedInput(creationState.uploadRequestCreation?.passwordProtected != null
+                ..addPasswordProtectedInput(creationState.uploadRequestCreation?.protectPasswordSetting != null
                     ? (CheckboxInputFieldBuilder()
                         ..setKey(Key('password_protected_input'))
                         ..setTitle(AppLocalizations.of(context).password_protected)
