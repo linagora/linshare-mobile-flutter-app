@@ -35,8 +35,8 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
 
   String get value {
     switch(this) {
-      case AuditLogEntryType.WORKGROUP:
-        return 'WORKGROUP';
+      case AuditLogEntryType.WORK_GROUP:
+        return 'WORK_GROUP';
       case AuditLogEntryType.WORKGROUP_MEMBER:
         return 'WORKGROUP_MEMBER';
       case AuditLogEntryType.WORKGROUP_FOLDER:
@@ -58,7 +58,7 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
 
   ClientLogAction generateClientLogAction(AuditLogEntry auditLogEntry) {
     switch(this) {
-      case AuditLogEntryType.WORKGROUP:
+      case AuditLogEntryType.WORK_GROUP:
         if (auditLogEntry.action == LogAction.CREATE) {
           return ClientLogAction.CREATE;
         } else if (auditLogEntry.action == LogAction.DELETE) {
