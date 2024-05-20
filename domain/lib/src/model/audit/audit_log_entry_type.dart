@@ -29,8 +29,9 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+
 enum AuditLogEntryType {
-  WORKGROUP,
+  WORK_GROUP,
   WORKGROUP_MEMBER,
   WORKGROUP_FOLDER,
   WORKGROUP_DOCUMENT,

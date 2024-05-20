@@ -40,7 +40,7 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
       Map<AuditLogActionMessageParam, dynamic> actionMessages,
       bool isCurrentUserAuthor) {
     switch (this) {
-      case AuditLogEntryType.WORKGROUP:
+      case AuditLogEntryType.WORK_GROUP:
         switch (clientLogAction) {
           case ClientLogAction.CREATE:
             return {
