@@ -2536,7 +2536,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "versioning_enable": "",
+  "versioning_enable": "Versioning enable",
   "@versioning_enable": {
     "type": "text",
     "placeholders_order": [],
