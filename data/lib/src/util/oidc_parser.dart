@@ -25,7 +25,7 @@ class OIDCParser {
       final responseTypeMatch = regExpResponseType.allMatches(matchString).first.group(3) ?? '';
 
       String oidcTokenType = DomainConstant.opaqueOidc;
-      if (oidcTypeMatch == 'Oidc-Jwt') {
+      if (oidcTypeMatch == DomainConstant.jwtOidc) {
         oidcTokenType = DomainConstant.jwtOidc;
       }
 
