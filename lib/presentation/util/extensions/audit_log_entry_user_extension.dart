@@ -43,6 +43,7 @@ extension AuditLogEntryUserExtension on AuditLogEntryUser {
   String getAuditLogIconPath(AppImagePaths imagePath) {
     switch (type) {
       case AuditLogEntryType.WORK_GROUP:
+      case AuditLogEntryType.WORKGROUP:
         return imagePath.icSharedSpace;
       case AuditLogEntryType.WORKGROUP_MEMBER:
         return imagePath.icAddMember;

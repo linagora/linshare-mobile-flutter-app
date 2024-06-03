@@ -200,7 +200,7 @@ class LinShareHttpClient {
   }
 
   AuditLogEntryUserDto? _convertToAuditLogEntryNodeChild(Map<String, dynamic> nodeChildJson) {
-    if (nodeChildJson['type'] == AuditLogEntryType.WORK_GROUP.value) {
+    if (nodeChildJson['type'] == AuditLogEntryType.WORK_GROUP.value || nodeChildJson['type'] == AuditLogEntryType.WORKGROUP.value) {
       return SharedSpaceNodeAuditLogEntryDto.fromJson(nodeChildJson);
     } else if (nodeChildJson['type'] == AuditLogEntryType.WORKGROUP_MEMBER.value) {
       return SharedSpaceMemberAuditLogEntryDto.fromJson(nodeChildJson);

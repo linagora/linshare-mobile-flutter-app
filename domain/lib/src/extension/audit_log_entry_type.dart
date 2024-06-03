@@ -37,6 +37,8 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
     switch(this) {
       case AuditLogEntryType.WORK_GROUP:
         return 'WORK_GROUP';
+      case AuditLogEntryType.WORKGROUP:
+        return 'WORKGROUP';
       case AuditLogEntryType.WORKGROUP_MEMBER:
         return 'WORKGROUP_MEMBER';
       case AuditLogEntryType.WORKGROUP_FOLDER:
@@ -59,6 +61,7 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
   ClientLogAction generateClientLogAction(AuditLogEntry auditLogEntry) {
     switch(this) {
       case AuditLogEntryType.WORK_GROUP:
+      case AuditLogEntryType.WORKGROUP:
         if (auditLogEntry.action == LogAction.CREATE) {
           return ClientLogAction.CREATE;
         } else if (auditLogEntry.action == LogAction.DELETE) {

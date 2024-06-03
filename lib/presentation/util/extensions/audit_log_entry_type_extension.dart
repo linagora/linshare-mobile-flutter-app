@@ -41,6 +41,7 @@ extension AuditLogEntryTypeExtension on AuditLogEntryType {
       bool isCurrentUserAuthor) {
     switch (this) {
       case AuditLogEntryType.WORK_GROUP:
+      case AuditLogEntryType.WORKGROUP:
         switch (clientLogAction) {
           case ClientLogAction.CREATE:
             return {
