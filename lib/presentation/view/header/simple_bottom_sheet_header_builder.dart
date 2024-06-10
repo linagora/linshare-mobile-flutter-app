@@ -63,12 +63,13 @@ class SimpleBottomSheetHeaderBuilder {
         key: _key,
         title: Transform(
           transform: _transformPadding ?? Matrix4.translationValues(12, 5, 0.0),
-          child: Text(
+          child: Center(
+          child:Text(
             _label ?? '',
             style: _textStyle ?? TextStyle(
                     fontSize: 20.0,
                     color: AppColor.uploadFileFileNameTextColor),
           ),
-        ));
+        )));
   }
 }

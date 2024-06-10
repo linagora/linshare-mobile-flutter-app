@@ -101,7 +101,7 @@ class ContextMenuBuilder {
                 child: Wrap(
                   children: [
                     _header ?? SizedBox.shrink(),
-                    Divider(),
+                    Divider(thickness: 1,),
                     areTilesHorizontal
                       ? Row(
                           mainAxisAlignment: alignment,

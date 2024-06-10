@@ -52,7 +52,7 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
-import 'package:linshare_flutter_app/presentation/util/media_Picker_From_Camera.dart';
+import 'package:linshare_flutter_app/presentation/util/media_picker_from_camera.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -442,7 +442,7 @@ class MySpaceViewModel extends BaseViewModel {
     _appNavigation.popBack();
     store.dispatch(_pickFileAction(context, fileType));
   }
-  
+
   void openCameraPicker(BuildContext context) {
     _appNavigation.popBack();
     store.dispatch(_openCameraAction(context));
@@ -521,6 +521,7 @@ class MySpaceViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
           .addHeader(SimpleBottomSheetHeaderBuilder(Key('file_picker_bottom_sheet_header_builder'))
+              .addTransformPadding(Matrix4.translationValues(0, 0, 0.0))
               .addLabel(AppLocalizations.of(context).upload_file_title)
               .build())
           .addTiles(actionTiles)
@@ -734,11 +735,15 @@ class MySpaceViewModel extends BaseViewModel {
     };
   }
 
-  ThunkAction<AppState> _pickFileSuccessAction(FilePickerSuccessViewState success) {
+  ThunkAction<AppState> _pickFileSuccessAction(Success success) {
     return (Store<AppState> store) async {
       store.dispatch(UploadFileAction(Right(success)));
       await _appNavigation.push(RoutePaths.uploadDocumentRoute,
-          arguments: UploadFileArguments(success.pickedFiles));
+          arguments: UploadFileArguments(success is FilePickerSuccessViewState
+              ? success.pickedFiles
+              : success is MediaPickerSuccessViewState
+                  ? success.file
+                  : []));
     };
   }
 
@@ -903,6 +908,11 @@ class MySpaceViewModel extends BaseViewModel {
     if (listDocumentAvailableOffline.isNotEmpty) {
       _autoSyncOfflineManager.syncOfflineDocument(listDocumentAvailableOffline);
     }
+  }
+
+  void openAudioRecorder(BuildContext context) {
+    _appNavigation.popBack();
+    _appNavigation.push(RoutePaths.audioRecorder);
   }
 
   @override
