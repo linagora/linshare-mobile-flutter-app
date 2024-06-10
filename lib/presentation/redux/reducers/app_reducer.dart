@@ -36,6 +36,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/account_reducer
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/add_shared_space_node_member_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/advance_search_settings_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/audio_recorder_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_login_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_setting_reducer.dart';
@@ -122,7 +123,10 @@ AppState appStateReducer(AppState state, action) {
         createdUploadRequestGroupState: createdUploadRequestGroupReducer(state.createdUploadRequestGroupState, action),
         archivedUploadRequestGroupState: archivedUploadRequestGroupReducer(state.archivedUploadRequestGroupState, action),
         activeClosedUploadRequestGroupState: activeClosedUploadRequestGroupReducer(state.activeClosedUploadRequestGroupState, action),
-        advanceSearchSettingsWorkgroupNodeState: advanceSearchSettingsReducer(state.advanceSearchSettingsWorkgroupNodeState, action)
+      advanceSearchSettingsWorkgroupNodeState: advanceSearchSettingsReducer(
+          state.advanceSearchSettingsWorkgroupNodeState, action),
+      audioRecorderState:
+          audioRecorderReducer(state.audioRecorderState, action),
     );
   }
 
@@ -171,6 +175,7 @@ AppState appStateReducer(AppState state, action) {
       activeClosedUploadRequestGroupState: state.activeClosedUploadRequestGroupState,
       archivedUploadRequestGroupState: state.archivedUploadRequestGroupState,
       advanceSearchSettingsWorkgroupNodeState: state.advanceSearchSettingsWorkgroupNodeState,
+    audioRecorderState: state.audioRecorderState,
   );
 }
 
