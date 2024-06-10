@@ -473,8 +473,18 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
   List<Widget> _uploadFileMenuActionTiles(BuildContext context) {
     return [
       _pickPhotoAndVideoAction(context),
+      Divider(
+        thickness: 1,
+      ),
       _browseFileAction(context),
+      Divider(
+        thickness: 1,
+      ),
       _openCameraPickerAction(context),
+      Divider(
+        thickness: 1,
+      ),
+      _openAudioRecorderAction(context)
     ];
   }
 
@@ -482,7 +492,11 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     return SimpleContextMenuActionBuilder(
         Key('pick_photo_and_video_context_menu_action'),
         SvgPicture.asset(imagePath.icPhotoLibrary,
-            width: 24, height: 24, fit: BoxFit.fill),
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+              color: AppColor.primaryColor,
+            ),
         AppLocalizations.of(context).photos_and_videos)
         .onActionClick((_) => mySpaceViewModel.openFilePickerByType(context, FileType.media))
         .build();
@@ -492,18 +506,39 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     return SimpleContextMenuActionBuilder(
         Key('pick_from_camera_context_menu_action'),
         SvgPicture.asset(imagePath.icCamera,
-            width: 24, height: 24, fit: BoxFit.fill),
-        //AppLocalizations.of(context).take_a_photo
-        'Take a photo' )
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+              color: AppColor.primaryColor,
+            ),
+            AppLocalizations.of(context).camera)
         .onActionClick((_) => mySpaceViewModel.openCameraPicker(context))
+        .build();
+  }
+  
+  Widget _openAudioRecorderAction(BuildContext context) {
+    return SimpleContextMenuActionBuilder(
+            Key('record_audio_context_menu_action'),
+            SvgPicture.asset(imagePath.icMicrophone,
+                width: 24,
+                height: 24,
+                fit: BoxFit.fill,
+                color: AppColor.primaryColor),
+            AppLocalizations.of(context).audio_recording)
+        .onActionClick((_) => mySpaceViewModel.openAudioRecorder(context))
         .build();
   }
 
   Widget _browseFileAction(BuildContext context) {
     return SimpleContextMenuActionBuilder(
         Key('browse_file_context_menu_action'),
-        SvgPicture.asset(imagePath.icMore,
-            width: 24, height: 24, fit: BoxFit.fill),
+            SvgPicture.asset(
+              imagePath.icFolder,
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+              color: AppColor.primaryColor,
+            ),
         AppLocalizations.of(context).browse)
         .onActionClick((_) => mySpaceViewModel.openFilePickerByType(context, FileType.any))
         .build();
