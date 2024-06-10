@@ -854,7 +854,6 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
     return [
       uploadFileAction(),
       addNewFolderAction(),
-      takePhotoAction()
     ];
   }
 
@@ -877,26 +876,45 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
           .build();
   }
     Widget takePhotoAction() {
-    return SimpleHorizontalContextMenuActionBuilder(
+    return SimpleContextMenuActionBuilder(
               Key('take_photo_context_menu_action'),
               SvgPicture.asset(imagePath.icCamera,
                   width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
-              //AppLocalizations.of(context).upload_file_title
-              'Take a photo')
+            AppLocalizations.of(context).camera)
           .onActionClick((_) => sharedSpaceDocumentViewModel.openCameraPicker(context))
           .build();
   }
+Widget recordAudioAction() {
+    return SimpleContextMenuActionBuilder(
+            Key('record_audio_context_menu_action'),
+            SvgPicture.asset(imagePath.icMicrophone,
+                width: 24,
+                height: 24,
+                fit: BoxFit.fill,
+                color: AppColor.primaryColor),
+            AppLocalizations.of(context).audio_recording)
+        .onActionClick((_) => sharedSpaceDocumentViewModel.openAudioRecorder())
+        .build();
+  }
+
+
   List<Widget> uploadFileMenuActionTiles(BuildContext context) {
     return [
       pickPhotoAndVideoAction(),
-      browseFileAction()
+      Divider(thickness: 1),
+      browseFileAction(),
+      Divider(thickness: 1),
+      takePhotoAction(),
+      Divider(thickness: 1),
+      recordAudioAction()
+
     ];
   }
 
   Widget pickPhotoAndVideoAction() {
     return SimpleContextMenuActionBuilder(
               Key('pick_photo_and_video_context_menu_action'),
-              SvgPicture.asset(imagePath.icPhotoLibrary, width: 24, height: 24, fit: BoxFit.fill),
+              SvgPicture.asset(imagePath.icPhotoLibrary, width: 24, height: 24, fit: BoxFit.fill,color: AppColor.primaryColor,),
               AppLocalizations.of(context).photos_and_videos)
           .onActionClick((_) => sharedSpaceDocumentViewModel.openFilePickerByType(FileType.media))
           .build();
@@ -905,7 +923,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   Widget browseFileAction() {
     return SimpleContextMenuActionBuilder(
               Key('browse_file_context_menu_action'),
-              SvgPicture.asset(imagePath.icMore, width: 24, height: 24, fit: BoxFit.fill),
+              SvgPicture.asset(imagePath.icFolder, width: 24, height: 24, fit: BoxFit.fill,color: AppColor.primaryColor,),
               AppLocalizations.of(context).browse)
           .onActionClick((_) => sharedSpaceDocumentViewModel.openFilePickerByType(FileType.any))
           .build();
