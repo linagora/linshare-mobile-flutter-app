@@ -49,6 +49,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/audio_recorder_st
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_login_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/camera_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/destination_picker_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/document_details_state.dart';
@@ -207,5 +208,6 @@ AppState createAppStateWithNetworkConnectivityState(NetworkConnectivityState net
     advanceSearchSettingsWorkgroupNodeState:
         AdvancedSearchSettingsWorkgroupNodeState.initial(),
     audioRecorderState: AudioRecorderState.initial(),
+    cameraState: CameraState.initial(),
   );
 }

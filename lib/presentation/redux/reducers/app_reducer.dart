@@ -40,6 +40,7 @@ import 'package:linshare_flutter_app/presentation/redux/reducers/audio_recorder_
 import 'package:linshare_flutter_app/presentation/redux/reducers/authentication_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_login_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/biometric_authentication_setting_reducer.dart';
+import 'package:linshare_flutter_app/presentation/redux/reducers/camera_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/delete_shared_space_members_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/destination_picker_reducer.dart';
 import 'package:linshare_flutter_app/presentation/redux/reducers/edit_upload_request_reducer.dart';
@@ -127,6 +128,7 @@ AppState appStateReducer(AppState state, action) {
           state.advanceSearchSettingsWorkgroupNodeState, action),
       audioRecorderState:
           audioRecorderReducer(state.audioRecorderState, action),
+      cameraState: cameraReducer(state.cameraState, action),
     );
   }
 
@@ -176,6 +178,7 @@ AppState appStateReducer(AppState state, action) {
       archivedUploadRequestGroupState: state.archivedUploadRequestGroupState,
       advanceSearchSettingsWorkgroupNodeState: state.advanceSearchSettingsWorkgroupNodeState,
     audioRecorderState: state.audioRecorderState,
+    cameraState: state.cameraState,
   );
 }
 
