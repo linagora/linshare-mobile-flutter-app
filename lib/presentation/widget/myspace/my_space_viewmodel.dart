@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync
 import 'package:linshare_flutter_app/presentation/model/file/document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/camera_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
@@ -749,11 +750,12 @@ class MySpaceViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _openCameraAction(BuildContext context) {
     return (Store<AppState> store) async {
-      store.dispatch(InsideAppAction(
-          actionInsideAppType: ActionInsideAppType.USING_CAMERA));
-      await _mediaPickerFromCamera.pickMediaFromCamera(context).then((result) {
+      store.dispatch(OpenCameraPicker());
+      await _mediaPickerFromCamera
+          .pickMediaFromCamera(context, _appNavigation)
+          .then((result) {
             store.dispatch(
-            InsideAppAction(actionInsideAppType: ActionInsideAppType.NONE));
+            CloseCameraPicker());
             result.fold(
             (failure) => store.dispatch(UploadFileAction(Left(failure))),
             (success) => store.dispatch(_pickFileSuccessAction(success)));

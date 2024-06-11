@@ -50,6 +50,7 @@ import 'package:linshare_flutter_app/presentation/model/file/selectable_element.
 import 'package:linshare_flutter_app/presentation/model/file/work_group_document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/work_group_folder_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/camera_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/shared_space_document_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
@@ -482,9 +483,11 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
 
   ThunkAction<AppState> _openCameraAction(BuildContext context) {
     return (Store<AppState> store) async {
-      store.dispatch(InsideAppAction(actionInsideAppType: ActionInsideAppType.USING_CAMERA));
-      await _mediaPickerFromCamera.pickMediaFromCamera(context).then((result) {
-        store.dispatch(InsideAppAction(actionInsideAppType: ActionInsideAppType.NONE));
+      store.dispatch(OpenCameraPicker());
+      await _mediaPickerFromCamera
+          .pickMediaFromCamera(context, _appNavigation)
+          .then((result) {
+        store.dispatch(CloseCameraPicker());
         result.fold((failure) => store.dispatch(UploadFileAction(Left(failure))), (success) => store.dispatch(_pickFileSuccessAction(success)));
       });
     };

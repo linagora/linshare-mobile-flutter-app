@@ -224,7 +224,7 @@ enum ActionOutsideAppType {
 }
 
 enum ActionInsideAppType {
-  NONE, AUTHENTICATING_BIOMETRIC,USING_CAMERA
+  NONE, AUTHENTICATING_BIOMETRIC
 }
 
 enum SearchDestination {

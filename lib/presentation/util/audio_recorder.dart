@@ -33,21 +33,26 @@ import 'dart:io';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:linshare_flutter_app/presentation/util/permission_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AudioRecorder {
   final RecorderController recorderController = RecorderController();
+  final PermissionService permissionService = PermissionService();
 
   Future<Either<Failure, Success>> startRecordingAudio() async {
     try {
-      final permission = await recorderController.checkPermission();
-      if (permission) {
+      final microphonePermission =
+          await permissionService.tryToGetPermissionForAudioRecording();
+      if (microphonePermission.isGranted) {
         final tempPath = Directory.systemTemp.path;
         final currentTime = DateTime.now().millisecondsSinceEpoch;
         final fileName = 'audio_$currentTime.m4a';
         await recorderController.record('$tempPath/$fileName');
         return Right(AudioRecorderStarted());
       } else {
-        return Left(AudioPermissionDenied());
+        return Left(
+            AudioPermissionDenied(microphonePermission.isPermanentlyDenied));
       }
     } catch (exception) {
       return Left(AudioRecorderFailed());
@@ -58,29 +63,55 @@ class AudioRecorder {
       stopRecordingAndSave() async {
     FileInfo file;
     List<FileInfo> pickedFiles = [];
-    await recorderController.stop().then((value) {
-      if (value != null) {
-        var recordedFile = File(value);
-        file = FileInfo(recordedFile.path.split('/').last,
-            '${recordedFile.parent.path}/', recordedFile.lengthSync());
-        pickedFiles.add(file);
+    try {
+      await recorderController.stop().then((value) {
+        if (value != null) {
+          var recordedFile = File(value);
+          file = FileInfo(recordedFile.path.split('/').last,
+              '${recordedFile.parent.path}/', recordedFile.lengthSync());
+          pickedFiles.add(file);
+        }
+      });
+      if (pickedFiles.isNotEmpty) {
+        return Right(AudioRecorderSuccessViewState(pickedFiles));
       }
-    });
-    if (pickedFiles.isNotEmpty) {
-      return Right(AudioRecorderSuccessViewState(pickedFiles));
+      return Left(NoAudioRecordingFound());
+    } catch (exception) {
+      return Left(AudioRecorderFailed());
     }
-    return Left(AudioRecorderFailed());
   }
 
-  void pauseRecording() {
-    recorderController.pause();
+  Either<Failure, Success> pauseRecording() {
+    try {
+      recorderController.pause();
+      return Right(AudioRecorderPaused());
+    } catch (exception) {
+      return Left(AudioRecorderFailed());
+    }
   }
 
-  void stopRecording() {
-    recorderController.stop();
+  Either<Failure, Success> stopRecording() {
+    try {
+      recorderController.stop();
+      return Right(AudioRecorderPaused());
+    } catch (exception) {
+      return Left(AudioRecorderFailed());
+    }
   }
 
-  void resumeRecording() {
-    recorderController.recorderState;
+  Either<Failure, Success> resumeRecording() {
+    try {
+      recorderController.record();
+      return Right(AudioRecorderPaused());
+    } catch (exception) {
+      return Left(AudioRecorderFailed());
+    }
+  }
+
+  String formatElapsedTime(int elapsedMilliseconds) {
+    final minutes = elapsedMilliseconds ~/ 60000;
+    final seconds = (elapsedMilliseconds ~/ 1000) % 60;
+    final remainingMilliseconds = (elapsedMilliseconds % 1000) ~/ 10;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}.${remainingMilliseconds.toString().padLeft(2, '0')}';
   }
 }

@@ -29,59 +29,19 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:wechat_camera_picker/wechat_camera_picker.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/camera_action.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/camera_state.dart';
+import 'package:redux/redux.dart';
 
-class MediaPickerFromCamera {
-  Future<PermissionStatus> requestCameraPermission() async {
-    var currentStatus = await Permission.camera.status;
-    if (currentStatus.isDenied) {
-      currentStatus = await Permission.camera.request();
-    } else if (currentStatus.isPermanentlyDenied) {
-      await openAppSettings();
-    }
-    return currentStatus;
-  }
+final cameraReducer = combineReducers<CameraState>([
+  TypedReducer<CameraState, OpenCameraPicker>(_openCamera),
+  TypedReducer<CameraState, CloseCameraPicker>(_closeCamera),
+]);
 
-  Future<Either<Failure, MediaPickerSuccessViewState>> pickMediaFromCamera(
-      BuildContext context) async {
-    try {
-      var fileinfo;
-      List<FileInfo> pickedFiles = [];
-      var status = await requestCameraPermission();
+CameraState _openCamera(CameraState state, OpenCameraPicker action) {
+  return state.setCameraStatus(cameraStatus.IN_USE);
+}
 
-      if (status.isGranted || status.isLimited) {
-        await CameraPicker.pickFromCamera(
-          context,
-          pickerConfig: CameraPickerConfig(
-              onError: (exception, stacktrace) {
-                throw exception;
-              },
-              onEntitySaving: ((context, viewType, file) {
-                fileinfo = FileInfo(file.path.split('/').last,
-                    '${file.parent.path}/', file.lengthSync());
-                Navigator.pop(context);
-                Navigator.pop(context);
-              }),
-              textDelegate: cameraPickerTextDelegateFromLocale(
-                  Localizations.localeOf(context)),
-              theme: Theme.of(context),
-              enableRecording: true),
-        );
-        if (fileinfo != null) {
-          pickedFiles.add(fileinfo);
-          return Right(MediaPickerSuccessViewState(pickedFiles));
-        } else {
-          return Left(MediaPickerCanceled());
-        }
-      } else {
-        throw (CameraPermissionDenied());
-      }
-    } catch (exception) {
-      return Left(MediaPickerFailed(exception));
-    }
-  }
+CameraState _closeCamera(CameraState state, CloseCameraPicker action) {
+  return state.setCameraStatus(cameraStatus.IDLE);
 }
