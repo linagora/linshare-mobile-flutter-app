@@ -120,7 +120,9 @@ class AppImagePaths {
   String get icWarningLimitationToast => _getImagePath('ic_reach_limitation_warning_toast.svg');
   String get icCamera => _getImagePath('ic_camera.svg');
   String get icMicrophone => _getImagePath('ic_microphone.svg');
-
+  String get icFolderOutlined => _getImagePath('ic_folder_outlined.svg');
+  String get icCreateFolderOutlined =>
+      _getImagePath('ic_create_folder_outlined.svg');
   String _getImagePath(String imageName) {
     return AppAssetsPath.images + imageName;
   }
