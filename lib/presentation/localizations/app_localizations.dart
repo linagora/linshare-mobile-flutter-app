@@ -3031,6 +3031,34 @@ class AppLocalizations {
   String get audio_recording {
     return Intl.message('Audio recording', name: 'audio_recording');
   }
+
+  String get give_access_in_settings {
+    return Intl.message(
+        'Please give linshare access in the settings to continue',
+        name: 'give_access_in_settings');
+  }
+
+  String get permission_required {
+    return Intl.message('Permission required', name: 'permission_required');
+  }
+
+  String get recording_saved {
+    return Intl.message('Recording saved', name: 'recording_saved');
+  }
+
+  String get permission_denied {
+    return Intl.message('Permission denied', name: 'permission_denied');
+  }
+
+  String get error_while_recording {
+    return Intl.message('An error has occured while recording',
+        name: 'error_while_recording');
+  }
+  
+  String get you_did_not_record_anything {
+    return Intl.message('You did not record anything',
+        name: 'you_did_not_record_anything');
+  }
   
   String get you_cant_delete_the_last_version {
     return Intl.message(
@@ -3040,6 +3068,7 @@ class AppLocalizations {
   }
 
 }
+
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();

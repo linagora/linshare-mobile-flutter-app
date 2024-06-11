@@ -78,6 +78,7 @@ class AppModule {
     _provideBiometric();
     _provideOfflineMode();
     _provideObservers();
+    _provideStopWatch();
   }
 
   void _provideHive() {
@@ -605,5 +606,9 @@ class AppModule {
 
   void _provideObservers() {
     getIt.registerLazySingleton(() => LifecycleEventHandler());
+  }
+  
+  void _provideStopWatch() {
+    getIt.registerLazySingleton(() => Stopwatch());
   }
 }

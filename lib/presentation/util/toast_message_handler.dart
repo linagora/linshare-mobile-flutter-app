@@ -56,6 +56,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_g
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_archived_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_group_created_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/audio_recorder_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/network_connectivity_state.dart';
@@ -96,6 +97,7 @@ class ToastMessageHandler {
       _handleActiveClosedUploadRequestInsideToastMessage(context, event.activeClosedUploadRequestInsideState);
       _handleCreatedUploadRequestInsideToastMessage(context, event.createdUploadRequestInsideState);
       _handleArchivedUploadRequestInsideToastMessage(context, event.archivedUploadRequestInsideState);
+      _handleAudioRecorderToastMessage(context, event.audioRecorderState);
     });
   }
 
@@ -679,6 +681,24 @@ class ToastMessageHandler {
       } else if (success is AddRecipientsToUploadRequestGroupViewState) {
         appToast.showToast(AppLocalizations.of(context).recipients_have_been_successfully_added);
         _cleanArchivedUploadRequestInsideViewState();
+      }
+    });
+  }
+
+  void _handleAudioRecorderToastMessage(
+      BuildContext context, AudioRecorderState audioRecorderState) {
+    audioRecorderState.viewState.fold((failure) {
+      if (failure is AudioRecorderFailed) {
+        appToast.showErrorToast(AppLocalizations.of(context).error_while_recording);
+      } else if (failure is AudioPermissionDenied) {
+        appToast.showErrorToast(AppLocalizations.of(context).permission_denied);
+      } else if (failure is NoAudioRecordingFound) {
+        appToast.showErrorToast(
+            AppLocalizations.of(context).you_did_not_record_anything);
+      }
+    }, (success) {
+      if (success is AudioRecorderSuccessViewState) {
+        appToast.showToast(AppLocalizations.of(context).recording_saved);
       }
     });
   }
