@@ -860,7 +860,11 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
   Widget addNewFolderAction() {
     return SimpleHorizontalContextMenuActionBuilder(
               Key('add_new_folder_context_menu_action'),
-              SvgPicture.asset(imagePath.icCreateFolder, width: 24, height: 24, fit: BoxFit.fill, color: AppColor.primaryColor),
+            SvgPicture.asset(imagePath.icCreateFolderOutlined,
+                width: 24,
+                height: 24,
+                fit: BoxFit.fill,
+                color: AppColor.primaryColor),
               AppLocalizations.of(context).create_folder)
           .onActionClick((_) => sharedSpaceDocumentViewModel.openCreateFolderModal(context))
           .build();
@@ -923,7 +927,13 @@ Widget recordAudioAction() {
   Widget browseFileAction() {
     return SimpleContextMenuActionBuilder(
               Key('browse_file_context_menu_action'),
-              SvgPicture.asset(imagePath.icFolder, width: 24, height: 24, fit: BoxFit.fill,color: AppColor.primaryColor,),
+            SvgPicture.asset(
+              imagePath.icFolderOutlined,
+              width: 24,
+              height: 24,
+              fit: BoxFit.fill,
+              color: AppColor.primaryColor,
+            ),
               AppLocalizations.of(context).browse)
           .onActionClick((_) => sharedSpaceDocumentViewModel.openFilePickerByType(FileType.any))
           .build();
