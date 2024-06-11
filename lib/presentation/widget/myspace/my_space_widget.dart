@@ -533,7 +533,7 @@ class _MySpaceWidgetState extends State<MySpaceWidget> {
     return SimpleContextMenuActionBuilder(
         Key('browse_file_context_menu_action'),
             SvgPicture.asset(
-              imagePath.icFolder,
+              imagePath.icFolderOutlined,
               width: 24,
               height: 24,
               fit: BoxFit.fill,
