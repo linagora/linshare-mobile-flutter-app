@@ -1,19 +1,13 @@
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionService {
-  Future<PermissionStatus> checkPermissionForCameraActions() async {
-    final status = await Permission.camera.status;
-    if (status.isDenied || status.isPermanentlyDenied) {
-      return await Permission.camera.request();
-    }
+  Future<PermissionStatus> tryToGetPermissionForCamera() async {
+    final status = await Permission.camera.request();
     return status;
   }
 
-  Future<PermissionStatus> checkPermissionForAudioRecordingActions() async {
-    final status = await Permission.microphone.status;
-    if (status.isDenied || status.isPermanentlyDenied) {
-      return await Permission.microphone.request();
-    }
+  Future<PermissionStatus> tryToGetPermissionForAudioRecording() async {
+    final status = await Permission.microphone.request();
     return status;
   }
 

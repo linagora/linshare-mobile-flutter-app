@@ -42,16 +42,17 @@ class AudioRecorder {
 
   Future<Either<Failure, Success>> startRecordingAudio() async {
     try {
-      final permission =
-          await permissionService.checkPermissionForAudioRecordingActions();
-      if (permission.isGranted) {
+      final microphonePermission =
+          await permissionService.tryToGetPermissionForAudioRecording();
+      if (microphonePermission.isGranted) {
         final tempPath = Directory.systemTemp.path;
         final currentTime = DateTime.now().millisecondsSinceEpoch;
         final fileName = 'audio_$currentTime.m4a';
         await recorderController.record('$tempPath/$fileName');
         return Right(AudioRecorderStarted());
       } else {
-        return Left(AudioPermissionDenied(permission.isPermanentlyDenied));
+        return Left(
+            AudioPermissionDenied(microphonePermission.isPermanentlyDenied));
       }
     } catch (exception) {
       return Left(AudioRecorderFailed());
@@ -82,7 +83,7 @@ class AudioRecorder {
 
   Either<Failure, Success> pauseRecording() {
     try {
-    recorderController.pause();
+      recorderController.pause();
       return Right(AudioRecorderPaused());
     } catch (exception) {
       return Left(AudioRecorderFailed());

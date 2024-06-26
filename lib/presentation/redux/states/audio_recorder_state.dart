@@ -47,8 +47,7 @@ class AudioRecorderState extends LinShareState with EquatableMixin {
   }
 
   AudioRecorderState setRecordingState(viewState) {
-    return AudioRecorderState(viewState
-    );
+    return AudioRecorderState(viewState);
   }
 
   @override

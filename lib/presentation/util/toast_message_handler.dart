@@ -688,14 +688,12 @@ class ToastMessageHandler {
   void _handleAudioRecorderToastMessage(
       BuildContext context, AudioRecorderState audioRecorderState) {
     audioRecorderState.viewState.fold((failure) {
-      debugPrint(audioRecorderState.toString());
       if (failure is AudioRecorderFailed) {
         appToast.showErrorToast(AppLocalizations.of(context).error_while_recording);
       } else if (failure is AudioPermissionDenied) {
         appToast.showErrorToast(AppLocalizations.of(context).permission_denied);
       }
     }, (success) {
-      debugPrint(audioRecorderState.toString());
       if (success is AudioRecorderSuccessViewState) {
         appToast.showToast(AppLocalizations.of(context).recording_saved);
       }
