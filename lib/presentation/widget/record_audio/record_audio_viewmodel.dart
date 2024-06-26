@@ -45,12 +45,13 @@ import 'package:redux/redux.dart';
 class RecordAudioViewModel extends BaseViewModel {
   final AppNavigation _appNavigation;
   final AudioRecorder audioRecorder;
-  final stopwatch = Stopwatch();
+  final Stopwatch stopwatch;
   UploadFileArguments? uploadFileArguments;
   var duration;
 
   RecordAudioViewModel(
-      Store<AppState> store, this._appNavigation, this.audioRecorder)
+      Store<AppState> store, this._appNavigation,
+      this.audioRecorder, this.stopwatch)
       : super(store);
 
   void startAudioRecording() {
@@ -68,16 +69,14 @@ class RecordAudioViewModel extends BaseViewModel {
     });
   }
 
-
   void saveAudioRecording() {
     stopwatch.stop();
     audioRecorder.stopRecordingAndSave().then((result) {
       result.fold((failure) {
         store.dispatch(StopRecording());
         store.dispatch(AudioRecorderAction(Left(failure)));
-        if (failure is AudioPermissionDenied && !failure.isPermanentlyDenied) {
-          _appNavigation.popBack();
-        }
+        _appNavigation.popBack();
+        
       }, (success) async {
         cancelAudioRecording();
         store.dispatch(AudioRecorderAction(Right(success)));
@@ -101,8 +100,8 @@ class RecordAudioViewModel extends BaseViewModel {
       _appNavigation.popBack();
     }, (success) {
       store.dispatch(StopRecording());
-    stopwatch.stop();
-    stopwatch.reset();
+      stopwatch.stop();
+      stopwatch.reset();
     });
   }
 
@@ -112,11 +111,9 @@ class RecordAudioViewModel extends BaseViewModel {
       store.dispatch(AudioRecorderAction(Left(failure)));
       _appNavigation.popBack();
     }, (success) {
-    store.dispatch(ResumeRecording());
-    stopwatch.start();
+      store.dispatch(ResumeRecording());
+      stopwatch.start();
     });
-
-    
   }
 
   void pauseAndStartAudioRecording() {
@@ -140,8 +137,6 @@ class RecordAudioViewModel extends BaseViewModel {
       store.dispatch(PauseRecording());
       stopwatch.stop();
     });
-
-    
   }
 
   Stream<String> get elapsedTimeStream {
@@ -165,6 +160,7 @@ class RecordAudioViewModel extends BaseViewModel {
   void onDisposed() {
     super.onDisposed();
     store.dispatch(StopRecording());
+    stopwatch.reset();
     audioRecorder.stopRecording();
     audioRecorder.recorderController.dispose();
   }

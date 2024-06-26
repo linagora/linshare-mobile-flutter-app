@@ -781,6 +781,7 @@ class WidgetModule {
           getIt.get<Store<AppState>>(),
           getIt.get<AppNavigation>(),
           getIt.get<AudioRecorder>(),
+          getIt.get<Stopwatch>(),
         ));
   }
 }
