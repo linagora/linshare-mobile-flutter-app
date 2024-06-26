@@ -30,6 +30,7 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
@@ -151,11 +152,19 @@ class RecordAudioWidgetState extends State<RecordAudioWidget> {
         child: StoreConnector<AppState, AudioRecorderState>(
             converter: (store) => store.state.audioRecorderState,
             builder: (context, state) {
-              return Icon(
-                state.status == RecordingStatus.recording
-                    ? Icons.pause
-                    : Icons.play_arrow,
-              );
+              return state.viewState.fold((failure) {
+                if (failure is AudioPermissionDenied &&
+                    failure.isPermanentlyDenied) {
+                  recordAudioViewModel.showAppSettingsDialog(context);
+                }
+                return Icon(Icons.play_arrow);
+              }, (success) {
+                if (success is AudioRecorderStarted) {
+                  return Icon(Icons.pause);
+                }
+                return Icon(Icons.play_arrow);
+              });
+              
             }));
   }
 

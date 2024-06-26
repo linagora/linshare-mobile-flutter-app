@@ -28,33 +28,45 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+
+import 'package:dartz/dartz.dart';
+import 'package:domain/domain.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/audio_recorder_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/audio_recorder_state.dart';
 import 'package:redux/redux.dart';
 
 final audioRecorderReducer = combineReducers<AudioRecorderState>([
+
+  TypedReducer<AudioRecorderState, AudioRecorderAction>(_updateAudioViewState),
   TypedReducer<AudioRecorderState, StartRecording>(_startRecording),
   TypedReducer<AudioRecorderState, PauseRecording>(_pauseRecording),
   TypedReducer<AudioRecorderState, ResumeRecording>(_resumeRecording),
   TypedReducer<AudioRecorderState, StopRecording>(_stopRecording),
 ]);
 
+AudioRecorderState _updateAudioViewState(
+    AudioRecorderState state, AudioRecorderAction action) {
+  return state.sendViewState(viewState: action.viewState);
+}
+
 AudioRecorderState _startRecording(
     AudioRecorderState state, StartRecording action) {
-  return AudioRecorderState(status: RecordingStatus.recording);
+  return AudioRecorderState(Right(AudioRecorderStarted()));
 }
+
+
 
 AudioRecorderState _pauseRecording(
     AudioRecorderState state, PauseRecording action) {
-  return AudioRecorderState(status: RecordingStatus.paused);
+  return AudioRecorderState(Right(AudioRecorderPaused()));
 }
 
 AudioRecorderState _resumeRecording(
     AudioRecorderState state, ResumeRecording action) {
-  return AudioRecorderState(status: RecordingStatus.recording);
+  return AudioRecorderState(Right(AudioRecorderStarted()));
 }
 
 AudioRecorderState _stopRecording(
     AudioRecorderState state, StopRecording action) {
-  return AudioRecorderState(status: RecordingStatus.idle);
+  return AudioRecorderState(Right(IdleState())); 
 }
