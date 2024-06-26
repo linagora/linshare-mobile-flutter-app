@@ -44,11 +44,12 @@ class MediaPickerFromCamera {
     try {
       var fileinfo;
       List<FileInfo> pickedFiles = [];
-      var status = await PermissionService().checkPermissionForCameraActions();
-      var microphoneStatus =
-          await PermissionService().checkPermissionForAudioRecordingActions();
+      final cameraPermission =
+          await PermissionService().tryToGetPermissionForCamera();
+      final microphonePermission =
+          await PermissionService().tryToGetPermissionForAudioRecording();
 
-      if (status.isGranted && microphoneStatus.isGranted) {
+      if (cameraPermission.isGranted && microphonePermission.isGranted) {
         await CameraPicker.pickFromCamera(
           context,
           pickerConfig: CameraPickerConfig(
@@ -58,8 +59,6 @@ class MediaPickerFromCamera {
               onEntitySaving: ((context, viewType, file) {
                 fileinfo = FileInfo(file.path.split('/').last,
                     '${file.parent.path}/', file.lengthSync());
-                Navigator.pop(context);
-                Navigator.pop(context);
               }),
               textDelegate: cameraPickerTextDelegateFromLocale(
                   Localizations.localeOf(context)),
@@ -72,8 +71,8 @@ class MediaPickerFromCamera {
         } else {
           return Left(MediaPickerCanceled());
         }
-      } else if (status.isPermanentlyDenied ||
-          microphoneStatus.isPermanentlyDenied) {
+      } else if (cameraPermission.isPermanentlyDenied ||
+          microphonePermission.isPermanentlyDenied) {
         await showDialog(
             context: context,
             builder: (context) => OpenSettingsDialog(appNavigation));
