@@ -32,28 +32,23 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/util/permission_service.dart';
+import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/open_settings_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class MediaPickerFromCamera {
-  Future<PermissionStatus> requestCameraPermission() async {
-    var currentStatus = await Permission.camera.status;
-    if (currentStatus.isDenied) {
-      currentStatus = await Permission.camera.request();
-    } else if (currentStatus.isPermanentlyDenied) {
-      await openAppSettings();
-    }
-    return currentStatus;
-  }
-
   Future<Either<Failure, MediaPickerSuccessViewState>> pickMediaFromCamera(
-      BuildContext context) async {
+      BuildContext context, AppNavigation appNavigation) async {
     try {
       var fileinfo;
       List<FileInfo> pickedFiles = [];
-      var status = await requestCameraPermission();
+      var status = await PermissionService().checkPermissionForCameraActions();
+      var microphoneStatus =
+          await PermissionService().checkPermissionForAudioRecordingActions();
 
-      if (status.isGranted || status.isLimited) {
+      if (status.isGranted && microphoneStatus.isGranted) {
         await CameraPicker.pickFromCamera(
           context,
           pickerConfig: CameraPickerConfig(
@@ -77,8 +72,14 @@ class MediaPickerFromCamera {
         } else {
           return Left(MediaPickerCanceled());
         }
+      } else if (status.isPermanentlyDenied ||
+          microphoneStatus.isPermanentlyDenied) {
+        await showDialog(
+            context: context,
+            builder: (context) => OpenSettingsDialog(appNavigation));
+        return Left(CameraPermissionDenied());
       } else {
-        throw (CameraPermissionDenied());
+        return Left(CameraPermissionDenied());
       }
     } catch (exception) {
       return Left(MediaPickerFailed(exception));

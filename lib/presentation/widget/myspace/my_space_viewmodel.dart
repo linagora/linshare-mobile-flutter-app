@@ -751,9 +751,11 @@ class MySpaceViewModel extends BaseViewModel {
   ThunkAction<AppState> _openCameraAction(BuildContext context) {
     return (Store<AppState> store) async {
       store.dispatch(OpenCameraPicker());
-      await _mediaPickerFromCamera.pickMediaFromCamera(context).then((result) {
+      await _mediaPickerFromCamera
+          .pickMediaFromCamera(context, _appNavigation)
+          .then((result) {
             store.dispatch(
-            CloseCameraPicker());  
+            CloseCameraPicker());
             result.fold(
             (failure) => store.dispatch(UploadFileAction(Left(failure))),
             (success) => store.dispatch(_pickFileSuccessAction(success)));
