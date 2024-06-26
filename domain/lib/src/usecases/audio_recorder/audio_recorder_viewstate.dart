@@ -1,3 +1,4 @@
+
 import 'package:domain/domain.dart';
 
 class AudioRecorderSuccessViewState extends Success {
@@ -12,6 +13,11 @@ class AudioRecorderStarted extends Success {
   @override
   List<Object> get props => [];
 }
+class AudioRecorderPaused extends Success {
+  @override
+  List<Object> get props => [];
+}
+
 
 class AudioRecorderFailed extends FeatureFailure {
   @override
@@ -19,6 +25,11 @@ class AudioRecorderFailed extends FeatureFailure {
 }
 
 class AudioPermissionDenied extends FeatureFailure {
+
+  final bool isPermanentlyDenied;
+
+  AudioPermissionDenied(this.isPermanentlyDenied);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isPermanentlyDenied];
 }

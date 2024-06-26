@@ -29,29 +29,44 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'package:domain/src/state/success.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-enum RecordingStatus { idle, recording, paused, stopped }
 
-class AudioRecorderState with EquatableMixin {
-  final RecordingStatus status;
 
-  AudioRecorderState({
-    required this.status,
-  }) : super();
+class AudioRecorderState extends LinShareState with EquatableMixin {
+  AudioRecorderState(Either<Failure, Success> viewState) : super(viewState);
 
   factory AudioRecorderState.initial() {
     return AudioRecorderState(
-      status: RecordingStatus.idle,
+      Right(IdleState()),
     );
   }
 
-  AudioRecorderState setRecordingState({required RecordingStatus status}) {
-    return AudioRecorderState(
-      status: status,
+  AudioRecorderState setRecordingState(viewState) {
+    return AudioRecorderState(viewState
     );
   }
 
   @override
-  List<Object> get props => [status];
+  AudioRecorderState clearViewState() {
+    return AudioRecorderState(Right(IdleState()));
+  }
+
+  @override
+  AudioRecorderState sendViewState(
+      {required Either<Failure, Success> viewState}) {
+    return AudioRecorderState(viewState);
+  }
+
+  @override
+  AudioRecorderState startLoadingState() {
+    return AudioRecorderState(Right(LoadingState()));
+  }
+
+  @override
+  List<Object> get props => [viewState];
 }
