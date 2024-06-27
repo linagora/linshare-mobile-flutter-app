@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -28,48 +28,44 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-//
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-class SimpleBottomSheetHeaderBuilder {
-  final Key _key;
-  String? _label;
-  TextStyle? _textStyle;
 
-  Matrix4? _transformPadding;
 
-  SimpleBottomSheetHeaderBuilder(this._key);
+class AudioRecorderState extends LinShareState with EquatableMixin {
+  AudioRecorderState(Either<Failure, Success> viewState) : super(viewState);
 
-  SimpleBottomSheetHeaderBuilder addLabel(String label) {
-    _label = label;
-    return this;
+  factory AudioRecorderState.initial() {
+    return AudioRecorderState(
+      Right(IdleState()),
+    );
   }
 
-  SimpleBottomSheetHeaderBuilder textStyle(TextStyle textStyle) {
-    _textStyle = textStyle;
-    return this;
+  AudioRecorderState setRecordingState(viewState) {
+    return AudioRecorderState(viewState);
   }
 
-  SimpleBottomSheetHeaderBuilder addTransformPadding(Matrix4 transformPadding) {
-    _transformPadding = transformPadding;
-    return this;
+  @override
+  AudioRecorderState clearViewState() {
+    return AudioRecorderState(Right(IdleState()));
   }
 
-  ListTile build() {
-    return ListTile(
-        key: _key,
-        title: Transform(
-          transform: _transformPadding ?? Matrix4.translationValues(12, 5, 0.0),
-          child: Center(
-          child:Text(
-            _label ?? '',
-            style: _textStyle ?? TextStyle(
-                    fontSize: 20.0,
-                    color: AppColor.uploadFileFileNameTextColor),
-          ),
-        )));
+  @override
+  AudioRecorderState sendViewState(
+      {required Either<Failure, Success> viewState}) {
+    return AudioRecorderState(viewState);
   }
+
+  @override
+  AudioRecorderState startLoadingState() {
+    return AudioRecorderState(Right(LoadingState()));
+  }
+
+  @override
+  List<Object> get props => [viewState];
 }

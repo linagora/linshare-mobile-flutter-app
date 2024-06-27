@@ -3023,6 +3023,37 @@ class AppLocalizations {
         name: 'reach_upload_request_limit_message_own_server'
     );
   }
+
+  String get camera {
+    return Intl.message('Camera', name: 'camera');
+  }
+
+  String get audio_recording {
+    return Intl.message('Audio recording', name: 'audio_recording');
+  }
+
+  String get give_access_in_settings {
+    return Intl.message(
+        'Please give linshare access in the settings to continue',
+        name: 'give_access_in_settings');
+  }
+
+  String get permission_required {
+    return Intl.message('Permission required', name: 'permission_required');
+  }
+
+  String get recording_saved {
+    return Intl.message('Permission saved', name: 'recording_saved');
+  }
+
+  String get permission_denied {
+    return Intl.message('Permission denied', name: 'permission_denied');
+  }
+
+  String get error_while_recording {
+    return Intl.message('An error has occured while recording',
+        name: 'error_while_recording');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

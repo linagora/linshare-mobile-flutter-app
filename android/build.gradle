@@ -21,12 +21,12 @@ allprojects {
     }
 
     configurations.all {
-        exclude group: 'com.google.guava', module: 'failureaccess'
+       exclude group: 'com.google.guava', module: 'failureaccess'
 
         resolutionStrategy {
             eachDependency { details ->
                 if('guava' == details.requested.name) {
-                    details.useVersion '27.0-android'
+                    details.useVersion '31.0-android'
                 }
             }
         }
