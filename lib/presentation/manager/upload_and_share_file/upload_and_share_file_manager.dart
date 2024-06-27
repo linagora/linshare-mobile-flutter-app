@@ -144,6 +144,7 @@ class UploadShareFileManager {
     _progressStateStreamGroup.stream.listen((flowUploadState) {
       flowUploadState.fold(
         (failure) {
+          developer.log('_handleFlowProgressState(): [Failure] $failure', name: 'UploadShareFileManager');
           if (failure is ErrorFlowUploadState) {
             _uploadingStateFiles.updateElementByUploadTaskId(
               failure.flowFile.uploadTaskId,
@@ -154,8 +155,6 @@ class UploadShareFileManager {
         },
         (success) {
           if (success is UploadingFlowUploadState) {
-            developer.log('_handleFlowProgressState(): uploading: ${success.progress}', name: 'UploadShareFileManager');
-
             _uploadingStateFiles.updateElementByUploadTaskId(
               success.flowFile.uploadTaskId,
               (currentState) => (currentState?.uploadStatus.completed ?? false)
@@ -177,7 +176,7 @@ class UploadShareFileManager {
   }
 
   void _handleUploadFileSucceedWithResource(SuccessWithResourceFlowUploadState successWithResourceFlowUploadState) {
-    developer.log('_handleUploadFileSucceed()', name: 'UploadShareFileManager');
+    developer.log('_handleUploadFileSucceedWithResource()', name: 'UploadShareFileManager');
     final fileState = _uploadingStateFiles.getElementByUploadTaskId(successWithResourceFlowUploadState.flowFile.uploadTaskId);
     if (fileState != null) {
       _fileHelper.deleteFile(fileState.file);
@@ -227,6 +226,7 @@ class UploadShareFileManager {
   }
 
   void _handleFlowUploadFileFailure(ErrorFlowUploadState errorFlowUploadState) {
+    developer.log('_handleFlowUploadFileFailure(): $errorFlowUploadState', name: 'UploadShareFileManager');
     final fileState = _uploadingStateFiles.getElementByUploadTaskId(errorFlowUploadState.flowFile.uploadTaskId);
     if (fileState != null) {
       _fileHelper.deleteFile(fileState.file);

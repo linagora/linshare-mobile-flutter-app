@@ -35,6 +35,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:dartz/dartz.dart';
 import 'package:data/src/network/config/endpoint.dart';
 import 'package:data/src/network/dio_client.dart';
@@ -43,7 +44,6 @@ import 'package:data/src/network/model/query/query_parameter.dart';
 import 'package:data/src/repository/flow/flow_response.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/async_task/async_task.dart';
 
 class FlowUploaderImpl extends FlowUploader {
   final DioClient _dioClient;
@@ -102,7 +102,7 @@ class FlowUploaderImpl extends FlowUploader {
 
   @override
   Future<Flow> uploadChunk(
-      File file,
+      ChunkedStreamReader<int> chunkedStreamReaderFile,
       int chunkNumber,
       int chunkSize,
       int currentChunkSize,
@@ -116,30 +116,51 @@ class FlowUploaderImpl extends FlowUploader {
       {String? sharedSpaceId,
       String? parentNodeId}
   ) async {
-    final _fileSize = file.lengthSync();
-    developer.log('uploadChunk(): chunk: $chunkNumber - currentChunkSize: $currentChunkSize', name: 'FlowUploaderImpl');
+    try {
+      final _fileSize = flowFile.fileInfo.fileSize;
+      developer.log(
+        'uploadChunk(): chunk: $chunkNumber - currentChunkSize: $currentChunkSize',
+        name: 'FlowUploaderImpl');
 
-    final formData = generateFormData(file, chunkNumber, chunkSize, currentChunkSize,
-        startByte, endByte, _fileSize, flowIdentifier, flowFile, totalChunk, uploadedByte,
-        onSendController, sharedSpaceId: sharedSpaceId, parentNodeId: parentNodeId);
+      final formData = generateFormData(
+        chunkedStreamReaderFile,
+        chunkNumber,
+        chunkSize,
+        currentChunkSize,
+        startByte,
+        endByte,
+        _fileSize,
+        flowIdentifier,
+        flowFile,
+        totalChunk,
+        uploadedByte,
+        onSendController,
+        sharedSpaceId: sharedSpaceId,
+        parentNodeId: parentNodeId);
 
-    final response = await _dioClient.post(
-      Endpoint.flow.generateEndpointPath(),
-      data: formData,
-      options: Options(
-        headers: _getRangeHeadersForChunkUpload(startByte, endByte, _fileSize)
-      ),
-      onSendProgress: (progress, total) {
-        onSendController.add(Right(UploadingFlowUploadState(flowFile, uploadedByte + progress, flowFile.fileInfo.fileSize)));
-      }
-    );
-    final flowResponse = FlowResponse.fromJson(response);
-    developer.log('uploadChunk(): ${flowResponse.toString()}', name: 'FlowUploaderImpl');
-    return flowResponse.toFlow();
+      final response = await _dioClient.post(
+        Endpoint.flow.generateEndpointPath(),
+        data: formData,
+        options: Options(
+          headers: _getRangeHeadersForChunkUpload(startByte, endByte, _fileSize)
+        ),
+        onSendProgress: (progress, total) {
+          onSendController.add(Right(UploadingFlowUploadState(
+            flowFile, uploadedByte + progress,
+            flowFile.fileInfo.fileSize)));
+        }
+      );
+      final flowResponse = FlowResponse.fromJson(response);
+      developer.log('uploadChunk(): ${flowResponse.toString()}', name: 'FlowUploaderImpl');
+      return flowResponse.toFlow();
+    } catch (e) {
+      developer.log('uploadChunk(): exception ${e}', name: 'FlowUploaderImpl');
+      rethrow;
+    }
   }
 
   FormData generateFormData(
-    File file,
+    ChunkedStreamReader<int> chunkedStreamReaderFile,
     int chunkNumber,
     int chunkSize,
     int currentChunkSize,
@@ -163,7 +184,7 @@ class FlowUploaderImpl extends FlowUploader {
       IDENTIFIER: flowIdentifier,
       FILENAME: flowFile.fileInfo.fileName,
       RELATIVE_PATH: flowFile.fileInfo.fileName,
-      FILE: MultipartFile(file.openRead(startByte, endByte), endByte - startByte),
+      FILE: MultipartFile(chunkedStreamReaderFile.readStream(currentChunkSize), currentChunkSize),
       ASYNC_TASK: true,
     };
 
@@ -192,10 +213,6 @@ class FlowUploaderImpl extends FlowUploader {
     );
 
     developer.log('getFlowTask(): 1', name: 'FlowUploaderImpl');
-    final dmm = AsyncTaskResponse.fromJson(asyncTaskJson);
-    developer.log('getFlowTask(): 2 - $dmm', name: 'FlowUploaderImpl');
-    final chot = dmm.toAsyncTask();
-    developer.log('getFlowTask(): 3 - $chot', name: 'FlowUploaderImpl');
-    return chot;
+    return AsyncTaskResponse.fromJson(asyncTaskJson).toAsyncTask();
   }
 }
