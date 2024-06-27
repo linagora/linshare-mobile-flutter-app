@@ -11,8 +11,7 @@
 #
 
 # Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-#
+update_fastlane
 
 opt_out_usage # Opt out of telemetry
 default_platform(:android)
