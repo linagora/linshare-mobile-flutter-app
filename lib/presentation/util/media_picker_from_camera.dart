@@ -59,6 +59,8 @@ class MediaPickerFromCamera {
               onEntitySaving: ((context, viewType, file) {
                 fileinfo = FileInfo(file.path.split('/').last,
                     '${file.parent.path}/', file.lengthSync());
+                Navigator.pop(context);
+                Navigator.pop(context);
               }),
               textDelegate: cameraPickerTextDelegateFromLocale(
                   Localizations.localeOf(context)),
