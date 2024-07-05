@@ -72,11 +72,12 @@ class RecordAudioViewModel extends BaseViewModel {
   void saveAudioRecording() {
     stopwatch.stop();
     audioRecorder.stopRecordingAndSave().then((result) {
-      result.fold((failure) {
-        store.dispatch(StopRecording());
+      result.fold((failure) {        
         store.dispatch(AudioRecorderAction(Left(failure)));
-        _appNavigation.popBack();
-        
+        store.dispatch(StopRecording());
+        if (failure is AudioRecorderFailed) {
+          _appNavigation.popBack();
+        }
       }, (success) async {
         cancelAudioRecording();
         store.dispatch(AudioRecorderAction(Right(success)));
@@ -159,8 +160,9 @@ class RecordAudioViewModel extends BaseViewModel {
   @override
   void onDisposed() {
     super.onDisposed();
-    store.dispatch(StopRecording());
+    stopwatch.stop();
     stopwatch.reset();
+    store.dispatch(StopRecording());
     audioRecorder.stopRecording();
     audioRecorder.recorderController.dispose();
   }

@@ -24,6 +24,11 @@ class AudioRecorderFailed extends FeatureFailure {
   List<Object> get props => [];
 }
 
+class NoAudioRecordingFound extends FeatureFailure {
+  @override
+  List<Object> get props => [];
+}
+
 class AudioPermissionDenied extends FeatureFailure {
 
   final bool isPermanentlyDenied;
