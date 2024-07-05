@@ -75,7 +75,7 @@ class AudioRecorder {
       if (pickedFiles.isNotEmpty) {
         return Right(AudioRecorderSuccessViewState(pickedFiles));
       }
-      return Left(AudioRecorderFailed());
+      return Left(NoAudioRecordingFound());
     } catch (exception) {
       return Left(AudioRecorderFailed());
     }

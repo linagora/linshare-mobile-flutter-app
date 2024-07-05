@@ -688,6 +688,9 @@ class ToastMessageHandler {
         appToast.showErrorToast(AppLocalizations.of(context).error_while_recording);
       } else if (failure is AudioPermissionDenied) {
         appToast.showErrorToast(AppLocalizations.of(context).permission_denied);
+      } else if (failure is NoAudioRecordingFound) {
+        appToast.showErrorToast(
+            AppLocalizations.of(context).you_did_not_record_anything);
       }
     }, (success) {
       if (success is AudioRecorderSuccessViewState) {

@@ -3043,7 +3043,7 @@ class AppLocalizations {
   }
 
   String get recording_saved {
-    return Intl.message('Permission saved', name: 'recording_saved');
+    return Intl.message('Recording saved', name: 'recording_saved');
   }
 
   String get permission_denied {
@@ -3054,7 +3054,13 @@ class AppLocalizations {
     return Intl.message('An error has occured while recording',
         name: 'error_while_recording');
   }
+  
+  String get you_did_not_record_anything {
+    return Intl.message('You did not record anything',
+        name: 'you_did_not_record_anything');
+  }
 }
+
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
