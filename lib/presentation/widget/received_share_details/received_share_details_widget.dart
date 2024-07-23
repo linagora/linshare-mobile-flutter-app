@@ -129,7 +129,7 @@ class _ReceivedShareDetailsWidgetState extends State<ReceivedShareDetailsWidget>
               _receivedShareInformationTile(AppLocalizations.of(context).created,
                   state.receivedShare!.creationDate.getMMMddyyyyFormatString()),
               _receivedShareInformationTile(AppLocalizations.of(context).expiration,
-                  state.receivedShare!.creationDate.getMMMddyyyyFormatString()),
+                state.receivedShare!.expirationDate.getMMMddyyyyFormatString()),
             ],
           ),
           Divider(),
