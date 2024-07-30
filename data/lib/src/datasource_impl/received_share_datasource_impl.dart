@@ -93,7 +93,8 @@ class ReceivedShareDataSourceImpl extends ReceivedShareDataSource {
             savedDir: externalStorageDirPath,
             headers: {Constant.authorization: 'Bearer ${token.token}'},
             showNotification: true,
-            openFileFromNotification: true)));
+            openFileFromNotification: true,
+            saveInPublicStorage: true)));
 
     return taskIds
         .where((taskId) => taskId != null)
