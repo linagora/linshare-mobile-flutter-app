@@ -807,7 +807,7 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
       EmptyNameValidator(),
       DuplicateNameValidator(listName),
       SpecialCharacterValidator(),
-      if (workGroupNode is WorkGroupDocument) LastDotValidator()
+      LastDotValidator()
     ]).fold((failure) {
       if (failure is VerifyNameFailure) {
         final nodeName = workGroupNode is WorkGroupDocument
