@@ -57,6 +57,10 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
           return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workgroup);
         } else if (exception is SpecialCharacterException) {
           return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workgroup);
+        } else if (exception is LastDotException) {
+          return AppLocalizations.of(context).node_name_contain_last_dot(
+              AppLocalizations.of(context).workgroup);
+                 
         } else {
           return null;
         }
@@ -67,6 +71,9 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
           return AppLocalizations.of(context).node_name_already_exists(AppLocalizations.of(context).workspace);
         } else if (exception is SpecialCharacterException) {
           return AppLocalizations.of(context).node_name_contain_special_character(AppLocalizations.of(context).workspace);
+        } else if (exception is LastDotException) {
+          return AppLocalizations.of(context).node_name_contain_last_dot(
+              AppLocalizations.of(context).workspace);
         } else {
           return null;
         }
@@ -86,12 +93,14 @@ extension LinShareNodeTypeExtension on LinShareNodeType {
         return [
           EmptyNameValidator(),
           DuplicateNameValidator(sharedSpaceNodes.map((node) => node.name).toList()),
-          SpecialCharacterValidator()
+          SpecialCharacterValidator(),
+          LastDotValidator()
         ];
       case LinShareNodeType.WORK_SPACE:
         return [
           EmptyNameValidator(),
-          SpecialCharacterValidator()
+          SpecialCharacterValidator(),
+          LastDotValidator()
         ];
     }
   }
