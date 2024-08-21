@@ -1,7 +1,7 @@
 // LinShare is an open source filesharing software, part of the LinPKI software
 // suite, developed by Linagora.
 //
-// Copyright (C) 2021 LINAGORA
+// Copyright (C) 2020 LINAGORA
 //
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU Affero General Public License as published by the Free Software
@@ -29,47 +29,8 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 //
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:linshare_flutter_app/presentation/util/extensions/color_extension.dart';
+class OpenCameraPicker extends ActionOffline {}
 
-class SimpleBottomSheetHeaderBuilder {
-  final Key _key;
-  String? _label;
-  TextStyle? _textStyle;
-
-  Matrix4? _transformPadding;
-
-  SimpleBottomSheetHeaderBuilder(this._key);
-
-  SimpleBottomSheetHeaderBuilder addLabel(String label) {
-    _label = label;
-    return this;
-  }
-
-  SimpleBottomSheetHeaderBuilder textStyle(TextStyle textStyle) {
-    _textStyle = textStyle;
-    return this;
-  }
-
-  SimpleBottomSheetHeaderBuilder addTransformPadding(Matrix4 transformPadding) {
-    _transformPadding = transformPadding;
-    return this;
-  }
-
-  ListTile build() {
-    return ListTile(
-        key: _key,
-        title: Transform(
-          transform: _transformPadding ?? Matrix4.translationValues(12, 5, 0.0),
-          child: Center(
-          child:Text(
-            _label ?? '',
-            style: _textStyle ?? TextStyle(
-                    fontSize: 20.0,
-                    color: AppColor.uploadFileFileNameTextColor),
-          ),
-        )));
-  }
-}
+class CloseCameraPicker extends ActionOffline {}
