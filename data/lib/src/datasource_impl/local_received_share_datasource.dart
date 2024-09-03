@@ -116,4 +116,16 @@ class LocalReceivedShareDataSource extends ReceivedShareDataSource {
       throw LocalUnknownError(error);
     });
   }
+  
+  @override
+  Future<List<ReceivedShare>> getAllReceivedSharesForRecipient(
+      String recipient) {
+    return Future.sync(() async {
+      return await _receivedShareDatabaseManager
+          .getListDataForRecipient(recipient);
+    }).catchError((error) {
+      throw LocalUnknownError(error);
+    });
+  }
+  
 }

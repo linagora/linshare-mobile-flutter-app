@@ -38,7 +38,8 @@ import 'package:domain/domain.dart';
 
 import 'model/received_share_cache.dart';
 
-class ReceivedShareDatabaseManager extends LinShareDatabaseManager<ReceivedShare> {
+class ReceivedShareDatabaseManager
+    extends LinShareDatabaseManager<ReceivedShare> {
   final DatabaseClient _databaseClient;
 
   ReceivedShareDatabaseManager(this._databaseClient);
@@ -98,4 +99,17 @@ class ReceivedShareDatabaseManager extends LinShareDatabaseManager<ReceivedShare
     return res > 0 ? true : false;
   }
 
+  Future<List<ReceivedShare>> getListDataForRecipient(String mail) async {
+    String todayDate = DateTime.now().toIso8601String();
+    final res = await _databaseClient.getListDataWithCondition(
+        ReceivedShareTable.TABLE_NAME,
+        '${ReceivedShareTable.MAIL_RECIPIENT} !="" AND ${ReceivedShareTable.MAIL_RECIPIENT} = ? AND ${ReceivedShareTable.EXPIRATION_DATE} >= ?',
+        [mail, todayDate]);
+    return res.isNotEmpty
+        ? res
+            .map((mapObject) =>
+                ReceivedShareCache.fromJson(mapObject).toReceivedShare())
+            .toList()
+        : [];
+  }
 }

@@ -50,4 +50,10 @@ extension UserExtension on User {
       secondFARequired
     );
   }
+  
+  GenericUser toGenericUser() {
+    return GenericUser(
+      mail,
+    );
+  }
 }

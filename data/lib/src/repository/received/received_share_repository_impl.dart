@@ -104,4 +104,9 @@ class ReceivedShareRepositoryImpl extends ReceivedShareRepository {
   Future<bool> disableOffline(ShareId shareId, String localPath) {
     return _receivedShareDataSources[DataSourceType.local]!.disableOffline(shareId, localPath);
   }
+  
+  @override
+  Future<List<ReceivedShare>> getAllReceivedShareOfflineByRecipient(String recipient) {
+    return _receivedShareDataSources[DataSourceType.local]!.getAllReceivedSharesForRecipient(recipient);
+  }
 }
