@@ -44,10 +44,11 @@ class GetAllReceivedSharesInteractor {
 
   GetAllReceivedSharesInteractor(this._receivedShareRepository);
 
-  Future<Either<Failure, Success>> execute() async {
+  Future<Either<Failure, Success>> execute(String recipient) async {
     try {
       final receivedShares = await _receivedShareRepository.getAllReceivedShares()
-        .onError((error, stackTrace) => _receivedShareRepository.getAllReceivedShareOffline());
+          .onError((error, stackTrace) => _receivedShareRepository
+              .getAllReceivedShareOfflineByRecipient(recipient));
       final combinedReceivedShares = List<ReceivedShare>.empty(growable: true);
 
       if (receivedShares.isNotEmpty) {

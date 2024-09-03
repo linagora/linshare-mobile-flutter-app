@@ -48,7 +48,8 @@ class MakeReceivedShareOfflineInteractor {
     this._credentialRepository
   );
 
-  Future<Either<Failure, Success>> execute(ReceivedShare receivedShare) async {
+  Future<Either<Failure, Success>> execute(
+      ReceivedShare receivedShare, GenericUser recipient) async {
     try {
       final downloadPreviewType = receivedShare.mediaType.isImageFile()
           ? DownloadPreviewType.image
@@ -69,7 +70,10 @@ class MakeReceivedShareOfflineInteractor {
         });
 
       if (filePath.isNotEmpty) {
-        final result = await _receivedShareRepository.makeAvailableOffline(receivedShare, filePath);
+        ReceivedShare receivedShareWithRecipient =
+            receivedShare.withRecipient(recipient);
+        final result = await _receivedShareRepository.makeAvailableOffline(
+            receivedShareWithRecipient, filePath);
         if (result) {
           return Right<Failure, Success>(MakeAvailableOfflineReceivedShareViewState(OfflineModeActionResult.successful, filePath));
         } else {
