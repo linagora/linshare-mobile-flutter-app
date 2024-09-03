@@ -33,7 +33,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/usecases/received/received_share_view_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -46,10 +45,18 @@ void main() {
   group('get_all_received_interactor', () {
     late MockReceivedShareRepository receivedShareRepository;
     late GetAllReceivedSharesInteractor getAllReceivedSharesInteractor;
+    late RemoveDeletedReceivedShareFromLocalDatabaseInteractor
+        removeDeletedReceivedShareFromLocalDatabaseInteractor;
+
 
     setUp(() {
       receivedShareRepository = MockReceivedShareRepository();
-      getAllReceivedSharesInteractor = GetAllReceivedSharesInteractor(receivedShareRepository);
+      removeDeletedReceivedShareFromLocalDatabaseInteractor =
+          RemoveDeletedReceivedShareFromLocalDatabaseInteractor(
+              receivedShareRepository);
+      getAllReceivedSharesInteractor = GetAllReceivedSharesInteractor(
+          receivedShareRepository,
+          removeDeletedReceivedShareFromLocalDatabaseInteractor);
     });
 
     test('get all receives interactor should return success with receive list', () async {
@@ -57,8 +64,11 @@ void main() {
       when(receivedShareRepository.getAllReceivedShareOffline()).thenAnswer((_) async => []);
       when(receivedShareRepository.getReceivedShareOffline(receivedShare1.shareId)).thenAnswer((_) async => null);
       when(receivedShareRepository.getReceivedShareOffline(receivedShare2.shareId)).thenAnswer((_) async => null);
+      when(receivedShareRepository
+              .getAllReceivedShareOfflineByRecipient(RECIPIENT_1.mail))
+          .thenAnswer((_) async => [receivedShare1]);
 
-      final result = await getAllReceivedSharesInteractor.execute();
+      final result = await getAllReceivedSharesInteractor.execute(RECIPIENT_1.mail);
 
       result.map((success) => (success as GetAllReceivedShareSuccess).receivedShares)
         .fold(
@@ -71,7 +81,8 @@ void main() {
       final exception = Exception();
       when(receivedShareRepository.getAllReceivedShares()).thenThrow(exception);
 
-      final result = await getAllReceivedSharesInteractor.execute();
+      final result =
+          await getAllReceivedSharesInteractor.execute(RECIPIENT_1.mail);
 
       result.fold(
           (failure) => expect(failure, isA<GetAllReceivedShareFailure>()),
