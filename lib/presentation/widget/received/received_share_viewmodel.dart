@@ -619,8 +619,7 @@ class ReceivedShareViewModel extends BaseViewModel {
   OnlineThunkAction _makeAvailableOfflineAction(ReceivedShare receivedShare, int position) {
     return OnlineThunkAction((Store<AppState> store) async {
       final recipient = GenericUser(store.state.account.user?.mail ?? '');
-      await _makeReceivedShareOfflineInteractor
-          .execute(receivedShare, recipient)
+      await _makeReceivedShareOfflineInteractor.execute(receivedShare, recipient)
         .then((result) => result.fold(
           (failure) {
             _receivedSharesList[position] = receivedShare.toSyncOffline(syncOfflineState: SyncOfflineState.none);
