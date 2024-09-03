@@ -55,4 +55,22 @@ extension ReceivedShareExtensions on ReceivedShare {
       localPath: localPath,
       syncOfflineState: SyncOfflineState.completed);
   }
+  
+  ReceivedShare withRecipient(GenericUser recipient) {
+    return ReceivedShare(
+        shareId,
+        name,
+        creationDate,
+        modificationDate,
+        expirationDate,
+        description,
+        recipient,
+        mediaType,
+        sender,
+        downloaded,
+        size,
+        hasThumbnail,
+        localPath: localPath,
+        syncOfflineState: syncOfflineState);
+  }
 }
