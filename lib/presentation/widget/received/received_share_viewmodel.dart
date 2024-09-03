@@ -169,7 +169,10 @@ class ReceivedShareViewModel extends BaseViewModel {
   ThunkAction<AppState> _getAllReceivedShareAction() {
     return (Store<AppState> store) async {
       store.dispatch(StartReceivedShareLoadingAction());
-      await _getAllReceivedInteractor.execute().then((result) => result.fold(
+      final currentUser = store.state.account.user;
+      await _getAllReceivedInteractor
+          .execute(currentUser?.mail ?? '')
+          .then((result) => result.fold(
         (failure) {
           store.dispatch(ReceivedShareGetAllReceivedSharesAction(Left(failure)));
           _receivedSharesList = [];
@@ -369,9 +372,10 @@ class ReceivedShareViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       store.dispatch(StartReceivedShareLoadingAction());
 
+      final currentUser = store.state.account.user;
       await Future.wait([
         _getSorterInteractor.execute(OrderScreen.receivedShares),
-        _getAllReceivedInteractor.execute()
+        _getAllReceivedInteractor.execute(currentUser?.mail ?? '')
       ]).then((response) async {
         response[0].fold((failure) {
           store.dispatch(ReceivedShareGetSorterAction(Sorter.fromOrderScreen(OrderScreen.receivedShares)));
@@ -614,7 +618,9 @@ class ReceivedShareViewModel extends BaseViewModel {
 
   OnlineThunkAction _makeAvailableOfflineAction(ReceivedShare receivedShare, int position) {
     return OnlineThunkAction((Store<AppState> store) async {
-      await _makeReceivedShareOfflineInteractor.execute(receivedShare)
+      final recipient = GenericUser(store.state.account.user?.mail ?? '');
+      await _makeReceivedShareOfflineInteractor
+          .execute(receivedShare, recipient)
         .then((result) => result.fold(
           (failure) {
             _receivedSharesList[position] = receivedShare.toSyncOffline(syncOfflineState: SyncOfflineState.none);
