@@ -356,7 +356,12 @@ class AppModule {
     getIt.registerFactory(() => GetSharedSpacesRootNodeInfoInteractor(getIt<SharedSpaceDocumentRepository>()));
     getIt.registerFactory(() => DownloadMultipleFileIOSInteractor(getIt<DownloadFileIOSInteractor>()));
     getIt.registerFactory(() => GetAuthorizedInteractor(getIt<AuthenticationRepository>(), getIt<CredentialRepository>()));
-    getIt.registerFactory(() => GetAllReceivedSharesInteractor(getIt<ReceivedShareRepository>()));
+    getIt.registerFactory(() =>
+        RemoveDeletedReceivedShareFromLocalDatabaseInteractor(
+            getIt<ReceivedShareRepository>()));
+    getIt.registerFactory(() => GetAllReceivedSharesInteractor(
+        getIt<ReceivedShareRepository>(),
+        getIt<RemoveDeletedReceivedShareFromLocalDatabaseInteractor>()));
     getIt.registerFactory(() => CopyToMySpaceInteractor(getIt<DocumentRepository>()));
     getIt.registerFactory(() => CopyMultipleFilesToMySpaceInteractor(getIt<CopyToMySpaceInteractor>()));
     getIt.registerFactory(() => SearchDocumentInteractor());

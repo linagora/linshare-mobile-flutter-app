@@ -38,11 +38,16 @@ import 'package:domain/src/repository/received/received_share_repository.dart';
 import 'package:domain/src/state/failure.dart';
 import 'package:domain/src/state/success.dart';
 import 'package:domain/src/usecases/received/received_share_view_state.dart';
+import 'package:collection/collection.dart';
+import 'package:domain/src/usecases/received/remove_deleted_received_share_from_local_database.dart';
 
 class GetAllReceivedSharesInteractor {
   final ReceivedShareRepository _receivedShareRepository;
+  final RemoveDeletedReceivedShareFromLocalDatabaseInteractor
+      _removeDeletedReceivedShareFromLocalDatabase;
 
-  GetAllReceivedSharesInteractor(this._receivedShareRepository);
+  GetAllReceivedSharesInteractor(this._receivedShareRepository,
+      this._removeDeletedReceivedShareFromLocalDatabase);
 
   Future<Either<Failure, Success>> execute(String recipient) async {
     try {
@@ -50,6 +55,9 @@ class GetAllReceivedSharesInteractor {
           .onError((error, stackTrace) => _receivedShareRepository
               .getAllReceivedShareOfflineByRecipient(recipient));
       final combinedReceivedShares = List<ReceivedShare>.empty(growable: true);
+
+      _removeDeletedReceivedShareFromLocalDatabase.execute(
+          receivedShares, recipient);
 
       if (receivedShares.isNotEmpty) {
         for (final received in receivedShares) {
