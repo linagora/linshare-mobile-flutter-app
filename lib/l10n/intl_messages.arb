@@ -1,5 +1,6 @@
 {
   "@@last_modified": "2024-11-12T10:15:33.090622",
+  "@@last_modified": "2024-10-31T09:25:14.095117",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -3114,10 +3115,42 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "you_cant_delete_the_last_version": "You can't delete the last version, try to delete the whole document",
-  "@you_cant_delete_the_last_version": {
+  "give_access_in_settings": "Please give linshare access in the settings to continue",
+  "@give_access_in_settings": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
-  }
+  },
+  "permission_required": "Permission required",
+  "@permission_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recording_saved": "Recording saved",
+  "@recording_saved": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "permission_denied": "Permission denied",
+  "@permission_denied": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "error_while_recording": "An error has occured while recording",
+  "@error_while_recording": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "you_did_not_record_anything": "You did not record anything",
+  "@you_did_not_record_anything": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "exit": "Exit",
+  "are_you_sure_you_want_to_discard_recording": "Are you sure you want to discard this recording"
 }
