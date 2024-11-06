@@ -34,56 +34,98 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/util/permission_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/camera_picker/custom_camera_picker_viewer.dart';
 import 'package:linshare_flutter_app/presentation/view/dialog/open_settings_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class MediaPickerFromCamera {
   Future<Either<Failure, MediaPickerSuccessViewState>> pickMediaFromCamera(
-      BuildContext context, AppNavigation appNavigation) async {
+    BuildContext context,
+    AppNavigation appNavigation,
+  ) async {
     try {
-      var fileinfo;
-      List<FileInfo> pickedFiles = [];
       final cameraPermission =
           await PermissionService().tryToGetPermissionForCamera();
       final microphonePermission =
           await PermissionService().tryToGetPermissionForAudioRecording();
 
       if (cameraPermission.isGranted && microphonePermission.isGranted) {
+        var fileinfo;
+        List<FileInfo> pickedFiles = [];
+        CameraPickerState cameraPickerState = CameraPickerState();
         await CameraPicker.pickFromCamera(
+          createPickerState: () => cameraPickerState,
           context,
           pickerConfig: CameraPickerConfig(
-              onError: (exception, stacktrace) {
-                throw exception;
-              },
-              onEntitySaving: ((context, viewType, file) {
-                fileinfo = FileInfo(file.path.split('/').last,
-                    '${file.parent.path}/', file.lengthSync());
-                Navigator.pop(context);
-                Navigator.pop(context);
-              }),
-              textDelegate: cameraPickerTextDelegateFromLocale(
-                  Localizations.localeOf(context)),
-              theme: Theme.of(context),
-              enableRecording: true),
+            onError: (
+              exception,
+              stacktrace,
+            ) {
+              throw exception;
+            },
+            onXFileCaptured: (
+              xFile,
+              view,
+            ) {
+              CameraPickerViewer.pushToViewer(
+                context,
+                pickerConfig: CameraPickerConfig(
+                  onEntitySaving: ((context, viewType, file) {
+                    fileinfo = FileInfo(
+                      file.path.split('/').last,
+                      '${file.parent.path}/',
+                      file.lengthSync(),
+                    );
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop();
+                  }),
+                ),
+                viewType: view,
+                previewXFile: xFile,
+                createViewerState: () => CustomCameraPickerViewer(),
+              );
+              cameraPickerState.controller.resumePreview();
+              return true;
+            },
+            shouldDeletePreviewFile: true,
+            textDelegate: cameraPickerTextDelegateFromLocale(
+              Localizations.localeOf(context),
+            ),
+            theme: Theme.of(context),
+            enableRecording: true,
+          ),
         );
+
         if (fileinfo != null) {
           pickedFiles.add(fileinfo);
-          return Right(MediaPickerSuccessViewState(pickedFiles));
+          return Right(
+            MediaPickerSuccessViewState(pickedFiles),
+          );
         } else {
-          return Left(MediaPickerCanceled());
+          return Left(
+            MediaPickerCanceled(),
+          );
         }
       } else if (cameraPermission.isPermanentlyDenied ||
           microphonePermission.isPermanentlyDenied) {
         await showDialog(
-            context: context,
-            builder: (context) => OpenSettingsDialog(appNavigation));
-        return Left(CameraPermissionDenied());
+          context: context,
+          builder: (context) => OpenSettingsDialog(appNavigation),
+        );
+        return Left(
+          CameraPermissionDenied(),
+        );
       } else {
-        return Left(CameraPermissionDenied());
+        return Left(
+          CameraPermissionDenied(),
+        );
       }
     } catch (exception) {
-      return Left(MediaPickerFailed(exception));
+      return Left(
+        MediaPickerFailed(exception),
+      );
     }
   }
 }
