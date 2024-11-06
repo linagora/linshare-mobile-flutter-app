@@ -3067,8 +3067,21 @@ class AppLocalizations {
     );
   }
 
-}
 
+  String get exit {
+    return Intl.message(
+      'exit',
+      name: 'exit',
+    );
+  }
+
+  String get are_you_sure_you_want_to_discard_recording {
+    return Intl.message(
+      'Are you sure you want to discard this recording',
+      name: 'are_you_sure_you_want_to_discard_recording',
+    );
+  }
+}
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();

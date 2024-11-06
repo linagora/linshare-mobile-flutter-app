@@ -36,6 +36,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:linshare_flutter_app/presentation/di/get_it_service.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/audio_recorder_state.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/discard_confirmation_dialog.dart';
 import 'package:linshare_flutter_app/presentation/widget/record_audio/record_audio_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
 
@@ -65,21 +66,41 @@ class RecordAudioWidgetState extends State<RecordAudioWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              const Spacer(),
-              elapsedTimeWidget(),
-              audioWaveformWidget(),
-              const Spacer(flex: 2),
-              audioControlButtons(),
-              const Spacer(),
-            ],
-          ),
-        ),
-      ),
+      body: StoreConnector<AppState, AudioRecorderState>(
+          converter: (store) => store.state.audioRecorderState,
+          builder: (context, state) {
+            return WillPopScope(
+              onWillPop: () async {
+                return state.viewState.fold((failure) {
+                  return true;
+                }, (success) async {
+                  if (success is IdleState) {
+                    return true;
+                  } else if (success is AudioRecorderStarted) {
+                    recordAudioViewModel.pauseAudioRecording();
+                  }
+                  return await DiscardConfirmationDialog()
+                          .showExitConfirmationDialog(context) ??
+                      false;
+                });
+              },
+              child: Center(
+                child: SafeArea(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      const Spacer(),
+                      elapsedTimeWidget(),
+                      audioWaveformWidget(),
+                      const Spacer(flex: 2),
+                      audioControlButtons(),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
     );
   }
 
@@ -164,7 +185,6 @@ class RecordAudioWidgetState extends State<RecordAudioWidget> {
                 }
                 return Icon(Icons.play_arrow);
               });
-              
             }));
   }
 
