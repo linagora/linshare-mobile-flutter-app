@@ -29,6 +29,7 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
+import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
 import 'package:linshare_flutter_app/presentation/view/dialog/open_settings_dialog.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_arguments.dart';
+import 'package:phone_state/phone_state.dart';
 import 'package:redux/redux.dart';
 
 class RecordAudioViewModel extends BaseViewModel {
@@ -47,23 +49,45 @@ class RecordAudioViewModel extends BaseViewModel {
   final AudioRecorder audioRecorder;
   final Stopwatch stopwatch;
   UploadFileArguments? uploadFileArguments;
+  var _phoneStateSubscription;
   var duration;
 
-  RecordAudioViewModel(
-      Store<AppState> store, this._appNavigation,
+  RecordAudioViewModel(Store<AppState> store, this._appNavigation,
       this.audioRecorder, this.stopwatch)
-      : super(store);
+      : super(store) {
+    _listenToPhoneState();
+  }
+
+  void _listenToPhoneState() {
+    _phoneStateSubscription = PhoneState.phoneStateStream.listen(
+      (status) {
+        if (status == PhoneStateStatus.CALL_INCOMING) {
+          pauseAudioRecording();
+        }
+      },
+    );
+  }
 
   void startAudioRecording() {
     audioRecorder.startRecordingAudio().then((result) {
       result.fold((failure) {
-        store.dispatch(StopRecording());
-        store.dispatch(AudioRecorderAction(Left(failure)));
+        store.dispatch(
+          StopRecording(),
+        );
+        store.dispatch(
+          AudioRecorderAction(
+            Left(
+              failure,
+            ),
+          ),
+        );
         if (failure is AudioPermissionDenied && !failure.isPermanentlyDenied) {
           _appNavigation.popBack();
         }
       }, (success) {
-        store.dispatch(StartRecording());
+        store.dispatch(
+          StartRecording(),
+        );
         stopwatch.start();
       });
     });
@@ -71,90 +95,154 @@ class RecordAudioViewModel extends BaseViewModel {
 
   void saveAudioRecording() {
     stopwatch.stop();
-    audioRecorder.stopRecordingAndSave().then((result) {
-      result.fold((failure) {        
-        store.dispatch(AudioRecorderAction(Left(failure)));
-        store.dispatch(StopRecording());
-        if (failure is AudioRecorderFailed) {
-          _appNavigation.popBack();
-        }
-      }, (success) async {
-        cancelAudioRecording();
-        store.dispatch(AudioRecorderAction(Right(success)));
-        _appNavigation.popBack();
-        var uploadArgs = UploadFileArguments(success.file);
-        if (uploadFileArguments != null) {
-          uploadArgs.shareType = uploadFileArguments!.shareType;
-          uploadArgs.workGroupDocumentUploadInfo =
-              uploadFileArguments!.workGroupDocumentUploadInfo;
-        }
-        await _appNavigation.push(RoutePaths.uploadDocumentRoute,
-            arguments: uploadArgs);
-      });
-    });
+    audioRecorder.stopRecordingAndSave().then(
+      (result) {
+        result.fold(
+          (failure) {
+            store.dispatch(
+              AudioRecorderAction(
+                Left(failure),
+              ),
+            );
+            store.dispatch(StopRecording());
+            if (failure is AudioRecorderFailed) {
+              _appNavigation.popBack();
+            }
+          },
+          (success) async {
+            cancelAudioRecording();
+            store.dispatch(
+              AudioRecorderAction(
+                Right(success),
+              ),
+            );
+            _appNavigation.popBack();
+            var uploadArgs = UploadFileArguments(
+              success.file,
+            );
+            if (uploadFileArguments != null) {
+              uploadArgs.shareType = uploadFileArguments!.shareType;
+              uploadArgs.workGroupDocumentUploadInfo =
+                  uploadFileArguments!.workGroupDocumentUploadInfo;
+            }
+            await _appNavigation.push(
+              RoutePaths.uploadDocumentRoute,
+              arguments: uploadArgs,
+            );
+          },
+        );
+      },
+    );
   }
 
   void cancelAudioRecording() {
-    audioRecorder.stopRecording().fold((failure) {
-      store.dispatch(StopRecording());
-      store.dispatch(AudioRecorderAction(Left(failure)));
-      _appNavigation.popBack();
-    }, (success) {
-      store.dispatch(StopRecording());
-      stopwatch.stop();
-      stopwatch.reset();
-    });
+    audioRecorder.stopRecording().fold(
+      (
+        failure,
+      ) {
+        store.dispatch(
+          StopRecording(),
+        );
+        store.dispatch(
+          AudioRecorderAction(
+            Left(
+              failure,
+            ),
+          ),
+        );
+        _appNavigation.popBack();
+      },
+      (success) {
+        store.dispatch(
+          StopRecording(),
+        );
+        stopwatch.stop();
+        stopwatch.reset();
+      },
+    );
   }
 
   void resumeAudioRecording() {
-    audioRecorder.resumeRecording().fold((failure) {
-      store.dispatch(StopRecording());
-      store.dispatch(AudioRecorderAction(Left(failure)));
-      _appNavigation.popBack();
-    }, (success) {
-      store.dispatch(ResumeRecording());
-      stopwatch.start();
-    });
+    audioRecorder.resumeRecording().fold(
+      (failure) {
+        store.dispatch(StopRecording());
+        store.dispatch(
+          AudioRecorderAction(
+            Left(failure),
+          ),
+        );
+        _appNavigation.popBack();
+      },
+      (success) {
+        store.dispatch(
+          ResumeRecording(),
+        );
+        stopwatch.start();
+      },
+    );
   }
 
   void pauseAndStartAudioRecording() {
-    store.state.audioRecorderState.viewState.fold((failure) => null, (success) {
-      if (success is IdleState) {
-        startAudioRecording();
-      } else if (success is AudioRecorderStarted) {
-        pauseAudioRecording();
-      } else if (success is AudioRecorderPaused) {
-        resumeAudioRecording();
-      }
-    });
+    store.state.audioRecorderState.viewState.fold(
+      (failure) => null,
+      (success) {
+        if (success is IdleState) {
+          startAudioRecording();
+        } else if (success is AudioRecorderStarted) {
+          pauseAudioRecording();
+        } else if (success is AudioRecorderPaused) {
+          resumeAudioRecording();
+        }
+      },
+    );
   }
 
   void pauseAudioRecording() {
-    audioRecorder.pauseRecording().fold((failure) {
-      store.dispatch(StopRecording());
-      store.dispatch(AudioRecorderAction(Left(failure)));
-      _appNavigation.popBack();
-    }, (success) {
-      store.dispatch(PauseRecording());
-      stopwatch.stop();
-    });
+    audioRecorder.pauseRecording().fold(
+      (failure) {
+        store.dispatch(
+          StopRecording(),
+        );
+        store.dispatch(
+          AudioRecorderAction(
+            Left(failure),
+          ),
+        );
+        _appNavigation.popBack();
+      },
+      (success) {
+        store.dispatch(
+          PauseRecording(),
+        );
+        stopwatch.stop();
+      },
+    );
   }
 
   Stream<String> get elapsedTimeStream {
-    return Stream.periodic(const Duration(milliseconds: 50), (_) {
-      return audioRecorder.formatElapsedTime(stopwatch.elapsedMilliseconds);
-    }).distinct();
+    return Stream.periodic(
+      const Duration(milliseconds: 50),
+      (_) {
+        return audioRecorder.formatElapsedTime(stopwatch.elapsedMilliseconds);
+      },
+    ).distinct();
   }
 
   Future<void> showAppSettingsDialog(BuildContext context) async {
-    store.dispatch(StopRecording());
-    Future.delayed(Duration.zero, () {
-      showDialog(
+    store.dispatch(
+      StopRecording(),
+    );
+    Future.delayed(
+      Duration.zero,
+      () {
+        showDialog(
           context: context,
           builder: (context) => OpenSettingsDialog(
-                _appNavigation,
-              ));
-    });
+            _appNavigation,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -162,7 +250,9 @@ class RecordAudioViewModel extends BaseViewModel {
     super.onDisposed();
     stopwatch.stop();
     stopwatch.reset();
-    store.dispatch(StopRecording());
+    store.dispatch(
+      StopRecording(),
+    );
     audioRecorder.stopRecording();
     audioRecorder.recorderController.dispose();
   }

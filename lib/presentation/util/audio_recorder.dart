@@ -44,6 +44,7 @@ class AudioRecorder {
     try {
       final microphonePermission =
           await permissionService.tryToGetPermissionForAudioRecording();
+      await permissionService.tryToGetPermissionForPhoneState();
       if (microphonePermission.isGranted) {
         final tempPath = Directory.systemTemp.path;
         final currentTime = DateTime.now().millisecondsSinceEpoch;

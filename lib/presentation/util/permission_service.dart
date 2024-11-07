@@ -10,6 +10,10 @@ class PermissionService {
     final status = await Permission.microphone.request();
     return status;
   }
+  Future<PermissionStatus> tryToGetPermissionForPhoneState() async {
+    final status = await Permission.phone.request();
+    return status;
+  }
 
   Future<PermissionStatus> handleMediaPickerPermissionAndroidHigher33() async {
     PermissionStatus? photoPermission = await Permission.photos.status;
