@@ -35,8 +35,6 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-
-
 class AudioRecorderState extends LinShareState with EquatableMixin {
   AudioRecorderState(Either<Failure, Success> viewState) : super(viewState);
 

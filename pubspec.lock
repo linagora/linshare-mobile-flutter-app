@@ -346,6 +346,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  enum_to_string:
+    dependency: transitive
+    description:
+      name: enum_to_string
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   equatable:
     dependency: transitive
     description:
@@ -887,6 +894,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
+  phone_state:
+    dependency: "direct main"
+    description:
+      name: phone_state
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   photo_manager:
     dependency: transitive
     description:

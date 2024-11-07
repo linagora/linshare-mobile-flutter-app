@@ -54,8 +54,6 @@ AudioRecorderState _startRecording(
   return AudioRecorderState(Right(AudioRecorderStarted()));
 }
 
-
-
 AudioRecorderState _pauseRecording(
     AudioRecorderState state, PauseRecording action) {
   return AudioRecorderState(Right(AudioRecorderPaused()));

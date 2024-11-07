@@ -888,7 +888,7 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
           .onActionClick((_) => sharedSpaceDocumentViewModel.openCameraPicker(context))
           .build();
   }
-Widget recordAudioAction() {
+    Widget recordAudioAction() {
     return SimpleContextMenuActionBuilder(
             Key('record_audio_context_menu_action'),
             SvgPicture.asset(imagePath.icMicrophone,
@@ -897,8 +897,8 @@ Widget recordAudioAction() {
                 fit: BoxFit.fill,
                 color: AppColor.primaryColor),
             AppLocalizations.of(context).audio_recording)
-        .onActionClick((_) => sharedSpaceDocumentViewModel.openAudioRecorder())
-        .build();
+          .onActionClick((_) => sharedSpaceDocumentViewModel.openAudioRecorder())
+          .build();
   }
 
 

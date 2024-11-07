@@ -51,7 +51,7 @@ class RecordAudioWidgetState extends State<RecordAudioWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       recordAudioViewModel.uploadFileArguments =
           ModalRoute.of(context)?.settings.arguments as UploadFileArguments;
     });
@@ -68,7 +68,10 @@ class RecordAudioWidgetState extends State<RecordAudioWidget> {
     return Scaffold(
       body: StoreConnector<AppState, AudioRecorderState>(
           converter: (store) => store.state.audioRecorderState,
-          builder: (context, state) {
+          builder: (
+            context,
+            state,
+          ) {
             return WillPopScope(
               onWillPop: () async {
                 return state.viewState.fold((failure) {
@@ -92,7 +95,9 @@ class RecordAudioWidgetState extends State<RecordAudioWidget> {
                       const Spacer(),
                       elapsedTimeWidget(),
                       audioWaveformWidget(),
-                      const Spacer(flex: 2),
+                      const Spacer(
+                        flex: 2,
+                      ),
                       audioControlButtons(),
                       const Spacer(),
                     ],
