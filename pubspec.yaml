@@ -126,8 +126,9 @@ dependencies:
 
   # audio recording and displaying waveforms
   audio_waveforms: 0.1.5+1
-  
 
+  phone_state: 1.0.2
+  
   async: 2.8.2
 
   firebase_core: 1.19.1

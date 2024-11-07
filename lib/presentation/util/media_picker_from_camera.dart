@@ -37,9 +37,24 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:linshare_flutter_app/presentation/view/camera_picker/custom_camera_picker_viewer.dart';
 import 'package:linshare_flutter_app/presentation/view/dialog/open_settings_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:phone_state/phone_state.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class MediaPickerFromCamera {
+  var _phoneStateSubscription;
+   FileInfo? fileInfo;
+
+  void _listenToPhoneState(Function onCallReceived,CameraPickerState cameraPickerState,
+      BuildContext context,) {
+    _phoneStateSubscription = PhoneState.phoneStateStream.listen(
+      (status) {
+        if (status == PhoneStateStatus.CALL_INCOMING) {
+          onCallReceived.call(cameraPickerState,context);
+        }
+      },
+    );
+  }
+
   Future<Either<Failure, MediaPickerSuccessViewState>> pickMediaFromCamera(
     BuildContext context,
     AppNavigation appNavigation,
@@ -50,10 +65,15 @@ class MediaPickerFromCamera {
       final microphonePermission =
           await PermissionService().tryToGetPermissionForAudioRecording();
 
+      final phonePermission= await PermissionService().tryToGetPermissionForPhoneState();
+
       if (cameraPermission.isGranted && microphonePermission.isGranted) {
-        var fileinfo;
+
         List<FileInfo> pickedFiles = [];
         CameraPickerState cameraPickerState = CameraPickerState();
+        if(phonePermission.isGranted){
+          _listenToPhoneState(handleIncomingPhoneCallWhileRecordingCallback,cameraPickerState,context);
+        }
         await CameraPicker.pickFromCamera(
           createPickerState: () => cameraPickerState,
           context,
@@ -72,7 +92,7 @@ class MediaPickerFromCamera {
                 context,
                 pickerConfig: CameraPickerConfig(
                   onEntitySaving: ((context, viewType, file) {
-                    fileinfo = FileInfo(
+                    fileInfo = FileInfo(
                       file.path.split('/').last,
                       '${file.parent.path}/',
                       file.lengthSync(),
@@ -98,8 +118,8 @@ class MediaPickerFromCamera {
           ),
         );
 
-        if (fileinfo != null) {
-          pickedFiles.add(fileinfo);
+        if (fileInfo != null) {
+          pickedFiles.add(fileInfo!);
           return Right(
             MediaPickerSuccessViewState(pickedFiles),
           );
@@ -125,6 +145,34 @@ class MediaPickerFromCamera {
     } catch (exception) {
       return Left(
         MediaPickerFailed(exception),
+      );
+    }
+  }
+
+  Future<void> handleIncomingPhoneCallWhileRecordingCallback(
+    CameraPickerState cameraPickerState,
+    BuildContext context,
+  ) async {
+    if (cameraPickerState.controller.value.isRecordingVideo) {
+      final xFile = await cameraPickerState.controller.stopVideoRecording();
+
+      await CameraPickerViewer.pushToViewer(
+        context,
+        pickerConfig: CameraPickerConfig(
+          onEntitySaving: ((context, viewType, file) {
+            fileInfo = FileInfo(
+              file.path.split('/').last,
+              '${file.parent.path}/',
+              file.lengthSync(),
+            );
+            Navigator.of(context)
+              ..pop()
+              ..pop();
+          }),
+        ),
+        viewType: CameraPickerViewType.video,
+        previewXFile: xFile,
+        createViewerState: () => CustomCameraPickerViewer(),
       );
     }
   }

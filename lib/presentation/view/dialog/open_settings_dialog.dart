@@ -4,8 +4,8 @@ import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dar
 import 'package:permission_handler/permission_handler.dart';
 
 class OpenSettingsDialog extends StatelessWidget {
-  VoidCallback? settingsButtonCallback;
-  VoidCallback? cancelButtonCallback;
+  final VoidCallback? settingsButtonCallback;
+  final VoidCallback? cancelButtonCallback;
   final AppNavigation _appNavigation;
   OpenSettingsDialog(this._appNavigation,
       {this.settingsButtonCallback, this.cancelButtonCallback});

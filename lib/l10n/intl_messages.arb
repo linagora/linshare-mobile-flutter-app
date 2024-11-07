@@ -1,6 +1,5 @@
 {
-  "@@last_modified": "2024-11-12T10:15:33.090622",
-  "@@last_modified": "2024-10-31T09:25:14.095117",
+  "@@last_modified": "2024-11-06T13:25:45.050236",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -3151,6 +3150,16 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "exit": "Exit",
-  "are_you_sure_you_want_to_discard_recording": "Are you sure you want to discard this recording"
+  "exit": "exit",
+  "@exit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_discard_recording": "Are you sure you want to discard this recording",
+  "@are_you_sure_you_want_to_discard_recording": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  }
 }
