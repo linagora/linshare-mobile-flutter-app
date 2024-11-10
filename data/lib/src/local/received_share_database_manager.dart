@@ -100,10 +100,14 @@ class ReceivedShareDatabaseManager
   }
 
   Future<List<ReceivedShare>> getListDataForRecipient(String mail) async {
-    String todayDate = DateTime.now().toIso8601String();
+    final now = DateTime.now();
+    final todayDate =
+        DateTime(now.year, now.month, now.day, now.hour, now.minute).toIso8601String();
+    final queryCondition =
+        '${ReceivedShareTable.MAIL_RECIPIENT} !="" AND ${ReceivedShareTable.MAIL_RECIPIENT} = ? AND ${ReceivedShareTable.EXPIRATION_DATE} >= ?';
     final res = await _databaseClient.getListDataWithCondition(
         ReceivedShareTable.TABLE_NAME,
-        '${ReceivedShareTable.MAIL_RECIPIENT} !="" AND ${ReceivedShareTable.MAIL_RECIPIENT} = ? AND ${ReceivedShareTable.EXPIRATION_DATE} >= ?',
+        queryCondition,
         [mail, todayDate]);
     return res.isNotEmpty
         ? res
