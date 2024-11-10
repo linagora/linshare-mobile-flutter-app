@@ -129,7 +129,6 @@ dependencies:
 
   phone_state: 1.0.2
   
-
   async: 2.8.2
 
   firebase_core: 1.19.1

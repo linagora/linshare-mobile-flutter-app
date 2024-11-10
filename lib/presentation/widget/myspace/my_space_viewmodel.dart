@@ -757,8 +757,8 @@ class MySpaceViewModel extends BaseViewModel {
             store.dispatch(
             CloseCameraPicker());
             result.fold(
-            (failure) => store.dispatch(UploadFileAction(Left(failure))),
-            (success) => store.dispatch(_pickFileSuccessAction(success)));
+              (failure) => store.dispatch(UploadFileAction(Left(failure))),
+              (success) => store.dispatch(_pickFileSuccessAction(success)));
     });
     };
   }
