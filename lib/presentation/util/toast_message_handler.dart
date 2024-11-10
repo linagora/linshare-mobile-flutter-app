@@ -429,6 +429,10 @@ class ToastMessageHandler {
         } else if (failure is CopyToSharedSpaceFailure) {
           appToast.showErrorToast(AppLocalizations.of(context).cannot_copy_file_to_shared_space);
           _cleanSharedSpaceNodeVersionsViewState();
+      } else if (failure is RemoveFinalSharedSpaceNodeVersionFailure) {
+        appToast.showErrorToast(
+            AppLocalizations.of(context).you_cant_delete_the_last_version);
+        _cleanSharedSpaceNodeVersionsViewState();
         }
       },
       (success) {

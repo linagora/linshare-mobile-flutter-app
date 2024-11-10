@@ -228,7 +228,7 @@ class SharedSpaceNodeVersionsViewModel extends BaseViewModel {
       .onConfirmAction(AppLocalizations.of(context).delete, (_) {
             _appNavigation.popBack();
             if (finalVersion) {
-              store.dispatch(_removeFinalNodeVersionAction(nodeVersionArguments.workGroupNode));
+             store.dispatch(SharedSpaceNodeVersionsAction(Left(RemoveFinalSharedSpaceNodeVersionFailure())));
             } else {
               store.dispatch(_removeNodeVersionAction(document));
             }

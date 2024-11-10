@@ -3023,6 +3023,14 @@ class AppLocalizations {
         name: 'reach_upload_request_limit_message_own_server'
     );
   }
+  
+  String get you_cant_delete_the_last_version {
+    return Intl.message(
+      "You can't delete the last version, try to delete the whole document",
+      name: 'you_cant_delete_the_last_version',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
