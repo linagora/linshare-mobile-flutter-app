@@ -697,3 +697,10 @@ class UpdateWorkspaceMemberFailure extends FeatureFailure {
   @override
   List<Object> get props => [exception];
 }
+
+class RemoveFinalSharedSpaceNodeVersionFailure extends FeatureFailure {
+  RemoveFinalSharedSpaceNodeVersionFailure();
+
+  @override
+  List<Object> get props => [];
+}
