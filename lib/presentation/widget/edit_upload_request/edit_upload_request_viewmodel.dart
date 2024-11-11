@@ -454,7 +454,9 @@ class EditUploadRequestViewModel extends BaseViewModel {
       final totalFileSizeTypeConfig = _totalFileSizeSetting!.maxUnit.toFileSizeType();
       if (totalSizeOfFilesInByte <= 0 ||
           (totalSizeOfFiles >= totalFileSizeConfig && maxFileSizeTypeNotifier.value == totalFileSizeTypeConfig)) {
-        _appToast.showErrorToast(AppLocalizations.of(context).total_file_size_error);
+        _appToast.showErrorToast(AppLocalizations.of(context)
+            .total_file_size_error(
+                totalFileSizeConfig, totalFileSizeTypeConfig.text));
         return;
       }
     }

@@ -2053,10 +2053,11 @@ class AppLocalizations {
     );
   }
 
-  String get total_file_size_error {
+  String total_file_size_error(int maxSize, String unit) {
     return Intl.message(
-        'Total size of files must be set and smaller than 100 GB',
-        name: 'total_file_size_error'
+        'Total size of files must be set and smaller than $maxSize $unit',
+        name: 'total_file_size_error',
+        args: [maxSize, unit]
     );
   }
 
