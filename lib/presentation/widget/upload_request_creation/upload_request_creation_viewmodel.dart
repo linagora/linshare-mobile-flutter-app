@@ -395,8 +395,11 @@ class UploadRequestCreationViewModel extends BaseViewModel {
       final totalFileSizeConfig = _totalFileSizeSetting!.maxValue;
       final totalFileSizeTypeConfig = _totalFileSizeSetting!.maxUnit.toFileSizeType();
       if (totalSizeOfFilesInByte <= 0 ||
-          (totalSizeOfFiles >= totalFileSizeConfig && maxFileSizeTypeNotifier.value == totalFileSizeTypeConfig)) {
-        _appToast.showErrorToast(AppLocalizations.of(context).total_file_size_error);
+          (totalSizeOfFiles >= totalFileSizeConfig &&
+              maxFileSizeTypeNotifier.value == totalFileSizeTypeConfig)) {
+        _appToast.showErrorToast(AppLocalizations.of(context)
+            .total_file_size_error(
+                totalFileSizeConfig, totalFileSizeTypeConfig.text));
         return;
       }
     }

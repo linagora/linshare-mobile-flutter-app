@@ -1639,11 +1639,17 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "total_file_size_error": "Total size of files must be set and smaller than 100 GB",
+  "total_file_size_error": "Total size of files must be set and smaller than {maxSize} {unit}",
   "@total_file_size_error": {
     "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
+    "placeholders_order": [
+      "maxSize",
+      "unit"
+    ],
+    "placeholders": {
+      "maxSize": {},
+      "unit": {}
+    }
   },
   "add": "Add",
   "@add": {

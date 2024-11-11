@@ -2132,11 +2132,17 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "total_file_size_error": "Total size of files must be set and smaller than 100 GB",
+  "total_file_size_error": "Total size of files must be set and smaller than {maxSize} {unit}",
   "@total_file_size_error": {
     "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
+    "placeholders_order": [
+      "maxSize",
+      "unit"
+    ],
+    "placeholders": {
+      "maxSize": {},
+      "unit": {}
+    }
   },
   "add": "Add",
   "@add": {
@@ -3167,5 +3173,80 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "you_cant_delete_the_last_version": "You can't delete the last version, try to delete the whole document",
+  "@you_cant_delete_the_last_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "camera": "Camera",
+  "@camera": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "audio_recording": "Audio recording",
+  "@audio_recording": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "give_access_in_settings": "To continue using all features, please allow LinShare access to the Camera, Microphone, and Phone in your device settings. Camera and Microphone access are needed to capture photos, videos, and audio, while Phone access enables LinShare to automatically pause capture if you receive a call.",
+  "@give_access_in_settings": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "permission_required": "Permission required",
+  "@permission_required": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "recording_saved": "Recording saved",
+  "@recording_saved": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "permission_denied": "Permission denied",
+  "@permission_denied": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "error_while_recording": "An error has occured while recording",
+  "@error_while_recording": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "you_did_not_record_anything": "You did not record anything",
+  "@you_did_not_record_anything": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+
+  "you_cant_delete_the_last_version": "You can't delete the last version, try to delete the whole document",
+  "@you_cant_delete_the_last_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+
+  },
+  "exit": "Exit",
+  "@exit": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "are_you_sure_you_want_to_discard_recording": "Are you sure you want to discard this recording",
+  "@are_you_sure_you_want_to_discard_recording": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+
   }
 }
