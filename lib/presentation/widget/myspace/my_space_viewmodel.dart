@@ -744,7 +744,8 @@ class MySpaceViewModel extends BaseViewModel {
               ? success.pickedFiles
               : success is MediaPickerSuccessViewState
                   ? success.file
-                  : []));
+                      : [],
+              cleanUpCacheFile: success is MediaPickerSuccessViewState));
     };
   }
 

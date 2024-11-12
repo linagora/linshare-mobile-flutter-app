@@ -51,10 +51,15 @@ class RecordAudioViewModel extends BaseViewModel {
   UploadFileArguments? uploadFileArguments;
   var _phoneStateSubscription;
   var duration;
+  final RemoveFileFromCacheInteractor removeFileFromCacheInteractor;
 
-  RecordAudioViewModel(Store<AppState> store, this._appNavigation,
-      this.audioRecorder, this.stopwatch)
-      : super(store) {
+  RecordAudioViewModel(
+    Store<AppState> store,
+    this._appNavigation,
+    this.audioRecorder,
+    this.stopwatch,
+    this.removeFileFromCacheInteractor,
+  ) : super(store) {
     _listenToPhoneState();
   }
 
@@ -119,6 +124,7 @@ class RecordAudioViewModel extends BaseViewModel {
             _appNavigation.popBack();
             var uploadArgs = UploadFileArguments(
               success.file,
+              cleanUpCacheFile: true,
             );
             if (uploadFileArguments != null) {
               uploadArgs.shareType = uploadFileArguments!.shareType;
@@ -243,6 +249,12 @@ class RecordAudioViewModel extends BaseViewModel {
         );
       },
     );
+  }
+
+  void removeFileFromCache() {
+    if (audioRecorder.recordingPath != null) {
+      removeFileFromCacheInteractor.execute(audioRecorder.recordingPath!);
+    }
   }
 
   @override
