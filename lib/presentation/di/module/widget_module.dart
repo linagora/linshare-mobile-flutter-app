@@ -259,7 +259,8 @@ class WidgetModule {
       getIt.get<AppNavigation>(),
       getIt.get<UploadShareFileManager>(),
       getIt.get<GetAutoCompleteSharingInteractor>(),
-      getIt.get<GetAutoCompleteSharingWithDeviceContactInteractor>()
+      getIt.get<GetAutoCompleteSharingWithDeviceContactInteractor>(),
+      getIt.get<RemoveFileFromCacheInteractor>()
     ));
   }
 
@@ -782,6 +783,7 @@ class WidgetModule {
           getIt.get<AppNavigation>(),
           getIt.get<AudioRecorder>(),
           getIt.get<Stopwatch>(),
+          getIt.get<RemoveFileFromCacheInteractor>()
         ));
   }
 }

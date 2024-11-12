@@ -42,14 +42,17 @@ import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class MediaPickerFromCamera {
   var _phoneStateSubscription;
-   FileInfo? fileInfo;
+  FileInfo? fileInfo;
 
-  void _listenToPhoneState(Function onCallReceived,CameraPickerState cameraPickerState,
-      BuildContext context,) {
+  void _listenToPhoneState(
+    Function onCallReceived,
+    CameraPickerState cameraPickerState,
+    BuildContext context,
+  ) {
     _phoneStateSubscription = PhoneState.phoneStateStream.listen(
       (status) {
         if (status == PhoneStateStatus.CALL_INCOMING) {
-          onCallReceived.call(cameraPickerState,context);
+          onCallReceived.call(cameraPickerState, context);
         }
       },
     );
@@ -64,15 +67,16 @@ class MediaPickerFromCamera {
           await PermissionService().tryToGetPermissionForCamera();
       final microphonePermission =
           await PermissionService().tryToGetPermissionForAudioRecording();
-
-      final phonePermission= await PermissionService().tryToGetPermissionForPhoneState();
+      final phonePermission =
+          await PermissionService().tryToGetPermissionForPhoneState();
 
       if (cameraPermission.isGranted && microphonePermission.isGranted) {
-
         List<FileInfo> pickedFiles = [];
         CameraPickerState cameraPickerState = CameraPickerState();
-        if(phonePermission.isGranted){
-          _listenToPhoneState(handleIncomingPhoneCallWhileRecordingCallback,cameraPickerState,context);
+        fileInfo = null;
+        if (phonePermission.isGranted) {
+          _listenToPhoneState(handleIncomingPhoneCallWhileRecordingCallback,
+              cameraPickerState, context);
         }
         await CameraPicker.pickFromCamera(
           createPickerState: () => cameraPickerState,
@@ -91,6 +95,7 @@ class MediaPickerFromCamera {
               CameraPickerViewer.pushToViewer(
                 context,
                 pickerConfig: CameraPickerConfig(
+                  shouldDeletePreviewFile: true,
                   onEntitySaving: ((context, viewType, file) {
                     fileInfo = FileInfo(
                       file.path.split('/').last,
@@ -155,10 +160,10 @@ class MediaPickerFromCamera {
   ) async {
     if (cameraPickerState.controller.value.isRecordingVideo) {
       final xFile = await cameraPickerState.controller.stopVideoRecording();
-
       await CameraPickerViewer.pushToViewer(
         context,
         pickerConfig: CameraPickerConfig(
+          shouldDeletePreviewFile: true,
           onEntitySaving: ((context, viewType, file) {
             fileInfo = FileInfo(
               file.path.split('/').last,

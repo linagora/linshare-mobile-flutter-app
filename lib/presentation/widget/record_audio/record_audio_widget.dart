@@ -82,9 +82,13 @@ class RecordAudioWidgetState extends State<RecordAudioWidget> {
                   } else if (success is AudioRecorderStarted) {
                     recordAudioViewModel.pauseAudioRecording();
                   }
-                  return await DiscardConfirmationDialog()
+                  final popAndDiscard = await DiscardConfirmationDialog()
                           .showExitConfirmationDialog(context) ??
                       false;
+                  if (popAndDiscard) {
+                    recordAudioViewModel.removeFileFromCache();
+                  }
+                  return popAndDiscard;
                 });
               },
               child: Center(

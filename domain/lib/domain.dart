@@ -514,3 +514,4 @@ export 'src/usecases/workgroup/workgroup_exception.dart';
 export 'src/usecases/workgroup/workgroup_view_state.dart';
 export 'src/usecases/media_picker_from_camera/media_picker_viewstate.dart';
 export 'src/usecases/audio_recorder/audio_recorder_viewstate.dart';
+export 'src/usecases/cache/remove_file_from_cache_interactor.dart';

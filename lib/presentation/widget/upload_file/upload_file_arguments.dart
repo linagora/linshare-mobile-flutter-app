@@ -39,12 +39,14 @@ class UploadFileArguments extends RouterArguments {
   ShareDestination? shareDestination;
   List<Document>? documents;
   late WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo;
+  final bool cleanUpCacheFile;
 
   UploadFileArguments(this.uploadFiles, {
     ShareType shareType = ShareType.uploadAndShare,
     List<Document>? documents,
     ShareDestination? shareDestination,
-    WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo
+    WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo,
+    this.cleanUpCacheFile = false
   }) {
     this.shareType = shareType;
     this.shareDestination = shareDestination;
