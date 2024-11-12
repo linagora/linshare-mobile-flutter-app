@@ -7,9 +7,13 @@ class CustomCameraPickerViewer extends CameraPickerViewerState {
   Widget buildConfirmButton(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return await DiscardConfirmationDialog()
+        var popAndDiscard = await DiscardConfirmationDialog()
                 .showExitConfirmationDialog(context) ??
             false;
+        if (popAndDiscard) {
+          await previewFile.delete();
+        }
+        return popAndDiscard;
       },
       child: super.buildConfirmButton(context),
     );

@@ -30,7 +30,6 @@
 //  the Additional Terms applicable to LinShare software.
 
 import 'dart:async';
-
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
@@ -63,10 +62,12 @@ class UploadFileViewModel extends BaseViewModel {
   final UploadShareFileManager _uploadShareFileManager;
   final GetAutoCompleteSharingInteractor _getAutoCompleteSharingInteractor;
   final GetAutoCompleteSharingWithDeviceContactInteractor _getAutoCompleteSharingWithDeviceContactInteractor;
+  final RemoveFileFromCacheInteractor _removeFileFromCacheInteractor;
   late StreamSubscription _autoCompleteResultListSubscription;
   ContactSuggestionSource _contactSuggestionSource = ContactSuggestionSource.linShareContact;
 
   List<FileInfo>? _uploadFilesArgument;
+  bool cleanUpCacheFile = false;
 
   ShareType _shareTypeArgument = ShareType.uploadAndShare;
   ShareType get shareTypeArgument => _shareTypeArgument;
@@ -94,6 +95,7 @@ class UploadFileViewModel extends BaseViewModel {
     this._uploadShareFileManager,
     this._getAutoCompleteSharingInteractor,
     this._getAutoCompleteSharingWithDeviceContactInteractor,
+    this._removeFileFromCacheInteractor
   ) : super(store) {
     _autoCompleteResultListSubscription = _autoCompleteResultListObservable.listen((shareMails) {
       switch (_shareTypeArgument) {
@@ -120,8 +122,17 @@ class UploadFileViewModel extends BaseViewModel {
   }
 
   void backToMySpace() {
+    cleanUpCache();
     _appNavigation.popBack();
     store.dispatch(CleanUploadStateAction());
+  }
+
+  void cleanUpCache() {
+    if (cleanUpCacheFile && _uploadFilesArgument != null) {
+      var filepath =
+          '${_uploadFilesArgument![0].filePath}${_uploadFilesArgument![0].fileName}';
+      _removeFileFromCacheInteractor.execute(filepath);
+    }
   }
 
   void setUploadFilesArgument(List<FileInfo> uploadFiles) {

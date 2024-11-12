@@ -83,6 +83,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     uploadFileViewModel.setUploadFilesArgument(arguments.uploadFiles);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
     uploadFileViewModel.setShareDestinationArgument(arguments.shareDestination);
+    uploadFileViewModel.cleanUpCacheFile = arguments.cleanUpCacheFile;
     if (arguments.documents != null) {
       uploadFileViewModel.setDocumentsArgument(arguments.documents);
     }
@@ -90,7 +91,12 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
       uploadFileViewModel.setWorkGroupDocumentUploadInfoArgument(arguments.workGroupDocumentUploadInfo);
     }
 
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+          uploadFileViewModel.cleanUpCache();
+          return true;
+        },
+        child: Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
@@ -272,7 +278,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+        ));
   }
 
   Widget _buildUploadDestinationPicker() {

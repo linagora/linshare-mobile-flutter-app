@@ -528,6 +528,7 @@ class AppModule {
     getIt.registerFactory(() => SaveQuotaInteractor(getIt<QuotaRepository>()));
     getIt.registerFactory(() => SaveLastLoginInteractor(getIt<AuditUserRepository>()));
     getIt.registerFactory(() => SearchRecipientsUploadRequestInteractor());
+    getIt.registerFactory(() => RemoveFileFromCacheInteractor());
   }
 
   void _provideSharePreference() {

@@ -39,6 +39,7 @@ import 'package:permission_handler/permission_handler.dart';
 class AudioRecorder {
   final RecorderController recorderController = RecorderController();
   final PermissionService permissionService = PermissionService();
+  String? recordingPath;
 
   Future<Either<Failure, Success>> startRecordingAudio() async {
     try {
@@ -49,7 +50,8 @@ class AudioRecorder {
         final tempPath = Directory.systemTemp.path;
         final currentTime = DateTime.now().millisecondsSinceEpoch;
         final fileName = 'audio_$currentTime.m4a';
-        await recorderController.record('$tempPath/$fileName');
+        recordingPath = '$tempPath/$fileName';
+        await recorderController.record(recordingPath);
         return Right(AudioRecorderStarted());
       } else {
         return Left(
@@ -103,7 +105,7 @@ class AudioRecorder {
   Either<Failure, Success> resumeRecording() {
     try {
       recorderController.record();
-      return Right(AudioRecorderPaused());
+      return Right(AudioRecorderStarted());
     } catch (exception) {
       return Left(AudioRecorderFailed());
     }
