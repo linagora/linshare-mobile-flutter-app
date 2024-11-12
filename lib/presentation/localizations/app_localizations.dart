@@ -3034,7 +3034,7 @@ class AppLocalizations {
 
   String get give_access_in_settings {
     return Intl.message(
-        'Please give linshare access in the settings to continue',
+        'To continue using all features, please allow LinShare access to the Camera, Microphone, and Phone in your device settings. Camera and Microphone access are needed to capture photos, videos, and audio, while Phone access enables LinShare to automatically pause capture if you receive a call.',
         name: 'give_access_in_settings');
   }
 
@@ -3070,7 +3070,7 @@ class AppLocalizations {
 
   String get exit {
     return Intl.message(
-      'exit',
+      'Exit',
       name: 'exit',
     );
   }
