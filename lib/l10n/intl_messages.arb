@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-11-06T13:25:45.050236",
+  "@@last_modified": "2024-11-18T00:11:56.997173",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -3114,7 +3114,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "give_access_in_settings": "Please give linshare access in the settings to continue",
+  "give_access_in_settings": "To continue using all features, please allow LinShare access to the Camera, Microphone, and Phone in your device settings. Camera and Microphone access are needed to capture photos, videos, and audio, while Phone access enables LinShare to automatically pause capture if you receive a call.",
   "@give_access_in_settings": {
     "type": "text",
     "placeholders_order": [],
@@ -3150,7 +3150,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "exit": "exit",
+  "you_cant_delete_the_last_version": "You can't delete the last version, try to delete the whole document",
+  "@you_cant_delete_the_last_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "exit": "Exit",
   "@exit": {
     "type": "text",
     "placeholders_order": [],
