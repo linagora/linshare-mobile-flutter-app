@@ -28,45 +28,9 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
+//
+import 'package:linshare_flutter_app/presentation/redux/actions/app_action.dart';
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
+class OpenCameraPicker extends ActionOffline {}
 
-class UploadFileArguments extends RouterArguments {
-  final List<FileInfo> uploadFiles;
-  late ShareType shareType;
-  ShareDestination? shareDestination;
-  List<Document>? documents;
-  late WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo;
-  final bool cleanUpCacheFile;
-
-  UploadFileArguments(this.uploadFiles, {
-    ShareType shareType = ShareType.uploadAndShare,
-    List<Document>? documents,
-    ShareDestination? shareDestination,
-    WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo,
-    this.cleanUpCacheFile = false
-  }) {
-    this.shareType = shareType;
-    this.shareDestination = shareDestination;
-    this.documents = documents;
-    this.workGroupDocumentUploadInfo = workGroupDocumentUploadInfo;
-  }
-}
-
-enum ShareDestination { mySpace }
-
-enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
-
-enum ShareButtonType { justUpload, uploadAndShare, workGroup }
-
-class WorkGroupDocumentUploadInfo {
-  final SharedSpaceNodeNested? sharedSpaceNodeNested;
-  final WorkGroupNode? currentNode;
-  final SharedSpaceDocumentType folderType;
-
-  WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);
-
-  bool isRootNode() => folderType == SharedSpaceDocumentType.root ? true : false;
-}
+class CloseCameraPicker extends ActionOffline {}

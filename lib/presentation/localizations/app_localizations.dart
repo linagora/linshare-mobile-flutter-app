@@ -3023,6 +3023,42 @@ class AppLocalizations {
         name: 'reach_upload_request_limit_message_own_server'
     );
   }
+
+  String get camera {
+    return Intl.message('Camera', name: 'camera');
+  }
+
+  String get audio_recording {
+    return Intl.message('Audio recording', name: 'audio_recording');
+  }
+
+  String get give_access_in_settings {
+    return Intl.message(
+        'To continue using all features, please allow LinShare access to the Camera, Microphone, and Phone in your device settings. Camera and Microphone access are needed to capture photos, videos, and audio, while Phone access enables LinShare to automatically pause capture if you receive a call.',
+        name: 'give_access_in_settings');
+  }
+
+  String get permission_required {
+    return Intl.message('Permission required', name: 'permission_required');
+  }
+
+  String get recording_saved {
+    return Intl.message('Recording saved', name: 'recording_saved');
+  }
+
+  String get permission_denied {
+    return Intl.message('Permission denied', name: 'permission_denied');
+  }
+
+  String get error_while_recording {
+    return Intl.message('An error has occured while recording',
+        name: 'error_while_recording');
+  }
+  
+  String get you_did_not_record_anything {
+    return Intl.message('You did not record anything',
+        name: 'you_did_not_record_anything');
+  }
   
   String get you_cant_delete_the_last_version {
     return Intl.message(
@@ -3031,6 +3067,20 @@ class AppLocalizations {
     );
   }
 
+
+  String get exit {
+    return Intl.message(
+      'exit',
+      name: 'exit',
+    );
+  }
+
+  String get are_you_sure_you_want_to_discard_recording {
+    return Intl.message(
+      'Are you sure you want to discard this recording',
+      name: 'are_you_sure_you_want_to_discard_recording',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

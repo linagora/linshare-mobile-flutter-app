@@ -29,44 +29,23 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
+import 'package:equatable/equatable.dart';
 
-class UploadFileArguments extends RouterArguments {
-  final List<FileInfo> uploadFiles;
-  late ShareType shareType;
-  ShareDestination? shareDestination;
-  List<Document>? documents;
-  late WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo;
-  final bool cleanUpCacheFile;
+class CameraState with EquatableMixin {
+  final cameraStatus status;
 
-  UploadFileArguments(this.uploadFiles, {
-    ShareType shareType = ShareType.uploadAndShare,
-    List<Document>? documents,
-    ShareDestination? shareDestination,
-    WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo,
-    this.cleanUpCacheFile = false
-  }) {
-    this.shareType = shareType;
-    this.shareDestination = shareDestination;
-    this.documents = documents;
-    this.workGroupDocumentUploadInfo = workGroupDocumentUploadInfo;
+  CameraState(this.status) : super();
+
+  factory CameraState.initial() {
+    return CameraState(cameraStatus.IDLE);
   }
+
+  CameraState setCameraStatus(cameraStatus status) {
+    return CameraState(status);
+  }
+
+  @override
+  List<Object?> get props => [status];
 }
 
-enum ShareDestination { mySpace }
-
-enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
-
-enum ShareButtonType { justUpload, uploadAndShare, workGroup }
-
-class WorkGroupDocumentUploadInfo {
-  final SharedSpaceNodeNested? sharedSpaceNodeNested;
-  final WorkGroupNode? currentNode;
-  final SharedSpaceDocumentType folderType;
-
-  WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);
-
-  bool isRootNode() => folderType == SharedSpaceDocumentType.root ? true : false;
-}
+enum cameraStatus { IDLE, IN_USE }

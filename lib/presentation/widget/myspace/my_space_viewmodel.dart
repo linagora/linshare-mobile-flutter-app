@@ -45,6 +45,7 @@ import 'package:linshare_flutter_app/presentation/manager/offline_mode/auto_sync
 import 'package:linshare_flutter_app/presentation/model/file/document_presentation_file.dart';
 import 'package:linshare_flutter_app/presentation/model/file/selectable_element.dart';
 import 'package:linshare_flutter_app/presentation/model/item_selection_type.dart';
+import 'package:linshare_flutter_app/presentation/redux/actions/camera_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/my_space_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/ui_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/upload_file_action.dart';
@@ -52,6 +53,7 @@ import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/my_space_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/ui_state.dart';
+import 'package:linshare_flutter_app/presentation/util/media_picker_from_camera.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/validator_failure_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/local_file_picker.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
@@ -81,6 +83,7 @@ import 'document_details/document_details_arguments.dart';
 
 class MySpaceViewModel extends BaseViewModel {
   final LocalFilePicker _localFilePicker;
+  final MediaPickerFromCamera _mediaPickerFromCamera;
   final AppNavigation _appNavigation;
   final GetAllDocumentInteractor _getAllDocumentInteractor;
   final DownloadFileInteractor _downloadFileInteractor;
@@ -109,6 +112,7 @@ class MySpaceViewModel extends BaseViewModel {
 
   MySpaceViewModel(Store<AppState> store,
       this._localFilePicker,
+      this._mediaPickerFromCamera,
       this._appNavigation,
       this._getAllDocumentInteractor,
       this._downloadFileInteractor,
@@ -135,20 +139,20 @@ class MySpaceViewModel extends BaseViewModel {
          (failure) => null,
          (success) {
             if (success is SearchDocumentNewQuery && event.uiState.searchState.searchStatus == SearchStatus.ACTIVE) {
-              _search(success.searchQuery);
-            } else if (success is DisableSearchViewState) {
-              store.dispatch((MySpaceSetSearchResultAction(_documentList)));
-              _searchQuery = SearchQuery('');
-            } else if (success is RemoveDocumentViewState ||
-                success is RemoveMultipleDocumentsAllSuccessViewState ||
-                success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
-              getAllDocument();
+          _search(success.searchQuery);
+        } else if (success is DisableSearchViewState) {
+          store.dispatch((MySpaceSetSearchResultAction(_documentList)));
+          _searchQuery = SearchQuery('');
+        } else if (success is RemoveDocumentViewState ||
+            success is RemoveMultipleDocumentsAllSuccessViewState ||
+            success is RemoveMultipleDocumentsHasSomeFilesFailedViewState) {
+          getAllDocument();
             } else if (success is MakeAvailableOfflineMultipleDocumentsAllSuccessViewState ||
                 success is MakeAvailableOfflineMultipleDocumentsHasSomeFilesFailedViewState) {
-              store.dispatch(_enableAvailableOfflineDocument(_documentList));
-            } else if (success is ShareDocumentViewState) {
-              getAllDocument();
-            }
+          store.dispatch(_enableAvailableOfflineDocument(_documentList));
+        } else if (success is ShareDocumentViewState) {
+          getAllDocument();
+        }
       });
 
       event.uploadFileState.viewState.fold((failure) => null, (success) {
@@ -202,19 +206,19 @@ class MySpaceViewModel extends BaseViewModel {
         final status = await Permission.storage.status;
         switch (status) {
           case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
-          break;
+            break;
           case PermissionStatus.permanentlyDenied:
             _appNavigation.popBack();
             break;
           default: {
-            final requested = await Permission.storage.request();
-            switch (requested) {
+              final requested = await Permission.storage.request();
+              switch (requested) {
               case PermissionStatus.granted: _download(documentIds, itemSelectionType: itemSelectionType);
-              break;
+                  break;
               default: _appNavigation.popBack();
-              break;
+                  break;
+              }
             }
-          }
         }
       } else {
         _download(documentIds, itemSelectionType: itemSelectionType);
@@ -292,10 +296,10 @@ class MySpaceViewModel extends BaseViewModel {
           ? sharedSpaceDocumentArguments.workGroupFolder?.workGroupNodeId
           : null;
       await _copyMultipleFilesToSharedSpaceInteractor.execute(
-          documents.map((document) => document.toCopyRequest()).toList(),
-          sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
-          destinationParentNodeId: parentNodeId)
-      .then((result) => result.fold(
+              documents.map((document) => document.toCopyRequest()).toList(),
+              sharedSpaceDocumentArguments.sharedSpaceNode.sharedSpaceId,
+              destinationParentNodeId: parentNodeId)
+          .then((result) => result.fold(
               (failure) => store.dispatch(MySpaceAction(Left(failure))),
               (success) => store.dispatch(MySpaceAction(Right(success)))));
     };
@@ -349,14 +353,14 @@ class MySpaceViewModel extends BaseViewModel {
         .setErrorString((value) => _getErrorString(context, document, value))
         .setTextController(
           TextEditingController.fromValue(
-            TextEditingValue(
-                text: name,
+          TextEditingValue(
+              text: name,
                 selection: TextSelection(
                     baseOffset: 0,
                     extentOffset: name.length
                 )
             ),
-          ))
+        ))
         .show(context);
   }
 
@@ -380,10 +384,10 @@ class MySpaceViewModel extends BaseViewModel {
   OnlineThunkAction _duplicateAction(List<Document> documents) {
     return OnlineThunkAction((Store<AppState> store) async {
       await _duplicateMultipleFilesInteractor
-        .execute(documents: documents)
-        .then((result) => result.fold(
-            (failure) => store.dispatch(MySpaceAction(Left(failure))),
-            (success) => store.dispatch(MySpaceAction(Right(success)))));
+          .execute(documents: documents)
+          .then((result) => result.fold(
+              (failure) => store.dispatch(MySpaceAction(Left(failure))),
+              (success) => store.dispatch(MySpaceAction(Right(success)))));
 
       getAllDocument();
     });
@@ -394,10 +398,10 @@ class MySpaceViewModel extends BaseViewModel {
 
     return OnlineThunkAction((Store<AppState> store) async {
       await _renameDocumentInteractor
-        .execute(document.documentId, RenameDocumentRequest(newName))
-        .then((result) => result.fold(
-            (failure) => store.dispatch(MySpaceAction(Left(failure))),
-            (success) => store.dispatch(MySpaceAction(Right(success)))));
+          .execute(document.documentId, RenameDocumentRequest(newName))
+          .then((result) => result.fold(
+              (failure) => store.dispatch(MySpaceAction(Left(failure))),
+              (success) => store.dispatch(MySpaceAction(Right(success)))));
 
       getAllDocument();
     });
@@ -407,17 +411,17 @@ class MySpaceViewModel extends BaseViewModel {
     final listName = _documentList.map((doc) => doc.name).toList();
 
     return _verifyNameInteractor.execute(value, [
-              EmptyNameValidator(),
-              DuplicateNameValidator(listName),
-              SpecialCharacterValidator(),
-              LastDotValidator()
+      EmptyNameValidator(),
+      DuplicateNameValidator(listName),
+      SpecialCharacterValidator(),
+      LastDotValidator()
             ])
         .fold(
             (failure) {
-              if (failure is VerifyNameFailure) {
-                return failure.getMessage(context);
-              } else {
-                return null;
+      if (failure is VerifyNameFailure) {
+        return failure.getMessage(context);
+      } else {
+        return null;
               }},
             (success) => null
     );
@@ -440,6 +444,11 @@ class MySpaceViewModel extends BaseViewModel {
     store.dispatch(_pickFileAction(context, fileType));
   }
 
+  void openCameraPicker(BuildContext context) {
+    _appNavigation.popBack();
+    store.dispatch(_openCameraAction(context));
+  }
+
   void openContextMenu(BuildContext context, Document document, List<Widget> actionTiles, {required Widget footerAction}) {
     store.dispatch(_handleContextMenuAction(context, document, actionTiles, footerAction: footerAction));
   }
@@ -447,7 +456,7 @@ class MySpaceViewModel extends BaseViewModel {
   void openUploadFileMenu(BuildContext context, List<Widget> actionTiles) {
     store.dispatch(_handleUploadFileMenuAction(context, actionTiles));
   }
-  
+
   void onClickPreviewFile(BuildContext context, Document document) {
     if (document.isOfflineMode() && store.state.networkConnectivityState.connectivityResult == ConnectivityResult.none) {
       _openDownloadedPreviewDocument(document, DownloadPreviewDocumentViewState(document.localPath!));
@@ -492,7 +501,7 @@ class MySpaceViewModel extends BaseViewModel {
                 if (success is DownloadPreviewDocumentViewState) {
                   _openDownloadedPreviewDocument(document, success);
                 }
-          }));
+              }));
     });
   }
 
@@ -513,6 +522,7 @@ class MySpaceViewModel extends BaseViewModel {
     return (Store<AppState> store) async {
       ContextMenuBuilder(context)
           .addHeader(SimpleBottomSheetHeaderBuilder(Key('file_picker_bottom_sheet_header_builder'))
+              .addTransformPadding(Matrix4.translationValues(0, 0, 0.0))
               .addLabel(AppLocalizations.of(context).upload_file_title)
               .build())
           .addTiles(actionTiles)
@@ -654,15 +664,15 @@ class MySpaceViewModel extends BaseViewModel {
       store.dispatch(StartMySpaceLoadingAction());
 
       await _getAllDocumentOfflineInteractor.execute().then((result) =>
-        result.fold((failure) {
-          store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
-          _documentList = [];
-          store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
-        }, (success) {
-          store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
+          result.fold((failure) {
+            store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
+            _documentList = [];
+            store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
+          }, (success) {
+            store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
           _documentList = success is MySpaceViewState ? success.documentList : [];
-          store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
-        }));
+            store.dispatch(_sortFilesAction(store.state.mySpaceState.sorter));
+          }));
     };
   }
 
@@ -719,18 +729,38 @@ class MySpaceViewModel extends BaseViewModel {
       await _localFilePicker.pickFiles(fileType: fileType)
          .then((result) {
            store.dispatch(OutsideAppAction(outsideAppType: ActionOutsideAppType.NONE));
-           result.fold(
-              (failure) => store.dispatch(UploadFileAction(Left(failure))),
-              (success) => store.dispatch(_pickFileSuccessAction(success)));
-         });
+        result.fold(
+            (failure) => store.dispatch(UploadFileAction(Left(failure))),
+            (success) => store.dispatch(_pickFileSuccessAction(success)));
+      });
     };
   }
 
-  ThunkAction<AppState> _pickFileSuccessAction(FilePickerSuccessViewState success) {
+  ThunkAction<AppState> _pickFileSuccessAction(Success success) {
     return (Store<AppState> store) async {
       store.dispatch(UploadFileAction(Right(success)));
       await _appNavigation.push(RoutePaths.uploadDocumentRoute,
-          arguments: UploadFileArguments(success.pickedFiles));
+          arguments: UploadFileArguments(success is FilePickerSuccessViewState
+              ? success.pickedFiles
+              : success is MediaPickerSuccessViewState
+                  ? success.file
+                      : [],
+              cleanUpCacheFile: success is MediaPickerSuccessViewState));
+    };
+  }
+
+  ThunkAction<AppState> _openCameraAction(BuildContext context) {
+    return (Store<AppState> store) async {
+      store.dispatch(OpenCameraPicker());
+      await _mediaPickerFromCamera
+          .pickMediaFromCamera(context, _appNavigation)
+          .then((result) {
+            store.dispatch(
+            CloseCameraPicker());
+            result.fold(
+              (failure) => store.dispatch(UploadFileAction(Left(failure))),
+              (success) => store.dispatch(_pickFileSuccessAction(success)));
+    });
     };
   }
 
@@ -753,8 +783,8 @@ class MySpaceViewModel extends BaseViewModel {
   void openMoreActionBottomMenu(BuildContext context, List<Document> documents, List<Widget> actionTiles, Widget footerAction) {
     ContextMenuBuilder(context)
         .addHeader(MoreActionBottomSheetHeaderBuilder(
-          context,
-          Key('more_action_menu_header'),
+                context,
+                Key('more_action_menu_header'),
           documents.map((element) => DocumentPresentationFile.fromDocument(element)).toList()).build())
         .addTiles(actionTiles)
         .addFooter(footerAction)
@@ -789,13 +819,13 @@ class MySpaceViewModel extends BaseViewModel {
         _sortInteractor.execute(_documentList, sorter)
       ]).then((response) => response[1].fold(
         (failure) {
-          _documentList = [];
-          store.dispatch(MySpaceSortDocumentAction(_documentList, sorter));
+            _documentList = [];
+            store.dispatch(MySpaceSortDocumentAction(_documentList, sorter));
         },
         (success) {
           _documentList = success is MySpaceViewState ? success.documentList : [];
-          store.dispatch(MySpaceSortDocumentAction(_documentList, sorter));
-        }));
+            store.dispatch(MySpaceSortDocumentAction(_documentList, sorter));
+          }));
     };
   }
 
@@ -818,17 +848,17 @@ class MySpaceViewModel extends BaseViewModel {
       await _disableAvailableOfflineDocumentInteractor
         .execute(document)
         .then((result) => result.fold(
-          (failure) => store.dispatch(MySpaceAction(Left(failure))),
-          (success) {
-            if (success is DisableAvailableOfflineDocumentViewState) {
+                  (failure) => store.dispatch(MySpaceAction(Left(failure))),
+                  (success) {
+                if (success is DisableAvailableOfflineDocumentViewState) {
               store.dispatch(MySpaceAction(success.result == OfflineModeActionResult.successful
-                  ? Right(success)
-                  : Left(CannotAvailableOfflineDocument())));
-              getAllDocument();
-            } else {
+                          ? Right(success)
+                          : Left(CannotAvailableOfflineDocument())));
+                  getAllDocument();
+                } else {
               store.dispatch(MySpaceAction(Left(CannotAvailableOfflineDocument())));
-            }
-          }));
+                }
+              }));
     };
   }
 
@@ -838,23 +868,23 @@ class MySpaceViewModel extends BaseViewModel {
         .then((result) => result.fold(
           (failure) {
             _documentList[positionDocument] = document.toSyncOfflineDocument(syncOfflineState: SyncOfflineState.none);
-            store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
+                store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
 
-            store.dispatch(MySpaceAction(Left(failure)));
+                store.dispatch(MySpaceAction(Left(failure)));
           },
           (success) {
             if (success is MakeAvailableOfflineDocumentViewState && success.result == OfflineModeActionResult.successful) {
               _documentList[positionDocument] = document.toSyncOfflineDocument(localPath: success.localPath, syncOfflineState: SyncOfflineState.completed);
-              store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
+                  store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
 
-              store.dispatch(MySpaceAction(Right(success)));
-            } else {
+                  store.dispatch(MySpaceAction(Right(success)));
+                } else {
               _documentList[positionDocument] = document.toSyncOfflineDocument(syncOfflineState: SyncOfflineState.none);
-              store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
+                  store.dispatch(MySpaceSetSyncOfflineMode(_documentList));
 
               store.dispatch(MySpaceAction(Left(CannotAvailableOfflineDocument())));
-            }
-          }));
+                }
+              }));
     });
   }
 
@@ -863,16 +893,16 @@ class MySpaceViewModel extends BaseViewModel {
       store.dispatch(StartMySpaceLoadingAction());
 
       await _enableAvailableOfflineDocumentInteractor
-        .execute(documents)
+          .execute(documents)
         .then((result) => result.fold(
           (failure) {
-            store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
-            _documentList = [];
+                store.dispatch(MySpaceGetAllDocumentAction(Left(failure)));
+                _documentList = [];
           },
           (success) {
-            store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
+                store.dispatch(MySpaceGetAllDocumentAction(Right(success)));
             _documentList = success is MySpaceViewState ? success.documentList : [];
-          }));
+              }));
     };
   }
 
@@ -881,6 +911,11 @@ class MySpaceViewModel extends BaseViewModel {
     if (listDocumentAvailableOffline.isNotEmpty) {
       _autoSyncOfflineManager.syncOfflineDocument(listDocumentAvailableOffline);
     }
+  }
+
+  void openAudioRecorder(BuildContext context) {
+    _appNavigation.popBack();
+    _appNavigation.push(RoutePaths.audioRecorder);
   }
 
   @override

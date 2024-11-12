@@ -83,6 +83,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
     uploadFileViewModel.setUploadFilesArgument(arguments.uploadFiles);
     uploadFileViewModel.setShareTypeArgument(arguments.shareType);
     uploadFileViewModel.setShareDestinationArgument(arguments.shareDestination);
+    uploadFileViewModel.cleanUpCacheFile = arguments.cleanUpCacheFile;
     if (arguments.documents != null) {
       uploadFileViewModel.setDocumentsArgument(arguments.documents);
     }

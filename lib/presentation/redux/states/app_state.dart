@@ -34,8 +34,10 @@ import 'package:linshare_flutter_app/presentation/redux/states/account_state.dar
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_node_member_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/add_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/advance_search_settings_workgroup_node_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/audio_recorder_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/authentication_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_login_state.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/camera_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/delete_shared_space_members_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/document_details_state.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/biometric_authentication_setting_state.dart';
@@ -117,6 +119,8 @@ class AppState with EquatableMixin {
   final ReceivedShareDetailsState receivedShareDetailsState;
   final AddRecipientsUploadRequestGroupState addRecipientsUploadRequestGroupState;
   final AdvancedSearchSettingsWorkgroupNodeState advanceSearchSettingsWorkgroupNodeState;
+  final AudioRecorderState audioRecorderState;
+  final CameraState cameraState;
 
   AppState(
       {required this.settingsState,
@@ -160,7 +164,9 @@ class AppState with EquatableMixin {
       required this.createdUploadRequestGroupState,
       required this.activeClosedUploadRequestGroupState,
       required this.archivedUploadRequestGroupState,
-      required this.advanceSearchSettingsWorkgroupNodeState});
+      required this.advanceSearchSettingsWorkgroupNodeState,
+      required this.audioRecorderState,
+      required this.cameraState});
 
   factory AppState.initial() {
     return AppState(
@@ -205,8 +211,10 @@ class AppState with EquatableMixin {
         archivedUploadRequestInsideState: ArchivedUploadRequestInsideState.initial(),
         receivedShareDetailsState: ReceivedShareDetailsState.initial(),
         addRecipientsUploadRequestGroupState: AddRecipientsUploadRequestGroupState.initial(),
-        advanceSearchSettingsWorkgroupNodeState: AdvancedSearchSettingsWorkgroupNodeState.initial()
-    );
+        advanceSearchSettingsWorkgroupNodeState:
+            AdvancedSearchSettingsWorkgroupNodeState.initial(),
+        audioRecorderState: AudioRecorderState.initial(),
+        cameraState: CameraState.initial());
   }
 
   @override
@@ -251,6 +259,8 @@ class AppState with EquatableMixin {
         archivedUploadRequestInsideState,
         receivedShareDetailsState,
         addRecipientsUploadRequestGroupState,
-        advanceSearchSettingsWorkgroupNodeState
+        advanceSearchSettingsWorkgroupNodeState,
+        audioRecorderState,
+        cameraState
       ];
 }

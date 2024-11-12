@@ -29,44 +29,41 @@
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
 
-import 'package:domain/domain.dart';
-import 'package:linshare_flutter_app/presentation/util/data_structure/router_arguments.dart';
-import 'package:linshare_flutter_app/presentation/widget/shared_space_document/shared_space_document_type.dart';
+import 'package:domain/src/state/success.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:linshare_flutter_app/presentation/redux/states/linshare_state.dart';
 
-class UploadFileArguments extends RouterArguments {
-  final List<FileInfo> uploadFiles;
-  late ShareType shareType;
-  ShareDestination? shareDestination;
-  List<Document>? documents;
-  late WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo;
-  final bool cleanUpCacheFile;
+class AudioRecorderState extends LinShareState with EquatableMixin {
+  AudioRecorderState(Either<Failure, Success> viewState) : super(viewState);
 
-  UploadFileArguments(this.uploadFiles, {
-    ShareType shareType = ShareType.uploadAndShare,
-    List<Document>? documents,
-    ShareDestination? shareDestination,
-    WorkGroupDocumentUploadInfo? workGroupDocumentUploadInfo,
-    this.cleanUpCacheFile = false
-  }) {
-    this.shareType = shareType;
-    this.shareDestination = shareDestination;
-    this.documents = documents;
-    this.workGroupDocumentUploadInfo = workGroupDocumentUploadInfo;
+  factory AudioRecorderState.initial() {
+    return AudioRecorderState(
+      Right(IdleState()),
+    );
   }
-}
 
-enum ShareDestination { mySpace }
+  AudioRecorderState setRecordingState(viewState) {
+    return AudioRecorderState(viewState);
+  }
 
-enum ShareType { quickShare, uploadAndShare, none, uploadFromOutside }
+  @override
+  AudioRecorderState clearViewState() {
+    return AudioRecorderState(Right(IdleState()));
+  }
 
-enum ShareButtonType { justUpload, uploadAndShare, workGroup }
+  @override
+  AudioRecorderState sendViewState(
+      {required Either<Failure, Success> viewState}) {
+    return AudioRecorderState(viewState);
+  }
 
-class WorkGroupDocumentUploadInfo {
-  final SharedSpaceNodeNested? sharedSpaceNodeNested;
-  final WorkGroupNode? currentNode;
-  final SharedSpaceDocumentType folderType;
+  @override
+  AudioRecorderState startLoadingState() {
+    return AudioRecorderState(Right(LoadingState()));
+  }
 
-  WorkGroupDocumentUploadInfo(this.sharedSpaceNodeNested, this.currentNode, this.folderType);
-
-  bool isRootNode() => folderType == SharedSpaceDocumentType.root ? true : false;
+  @override
+  List<Object> get props => [viewState];
 }
