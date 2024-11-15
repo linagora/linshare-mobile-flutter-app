@@ -30,19 +30,20 @@
 //  the Additional Terms applicable to LinShare software.
 //
 
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:domain/domain.dart';
+import 'dart:developer' as developer;
 
 class FileHelper {
   void deleteFile(FileInfo fileInfo) async {
-    if (fileInfo != null) {
-      final file = File(fileInfo.filePath + fileInfo.fileName);
-      try {
-        await file.delete();
-      } catch (exception) {
-        print('error when delete file: ${fileInfo.fileName} ' + exception.toString());
-      }
+    developer.log('deleteFile(): $fileInfo', name: 'FileHelper');
+    final file = File(fileInfo.filePath + fileInfo.fileName);
+    try {
+      await file.delete();
+    } catch (exception) {
+      developer.log('deleteFile(): error when delete file: ${fileInfo.fileName}' + exception.toString(), name: 'FileHelper');
     }
   }
 }
