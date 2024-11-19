@@ -82,6 +82,7 @@ class MediaPickerFromCamera {
           createPickerState: () => cameraPickerState,
           context,
           pickerConfig: CameraPickerConfig(
+            maximumRecordingDuration: null,
             onError: (
               exception,
               stacktrace,
@@ -92,7 +93,7 @@ class MediaPickerFromCamera {
               xFile,
               view,
             ) {
-              CameraPickerViewer.pushToViewer(
+              var entity = CameraPickerViewer.pushToViewer(
                 context,
                 pickerConfig: CameraPickerConfig(
                   shouldDeletePreviewFile: true,
@@ -111,7 +112,12 @@ class MediaPickerFromCamera {
                 previewXFile: xFile,
                 createViewerState: () => CustomCameraPickerViewer(),
               );
-              cameraPickerState.controller.resumePreview();
+              entity.then((value) {
+                if (value == null) {
+                  resumeCameraPreview(cameraPickerState);
+                }
+              });
+             
               return true;
             },
             shouldDeletePreviewFile: true,
@@ -180,5 +186,9 @@ class MediaPickerFromCamera {
         createViewerState: () => CustomCameraPickerViewer(),
       );
     }
+  }
+
+  void resumeCameraPreview(CameraPickerState cameraPickerState) async {
+    await cameraPickerState.controller.resumePreview();
   }
 }
