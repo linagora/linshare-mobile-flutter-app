@@ -68,6 +68,7 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
   void initState() {
     super.initState();
     uploadFileViewModel.cancelSelection();
+    uploadFileViewModel.checkContactPermission(context);
   }
 
   @override

@@ -32,6 +32,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/model/upload_request_group_tab.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/add_recipients_upload_request_group_action.dart';
@@ -42,6 +43,7 @@ import 'package:linshare_flutter_app/presentation/redux/actions/upload_request_i
 import 'package:linshare_flutter_app/presentation/redux/online_thunk_action.dart';
 import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/permission_dialog.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/confirm_modal_sheet_builder.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/upload_file/upload_file_viewmodel.dart';
@@ -68,9 +70,7 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
       this._getAutoCompleteSharingWithDeviceContactInteractor,
       this._addRecipientsToUploadRequestGroupInteractor,
       this._getAllUploadRequestsInteractor)
-      : super(store) {
-    Future.delayed(Duration(milliseconds: 500), () => _checkContactPermission());
-  }
+      : super(store);
 
   void initState(AddRecipientsUploadRequestGroupArgument argument) {
     store.dispatch(_getAllUploadRequests(argument.uploadRequestGroup.uploadRequestGroupId));
@@ -187,11 +187,21 @@ class AddRecipientsUploadRequestGroupViewModel extends BaseViewModel {
     }
   }
 
-  void _checkContactPermission() async {
+  void checkContactPermission(BuildContext context) async {
     final permissionStatus = await Permission.contacts.status;
     if (permissionStatus.isGranted) {
       _contactSuggestionSource = ContactSuggestionSource.all;
     } else if (!permissionStatus.isPermanentlyDenied) {
+      final confirmExplanation = await PermissionDialog.showPermissionDialog(
+              context,
+              Center(
+                child: Icon(Icons.warning, color: Colors.orange, size: 40),
+              ),
+              AppLocalizations.of(context).explain_contact_permission) ??
+          false;
+      if (!confirmExplanation) {
+        return;
+      }
       final requestedPermission = await Permission.contacts.request();
       _contactSuggestionSource = requestedPermission == PermissionStatus.granted
           ? ContactSuggestionSource.all

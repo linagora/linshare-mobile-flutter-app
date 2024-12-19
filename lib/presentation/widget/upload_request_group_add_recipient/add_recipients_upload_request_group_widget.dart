@@ -64,13 +64,14 @@ class _AddSharedSpaceMemberWidgetState extends State<AddRecipientsUploadRequestG
 
   @override
   void initState() {
+    super.initState();
     Future.delayed(Duration.zero, () {
       _arguments = ModalRoute.of(context)?.settings.arguments as AddRecipientsUploadRequestGroupArgument;
       if (_arguments != null) {
         _model.initState(_arguments!);
       }
     });
-    super.initState();
+    _model.checkContactPermission(context);
   }
 
   @override
