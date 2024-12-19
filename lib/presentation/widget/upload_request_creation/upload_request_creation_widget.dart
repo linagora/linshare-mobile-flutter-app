@@ -73,6 +73,7 @@ class _UploadRequestCreationWidgetState extends State<UploadRequestCreationWidge
       _arguments = ModalRoute.of(context)?.settings.arguments as UploadRequestCreationArguments;
       _model.initialize(_arguments);
     });
+    _model.checkContactPermission(context);
   }
 
   @override

@@ -54,6 +54,7 @@ import 'package:linshare_flutter_app/presentation/util/extensions/list_functiona
 import 'package:linshare_flutter_app/presentation/util/extensions/string_extensions.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/value_notifier_common.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/permission_dialog.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/modal_card.dart';
 import 'package:linshare_flutter_app/presentation/view/modal_sheets/reach_limitation_alert.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
@@ -62,6 +63,7 @@ import 'package:linshare_flutter_app/presentation/widget/upload_request_creation
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/src/store.dart';
 import 'package:rxdart/rxdart.dart';
+
 
 class UploadRequestCreationViewModel extends BaseViewModel {
 
@@ -146,8 +148,6 @@ class UploadRequestCreationViewModel extends BaseViewModel {
     }).listen((event) {
       event ? _enableCreateButton.add(true) : _enableCreateButton.add(false);
     });
-
-    Future.delayed(Duration(milliseconds: 500), () => _checkContactPermission());
   }
 
   void _disposeValueNotifier() {
@@ -534,11 +534,21 @@ class UploadRequestCreationViewModel extends BaseViewModel {
     );
   }
 
-  void _checkContactPermission() async {
+  void checkContactPermission(BuildContext context) async {
     final permissionStatus = await Permission.contacts.status;
     if (permissionStatus.isGranted) {
       _contactSuggestionSource = ContactSuggestionSource.all;
     } else if (!permissionStatus.isPermanentlyDenied) {
+      final confirmExplanation = await PermissionDialog.showPermissionDialog(
+              context,
+              Center(
+                child: Icon(Icons.warning, color: Colors.orange, size: 40),
+              ),
+              AppLocalizations.of(context).explain_contact_permission) ??
+          false;
+      if (!confirmExplanation) {
+        return;
+      }
       final requestedPermission = await Permission.contacts.request();
       _contactSuggestionSource = requestedPermission == PermissionStatus.granted
           ? ContactSuggestionSource.all
