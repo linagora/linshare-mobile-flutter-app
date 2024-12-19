@@ -3082,6 +3082,26 @@ class AppLocalizations {
       name: 'are_you_sure_you_want_to_discard_recording',
     );
   }
+  String get allow {
+    return Intl.message(
+      'Allow',
+      name: 'allow',
+    );
+  }
+
+  String get not_now {
+    return Intl.message(
+      'Not now',
+      name: 'not_now',
+    );
+  }
+
+  String get explain_contact_permission {
+    return Intl.message(
+      'LinShare requests access to your contacts solely to provide autocomplete suggestions when you are adding a recipient to share files or collaborate with others. Please note that your contacts are not synchronized with the server.',
+      name: 'explain_contact_permission',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

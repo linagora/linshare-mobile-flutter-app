@@ -41,6 +41,7 @@ import 'package:linshare_flutter_app/presentation/redux/states/app_state.dart';
 import 'package:linshare_flutter_app/presentation/util/extensions/media_type_extension.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/util/router/route_paths.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/permission_dialog.dart';
 import 'package:linshare_flutter_app/presentation/widget/base/base_viewmodel.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/choose_destination_picker_action.dart';
 import 'package:linshare_flutter_app/presentation/widget/destination_picker/destination_picker_action/negative_destination_picker_action.dart';
@@ -117,8 +118,6 @@ class UploadFileViewModel extends BaseViewModel {
           break;
       }
     });
-
-    Future.delayed(Duration(milliseconds: 500), () => _checkContactPermission());
   }
 
   void backToMySpace() {
@@ -338,11 +337,21 @@ class UploadFileViewModel extends BaseViewModel {
     store.dispatch(MySpaceClearSelectedDocumentsAction());
   }
 
-  void _checkContactPermission() async {
+  void checkContactPermission(BuildContext context) async {
     final permissionStatus = await Permission.contacts.status;
     if (permissionStatus.isGranted) {
       _contactSuggestionSource = ContactSuggestionSource.all;
     } else if (!permissionStatus.isPermanentlyDenied) {
+      final confirmExplanation = await PermissionDialog.showPermissionDialog(
+              context,
+              Center(
+                child: Icon(Icons.warning, color: Colors.orange, size: 40),
+              ),
+              AppLocalizations.of(context).explain_contact_permission) ??
+          false;
+      if (!confirmExplanation) {
+        return;
+      }
       final requestedPermission = await Permission.contacts.request();
       _contactSuggestionSource = requestedPermission == PermissionStatus.granted
           ? ContactSuggestionSource.all
