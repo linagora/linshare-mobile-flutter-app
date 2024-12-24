@@ -33,19 +33,36 @@ import 'dart:io';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/permission_service.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/permission_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AudioRecorder {
   final RecorderController recorderController = RecorderController();
-  final PermissionService permissionService = PermissionService();
   String? recordingPath;
 
-  Future<Either<Failure, Success>> startRecordingAudio() async {
+  Future<Either<Failure, Success>> startRecordingAudio(
+      BuildContext context) async {
     try {
+      if (!await PermissionService.arePermissionsGranted(
+          [Permission.microphone, Permission.phone])) {
+        final confirmExplanation = await PermissionDialog.showPermissionDialog(
+                context,
+                Center(
+                  child: Icon(Icons.warning, color: Colors.orange, size: 40),
+                ),
+                AppLocalizations.of(context)
+                    .explain_audio_recorder_permission) ??
+            false;
+        if (!confirmExplanation) {
+          return Left(AudioPermissionDenied(false));
+        }
+      }
       final microphonePermission =
-          await permissionService.tryToGetPermissionForAudioRecording();
-      await permissionService.tryToGetPermissionForPhoneState();
+          await PermissionService.tryToGetPermissionForAudioRecording();
+      await PermissionService.tryToGetPermissionForPhoneState();
       if (microphonePermission.isGranted) {
         final tempPath = Directory.systemTemp.path;
         final currentTime = DateTime.now().millisecondsSinceEpoch;

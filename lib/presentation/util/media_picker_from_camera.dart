@@ -32,10 +32,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/util/permission_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/camera_picker/custom_camera_picker_viewer.dart';
 import 'package:linshare_flutter_app/presentation/view/dialog/open_settings_dialog.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/permission_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
@@ -63,12 +65,28 @@ class MediaPickerFromCamera {
     AppNavigation appNavigation,
   ) async {
     try {
+      if (!await PermissionService.arePermissionsGranted(
+          [Permission.camera, Permission.microphone])) {
+        final confirmExplanation = await PermissionDialog.showPermissionDialog(
+                context,
+                Center(
+                  child: Icon(Icons.warning, color: Colors.orange, size: 40),
+                ),
+                AppLocalizations.of(context).explain_camera_permission) ??
+            false;
+        if (!confirmExplanation) {
+          return Left(
+            CameraPermissionDenied(),
+          );
+        }
+      }
       final cameraPermission =
-          await PermissionService().tryToGetPermissionForCamera();
+          await PermissionService.tryToGetPermissionForCamera();
+
       final microphonePermission =
-          await PermissionService().tryToGetPermissionForAudioRecording();
+          await PermissionService.tryToGetPermissionForAudioRecording();
       final phonePermission =
-          await PermissionService().tryToGetPermissionForPhoneState();
+          await PermissionService.tryToGetPermissionForPhoneState();
 
       if (cameraPermission.isGranted && microphonePermission.isGranted) {
         List<FileInfo> pickedFiles = [];

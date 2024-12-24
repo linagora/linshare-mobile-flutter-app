@@ -3102,6 +3102,17 @@ class AppLocalizations {
       name: 'explain_contact_permission',
     );
   }
+  String get explain_audio_recorder_permission {
+    return Intl.message(
+        'LinShare requests audio permission to record audio messages and phone state permission to handle pausing while recording during calls',
+        name: 'explain_audio_recorder_permission');
+  }
+
+  String get explain_camera_permission {
+    return Intl.message(
+        'Linshare requests camera and microphone permissions to capture photos and videos and phone state permission to handle pausing while recording during calls ',
+        name: 'explain_camera_permission');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

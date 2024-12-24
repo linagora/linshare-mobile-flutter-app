@@ -177,7 +177,8 @@ class RecordAudioWidgetState extends State<RecordAudioWidget> {
   Widget recordAudioStartPauseButton() {
     return FloatingActionButton(
         heroTag: 'record_audio_start_pause_button',
-        onPressed: recordAudioViewModel.pauseAndStartAudioRecording,
+        onPressed: () =>
+            recordAudioViewModel.pauseAndStartAudioRecording(context),
         backgroundColor: Colors.red,
         child: StoreConnector<AppState, AudioRecorderState>(
             converter: (store) => store.state.audioRecorderState,

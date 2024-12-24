@@ -1,21 +1,33 @@
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionService {
-  Future<PermissionStatus> tryToGetPermissionForCamera() async {
+
+  static Future<bool> arePermissionsGranted(
+      List<Permission> permissions) async {
+    for (var permission in permissions) {
+      if (!await permission.isGranted) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static Future<PermissionStatus> tryToGetPermissionForCamera() async {
     final status = await Permission.camera.request();
     return status;
   }
 
-  Future<PermissionStatus> tryToGetPermissionForAudioRecording() async {
+  static Future<PermissionStatus> tryToGetPermissionForAudioRecording() async {
     final status = await Permission.microphone.request();
     return status;
   }
-  Future<PermissionStatus> tryToGetPermissionForPhoneState() async {
+  static Future<PermissionStatus> tryToGetPermissionForPhoneState() async {
     final status = await Permission.phone.request();
     return status;
   }
 
-  Future<PermissionStatus> handleMediaPickerPermissionAndroidHigher33() async {
+  static Future<PermissionStatus>
+      handleMediaPickerPermissionAndroidHigher33() async {
     PermissionStatus? photoPermission = await Permission.photos.status;
     if (photoPermission == PermissionStatus.denied) {
       photoPermission = await Permission.photos.request();
