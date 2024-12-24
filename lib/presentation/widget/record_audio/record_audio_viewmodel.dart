@@ -73,8 +73,8 @@ class RecordAudioViewModel extends BaseViewModel {
     );
   }
 
-  void startAudioRecording() {
-    audioRecorder.startRecordingAudio().then((result) {
+  void startAudioRecording(BuildContext context) {
+    audioRecorder.startRecordingAudio(context).then((result) {
       result.fold((failure) {
         store.dispatch(
           StopRecording(),
@@ -188,12 +188,12 @@ class RecordAudioViewModel extends BaseViewModel {
     );
   }
 
-  void pauseAndStartAudioRecording() {
+  void pauseAndStartAudioRecording(BuildContext context) {
     store.state.audioRecorderState.viewState.fold(
       (failure) => null,
       (success) {
         if (success is IdleState) {
-          startAudioRecording();
+          startAudioRecording(context);
         } else if (success is AudioRecorderStarted) {
           pauseAudioRecording();
         } else if (success is AudioRecorderPaused) {
