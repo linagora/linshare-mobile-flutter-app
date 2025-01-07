@@ -342,7 +342,8 @@ class UploadFileViewModel extends BaseViewModel {
     if (permissionStatus.isGranted) {
       _contactSuggestionSource = ContactSuggestionSource.all;
     } else if (!permissionStatus.isPermanentlyDenied) {
-      final confirmExplanation = await PermissionDialog.showPermissionDialog(
+      final confirmExplanation =
+          await PermissionDialog.showPermissionExplanationDialog(
               context,
               Center(
                 child: Icon(Icons.warning, color: Colors.orange, size: 40),

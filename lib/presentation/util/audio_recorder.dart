@@ -48,7 +48,8 @@ class AudioRecorder {
     try {
       if (!await PermissionService.arePermissionsGranted(
           [Permission.microphone, Permission.phone])) {
-        final confirmExplanation = await PermissionDialog.showPermissionDialog(
+        final confirmExplanation =
+            await PermissionDialog.showPermissionExplanationDialog(
                 context,
                 Center(
                   child: Icon(Icons.warning, color: Colors.orange, size: 40),

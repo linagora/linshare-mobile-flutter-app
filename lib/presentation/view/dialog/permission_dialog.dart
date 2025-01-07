@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 
 class PermissionDialog {
-  static Future<bool?> showPermissionDialog(
+  static Future<bool?> showPermissionExplanationDialog(
       BuildContext context, Widget title, String content) async {
     return showDialog<bool>(
         barrierDismissible: false,

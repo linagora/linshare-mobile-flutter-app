@@ -67,7 +67,8 @@ class MediaPickerFromCamera {
     try {
       if (!await PermissionService.arePermissionsGranted(
           [Permission.camera, Permission.microphone])) {
-        final confirmExplanation = await PermissionDialog.showPermissionDialog(
+        final confirmExplanation =
+            await PermissionDialog.showPermissionExplanationDialog(
                 context,
                 Center(
                   child: Icon(Icons.warning, color: Colors.orange, size: 40),

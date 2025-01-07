@@ -920,7 +920,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               Key('pick_photo_and_video_context_menu_action'),
               SvgPicture.asset(imagePath.icPhotoLibrary, width: 24, height: 24, fit: BoxFit.fill,color: AppColor.primaryColor,),
               AppLocalizations.of(context).photos_and_videos)
-          .onActionClick((_) => sharedSpaceDocumentViewModel.openFilePickerByType(FileType.media))
+        .onActionClick((_) => sharedSpaceDocumentViewModel.openFilePickerByType(
+            FileType.media, context))
           .build();
   }
 
@@ -935,7 +936,8 @@ class _SharedSpaceDocumentWidgetState extends State<SharedSpaceDocumentWidget> {
               color: AppColor.primaryColor,
             ),
               AppLocalizations.of(context).browse)
-          .onActionClick((_) => sharedSpaceDocumentViewModel.openFilePickerByType(FileType.any))
+        .onActionClick((_) => sharedSpaceDocumentViewModel.openFilePickerByType(
+            FileType.any, context))
           .build();
   }
 
