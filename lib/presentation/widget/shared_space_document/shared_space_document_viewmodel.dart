@@ -439,16 +439,17 @@ class SharedSpaceDocumentNodeViewModel extends BaseViewModel {
     store.dispatch(_handleUploadFileMenuAction(context, actionTiles));
   }
 
-  void openFilePickerByType(FileType fileType) {
+  void openFilePickerByType(FileType fileType, BuildContext context) {
     _appNavigation.popBack();
-    store.dispatch(_pickFileAction(fileType));
+    store.dispatch(_pickFileAction(fileType, context));
   }
 
-  ThunkAction<AppState> _pickFileAction(FileType fileType) {
+  ThunkAction<AppState> _pickFileAction(
+      FileType fileType, BuildContext context) {
     return (Store<AppState> store) async {
       store.dispatch(OutsideAppAction(outsideAppType: ActionOutsideAppType.PICKING_FILE));
       await _localFilePicker
-        .pickFiles(fileType: fileType)
+          .pickFiles(context, fileType: fileType)
         .then((result) {
           store.dispatch(OutsideAppAction(outsideAppType: ActionOutsideAppType.NONE));
           result.fold(

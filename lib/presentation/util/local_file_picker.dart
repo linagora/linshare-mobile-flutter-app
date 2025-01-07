@@ -28,16 +28,46 @@
 // <http://www.gnu.org/licenses/> for the GNU Affero General Public License version
 //  3 and <http://www.linshare.org/licenses/LinShare-License_AfferoGPL-v3.pdf> for
 //  the Additional Terms applicable to LinShare software.
-
+import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/util/permission_service.dart';
+import 'package:linshare_flutter_app/presentation/view/dialog/permission_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LocalFilePicker {
-
-  Future<Either<Failure, FilePickerSuccessViewState>> pickFiles({FileType fileType = FileType.any}) async {
+  Future<Either<Failure, FilePickerSuccessViewState>> pickFiles(
+      BuildContext context,
+      {FileType fileType = FileType.any}) async {
     try {
-      final filesResult = await FilePicker.platform.pickFiles(type: fileType, allowMultiple: true);
+      if (Platform.isAndroid && await PermissionService.isAndroid32AndLower()) {
+        final permissionStatus = await Permission.storage.status;
+        if (!permissionStatus.isGranted) {
+          final confirmExplanation =
+              await PermissionDialog.showPermissionExplanationDialog(
+                      context,
+                      Center(
+                        child:
+                            Icon(Icons.warning, color: Colors.orange, size: 40),
+                      ),
+                      AppLocalizations.of(context)
+                          .explain_storage_permission) ??
+                  false;
+          if (!confirmExplanation) {
+            return Left(FilePickerFailure(Exception('Permission denied')));
+          }
+          final requestedPermission = await PermissionService
+              .tryToGetPermissionForStorageForAndroid32AndLower();
+          if (requestedPermission != PermissionStatus.granted) {
+            return Left(FilePickerFailure(Exception('Permission denied')));
+          }
+        }
+      }
+      final filesResult = await FilePicker.platform
+          .pickFiles(type: fileType, allowMultiple: true);
       if (filesResult != null && filesResult.files.isNotEmpty) {
         final filesInfoResult = filesResult.files.map((platformFile) {
           return FileInfo(

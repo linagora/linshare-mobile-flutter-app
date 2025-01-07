@@ -1,7 +1,7 @@
+import 'package:device_info/device_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionService {
-
   static Future<bool> arePermissionsGranted(
       List<Permission> permissions) async {
     for (var permission in permissions) {
@@ -21,6 +21,7 @@ class PermissionService {
     final status = await Permission.microphone.request();
     return status;
   }
+
   static Future<PermissionStatus> tryToGetPermissionForPhoneState() async {
     final status = await Permission.phone.request();
     return status;
@@ -49,4 +50,18 @@ class PermissionService {
 
     return PermissionStatus.denied;
   }
+
+  static Future<PermissionStatus>
+      tryToGetPermissionForStorageForAndroid32AndLower() async {
+    final status = await Permission.storage.request();
+    return status;
+  }
+
+  static Future<bool> isAndroid32AndLower() async {
+    final deviceInfoPlugin = DeviceInfoPlugin();
+    final androidInfo = await deviceInfoPlugin.androidInfo;
+    final apiLevel = androidInfo.version.sdkInt;
+    return apiLevel <= 32;
+  }
+
 }

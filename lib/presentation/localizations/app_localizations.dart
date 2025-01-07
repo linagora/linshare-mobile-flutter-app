@@ -3113,6 +3113,13 @@ class AppLocalizations {
         'Linshare requests camera and microphone permissions to capture photos and videos and phone state permission to handle pausing while recording during calls ',
         name: 'explain_camera_permission');
   }
+  
+  String get explain_storage_permission {
+    return Intl.message(
+      'Linshare requests storage permission to let you upload files from your file system, ensuring you can easily share your documents, photos, and videos.',
+      name: 'explain_storage_permission',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
