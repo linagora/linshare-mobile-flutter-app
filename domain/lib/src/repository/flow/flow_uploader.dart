@@ -32,16 +32,19 @@
  */
 
 import 'dart:async';
-import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:dartz/dartz.dart';
-import 'package:domain/domain.dart';
 import 'package:domain/src/model/async_task/async_task.dart';
+import 'package:domain/src/model/file_info.dart';
 import 'package:domain/src/model/flow/flow.dart';
+import 'package:domain/src/model/flow/flow_file.dart';
+import 'package:domain/src/state/failure.dart';
+import 'package:domain/src/state/success.dart';
 
 abstract class FlowUploader {
   Future<Flow> uploadChunk(
-    File file,
+    ChunkedStreamReader<int> chunkedStreamReaderFile,
     int chunkNumber,
     int chunkSize,
     int currentChunkSize,

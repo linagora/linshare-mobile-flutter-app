@@ -37,13 +37,9 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/src/model/async_task/async_task.dart';
 import 'package:domain/src/model/async_task/async_task_exception.dart';
 import 'package:domain/src/model/async_task/async_task_status.dart';
-import 'package:domain/src/model/flow/flow_chunk.dart';
 import 'package:domain/src/model/flow/flow_chunk_upload_state.dart';
-import 'package:domain/src/repository/flow/flow_uploader.dart';
-import 'package:domain/src/usecases/upload_file/flow_upload_state.dart';
 import 'package:equatable/equatable.dart';
 import 'package:retry/retry.dart';
 
@@ -110,21 +106,26 @@ class FlowFile extends Equatable {
   }
 
   void _updateEvent(Either<Failure, Success> flowUploadState) {
+    developer.log('_updateEvent(): $flowUploadState', name: 'FlowFile');
     _progressStateController.add(flowUploadState);
   }
 
   void _handleCompleted() {
-    if (chunks.every((chunk) => chunk.status == FlowChunkUploadState.success)) {
-      final asyncTaskId = _getProcessingTaskId();
-      if (asyncTaskId != null) {
-        _handleProcessing(asyncTaskId);
+    try {
+      if (chunks.every((chunk) => chunk.status == FlowChunkUploadState.success)) {
+        final asyncTaskId = _getProcessingTaskId();
+        if (asyncTaskId != null) {
+          _handleProcessing(asyncTaskId);
+        } else {
+          _handleSuccess();
+        }
       } else {
-        _handleSuccess();
+        developer.log('handleCompleted(): error', name: 'FlowFile');
+        _updateEvent(Left(ErrorFlowUploadState(this)));
+        _progressStateController.close();
       }
-    } else {
-      developer.log('handleCompleted(): error', name: 'FlowFile');
-      _updateEvent(Left(ErrorFlowUploadState(this)));
-      _progressStateController.close();
+    } catch (e) {
+      developer.log('_handleCompleted(): exception $e', name: 'FlowFile');
     }
   }
 
@@ -177,6 +178,7 @@ class FlowFile extends Equatable {
       if (success) {
         _updateProgress(chunk);
       }
+      chunk.completed();
     }
   }
 
