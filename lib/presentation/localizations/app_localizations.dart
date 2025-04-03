@@ -3120,6 +3120,20 @@ class AppLocalizations {
       name: 'explain_storage_permission',
     );
   }
+
+  String get privacyPolicy {
+    return Intl.message(
+      'Privacy policy',
+      name: 'privacyPolicy',
+    );
+  }
+  
+  String get byContinuingYouAreAgreeingToOur {
+    return Intl.message(
+      'By continuing, you\'re agreeing to our',
+      name: 'byContinuingYouAreAgreeingToOur',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

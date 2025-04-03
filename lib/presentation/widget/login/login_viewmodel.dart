@@ -34,7 +34,6 @@ import 'dart:developer' as developer;
 import 'package:dartz/dartz.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
 import 'package:linshare_flutter_app/presentation/redux/actions/authentication_action.dart';
@@ -56,6 +55,7 @@ import 'package:linshare_flutter_app/presentation/widget/login/login_arguments.d
 import 'package:linshare_flutter_app/presentation/widget/login/login_form_type.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class LoginViewModel extends BaseViewModel {
 
@@ -465,6 +465,12 @@ class LoginViewModel extends BaseViewModel {
     FocusScope.of(context).unfocus();
     _clearAllValueInput();
     store.dispatch(UpdateAuthenticationScreenStateAction(LoginFormType.main));
+  }
+
+  void onClickPrivacyPolicy() async {
+    if (await canLaunchUrlString(Constant.linagoraPrivacyUrl)) {
+      await launchUrlString(Constant.linagoraPrivacyUrl);
+    }
   }
 
   @override

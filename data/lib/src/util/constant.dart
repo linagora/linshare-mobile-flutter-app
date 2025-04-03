@@ -43,4 +43,5 @@ class Constant {
   static const linshareClientAppHeader = 'X-LinShare-Client-App';
   static const linshareClientAppValue = 'Linshare-Web';
   static const linshareTokenIdHeader = 'X-Linshare-Id-Token';
+  static const String linagoraPrivacyUrl = 'https://linshare.app/privacy';
 }

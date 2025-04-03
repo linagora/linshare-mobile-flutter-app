@@ -382,6 +382,35 @@ class _LoginWidgetState extends State<LoginWidget> {
               .text(AppLocalizations.of(context).login_message_bottom)
               .textStyle(TextStyle(fontSize: 13, color: AppColor.loginMessageBottomColor))
               .build()),
+        if (_responsiveUtils.isLandscapeSmallScreen(context))
+          const SizedBox(
+            height: 32,
+          ),
+          Column(
+            children: [
+              Text(
+                AppLocalizations.of(context).byContinuingYouAreAgreeingToOur,
+                style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.loginMessageBottomColor,
+                    ),
+              ),
+              InkWell(
+                onTap: loginViewModel.onClickPrivacyPolicy,
+                child: Text(
+                  AppLocalizations.of(context).privacyPolicy,
+                  style:
+                      TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Inter',
+                        color: AppColor.loginDefaultButtonColor,
+                      ),
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }

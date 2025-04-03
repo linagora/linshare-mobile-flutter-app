@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-11-18T00:11:56.997173",
+  "@@last_modified": "2025-04-03T17:00:42.830043",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -3174,79 +3174,40 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "you_cant_delete_the_last_version": "You can't delete the last version, try to delete the whole document",
-  "@you_cant_delete_the_last_version": {
+  "allow": "Allow",
+  "@allow": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "camera": "Camera",
-  "@camera": {
+  "not_now": "Not now",
+  "@not_now": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "audio_recording": "Audio recording",
-  "@audio_recording": {
+  "explain_contact_permission": "LinShare requests access to your contacts solely to provide autocomplete suggestions when you are adding a recipient to share files or collaborate with others. Please note that your contacts are not synchronized with the server.",
+  "@explain_contact_permission": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "give_access_in_settings": "To continue using all features, please allow LinShare access to the Camera, Microphone, and Phone in your device settings. Camera and Microphone access are needed to capture photos, videos, and audio, while Phone access enables LinShare to automatically pause capture if you receive a call.",
-  "@give_access_in_settings": {
+  "explain_audio_recorder_permission": "LinShare requests audio permission to record audio messages and phone state permission to handle pausing while recording during calls",
+  "@explain_audio_recorder_permission": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "permission_required": "Permission required",
-  "@permission_required": {
+  "explain_camera_permission": "Linshare requests camera and microphone permissions to capture photos and videos and phone state permission to handle pausing while recording during calls ",
+  "@explain_camera_permission": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "recording_saved": "Recording saved",
-  "@recording_saved": {
+  "explain_storage_permission": "Linshare requests storage permission to let you upload files from your file system, ensuring you can easily share your documents, photos, and videos.",
+  "@explain_storage_permission": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
-  },
-  "permission_denied": "Permission denied",
-  "@permission_denied": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "error_while_recording": "An error has occured while recording",
-  "@error_while_recording": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "you_did_not_record_anything": "You did not record anything",
-  "@you_did_not_record_anything": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-
-  "you_cant_delete_the_last_version": "You can't delete the last version, try to delete the whole document",
-  "@you_cant_delete_the_last_version": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-
-  },
-  "exit": "Exit",
-  "@exit": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
-  "are_you_sure_you_want_to_discard_recording": "Are you sure you want to discard this recording",
-  "@are_you_sure_you_want_to_discard_recording": {
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-
   }
 }
