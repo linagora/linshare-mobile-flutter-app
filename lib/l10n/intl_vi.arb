@@ -2534,5 +2534,7 @@
   "@confirm": {
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "shootingWithRecordingTips": "Nhấn để chụp ảnh. Nhấn và giữ để quay hình.",
+  "@shootingWithRecordingTips": {}
 }

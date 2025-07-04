@@ -65,6 +65,9 @@ class MediaPickerFromCamera {
     BuildContext context,
     AppNavigation appNavigation,
   ) async {
+    // Get the AppLocalizations instance before opening the camera picker
+    final localizations = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context);
     try {
       if (!await PermissionService.arePermissionsGranted(
           [Permission.camera, Permission.microphone])) {
@@ -128,7 +131,9 @@ class MediaPickerFromCamera {
                       ..pop()
                       ..pop();
                   }),
-                  textDelegate: getTextDelegateForLocale(context),
+                  textDelegate: LocalizedCameraPickerTextDelegate(
+                    locale.languageCode,
+                  ),
                 ),
                 viewType: view,
                 previewXFile: xFile,
@@ -143,7 +148,9 @@ class MediaPickerFromCamera {
               return true;
             },
             shouldDeletePreviewFile: true,
-            textDelegate: getTextDelegateForLocale(context),
+            textDelegate: LocalizedCameraPickerTextDelegate(
+              locale.languageCode,
+            ),
             theme: Theme.of(context),
             enableRecording: true,
           ),
@@ -184,6 +191,10 @@ class MediaPickerFromCamera {
     CameraPickerState cameraPickerState,
     BuildContext context,
   ) async {
+    // Get the AppLocalizations instance before opening the camera picker
+    final localizations = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context);
+    
     if (cameraPickerState.controller.value.isRecordingVideo) {
       final xFile = await cameraPickerState.controller.stopVideoRecording();
       await CameraPickerViewer.pushToViewer(
@@ -200,7 +211,9 @@ class MediaPickerFromCamera {
               ..pop()
               ..pop();
           }),
-          textDelegate: getTextDelegateForLocale(context),
+          textDelegate: LocalizedCameraPickerTextDelegate(
+            locale.languageCode,
+          ),
         ),
         viewType: CameraPickerViewType.video,
         previewXFile: xFile,
@@ -217,17 +230,10 @@ class MediaPickerFromCamera {
     BuildContext context,
   ) {
     final locale = Localizations.localeOf(context);
-    switch (locale.languageCode) {
-      case 'ru':
-      case 'fr':
-        return LocalizedCameraPickerTextDelegate(
-          context,
-          locale.languageCode,
-        );
-      default:
-        return cameraPickerTextDelegateFromLocale(
-          locale,
-        );
-    }
+    final localizations = AppLocalizations.of(context);
+    // Always use LocalizedCameraPickerTextDelegate for all languages
+    return LocalizedCameraPickerTextDelegate(
+      locale.languageCode,
+    );
   }
 }

@@ -2688,5 +2688,5 @@
   "@confirm": {
     "type": "text",
     "placeholders": {}
-  },
+  }
 }
