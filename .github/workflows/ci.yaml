@@ -77,7 +77,7 @@ jobs:
         working-directory: ${{ matrix.os }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linshare-dev
           path: |
