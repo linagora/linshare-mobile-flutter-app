@@ -2477,5 +2477,62 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "shootingTips": "Nhấn để chụp ảnh.",
+  "@shootingTips": {},
+  "shootingOnlyRecordingTips": "Nhấn và giữ để ghi hình.",
+  "@shootingOnlyRecordingTips": {},
+  "shootingTapRecordingTips": "Nhấn và giữ để quay hình.",
+  "@shootingTapRecordingTips": {},
+  "loadFailed": "Tải thất bại",
+  "@loadFailed": {},
+  "saving": "Đang lưu...",
+  "@saving": {},
+  "sActionManuallyFocusHint": "Lấy nét thủ công",
+  "@sActionManuallyFocusHint": {},
+  "sActionPreviewHint": "Xem trước",
+  "@sActionPreviewHint": {},
+  "sActionRecordHint": "Ghi hình",
+  "@sActionRecordHint": {},
+  "sActionShootHint": "Chụp ảnh",
+  "@sActionShootHint": {},
+  "sActionShootingButtonTooltip": "Nút chụp",
+  "@sActionShootingButtonTooltip": {},
+  "sActionStopRecordingHint": "Dừng quay",
+  "@sActionStopRecordingHint": {},
+  "sCameraLensDirectionLabel": "Hướng ống kính camera: {value}",
+  "@sCameraLensDirectionLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sCameraPreviewLabel": "Xem trước máy ảnh:{value}",
+  "@sCameraPreviewLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sSwitchCameraLensDirectionLabel": "Chuyển sang máy ảnh {value}",
+  "@sSwitchCameraLensDirectionLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "confirm": "Xác nhận",
+  "@confirm": {
+    "type": "text",
+    "placeholders": {}
   }
 }

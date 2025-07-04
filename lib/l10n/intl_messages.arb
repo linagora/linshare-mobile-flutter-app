@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2025-04-03T17:00:42.830043",
+  "@@last_modified": "2025-07-04T16:07:19.331056",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
@@ -3209,5 +3209,135 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "privacyPolicy": "Privacy policy",
+  "@privacyPolicy": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "byContinuingYouAreAgreeingToOur": "By continuing, you're agreeing to our",
+  "@byContinuingYouAreAgreeingToOur": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shootingTips": "Tap to take photo.",
+  "@shootingTips": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shootingWithRecordingTips": "Tap to take photo. Long press to record video.",
+  "@shootingWithRecordingTips": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shootingOnlyRecordingTips": "Long press to record video.",
+  "@shootingOnlyRecordingTips": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "shootingTapRecordingTips": "Tap to record video.",
+  "@shootingTapRecordingTips": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "loadFailed": "Load failed",
+  "@loadFailed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "saving": "Saving...",
+  "@saving": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sActionManuallyFocusHint": "Manually focus",
+  "@sActionManuallyFocusHint": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sActionPreviewHint": "Preview",
+  "@sActionPreviewHint": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sActionRecordHint": "Record",
+  "@sActionRecordHint": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sActionShootHint": "Take picture",
+  "@sActionShootHint": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sActionShootingButtonTooltip": "Shooting button",
+  "@sActionShootingButtonTooltip": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sActionStopRecordingHint": "Stop recording",
+  "@sActionStopRecordingHint": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sCameraLensDirectionLabel": "Camera lens direction: {value}",
+  "@sCameraLensDirectionLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sCameraPreviewLabel": "Camera preview: {value}",
+  "@sCameraPreviewLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sFlashModeLabel": "Flash mode: {mode}",
+  "@sFlashModeLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "mode"
+    ],
+    "placeholders": {
+      "mode": {}
+    }
+  },
+  "sSwitchCameraLensDirectionLabel": "Switch to the {value} camera",
+  "@sSwitchCameraLensDirectionLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
   }
 }
