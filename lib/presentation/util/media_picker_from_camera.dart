@@ -33,6 +33,7 @@ import 'package:dartz/dartz.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:linshare_flutter_app/presentation/localizations/app_localizations.dart';
+import 'package:linshare_flutter_app/presentation/localizations/localized_camera_picker_text_delegate.dart';
 import 'package:linshare_flutter_app/presentation/util/permission_service.dart';
 import 'package:linshare_flutter_app/presentation/util/router/app_navigation.dart';
 import 'package:linshare_flutter_app/presentation/view/camera_picker/custom_camera_picker_viewer.dart';
@@ -69,12 +70,13 @@ class MediaPickerFromCamera {
           [Permission.camera, Permission.microphone])) {
         final confirmExplanation =
             await PermissionDialog.showPermissionExplanationDialog(
-                context,
-                Center(
-                  child: Icon(Icons.warning, color: Colors.orange, size: 40),
-                ),
-                AppLocalizations.of(context).explain_camera_permission) ??
-            false;
+                    context,
+                    Center(
+                      child:
+                          Icon(Icons.warning, color: Colors.orange, size: 40),
+                    ),
+                    AppLocalizations.of(context).explain_camera_permission) ??
+                false;
         if (!confirmExplanation) {
           return Left(
             CameraPermissionDenied(),
@@ -126,6 +128,7 @@ class MediaPickerFromCamera {
                       ..pop()
                       ..pop();
                   }),
+                  textDelegate: getTextDelegateForLocale(context),
                 ),
                 viewType: view,
                 previewXFile: xFile,
@@ -136,13 +139,11 @@ class MediaPickerFromCamera {
                   resumeCameraPreview(cameraPickerState);
                 }
               });
-             
+
               return true;
             },
             shouldDeletePreviewFile: true,
-            textDelegate: cameraPickerTextDelegateFromLocale(
-              Localizations.localeOf(context),
-            ),
+            textDelegate: getTextDelegateForLocale(context),
             theme: Theme.of(context),
             enableRecording: true,
           ),
@@ -199,6 +200,7 @@ class MediaPickerFromCamera {
               ..pop()
               ..pop();
           }),
+          textDelegate: getTextDelegateForLocale(context),
         ),
         viewType: CameraPickerViewType.video,
         previewXFile: xFile,
@@ -209,5 +211,23 @@ class MediaPickerFromCamera {
 
   void resumeCameraPreview(CameraPickerState cameraPickerState) async {
     await cameraPickerState.controller.resumePreview();
+  }
+
+  CameraPickerTextDelegate getTextDelegateForLocale(
+    BuildContext context,
+  ) {
+    final locale = Localizations.localeOf(context);
+    switch (locale.languageCode) {
+      case 'ru':
+      case 'fr':
+        return LocalizedCameraPickerTextDelegate(
+          context,
+          locale.languageCode,
+        );
+      default:
+        return cameraPickerTextDelegateFromLocale(
+          locale,
+        );
+    }
   }
 }

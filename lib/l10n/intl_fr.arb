@@ -2585,5 +2585,84 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "shootingTips": "Appuyez pour prendre une photo.",
+  "@shootingTips": {},
+  "shootingWithRecordingTips": "Appuyez pour prendre une photo. Appuyez longuement pour enregistrer une vidéo.",
+  "@shootingWithRecordingTips": {},
+  "shootingOnlyRecordingTips": "Appuyez longuement pour enregistrer une vidéo.",
+  "@shootingOnlyRecordingTips": {},
+  "shootingTapRecordingTips": "Appuyez pour enregistrer une vidéo.",
+  "@shootingTapRecordingTips": {},
+  "loadFailed": "Échec du chargement",
+  "@loadFailed": {},
+  "saving": "Enregistrement...",
+  "@saving": {},
+  "sActionManuallyFocusHint": "mettre au point manuellement",
+  "@sActionManuallyFocusHint": {},
+  "sActionPreviewHint": "aperçu",
+  "@sActionPreviewHint": {},
+  "sActionRecordHint": "enregistrer",
+  "@sActionRecordHint": {},
+  "sActionShootHint": "prendre une photo",
+  "@sActionShootHint": {},
+  "sActionShootingButtonTooltip": "bouton de prise de vue",
+  "@sActionShootingButtonTooltip": {},
+  "sActionStopRecordingHint": "arrêter l'enregistrement",
+  "@sActionStopRecordingHint": {},
+  "sCameraLensDirectionLabel": "Direction de la lentille de la caméra : {value}",
+  "@sCameraLensDirectionLabel": {
+        "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sCameraPreviewLabel": "Aperçu de la caméra : {value}",
+  "@sCameraPreviewLabel": {
+        "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sFlashModeLabel": "Mode flash : {mode}",
+  "@sFlashModeLabel": {
+        "type": "text",
+    "placeholders_order": [
+      "mode"
+    ],
+    "placeholders": {
+      "mode": {}
+    }
+  },
+  "sSwitchCameraLensDirectionLabel": "Passer à la caméra : {value}",
+  "@sSwitchCameraLensDirectionLabel": {
+        "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sFlashModeLabel": "Mode flash : {mode}",
+  "@sFlashModeLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "mode"
+    ],
+    "placeholders": {
+      "mode": {}
+    }
+  },
+    "confirm": "Confirmer",
+  "@confirm": {
+    "type": "text",
+    "placeholders": {}
   }
 }

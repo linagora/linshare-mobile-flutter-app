@@ -2619,5 +2619,74 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
-  }
+  },
+  "shootingTips": "Tap to take photo.",
+  "@shootingTips": {},
+  "shootingWithRecordingTips": "Tap to take photo. Long press to record video.",
+  "@shootingWithRecordingTips": {},
+  "shootingOnlyRecordingTips": "Long press to record video.",
+  "@shootingOnlyRecordingTips": {},
+  "shootingTapRecordingTips": "Tap to record video.",
+  "@shootingTapRecordingTips": {},
+  "loadFailed": "Load failed",
+  "@loadFailed": {},
+  "saving": "Saving...",
+  "@saving": {},
+  "sActionManuallyFocusHint": "Manually focus",
+  "@sActionManuallyFocusHint": {},
+  "sActionPreviewHint": "Preview",
+  "@sActionPreviewHint": {},
+  "sActionRecordHint": "Record",
+  "@sActionRecordHint": {},
+  "sActionShootHint": "Take picture",
+  "@sActionShootHint": {},
+  "sActionShootingButtonTooltip": "Shooting button",
+  "@sActionShootingButtonTooltip": {},
+  "sActionStopRecordingHint": "Stop recording",
+  "@sActionStopRecordingHint": {},
+  "sCameraLensDirectionLabel": "Camera lens direction: {value}",
+  "@sCameraLensDirectionLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sCameraPreviewLabel": "Camera preview: {value}",
+  "@sCameraPreviewLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sFlashModeLabel": "Flash mode: {mode}",
+  "@sFlashModeLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "mode"
+    ],
+    "placeholders": {
+      "mode": {}
+    }
+  },
+  "sSwitchCameraLensDirectionLabel": "Switch to the {value} camera",
+  "@sSwitchCameraLensDirectionLabel": {
+    "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "type": "text",
+    "placeholders": {}
+  },
 }

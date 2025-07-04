@@ -476,6 +476,11 @@
       "quota": {}
     }
   },
+  "confirm": "Подтвердить",
+  "@confirm": {
+    "type": "text",
+    "placeholders": {}
+  },
   "tooBigFiles": "{nbFiles,plural, =1{{firstElementName} превысил максимальный размер файла в {quota}}other{Некоторые файлы превысили максимальный размер в {quota}}}",
   "@tooBigFiles": {
     "type": "text",
@@ -2580,5 +2585,69 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "shootingTips": "Нажмите, чтобы сделать фото.",
+  "@shootingTips": {},
+  "shootingWithRecordingTips": "Нажмите, чтобы сделать фото. Удерживайте для записи видео.",
+  "@shootingWithRecordingTips": {},
+  "shootingOnlyRecordingTips": "Удерживайте для записи видео.",
+  "@shootingOnlyRecordingTips": {},
+  "shootingTapRecordingTips": "Нажмите, чтобы записать видео.",
+  "@shootingTapRecordingTips": {},
+  "loadFailed": "Не удалось загрузить",
+  "@loadFailed": {},
+  "saving": "Сохранение...",
+  "@saving": {},
+  "sActionManuallyFocusHint": "ручная фокусировка",
+  "@sActionManuallyFocusHint": {},
+  "sActionPreviewHint": "предпросмотр",
+  "@sActionPreviewHint": {},
+  "sActionRecordHint": "запись",
+  "@sActionRecordHint": {},
+  "sActionShootHint": "сделать фото",
+  "@sActionShootHint": {},
+  "sActionShootingButtonTooltip": "кнопка съемки",
+  "@sActionShootingButtonTooltip": {},
+  "sActionStopRecordingHint": "остановить запись",
+  "@sActionStopRecordingHint": {},
+  "sCameraLensDirectionLabel": "Направление объектива камеры: {value}",
+  "@sCameraLensDirectionLabel": {
+        "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sCameraPreviewLabel": "Предпросмотр камеры: {value}",
+  "@sCameraPreviewLabel": {
+        "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "sFlashModeLabel": "Режим вспышки: {mode}",
+  "@sFlashModeLabel": {
+        "type": "text",
+    "placeholders_order": [
+      "mode"
+    ],
+    "placeholders": {
+      "mode": {}
+    }
+  },
+  "sSwitchCameraLensDirectionLabel": "Переключиться на камеру {value}",
+  "@sSwitchCameraLensDirectionLabel": {
+        "type": "text",
+    "placeholders_order": [
+      "value"
+    ],
+    "placeholders": {
+      "value": {}
+    }
   }
 }

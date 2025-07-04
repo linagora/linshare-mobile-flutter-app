@@ -3134,6 +3134,129 @@ class AppLocalizations {
       name: 'byContinuingYouAreAgreeingToOur',
     );
   }
+
+  String get confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'confirm',
+    );
+  }
+
+  String get shootingTips {
+    return Intl.message(
+      'Tap to take photo.',
+      name: 'shootingTips',
+    );
+  }
+
+  String get shootingWithRecordingTips {
+    return Intl.message(
+      'Tap to take photo. Long press to record video.',
+      name: 'shootingWithRecordingTips',
+    );
+  }
+
+  String get shootingOnlyRecordingTips {
+    return Intl.message(
+      'Long press to record video.',
+      name: 'shootingOnlyRecordingTips',
+    );
+  }
+
+  String get shootingTapRecordingTips {
+    return Intl.message(
+      'Tap to record video.',
+      name: 'shootingTapRecordingTips',
+    );
+  }
+
+  String get loadFailed {
+    return Intl.message(
+      'Load failed',
+      name: 'loadFailed',
+    );
+  }
+
+  String get saving {
+    return Intl.message(
+      'Saving...',
+      name: 'saving',
+    );
+  }
+
+  String get sActionManuallyFocusHint {
+    return Intl.message(
+      'Manually focus',
+      name: 'sActionManuallyFocusHint',
+    );
+  }
+
+  String get sActionPreviewHint {
+    return Intl.message(
+      'Preview',
+      name: 'sActionPreviewHint',
+    );
+  }
+
+  String get sActionRecordHint {
+    return Intl.message(
+      'Record',
+      name: 'sActionRecordHint',
+    );
+  }
+
+  String get sActionShootHint {
+    return Intl.message(
+      'Take picture',
+      name: 'sActionShootHint',
+    );
+  }
+
+  String get sActionShootingButtonTooltip {
+    return Intl.message(
+      'Shooting button',
+      name: 'sActionShootingButtonTooltip',
+    );
+  }
+
+  String get sActionStopRecordingHint {
+    return Intl.message(
+      'Stop recording',
+      name: 'sActionStopRecordingHint',
+    );
+  }
+
+  String sCameraLensDirectionLabel(Object value) {
+    return Intl.message(
+      'Camera lens direction: $value',
+      name: 'sCameraLensDirectionLabel',
+      args: [value],
+    );
+  }
+
+  String sCameraPreviewLabel(Object value) {
+    return Intl.message(
+      'Camera preview: $value',
+      name: 'sCameraPreviewLabel',
+      args: [value],
+    );
+  }
+
+  String sFlashModeLabel(Object mode) {
+    return Intl.message(
+      'Flash mode: $mode',
+      name: 'sFlashModeLabel',
+      args: [mode],
+    );
+  }
+
+  String sSwitchCameraLensDirectionLabel(Object value) {
+    return Intl.message(
+      'Switch to the $value camera',
+      name: 'sSwitchCameraLensDirectionLabel',
+      args: [value],
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
