@@ -44,7 +44,7 @@ jobs:
 
       - name: Upload test reports
         if: success() || failure() # Always upload report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: test-report*.json
