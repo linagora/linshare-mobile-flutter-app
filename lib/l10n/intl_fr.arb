@@ -2660,7 +2660,7 @@
       "mode": {}
     }
   },
-    "confirm": "Confirmer",
+  "confirm": "Confirmer",
   "@confirm": {
     "type": "text",
     "placeholders": {}
